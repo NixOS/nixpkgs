@@ -6,27 +6,27 @@ let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
 in {
-  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 mfrw ];
+  meta.maintainers = with maintainers; [ mbaillie mfrw ];
 
   options.services.tailscale = {
-    enable = mkEnableOption (lib.mdDoc "Tailscale client daemon");
+    enable = mkEnableOption "Tailscale client daemon";
 
     port = mkOption {
       type = types.port;
       default = 41641;
-      description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
+      description = "The port to listen on for tunnel traffic (0=autoselect).";
     };
 
     interfaceName = mkOption {
       type = types.str;
       default = "tailscale0";
-      description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
+      description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
     permitCertUid = mkOption {
       type = types.nullOr types.nonEmptyStr;
       default = null;
-      description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
+      description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
     package = lib.mkPackageOption pkgs "tailscale" {};
@@ -34,14 +34,14 @@ in {
     openFirewall = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc "Whether to open the firewall for the specified port.";
+      description = "Whether to open the firewall for the specified port.";
     };
 
     useRoutingFeatures = mkOption {
       type = types.enum [ "none" "client" "server" "both" ];
       default = "none";
       example = "server";
-      description = lib.mdDoc ''
+      description = ''
         Enables settings required for Tailscale's routing features like subnet routers and exit nodes.
 
         To use these these features, you will still need to call `sudo tailscale up` with the relevant flags like `--advertise-exit-node` and `--exit-node`.
@@ -55,20 +55,20 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/run/secrets/tailscale_key";
-      description = lib.mdDoc ''
+      description = ''
         A file containing the auth key.
       '';
     };
 
     extraUpFlags = mkOption {
-      description = lib.mdDoc "Extra flags to pass to {command}`tailscale up`.";
+      description = "Extra flags to pass to {command}`tailscale up`.";
       type = types.listOf types.str;
       default = [];
       example = ["--ssh"];
     };
 
     extraDaemonFlags = mkOption {
-      description = lib.mdDoc "Extra flags to pass to {command}`tailscaled`.";
+      description = "Extra flags to pass to {command}`tailscaled`.";
       type = types.listOf types.str;
       default = [];
       example = ["--no-logs-no-support"];

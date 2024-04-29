@@ -81,8 +81,8 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
-  version = "24.0.3";
-  hash = "sha256-d67JoqN7fTWW6hZAs8xT0LXZs7Uqvtid4H43F+kb/b4=";
+  version = "24.0.5";
+  hash = "sha256-OMwkXKj6o8adptJof4kGN3AB9jNlNIpizG9/r7HowBg=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -141,11 +141,6 @@ self = stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
-
-    # Backport crash fix for Radeon (legacy) kernel driver
-    # see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10613
-    # FIXME: remove when merged upstream
-    ./backport-radeon-crash-fix.patch
   ];
 
   postPatch = ''
@@ -254,7 +249,8 @@ self = stdenv.mkDerivation {
   ] ++ [
     python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ elfutils libomxil-bellagio libva-minimal udev lm_sensors ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ]
     ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader

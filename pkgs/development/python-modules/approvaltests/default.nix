@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "11.1.2";
+  version = "11.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,14 +29,14 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VM4TP98bS9NmhxZz+YHMJrHKr5g6E6aYidxjKQyXp7k=";
+    hash = "sha256-oG1TH9F8IYDZWLuL2TIesNuZQVzGQRqkGk502HTG+O8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     allpairspy
     approval-utilities
     beautifulsoup4
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Tests expects paths below ApprovalTests.Python directory
+    # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
   ];
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/approvals/ApprovalTests.Python";
     changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

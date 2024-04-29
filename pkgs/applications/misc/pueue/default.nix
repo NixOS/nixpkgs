@@ -62,6 +62,6 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/Nukesor/pueue/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ sarcasticadmin ];
   };
 }

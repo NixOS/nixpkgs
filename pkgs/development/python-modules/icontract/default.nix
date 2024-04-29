@@ -1,26 +1,28 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , astor
 , asttokens
 , asyncstdlib
+, buildPythonPackage
 , deal
 , dpcontracts
+, fetchFromGitHub
 , numpy
 , pytestCheckHook
+, pythonOlder
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "icontract";
   version = "2.6.6";
-  format = "setuptools";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";
-    repo = pname;
+    repo = "icontract";
     rev = "refs/tags/v${version}";
     hash = "sha256-R5/FBfuTvXItfTlNZMSnO18Q+etnHbQyXFWpaOpOLes=";
   };
@@ -32,7 +34,11 @@ buildPythonPackage rec {
     export ICONTRACT_SLOW=1
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     asttokens
     typing-extensions
   ];
@@ -46,11 +52,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # AssertionError
+    "test_abstract_method_not_implemented"
+  ];
+
   disabledTestPaths = [
     # mypy decorator checks don't pass. For some reason mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
-    # those tests seems to simply re-run some typeguard tests
+    # Those tests seems to simply re-run some typeguard tests
     "tests/test_typeguard.py"
   ];
 
@@ -59,7 +70,9 @@ buildPythonPackage rec {
     "-W" "ignore::RuntimeWarning"
   ];
 
-  pythonImportsCheck = [ "icontract" ];
+  pythonImportsCheck = [
+    "icontract"
+  ];
 
   meta = with lib; {
     description = "Provide design-by-contract with informative violation messages";

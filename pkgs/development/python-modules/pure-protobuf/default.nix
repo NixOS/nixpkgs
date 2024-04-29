@@ -4,33 +4,32 @@
 , fetchFromGitHub
 , poetry-core
 , poetry-dynamic-versioning
-, pydantic
+, typing-extensions
 , pytestCheckHook
 , pytest-benchmark
-, typing-extensions
+, pytest-cov
+, pydantic
 }:
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "3.0.1";  # Komikku not launching w/ 3.0.0, #280551
+  version = "3.1.0";
 
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+  # < 3.10 requires get-annotations which isn't packaged yet
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "eigenein";
     repo = "protobuf";
     rev = "refs/tags/${version}";
-    hash = "sha256-sGKnta+agrpJkQB0twFkqRreD5WB2O/06g75N0ic4mc=";
+    hash = "sha256-JXC68iEX5VepIe4qpugvY0Qb3JlM5mPGHnUVWvb1TDA=";
   };
-
-  postPatch = ''
-    sed -i "/addopts =/d" pyproject.toml
-  '';
 
   build-system = [
     poetry-core
     poetry-dynamic-versioning
+    typing-extensions
   ];
 
   dependencies = [
@@ -41,6 +40,7 @@ buildPythonPackage rec {
     pydantic
     pytestCheckHook
     pytest-benchmark
+    pytest-cov
   ];
 
   pytestFlagsArray = [

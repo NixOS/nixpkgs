@@ -27,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-WU8q6A3q24xrCOjhMi1C4lj0DULIDWiG2E4BQ/kLWiM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "setuptools_scm>=8" "setuptools_scm"
-  '';
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -43,14 +38,17 @@ buildPythonPackage rec {
     can
     crccheck
     diskcache
-    matplotlib
     textparser
+  ];
+
+  passthru.optional-dependencies.plot = [
+    matplotlib
   ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.plot;
 
   pythonImportsCheck = [
     "cantools"

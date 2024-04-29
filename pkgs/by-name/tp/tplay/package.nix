@@ -11,17 +11,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tplay";
-  version = "0.4.5";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
     rev =  "v${version}";
-    hash = "sha256-qt5I5rel88NWJZ6dYLCp063PfVmGTzkUUKgF3JkhLQk=";
+    hash = "sha256-/3ui0VOxf+kYfb0JQXPVbjAyXPph2LOg2xB0DGmAbwc=";
   };
 
-  cargoHash = "sha256-0kHh7Wb9Dp+t2G9/Kz/3K43bQdFCl+q2Vc3W32koc2I=";
-  cargoPatches = [ ./cargo.diff ];
+  cargoHash = "sha256-zRkIEH37pvxHUbnfg25GW1Z7od9XMkRmP2Qvs64uUjg=";
   checkFlags = [
         # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"
@@ -46,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/maxcurzi/tplay";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ demine ];
+    maintainers = with lib.maintainers; [ demine colemickens ];
   };
 }

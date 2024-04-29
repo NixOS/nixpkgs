@@ -10,10 +10,7 @@
 
 buildPythonPackage rec {
   pname = "catppuccin";
-  version = "1.3.2";
-  # Note: updating to later versions breaks catppuccin-gtk
-  # It would be ideal to only update this after catppuccin-gtk
-  # gets support for the newer version
+  version = "2.2.0";
 
   pyproject = true;
 
@@ -21,7 +18,7 @@ buildPythonPackage rec {
     owner = "catppuccin";
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-spPZdQ+x3isyeBXZ/J2QE6zNhyHRfyRQGiHreuXzzik=";
+    hash = "sha256-+V1rln3FlFvs1FEIANIch7k/b2EsI9xBxhg3Bwg99+I=";
   };
 
   build-system = [
@@ -37,11 +34,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  # can be removed next version
-  disabledTestPaths = [
-    "tests/test_flavour.py" # would download a json to check correctness of flavours
-  ];
 
   pythonImportsCheck = [ "catppuccin" ];
 

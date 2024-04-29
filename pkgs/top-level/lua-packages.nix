@@ -100,13 +100,13 @@ rec {
 
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
-    version = "0.1.24";
+    version = "0.1.28";
 
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "lua-resty-core";
       rev = "v${version}";
-      sha256 = "sha256-obwyxHSot1Lb2c1dNqJor3inPou+UIBrqldbkNBCQQk=";
+      sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
     };
 
     propagatedBuildInputs = [ lua-resty-lrucache ];

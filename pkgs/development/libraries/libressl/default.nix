@@ -111,7 +111,12 @@ in {
   };
 
   libressl_3_8 = generic {
-    version = "3.8.2";
-    hash = "sha256-bUuNW7slofgzZjnlbsUIgFLUOpUlZpeoXEzpEyPCWVQ=";
+    version = "3.8.4";
+    hash = "sha256-wM75z+F0rDZs5IL1Qv3bB3Ief6DK+s40tJqHIPo3/n0=";
+  };
+
+  libressl_3_9 = generic {
+    version = "3.9.1";
+    hash = "sha256-baC5VGlffuYrA/ZCAKik8Cr5Nxe2DM4Eq2yN8mLAelE=";
   };
 }

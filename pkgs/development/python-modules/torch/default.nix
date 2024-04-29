@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages,
+  autoAddDriverRunpath,
   effectiveMagma ?
   if cudaSupport then magma-cuda-static
   else if rocmSupport then magma-hip
@@ -52,13 +53,15 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages,
+  rocmPackages_5,
   gpuTargets ? [ ]
 }:
 
 let
   inherit (lib) attrsets lists strings trivial;
   inherit (cudaPackages) cudaFlags cudnn nccl;
+
+  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 
@@ -127,7 +130,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -145,7 +148,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6z8G5nMbGHbpA+xfmOR726h9E4N9NoEtaFgcYE0DuUE=";
+    hash = "sha256-la9wL9pOlgrSfq5V8aRKXt3hjW+Er/6484m0oUujlzk=";
   };
 
   patches = lib.optionals cudaSupport [

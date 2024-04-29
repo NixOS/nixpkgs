@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-pysmi";
-  version = "1.1.11";
+  version = "1.1.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "pysnmp";
     repo = "pysmi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qe99nLOyUvE6LJagtQ9whPF4zwIWiM7g5zn40QsmrmA=";
+    hash = "sha256-dK02y8HXhwq1W6NOYsycjTpIMxoQY4qNT4n8TEycmWM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ply
     requests
   ];

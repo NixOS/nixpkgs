@@ -150,7 +150,10 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  hiprand = rocrand; # rocrand includes hiprand
+  hiprand = callPackage ./hiprand {
+    inherit rocmUpdateScript rocm-cmake clr rocrand;
+    stdenv = llvm.rocmClangStdenv;
+  };
 
   rocfft = callPackage ./rocfft {
     inherit rocmUpdateScript rocm-cmake rocrand rocfft clr;
@@ -191,7 +194,7 @@ in rec {
   };
 
   rocblas = callPackage ./rocblas {
-    inherit rocblas rocmUpdateScript rocm-cmake clr tensile;
+    inherit rocmUpdateScript rocm-cmake clr tensile;
     inherit (llvm) openmp;
     stdenv = llvm.rocmClangStdenv;
   };
@@ -236,9 +239,9 @@ in rec {
   # hipTensor - Only supports GFX9
 
   miopengemm= throw ''
-    'miopen-opencl' has been deprecated.
+    'miopengemm' has been deprecated.
     It is still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-3;
+  ''; # Added 2024-3-3
 
   composable_kernel = callPackage ./composable_kernel {
     inherit rocmUpdateScript rocm-cmake clr;
@@ -264,7 +267,7 @@ in rec {
   miopen-opencl= throw ''
     'miopen-opencl' has been deprecated.
     It is still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-3;
+  ''; # Added 2024-3-3
 
   migraphx = callPackage ./migraphx {
     inherit rocmUpdateScript rocm-cmake rocblas composable_kernel miopen clr half rocm-device-libs;
@@ -313,6 +316,9 @@ in rec {
         rev = "640d7ee1917fcd3b6a5271aa6cf4576bccc7c5fb";
         sha256 = "sha256-T52whJ7nZi8jerJaZtYInC2YDN0QM+9tUDqiNr6IsNY=";
       };
+
+      # overwrite all patches, since patches for newer version do not apply
+      patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ];
     };
   };
 
@@ -322,12 +328,11 @@ in rec {
     useCPU = false;
   };
 
-  mivisionx-opencl = mivisionx.override {
-    rpp = rpp-opencl;
-    miopen = miopen-opencl;
-    useOpenCL = true;
-    useCPU = false;
-  };
+  mivisionx-opencl = throw ''
+    'mivisionx-opencl' has been deprecated.
+    Other versions of mivisionx are still available.
+    It is also still available for some time as part of rocmPackages_5.
+  ''; # Added 2024-3-24
 
   mivisionx-cpu = mivisionx.override {
     rpp = rpp-cpu;

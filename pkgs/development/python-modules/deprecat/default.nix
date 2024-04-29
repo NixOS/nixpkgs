@@ -10,22 +10,22 @@
 buildPythonPackage rec {
   pname = "deprecat";
   version = "2.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mjhajharia";
-    repo = pname;
+    repo = "deprecat";
     rev = "refs/tags/v${version}";
     hash = "sha256-uAabZAtZDhcX6TfiM0LnrAzxxS64ys+vdodmxO//0x8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     wrapt
   ];
 
@@ -35,6 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "deprecat"
+  ];
+
+  disabledTestPaths = [
+    # https://github.com/mjhajharia/deprecat/issues/13
+    "tests/test_sphinx.py"
   ];
 
   meta = with lib; {

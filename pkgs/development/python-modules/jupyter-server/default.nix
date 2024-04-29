@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.13.0";
+  version = "2.14.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-yAv7BJ6iAFPD2WQcKt1ISLOAc7958XKc6h+u0y/Bx44=";
+    hash = "sha256-ZZFUzqUSCDQ0/XyTt/4Il696L9C53UdJKCtC6qxK5nc=";
   };
 
   nativeBuildInputs = [
@@ -69,6 +69,9 @@ buildPythonPackage rec {
     websocket-client
     overrides
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/299427
+  stripExclude = lib.optionals stdenv.isDarwin [ "favicon.ico" ];
 
   nativeCheckInputs = [
     ipykernel

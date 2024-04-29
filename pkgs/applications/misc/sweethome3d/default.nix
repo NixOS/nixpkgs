@@ -6,6 +6,7 @@
 , makeDesktopItem
 , jdk
 , ant
+, stripJavaArchivesHook
 , gtk3
 , gsettings-desktop-schemas
 , p7zip
@@ -51,7 +52,7 @@ let
       find . -name '*.so' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
     '';
 
-    nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+    nativeBuildInputs = [ makeWrapper autoPatchelfHook stripJavaArchivesHook ];
     buildInputs = [ ant jdk p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
 
     # upstream targets Java 7 by default
@@ -108,13 +109,13 @@ in {
 
   application = mkSweetHome3D rec {
     pname = lib.toLower module + "-application";
-    version = "7.2";
+    version = "7.3";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
     src = fetchzip {
       url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
-      hash = "sha256-RVuwxL/YATqHoQuc25ZaYgZ+o2rMOqnzU8/LLxb5Ra4=";
+      hash = "sha256-adMQzQE+xAZpMJyQFm01A+AfvcB5YHsJvk+533BUf1Q=";
     };
     desktopName = "Sweet Home 3D";
     icons = {

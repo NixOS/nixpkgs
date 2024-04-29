@@ -5,7 +5,7 @@
 , python
 , libev
 , cffi
-, cython_3
+, cython
 , greenlet
 , importlib-metadata
 , setuptools
@@ -13,6 +13,8 @@
 , zope-event
 , zope-interface
 , pythonOlder
+, c-ares
+, libuv
 
 # for passthru.tests
 , dulwich
@@ -34,7 +36,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
     wheel
   ] ++ lib.optionals (!isPyPy) [
@@ -43,6 +45,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     libev
+    libuv
+    c-ares
   ];
 
   propagatedBuildInputs = [
@@ -68,6 +72,8 @@ buildPythonPackage rec {
       opentracing
       pika;
   } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;
+
+  GEVENTSETUP_EMBED = "0";
 
   meta = with lib; {
     description = "Coroutine-based networking library";

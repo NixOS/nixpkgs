@@ -1,18 +1,21 @@
 { lib
 , stdenv
-, fetchurl
-, unzip
+, fetchFromGitHub
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "atasm";
-  version = "1.09";
+  version = "1.23";
 
-  src = fetchurl {
-    url = "https://atari.miribilist.com/${pname}/${pname}${builtins.replaceStrings ["."] [""] version}.zip";
-    hash = "sha256-26shhw2r30GZIPz6S1rf6dOLKRpgpLwrqCRZX3+8PvA=";
+  src = fetchFromGitHub {
+    owner = "CycoPH";
+    repo = "atasm";
+    rev = "V${version}";
+    hash = "sha256-U1HNYTiXO6WZEQJl2icY0ZEVy82CsL1mKR7Xgj9OZ14=";
   };
+
+  makefile = "Makefile";
 
   patches = [
     # make install fails because atasm.txt was moved; report to upstream
@@ -22,10 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   dontConfigure = true;
-
-  nativeBuildInputs = [
-    unzip
-  ];
 
   buildInputs = [
     zlib
@@ -42,9 +41,10 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
+    mkdir -p $out/bin/
     install -d $out/share/doc/${pname} $out/man/man1
     installFlagsArray+=(
-      DESTDIR=$out
+      DESTDIR=$out/bin/
       DOCDIR=$out/share/doc/${pname}
       MANDIR=$out/man/man1
     )
@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://atari.miribilist.com/atasm/";
+    homepage = "https://github.com/CycoPH/atasm";
     description = "A commandline 6502 assembler compatible with Mac/65";
     license = licenses.gpl2Plus;
+    changelog = "https://github.com/CycoPH/atasm/releases/tag/V${version}";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
   };

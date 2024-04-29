@@ -1,25 +1,26 @@
-{ lib
-, aiohttp
-, aioredis
-, buildPythonPackage
-, coloredlogs
-, fastapi
-, fetchFromGitHub
-, hatchling
-, pillow
-, psutil
-, pytestCheckHook
-, pythonOlder
-, redis
-, requests
-, ujson
-, uvicorn
-, watchdog
+{
+  lib,
+  aiohttp,
+  aioredis,
+  buildPythonPackage,
+  coloredlogs,
+  fastapi,
+  fetchFromGitHub,
+  hatchling,
+  pillow,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
+  ujson,
+  uvicorn,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
-  version = "4.16.0";
+  version = "4.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,55 +29,30 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     rev = "refs/tags/${version}";
-    hash = "sha256-w039aPK+PdOiiOj5ZZAUfyHQ6QDrKySVIijcOw+GIOk=";
+    hash = "sha256-Asw6wpZs0FgsUYLVQ4u4qQgIFdvShcsN3XvgHn48cbI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   passthru.optional-dependencies = {
-    json = [
-      ujson
-    ];
-    PIL = [
-      pillow
-    ];
-    redis = [
-      redis
-    ];
-    aioredis = [
-      aioredis
-    ];
-    aiohttp = [
-      aiohttp
-    ];
-    fastapi = [
-      fastapi
-    ];
-    uvicorn = [
-      uvicorn
-    ];
-    psutil = [
-      psutil
-    ];
-    coloredlogs = [
-      coloredlogs
-    ];
-    watchdog = [
-      watchdog
-    ];
+    json = [ ujson ];
+    PIL = [ pillow ];
+    redis = [ redis ];
+    aioredis = [ aioredis ];
+    aiohttp = [ aiohttp ];
+    fastapi = [ fastapi ];
+    uvicorn = [ uvicorn ];
+    psutil = [ psutil ];
+    coloredlogs = [ coloredlogs ];
+    watchdog = [ watchdog ];
   };
 
   checkInputs = [
     pytestCheckHook
     requests
-  ] ++ passthru.optional-dependencies.watchdog
-  ++ passthru.optional-dependencies.aiohttp;
+  ] ++ passthru.optional-dependencies.watchdog ++ passthru.optional-dependencies.aiohttp;
 
-  pythonImportsCheck = [
-    "telebot"
-  ];
+  pythonImportsCheck = [ "telebot" ];
 
   meta = with lib; {
     description = "Python implementation for the Telegram Bot API";

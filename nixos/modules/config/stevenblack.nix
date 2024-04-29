@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) optionals mkOption mkEnableOption types mkIf elem concatStringsSep maintainers mdDoc;
+  inherit (lib) optionals mkOption mkEnableOption types mkIf elem concatStringsSep maintainers;
   cfg = config.networking.stevenblack;
 
   # needs to be in a specific order
@@ -15,12 +15,12 @@ let
 in
 {
   options.networking.stevenblack = {
-    enable = mkEnableOption (mdDoc "the stevenblack hosts file blocklist");
+    enable = mkEnableOption "the stevenblack hosts file blocklist";
 
     block = mkOption {
       type = types.listOf (types.enum [ "fakenews" "gambling" "porn" "social" ]);
       default = [ ];
-      description = mdDoc "Additional blocklist extensions.";
+      description = "Additional blocklist extensions.";
     };
   };
 

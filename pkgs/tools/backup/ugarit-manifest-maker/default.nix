@@ -1,7 +1,10 @@
 { pkgs, lib, eggDerivation, fetchegg }:
+
 let
   eggs = import ./eggs.nix { inherit eggDerivation fetchegg; };
-in with pkgs; eggDerivation rec {
+in
+
+eggDerivation rec {
   pname = "ugarit-manifest-maker";
   version = "0.1";
   name = "${pname}-${version}";

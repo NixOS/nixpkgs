@@ -1,5 +1,25 @@
 { lib }:
-with builtins; with lib; recursiveUpdate lib (rec {
+
+let
+  inherit (lib)
+    all
+    concatStringsSep
+    findFirst
+    flip
+    getAttr
+    head
+    isFunction
+    length
+    recursiveUpdate
+    splitVersion
+    tail
+    take
+    versionAtLeast
+    versionOlder
+    zipListsWith
+    ;
+in
+recursiveUpdate lib (rec {
 
   versions =
     let

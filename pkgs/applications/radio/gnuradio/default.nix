@@ -45,11 +45,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, version ? "3.10.9.2"
+, version ? "3.10.10.0"
 }:
 
 let
-  sourceSha256 = "sha256-SMalZwIvATZ3rqAAqeSmf8/RJ1d9pp7NvoWO/YP0BMc=";
+  sourceSha256 = "sha256-pEVWhXDjOevrduDbZQbiDbODZY8PpsGY4O8yxrwlCcs=";
   featuresInfo = {
     # Needed always
     basic = {

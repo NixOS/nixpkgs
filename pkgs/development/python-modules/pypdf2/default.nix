@@ -8,13 +8,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "PyPDF2";
+  pname = "pypdf2";
   version = "3.0.1";
 
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyPDF2";
+    inherit version;
     hash = "sha256-p0QI9pumJx9xuTUu9O0D3FOjGqQE0ptdMfU7/s/uFEA=";
   };
 

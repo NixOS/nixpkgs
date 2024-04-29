@@ -6,23 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zircolite";
-  version = "2.10.0";
+  version = "2.20.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "wagga40";
     repo = "Zircolite";
     rev = "refs/tags/${version}";
-    hash = "sha256-r5MIoP+6CnAGsOtK4YLshLBVSZN2NVrwnkuHHDdLZrQ=";
+    hash = "sha256-a7xwF0amsh2SycOjtZpk3dylcBGG9uYd7vmbnz/f9Ug=";
   };
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
+  build-system = [
     makeWrapper
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     colorama
     elastic-transport

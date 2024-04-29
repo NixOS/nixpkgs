@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, autoAddDriverRunpath
 , fetchurl
 , python
 , pythonAtLeast
@@ -24,7 +25,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.2.1";
+  version = "2.2.2";
 in buildPythonPackage {
   inherit version;
 
@@ -40,7 +41,7 @@ in buildPythonPackage {
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [

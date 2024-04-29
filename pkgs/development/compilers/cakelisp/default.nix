@@ -3,12 +3,12 @@
 stdenv.mkDerivation {
   pname = "cakelisp";
   # using unstable as it's the only version that builds against gcc-13
-  version = "0.3.0-unstable-2024-02-21";
+  version = "0.3.0-unstable-2024-04-18";
 
   src = fetchgit {
     url = "https://macoy.me/code/macoy/cakelisp";
-    rev = "75ce620b265bf83c6952c0093df2b9d4f7f32a54";
-    hash = "sha256-X+tWq2QQogy4d042pcVuldc80jcClYtV09Jr91rHJl4=";
+    rev = "115ab436056602b7f3a1ca30be40edbfcc88299d";
+    hash = "sha256-rgBtT24aopXLTeDffjXGvJ3RgT+QLlr50Ju9a6ccyzc=";
   };
 
   buildInputs = [ gcc ];

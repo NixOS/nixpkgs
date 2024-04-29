@@ -63,7 +63,7 @@ in
   };
 
   options.services.pretix = {
-    enable = mkEnableOption "pretix";
+    enable = mkEnableOption "Pretix, a ticket shop application for conferences, festivals, concerts, etc.";
 
     package = mkPackageOption pkgs "pretix" { };
 

@@ -8,13 +8,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "4.4.4";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-QCJfFdY4THBurx7G8q/WAzb7b9CwtNNGi5fn9D++BMU=";
+    hash = "sha256-4y4Uhh3O84UbK39j8ACu06/6n7lyHsd8MzODR0FOp3I=";
   };
 
   nativeBuildInputs = [ cython ];

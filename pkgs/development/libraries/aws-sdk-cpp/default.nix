@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.11.207";
+  version = "1.11.296";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-IsPDQJo+TZ2noLefroiWl/Jx8fXmrmY73WHNRO41sik=";
+    hash = "sha256-yg+OkeUaqwUQGQ5ThIVQUpF2rHm4FuFbcl5gE5WHHOQ=";
   };
 
   postPatch = ''

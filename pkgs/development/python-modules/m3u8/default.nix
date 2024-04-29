@@ -5,23 +5,28 @@
 , bottle
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "4.0.0";
-  format = "setuptools";
+  version = "4.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "globocom";
-    repo = pname;
+    repo = "m3u8";
     rev = "refs/tags/${version}";
-    hash = "sha256-sxLT3a9f38RZqzEzqyZos3G38vzHPzhMexfBN2qzbxQ=";
+    hash = "sha256-vH5y/fk9dW8w54U3o+70enbTOubV4V0/NVbSSqOY9rQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     iso8601
   ];
 
@@ -45,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python m3u8 parser";
     homepage = "https://github.com/globocom/m3u8";
-    changelog = "https://github.com/globocom/m3u8/releases/tag//${version}";
+    changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

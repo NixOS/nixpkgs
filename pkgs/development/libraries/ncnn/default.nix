@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncnn";
-  version = "20240102";
+  version = "20240410";
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = pname;
     rev = version;
-    hash = "sha256-kk70oLY+2QJOkyYq10whLRMxBuibQMWMOBA9dcbKf/I=";
+    hash = "sha256-UiaU+LCevrWBxZg5LAimGIJB0CElWBnO6qoadUc3VVM=";
   };
 
   patches = [
@@ -33,7 +33,9 @@ stdenv.mkDerivation rec {
     "-DNCNN_BUILD_TOOLS=0"
     "-DNCNN_SYSTEM_GLSLANG=1"
     "-DNCNN_PYTHON=0" # Should be an attribute
-  ];
+  ]
+  # Requires setting `Vulkan_LIBRARY` on Darwin. Otherwise the build fails due to missing symbols.
+  ++ lib.optionals stdenv.isDarwin [ "-DVulkan_LIBRARY=-lvulkan" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ vulkan-headers vulkan-loader glslang opencv protobuf ];

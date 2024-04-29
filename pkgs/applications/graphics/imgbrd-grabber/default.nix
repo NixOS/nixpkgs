@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cmake
 , fetchFromGitHub
 , wrapQtAppsHook
@@ -93,6 +94,7 @@ stdenv.mkDerivation rec {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";
     license = licenses.asl20;
     homepage = "https://bionus.github.io/imgbrd-grabber/";
+    mainProgram = "Grabber";
     maintainers = [ maintainers.evanjs ];
   };
 }

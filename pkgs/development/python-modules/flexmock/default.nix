@@ -3,30 +3,31 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, poetry-core
 , teamcity-messages
 , testtools
 }:
 
 buildPythonPackage rec {
   pname = "flexmock";
-  version = "0.11.3";
-  format = "setuptools";
+  version = "0.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sf419qXzJUe1zTGhXAYNmrhj3Aiv8BjNc9x40bZR7dQ=";
+    hash = "sha256-YdBvPRRCuBW3qoWh9HvoONBW9fXRTO/teuv7A0c9FKs=";
   };
+
+  build-system = [
+    poetry-core
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     teamcity-messages
     testtools
-  ];
-
-  disabledTests = [
-    "test_failed_test_case"
   ];
 
   pythonImportsCheck = [

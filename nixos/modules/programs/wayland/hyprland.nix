@@ -13,8 +13,8 @@ in
 {
   options.programs.hyprland = {
     enable = mkEnableOption null // {
-      description = mdDoc ''
-        Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
+      description = ''
+        Whether to enable Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
 
         You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
 
@@ -33,14 +33,33 @@ in
       };
       defaultText = literalExpression
         "`programs.hyprland.package` with applied configuration";
-      description = mdDoc ''
+      description = ''
         The Hyprland package after applying configuration.
       '';
     };
 
     portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
-    xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
+    xwayland.enable = mkEnableOption ("XWayland") // { default = true; };
+
+    envVars.enable = mkEnableOption null // {
+      default = true;
+      example = false;
+      description = ''
+        Set environment variables for Hyprland to work properly.
+        Enabled by default.
+      '';
+    };
+
+    systemd.setPath.enable = mkEnableOption null // {
+      default = true;
+      example = false;
+      description = ''
+        Set environment path of systemd to include the current system's bin directory.
+        This is needed in Hyprland setups, where opening links in applications do not work.
+        Enabled by default.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -56,12 +75,27 @@ in
 
     security.polkit.enable = true;
 
-    services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
+    services.displayManager.sessionPackages = [ cfg.finalPackage ];
 
     xdg.portal = {
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
       configPackages = mkDefault [ cfg.finalPackage ];
+    };
+
+    environment.sessionVariables = mkIf cfg.envVars.enable {
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      XDG_SESSION_DESKTOP = "Hyprland";
+      XDG_SESSION_TYPE = "wayland";
+      GDK_BACKEND = "wayland,x11";
+      QT_QPA_PLATFORM = "wayland;xcb";
+      _JAVA_AWT_WM_NONREPARENTING = "1"; # Fix for Java applications on tiling window managers
+    };
+
+    systemd = mkIf cfg.systemd.setPath.enable {
+      user.extraConfig = ''
+        DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin:/etc/profiles/per-user/%u/bin:/run/wrappers/bin"
+      '';
     };
   };
 

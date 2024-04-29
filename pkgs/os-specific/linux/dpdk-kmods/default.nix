@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.mic92 ];
     platforms = platforms.linux;
-    broken = kernel.isHardened;
   };
 }

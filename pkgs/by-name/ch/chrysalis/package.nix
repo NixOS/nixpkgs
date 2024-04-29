@@ -22,8 +22,6 @@ in appimageTools.wrapType2 rec {
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
-
     install -m 444 \
       -D ${appimageContents}/usr/lib/chrysalis/resources/static/udev/60-kaleidoscope.rules \
       -t $out/lib/udev/rules.d

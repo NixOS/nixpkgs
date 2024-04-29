@@ -8,7 +8,7 @@ in
 {
   options = {
     environment.wordlist = {
-      enable = mkEnableOption (lib.mdDoc "environment variables for lists of words");
+      enable = mkEnableOption "environment variables for lists of words";
 
       lists = mkOption {
         type = types.attrsOf (types.nonEmptyListOf types.path);
@@ -23,7 +23,7 @@ in
           }
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           A set with the key names being the environment variable you'd like to
           set and the values being a list of paths to text documents containing
           lists of words. The various files will be merged, sorted, duplicates

@@ -37,6 +37,7 @@ localPython.pkgs.buildPythonApplication rec {
     aws-encryption-sdk
     base64io
     urllib3
+    setuptools # for pkg_resources
   ];
 
   doCheck = true;
@@ -51,6 +52,9 @@ localPython.pkgs.buildPythonApplication rec {
     # requires networking
     "test/integration"
   ];
+
+  # Upstream did not adapt to pytest 8 yet.
+  pytestFlagsArray = [ "-W" "ignore::pytest.PytestRemovedIn8Warning" ];
 
   passthru = {
     updateScript = nix-update-script { };

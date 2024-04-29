@@ -10,7 +10,7 @@
 , youtube-dl
 , glib
 , ffmpeg
-, aria
+, aria2
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     playsound
     ffmpeg
     matplotlib
-    aria
+    aria2
   ];
 
   buildInputs = [

@@ -16,7 +16,7 @@ The Emacs package comes with some extra helpers to make it easier to configure. 
       projectile
       use-package
     ]));
-  }
+  };
 }
 ```
 
@@ -102,10 +102,12 @@ This provides a fairly full Emacs start file. It will load in addition to the us
 Sometimes `emacs.pkgs.withPackages` is not enough, as this package set has some priorities imposed on packages (with the lowest priority assigned to GNU-devel ELPA, and the highest for packages manually defined in `pkgs/applications/editors/emacs/elisp-packages/manual-packages`). But you can't control these priorities when some package is installed as a dependency. You can override it on a per-package-basis, providing all the required dependencies manually, but it's tedious and there is always a possibility that an unwanted dependency will sneak in through some other package. To completely override such a package, you can use `overrideScope`.
 
 ```nix
-overrides = self: super: rec {
-  haskell-mode = self.melpaPackages.haskell-mode;
-  ...
-};
+let
+  overrides = self: super: rec {
+    haskell-mode = self.melpaPackages.haskell-mode;
+    # ...
+  };
+in
 ((emacsPackagesFor emacs).overrideScope overrides).withPackages
   (p: with p; [
     # here both these package will use haskell-mode of our own choice
@@ -113,3 +115,4 @@ overrides = self: super: rec {
     dante
   ])
 ```
+}

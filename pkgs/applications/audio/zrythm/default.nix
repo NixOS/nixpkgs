@@ -64,7 +64,7 @@
 , sratom
 , texi2html
 , vamp-plugin-sdk
-, wrapGAppsHook
+, wrapGAppsHook4
 , xdg-utils
 , xxHash
 , zix
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.sphinx
     sassc
     texi2html
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

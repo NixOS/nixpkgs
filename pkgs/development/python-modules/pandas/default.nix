@@ -6,7 +6,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , meson-python
 , meson
 , oldest-supported-numpy
@@ -84,7 +84,7 @@ let pandas = buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     meson-python
     meson
     numpy
@@ -266,7 +266,7 @@ let pandas = buildPythonPackage rec {
       Python, providing labeled data structures similar to R data.frame
       objects, statistical functions, and much more.
     '';
-    maintainers = with maintainers; [ raskin fridh knedlsepp ];
+    maintainers = with maintainers; [ raskin knedlsepp ];
   };
 };
 in pandas

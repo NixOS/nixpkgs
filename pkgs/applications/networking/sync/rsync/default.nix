@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64) [
     # fix `multiversioning needs 'ifunc' which is not supported on this target` error
     "--disable-roll-simd"
+  ] ++ lib.optionals (!enableZstd) [
+    "--disable-zstd"
+  ] ++ lib.optionals (!enableXXHash) [
+    "--disable-xxhash"
   ];
 
   enableParallelBuilding = true;

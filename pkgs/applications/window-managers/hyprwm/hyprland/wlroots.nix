@@ -1,16 +1,17 @@
-{ fetchFromGitLab
+{ fetchFromGitHub
 , wlroots
+, enableXWayland ? true
 }:
 wlroots.overrideAttrs
   (old: {
+    inherit enableXWayland;
     version = "0.18.0-dev";
 
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      owner = "wlroots";
-      repo = "wlroots";
-      rev = "0cb091f1a2d345f37d2ee445f4ffd04f7f4ec9e5";
-      hash = "sha256-Mz6hCtommq7RQfcPnxLINigO4RYSNt23HeJHC6mVmWI=";
+    src = fetchFromGitHub {
+      owner = "hyprwm";
+      repo = "wlroots-hyprland";
+      rev = "611a4f24cd2384378f6e500253983107c6656c64";
+      hash = "sha256-vPeZCY+sdiGsz4fl3AVVujfyZyQBz6+vZdkUE4hQ+HI=";
     };
 
     patches = [ ]; # don't inherit old.patches

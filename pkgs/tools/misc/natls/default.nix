@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "the 'ls' replacement you never knew you needed";
     homepage = "https://github.com/willdoescode/nat";
     license = licenses.mit;
-    maintainers = with maintainers; [ msfjarvis ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "natls";
   };
 }

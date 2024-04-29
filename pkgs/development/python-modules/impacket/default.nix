@@ -27,11 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-7kA5tNKu3o9fZEeLxZ+qyGA2eWviTeqNwY8An7CQXko=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     dsinternals
     flask
@@ -40,6 +40,7 @@ buildPythonPackage rec {
     pyasn1
     pycryptodomex
     pyopenssl
+    setuptools
     six
   ];
 

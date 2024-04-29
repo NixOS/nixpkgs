@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
-  version = "2024.1.25893";
+  version = "2024.1.28928";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.zip";
-    hash = "sha256-YH+SC2kc4jfW3Tn9pnhROoUHID1JAWF86As5rrU4xlY=";
+    hash = "sha256-8+dZ1YTpvOX0IEEbFzv4t8T/U/BZMeDCZL7Ju25WBpE=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

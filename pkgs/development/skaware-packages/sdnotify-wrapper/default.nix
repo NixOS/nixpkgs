@@ -1,6 +1,4 @@
-{ stdenv, lib, runCommandCC, skawarePackages }:
-
-with skawarePackages;
+{ stdenv, lib, runCommandCC, skawarePackages, skalibs }:
 
 let
   # From https://skarnet.org/software/misc/sdnotify-wrapper.c,

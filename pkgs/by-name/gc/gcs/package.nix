@@ -56,7 +56,7 @@ buildGoModule rec {
   ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
-  flags = [ "-a -trimpath" ];
+  flags = [ "-a" ];
   ldflags = [ "-s" "-w" "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}" ];
 
   installPhase = ''

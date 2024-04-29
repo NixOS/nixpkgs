@@ -102,3 +102,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # systemd: break too long lines of Nix code
 67643f8ec84bef1482204709073e417c9f07eb87
+
+# {pkgs/development/cuda-modules,pkgs/test/cuda,pkgs/top-level/cuda-packages.nix}: reformat all CUDA files with nixfmt-rfc-style 2023-03-01
+802a1b4d3338f24cbc4efd704616654456d75a94

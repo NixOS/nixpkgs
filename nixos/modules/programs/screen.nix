@@ -7,7 +7,7 @@ in
 {
   options = {
     programs.screen = {
-      enable = lib.mkEnableOption (lib.mdDoc "screen, a basic terminal multiplexer");
+      enable = lib.mkEnableOption "screen, a basic terminal multiplexer";
 
       package = lib.mkPackageOptionMD pkgs "screen" { };
 
@@ -17,7 +17,7 @@ in
           defscrollback 10000
           startup_message off
         '';
-        description = lib.mdDoc "The contents of {file}`/etc/screenrc` file";
+        description = "The contents of {file}`/etc/screenrc` file";
       };
     };
   };

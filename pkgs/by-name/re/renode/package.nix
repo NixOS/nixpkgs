@@ -1,15 +1,15 @@
 { stdenv
 , lib
+, fetchFromGitHub
 , fetchurl
 , autoPatchelfHook
 , makeWrapper
-, writeScript
+, nix-update-script
 , glibcLocales
 , python3Packages
 , gtk-sharp-2_0
 , gtk2-x11
 , screen
-, buildUnstable ? false
 }:
 
 let
@@ -18,7 +18,15 @@ let
     psutil
     pyyaml
     requests
-    robotframework
+
+    (robotframework.overrideDerivation (oldAttrs: {
+      src = fetchFromGitHub {
+        owner = "robotframework";
+        repo = "robotframework";
+        rev = "v6.0.2";
+        hash = "sha256-c7pPcDgqyqWQtiMbLQbQd0nAgx4TIFUFHrlBVDNdr8M=";
+      };
+    }))
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -69,29 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript =
-    let
-      versionRegex =
-        if buildUnstable
-        then "[0-9\.\+]+[^\+]*."
-        else "[0-9\.]+[^\+]*.";
-    in
-    writeScript "${finalAttrs.pname}-updater" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused pup
-
-      latestVersion=$(
-        curl -sS https://builds.renode.io \
-          | pup 'a text{}' \
-          | egrep 'renode-${versionRegex}\.linux-portable\.tar\.gz' \
-          | head -n1 \
-          | sed -e 's,renode-\(.*\)\.linux-portable\.tar\.gz,\1,g'
-      )
-
-      update-source-version ${finalAttrs.pname} "$latestVersion" \
-        --file=pkgs/by-name/re/${finalAttrs.pname}/package.nix \
-        --system=x86_64-linux
-    '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Virtual development framework for complex embedded systems";

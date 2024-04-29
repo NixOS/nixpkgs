@@ -71,6 +71,7 @@ let
     ghc948
     ghc963
     ghc964
+    ghc965
     ghc981
     ghc982
   ];
@@ -270,7 +271,7 @@ let
         cabal-install
         cabal2nix
         cachix
-        carp
+        # carp broken on 2024-04-09
         cedille
         client-ip-echo
         darcs
@@ -318,6 +319,7 @@ let
         madlang
         mailctl
         matterhorn
+        mkjson
         mueval
         naproche
         niv
@@ -329,6 +331,8 @@ let
         nix-script
         nix-tree
         nixfmt
+        nixfmt-classic
+        nixfmt-rfc-style
         nota
         nvfetcher
         ormolu
@@ -469,6 +473,15 @@ let
               inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
                 ghc
                 hello
+                microlens
+              ;
+            };
+
+            haskell.packages.ghc98 = {
+              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
+                ghc
+                hello
+                microlens
               ;
             };
 
@@ -476,6 +489,7 @@ let
               inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
                 ghc
                 hello
+                microlens
               ;
             };
           };
@@ -491,11 +505,11 @@ let
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
-      Cabal_3_10_2_1 = lib.subtractLists [
+      Cabal_3_10_3_0 = lib.subtractLists [
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
-      Cabal-syntax_3_10_1_0 = lib.subtractLists [
+      Cabal-syntax_3_10_3_0 = lib.subtractLists [
         compilerNames.ghc981
         compilerNames.ghc982
       ] released;
@@ -593,42 +607,35 @@ let
           maintainers = lib.teams.haskell.members;
         };
         constituents =
-          let
-            # Filter out all Darwin derivations.  We don't want flakey Darwin
-            # derivations and flakey Hydra Darwin builders to block the
-            # mergeable job from successfully building.
-            filterInLinux =
-              lib.filter (drv: drv.system == "x86_64-linux" || drv.system == "aarch64-linux");
-          in
-          filterInLinux
-            (accumulateDerivations [
-              # haskell specific tests
-              jobs.tests.haskell
-              # important top-level packages
-              jobs.cabal-install
-              jobs.cabal2nix
-              jobs.cachix
-              jobs.darcs
-              jobs.haskell-language-server
-              jobs.hledger
-              jobs.hledger-ui
-              jobs.hpack
-              jobs.niv
-              jobs.pandoc
-              jobs.stack
-              jobs.stylish-haskell
-              # important haskell (library) packages
-              jobs.haskellPackages.cabal-plan
-              jobs.haskellPackages.distribution-nixpkgs
-              jobs.haskellPackages.hackage-db
-              jobs.haskellPackages.xmonad
-              jobs.haskellPackages.xmonad-contrib
-              # haskell packages maintained by @peti
-              # imported from the old hydra jobset
-              jobs.haskellPackages.hopenssl
-              jobs.haskellPackages.hsemail
-              jobs.haskellPackages.hsyslog
-            ]);
+          accumulateDerivations [
+            # haskell specific tests
+            jobs.tests.haskell
+            # important top-level packages
+            jobs.cabal-install
+            jobs.cabal2nix
+            jobs.cachix
+            jobs.darcs
+            jobs.haskell-language-server
+            jobs.hledger
+            jobs.hledger-ui
+            jobs.hpack
+            jobs.niv
+            jobs.pandoc
+            jobs.stack
+            jobs.stylish-haskell
+            jobs.shellcheck
+            # important haskell (library) packages
+            jobs.haskellPackages.cabal-plan
+            jobs.haskellPackages.distribution-nixpkgs
+            jobs.haskellPackages.hackage-db
+            jobs.haskellPackages.xmonad
+            jobs.haskellPackages.xmonad-contrib
+            # haskell packages maintained by @peti
+            # imported from the old hydra jobset
+            jobs.haskellPackages.hopenssl
+            jobs.haskellPackages.hsemail
+            jobs.haskellPackages.hsyslog
+           ];
       };
       maintained = pkgs.releaseTools.aggregate {
         name = "maintained-haskell-packages";

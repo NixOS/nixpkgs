@@ -16,7 +16,7 @@
 , c-ares
 , json_c
 , libcap
-, libelf
+, elfutils
 , libunwind
 , libyang
 , net-snmp
@@ -118,7 +118,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     c-ares
     json_c
-    libelf
     libunwind
     libyang
     openssl
@@ -132,6 +131,8 @@ stdenv.mkDerivation rec {
     libcap
   ] ++ lib.optionals snmpSupport [
     net-snmp
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"

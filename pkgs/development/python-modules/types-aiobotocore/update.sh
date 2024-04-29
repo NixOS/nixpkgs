@@ -1,13 +1,13 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update
+#!nix-shell -i bash -p nix-update nixpkgs-fmt
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-version="2.12.1"
+version="2.12.3"
 
-nix-update python311Packages.types-aiobotocore --commit --build
+#nix-update python312Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-alexaforbusiness

@@ -18,17 +18,14 @@
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
-  version = "0.4.36";
+  version = "0.4.38";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
-    sha256 = "sha256-g7B0y2cxfVi+8ejQzIYveuinekW7/wVqH5h8ZIiy9f0=";
+    sha256 = "sha256-pVqY1HclZ6o/rtj7hNVAw9t36roW0+LhCwRPvJIoZo0=";
   };
 
-  postPatch = lib.optionalString stdenv.isAarch32 ''
-    # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/20
-    sed -i '/exec_opcodes_sys/d' testsuite/meson.build
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     # This benchmark times out on Hydra.nixos.org
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';

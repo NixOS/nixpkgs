@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-i3IcqTnTEq+qbvMdy9avtRYe04Wsgo5vzNTFt2vhidY=";
   };
 
+  separateDebugInfo = true;
+
   postPatch = ''
     patchShebangs tests
   '';

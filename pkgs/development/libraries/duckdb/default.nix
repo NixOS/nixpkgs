@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       runHook preInstallCheck
+      (($(ulimit -n) < 1024)) && ulimit -n 1024
 
       HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
 

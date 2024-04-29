@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , makeWrapper
 , pkg-config
 , libxslt
@@ -33,7 +32,7 @@ assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
-  version = "1.90.2";
+  version = "1.90.4";
 
   outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optionals withDocs [ "devdoc" ];
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "upower";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7WzMAJuf1czU8ZalsEU/NwCXYqTGvcqEqxFt5ocgt48=";
+    hash = "sha256-5twHuDLisVF07Y5KYwlqWMi12+p6UpARJvoBN/+tX2o=";
   };
 
   patches = lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
@@ -52,10 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./i686-test-remove-battery-check.patch
   ] ++ [
     ./installed-tests-path.patch
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/upower/upower/-/merge_requests/207.diff";
-      hash = "sha256-ldr1bKbSAdYpwbbe/Iq9i0Q9zQrHWvIvBGym/F3+vxs=";
-    })
   ];
 
   strictDeps = true;

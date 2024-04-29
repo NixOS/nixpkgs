@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , buildPackages
-, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
+, vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
 , gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
 , libadwaita
 , libnotify, libsoup, libgee
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja # https://github.com/dino/dino/issues/230
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
     gobject-introspection
   ];

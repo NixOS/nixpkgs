@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
   pname = "dirigera";
-  version = "1.0.11";
+  version = "1.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,33 +21,27 @@ buildPythonPackage rec {
     owner = "Leggin";
     repo = "dirigera";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kZlmfoGbvSv13+UqCE73ToLfrzzQ9AOxefRTxUvxMCg=";
+    hash = "sha256-OXq8eJyZQBsJEK81GxstfMHqDShlZyOWSXLwP9Zfpqw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pydantic
     requests
     websocket-client
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dirigera"
-  ];
+  pythonImportsCheck = [ "dirigera" ];
 
   meta = with lib; {
     description = "Module for controlling the IKEA Dirigera Smart Home Hub";
-    mainProgram = "generate-token";
     homepage = "https://github.com/Leggin/dirigera";
     changelog = "https://github.com/Leggin/dirigera/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "generate-token";
   };
 }

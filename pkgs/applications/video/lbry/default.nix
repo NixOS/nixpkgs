@@ -1,14 +1,12 @@
 { lib, fetchurl, appimageTools}:
 
-let
+appimageTools.wrapAppImage rec {
   pname = "lbry-desktop";
   version = "0.53.9";
-in appimageTools.wrapAppImage rec {
-  name = "${pname}-${version}";
 
   # Fetch from GitHub Releases and extract
   src = appimageTools.extract {
-    inherit name;
+    inherit pname version;
     src = fetchurl {
       url = "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
       # Gotten from latest-linux.yml
@@ -24,7 +22,7 @@ in appimageTools.wrapAppImage rec {
   # General fixup
   extraInstallCommands = ''
     # Firstly, rename the executable to lbry for convinence
-    mv $out/bin/${name} $out/bin/lbry
+    mv $out/bin/${pname} $out/bin/lbry
 
     # Now, install assets such as the desktop file and icons
     install -m 444 -D ${src}/lbry.desktop -t $out/share/applications

@@ -1,23 +1,25 @@
 { stdenv, lib, fetchFromGitHub, imagemagick
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+, libiconv
 
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    hash = "sha256-FqtxTRgjFqFu4zml6xePXtK8yn/dkHP+5aU2/9S7gSQ=";
+    hash = "sha256-uR46G1DISurBk17GQdo+x94F2cP0+157PxjdG2s1Ik4=";
   };
 
   nativeBuildInputs = [ imagemagick ];
 
-  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
+  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"
@@ -67,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.karolchmist ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

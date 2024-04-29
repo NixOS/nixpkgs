@@ -1,2 +1,0 @@
-pkgs/by-name/fo/foo: Path foo is a symlink which cannot be resolved: No such file or directory (os error 2).
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

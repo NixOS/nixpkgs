@@ -7,7 +7,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "vsc-material-theme";
     publisher = "Equinusocio";
     version = "34.3.1";
-    sha256 = "sha256-3yxFTMtjJR1b4EzBDfm55HF9chrya5OUF5wN+KHEduE=";
+    hash = "sha256-3yxFTMtjJR1b4EzBDfm55HF9chrya5OUF5wN+KHEduE=";
   };
 
   # extensions wants to write at the /nix/store path, so we patch it to use the globalStorageUri instead.

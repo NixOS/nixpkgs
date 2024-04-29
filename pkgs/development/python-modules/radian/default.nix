@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.8";
+  version = "0.6.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zI6oUHO4rY/BbbHhvzSNIKCpTDRm0cK46rIKN/ISgY0=";
+    hash = "sha256-cojKbDNqcUay5RxvWszQ96eC4jVI4G7iRv/ZYWgidCQ=";
   };
 
   postPatch = ''

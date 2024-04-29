@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cryptography
-, cython
+, cython_0
 , eventlet
 , fetchFromGitHub
 , geomet
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.28.0";
+  version = "3.29.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "datastax";
     repo = "python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-5JRbzYl7ftgK6GuvXWdvo52ZlS1th9JyLAYu/UCcPVc=";
+    hash = "sha256-pnNm5Pd5k4bt+s3GrUUDWRpSdqNSM89GiX8DZKYzW1E=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_0
   ];
 
   buildInputs = [

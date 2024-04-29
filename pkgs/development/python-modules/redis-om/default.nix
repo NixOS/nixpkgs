@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,10 +30,10 @@ buildPythonPackage rec {
     owner = "redis";
     repo = "redis-om-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jQS0VTYZeAj3+OVFy+JP4mUFBPo+a5D/kdJKagFraaA=";
+    hash = "sha256-E11wpTrE+HIT+jgn1zMC8L7RGas83DAJd1R0WWHp7Jc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     unasync
     poetry-core
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   # https://github.com/redis/redis-om-python/pull/577
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     hiredis
     more-itertools

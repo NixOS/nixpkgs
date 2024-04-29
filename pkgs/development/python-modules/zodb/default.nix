@@ -15,12 +15,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ZODB";
-  version = "5.8.1";
+  pname = "zodb";
+  version = "6.0";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xsc6vTZg1gb/wfIfl97xS1K0b0pwLsnm7kSabiviZN8=";
+    pname = "ZODB";
+    inherit version;
+    hash = "sha256-5Rx5IRXF2q1OgGdXuvovdUwADCPmurw75eQHdf5Jtdw=";
   };
 
   # remove broken test

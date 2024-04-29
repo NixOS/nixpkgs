@@ -8,7 +8,7 @@
 , python3
 , python3Packages
 , libffi
-, enableGoldPlugin ? true
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2
@@ -179,6 +179,10 @@ stdenv.mkDerivation (rec {
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
       --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
       --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+
+    # fails when run in sandbox
+    substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+      --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
   '' + optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86) ''
     # This test fails on darwin x86_64 because `sw_vers` reports a different
     # macOS version than what LLVM finds by reading
@@ -210,10 +214,6 @@ stdenv.mkDerivation (rec {
     # TODO(@rrbutani): fix/follow-up
     substituteInPlace unittests/TargetParser/Host.cpp \
       --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-
-    # This test fails with a `dysmutil` crash; have not yet dug into what's
-    # going on here (TODO(@rrbutani)).
-    rm test/tools/dsymutil/ARM/obfuscated.test
   '' + ''
     # FileSystem permissions tests fail with various special bits
     substituteInPlace unittests/Support/CMakeLists.txt \
@@ -382,7 +382,6 @@ stdenv.mkDerivation (rec {
       --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   ''
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

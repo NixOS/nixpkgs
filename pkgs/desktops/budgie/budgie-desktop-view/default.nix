@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
+  mesonFlags = [ (lib.mesonBool "werror" false) ];
+
   meta = {
     description = "The official Budgie desktop icons application/implementation";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop-view";

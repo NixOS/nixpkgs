@@ -20,7 +20,7 @@ buildGoModule {
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorHash = "sha256-McSmG+fMO8/T/bJR6YAJDYw9pxsWJoj1hcSTPv/wMsI=";
+  vendorHash = "sha256-074bgtoBRS3SOxLrwZbBdK1jFpdCvF6tRtU1CkrhoDY=";
   proxyVendor = true;
 
   # hack to get both go and cmake configure phase

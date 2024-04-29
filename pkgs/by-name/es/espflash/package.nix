@@ -6,6 +6,7 @@
 , installShellFiles
 , udev
 , stdenv
+, CoreServices
 , Security
 , nix-update-script
 , openssl
@@ -14,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espflash";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
     rev = "v${version}";
-    hash = "sha256-Nv2/33VYpCkPYyUhlVDYJR1BkbtEvEPtmgyZXfVn1ug=";
+    hash = "sha256-0CnYdz1KG/y4B+dOp9rYE097ctf4GNmyqv3/xywdA6A=";
   };
 
   nativeBuildInputs = [
@@ -34,11 +35,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
     udev
   ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
     Security
     SystemConfiguration
   ];
 
-  cargoHash = "sha256-Xj5FVTssC3e+mMhDHmKqV6lUQgaIv3aVc1yewbQSy9E=";
+  cargoHash = "sha256-CmhBl+d5odc0QL45aWCJcBZIVeJsdpxJweh7FT8cpyY=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espflash \

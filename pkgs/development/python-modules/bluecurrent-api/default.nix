@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, pythonRelaxDepsHook
 , setuptools
 , pytz
 , websockets
@@ -13,26 +12,21 @@
 
 buildPythonPackage rec {
   pname = "bluecurrent-api";
-  version = "1.2.1";
+  version = "1.2.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vr6mehGRXHW+fP2luLpD14igCdIgJI5NXzaa+bEife0=";
+    hash = "sha256-mWRTSMS68+J1Z4PYOFF/UvofSqV1wv0gjiTACEWDfNg=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
   ];
 
-  pythonRemoveDeps = [
-    "asyncio"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     websockets
   ];

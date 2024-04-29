@@ -1,31 +1,30 @@
 { lib
 , buildPythonPackage
 , docutils
+, ephem
 , fetchFromGitHub
 , fetchpatch
 , funcparserlib
-, nose
 , pillow
-, ephem
-, pythonOlder
+, pynose
 , pytestCheckHook
+, pythonOlder
 , reportlab
 , setuptools
 , webcolors
-, python
 }:
 
 buildPythonPackage rec {
   pname = "blockdiag";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "blockdiag";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
@@ -38,18 +37,21 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
     setuptools
+  ];
+
+  dependencies = [
+    docutils
     funcparserlib
     pillow
-    webcolors
     reportlab
-    docutils
+    webcolors
   ];
 
   nativeCheckInputs = [
     ephem
-    nose
+    pynose
     pytestCheckHook
   ];
 
@@ -68,10 +70,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
-    mainProgram = "blockdiag";
     homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/blockdiag/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "blockdiag";
+    platforms = platforms.unix;
   };
 }

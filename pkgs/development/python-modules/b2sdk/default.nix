@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, glibcLocales
-, importlib-metadata
-, logfury
-, pyfakefs
-, pytestCheckHook
-, pytest-lazy-fixture
-, pytest-mock
-, pythonOlder
-, pythonRelaxDepsHook
-, pdm-backend
-, requests
-, tqdm
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  glibcLocales,
+  importlib-metadata,
+  logfury,
+  packaging,
+  pdm-backend,
+  pyfakefs,
+  pytest-lazy-fixture,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.32.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,36 +30,31 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xBLMvH51zbrSuBOtMxLeQJt7Wv31OcxBbD72EuLHzuU=";
+    hash = "sha256-0/UC4O19oO8SpboiPIhvkWBA8XHpc279fl377MooK54=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
-  pythonRemoveDeps = [
-    "setuptools"
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [
-    logfury
-    requests
-    tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    typing-extensions
-  ];
+  pythonRemoveDeps = [ "setuptools" ];
+
+  dependencies =
+    [
+      packaging
+      logfury
+      requests
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pyfakefs
     pytest-lazy-fixture
     pytest-mock
-    pyfakefs
-  ] ++ lib.optionals stdenv.isLinux [
-    glibcLocales
-  ];
+    pytestCheckHook
+    tqdm
+  ] ++ lib.optionals stdenv.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth
@@ -73,9 +70,7 @@ buildPythonPackage rec {
     "test_file_info_b2_attributes"
   ];
 
-  pythonImportsCheck = [
-    "b2sdk"
-  ];
+  pythonImportsCheck = [ "b2sdk" ];
 
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";

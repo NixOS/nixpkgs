@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, electron, libsecret
-, desktop-file-utils , callPackage }:
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, electron
+, libsecret
+, asar
+, glib
+, desktop-file-utils
+, callPackage
+}:
 
 let
 
@@ -21,20 +31,31 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils ];
+  nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils asar ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
-  installPhase = ''
+  installPhase = let
+    libPath = lib.makeLibraryPath [
+      libsecret
+      glib
+      stdenv.cc.cc.lib
+    ];
+  in
+    ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share/standardnotes
     cp -R usr/share/{applications,icons} $out/share
     cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
+    asar e $out/share/standardnotes/app.asar asar-unpacked
+    find asar-unpacked -name '*.node' -exec patchelf \
+      --add-rpath "${libPath}" \
+      {} \;
+    asar p asar-unpacked $out/share/standardnotes/app.asar
 
     makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
-      --add-flags $out/share/standardnotes/app.asar \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
+      --add-flags $out/share/standardnotes/app.asar
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
       --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop

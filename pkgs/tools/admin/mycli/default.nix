@@ -8,11 +8,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.27.0";
+  version = "1.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-px21vZwafQAG9PL/AVSM51Y30/UMo6fne5ULW0av980=";
+    sha256 = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
   };
 
   propagatedBuildInputs = [
@@ -40,13 +40,6 @@ buildPythonApplication rec {
 
   disabledTestPaths = [
     "mycli/packages/paramiko_stub/__init__.py"
-  ];
-
-  disabledTests = [
-    # Note: test_auto_escaped_col_names is currently failing due to a bug upstream.
-    # TODO: re-enable this test once there is a fix upstream. See
-    # https://github.com/dbcli/mycli/issues/1103 for details.
-    "test_auto_escaped_col_names"
   ];
 
   postPatch = ''

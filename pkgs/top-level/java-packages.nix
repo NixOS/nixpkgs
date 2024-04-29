@@ -9,9 +9,10 @@ let
   openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
   openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
   openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
+  openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22.nix { };
 
 in {
-  inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
+  inherit openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21 openjfx22;
 
   compiler = let
 
@@ -98,6 +99,7 @@ in {
     corretto11 = callPackage ../development/compilers/corretto/11.nix { };
     corretto17 = callPackage ../development/compilers/corretto/17.nix { };
     corretto19 = callPackage ../development/compilers/corretto/19.nix { };
+    corretto21 = callPackage ../development/compilers/corretto/21.nix { };
 
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
@@ -219,6 +221,14 @@ in {
       {
         openjdk21-bootstrap = temurin-bin.jdk-21;
         openjfx = openjfx21;
+      };
+
+    openjdk22 = mkOpenjdk
+      ../development/compilers/openjdk/22.nix
+      ../development/compilers/zulu/22.nix
+      {
+        openjdk22-bootstrap = temurin-bin.jdk-21;
+        openjfx = openjfx22;
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (

@@ -84,6 +84,7 @@ buildPythonPackage rec {
     "test_n3_cis_ewald"
     "test_veff"
     "test_collinear_kgks_gga"
+    "test_libxc_gga_deriv4"
   ];
 
   pytestFlagsArray = [

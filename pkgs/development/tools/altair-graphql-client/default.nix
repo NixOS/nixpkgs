@@ -2,11 +2,11 @@
 
 let
   pname = "altair";
-  version = "6.3.1";
+  version = "6.4.0";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-ebRwdivDxjcM3dD+RLW09otT/wovz1JjgXai2TsuSOE=";
+    sha256 = "sha256-eUUPfMwCMrMHk2RcLfpI8VuolgI/7geY6/6QrWjkIXg=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -15,8 +15,6 @@ appimageTools.wrapType2 {
   inherit src pname version;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

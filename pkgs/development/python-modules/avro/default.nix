@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
+, setuptools
 , fetchPypi
 , typing-extensions
 , pytestCheckHook
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "avro";
   version = "1.11.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,8 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-M5O7UTn5zweR0gV1bOHjmltYWGr1sVPWo7WhmWEOnRc=";
   };
 
+  postPatch = lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace avro/test/test_tether_word_count.py \
+      --replace-fail 'distutils' 'setuptools._distutils'
+  '';
+
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   nativeCheckInputs = [

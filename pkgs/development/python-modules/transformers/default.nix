@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 # propagated build inputs
 , filelock
 , huggingface-hub
@@ -53,8 +54,8 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.39.1";
-  format = "setuptools";
+  version = "4.40.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -62,8 +63,12 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OzuiKzhgI9eRTPq3l7x4aw3fxvCe4080pK1RKzcC1RQ=";
+    hash = "sha256-w9BVJwYS2QV58UTOpcoQwdC+dxZuhLS2h8PqN5W2Yjc=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     filelock

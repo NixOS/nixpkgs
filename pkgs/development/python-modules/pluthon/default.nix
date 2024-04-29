@@ -26,7 +26,7 @@ buildPythonPackage rec {
     setuptools
     uplc
     ordered-set
-  ] ++ lib.optionals (pythonOlder "3.9") graphlib-backport;
+  ] ++ lib.optional (pythonOlder "3.9") graphlib-backport;
 
   pythonImportsCheck = [ "pluthon" ];
 

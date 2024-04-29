@@ -15,21 +15,27 @@
 , qhull
 , cmake
 , cgal
-, boost179
+, boost
 , mpfr
 , xercesc
+, tbb
+, embree
+, vcg
+, libigl
+, corto
+, openctm
+, structuresynth
 }:
 
 mkDerivation rec {
   pname = "meshlab";
-  version = "2022.02";
+  version = "2023.12";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
     rev = "MeshLab-${version}";
-    sha256 = "sha256-jcc3PfsiIeYyipteZgzd0NwZgFFgR/mMBiaInzhOcDY=";
-    fetchSubmodules = true; # for vcglib
+    sha256 = "sha256-AdUAWS741RQclYaSE3Tz1/I0YSinNAnfSaqef+Tib8Y=";
   };
 
   buildInputs = [
@@ -46,38 +52,38 @@ mkDerivation rec {
     levmar
     qhull
     cgal
-    boost179
+    boost
     mpfr
     xercesc
+    tbb
+    embree
+    vcg
+    libigl
+    corto
+    openctm
+    structuresynth
   ];
 
   nativeBuildInputs = [ cmake ];
 
   preConfigure = ''
-    substituteAll ${./meshlab.desktop} scripts/Linux/resources/meshlab.desktop
-    cmakeDir=$PWD/src
-    mkdir ../build
-    cd ../build
+    substituteAll ${./meshlab.desktop} resources/linux/meshlab.desktop
+    substituteInPlace src/external/libigl.cmake \
+      --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-2.4.0 ${libigl}
+    substituteInPlace src/external/nexus.cmake \
+      --replace-fail '$'{NEXUS_DIR}/src/corto ${corto.src}
+    substituteInPlace src/external/levmar.cmake \
+      --replace-fail '$'{LEVMAR_LINK} ${levmar.src} \
+      --replace-warn "MD5 ''${LEVMAR_MD5}" ""
+    substituteInPlace src/external/ssynth.cmake \
+      --replace-fail '$'{SSYNTH_LINK} ${structuresynth.src} \
+      --replace-warn "MD5 ''${SSYNTH_MD5}" ""
+    substituteInPlace src/common_gui/CMakeLists.txt \
+      --replace-warn "MESHLAB_LIB_INSTALL_DIR" "CMAKE_INSTALL_LIBDIR"
   '';
 
   cmakeFlags = [
-    "-DALLOW_BUNDLED_EIGEN=OFF"
-    "-DALLOW_BUNDLED_GLEW=OFF"
-    "-DALLOW_BUNDLED_LIB3DS=OFF"
-    "-DALLOW_BUNDLED_MUPARSER=OFF"
-    "-DALLOW_BUNDLED_QHULL=OFF"
-    # disable when available in nixpkgs
-    "-DALLOW_BUNDLED_OPENCTM=ON"
-    "-DALLOW_BUNDLED_SSYNTH=ON"
-    "-DALLOW_BUNDLED_BOOST=OFF"
-    # some plugins are disabled unless these are on
-    "-DALLOW_BUNDLED_NEWUOA=ON"
-    "-DALLOW_BUNDLED_LEVMAR=ON"
-  ];
-
-  CXXFLAGS = [
-    # GCC 13: error: 'int16_t' has not been declared in 'std'
-    "-include cstdint"
+    "-DVCGDIR=${vcg.src}"
   ];
 
   postFixup = ''

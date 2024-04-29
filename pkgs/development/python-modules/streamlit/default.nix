@@ -18,6 +18,7 @@
 , pympler
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , requests
 , rich
@@ -32,18 +33,23 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.32.2";
+  version = "1.33.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Eli5y8P/lXv30Jsb/IXO3DCPEGWzB0hUUpWpr41Vd6s=";
+    hash = "sha256-qNqP9G9blIxW0tx6ynphz42ZX08hdEz4IliudeYwBLo=";
   };
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "packaging"
   ];
 
   propagatedBuildInputs = [

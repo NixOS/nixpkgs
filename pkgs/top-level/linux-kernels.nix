@@ -185,17 +185,6 @@ in {
       ];
     };
 
-    linux_6_7 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.7";
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.rust_1_74
-        kernelPatches.rust_1_75
-        kernelPatches.rust_1_76
-      ];
-    };
-
     linux_6_8 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "6.8";
       kernelPatches = [
@@ -203,6 +192,7 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.rust_1_75
         kernelPatches.rust_1_76
+        kernelPatches.rust_1_77-6_8
       ];
     };
 
@@ -214,8 +204,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.rust_1_75
-          kernelPatches.rust_1_76
+          kernelPatches.rust_1_77-6_9
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -271,7 +260,6 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
-    linux_6_7_hardened = hardenedKernelFor kernels.linux_6_7 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -283,12 +271,14 @@ in {
     linux_6_3 = throw "linux 6.3 was removed because it has reached its end of life upstream";
     linux_6_4 = throw "linux 6.4 was removed because it has reached its end of life upstream";
     linux_6_5 = throw "linux 6.5 was removed because it has reached its end of life upstream";
+    linux_6_7 = throw "linux 6.7 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0_hardened = throw "linux 6.0 was removed because it has reached its end of life upstream";
+    linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
@@ -451,6 +441,10 @@ in {
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
 
+    rtl8852au = callPackage ../os-specific/linux/rtl8852au { };
+
+    rtl8852bu = callPackage ../os-specific/linux/rtl8852bu { };
+
     rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack {};
 
     rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
@@ -542,9 +536,7 @@ in {
       virtualbox = pkgs.virtualboxHardened;
     };
 
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions {
-      virtualbox = pkgs.virtualboxHardened;
-    };
+    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
     vm-tools = callPackage ../os-specific/linux/vm-tools { };
 
@@ -561,6 +553,8 @@ in {
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
     ithc = callPackage ../os-specific/linux/ithc { };
+
+    ryzen-smu = callPackage ../os-specific/linux/ryzen-smu { };
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
@@ -586,6 +580,8 @@ in {
 
     hid-tmff2 = callPackage ../os-specific/linux/hid-tmff2 { };
 
+    drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
@@ -604,7 +600,6 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-    linux_6_7 = recurseIntoAttrs (packagesFor kernels.linux_6_7);
     linux_6_8 = recurseIntoAttrs (packagesFor kernels.linux_6_8);
     __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
@@ -617,6 +612,7 @@ in {
     linux_6_3 = throw "linux 6.3 was removed because it reached its end of life upstream"; # Added 2023-07-22
     linux_6_4 = throw "linux 6.4 was removed because it reached its end of life upstream"; # Added 2023-10-02
     linux_6_5 = throw "linux 6.5 was removed because it reached its end of life upstream"; # Added 2024-02-28
+    linux_6_7 = throw "linux 6.7 was removed because it reached its end of life upstream"; # Added 2024-04-04
   };
 
   rtPackages = {
@@ -650,7 +646,6 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
-    linux_6_7_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_7_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -666,6 +661,7 @@ in {
     linux_5_18_hardened = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19_hardened = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0_hardened = throw "linux 6.0 was removed because it has reached its end of life upstream";
+    linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
   });
 

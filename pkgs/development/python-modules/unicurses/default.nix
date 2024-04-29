@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "unicurses";
-  version = "2.1.3";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "Uni-Curses";
-    hash = "sha256-uzSiF0jAZzI0iZngM/GuJ60o+UbLQ5XQzycTPito34w=";
+    hash = "sha256-ZJUKWxu2cQlFGN1RNtyDacwSOtBiUKzk9SIDD0IQiuU=";
   };
 
   propagatedBuildInputs = [ x256 ];

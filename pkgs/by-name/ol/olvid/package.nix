@@ -53,14 +53,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "olvid";
-  version = "1.5.0";
+  version = "1.5.2";
 
   dontUnpack = true;
   dontWrapGApps = true;
 
   src = fetchurl {
     url = "https://static.olvid.io/linux/${repo}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iiMc9mM+uUVeS1i1gzXMZaMwSChdz7vNrL9uqJlR8NU=";
+    hash = "sha256-WjIOk3dPSXQdAR2fdXseV0NdOjld0PzyqnUx/VbvQio=";
   };
 
   nativeBuildInputs = [

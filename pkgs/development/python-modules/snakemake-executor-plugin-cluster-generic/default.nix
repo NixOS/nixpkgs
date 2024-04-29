@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-executor-plugin-cluster-generic";
-  version = "1.0.8";
+  version = "1.0.9";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+aGd+E+VQb7MflsiUgFR98AyeetZxbc4gdvU1JWJNcM=";
+    hash = "sha256-RHMefoJOZb6TjRsFCORLFdHtI5ZpTsV6CHrjHKMat9o=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic cluster executor for Snakemake";
-    homepage = "https://github.com/snakemake/snakemake-executor-plugin-cluster-generic/tags";
+    homepage = "https://github.com/snakemake/snakemake-executor-plugin-cluster-generic";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];
   };

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-rom";
-  version = "46";
+  version = "47";
 
   src = fetchFromGitHub {
     owner = "X16Community";
     repo = "x16-rom";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-PcLHIT84NbH+ejq8SY/UN+TYtRFWtqQBHwHqToFUol8=";
+    hash = "sha256-+NvuCW8CIj5cnrGh+VQOExhAeXMElqdl9DVJjjGhNPk=";
   };
 
   nativeBuildInputs = [

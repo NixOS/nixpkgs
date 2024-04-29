@@ -1,5 +1,5 @@
 { lib, wrapQtAppsHook, fetchFromGitHub, substituteAll, udev, stdenv
-, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu
+, pkg-config, qtbase, cmake, zlib, kmod, libXdmcp, qttools, qtx11extras, libdbusmenu, gnused
 , withPulseaudio ? stdenv.isLinux, libpulseaudio, quazip
 }:
 
@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
       inherit kmod;
     })
   ];
+
+  postInstall = ''
+    substituteInPlace "$out/lib/udev/rules.d/99-ckb-next-daemon.rules" \
+      --replace-fail "/usr/bin/env sed" "${lib.getExe gnused}"
+  '';
 
   meta = with lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";

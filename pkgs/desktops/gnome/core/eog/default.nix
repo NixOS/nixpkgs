@@ -21,6 +21,7 @@
 , exempi
 , shared-mime-info
 , wrapGAppsHook
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , libheif
@@ -81,10 +82,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
         libheif.out
@@ -96,6 +98,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${libjxl}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )

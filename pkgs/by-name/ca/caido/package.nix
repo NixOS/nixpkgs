@@ -19,7 +19,6 @@ in appimageTools.wrapType2 {
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/caido.desktop -t $out/share/applications
     install -m 444 -D ${appimageContents}/caido.png \
       $out/share/icons/hicolor/512x512/apps/caido.png

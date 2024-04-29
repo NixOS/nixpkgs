@@ -10,17 +10,17 @@ let
 in
 {
   options.services.pinnwand = {
-    enable = mkEnableOption (lib.mdDoc "Pinnwand");
+    enable = mkEnableOption "Pinnwand, a pastebin";
 
     port = mkOption {
       type = types.port;
-      description = lib.mdDoc "The port to listen on.";
+      description = "The port to listen on.";
       default = 8000;
     };
 
     settings = mkOption {
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Your {file}`pinnwand.toml` as a Nix attribute set. Look up
         possible options in the [documentation](https://pinnwand.readthedocs.io/en/v${pkgs.pinnwand.version}/configuration.html).
       '';
@@ -31,7 +31,7 @@ in
             type = types.str;
             default = "sqlite:////var/lib/pinnwand/pinnwand.db";
             example = "sqlite:///:memory";
-            description = lib.mdDoc ''
+            description = ''
               Database URI compatible with [SQLAlchemyhttps://docs.sqlalchemy.org/en/14/core/engines.html#database-urls].
 
               Additional packages may need to be introduced into the environment for certain databases.
@@ -42,7 +42,7 @@ in
             type = types.ints.positive;
             default = 262144;
             example = 524288;
-            description = lib.mdDoc ''
+            description = ''
               Maximum size of a paste in bytes.
             '';
           };
@@ -51,7 +51,7 @@ in
             default = ''
               <p>Welcome to pinnwand, this site is a pastebin. It allows you to share code with others. If you write code in the text area below and press the paste button you will be given a link you can share with others so they can view your code as well.</p><p>People with the link can view your pasted code, only you can remove your paste and it expires automatically. Note that anyone could guess the URI to your paste so don't rely on it being private.</p>
               '';
-            description = lib.mdDoc ''
+            description = ''
               Raw HTML help text shown in the header area.
             '';
           };
@@ -60,7 +60,7 @@ in
             default = ''
               View <a href="//github.com/supakeen/pinnwand" target="_BLANK">source code</a>, the <a href="/removal">removal</a> or <a href="/expiry">expiry</a> stories, or read the <a href="/about">about</a> page.
             '';
-            description = lib.mdDoc ''
+            description = ''
               The footer in raw HTML.
             '';
           };

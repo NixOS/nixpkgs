@@ -26,6 +26,7 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
+        doCheck = false; # no tests
       });
 
       dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {

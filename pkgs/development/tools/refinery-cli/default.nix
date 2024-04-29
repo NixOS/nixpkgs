@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "refinery-cli";
-  version = "0.8.12";
+  version = "0.8.14";
 
   src = fetchCrate {
     pname = "refinery_cli";
     inherit version;
-    sha256 = "sha256-ftti/+Zl9/8CsrlEI5gZQF0M33vzl5aK3X/EfCujtY4=";
+    sha256 = "sha256-gHW+5WWzk1H2O5B2sWdl6QcOeUbNvbdZZBD10SmE1GA=";
   };
 
-  cargoHash = "sha256-KlZTgg/Y4cXy5DR8iT4olVTF0kq1g5AQm3Sjpmrl6lk=";
+  cargoHash = "sha256-Go7+LZSze/IrNwEl+11Dm5O9RcREyPSkHPjlE9SPO70=";
 
   nativeBuildInputs = [ pkg-config ];
 

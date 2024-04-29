@@ -81,7 +81,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 
 ## Example flake usage {#sec-darwin-builder-example-flake}
 
-```
+```nix
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
@@ -153,7 +153,8 @@ you may use it to build a modified remote builder with additional storage or mem
 To do this, you just need to set the `virtualisation.darwin-builder.*` parameters as
 in the example below and rebuild.
 
-```
+```nix
+  {
     darwin-builder = nixpkgs.lib.nixosSystem {
       system = linuxSystem;
       modules = [
@@ -166,6 +167,8 @@ in the example below and rebuild.
           virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
         }
       ];
+    };
+  }
 ```
 
 You may make any other changes to your VM in this attribute set. For example,

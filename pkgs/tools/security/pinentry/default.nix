@@ -103,7 +103,7 @@ let
           platforms.all;
         longDescription = ''
           Pinentry provides a console and (optional) GTK and Qt GUIs allowing users
-          to enter a passphrase when `gpg' or `gpg2' is run and needs it.
+          to enter a passphrase when `gpg` or `gpg2` is run and needs it.
         '';
         maintainers = with maintainers; [ fpletz ];
         mainProgram = "pinentry";

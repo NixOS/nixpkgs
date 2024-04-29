@@ -18,7 +18,15 @@
 
   gpio = callPackage ./gpio {};
 
+  homematicip_local = callPackage ./homematicip_local { };
+
+  indego = callPackage ./indego { };
+
+  local_luftdaten = callPackage ./local_luftdaten { };
+
   localtuya = callPackage ./localtuya {};
+
+  midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
 
   miele = callPackage ./miele {};
 
@@ -30,5 +38,15 @@
 
   sensi = callPackage ./sensi {};
 
+  smartir = callPackage ./smartir {};
+
+  smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
+
+  xiaomi_gateway3 = callPackage ./xiaomi_gateway3 {};
+
+  xiaomi_miot = callPackage ./xiaomi_miot {};
+
+  yassi = callPackage ./yassi {};
 }

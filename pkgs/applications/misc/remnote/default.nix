@@ -6,11 +6,11 @@ stdenv.mkDerivation (finalAttrs: let
 in
 {
   pname = "remnote";
-  version = "1.14.13";
+  version = "1.16.4";
 
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
-    hash = "sha256-WpNgdQGNz1Vv3MQe6tgnkzf+rvxMeoDQns5SqKNP7F8=";
+    hash = "sha256-dgbQ0cbPq7BSQ9VwwH6+GoAxb85HDxRixfjeDJBtOrg=";
   };
 
   appexec = appimageTools.wrapType2 {
@@ -40,7 +40,7 @@ in
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 ${appexec}/bin/remnote-${version} $out/bin/remnote
+    install -Dm755 ${appexec}/bin/remnote $out/bin/remnote
     install -Dm444 "${desktopItem}/share/applications/"* -t $out/share/applications/
     install -Dm444 ${icon} $out/share/pixmaps/remnote.png
 

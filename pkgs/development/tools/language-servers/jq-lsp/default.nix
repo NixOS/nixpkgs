@@ -18,7 +18,7 @@ buildGoModule rec {
 
   # based on https://github.com/wader/jq-lsp/blob/master/.goreleaser.yml
   CGO_ENABLED = 0;
-  GOFLAGS = [ "-trimpath" ];
+
   ldflags = [
     "-s"
     "-w"

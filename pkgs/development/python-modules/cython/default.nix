@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , setuptools
 , python
 , pkg-config
@@ -25,16 +24,16 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.36";
+  version = "3.0.9";
   pyproject = true;
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
-    hash = "sha256-QcDP0tdU44PJ7rle/8mqSrhH0Ml0cHfd18Dctow7wB8=";
+    hash = "sha256-otNU8FnR8FXTTPqmLFtovHisLOq2QHFI1H+1CM87pPM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pkg-config
     setuptools
   ];
@@ -43,26 +42,7 @@ in buildPythonPackage rec {
     gdb numpy ncurses
   ];
 
-  LC_ALL = "en_US.UTF-8";
-
-  patches = [
-    # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
-    # it does not affect Python code unless the code explicitly uses the feature.
-    # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
-    ./trashcan.patch
-    # The above commit introduces custom trashcan macros, as well as
-    # compiler changes to use them in Cython-emitted code. The latter
-    # change is still useful, but the former has been upstreamed as of
-    # Python 3.8, and the patch below makes Cython use the upstream
-    # trashcan macros whenever available. This is needed for Python
-    # 3.11 support, because the API used in Cython's implementation
-    # changed: https://github.com/cython/cython/pull/4475
-    (fetchpatch {
-      name = "disable-trashcan.patch";
-      url = "https://github.com/cython/cython/commit/e337825cdcf5e94d38ba06a0cb0188e99ce0cc92.patch";
-      hash = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
-    })
-  ];
+  env.LC_ALL = "en_US.UTF-8";
 
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
@@ -86,6 +66,5 @@ in buildPythonPackage rec {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -2,7 +2,6 @@
 , lib
 , fetchFromBitbucket
 , cmake
-, copyDesktopItems
 , pkg-config
 , makeWrapper
 , zlib
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
 
-  nativeBuildInputs = [ cmake copyDesktopItems pkg-config ]
+  nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
   buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk3 ];
 

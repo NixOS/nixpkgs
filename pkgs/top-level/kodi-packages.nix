@@ -26,7 +26,7 @@ let
   self = {
     addonDir = "/share/kodi/addons";
 
-    rel = "Nexus";
+    rel = kodi.kodiReleaseName;
 
     inherit callPackage kodi hasKodiAddon requiredKodiAddons;
 

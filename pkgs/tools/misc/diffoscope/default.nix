@@ -79,11 +79,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "260";
+  version = "265";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-jZXBX6aIArm3eFmJpr60HxlcSlVNCK/wSL1yeIl/MjQ=";
+    hash = "sha256-YE81R8lTOM3wmv/GIaIBqUq2O6UvnUaHjuXZ00yDU8U=";
   };
 
   outputs = [
@@ -93,6 +93,7 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
+    ./openssh-no-dsa.patch # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/139
   ];
 
   postPatch = ''
@@ -167,7 +168,7 @@ python3.pkgs.buildPythonApplication rec {
     jsondiff
     libarchive-c
     progressbar33
-    pypdf2
+    pypdf
     python-magic
     pyxattr
     rpm
@@ -214,7 +215,8 @@ python3.pkgs.buildPythonApplication rec {
       guestfs
       h5py
       pdfminer-six
-      # docx2txt, breaks the tests.
+      r2pipe
+      # docx2txt, nixpkgs packages another project named the same, which does not work
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]

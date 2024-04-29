@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://xplr.dev";
     changelog = "https://github.com/sayanarijit/xplr/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sayanarijit suryasr007 thehedgeh0g mimame figsoda ];
+    maintainers = with maintainers; [ sayanarijit suryasr007 pyrox0 mimame figsoda ];
   };
 }

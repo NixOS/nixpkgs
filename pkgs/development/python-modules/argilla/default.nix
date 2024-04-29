@@ -65,7 +65,7 @@
 }:
 let
   pname = "argilla";
-  version = "1.26.0";
+  version = "1.27.0";
   optional-dependencies = {
     server = [
       fastapi
@@ -126,7 +126,7 @@ buildPythonPackage {
     owner = "argilla-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+8oN3afbpBQU2tRb2Oq12IlmoCg4O1LUHtt4hl2FOEI=";
+    hash = "sha256-CBVP/+XFKnJBMcxsDd7lgQ1JFX7zFlHmdBwkAMmq85g=";
   };
 
   pythonRelaxDeps = [

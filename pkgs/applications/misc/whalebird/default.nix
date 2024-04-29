@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "whalebird";
-  version = "6.0.4";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "h3poteto";
     repo = "whalebird-desktop";
     rev = "v${version}";
-    hash = "sha256-Yx0GEEPJ+d4/RvCbqZdKR6iE2iUNbOJr+RuboqjT8z8=";
+    hash = "sha256-Jf+vhsfVjNrxdBkwwh3D3d2AlsGHfmEn90dq2QrKi2k=";
   };
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
   offlineCache = stdenv.mkDerivation {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-RjTGAgHRRQ4O3eTYpmTrl+KXafDZkWf1NH6lzdozVAA=";
+    outputHash = "sha256-SJCJq1vkO/jH9YgB3rV/pK4wV5Prm3sNjOj9YwL6XTw=";
   };
 
   nativeBuildInputs = [

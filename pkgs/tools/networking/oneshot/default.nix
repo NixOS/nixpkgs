@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd" ];
 
-  GOWORK = "off";
+  env.GOWORK = "off";
 
   modRoot = "v2";
 

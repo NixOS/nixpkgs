@@ -89,12 +89,14 @@ The first steps to all these are the same:
     want to add something like this to your `configuration.nix`:
 
     ```nix
-    boot.loader.grub.extraEntries = ''
-      menuentry "Ubuntu" {
-        search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
-        configfile "($ubuntu)/boot/grub/grub.cfg"
-      }
-    '';
+    {
+      boot.loader.grub.extraEntries = ''
+        menuentry "Ubuntu" {
+          search --set=ubuntu --fs-uuid 3cc3e652-0c1f-4800-8451-033754f68e6e
+          configfile "($ubuntu)/boot/grub/grub.cfg"
+        }
+      '';
+    }
     ```
 
     (You can find the appropriate UUID for your partition in
@@ -164,7 +166,9 @@ The first steps to all these are the same:
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
-    users.users.root.initialHashedPassword = "";
+    {
+      users.users.root.initialHashedPassword = "";
+    }
     ```
 
 1.  Build the NixOS closure and install it in the `system` profile:

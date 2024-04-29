@@ -17,7 +17,7 @@
 }:
 
 buildPythonPackage {
-  pname = "PySC2";
+  pname = "pysc2";
   version = "1.2";
 
   src = fetchFromGitHub {

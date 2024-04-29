@@ -1,13 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, apacheHttpd, python3, libintl }:
+{
+  apacheHttpd,
+  fetchFromGitHub,
+  lib,
+  libintl,
+  nix-update-script,
+  python3,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_python";
-  version = "unstable-2022-10-18";
+  version = "3.5.0.2";
 
   src = fetchFromGitHub {
     owner = "grisha";
     repo = pname;
-    rev = "d066b07564d2194839eceb535485eb1ba0c292d8";
+    rev = "refs/tags/${version}";
     hash = "sha256-EH8wrXqUAOFWyPKfysGeiIezgrVc789RYO4AHeSA6t4=";
   };
 
@@ -18,13 +26,21 @@ stdenv.mkDerivation rec {
     "BINDIR=$(out)/bin"
   ];
 
-  passthru = { inherit apacheHttpd; };
+  buildInputs = [
+    apacheHttpd
+    python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    libintl
+  ];
 
-  buildInputs = [ apacheHttpd python3 ]
-    ++ lib.optional stdenv.isDarwin libintl;
+  passthru = {
+    inherit apacheHttpd;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://modpython.org/";
+    changelog = "https://github.com/grisha/mod_python/blob/${version}/NEWS";
     description = "An Apache module that embeds the Python interpreter within the server";
     mainProgram = "mod_python";
     platforms = platforms.unix;

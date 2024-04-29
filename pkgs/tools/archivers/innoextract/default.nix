@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://constexpr.org/innoextract/";
     license = licenses.zlib;
     maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "innoextract";
   };
 }

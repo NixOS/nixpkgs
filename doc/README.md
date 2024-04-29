@@ -106,12 +106,12 @@ This is a warning
 
 The following are supported:
 
-- [`caution`](https://tdg.docbook.org/tdg/5.0/caution.html)
-- [`important`](https://tdg.docbook.org/tdg/5.0/important.html)
-- [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
-- [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
-- [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
-- [`example`](https://tdg.docbook.org/tdg/5.0/example.html)
+- `caution`
+- `important`
+- `note`
+- `tip`
+- `warning`
+- `example`
 
 Example admonitions require a title to work.
 If you don't provide one, the manual won't be built.

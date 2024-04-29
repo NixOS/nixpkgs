@@ -39,6 +39,15 @@ let
         };
       });
 
+      aioautomower = super.aioautomower.overridePythonAttrs (oldAttrs: rec {
+        version = "2024.3.4";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-dk8HfIiQOKq7Ky+vYa3wKmTS78gTw6J0yyQT2Folpp0=";
+        };
+      });
+
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -134,15 +143,6 @@ let
         ];
       });
 
-      bluecurrent-api = super.bluecurrent-api.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.6";
-        src = fetchPypi {
-          pname = "bluecurrent-api";
-          inherit version;
-          hash = "sha256-XHVdtkiG0ff/OY8g+W5iur7OAyhhk1UGA+XUfB2L8/o=";
-        };
-      });
-
       debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
         # tests are deadlocking too often
         # https://github.com/NixOS/nixpkgs/issues/262000
@@ -231,6 +231,15 @@ let
         };
       });
 
+      jaraco-functools = super.jaraco-functools.overridePythonAttrs (oldAttrs: rec {
+        version = "3.9.0";
+        src = fetchPypi {
+          pname = "jaraco.functools";
+          inherit version;
+          hash = "sha256-ixN7D+rMF/70us7gTAEcnobyNBCZyHCh0S0743sypjg=";
+        };
+      });
+
       lmcloud = super.lmcloud.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.35";
         src = fetchFromGitHub {
@@ -253,7 +262,7 @@ let
         };
 
         nativeBuildInputs = with self; [
-          cython_3
+          cython
           setuptools
           libxml2.dev
           libxslt.dev
@@ -379,6 +388,13 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-vi5f4V0nPb9K3nwdmwMDoNE85Or6haOWjMY4d/2Fj2s=";
         };
+        dependencies = with self; [
+          aiohttp
+          async-timeout
+          gql
+          python-dateutil
+          websockets
+        ];
       });
 
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
@@ -417,26 +433,6 @@ let
           repo = "pytradfri";
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
-        };
-      });
-
-      pywaze = super.pywaze.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.1";
-        src = fetchFromGitHub {
-          owner = "eifinger";
-          repo = "pywaze";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-r7ROEdgHdjXkveVUbuALHtwCX4IO0lwx9Zo3u6R9I58=";
-        };
-      });
-
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.27";
-        src = fetchFromGitHub {
-          owner = "sqlalchemy";
-          repo = "sqlalchemy";
-          rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-          hash = "sha256-6R+A7rVq1olRXj1wMolHhEq418bpr5rsmH8RjxajmmQ=";
         };
       });
 
@@ -536,8 +532,8 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
-  # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2024.3.3";
+  # Don't forget to run update-component-packages.py after updating
+  hassVersion = "2024.4.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -555,13 +551,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-EutnNqENt1MTmbMe9vtSM+bM5PzvjsfMhpkwXdxWoeI=";
+    hash = "sha256-bZcrFtaO0S22M6Wt2otK8rCg+NhpXr+/yRFxi02QJJI=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-9i8snvozDKgvcEQfk9KTYfqHxQbDBluvArXYVVnNvnA=";
+    hash = "sha256-NyIBFpDstX1MEoLS9p7GXl/+V6xB2hklNf2LmNLUMQk=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -570,6 +566,7 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "aiohttp"
     "attrs"
     "bcrypt"
     "ciso8601"
@@ -577,6 +574,7 @@ in python.pkgs.buildPythonApplication rec {
     "hass-nabucasa"
     "httpx"
     "orjson"
+    "pillow"
     "pyopenssl"
     "typing-extensions"
     "urllib3"
@@ -621,6 +619,7 @@ in python.pkgs.buildPythonApplication rec {
     certifi
     ciso8601
     cryptography
+    fnv-hash-fast
     hass-nabucasa
     httpx
     home-assistant-bluetooth
@@ -629,12 +628,15 @@ in python.pkgs.buildPythonApplication rec {
     lru-dict
     orjson
     packaging
+    pillow
     pip
+    psutil-home-assistant
     pyopenssl
     pyjwt
     python-slugify
     pyyaml
     requests
+    sqlalchemy
     typing-extensions
     ulid-transform
     urllib3
@@ -733,6 +735,10 @@ in python.pkgs.buildPythonApplication rec {
       version = testers.testVersion {
         package = home-assistant;
         command = "hass --version";
+      };
+      withoutCheckDeps = home-assistant.overridePythonAttrs {
+        pname = "home-assistant-without-check-deps";
+        doCheck = false;
       };
     };
   };

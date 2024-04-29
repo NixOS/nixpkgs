@@ -60,6 +60,11 @@ buildPythonPackage {
   #
   postPatch = ''
     sed -i "/extra_compile_args.append('-std=c++14')/d" setup.py
+
+    # The former function has been renamed into the latter in Python 3.12.
+    # Does not apply to all protobuf versions, hence --replace-warn.
+    substituteInPlace google/protobuf/internal/json_format_test.py \
+      --replace-warn assertRaisesRegexp assertRaisesRegex
   '';
 
   nativeBuildInputs = lib.optional isPyPy tzdata;

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.0.2";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-n1CIozKuF0+N8Vg3QA2jy5xNLDBJPdnhVT/xg1R+t90=";
+    hash = "sha256-W7bakj/94l0pL5fOb+CK+Z6k1cbv/CY9XjXGYZfLFY4=";
   };
 
   nativeBuildInputs = [

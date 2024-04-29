@@ -17,11 +17,11 @@ in
   options = {
 
     services.torque.mom = {
-      enable = mkEnableOption (lib.mdDoc "torque computing node");
+      enable = mkEnableOption "torque computing node";
 
       serverNode = mkOption {
         type = types.str;
-        description = lib.mdDoc "Hostname running pbs server.";
+        description = "Hostname running pbs server.";
       };
 
     };

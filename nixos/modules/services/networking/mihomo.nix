@@ -12,7 +12,7 @@ let
 in
 {
   options.services.mihomo = {
-    enable = lib.mkEnableOption "Mihomo, A rule-based proxy in Go.";
+    enable = lib.mkEnableOption "Mihomo, A rule-based proxy in Go";
 
     package = lib.mkPackageOption pkgs "mihomo" { };
 
@@ -28,14 +28,14 @@ in
       description = ''
         Local web interface to use.
 
-        You can also use the following website, just in case:
+        You can also use the following website:
         - metacubexd:
           - https://d.metacubex.one
           - https://metacubex.github.io/metacubexd
           - https://metacubexd.pages.dev
         - yacd:
           - https://yacd.haishan.me
-        - clash-dashboard (buggy):
+        - clash-dashboard:
           - https://clash.razord.top
       '';
     };
@@ -49,7 +49,7 @@ in
     tunMode = lib.mkEnableOption ''
       necessary permission for Mihomo's systemd service for TUN mode to function properly.
 
-      Keep in mind, that you still need to enable TUN mode manually in Mihomo's configuration.
+      Keep in mind, that you still need to enable TUN mode manually in Mihomo's configuration
     '';
   };
 

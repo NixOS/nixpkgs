@@ -11,7 +11,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to add Wireshark to the global environment and configure a
           setcap wrapper for 'dumpcap' for users in the 'wireshark' group.
         '';

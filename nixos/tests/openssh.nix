@@ -22,6 +22,19 @@ in {
         ];
       };
 
+    server-allowed-users =
+      { ... }:
+
+      {
+        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
+        users.groups = { alice = { }; bob = { }; carol = { }; };
+        users.users = {
+          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+        };
+      };
+
     server-lazy =
       { ... }:
 
@@ -95,17 +108,21 @@ in {
         };
       };
 
-    server_allowedusers =
-      { ... }:
-
+    server-no-pam =
+      { pkgs, ... }:
       {
-        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
-        users.groups = { alice = { }; bob = { }; carol = { }; };
-        users.users = {
-          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
-          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
-          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+        programs.ssh.package = pkgs.opensshPackages.openssh.override {
+          withPAM = false;
         };
+        services.openssh = {
+          enable = true;
+          settings = {
+            UsePAM = false;
+          };
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
       };
 
     client =
@@ -119,8 +136,10 @@ in {
     start_all()
 
     server.wait_for_unit("sshd", timeout=30)
+    server_allowed_users.wait_for_unit("sshd", timeout=30)
     server_localhost_only.wait_for_unit("sshd", timeout=30)
     server_match_rule.wait_for_unit("sshd", timeout=30)
+    server_no_pam.wait_for_unit("sshd", timeout=30)
 
     server_lazy.wait_for_unit("sshd.socket", timeout=30)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
@@ -166,8 +185,9 @@ in {
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
         )
         client.succeed("chmod 600 privkey.snakeoil")
+        # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
         client.succeed(
-            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.4 true",
+            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
             timeout=30
         )
 
@@ -198,15 +218,25 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil alice@server-allowed-users true",
             timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil bob@server-allowed-users true",
             timeout=30
         )
         client.fail(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server_allowedusers true",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil carol@server-allowed-users true",
+            timeout=30
+        )
+
+    with subtest("no-pam"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
   '';

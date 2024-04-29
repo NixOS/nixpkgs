@@ -69,6 +69,5 @@ in buildPythonPackage rec {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
     license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
   };
 }

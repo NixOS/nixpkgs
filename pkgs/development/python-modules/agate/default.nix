@@ -7,30 +7,35 @@
 , isodate
 , leather
 , lxml
-, nose
 , parsedatetime
 , pyicu
+, pynose
 , python-slugify
-, pytimeparse
 , pythonOlder
+, pytimeparse
 , pytz
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "agate";
   version = "1.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wireservice";
-    repo = pname;
+    repo = "agate";
     rev = "refs/tags/${version}";
     hash = "sha256-I7jvZA/m06kUuUcfglySaroDbJ5wbgiF2lb84EFPmpw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     babel
     isodate
     leather
@@ -43,7 +48,7 @@ buildPythonPackage rec {
     cssselect
     glibcLocales
     lxml
-    nose
+    pynose
     pyicu
     pytz
   ];

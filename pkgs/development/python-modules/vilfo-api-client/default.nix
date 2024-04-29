@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "vilfo-api-client";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ManneW";
     repo = "vilfo-api-client-python";
-    rev = version;
-    hash = "sha256-j06Bbv0hWSmrlCv8RfgvfGTyOF+vSX+zZnX3AvG5Hys=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZlmriBd+M+54ux/UNYa355mkz808/NxSz7IzmWouA0c=";
   };
 
   postPatch = ''

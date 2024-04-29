@@ -2,7 +2,7 @@
 , autoreconfHook
 , fetchPypi
 , buildPythonPackage
-, cython_3
+, cython
 , pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
 }:
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    cython_3
+    cython
   ] ++ lib.optionals pariSupport [
     # When cysignals is built with pari, including cysignals into the
     # buildInputs of another python package will cause cython to link against

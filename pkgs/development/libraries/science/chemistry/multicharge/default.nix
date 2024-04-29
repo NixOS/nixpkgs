@@ -1,8 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
+, fetchpatch2
 , gfortran
+, meson
+, ninja
+, pkg-config
+, python3
 , blas
 , lapack
 , mctc-lib
@@ -22,23 +26,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-oUI5x5/Gd0EZBb1w+0jlJUF9X51FnkHFu8H7KctqXl0=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  patches = [
+    # Fix finding of MKL for Intel 2021 and newer
+    # Also fix finding mstore
+    # https://github.com/grimme-lab/multicharge/pull/20
+    (fetchpatch2 {
+      url = "https://github.com/grimme-lab/multicharge/commit/98a11ac524cd2a1bd9e2aeb8f4429adb2d76ee8.patch";
+      hash = "sha256-zZ2pcbyaHjN2ZxpMhlqUtIXImrVsLk/8WIcb9IYPgBw=";
+    })
+  ];
+
+  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
 
   buildInputs = [ blas lapack mctc-lib mstore ];
 
   outputs = [ "out" "dev" ];
 
-  # Fix the Pkg-Config files for doubled store paths
+  doCheck = true;
+
   postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace "\''${prefix}/" ""
+    patchShebangs --build config/install-mod.py
   '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
-
-  doCheck = true;
   preCheck = ''
     export OMP_NUM_THREADS=2
   '';

@@ -11,7 +11,7 @@
   openssl,
 
   pkg-config,
-  protobuf_23,
+  protobuf_24,
   grpc,
   pandoc,
   python3,
@@ -75,19 +75,21 @@ stdenv.mkDerivation rec {
     grpc
     libgit2
     openssl
-    # Using protobuf 23 because this is the same version upstream currently
-    # uses for bundled builds
+    # Using protobuf 24 because the current version of grpc is build using
+    # protobuf 24 and therefore the older protobuf version causes errors
+    # during build.
+    # Upstream currently uses protobuf 23 for bundled builds
     # For future updates: The currently used version can be found in the file
     # etc/repos.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.json
     # under the key .repositories.protobuf
-    protobuf_23
+    protobuf_24
     python3
   ];
 
   postPatch = ''
     sed -ie 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
     sed -ie 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf_23}"' etc/repos.json > etc/repos.json.patched
+    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf_24}"' etc/repos.json > etc/repos.json.patched
     mv etc/repos.json.patched etc/repos.json
     jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
     mv etc/repos.json.patched etc/repos.json
@@ -170,7 +172,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = true; # last successful build 2024-01-26
+    broken = stdenv.isDarwin;
     description = "a generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
     license = licenses.asl20;

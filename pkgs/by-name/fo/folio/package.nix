@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folio";
-  version = "24.08";
+  version = "24.10";
 
   src = fetchFromGitHub {
     owner = "toolstack";
     repo = "Folio";
     rev = version;
-    hash = "sha256-IwcLz5b2aEVUE0YS3qZ3238ksucQFpPl3eQGIjQo+pA=";
+    hash = "sha256-v9YtMFVjRtsf+dijAM5mULx15sOn0u3b/fmRiOAtawc=";
   };
 
   nativeBuildInputs = [

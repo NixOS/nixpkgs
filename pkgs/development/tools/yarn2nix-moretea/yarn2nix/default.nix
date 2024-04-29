@@ -100,7 +100,7 @@ in rec {
       ) (builtins.attrNames pkgConfig);
 
       # build-time JSON generation to avoid IFD
-      # see https://nixos.wiki/wiki/Import_From_Derivation
+      # see https://wiki.nixos.org/wiki/Import_From_Derivation
       workspaceJSON = pkgs.runCommand "${name}-workspace-package.json"
         {
           nativeBuildInputs = [ pkgs.jq ];

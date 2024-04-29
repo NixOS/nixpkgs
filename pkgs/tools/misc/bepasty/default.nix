@@ -2,6 +2,7 @@
 , python3
 , fetchPypi
 }:
+
 let
   # bepasty 1.2 needs xstatic-font-awesome < 5, see
   # https://github.com/bepasty/bepasty-server/issues/305
@@ -17,16 +18,18 @@ let
       });
     };
   };
+in
 
-#We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
-#This is needed for services.bepasty
-#https://github.com/NixOS/nixpkgs/pull/38300
-in with bepastyPython.pkgs; buildPythonPackage rec {
+# We need to use buildPythonPackage here to get the PYTHONPATH build correctly.
+# This is needed for services.bepasty
+# https://github.com/NixOS/nixpkgs/pull/38300
+
+bepastyPython.pkgs.buildPythonPackage rec {
   pname = "bepasty";
   version = "1.2.1";
   format = "pyproject";
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with bepastyPython.pkgs; [
     flask
     markupsafe
     pygments
@@ -42,14 +45,14 @@ in with bepastyPython.pkgs; buildPythonPackage rec {
     xstatic-pygments
   ];
 
-  buildInputs = [ setuptools-scm ];
+  buildInputs = with bepastyPython.pkgs; [ setuptools-scm ];
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-08cyr2AruGAfHAwHHS8WMfJh7DBKymaYyz4AxI/ubkE=";
   };
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with bepastyPython.pkgs; [
     build
     codecov
     flake8
@@ -70,10 +73,10 @@ in with bepastyPython.pkgs; buildPythonPackage rec {
     "src/bepasty/tests/test_website.py"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/bepasty/bepasty-server";
     description = "Binary pastebin server";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ aither64 makefu ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ aither64 makefu ];
   };
 }

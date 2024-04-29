@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "openlawlibrary";
     repo = "pygls";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6+SMlBTi+jw+bAUYqbaxXT5QygZFj4FeeEp6bch8M1s=";
+    hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
   };
 
   pythonRelaxDeps = [

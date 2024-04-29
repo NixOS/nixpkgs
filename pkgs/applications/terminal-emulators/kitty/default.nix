@@ -31,20 +31,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.33.0";
+  version = "0.34.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0bdDolaFbVI3CqcOtKFrvRqrKXIiSIfH5rxJgK5XssI=";
+    hash = "sha256-r7KZcSqREILMp0F9ajeHS5sglq/o88h2t+4BgbABjOY=";
   };
 
   goModules = (buildGo122Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-7301wHGCXUdfPFOhgLEJILmYxNohNm6H2zXGd9W11Wk=";
+    vendorHash = "sha256-HNE0MWjL0PH20Glzb0GV6+lQu/Lslx8k/+YvlLHbHww=";
   }).goModules;
 
   buildInputs = [
@@ -234,7 +234,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    tests = lib.mkIf stdenv.isLinux {
+    tests = lib.optionalAttrs stdenv.isLinux {
       default = nixosTests.terminal-emulators.kitty;
     };
     updateScript = nix-update-script {};
@@ -250,6 +250,6 @@ buildPythonApplication rec {
     ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }

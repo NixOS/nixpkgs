@@ -21,21 +21,21 @@ let
     url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.xz";
     hash = "sha256-ut1iwWxjc3h6D9qPCc1FLRL2DVhohW9lHO7PGge6ujI=";
   };
-  dictVer = "20230412";
+  dictVer = "20240416";
   dict = fetchurl {
-    url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.xz";
-    hash = "sha256-8F/Mr/loeQCqw9mtWoGyCIi1cyAUA/vNm7x5B9npdQc=";
+    url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.zst";
+    hash = "sha256-nCYsv6MGy0w7BVmRt+IrRT4PJn8gzrXZ2eX4++Ty02c=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    hash = "sha256-PhzJtAGmSkMeXMSe2uR/JKHKlZtL0e3tPDZVoRCvAis=";
+    hash = "sha256-I8zznZlMz1U2DAVYkvtF1thEYz/tIEbA682y7czK5ck=";
     fetchSubmodules = true;
   };
 

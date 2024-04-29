@@ -63,8 +63,6 @@ else appimageTools.wrapType2 {
       appimageContents = appimageTools.extractType2 { inherit pname version src; };
     in
     ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
       # Install .desktop files
       install -Dm444 ${appimageContents}/hoppscotch.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/hoppscotch.png -t $out/share/pixmaps

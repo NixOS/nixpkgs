@@ -5,10 +5,10 @@
 
 let
   pname = "jan";
-  version = "0.4.9";
+  version = "0.4.12";
   src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
-    hash = "sha256-6XnDrr+AkZH69zXf0OKdi8R6LoRWWMZNqWilZhLGynk=";
+    hash = "sha256-IMqTQGuMuivUq8UTpgNRSHwskxvA/2XWA1bp38MDJdI=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -17,10 +17,9 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/jan-${version} $out/bin/jan
     install -Dm444 ${appimageContents}/jan.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/jan.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=jan'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 

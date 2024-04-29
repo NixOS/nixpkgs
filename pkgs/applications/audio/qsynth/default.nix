@@ -1,25 +1,19 @@
-{ lib, fetchurl, alsa-lib, fluidsynth, libjack2, autoconf, pkg-config
-, mkDerivation, qtbase, qttools, qtx11extras
+{ lib, stdenv, fetchurl, alsa-lib, fluidsynth, libjack2, cmake, pkg-config
+, qtbase, qttools, qtx11extras, wrapQtAppsHook
 }:
 
-mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "qsynth";
-  version = "0.9.4";
+  version = "0.9.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dlgIkMde7uv4UlMKEPhtZ7MfSTBc7RvHs+Q2yk+G/JM=";
+    hash = "sha256-SvgZrdS6BwWhNgbovcfhpQKVcu0iwr4dDqeIckuo1fk=";
   };
 
-  nativeBuildInputs = [ autoconf pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [ alsa-lib fluidsynth libjack2 qtbase qttools qtx11extras ];
-
-  enableParallelBuilding = true;
-  # Missing install depends:
-  #   lrelease error: Parse error at src/translations/qsynth_ru.ts:1503:33: Premature end of document.
-  #   make: *** [Makefile:107: src/translations/qsynth_ru.qm] Error 1
-  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "Fluidsynth GUI";

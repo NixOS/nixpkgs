@@ -80,6 +80,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ a-n-n-a-l-e-e drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

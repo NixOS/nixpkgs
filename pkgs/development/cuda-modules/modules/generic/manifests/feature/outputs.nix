@@ -1,4 +1,4 @@
-{lib, ...}:
+{ lib, ... }:
 let
   inherit (lib) options types;
 in

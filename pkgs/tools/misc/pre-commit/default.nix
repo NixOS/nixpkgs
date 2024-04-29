@@ -18,7 +18,7 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "3.6.2";
+  version = "3.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rlGkoaVLrTCEPgPFNUWefJf6MJaKTA2RDSbV7eGtaAU=";
+    hash = "sha256-k9pC/GCtqLlK9PhZmx4EKWT1HDyl+KQubDFDQOZdKUQ=";
   };
 
   patches = [
@@ -131,9 +131,6 @@ buildPythonApplication rec {
     "test_dart"
     "test_dart_additional_deps"
     "test_dart_additional_deps_versioned"
-    "test_docker_hook"
-    "test_docker_image_hook_via_args"
-    "test_docker_image_hook_via_entrypoint"
     "test_during_commit_all"
     "test_golang_default_version"
     "test_golang_hook"
@@ -172,6 +169,9 @@ buildPythonApplication rec {
     # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
     # but we use an absolute path so it's not an issue.
     "test_environment_not_sourced"
+
+    # Docker required
+    "test_docker_"
   ];
 
   pythonImportsCheck = [

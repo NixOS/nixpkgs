@@ -11,11 +11,11 @@ mkDerivation {
 
   buildInputs = [ python' backintime-common ];
 
+  configureFlags = [ "--python=${lib.getExe python'}" ];
+
   preConfigure = ''
     cd qt
-    substituteInPlace configure \
-      --replace '"/../etc' '"/etc'
-    substituteInPlace qttools.py \
+    substituteInPlace qttools_path.py \
       --replace "__file__, os.pardir, os.pardir" '"${backintime-common}/${python'.sitePackages}/backintime"'
   '';
 
@@ -37,7 +37,6 @@ mkDerivation {
       --replace "/usr/bin/ionice" "${lib.getBin util-linux}/bin/ionice"
 
     substituteInPlace "$out/share/dbus-1/system-services/net.launchpad.backintime.serviceHelper.service" \
-      --replace "/usr/bin/python3" "${lib.getBin python'}/bin/python3" \
       --replace "/usr/share/backintime" "$out/share/backintime"
 
     substituteInPlace "$out/bin/backintime-qt_polkit" \

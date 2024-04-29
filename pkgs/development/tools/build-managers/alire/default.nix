@@ -8,24 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WF7spXwQR04zIGWazUrbCdeLYOzsk8C6G+cfSS6bwdE=";
+    hash = "sha256-fJXt3mM/v87hWumML6L3MH1O/uKkzmpE58B9nDRohzM=";
 
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ gprbuild gnat ];
-
-  patches = [(fetchpatch {
-    name = "control-build-jobs.patch";
-    url = "https://github.com/alire-project/alire/pull/1651.patch";
-    hash = "sha256-CBQm8Doydze/KouLWuYm+WYlvnDguR/OuX8A4y4F6fo=";
-  })];
 
   postPatch = ''
     patchShebangs ./dev/build.sh

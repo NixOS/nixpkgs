@@ -9,7 +9,7 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/sdk/python/cmd/pulumi-language-python";
 
-  vendorHash = "sha256-upRXs8Bo0dpnANNetfXqkatip9bA+Fqhg72Cd60ltz8=";
+  vendorHash = "sha256-Q8nnYJJN5+W2luY8JQJj1X9KIk9ad511FBywr+0wBNg=";
 
   postPatch = ''
     substituteInPlace main_test.go \

@@ -15,14 +15,45 @@
 # systems that overlap with existing ones and won't notice something amiss.
 #
 { lib }:
-with lib.lists;
-with lib.types;
-with lib.attrsets;
-with lib.strings;
-with (import ./inspect.nix { inherit lib; }).predicates;
 
 let
-  inherit (lib.options) mergeOneOption;
+  inherit (lib)
+    all
+    any
+    attrValues
+    elem
+    elemAt
+    hasPrefix
+    id
+    length
+    mapAttrs
+    mergeOneOption
+    optionalString
+    splitString
+    versionAtLeast
+    ;
+
+  inherit (lib.strings) match;
+
+  inherit (lib.systems.inspect.predicates)
+    isAarch32
+    isBigEndian
+    isDarwin
+    isLinux
+    isPower64
+    isWindows
+    ;
+
+  inherit (lib.types)
+    enum
+    float
+    isType
+    mkOptionType
+    number
+    setType
+    string
+    types
+    ;
 
   setTypes = type:
     mapAttrs (name: value:
@@ -33,10 +64,10 @@ let
   # regex `e?abi.*$` when determining the validity of a triple.  In
   # other words, `i386-linuxabichickenlips` is a valid triple.
   removeAbiSuffix = x:
-    let match = builtins.match "(.*)e?abi.*" x;
-    in if match==null
+    let found = match "(.*)e?abi.*" x;
+    in if found == null
        then x
-       else lib.elemAt match 0;
+       else elemAt found 0;
 
 in
 
@@ -76,7 +107,7 @@ rec {
 
   types.cpuType = enum (attrValues cpuTypes);
 
-  cpuTypes = with significantBytes; setTypes types.openCpuType {
+  cpuTypes = let inherit (significantBytes) bigEndian littleEndian; in setTypes types.openCpuType {
     arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; arch = "armv5t"; };
     armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6-m"; };
@@ -166,7 +197,7 @@ rec {
   # Note: Since 22.11 the archs of a mode switching CPU are no longer considered
   # pairwise compatible. Mode switching implies that binaries built for A
   # and B respectively can't be executed at the same time.
-  isCompatible = a: b: with cpuTypes; lib.any lib.id [
+  isCompatible = with cpuTypes; a: b: any id [
     # x86
     (b == i386 && isCompatible a i486)
     (b == i486 && isCompatible a i586)
@@ -287,7 +318,10 @@ rec {
 
   types.kernel = enum (attrValues kernels);
 
-  kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
+  kernels = let
+    inherit (execFormats) elf pe wasm unknown macho;
+    inherit (kernelFamilies) bsd darwin;
+  in setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
     # the normalized name for macOS.
     macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
@@ -359,7 +393,7 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
-        { assertion = platform: with platform; !(isPower64 && isBigEndian);
+        { assertion = platform: !(platform.isPower64 && platform.isBigEndian);
           message = ''
             The "gnu" ABI is ambiguous on big-endian 64-bit PowerPC. Use "gnuabielfv2" or "gnuabielfv1" instead.
           '';
@@ -480,7 +514,7 @@ rec {
         /**/ if args ? abi       then getAbi args.abi
         else if isLinux parsed || isWindows parsed then
           if isAarch32 parsed then
-            if lib.versionAtLeast (parsed.cpu.version or "0") "6"
+            if versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
           # Default ppc64 BE to ELFv2
@@ -491,7 +525,7 @@ rec {
 
   in mkSystem parsed;
 
-  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
+  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s));
 
   kernelName = kernel:
     kernel.name + toString (kernel.version or "");
@@ -503,10 +537,10 @@ rec {
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optExecFormat =
-      lib.optionalString (kernel.name == "netbsd" &&
+      optionalString (kernel.name == "netbsd" &&
                           gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
         kernel.execFormat.name;
-    optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
+    optAbi = optionalString (abi != abis.unknown) "-${abi.name}";
   in "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################

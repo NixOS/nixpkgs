@@ -10,7 +10,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the Machine Check Exception logger.
         '';
       };

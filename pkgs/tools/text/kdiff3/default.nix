@@ -27,12 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Wno-dev" ];
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    ln -s "$out/Applications/KDE/kdiff3.app/Contents/MacOS" "$out/bin"
+  '';
+
   meta = with lib; {
     description = "Compares and merges 2 or 3 files or directories";
     mainProgram = "kdiff3";
     homepage = "https://invent.kde.org/sdk/kdiff3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 })

@@ -19,11 +19,11 @@ buildPythonPackage {
 
   env.DBT_PSYCOPG2_NAME = "psycopg2";
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     agate
     dbt-core
     psycopg2

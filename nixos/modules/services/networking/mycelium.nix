@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 let
   cfg = config.services.mycelium;
@@ -9,17 +9,23 @@ in
     peers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = ''
-        List of peers to connect to in the format quic://1.2.3.4:9651.
-        If addHostedPublicNodes is set to true, the hosted public nodes will be added to this list.
+        List of peers to connect to, in the formats:
+         - `quic://[2001:0db8::1]:9651`
+         - `quic://192.0.2.1:9651`
+         - `tcp://[2001:0db8::1]:9651`
+         - `tcp://192.0.2.1:9651`
+
+        If addHostedPublicNodes is set to true, the hosted public nodes will also be added.
       '';
-      default = [];
+      default = [ ];
     };
     keyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
-        optional path to a keyFile, if unset the default location (/var/lib/mycelium/key) will be used
-        If this key does not exist, it will be generated
+        Optional path to a file containing the mycelium key material.
+        If unset, the default location (`/var/lib/mycelium/key.bin`) will be used.
+        If no key exist at this location, it will be generated on startup.
       '';
     };
     openFirewall = lib.mkOption {
@@ -37,7 +43,16 @@ in
       type = lib.types.bool;
       default = true;
       description = ''
-        add the hosted peers from https://github.com/threefoldtech/mycelium#hosted-public-nodes
+        Adds the hosted peers from https://github.com/threefoldtech/mycelium#hosted-public-nodes.
+      '';
+    };
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = ''
+        Extra command-line arguments to pass to mycelium.
+
+        See `mycelium --help` for all available options.
       '';
     };
   };
@@ -79,9 +94,11 @@ in
             "--key-file \${CREDENTIALS_DIRECTORY}/keyfile" else
             "--key-file %S/mycelium/key.bin"
           )
-          "--tun-name" "mycelium"
+          "--tun-name"
+          "mycelium"
+          "${utils.escapeSystemdExecArgs cfg.extraArgs}"
         ] ++
-          (lib.optional (cfg.addHostedPublicNodes || cfg.peers != []) "--peers")
+        (lib.optional (cfg.addHostedPublicNodes || cfg.peers != [ ]) "--peers")
         ++ cfg.peers ++ (lib.optionals cfg.addHostedPublicNodes [
           "tcp://188.40.132.242:9651" # DE 01
           "tcp://[2a01:4f8:221:1e0b::2]:9651"
@@ -123,4 +140,3 @@ in
     maintainers = with lib.maintainers; [ flokli lassulus ];
   };
 }
-

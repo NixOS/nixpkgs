@@ -1,20 +1,20 @@
 {
   "de_DE": {
     "path": "de_DE",
-    "rev": "1286009",
-    "sha256": "1w6q2ja1y77yagg73zhrw94f2vpgd521zahwhvxqxa8isphbrybj",
-    "version": "6.4"
+    "rev": "1416209",
+    "sha256": "1ffs7qjn9qp6s40v7z4ngm062wapjbhg2fihp7p4nb4ki3gf2yh9",
+    "version": "6.5"
   },
   "fr_FR": {
     "path": "fr_FR",
-    "rev": "1285884",
-    "sha256": "1qlq7p9pmspizbgjp895jldb6cbsvfal6h02p44r87ag356cjk6j",
-    "version": "6.4"
+    "rev": "1412485",
+    "sha256": "06h4vg0kcybvf6v04sf6iyi8bw1bjjzpicdv90acdb049q5vc4x3",
+    "version": "6.5"
   },
   "ro_RO": {
     "path": "ro_RO",
-    "rev": "1296680",
-    "sha256": "0m98iaai240yn4lx4lhqgzi2wlxkz67v1cg86jhfi72n0rhr4l46",
-    "version": "6.4"
+    "rev": "1410752",
+    "sha256": "1j4ypjgm1qghr18cll7iwr7qhdcffakzpj83lb391fyr2b3s7liq",
+    "version": "6.5"
   }
 }

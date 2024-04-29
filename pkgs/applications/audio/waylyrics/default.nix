@@ -9,20 +9,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.2.12";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
-    owner = "poly000";
+    owner = "waylyrics";
     repo = "waylyrics";
     rev = "v${version}";
-    hash = "sha256-sUhFT3Vq/IjbMir7/AVCU8FyfmoNiZsn2zkqdJkOMFo=";
+    hash = "sha256-44O2+OLsBZhl0/0910RsdCe8cHt6UGhYF7CUfhsFQU8=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ncmapi-0.1.13" = "sha256-NxgF1TV+3hK5oE/DfJnWyc+XmPX3U1UeD+xTkcvDzIA=";
-      "qqmusic-rs-0.1.0" = "sha256-woLsO0n+m3EBUI+PRLio7iLp0UPQSliWK0djCSZEaZc=";
+      "ksni-0.2.1" = "sha256-kjirYZVDP9e7/933L7gwSgVrNInSTbsRCAfnhUqmcLI=";
     };
   };
 
@@ -44,19 +43,29 @@ rustPlatform.buildRustPackage rec {
     install -d $WAYLYRICS_THEME_PRESETS_DIR
     cp -vr themes/* $WAYLYRICS_THEME_PRESETS_DIR
     # Install desktop entry
-    install -Dm644 io.poly000.waylyrics.desktop -t $out/share/applications
+    install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t $out/share/applications
     # Install schema
-    install -Dm644 io.poly000.waylyrics.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
+    install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t $out/share/gsettings-schemas/$name/glib-2.0/schemas
     glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas/
+    # Install metainfo
+    install -Dm644 metainfo/io.github.waylyrics.Waylyrics.metainfo.xml -t $out/share/metainfo
     # Install icons
     install -d $out/share/icons
     cp -vr res/icons/hicolor $out/share/icons/hicolor
+    # Install translations
+    pushd locales
+    for po in $(find . -type f -name '*.po')
+    do
+      install -d $(dirname "$out/share/locale/$po")
+      msgfmt -o $out/share/locale/''${po%.po}.mo $po
+    done
+    popd
   '';
 
   meta = with lib; {
     description = "Desktop lyrics with QQ and NetEase Music source";
     mainProgram = "waylyrics";
-    homepage = "https://github.com/poly000/waylyrics";
+    homepage = "https://github.com/waylyrics/waylyrics";
     license = with licenses; [ mit cc-by-40 ];
     maintainers = with maintainers; [ shadowrz aleksana ];
     platforms = platforms.linux;

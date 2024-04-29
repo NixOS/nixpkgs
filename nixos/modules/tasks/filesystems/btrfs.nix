@@ -19,12 +19,12 @@ in
     # One could also do regular btrfs balances, but that shouldn't be necessary
     # during normal usage and as long as the filesystems aren't filled near capacity
     services.btrfs.autoScrub = {
-      enable = mkEnableOption (lib.mdDoc "regular btrfs scrub");
+      enable = mkEnableOption "regular btrfs scrub";
 
       fileSystems = mkOption {
         type = types.listOf types.path;
         example = [ "/" ];
-        description = lib.mdDoc ''
+        description = ''
           List of paths to btrfs filesystems to regularly call {command}`btrfs scrub` on.
           Defaults to all mount points with btrfs filesystems.
           If you mount a filesystem multiple times or additionally mount subvolumes,
@@ -36,7 +36,7 @@ in
         default = "monthly";
         type = types.str;
         example = "weekly";
-        description = lib.mdDoc ''
+        description = ''
           Systemd calendar expression for when to scrub btrfs filesystems.
           The recommended period is a month but could be less
           ({manpage}`btrfs-scrub(8)`).

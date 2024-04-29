@@ -15,9 +15,11 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , setuptools
 , shapely
+, strenum
 , tqdm
 , typeguard
 , typing-extensions
@@ -25,36 +27,49 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.65";
+  version = "3.67.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-i0hbVxGrb2C/bMcVPNzaPBxhKm+5r3o1GlToZvIS35k=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-JQTjmYxPBS8JC4HQTtbQ7hb80LPLYE4OEj1lFA6cZ1Y=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--reruns 5 --reruns-delay 10" ""
+      --replace-fail "--reruns 2 --reruns-delay 10 --durations=20 -n 10" ""
+
+    # disable pytest_plugins which requires `pygeotile`
+    substituteInPlace tests/conftest.py \
+      --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "python-dateutil"
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     pydantic
     python-dateutil
     requests
+    strenum
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     data = [
       shapely
       geojson
@@ -74,13 +89,7 @@ buildPythonPackage rec {
     nbconvert
     nbformat
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.data;
-
-  # disable pytest_plugins which requires `pygeotile`
-  preCheck = ''
-    substituteInPlace tests/conftest.py \
-      --replace "pytest_plugins" "_pytest_plugins"
-  '';
+  ] ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access

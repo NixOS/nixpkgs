@@ -22,6 +22,6 @@ buildGoModule rec {
     description = "SQL language server written in Go";
     mainProgram = "sqls";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ vinnymeller ];
   };
 }

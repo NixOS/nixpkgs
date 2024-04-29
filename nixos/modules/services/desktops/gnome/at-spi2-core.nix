@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable at-spi2-core, a service for the Assistive Technologies
           available on the GNOME platform.
 

@@ -69,6 +69,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-level Ledger API client for Daml ledgers";
-    license = licenses.apsl20;
+    license = licenses.asl20;
   };
 }

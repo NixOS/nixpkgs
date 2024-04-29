@@ -2,6 +2,8 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, setuptools
 , autoreconfHook
 , pkg-config
 , mpiCheckPhaseHook
@@ -44,6 +46,12 @@ buildPythonPackage rec {
 
   format = "other";
 
+  # https://github.com/NanoComp/meep/issues/2819
+  postPatch = lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace configure.ac doc/docs/setup.py python/visualization.py \
+      --replace-fail "distutils" "setuptools._distutils"
+  '';
+
   # MPI is needed in nativeBuildInputs too, otherwise MPI libs will be missing
   # at runtime
   nativeBuildInputs = [
@@ -76,6 +84,9 @@ buildPythonPackage rec {
     cython
     autograd
     mpi4py
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [
+      setuptools # used in python/visualization.py
   ];
 
   propagatedUserEnvPkgs = [ mpi ];

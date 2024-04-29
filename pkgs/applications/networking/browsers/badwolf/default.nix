@@ -1,39 +1,49 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchgit
+, ninja
 , pkg-config
+, ed
 , wrapGAppsHook
 , webkitgtk
 , libxml2
-, glib
 , glib-networking
 , gettext
 }:
+
 stdenv.mkDerivation rec {
   pname = "badwolf";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchgit {
-    url = "git://hacktivis.me/git/badwolf.git";
+    url = "https://hacktivis.me/git/badwolf.git";
     rev = "v${version}";
-    hash = "sha256-HfAsq6z+1kqMAsNxJjWJx9nd2cbv0XN4KRS8cYuhOsQ=";
+    hash = "sha256-feWSxK9TJ5MWxUKutuTcdmMk5IbLjNseUAvfm20kQ1U=";
   };
 
-  preConfigure = ''
-    export PREFIX=$out
-  '';
+  # configure script not accepting '--prefix'
+  prefixKey = "PREFIX=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    ninja
+    pkg-config
+    ed
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ webkitgtk libxml2 gettext glib glib-networking ];
+  buildInputs = [
+    webkitgtk
+    libxml2
+    gettext
+    glib-networking
+  ];
 
   meta = with lib; {
     description = "Minimalist and privacy-oriented WebKitGTK+ browser";
     mainProgram = "badwolf";
     homepage = "https://hacktivis.me/projects/badwolf";
-    license = licenses.bsd3;
+    license = with licenses; [ bsd3 cc-by-sa-40 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ laalsaas ];
+    maintainers = with maintainers; [ laalsaas aleksana ];
   };
-
 }

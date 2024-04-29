@@ -1,7 +1,8 @@
 { lib
 , fetchFromGitHub
 , runCommand
-, pkgsBuildBuild
+, yallback
+, yara
 }:
 
 /* TODO/CAUTION:
@@ -29,8 +30,8 @@ let
   src = fetchFromGitHub {
     owner = "abathur";
     repo = "binlore";
-    rev = "v0.2.0";
-    hash = "sha256-bBJky7Km+mieHTqoMz3mda3KaKxr9ipYpfQqn/4w8J0=";
+    rev = "v0.3.0";
+    hash = "sha256-4Fs6HThfDhKRskuDJx2+hucl8crMRm10K6949JdIwPY=";
   };
   /*
   binlore has one one more yallbacks responsible for
@@ -58,7 +59,7 @@ let
     callback = lore: drv: overrides: ''
       if [[ -d "${drv}/bin" ]] || [[ -d "${drv}/lib" ]] || [[ -d "${drv}/libexec" ]]; then
         echo generating binlore for $drv by running:
-        echo "${pkgsBuildBuild.yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${pkgsBuildBuild.yallback}/bin/yallback ${lore.yallback}"
+        echo "${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback}"
       else
         echo "failed to generate binlore for $drv (none of ${drv}/{bin,lib,libexec} exist)"
       fi
@@ -83,7 +84,7 @@ let
         ((i--)) || true # don't break build
       done # || true # don't break build
       if [[ -d "${drv}/bin" ]] || [[ -d "${drv}/lib" ]] || [[ -d "${drv}/libexec" ]]; then
-        ${pkgsBuildBuild.yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${pkgsBuildBuild.yallback}/bin/yallback ${lore.yallback} "$filter"
+        ${yara}/bin/yara --scan-list --recursive ${lore.rules} <(printf '%s\n' ${drv}/{bin,lib,libexec}) | ${yallback}/bin/yallback ${lore.yallback} "$filter"
       fi
     '';
   };

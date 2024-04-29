@@ -1,6 +1,8 @@
 { lib, fetchFromGitHub, nix-update-script, ocamlPackages }:
 
-with ocamlPackages;
+let
+  inherit (ocamlPackages) buildDunePackage camomile;
+in
 
 buildDunePackage rec {
   pname = "headache";

@@ -28,6 +28,7 @@
 
 # tests
 , arrow-cpp
+, dask-expr
 , hypothesis
 , pytest-asyncio
 , pytest-rerunfailures
@@ -36,9 +37,9 @@
 , pythonOlder
 }:
 
-buildPythonPackage rec {
+let self = buildPythonPackage rec {
   pname = "dask";
-  version = "2024.1.1";
+  version = "2024.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-L8bRh2bx36CYrAFXYJF67rCeCRfm5ufhTkMFRJo0yYo=";
+    hash = "sha256-iD+diwctXaQlOpL0fjOiFoWVONtlMq7AonbC0vCmXc0=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +80,7 @@ buildPythonPackage rec {
     ++ self.distributed
     ++ self.diagnostics;
     dataframe = [
+      # dask-expr -> circular dependency with dask-expr
       numpy
       pandas
     ];
@@ -92,6 +94,7 @@ buildPythonPackage rec {
   });
 
   nativeCheckInputs = [
+    dask-expr
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
@@ -99,6 +102,7 @@ buildPythonPackage rec {
     hypothesis
     pytest-asyncio
   ]
+  ++ passthru.optional-dependencies.array
   ++ passthru.optional-dependencies.dataframe
   ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
@@ -127,8 +131,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -160,14 +162,28 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "dask"
-    "dask.array"
     "dask.bag"
     "dask.bytes"
-    "dask.dataframe"
-    "dask.dataframe.io"
-    "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
+
+  doCheck = false;
+
+  # Enable tests via passthru to avoid cyclic dependency with dask-expr.
+  passthru.tests = {
+    check = self.overridePythonAttrs (old: {
+      doCheck = true;
+      pythonImportsCheck = [
+        # Requires the `dask.optional-dependencies.array` that are only in `nativeCheckInputs`
+        "dask.array"
+        # Requires the `dask.optional-dependencies.dataframe` that are only in `nativeCheckInputs`
+        "dask.dataframe"
+        "dask.dataframe.io"
+        "dask.dataframe.tseries"
+      ] ++ old.pythonImportsCheck;
+    });
+  };
+
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
@@ -175,6 +191,5 @@ buildPythonPackage rec {
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
-}
+}; in self

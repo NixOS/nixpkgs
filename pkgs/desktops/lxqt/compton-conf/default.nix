@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, mkDerivation
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
+, libconfig
+, lxqt-build-tools
 , pkg-config
 , qtbase
 , qttools
-, lxqt
-, libconfig
+, qtx11extras
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "compton-conf";
   version = "0.16.0";
 
@@ -24,19 +25,21 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     pkg-config
-    lxqt.lxqt-build-tools
     qttools
+    qtx11extras
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
     libconfig
+    qtbase
   ];
 
   preConfigure = ''
     substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
+      --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
   passthru.updateScript = gitUpdater { };

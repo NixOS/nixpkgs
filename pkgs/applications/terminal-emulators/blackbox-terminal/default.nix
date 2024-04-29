@@ -18,9 +18,8 @@
 , libgee
 , callPackage
 , python3
-, gtk3
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook4
 , sixelSupport ? false
 }:
 
@@ -48,6 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
     patchShebangs build-aux/meson/postinstall.py
   '';
 
@@ -57,9 +58,8 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     sassc
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
-    gtk3 # For gtk-update-icon-cache
     desktop-file-utils # For update-desktop-database
   ];
   buildInputs = [

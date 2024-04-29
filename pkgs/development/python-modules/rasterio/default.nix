@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , stdenv
+, testers
 
 , affine
 , attrs
@@ -13,24 +13,25 @@
 , click
 , click-plugins
 , cligj
-, cython_3
+, cython
 , gdal
 , hypothesis
 , ipython
 , matplotlib
 , numpy
-, oldest-supported-numpy
 , packaging
 , pytest-randomly
 , setuptools
 , shapely
 , snuggs
 , wheel
+
+, rasterio  # required to run version test
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.9";
+  version = "1.3.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -39,26 +40,23 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-Tp6BSU33FaszrIXQgU0Asb7IMue0C939o/atAKz+3Q4=";
+    hash = "sha256-FidUaSpbTR8X1/Cqy/IwApkOOl2RRtPqYJaSISRPThI=";
   };
 
-  patches = [
-    # fix tests failing with GDAL 3.8.0
-    (fetchpatch {
-      url = "https://github.com/rasterio/rasterio/commit/54ec554a6d9ee52207ad17dee42cbc51c613f709.diff";
-      hash = "sha256-Vjt9HRYNAWyj0myMdtSUENbcLjACfzegEClzZb4BxY8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rasterio/rasterio/commit/5a72613c58d1482bf297d08cbacf27992f52b2c4.diff";
-      hash = "sha256-bV6rh3GBmeqq9+Jff2b8/1wOuyF3Iqducu2eN4CT3lM=";
-    })
-  ];
+  postPatch = ''
+    # remove useless import statement requiring distutils to be present at the runtime
+    substituteInPlace rasterio/rio/calc.py \
+      --replace-fail "from distutils.version import LooseVersion" ""
+
+    # relax dependency on yet non-packaged, RC version of numpy
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==2.0.0rc1" "numpy"
+    '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gdal
     numpy
-    oldest-supported-numpy
     setuptools
     wheel
   ];
@@ -71,7 +69,6 @@ buildPythonPackage rec {
     click-plugins
     cligj
     numpy
-    setuptools
     snuggs
   ];
 
@@ -116,6 +113,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "rasterio"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = rasterio;
+    version = version;
+    command = "${rasterio}/bin/rio --version";
+  };
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";

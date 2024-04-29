@@ -9,11 +9,12 @@
 , pontos
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "24.1.0";
+  version = "24.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,17 +23,18 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "python-gvm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1MJajawm/QdioZM+/efnXOAFcuDOk/xJ1acPrxKp700=";
+    hash = "sha256-GIEsP8+RJMIehsBbZWpIRXCdqxm042lPbYTHY7/fknM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     lxml
     paramiko
+    typing-extensions
   ];
 
   nativeCheckInputs = [

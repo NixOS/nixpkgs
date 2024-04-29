@@ -47,14 +47,14 @@ let
 in python.pkgs.buildPythonApplication rec {
   pname = "manim";
   pyproject = true;
-  version = "0.18.0";
-  disabled = python3.pythonOlder "3.8";
+  version = "0.18.1";
+  disabled = python3.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
     repo = "manim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TI7O0b1JvUZAxTj6XfpAJKhbGqrGnhcrE9eRJUVx4GM=";
+    hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -64,8 +64,10 @@ in python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "cloup"
+    "isosurfaces"
     "pillow"
     "skia-pathops"
+    "watchdog"
   ];
 
   patches = [
