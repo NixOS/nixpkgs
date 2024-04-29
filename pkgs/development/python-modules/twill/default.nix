@@ -6,23 +6,33 @@
 , pyparsing
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
+, quixote
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "twill";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m4jrxx7udWkRXzYS0Yfd14tKVHt8kGYPn2eTa4unOdc=";
+    hash = "sha256-YlZKvOGxLWwGh+MqCXf8tfruxLK60H73k1VQhGOSTc8=";
   };
+
+  pythonRelaxDeps = [
+    "lxml"
+  ];
 
   build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -33,6 +43,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    quixote
+  ];
+
+  disabledTestPaths = [
+    # pytidylib is abandoned
+    "tests/test_tidy.py"
   ];
 
   pythonImportsCheck = [
