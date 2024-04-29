@@ -5,7 +5,7 @@
 , ... }:
 
 stdenvNoCC.mkDerivation (self: {
-  name = "alacritty-theme";
+  pname = "alacritty-theme";
   version = "0-unstable-2024-04-24";
 
   src = fetchFromGitHub {
