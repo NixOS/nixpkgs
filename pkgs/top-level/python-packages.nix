@@ -6683,6 +6683,8 @@ self: super: with self; {
 
   libmambapy = callPackage ../development/python-modules/libmambapy { };
 
+  libmodi-python = callPackage ../development/python-modules/libmodi-python { };
+
   libmodulemd = lib.pipe pkgs.libmodulemd [
     toPythonModule
     (p:
