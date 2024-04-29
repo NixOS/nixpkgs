@@ -3069,23 +3069,30 @@ buildLuarocksPackage {
   };
 }) {};
 
-toml = callPackage({ buildLuarocksPackage, cmake, fetchFromGitHub, fetchurl, luaOlder }:
+toml = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "toml";
-  version = "0.4.0-0";
+  version = "0.3.0-0";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/toml-0.4.0-0.rockspec";
-    sha256 = "17yr5gj9yyax3wzn7cv3vvkjrg5qq4yfw8sc6v72ivg79fhvwnli";
+    url    = "mirror://luarocks/toml-0.3.0-0.rockspec";
+    sha256 = "0y4qdzsvf4xwnr49xcpbqclrq9d6snv83cbdkrchl0cn4cx6zpxy";
   }).outPath;
-  src = fetchFromGitHub {
-    owner = "LebJe";
-    repo = "toml.lua";
-    rev = "0.4.0";
-    hash = "sha256-zVV49x2FW7UE1JoI88VzfYoQtkMFPiXrrAGOaNk4nok=";
-  };
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/LebJe/toml.lua.git",
+  "rev": "319e9accf8c5cedf68795354ba81e54c817d1277",
+  "date": "2023-02-19T23:00:49-05:00",
+  "path": "/nix/store/p6a98sqp9a4jwsw6ghqcwpn9lxmhvkdg-toml.lua",
+  "sha256": "05p33bq0ajl41vbsw9bx73shpf0p11n5gb6yy8asvp93zh2m51hq",
+  "hash": "sha256-GIZSBfwj3a0V8t6sV2wIF7gL9Th9Ja7XDoRKBfAa4xY=",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path" "sha256"]) ;
 
-  disabled = luaOlder "5.1";
-  nativeBuildInputs = [ cmake ];
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
 
   meta = {
     homepage = "https://github.com/LebJe/toml.lua";
