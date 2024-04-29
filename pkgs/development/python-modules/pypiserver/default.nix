@@ -28,7 +28,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
     setuptools-git
     wheel
   ];
