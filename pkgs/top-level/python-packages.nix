@@ -9018,6 +9018,8 @@ self: super: with self; {
 
   python-youtube = callPackage ../development/python-modules/python-youtube { };
 
+  pytsk3 = callPackage ../development/python-modules/pytsk3 { };
+
   py-aosmith = callPackage ../development/python-modules/py-aosmith { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
