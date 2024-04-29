@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, audioSupport ? true
-, darwin
-, alsa-lib
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  audioSupport ? true,
+  darwin,
+  alsa-lib,
 
-# passthru.tests.run
-, runCommand
-, uiua
+  # passthru.tests.run
+  runCommand,
+  uiua,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,19 +26,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-R97KO3MYmtO9C1Hi9kU+1FDdbOCVQk+gwVXTTvbeok4=";
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    rustPlatform.bindgenHook
-  ] ++ lib.optionals audioSupport [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ]
+    ++ lib.optionals audioSupport [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ] ++ lib.optionals (audioSupport && stdenv.isDarwin) [
-    darwin.apple_sdk.frameworks.AudioUnit
-  ] ++ lib.optionals (audioSupport && stdenv.isLinux) [
-    alsa-lib
-  ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ]
+    ++ lib.optionals (audioSupport && stdenv.isDarwin) [ darwin.apple_sdk.frameworks.AudioUnit ]
+    ++ lib.optionals (audioSupport && stdenv.isLinux) [ alsa-lib ];
 
   buildFeatures = lib.optional audioSupport "audio";
 
@@ -59,6 +55,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.uiua.org/";
     license = lib.licenses.mit;
     mainProgram = "uiua";
-    maintainers = with lib.maintainers; [ cafkafk tomasajt defelo ];
+    maintainers = with lib.maintainers; [
+      cafkafk
+      tomasajt
+      defelo
+    ];
   };
 }
