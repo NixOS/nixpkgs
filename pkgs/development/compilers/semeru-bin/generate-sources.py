@@ -9,7 +9,7 @@ import sys
 feature_versions = (8, 11, 16, 17)
 oses = ("mac", "linux")
 types = ("jre", "jdk")
-impls = ("openj9")
+impls = ("openj9",)
 
 arch_to_nixos = {
     "x64": ("x86_64",),
