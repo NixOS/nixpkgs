@@ -3581,6 +3581,12 @@ with pkgs;
 
   clairvoyance = callPackage ../tools/security/clairvoyance { };
 
+  inherit ({ # workaround for keeping the packages in 1 directory outside of by-name
+    clarissa = callPackage ../tools/networking/clarissa { };
+    clar = callPackage ../tools/networking/clarissa/clar.nix { };
+    clar-oui = callPackage ../tools/networking/clarissa/oui.nix { };
+  }) clarissa clar clar-oui;
+
   cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudhunter = callPackage ../tools/security/cloudhunter { };
