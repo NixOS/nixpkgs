@@ -4,6 +4,7 @@
 , lib
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , python3
 , substituteAll
 , nix-update-script
@@ -187,6 +188,13 @@ let
                 (substituteAll {
                   src = ./ffmpeg-path.patch;
                   ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+                })
+
+                (fetchpatch {
+                  # https://github.com/OctoPrint/OctoPrint/security/advisories/GHSA-x7mf-wrh9-r76c
+                  name = "CVE-2024-28237.patch";
+                  url = "https://github.com/OctoPrint/OctoPrint/commit/779894c1bc6478332d14bc9ed1006df1354eb517.patch";
+                  hash = "sha256-JtZSEbzkvVl1yz1fjJN1BCVIRSx3ZiLsj01dh+xchyM=";
                 })
               ];
 
