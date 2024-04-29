@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   python-snappy,
   pythonOlder,
@@ -22,6 +23,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-WVDffYKGsyepK4w1d4KUUMmxB6a6ylTbJvG79Bt5G6o=";
   };
+
+  patches = [
+    # Refactor deprecated unittest aliases, https://github.com/jcrobak/parquet-python/pull/83
+    (fetchpatch {
+      name = "unittest-aliases.patch";
+      url = "https://github.com/jcrobak/parquet-python/commit/746bebd1e84d8945a3491e1ae5e44102ff534592.patch";
+      hash = "sha256-4awxlzman/YMfOz1WYNR+mVn1ixGku9sqlaMJ1QITYs=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
