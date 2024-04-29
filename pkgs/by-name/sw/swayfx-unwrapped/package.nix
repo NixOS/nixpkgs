@@ -22,9 +22,10 @@
   json_c,
   libevdev,
   scdoc,
+  scenefx,
   wayland-scanner,
   xcbutilwm,
-  wlroots_0_16,
+  wlroots,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
@@ -32,9 +33,6 @@
   trayEnabled ? systemdSupport,
 }:
 
-let
-  wlroots = wlroots_0_16;
-in
 stdenv.mkDerivation (finalAttrs: {
   inherit
     enableXWayland
@@ -44,13 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.3.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
-    rev = finalAttrs.version;
-    sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-VT+JjQPqCIdtaLeSnRiZ3rES0KgDJR7j5Byxr+d6oRg=";
   };
 
   patches =
@@ -80,24 +78,25 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wayland-scanner
     scdoc
+    wayland-scanner
   ];
 
   buildInputs = [
-    libGL
-    wayland
-    libxkbcommon
-    pcre2
-    json_c
-    libevdev
-    pango
     cairo
-    libinput
     gdk-pixbuf
-    librsvg
-    wayland-protocols
+    json_c
     libdrm
+    libevdev
+    libGL
+    libinput
+    librsvg
+    libxkbcommon
+    pango
+    pcre2
+    scenefx
+    wayland
+    wayland-protocols
     (wlroots.override { inherit (finalAttrs) enableXWayland; })
   ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
 
