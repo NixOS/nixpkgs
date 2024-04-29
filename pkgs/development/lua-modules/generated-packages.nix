@@ -2759,6 +2759,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+
+rtp-nvim = callPackage ({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "rtp.nvim";
+  version = "1.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/rtp.nvim-1.0.0-1.rockspec";
+    sha256 = "0ddlwhk62g3yx1ysddsmlggfqv0hj7dljgczfwij1ijbz7qyp3hy";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorocks/rtp.nvim/archive/v1.0.0.zip";
+    sha256 = "1kx7qzdz8rpwsjcp63wwn619nrkxn6xd0nr5pfm3g0z4072nnpzn";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/nvim-neorocks/rtp.nvim";
+    description = "Source plugin and ftdetect directories on the Neovim runtimepath.";
+    license.fullName = "GPL-3.0";
+  };
+}) {};
+
 rustaceanvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "rustaceanvim";
