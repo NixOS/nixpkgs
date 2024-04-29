@@ -203,6 +203,8 @@ in
             TOKEN = "${instance.token}";
           } // optionalAttrs (wantsPodman) {
             DOCKER_HOST = "unix:///run/podman/podman.sock";
+          } // {
+            HOME = "/var/lib/gitea-runner/${name}";
           };
           path = with pkgs; [
             coreutils

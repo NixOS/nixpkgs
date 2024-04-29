@@ -73,7 +73,7 @@ in
       algorithm = lib.mkOption {
         default = "zstd";
         example = "lz4";
-        type = with lib.types; either (enum [ "lzo" "lz4" "zstd" ]) str;
+        type = with lib.types; either (enum [ "842" "lzo" "lzo-rle" "lz4" "lz4hc" "zstd" ]) str;
         description = ''
           Compression algorithm. `lzo` has good compression,
           but is slow. `lz4` has bad compression, but is fast.

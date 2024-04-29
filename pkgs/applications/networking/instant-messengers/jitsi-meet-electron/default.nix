@@ -10,7 +10,6 @@
 , libXtst
 , zlib
 , electron
-, pipewire
 }:
 
 buildNpmPackage rec {
@@ -72,7 +71,6 @@ buildNpmPackage rec {
 
     makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
         --add-flags $out/share/jitsi-meet-electron/resources/app.asar \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pipewire ]} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
         --inherit-argv0
 

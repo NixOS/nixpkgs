@@ -4,7 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
-, cython
+, cython_0
 , numpy
 , six
 , nose
@@ -67,13 +67,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+    cython_0
   ] ++ lib.optionals cudaSupport [
     addOpenGLRunpath
   ];
 
 
   buildInputs = [
-    cython
     nose
   ];
 

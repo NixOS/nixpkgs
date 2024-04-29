@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, cython_3
+, cython
 , pdm-backend
 , setuptools
 , pythonOlder
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     pdm-backend
     setuptools
   ];

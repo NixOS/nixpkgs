@@ -15,12 +15,12 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "1.4.0";
+  version = "1.6.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-N2RkeKJ+lEyNJwpmF5sORmOkDhNmTYRYAgvyR7Pc5EI=";
+    hash = "sha256-ZPHOgozuUij9+4YXZTnn1koddQEQZe/yrpb+OPHO+nA=";
     fetchSubmodules = true;
   };
 
@@ -29,8 +29,6 @@ ocamlPackages.buildDunePackage rec {
 
   # This is a hack to work around the hack used in the dune files
   OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     ocaml-crunch
@@ -98,7 +96,7 @@ ocamlPackages.buildDunePackage rec {
     bls12-381
     bls12-381-signature
     ptime
-    mtime_1
+    mtime
     lwt_log
     secp256k1-internal
     resto
@@ -112,6 +110,7 @@ ocamlPackages.buildDunePackage rec {
     simple-diff
     seqes
     stdint
+    tezt
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];

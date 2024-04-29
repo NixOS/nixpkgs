@@ -34,6 +34,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # https://github.com/ipython/traitlets/issues/902
+    "test_complete_custom_completers"
+  ];
+
   disabledTestPaths = [
     # requires mypy-testing
     "tests/test_typing.py"
@@ -44,6 +49,5 @@ buildPythonPackage rec {
     description = "Traitlets Python config system";
     homepage = "https://github.com/ipython/traitlets";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

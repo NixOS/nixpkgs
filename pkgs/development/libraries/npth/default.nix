@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgsCross }:
 
 stdenv.mkDerivation rec {
   pname = "npth";
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   doCheck = true;
+
+  passthru.tests = {
+    musl = pkgsCross.musl64.npth;
+  };
 
   meta = with lib; {
     description = "The New GNU Portable Threads Library";

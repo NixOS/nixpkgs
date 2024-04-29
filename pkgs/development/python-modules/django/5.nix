@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch2
 , pythonAtLeast
 , pythonOlder
 , substituteAll
@@ -63,6 +64,13 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that excpects timezone issues
     ./django_5_disable_failing_tests.patch
+
+    (fetchpatch2 {
+      # https://github.com/django/django/pull/17979
+      name = "django-mime-utf8-surrogates.patch";
+      url = "https://github.com/django/django/commit/b231bcd19e57267ce1fc21d42d46f0b65fdcfcf8.patch";
+      hash = "sha256-HhmRwi24VkoPoh+NygAThCoMywoMwrLijU4ZsDfVU34=";
+    })
 
   ] ++ lib.optionals withGdal [
     (substituteAll {

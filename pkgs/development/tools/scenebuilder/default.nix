@@ -1,80 +1,104 @@
-{ lib, stdenv, fetchFromGitHub, openjdk20, maven, makeDesktopItem, copyDesktopItems, makeWrapper, glib, wrapGAppsHook }:
+{ lib
+, jdk21
+, maven
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, glib
+, makeWrapper
+, wrapGAppsHook
+}:
 
 let
-  jdk = openjdk20.override (lib.optionalAttrs stdenv.isLinux {
+  jdk = jdk21.override {
     enableJavaFX = true;
-  });
+  };
   maven' = maven.override {
     inherit jdk;
   };
-  selectSystem = attrs:
-    attrs.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 maven'.buildMavenPackage rec {
   pname = "scenebuilder";
-  version = "20.0.0";
+  version = "21.0.1";
 
   src = fetchFromGitHub {
     owner = "gluonhq";
-    repo = pname;
+    repo = "scenebuilder";
     rev = version;
-    hash = "sha256-Og+dzkJ6+YH0fD4HJw8gUKGgvQuNw17BxgzZMP/bEA0=";
+    hash = "sha256-YEcW1yQK6RKDqSstsrpdOqMt972ZagenGDxcJ/gP+SA=";
   };
 
-  buildDate = "2022-10-07T00:00:00+01:00"; # v20.0.0 release date
-  mvnParameters = "-Dmaven.test.skip -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
-  mvnHash = selectSystem {
-    x86_64-linux = "sha256-QwxA3lKVkRG5CV2GIwfVFPOj112pHr7bDlZJD6KwrHc=";
-    aarch64-linux = "sha256-cO5nHSvv2saBuAjq47A+GW9vFWEM+ysXyZgI0Oe/F70=";
-  };
+  patches = [
+    # makes the mvnHash platform-independent
+    ./pom-remove-javafx.patch
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper glib wrapGAppsHook ];
+    # makes sure that maven upgrades don't change the mvnHash
+    ./fix-default-maven-plugin-versions.patch
+  ];
+
+  postPatch = ''
+    # set the build timestamp to $SOURCE_DATE_EPOCH
+    substituteInPlace app/pom.xml \
+        --replace-fail "\''${maven.build.timestamp}" "$(date -d "@$SOURCE_DATE_EPOCH" '+%Y-%m-%d %H:%M:%S')"
+  '';
+
+  mvnParameters = toString [
+    "-Dmaven.test.skip"
+    "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
+  ];
+
+  mvnHash = "sha256-fS7dS2Q4ORThLBwDOzJJnRboNNRmhp0RG6Dae9fl+pw=";
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    glib
+    makeWrapper
+    wrapGAppsHook
+  ];
 
   dontWrapGApps = true; # prevent double wrapping
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/java $out/share/{${pname},icons/hicolor/128x128/apps}
-    cp app/target/lib/scenebuilder-${version}-SNAPSHOT-all.jar $out/share/java/${pname}.jar
-
-    cp app/src/main/resources/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
+    install -Dm644 app/target/lib/scenebuilder-${version}-SNAPSHOT-all.jar $out/share/scenebuilder/scenebuilder.jar
+    install -Dm644 app/src/main/resources/com/oracle/javafx/scenebuilder/app/SB_Logo.png $out/share/icons/hicolor/128x128/apps/scenebuilder.png
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk}/bin/java $out/bin/scenebuilder \
       --add-flags "--add-modules javafx.web,javafx.fxml,javafx.swing,javafx.media" \
       --add-flags "--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED" \
-      --add-flags "-cp $out/share/java/${pname}.jar" \
-      --add-flags "com.oracle.javafx.scenebuilder.app.SceneBuilderApp" \
+      --add-flags "-jar $out/share/scenebuilder/scenebuilder.jar" \
       "''${gappsWrapperArgs[@]}"
-    '';
+  '';
 
-  desktopItems = [ (makeDesktopItem {
-    name = "scenebuilder";
-    exec = "scenebuilder";
-    icon = "scenebuilder";
-    comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = "Scene Builder";
-    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
-    categories = [ "Development" ];
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "scenebuilder";
+      exec = "scenebuilder";
+      icon = "scenebuilder";
+      comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
+      desktopName = "Scene Builder";
+      mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    changelog = "https://github.com/gluonhq/scenebuilder/releases/tag/${src.rev}";
     description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    mainProgram = "scenebuilder";
     homepage = "https://gluonhq.com/products/scene-builder/";
+    license = licenses.bsd3;
+    mainProgram = "scenebuilder";
+    maintainers = with maintainers; [ wirew0rm ];
+    platforms = jdk.meta.platforms;
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wirew0rm ];
-    platforms = platforms.all;
   };
 }
 

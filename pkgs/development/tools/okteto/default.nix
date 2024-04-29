@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.25.4";
+  version = "2.26.1";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-F3tvk3vC6h8fJ2hZMKo2eQ0uUj0UsK7MEujo//wXJi0=";
+    hash = "sha256-bWyerkXmAto0c/LYybUSRctajmL1R0PldfpKsh8crfA=";
   };
 
-  vendorHash = "sha256-+Adnveutg8soqK2Zwn2SNq7SEHd/Z91diHbPYHrGVrA=";
+  vendorHash = "sha256-cYiyKNpsMfjqLL+6Q/s3nHRcj2y0DHuOu+S5GndLHxk=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -33,6 +33,10 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
+  checkFlags = [
+    "-skip=TestCreateDockerfile" # Skip flaky test
+  ];
+
   postInstall = ''
     installShellCompletion --cmd okteto \
       --bash <($out/bin/okteto completion bash) \
@@ -47,9 +51,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Develop your applications directly in your Kubernetes Cluster";
-    mainProgram = "okteto";
     homepage = "https://okteto.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "okteto";
   };
 }

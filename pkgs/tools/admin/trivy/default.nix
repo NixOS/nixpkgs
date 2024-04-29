@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPackages
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, trivy
+{
+  lib,
+  stdenv,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  trivy,
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.50.1";
+  version = "0.50.4";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
+    repo = "trivy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TcSWgEdk0hjckY5ZGm2/jg9C4yiTTtgQjZEihXBi+fA=";
+    hash = "sha256-KFVeJmtMPGPjeiXzeVFtY73drZ4CySdmMRxDqEJfA4c=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-FkyGqZSEKWCI7tRmTBI+dmiqZPPPMUlqbCxs59N1syY=";
+  vendorHash = "sha256-aki+kwjZxPPD/K3k8wJMc2HNB6DzFf92mcOOQFwsbXU=";
 
   subPackages = [ "cmd/trivy" ];
 
@@ -39,7 +40,11 @@ buildGoModule rec {
 
   postInstall =
     let
-      trivy = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then placeholder "out" else buildPackages.trivy;
+      trivy =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.trivy;
     in
     ''
       installShellCompletion --cmd trivy \
@@ -69,6 +74,9 @@ buildGoModule rec {
     '';
     mainProgram = "trivy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
   };
 }

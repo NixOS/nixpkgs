@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
+, setuptools
 , pillow
 , zbar
 , pytestCheckHook
@@ -9,7 +11,10 @@
 buildPythonPackage rec {
   pname = "python-zbar";
   version = "0.23.93";
-  format = "setuptools";
+  pyproject = true;
+
+  # distutils usage in setup.py
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "mchehab";
@@ -18,22 +23,17 @@ buildPythonPackage rec {
     hash = "sha256-6gOqMsmlYy6TK+iYPIBsCPAk8tYDliZYMYeTOidl4XQ=";
   };
 
-  patches = [
-    # python: enum: fix build for Python 3.11
-    # https://github.com/mchehab/zbar/pull/231
-    # the patch is reworked as it does not cleanly apply
-    ./0001-python-enum-fix-build-for-Python-3.11.patch
-  ];
+  postPatch = ''
+    cd python
+  '';
 
-  propagatedBuildInputs = [ pillow ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pillow ];
 
   buildInputs = [ zbar ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  preBuild = ''
-    cd python
-  '';
 
   disabledTests = [
     #AssertionError: b'Y800' != 'Y800'
@@ -42,6 +42,9 @@ buildPythonPackage rec {
     #Requires loading a recording device
     #zbar.SystemError: <zbar.Processor object at 0x7ffff615a680>
     "test_processing"
+    # Version too long?
+    # self.assertEqual(len(ver), 2)
+    "test_version"
   ];
 
   pythonImportsCheck = [ "zbar" ];

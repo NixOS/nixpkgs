@@ -42,13 +42,6 @@ buildPythonApplication rec {
     "mycli/packages/paramiko_stub/__init__.py"
   ];
 
-  disabledTests = [
-    # Note: test_auto_escaped_col_names is currently failing due to a bug upstream.
-    # TODO: re-enable this test once there is a fix upstream. See
-    # https://github.com/dbcli/mycli/issues/1103 for details.
-    "test_auto_escaped_col_names"
-  ];
-
   postPatch = ''
     substituteInPlace setup.py \
       --replace "cryptography == 36.0.2" "cryptography"

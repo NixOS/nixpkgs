@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 3855e135a14eec07e12f3d26416713a691b3c149
-  ref: refs/tags/6.4.3
+  revision: 55ea82f7d3f98652ea81ab1d29d3be3e55528345
+  ref: refs/tags/6.4.6
   specs:
-    metasploit-framework (6.4.3)
+    metasploit-framework (6.4.6)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -22,7 +22,7 @@ GIT
       em-http-request
       eventmachine
       faker
-      faraday
+      faraday (= 2.7.11)
       faraday-retry
       faye-websocket
       filesize
@@ -87,7 +87,7 @@ GIT
       rubyntlm
       rubyzip
       sinatra
-      sqlite3
+      sqlite3 (= 1.6.6)
       sshkey
       swagger-blocks
       thin
@@ -135,29 +135,29 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.3.0)
-    aws-partitions (1.895.0)
-    aws-sdk-core (3.191.3)
+    aws-partitions (1.916.0)
+    aws-sdk-core (3.192.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.440.0)
+    aws-sdk-ec2 (1.450.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-ec2instanceconnect (1.37.0)
+    aws-sdk-ec2instanceconnect (1.38.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.94.0)
+    aws-sdk-iam (1.96.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.77.0)
+    aws-sdk-kms (1.79.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.143.0)
-      aws-sdk-core (~> 3, >= 3.191.0)
+    aws-sdk-s3 (1.147.0)
+      aws-sdk-core (~> 3, >= 3.192.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.8)
-    aws-sdk-ssm (1.165.0)
+    aws-sdk-ssm (1.166.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.8.0)
@@ -165,7 +165,7 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.0)
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.7)
     bindata (2.4.15)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
@@ -177,7 +177,7 @@ GEM
     crass (1.0.6)
     daemons (1.4.1)
     date (3.3.4)
-    dnsruby (1.70.0)
+    dnsruby (1.72.1)
       simpleidn (~> 0.2.1)
     domain_name (0.6.20240107)
     ed25519 (1.3.0)
@@ -191,13 +191,14 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubi (1.12.0)
     eventmachine (1.2.7)
-    faker (3.2.3)
+    faker (3.3.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.9.0)
-      faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
-      net-http
-    faraday-retry (2.2.0)
+    faraday (2.7.11)
+      base64
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
+    faraday-retry (2.2.1)
       faraday (~> 2.0)
     faye-websocket (0.11.3)
       eventmachine (>= 0.12.0)
@@ -218,7 +219,7 @@ GEM
       domain_name (~> 0.5)
     http_parser.rb (0.8.0)
     httpclient (2.8.3)
-    i18n (1.14.1)
+    i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
     irb (1.7.4)
@@ -226,7 +227,7 @@ GEM
     jmespath (1.6.2)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.7.1)
+    json (2.7.2)
     little-plugger (1.1.4)
     logging (2.3.1)
       little-plugger (~> 1.1)
@@ -240,7 +241,7 @@ GEM
       activesupport (~> 7.0)
       railties (~> 7.0)
       zeitwerk
-    metasploit-credential (6.0.8)
+    metasploit-credential (6.0.9)
       metasploit-concern
       metasploit-model
       metasploit_data_models (>= 5.0.0)
@@ -266,29 +267,27 @@ GEM
       recog
       webrick
     metasploit_payloads-mettle (1.0.26)
-    method_source (1.0.0)
-    mini_portile2 (2.8.5)
-    minitest (5.22.2)
+    method_source (1.1.0)
+    mini_portile2 (2.8.6)
+    minitest (5.22.3)
     mqtt (0.6.0)
     msgpack (1.6.1)
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nessus_rest (0.1.6)
-    net-http (0.4.1)
-      uri
     net-imap (0.4.10)
       date
       net-protocol
     net-ldap (0.19.0)
     net-protocol (0.2.2)
       timeout
-    net-smtp (0.4.0.1)
+    net-smtp (0.5.0)
       net-protocol
-    net-ssh (7.2.1)
+    net-ssh (7.2.3)
     network_interface (0.0.4)
     nexpose (7.3.0)
-    nio4r (2.7.0)
+    nio4r (2.7.1)
     nokogiri (1.14.5)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
@@ -311,11 +310,11 @@ GEM
       ruby-rc4
       ttfunk
     pg (1.5.6)
-    public_suffix (5.0.4)
+    public_suffix (5.0.5)
     puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.3)
-    rack (2.2.8.1)
+    rack (2.2.9)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -335,14 +334,14 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0)
       zeitwerk (~> 2.5)
-    rake (13.1.0)
+    rake (13.2.1)
     rasn1 (0.13.0)
       strptime (~> 0.2.5)
     rb-readline (0.5.5)
-    recog (3.1.4)
+    recog (3.1.5)
       nokogiri
     redcarpet (3.6.0)
-    reline (0.4.3)
+    reline (0.5.2)
       io-console (~> 0.5)
     rex-arch (0.1.15)
       rex-text
@@ -382,14 +381,14 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.56)
+    rex-socket (0.1.57)
       rex-core
     rex-sslscan (0.1.10)
       rex-core
       rex-socket
       rex-text
     rex-struct2 (0.1.4)
-    rex-text (0.2.56)
+    rex-text (0.2.57)
     rex-zip (0.1.5)
       rex-text
     rexml (3.2.6)
@@ -398,7 +397,7 @@ GEM
     ruby-mysql (4.1.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    ruby_smb (3.3.4)
+    ruby_smb (3.3.5)
       bindata (= 2.4.15)
       openssl-ccm
       openssl-cmac
@@ -416,7 +415,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    sqlite3 (1.7.2)
+    sqlite3 (1.6.6)
       mini_portile2 (~> 2.8.0)
     sshkey (3.0.0)
     strptime (0.2.5)
@@ -428,7 +427,8 @@ GEM
     thor (1.3.1)
     tilt (2.3.0)
     timeout (0.4.1)
-    ttfunk (1.7.0)
+    ttfunk (1.8.0)
+      bigdecimal (~> 3.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2024.1)
@@ -437,7 +437,6 @@ GEM
       unf_ext
     unf_ext (0.0.9.1)
     unix-crypt (1.3.1)
-    uri (0.13.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     webrick (1.8.1)
@@ -469,4 +468,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.5.6
+   2.5.7

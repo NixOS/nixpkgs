@@ -23,7 +23,6 @@ in appimageTools.wrapType2 {
   runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}";
 
   extraInstallCommands = ''
-    mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
     install -m 444 -D ${appimageContents}/zulip.desktop $out/share/applications/zulip.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/zulip.png \
       $out/share/icons/hicolor/512x512/apps/zulip.png

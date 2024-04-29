@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildPythonPackage
-, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 
@@ -17,7 +16,7 @@
 , py
 , pytest-django
 , pytest-random-order
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -58,20 +57,15 @@ buildPythonPackage rec {
     py
     pytest-django
     pytest-random-order
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Passing None has been deprecated.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # Python 3.11 support, https://github.com/graphql-python/graphene-django/pull/1365
-    "test_django_objecttype_convert_choices_enum_naming_collisions"
-    "test_django_objecttype_choices_custom_enum_name"
-    "test_django_objecttype_convert_choices_enum_list"
-    "test_schema_representation"
+  disabledTests = [
+    # https://github.com/graphql-python/graphene-django/issues/1510
+    "test_should_filepath_convert_string"
+    "test_should_choice_convert_enum"
+    "test_should_multiplechoicefield_convert_to_list_of_enum"
+    "test_perform_mutate_success_with_enum_choice_field"
   ] ++ lib.optionals stdenv.isDarwin [
     # this test touches files in the "/" directory and fails in darwin sandbox
     "test_should_filepath_convert_string"

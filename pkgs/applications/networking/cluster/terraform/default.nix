@@ -58,7 +58,6 @@ let
           Chili-Man
           babariviere
           kalbasit
-          amaxine
           timstott
           zimbatm
           zowoq
@@ -167,9 +166,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.8.0";
-    hash = "sha256-An/ElR1tXQSb9x26R5o9gcb4XKTeVxlv+72Whcrdeoc=";
-    vendorHash = "sha256-xpgGceAA+kvwUp4T0m9rnbPoZ3uJHU2KIRsrcGr8dRo=";
+    version = "1.8.2";
+    hash = "sha256-c9RzdmaTXMOi4oP++asoysDpt/BSvBK/GmEDDGViSl0=";
+    vendorHash = "sha256-2+ctm1lJjCHITWV7BqoqgBlXKjNT4lueAt4F3UtoL9Q=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tootik";
-  version = "0.10.0";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
     rev = version;
-    hash = "sha256-5rv+hkIBRu5uIUYsy7drJvcAHwL9tY8qD/dTj1mbarQ=";
+    hash = "sha256-afGFQxC9WJxSQk6LLl4IBo1JoKqcKQ/Qc7HOaJKi2Do=";
   };
 
   vendorHash = "sha256-Lsc8nK4I1gZEW7RbEapHr3IJ6wTATLElX3XfNX1LwvM=";

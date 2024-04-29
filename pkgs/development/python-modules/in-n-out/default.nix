@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, cython_3
+, cython
 , fetchPypi
 , future
 , pytestCheckHook
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "in-n-out";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "in_n_out";
     inherit version;
-    hash = "sha256-hKJb2/DKl2Dd+rgndujNJWddriHKDpVuIKwOcwL8oZ8=";
+    hash = "sha256-Q83it96YHUGm1wYYore9mJSBCVkipT6tTcdfK71d/+o=";
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     hatchling
     hatch-vcs
   ];

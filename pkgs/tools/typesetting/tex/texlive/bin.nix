@@ -8,7 +8,7 @@
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
 , tlpdb
-}:
+}@args:
 
 # Useful resource covering build options:
 # http://tug.org/texlive/doc/tlbuild.html
@@ -196,7 +196,7 @@ core = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Basic binaries for TeX Live";
     homepage    = "http://www.tug.org/texlive";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
@@ -420,7 +420,28 @@ pygmentex = python3Packages.buildPythonApplication rec {
   };
 };
 
-inherit asymptote;
+asymptote = args.asymptote.overrideAttrs (finalAttrs: prevAttrs: {
+  version = texlive.pkgs.asymptote.version;
+
+  # keep local src and patches even if duplicated in the top level asymptote
+  # so that top level updates do not break texlive
+  src = fetchurl {
+    url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+    hash = "sha256-DecadD+m7pORuH3Sdcs/5M3vUbN6rhSkFoNN0Soq9bs=";
+  };
+
+  texContainer = texlive.pkgs.asymptote.tex;
+  texdocContainer = texlive.pkgs.asymptote.texdoc;
+
+  patches = [
+    (fetchpatch {
+      # partial fix for macOS XDR/V3D support (LDFLAGS change seems like an unrelated bugfix)
+      name = "restore-LDFLAGS-dont-look-for-tirpc-under-MacOS.patch";
+      url = "https://github.com/vectorgraphics/asymptote/commit/7e17096b22d18d133d1bc5916b6e32c0cb24ad10.patch";
+      hash = "sha256-olCFzqfZwWOAjqlB5lDPXYRHU9i3VQNgoR0cO5TmW98=";
+    })
+  ];
+});
 
 inherit biber;
 inherit biber-ms;
@@ -499,23 +520,23 @@ xindy = stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace xindy-*/user-commands/xindy.in \
       --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                     "our \$clisp = '$(type -P clisp)';"
+                     "our \$clisp = '$(type -P clisp)';" \
+      --replace-fail 'die "$cmd: Cannot locate xindy modules directory";' \
+                     '$modules_dir = "${texlive.pkgs.xindy.tex}/xindy/modules"; die "$cmd: Cannot locate xindy modules directory" unless -d $modules_dir;'
   '';
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv perl ];
 
-  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
+  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" "--disable-xindy-rules" ];
 
   preInstall = ''mkdir -p "$out/bin" '';
   # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
   postInstall = ''
     mkdir -p "$out/lib/xindy"
     mv "$out"/{bin/xindy.mem,lib/xindy/}
-    ln -s ../../share/texmf-dist/xindy/modules "$out/lib/xindy/"
   '';
 };
 

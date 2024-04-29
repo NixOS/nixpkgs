@@ -100,10 +100,12 @@ rec {
   clion = (mkJetBrainsProduct {
     pname = "clion";
     extraBuildInputs = lib.optionals (stdenv.isLinux) [
+      fontconfig
       python3
       stdenv.cc.cc
       openssl
       libxcrypt-legacy
+      lttng-ust_2_12
       musl
     ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
       expat
@@ -254,6 +256,8 @@ rec {
   });
 
   webstorm = mkJetBrainsProduct { pname = "webstorm"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
+
+  writerside = mkJetBrainsProduct { pname = "writerside"; extraBuildInputs = [ stdenv.cc.cc musl ]; };
 
   plugins = callPackage ./plugins { } // { __attrsFailEvaluation = true; };
 

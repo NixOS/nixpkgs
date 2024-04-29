@@ -11,12 +11,12 @@
 , pyright
 , ruff
 , tempel
+, writeScript
 , writeText
-, unstableGitUpdater
 }:
 
 let
-  rev = "0b30d95c6de95b150d93ecee325b95e04ff09e46";
+  rev = "977d344e2e930f3680990014f84ca94877d6eebf";
   python = python3.withPackages (ps: with ps; [
     epc
     orjson
@@ -28,13 +28,13 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "20231021.309"; # 3:09 UTC
+  version = "20240424.1125";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
     inherit rev;
-    hash = "sha256-hR7bZh0ElJ8F9ToJ4dkazF19T8PE01MTcxKrjeaEp4o=";
+    hash = "sha256-moG0BaHHN3ySON4aMza43Ub4GKuGV9mGSzC48xoiPl8=";
   };
 
   commit = rev;
@@ -88,7 +88,22 @@ melpaBuild {
     runHook postCheck
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts coreutils git gnused
+    set -eu -o pipefail
+
+    tmpdir="$(mktemp -d)"
+    git clone --depth=1 https://github.com/manateelazycat/lsp-bridge.git "$tmpdir"
+
+    pushd "$tmpdir"
+    commit=$(git show -s --pretty='format:%H')
+    # Based on: https://github.com/melpa/melpa/blob/2d8716906a0c9e18d6c979d8450bf1d15dd785eb/package-build/package-build.el#L523-L533
+    version=$(TZ=UTC git show -s --pretty='format:%cd' --date='format-local:%Y%m%d.%H%M' | sed 's|\.0*|.|')
+    popd
+
+    update-source-version emacsPackages.lsp-bridge $version --rev="$commit"
+  '';
 
   meta = with lib; {
     description = "A blazingly fast LSP client for Emacs";

@@ -15,6 +15,8 @@ in buildPecl rec {
 
   sourceRoot = "${src.name}/ext";
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-parentheses-equality";
+
   doCheck = true;
 
   meta = with lib; {

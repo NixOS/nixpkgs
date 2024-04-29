@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "fast-histogram";
-  version = "0.12";
+  version = "0.14";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astrofrog";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Cz4BgbtxbUPxL2NSzvZYjbYIN4KUuliUV0bXRRtyvfM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-vIzDDzz6e7PXArHdZdSSgShuTjy3niVdGtXqgmyJl1w=";
   };
 
   nativeBuildInputs = [

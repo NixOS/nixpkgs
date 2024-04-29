@@ -50,6 +50,7 @@
 , mobile-broadband-provider-info
 , runtimeShell
 , buildPackages
+, nixosTests
 }:
 
 let
@@ -203,6 +204,9 @@ stdenv.mkDerivation rec {
       attrPath = "networkmanager";
       versionPolicy = "odd-unstable";
     };
+    tests = {
+      inherit (nixosTests.networking) networkmanager;
+    };
   };
 
   meta = with lib; {
@@ -210,7 +214,7 @@ stdenv.mkDerivation rec {
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz amaxine ]);
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz ]);
     platforms = platforms.linux;
   };
 }

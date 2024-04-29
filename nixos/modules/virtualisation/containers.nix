@@ -28,43 +28,6 @@ in
       description = "Enable the OCI seccomp BPF hook";
     };
 
-    cdi = {
-      dynamic.nvidia.enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable dynamic CDI configuration for NVidia devices by running nvidia-container-toolkit on boot.
-        '';
-      };
-
-      static = mkOption {
-        type = types.attrs;
-        default = { };
-        description = ''
-          Declarative CDI specification. Each key of the attribute set
-          will be mapped to a file in /etc/cdi. It is required for every
-          key to be provided in JSON format.
-        '';
-        example = {
-          some-vendor = builtins.fromJSON ''
-              {
-                "cdiVersion": "0.5.0",
-                "kind": "some-vendor.com/foo",
-                "devices": [],
-                "containerEdits": []
-              }
-            '';
-
-          some-other-vendor = {
-            cdiVersion = "0.5.0";
-            kind = "some-other-vendor.com/bar";
-            devices = [];
-            containerEdits = [];
-          };
-        };
-      };
-    };
-
     containersConf.settings = mkOption {
       type = toml.type;
       default = { };
@@ -150,8 +113,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    hardware.nvidia-container-toolkit-cdi-generator.enable = lib.mkIf cfg.cdi.dynamic.nvidia.enable true;
-
     virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
     virtualisation.containers.containersConf.settings = {
@@ -163,13 +124,7 @@ in
       };
     };
 
-    environment.etc = let
-      cdiStaticConfigurationFiles = (lib.attrsets.mapAttrs'
-        (name: value:
-          lib.attrsets.nameValuePair "cdi/${name}.json"
-            { text = builtins.toJSON value; })
-        cfg.cdi.static);
-    in {
+    environment.etc = {
       "containers/containers.conf".source =
         toml.generate "containers.conf" cfg.containersConf.settings;
 
@@ -183,7 +138,7 @@ in
       "containers/policy.json".source =
         if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
         else "${pkgs.skopeo.policy}/default-policy.json";
-    } // cdiStaticConfigurationFiles;
+    };
 
   };
 

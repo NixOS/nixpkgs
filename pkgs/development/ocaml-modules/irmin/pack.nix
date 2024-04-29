@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   pname = "irmin-pack";
 
-  inherit (irmin) version src strictDeps;
+  inherit (irmin) version src;
 
   nativeBuildInputs = [ ppx_irmin ];
 

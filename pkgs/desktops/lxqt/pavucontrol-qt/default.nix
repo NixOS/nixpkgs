@@ -1,24 +1,26 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
-, lxqt-build-tools
 , libpulseaudio
+, lxqt-build-tools
+, pkg-config
 , qtbase
 , qttools
+, qtwayland
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-eNhoqY1pak96x0xCypvgHmgCYjw4CYH8ABtWjIZrD3w=";
+    hash = "sha256-dhFVVqJIX40oiHCcnG1166RsllXtfaO7MqM6ZNizjQQ=";
   };
 
   nativeBuildInputs = [
@@ -26,11 +28,13 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
     libpulseaudio
+    qtbase
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };

@@ -115,6 +115,9 @@ buildPythonPackage rec {
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure = ''
+    # Ensure that the build process uses the requested number of cores
+    export MAX_JOBS="$NIX_BUILD_CORES"
+
     # Upstream's setup.py tries to write cache somewhere in ~/
     export HOME=$(mktemp -d)
 

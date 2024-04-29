@@ -11,28 +11,28 @@
 , rust-jemalloc-sys
 , darwin
 }:
+
 let
-  pname = "polars";
-  version = "0.20.15";
-  rootSource = fetchFromGitHub {
-    owner = "pola-rs";
-    repo = "polars";
-    rev = "refs/tags/py-${version}";
-    hash = "sha256-N/VIi0s5unYWqlR5Mpaq9cqXl2ccbzWPuOtE2UbmQw8=";
-  };
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
     jemalloc = jemalloc.override {
       disableInitExecTls = true;
     };
   };
 in
-buildPythonPackage {
-  inherit pname version;
+
+buildPythonPackage rec {
+  pname = "polars";
+  version = "0.20.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = rootSource;
+  src = fetchFromGitHub {
+    owner = "pola-rs";
+    repo = "polars";
+    rev = "refs/tags/py-${version}";
+    hash = "sha256-N/VIi0s5unYWqlR5Mpaq9cqXl2ccbzWPuOtE2UbmQw8=";
+  };
 
   # Cargo.lock file is sometimes behind actual release which throws an error,
   # thus the `sed` command

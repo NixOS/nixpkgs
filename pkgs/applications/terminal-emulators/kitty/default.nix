@@ -31,14 +31,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.34.0";
+  version = "0.34.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IP1CWMHiWnBSbt+78EQ6hfX2A9FDhlwt0KLthXtO4dA=";
+    hash = "sha256-r7KZcSqREILMp0F9ajeHS5sglq/o88h2t+4BgbABjOY=";
   };
 
   goModules = (buildGo122Module {
@@ -250,6 +250,6 @@ buildPythonApplication rec {
     ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }

@@ -2,7 +2,7 @@ import ./make-test-python.nix (
 { pkgs, lib, ...}:
 {
   name = "gnome-extensions";
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:

@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/harlanc/xiu";
     changelog = "https://github.com/harlanc/xiu/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "xiu";
   };
 }

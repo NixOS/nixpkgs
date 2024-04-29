@@ -3,7 +3,7 @@
 , fetchPypi
 
 # build-system
-, cython_3
+, cython
 , numpy
 , setuptools
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     numpy
     setuptools
   ];

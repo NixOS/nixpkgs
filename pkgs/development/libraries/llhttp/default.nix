@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nodejs/llhttp/releases/tag/release/v${finalAttrs.version}";
     license = licenses.mit;
     pkgConfigModules = [ "libllhttp" ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

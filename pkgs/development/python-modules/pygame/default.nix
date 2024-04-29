@@ -6,7 +6,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , setuptools
 , pkg-config
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     pkg-config
     SDL2
     setuptools

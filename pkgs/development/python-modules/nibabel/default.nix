@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , hatchling
 , hatch-vcs
@@ -15,7 +16,7 @@
 , pytest-doctestplus
 , pytest-httpserver
 , pytest-xdist
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -70,15 +71,15 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ passthru.optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTestPaths = lib.optionals (!pythonOlder "3.12") [
-    # tries to use `distutils`, removed in Python 3.12
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # uses distutils
     "nisext/tests/test_sexts.py"
   ];
 

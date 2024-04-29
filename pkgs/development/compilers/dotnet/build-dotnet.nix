@@ -25,6 +25,7 @@ assert if type == "sdk" then packages != null else true;
 , writeShellScript
 , mkNugetDeps
 , callPackage
+, dotnetCorePackages
 }:
 
 let
@@ -43,6 +44,8 @@ let
   };
 
   mkCommon = callPackage ./common.nix {};
+
+  targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
 
 in
 mkCommon type rec {
@@ -88,21 +91,21 @@ mkCommon type rec {
 
   # Tell autoPatchelf about runtime dependencies.
   # (postFixup phase is run before autoPatchelfHook.)
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.targetPlatform.isLinux ''
     patchelf \
       --add-needed libicui18n.so \
       --add-needed libicuuc.so \
       $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
   '';
 
   passthru = {

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.2.2";
+  version = "2024.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GdoVb9YtlUlrSx7TWWrdHOqOJJ4M+kJspOllv6HgFXk=";
+    hash = "sha256-Iu1GHnLUqdhYO7hoHaf+O/S6KO0P+dvl0wgfRA5vtGI=";
   };
 
   postPatch = ''

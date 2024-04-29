@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dirigera";
-  version = "1.1.1";
+  version = "1.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Leggin";
     repo = "dirigera";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k5xChz3qfClWU131WH0CqaY8qrJXh85NQ0y1iPfnX5Y=";
+    hash = "sha256-OXq8eJyZQBsJEK81GxstfMHqDShlZyOWSXLwP9Zfpqw=";
   };
 
   build-system = [ setuptools ];

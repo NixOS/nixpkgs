@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nix-update-script
 , deprecated
 , importlib-metadata
 , pydantic_1
@@ -16,6 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic_yaml-0";
+  # nixpkgs-update: no auto update
   version = "0.11.2";
 
   pyproject = true;
@@ -54,8 +54,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A small helper library that adds some YAML capabilities to pydantic";

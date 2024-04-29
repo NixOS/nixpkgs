@@ -100,10 +100,6 @@ let
       cudaPackages.cuda_cudart
       cudaPackages.cuda_cudart.static
     ];
-    postBuild = ''
-      rm "$out/lib64"
-      ln -s "lib" "$out/lib64"
-    '';
   };
 
   runtimeLibs = lib.optionals enableRocm [
@@ -140,6 +136,8 @@ goBuild ((lib.optionalAttrs enableRocm {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals enableRocm [
+    rocmPackages.llvm.bintools
   ] ++ lib.optionals (enableRocm || enableCuda) [
     makeWrapper
   ] ++ lib.optionals stdenv.isDarwin

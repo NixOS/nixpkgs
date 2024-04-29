@@ -78,7 +78,9 @@ let
   ] (arch: elem "${arch}-darwin" supportedSystems);
 
   nonPackageJobs =
-    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
+    { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
+
+      release-checks = import ./nixpkgs-basic-release-checks.nix { inherit pkgs nixpkgs supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
 
@@ -91,6 +93,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
           constituents =
             [ jobs.tarball
+              jobs.release-checks
               jobs.cabal2nix.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -140,6 +143,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.release-checks
               jobs.metrics
               jobs.manual
               jobs.lib-tests

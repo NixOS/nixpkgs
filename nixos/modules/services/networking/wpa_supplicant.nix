@@ -124,11 +124,20 @@ let
           fi
         ''}
 
+        # ensure wpa_supplicant.conf exists, or the daemon will fail to start
+        ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
+          touch /etc/wpa_supplicant.conf
+        ''}
+
         # substitute environment variables
         if [ -f "${configFile}" ]; then
           ${pkgs.gawk}/bin/awk '{
-            for(varname in ENVIRON)
-              gsub("@"varname"@", ENVIRON[varname])
+            for(varname in ENVIRON) {
+              find = "@"varname"@"
+              repl = ENVIRON[varname]
+              if (i = index($0, find))
+                $0 = substr($0, 1, i-1) repl substr($0, i+length(find))
+            }
             print
           }' "${configFile}" > "${finalConfig}"
         else

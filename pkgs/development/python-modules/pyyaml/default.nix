@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython
+, cython_0
 , setuptools
 , libyaml
 , python
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
   ];
 

@@ -6,6 +6,8 @@
 , freetype
 , lib
 , libglvnd
+, libxkbcommon
+, wayland
 , makeWrapper
 , mold
 , pkg-config
@@ -47,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/uad-ng \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ fontconfig freetype libglvnd xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ fontconfig freetype libglvnd libxkbcommon wayland xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr ]} \
       --suffix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
@@ -57,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation";
     license = licenses.gpl3Only;
     mainProgram = "uad-ng";
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ lavafroth ];
     platforms = platforms.linux;
   };
 }

@@ -5,6 +5,7 @@
 , ninja
 , xorg
 , libdrm
+, libei
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -43,14 +44,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.3";
+  version = "3.14.6";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+6RyrdHRDk9aeM52wcgLo966jP70EAiXSMR3sffNeZM=";
+    hash = "sha256-Nj66d42Ih4pD15cNuMe81sviUepVVzVX8BEP7O2p0o0=";
   };
 
   patches = [
@@ -114,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXxf86vm
     libavif
     libdrm
+    libei
     libliftoff
     SDL2
     libdecor

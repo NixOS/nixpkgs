@@ -18,7 +18,7 @@ let
     python3.pkgs.ropgadget # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/rop.py#L32
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pwndbg";
   version = lib.getVersion pwndbg-py;
   format = "other";
@@ -31,18 +31,30 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/pwndbg
-    cp gdbinit.py $out/share/pwndbg
+    cp gdbinit.py $out/share/pwndbg/gdbinit.py
     chmod +x $out/share/pwndbg/gdbinit.py
+    # First line is a import from future, so we need to append our imports after that
+    sed '2 i import sys, os
+    3 i [sys.path.append(p) for p in "${pythonPath}".split(":")]
+    4 i os.environ["PATH"] += ":${binPath}"' -i $out/share/pwndbg/gdbinit.py
 
     # Don't require an in-package venv
     touch $out/share/pwndbg/.skip-venv
 
     makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
-      --add-flags "-q -x $out/share/pwndbg/gdbinit.py" \
-      --prefix PATH : ${binPath} \
-      --set PYTHONPATH ${pythonPath} \
+      --add-flags "-q -x $out/share/pwndbg/gdbinit.py"
 
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Check if pwndbg is installed correctly
+    HOME=$TMPDIR LC_CTYPE=C.UTF-8 $out/bin/pwndbg -ex exit
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -35,8 +35,6 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mv bin/${name} bin/${pname}
-
     mkdir -p $out/
     cp -r bin $out/bin
 

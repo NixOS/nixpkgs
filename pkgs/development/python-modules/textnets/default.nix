@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , cairocffi
-, cython_3
+, cython
 , fetchPypi
 , igraph
 , leidenalg
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
-    cython_3
+    cython
     poetry-core
     setuptools
   ];

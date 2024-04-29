@@ -7,11 +7,8 @@
 , yarn
 , nodejs
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , electron
-, libnotify
-, libpulseaudio
-, pipewire
 , alsa-utils
 , which
 , testers
@@ -20,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.4.22";
+  version = "1.4.27";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eNd12p9QvuYpiy9FaGaMSfQ3qVYzmYyO2/v/rdV3nN8=";
+    hash = "sha256-nUHiveS1XI+vC2Tj1DK/DS4CrKTLMg1IYgTPWXuLrAc=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -34,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jBwyIyiWeqNmOnxmVOr7c4oMWwHElEjM25sShhTMi78=";
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
     runHook preConfigure
@@ -72,11 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
     popd
 
-    # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, 'libpipewire' for screen sharing and 'libnotify' for notifications
+    # Linux needs 'aplay' for notification sounds
     makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire libnotify ]} \
       ''} \
       --add-flags "$out/share/teams-for-linux/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

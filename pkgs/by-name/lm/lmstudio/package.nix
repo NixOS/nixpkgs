@@ -5,10 +5,10 @@
 
 let
   pname = "lmstudio";
-  version = "0.2.18";
+  version = "0.2.20";
   src = fetchurl {
     url = "https://releases.lmstudio.ai/linux/${version}/beta/LM_Studio-${version}.AppImage";
-    hash = "sha256-cUa0fjV7xx6+2tnGVP7uLG0QQb44LhP2nYsn6Qn0al4=";
+    hash = "sha256-T92ZDqGvxJfBkAWsK8EgHdQZnLefK3gDP2vCTL8X+eM=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -20,7 +20,6 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications
-    mv $out/bin/lmstudio-${version} $out/bin/lmstudio
     cp -r ${appimageContents}/usr/share/icons $out/share
     install -m 444 -D ${appimageContents}/lm-studio.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/lm-studio.desktop \

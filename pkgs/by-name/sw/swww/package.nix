@@ -10,16 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "swww";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JtwNrdXZbmR7VZeRiXcLEEOq1z7bF8idjp2D1Zpf3Z4=";
+    hash = "sha256-LvSPKg8cWlwKu4a+P/G0dOqV+aPsUq3axI1QqnLj4U8=";
   };
 
-  cargoHash = "sha256-FC3HeqWAMOTm2Tmzg+Sn/j0ZXyd8nsYH64MlwQwr8W0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bitcode-0.6.0" = "sha256-D1Jv9k9m6m7dXjU8s4YMEMC39FOUN7Ix9SvLKhM1yh0=";
+    };
+  };
 
   buildInputs = [
     lz4

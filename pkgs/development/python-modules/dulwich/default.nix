@@ -3,7 +3,7 @@
 , buildPythonPackage
 , certifi
 , fastimport
-, fetchPypi
+, fetchFromGitHub
 , gevent
 , geventhttpclient
 , git
@@ -14,6 +14,8 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-rust
 , urllib3
 }:
 
@@ -24,12 +26,17 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qenGaDPOpYDDrBKSfkuXEZhddq/KmNqXFAXUFN5g6Wg=";
+  src = fetchFromGitHub {
+    owner = "jelmer";
+    repo = "dulwich";
+    rev = "refs/tags/${pname}-${version}";
+    hash = "sha256-iP+6KtaQ8tfOobovSLSJZogS/XWW0LuHgE2oV8uQW/8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  build-system = [
+    setuptools
+    setuptools-rust
+  ];
 
   propagatedBuildInputs = [
     certifi

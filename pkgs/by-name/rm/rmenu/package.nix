@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "imgurbot12";
     repo = "rmenu";
-    hash = "sha256-mzY+M7GGJDxb8s7pusRDo/xfKE/S4uxPy4klRBjVGOA=";
+    hash = "sha256-khauloUGVuekR+Lran1DLnsxwY8sIf5PsEKY7sNy1K4=";
   };
 
   nativeBuildInputs = [
@@ -65,14 +65,17 @@ rustPlatform.buildRustPackage rec {
     # fix config and theme
     mkdir -p $out/share/rmenu
     cp -vf $src/rmenu/public/config.yaml $out/share/rmenu/config.yaml
-    sed -i "s@~\/\.config\/rmenu\/themes@$out\/themes@g" $out/share/rmenu/config.yaml
-    sed -i "s@~\/\.config\/rmenu@$out\/plugins@g" $out/share/rmenu/config.yaml
+    substituteInPlace $out/share/rmenu/config.yaml --replace "~/.config/rmenu" "$out"
     ln -sf  $out/themes/dark.css $out/share/rmenu/style.css
   '';
 
   preFixup = ''
+    # rmenu expects the config to be in XDG_CONFIG_DIRS
+    # shell script plugins called from rmenu binary expect the rmenu-build binary to be on the PATH,
+    # which needs wrapping in temporary environments like shells and flakes
     gappsWrapperArgs+=(
       --suffix XDG_CONFIG_DIRS : "$out/share"
+      --suffix PATH : "$out/bin"
     )
   '';
 

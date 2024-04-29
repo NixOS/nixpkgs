@@ -9,6 +9,7 @@
 , openssl
 , pkg-config
 , protobuf
+, python3
 , qrencode
 , qt6
 , readline
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     qt6.wrapQtAppsHook
   ];
 

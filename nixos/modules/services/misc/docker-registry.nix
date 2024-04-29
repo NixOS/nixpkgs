@@ -41,8 +41,7 @@ let
     };
   };
 
-  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
-
+  configFile = cfg.configFile;
 in {
   options.services.dockerRegistry = {
     enable = mkEnableOption "Docker Registry";
@@ -104,6 +103,17 @@ in {
       '';
       default = {};
       type = types.attrs;
+    };
+
+    configFile = lib.mkOption {
+      default = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
+      defaultText = literalExpression ''pkgs.writeText "docker-registry-config.yml" "# my custom docker-registry-config.yml ..."'';
+      description = ''
+       Path to CNCF distribution config file.
+
+       Setting this option will override any configuration applied by the extraConfig option.
+      '';
+      type =  types.path;
     };
 
     enableGarbageCollect = mkEnableOption "garbage collect";

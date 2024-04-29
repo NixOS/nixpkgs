@@ -19,30 +19,39 @@
 , traitlets
 , typing-extensions
 
+# Optional dependencies
+, ipykernel
+, ipyparallel
+, ipywidgets
+, matplotlib
+, nbconvert
+, nbformat
+, notebook
+, qtconsole
+
 # Test dependencies
 , pickleshare
 , pytest-asyncio
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , testpath
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.22.2";
+  version = "8.23.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LcqtkEn5BW8f72NRTxdsfUH5MNqnjQW4KhdiAoGPLBQ=";
+    hash = "sha256-dGjtr09t4+G5EuV/ZsJB5v08cJny7CE24jnhQugAJ00=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
     jedi
     matplotlib-inline
@@ -53,9 +62,22 @@ buildPythonPackage rec {
     traitlets
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
-  ] ++ lib.optionals (pythonOlder "3.10") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
   ];
+
+  optional-dependencies = {
+    kernel = [ ipykernel ];
+    nbconvert = [ nbconvert ];
+    nbformat = [ nbformat ];
+    notebook = [
+      ipywidgets
+      notebook
+    ];
+    parallel = [ ipyparallel ];
+    qtconsole = [ qtconsole ];
+    matplotlib = [ matplotlib ];
+  };
 
   pythonImportsCheck = [
     "IPython"
@@ -72,7 +94,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pickleshare
     pytest-asyncio
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     testpath
   ];
 
@@ -90,6 +112,6 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor fridh ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

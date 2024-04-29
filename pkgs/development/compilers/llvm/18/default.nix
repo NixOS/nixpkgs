@@ -25,7 +25,7 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
-, officialRelease ? { version = "18.1.3"; sha256 = "sha256-saQGbpYd95JuudwLcdG80GL8YhadH7TUY1FC0o0ithY="; }
+, officialRelease ? { version = "18.1.4"; sha256 = "sha256-LyQEb4ZJXm2hkPOM9XITIploMT2VKIQWxUFio7SXrc0="; }
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -80,7 +80,7 @@ in let
     then tools.bintools
     else bootBintools;
 
-  in rec {
+  in {
 
     libllvm = callPackage ./llvm {
       inherit llvm_meta;
@@ -98,7 +98,7 @@ in let
         ../common/clang/add-nostdlibinc-flag.patch
         (substituteAll {
           src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
-          libllvmLibdir = "${libllvm.lib}/lib";
+          libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
       inherit llvm_meta;

@@ -17,8 +17,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     mkdir -p $out/share/${pname}
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     cp -a ${appimageContents}/usr/share/icons $out/share/

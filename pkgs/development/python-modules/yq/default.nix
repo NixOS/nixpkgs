@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "3.3.0";
+  version = "3.4.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0qtWLxGx4OW5ZUubBtQ/iiBSacx72izgdzJfWhI2Udw=";
+    hash = "sha256-tVjatvFcA+JKHESHiVALINbzB+6cpMk2E4fzZYFjAA0=";
   };
 
   patches = [

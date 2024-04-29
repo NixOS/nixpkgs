@@ -2,11 +2,11 @@
 , buildGoModule
 , fetchFromGitHub
 , fetchYarnDeps
+, fixup-yarn-lock
 , grafana-agent
 , nix-update-script
 , nixosTests
 , nodejs
-, prefetch-yarn-deps
 , stdenv
 , systemd
 , testers
@@ -44,7 +44,7 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
-  nativeBuildInputs = [ prefetch-yarn-deps nodejs yarn ];
+  nativeBuildInputs = [ fixup-yarn-lock nodejs yarn ];
 
   tags = [
     "builtinassets"

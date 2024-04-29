@@ -1,24 +1,22 @@
 { lib
 , stdenv
 , fetchgit
-, openjdk17_headless
-, gradle_7
+, jdk_headless
+, gradle
 , perl
 , makeWrapper
 }:
-let
-  gradle = gradle_7;
-in
+
 stdenv.mkDerivation rec {
   pname = "apksigner";
-  version = "33.0.1";
+  version = "34.0.5-unstable-2024-03-06";
 
   src = fetchgit {
     # use pname here because the final jar uses this as the filename
     name = pname;
     url = "https://android.googlesource.com/platform/tools/apksig";
-    rev = "platform-tools-${version}";
-    hash = "sha256-CKvwB9Bb12QvkL/HBOwT6DhA1PI45+QnTNfwnvReGUQ=";
+    rev = "ac5cbb07d87cc342fcf07715857a812305d69888";
+    hash = "sha256-sLAs7XEkhNkQjB/nhBODxI3QzxFvLWM1SBKDuXp6gvw=";
   };
 
   postPatch = ''
@@ -36,6 +34,7 @@ stdenv.mkDerivation rec {
             include 'com/android/apksigner/*.txt'
         }
     }
+    tasks.named("processTestResources") { dependsOn("extractTestProto") }
     EOF
     sed -i -e '/conscrypt/s/testImplementation/implementation/' build.gradle
   '';
@@ -80,9 +79,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm444 build/libs/apksigner.jar -t $out/lib
-    makeWrapper "${openjdk17_headless}/bin/java" "$out/bin/apksigner" \
+    makeWrapper "${jdk_headless}/bin/java" "$out/bin/apksigner" \
       --add-flags "-jar $out/lib/apksigner.jar"
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Command line tool to sign and verify Android APKs";

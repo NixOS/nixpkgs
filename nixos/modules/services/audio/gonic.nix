@@ -55,6 +55,9 @@ in
         RuntimeDirectory = "gonic";
         RootDirectory = "/run/gonic";
         ReadWritePaths = "";
+        BindPaths = [
+          cfg.settings.playlists-path
+        ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
           "-/etc/resolv.conf"

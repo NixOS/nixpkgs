@@ -25,15 +25,15 @@
 , mesa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exodus";
-  version = "24.13.3";
+  version = "24.17.5";
 
   src = fetchurl {
-    name = "exodus-linux-x64-${version}.zip";
-    url = "https://downloads.exodus.com/releases/${pname}-linux-x64-${version}.zip";
+    name = "exodus-linux-x64-${finalAttrs.version}.zip";
+    url = "https://downloads.exodus.com/releases/exodus-linux-x64-${finalAttrs.version}.zip";
     curlOptsList = [ "--user-agent" "Mozilla/5.0" ];
-    sha256 = "sha256-hhPHWo+nQXgluB6qn57wndX1eslLv3lLpdxm+COGMO8=";
+    hash = "sha256-HlyscqoxGucoQoFgSWN3vEjAnkdAmtBLOhjhWbScPFc=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ mmahut rople380 Crafter ];
   };
-}
+})

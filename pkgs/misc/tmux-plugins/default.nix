@@ -397,10 +397,23 @@ in rec {
     pluginName = "nord";
     version = "0.3.0";
     src = pkgs.fetchFromGitHub {
-      owner = "arcticicestudio";
-      repo = "nord-tmux";
+      owner = "nordtheme";
+      repo = "tmux";
       rev = "v${version}";
-      sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
+      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
+    };
+    meta = {
+      homepage = "https://www.nordtheme.com/ports/tmux";
+      description = "Nord Tmux theme with plugin support";
+      longDescription =
+        ''
+          > An arctic, north-bluish clean and elegant tmux theme.
+          > Designed for a fluent and clear workflow with support for third-party plugins.
+
+          This plugin requires that tmux be used with a Nord terminal emulator
+          theme in order to work properly.
+      '';
+      license = lib.licenses.mit;
     };
   };
 

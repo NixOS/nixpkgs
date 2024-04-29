@@ -102,7 +102,14 @@ let
     "flac"
     "libjpeg"
     "libpng"
+  ] ++ lib.optionals (!chromiumVersionAtLeast "124") [
+    # Use the vendored libwebp for M124+ until we figure out how to solve:
+    # Running phase: configurePhase
+    # ERROR Unresolved dependencies.
+    # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
+    #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     "libwebp"
+  ] ++ [
     "libxslt"
     # "opus"
   ];
@@ -241,6 +248,15 @@ let
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-121-rust.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "124" && !chromiumVersionAtLeast "125") [
+      # M124 shipped with broken --ozone-platform-hint flag handling, which we rely on
+      # for our NIXOS_OZONE_WL (wayland) environment variable.
+      # See <https://issues.chromium.org/issues/329678163>.
+      # This is the commit for the fix that landed in M125, which applies clean on M124.
+      (githubPatch {
+        commit = "c7f4c58f896a651eba80ad805ebdb49d19ebdbd4";
+        hash = "sha256-6nYWT2zN+j73xAIXLdGYT2eC71vGnGfiLCB0OwT0CAI=";
+      })
     ];
 
     postPatch = ''

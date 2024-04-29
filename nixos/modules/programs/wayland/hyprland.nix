@@ -42,6 +42,15 @@ in
 
     xwayland.enable = mkEnableOption ("XWayland") // { default = true; };
 
+    envVars.enable = mkEnableOption null // {
+      default = true;
+      example = false;
+      description = ''
+        Set environment variables for Hyprland to work properly.
+        Enabled by default.
+      '';
+    };
+
     systemd.setPath.enable = mkEnableOption null // {
       default = true;
       example = false;
@@ -72,6 +81,15 @@ in
       enable = mkDefault true;
       extraPortals = [ finalPortalPackage ];
       configPackages = mkDefault [ cfg.finalPackage ];
+    };
+
+    environment.sessionVariables = mkIf cfg.envVars.enable {
+      XDG_CURRENT_DESKTOP = "Hyprland";
+      XDG_SESSION_DESKTOP = "Hyprland";
+      XDG_SESSION_TYPE = "wayland";
+      GDK_BACKEND = "wayland,x11";
+      QT_QPA_PLATFORM = "wayland;xcb";
+      _JAVA_AWT_WM_NONREPARENTING = "1"; # Fix for Java applications on tiling window managers
     };
 
     systemd = mkIf cfg.systemd.setPath.enable {

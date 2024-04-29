@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
-
 buildGoModule rec {
   pname = "gotestsum";
   version = "1.10.1";
@@ -33,6 +33,6 @@ buildGoModule rec {
     mainProgram = "gotestsum";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ endocrimes ];
+    maintainers = with maintainers; [ isabelroses ];
   };
 }

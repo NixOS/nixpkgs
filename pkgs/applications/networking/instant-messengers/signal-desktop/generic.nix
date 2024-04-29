@@ -120,6 +120,8 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libdbusmenu
+    pipewire
+    stdenv.cc.cc
     xdg-utils
     wayland
   ];
@@ -128,10 +130,6 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
-  dontPatchELF = true;
-  # We need to run autoPatchelf manually with the "no-recurse" option, see
-  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
-  dontAutoPatchelf = true;
 
   installPhase = ''
     runHook preInstall
@@ -140,11 +138,6 @@ in stdenv.mkDerivation rec {
 
     mv usr/share $out/share
     mv "opt/${dir}" "$out/lib/${dir}"
-
-    # Note: The following path contains bundled libraries:
-    # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/sharp/vendor/lib/
-    # We run autoPatchelf with the "no-recurse" option to avoid picking those
-    # up, but resources/app.asar still requires them.
 
     # Symlink to bin
     mkdir -p $out/bin
@@ -158,7 +151,6 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc pipewire ] }"
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
@@ -168,7 +160,8 @@ in stdenv.mkDerivation rec {
       --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
       ${if pname == "signal-desktop" then "--replace \"bin/signal-desktop\" \"bin/signal-desktop --use-tray-icon\"" else ""}
 
-    autoPatchelf --no-recurse -- "$out/lib/${dir}/"
+    # Note: The following path contains bundled libraries:
+    # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
   '';
 

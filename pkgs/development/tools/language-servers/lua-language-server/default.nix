@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.7.4";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     rev = finalAttrs.version;
-    hash = "sha256-wJOOzKM2pgxfRqx5WZjOcCyRapz0Sub3AYm51LRYpFU=";
+    hash = "sha256-Zl57KmsAuyMWbcKnU19m7ljox/LqWsa6gXbjaWiznfg=";
     fetchSubmodules = true;
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A language server that offers Lua language support";
     homepage = "https://github.com/luals/lua-language-server";
-    changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
+    changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda gepbird sei40kr ];
     mainProgram = "lua-language-server";

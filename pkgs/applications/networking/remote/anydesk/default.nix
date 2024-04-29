@@ -7,14 +7,14 @@ let
   description = "Desktop sharing application, providing remote support and online meetings";
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.3.1";
+  version = "6.3.2";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/anydesk-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/anydesk-${version}-amd64.tar.gz"
     ];
-    hash = "sha256-qVksva6+EfAQiOexP8NlDSCR5Ab2WGsuCG4BD87rlag=";
+    hash = "sha256-nSY4qHRsEvQk4M3JDHalAk3C6Y21WlfDQ2Gpp6/jjMs=";
   };
 
   buildInputs = [

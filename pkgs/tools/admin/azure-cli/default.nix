@@ -39,8 +39,8 @@ let
     , url
     , sha256
     , description
-    }: python3.pkgs.buildPythonPackage {
-      inherit pname version;
+    , ...
+    }@args: python3.pkgs.buildPythonPackage ({
       format = "wheel";
       src = fetchurl { inherit url sha256; };
       meta = with lib; {
@@ -51,9 +51,11 @@ let
         license = lib.licenses.mit;
         sourceProvenance = [ sourceTypes.fromSource ];
       };
-    };
+    } // (removeAttrs args [ "url" "sha256" "description" ]));
 
-  extensions = callPackages ./extensions-generated.nix { inherit mkAzExtension; };
+  extensions =
+    callPackages ./extensions-generated.nix { inherit mkAzExtension; }
+    // callPackages ./extensions-manual.nix { inherit mkAzExtension; };
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
@@ -352,6 +354,18 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
       command-line tool to connect to Azure and execute administrative
       commands on Azure resources. It allows the execution of commands
       through a terminal using interactive command-line prompts or a script.
+
+      `azure-cli` has extension support. For example, to install the `aks-preview` extension, use
+
+      ```nix
+      environment.systemPackages = [
+        (azure-cli.withExtensions [ azure-cli.extensions.aks-preview ])
+      ];
+      ```
+
+      To make the `azure-cli` immutable and prevent clashes in case `azure-cli` is also installed via other package managers,
+      some configuration files were moved into the derivation. This can be disabled by overriding `withImmutableConfig = false`
+      when building `azure-cli`.
     '';
     changelog = "https://github.com/MicrosoftDocs/azure-docs-cli/blob/main/docs-ref-conceptual/release-notes-azure-cli.md";
     sourceProvenance = [ sourceTypes.fromSource ];

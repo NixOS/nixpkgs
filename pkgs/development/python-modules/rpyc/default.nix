@@ -34,6 +34,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export PYTHONPATH=$(pwd)/tests:$PYTHONPATH
+  '';
+
   disabledTests = [
     # Disable tests that requires network access
     "test_api"

@@ -1,5 +1,7 @@
 { lib
 , stdenv
+, aiohttp
+, ansicolors
 , azure-datalake-store
 , azure-identity
 , azure-storage-blob
@@ -17,8 +19,8 @@
 , pygithub
 , pytest-mock
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
-, pythonRelaxDepsHook
 , pyyaml
 , requests
 , setuptools
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,19 +39,14 @@ buildPythonPackage rec {
     owner = "nteract";
     repo = "papermill";
     rev = "refs/tags/${version}";
-    hash = "sha256-x6f5hhTdOPDVFiBvRhfrXq1wd5keYiuUshXnT0IkjX0=";
+    hash = "sha256-NxC5+hRDdMCl/7ZIho5ml4hdENrgO+wzi87GRPeMv8Q=";
   };
 
-  pythonRelaxDeps = [
-    "aiohttp"
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     pyyaml
     nbformat
@@ -58,6 +55,9 @@ buildPythonPackage rec {
     requests
     entrypoints
     tenacity
+    ansicolors
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    aiohttp
   ];
 
   passthru.optional-dependencies = {
@@ -97,11 +97,10 @@ buildPythonPackage rec {
     "papermill"
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # pytest 8 compat
+    "test_read_with_valid_file_extension"
+  ] ++ lib.optionals stdenv.isDarwin [
     # might fail due to the sandbox
     "test_end2end_autosave_slow_notebook"
   ];

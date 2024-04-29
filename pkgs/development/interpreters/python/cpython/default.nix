@@ -537,7 +537,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Strip tests
     rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
     '' + optionalString includeSiteCustomize ''
-
+    # Include a sitecustomize.py file
+    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
     '' + optionalString stripBytecode ''
     # Determinism: deterministic bytecode
     # First we delete all old bytecode.
@@ -661,7 +662,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     license = licenses.psfl;
     pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
-    maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
   };
 })

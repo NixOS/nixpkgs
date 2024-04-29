@@ -192,6 +192,7 @@ in {
         kernelPatches.request_key_helper
         kernelPatches.rust_1_75
         kernelPatches.rust_1_76
+        kernelPatches.rust_1_77-6_8
       ];
     };
 
@@ -203,6 +204,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.rust_1_77-6_9
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -438,6 +440,10 @@ in {
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
+
+    rtl8852au = callPackage ../os-specific/linux/rtl8852au { };
+
+    rtl8852bu = callPackage ../os-specific/linux/rtl8852bu { };
 
     rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack {};
 

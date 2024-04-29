@@ -14,7 +14,7 @@ in {
       allowedUDPPorts = [ 9511 9512 ];
     };
 
-    systemd.user.services.urserver =  {
+    systemd.user.services.urserver = {
       description = ''
         Server for Unified Remote: The one-and-only remote for your computer.
       '';

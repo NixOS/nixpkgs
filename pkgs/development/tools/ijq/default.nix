@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ijq";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromSourcehut {
     owner = "~gpanders";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-su/PHUt4GpJxt9nm/oYnP1F8EDSl0fUgamWJj1TxuZA=";
+    sha256 = "sha256-KtWJwIofMKW+03DFY4UWf3ni1DKuH289svh8iOPo1so=";
   };
 
-  vendorHash = "sha256-X91kW+dpcxd1+vTV1G1al5cdlwWpbUS85Xxf3yeVg1I=";
+  vendorHash = "sha256-oMkL4qZUS47h9izDad7Ar0Npd6toIZQuy1YIdEoJ2AM=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper scdoc ];
 

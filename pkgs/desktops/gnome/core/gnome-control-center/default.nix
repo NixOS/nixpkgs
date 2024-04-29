@@ -31,6 +31,7 @@
 , libgudev
 , libadwaita
 , libkrb5
+, libjxl
 , libpulseaudio
 , libpwquality
 , librsvg
@@ -173,10 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];

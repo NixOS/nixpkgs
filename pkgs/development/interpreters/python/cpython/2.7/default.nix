@@ -318,6 +318,8 @@ in with passthru; stdenv.mkDerivation ({
     inherit passthru;
 
     postFixup = ''
+      # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
+      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
     '' + lib.optionalString strip2to3 ''
       rm -R $out/bin/2to3 $out/lib/python*/lib2to3
     '' + lib.optionalString stripConfig ''
@@ -348,7 +350,6 @@ in with passthru; stdenv.mkDerivation ({
       '';
       license = lib.licenses.psfl;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ fridh ];
       knownVulnerabilities = [
         "Python 2.7 has reached its end of life after 2020-01-01. See https://www.python.org/doc/sunset-python-2/."
         # Quote: That means that we will not improve it anymore after that day,

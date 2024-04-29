@@ -72,13 +72,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "2674";
+  version = "2746";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-5Vc9DkXD83X22xRxZ2laCxrAZe2RdsL6FwR2tC/YGU0=";
+    hash = "sha256-V+QDymEzXpw78Ezd2DInRLE0F6mXpLRhCK8iI8prq8I=";
   };
 
   postPatch = ''

@@ -284,7 +284,7 @@ in
       in
         # We will generate every possible pair of WM and DM.
         concatLists (
-            builtins.map
+            lib.mapCartesianProduct
             ({dm, wm}: let
               sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
               script = xsession dm wm;
@@ -312,7 +312,7 @@ in
                   providedSessions = [ sessionName ];
                 })
             )
-            (cartesianProductOfSets { dm = dms; wm = wms; })
+            { dm = dms; wm = wms; }
           );
   };
 

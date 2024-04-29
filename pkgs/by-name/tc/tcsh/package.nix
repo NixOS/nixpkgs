@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcsh";
-  version = "6.24.11";
+  version = "6.24.12";
 
   src = fetchurl {
     url = "mirror://tcsh/tcsh-${finalAttrs.version}.tar.gz";
-    hash = "sha256-tae2J6uz7y6NOoabtnXQ6SfYUHBER6Gyx3lGwNMkeZ0=";
+    hash = "sha256-4ycM6WZ/1b0qBGaHZZ/PX9ameBMm+Abr1yTx4cnNQYU=";
   };
 
   strictDeps = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       - job control
     '';
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ AndersonTorres suominen ];
+    maintainers = with lib.maintainers; [ suominen ];
     platforms = lib.platforms.unix;
   };
 })

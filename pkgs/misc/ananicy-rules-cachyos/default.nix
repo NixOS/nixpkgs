@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "ananicy-rules-cachyos";
-  version = "unstable-2024-04-10";
+  version = "unstable-2024-04-22";
 
   src = fetchFromGitHub {
     owner = "CachyOS";
     repo = "ananicy-rules";
-    rev = "de55e2f55e6adf559bf4990aa433f5c202dc073d";
-    sha256 = "sha256-TWaOMVEeTLI67eG5BPyb+OSnz31QvTueQD2yfEEbTEo=";
+    rev = "8646faa8c0c8fc16d78ca3a25d65ddbd86b9d468";
+    hash = "sha256-b9M6Uqlb6Ysp8BRe1QV62sjVOU6tgFbrjTxDc3B4xlg=";
   };
 
   dontConfigure = true;
@@ -16,17 +16,17 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out
-    cp -r * $out
-    rm $out/README.md
+    mkdir -p $out/etc/ananicy.d
+    rm README.md LICENSE
+    cp -r * $out/etc/ananicy.d
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/CachyOS/ananicy-rules";
-    description = "ananicy-cpp-rules for CachyOS ";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin johnrtitor diniamo ];
+    description = "CachyOS' ananicy-rules meant to be used with ananicy-cpp";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin johnrtitor diniamo ];
   };
 }

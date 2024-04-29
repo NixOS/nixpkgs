@@ -1,27 +1,28 @@
- { lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, crcmod
-, defusedxml
-, fetchFromGitHub
-, freezegun
-, jsonpickle
-, munch
-, pyserial
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, semver
-, setuptools
-, wheel
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  crcmod,
+  defusedxml,
+  fetchFromGitHub,
+  freezegun,
+  jsonpickle,
+  munch,
+  pyserial,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  semver,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.37.2";
+  version = "0.37.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "plugwise";
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zPh4yko35aMhiTTIDbaBgVruRDyolhtvTzTIhF5fo+Y=";
+    hash = "sha256-aQz0p+DNi1XVoFwdFjc3RjpHqA2kGf4pU1QS6m271gU=";
   };
 
   postPatch = ''
@@ -64,9 +65,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plugwise"
-  ];
+  pythonImportsCheck = [ "plugwise" ];
 
   __darwinAllowLocalNetworking = true;
 

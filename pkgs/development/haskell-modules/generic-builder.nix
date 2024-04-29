@@ -1,13 +1,24 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, jailbreak-cabal, hscolour, cpphs
 , ghcWithHoogle, ghcWithPackages
+, nodejs
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  # Pass the "wrong" C compiler rather than none at all so packages that just
+  # use the C preproccessor still work, see
+  # https://github.com/haskell/cabal/issues/6466 for details.
+  cc =
+    if stdenv.hasCC then "$CC"
+    else if stdenv.hostPlatform.isGhcjs then "${emscripten}/bin/emcc"
+    else "$CC_FOR_BUILD";
+
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkg-config coreutils gnugrep glibcLocales;
+    pkg-config coreutils gnugrep glibcLocales
+    emscripten;
 in
 
 { pname
@@ -40,7 +51,8 @@ in
 , enableSharedExecutables ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows or stdenv.hostPlatform.isWasm)
+# Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
+, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs)
 , enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 # On macOS, statically linking against system frameworks is not supported;
@@ -188,10 +200,7 @@ let
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
-    # Pass the "wrong" C compiler rather than none at all so packages that just
-    # use the C preproccessor still work, see
-    # https://github.com/haskell/cabal/issues/6466 for details.
-    "--with-gcc=${if stdenv.hasCC then "$CC" else "$CC_FOR_BUILD"}"
+    "--with-gcc=${cc}"
   ] ++ optionals stdenv.hasCC [
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
     "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
@@ -315,7 +324,7 @@ let
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
     [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) (assert pkg-config != null; pkg-config) ++
-    setupHaskellDepends ++ collectedToolDepends;
+    setupHaskellDepends ++ collectedToolDepends ++ optional stdenv.hostPlatform.isGhcjs nodejs;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
     optionals doCheck (testDepends ++ testHaskellDepends) ++
@@ -442,6 +451,11 @@ stdenv.mkDerivation ({
   '' + ''
     done
   ''
+  + (optionalString stdenv.hostPlatform.isGhcjs ''
+    export EM_CACHE="$(realpath "$(mktemp -d emcache.XXXXXXXXXX)")"
+    cp -Lr ${emscripten}/share/emscripten/cache/* "$EM_CACHE/"
+    chmod u+rwX -R "$EM_CACHE"
+  '')
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
