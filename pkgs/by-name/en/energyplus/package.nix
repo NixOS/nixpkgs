@@ -5,6 +5,9 @@
   cmake,
   patchelf,
   python3,
+  gfortran,
+  libGL,
+  xorg,
 }:
 stdenv.mkDerivation rec {
   pname = "energyplus";
@@ -20,7 +23,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     python3
+    gfortran
   ];
+
+  buildInputs = [
+    libGL
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
+    xorg.libXi
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_FORTRAN=ON"
+    "-DBUILD_PACKAGE=ON"
+  ];
+
+  makeFlags = [ "package" ];
 
   postInstall = ''
     # binaries
