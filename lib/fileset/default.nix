@@ -218,8 +218,12 @@ in {
 
     : The file set to trace.
 
-    This argument can also be a path,
-    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+      This argument can also be a path,
+      which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+
+    `val`
+
+    : The value to return.
 
     # Type
 
@@ -271,8 +275,8 @@ in {
 
     : The file set to trace and return.
 
-    This argument can also be a path,
-    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+      This argument can also be a path,
+      which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
 
     # Type
 
@@ -333,27 +337,27 @@ in {
 
     Takes an attribute set with the following attributes
 
-    ## root (required, Path)
+    `root` (Path; _required_)
 
-    The local directory [path](https://nixos.org/manual/nix/stable/language/values.html#type-path) that will correspond to the root of the resulting store path.
-    Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
-    `root` has to be a directory.
+    : The local directory [path](https://nixos.org/manual/nix/stable/language/values.html#type-path) that will correspond to the root of the resulting store path.
+      Paths in [strings](https://nixos.org/manual/nix/stable/language/values.html#type-string), including Nix store paths, cannot be passed as `root`.
+      `root` has to be a directory.
 
-    :::{.note}
-    Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
-    The only way to change which files get added to the store is by changing the `fileset` attribute.
-    :::
+      :::{.note}
+      Changing `root` only affects the directory structure of the resulting store path, it does not change which files are added to the store.
+      The only way to change which files get added to the store is by changing the `fileset` attribute.
+      :::
 
-    ## fileset (required, FileSet)
+    `fileset` (FileSet; _required_)
 
-    The file set whose files to import into the store.
-    File sets can be created using other functions in this library.
-    This argument can also be a path,
-    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    : The file set whose files to import into the store.
+      File sets can be created using other functions in this library.
+      This argument can also be a path,
+      which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
 
-    :::{.note}
-    If a directory does not recursively contain any file, it is omitted from the store path contents.
-    :::
+      :::{.note}
+      If a directory does not recursively contain any file, it is omitted from the store path contents.
+      :::
 
     # Type
 
@@ -767,22 +771,22 @@ in {
     `predicate`
 
     : The predicate function to call on all files contained in given file set.
-    A file is included in the resulting file set if this function returns true for it.
+      A file is included in the resulting file set if this function returns true for it.
 
-    This function is called with an attribute set containing these attributes:
+      This function is called with an attribute set containing these attributes:
 
-    - `name` (String): The name of the file
+      - `name` (String): The name of the file
 
-    - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
-      This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
+      - `type` (String, one of `"regular"`, `"symlink"` or `"unknown"`): The type of the file.
+        This matches result of calling [`builtins.readFileType`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-readFileType) on the file's path.
 
-    - `hasExt` (String -> Bool): Whether the file has a certain file extension.
-      `hasExt ext` is true only if `hasSuffix ".${ext}" name`.
+      - `hasExt` (String -> Bool): Whether the file has a certain file extension.
+        `hasExt ext` is true only if `hasSuffix ".${ext}" name`.
 
-      This also means that e.g. for a file with name `.gitignore`,
-      `hasExt "gitignore"` is true.
+        This also means that e.g. for a file with name `.gitignore`,
+        `hasExt "gitignore"` is true.
 
-    Other attributes may be added in the future.
+      Other attributes may be added in the future.
 
     `path`
 
@@ -939,7 +943,7 @@ in {
     `path`
 
     : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
-    This directory must contain a `.git` file or subdirectory.
+      This directory must contain a `.git` file or subdirectory.
 
     # Type
 
@@ -997,14 +1001,14 @@ in {
 
     # Inputs
 
-    `options`
+    `options` (attribute set)
     : `recurseSubmodules` (optional, default: `false`)
       : Whether to recurse into [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to also include their tracked files.
-      If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
+        If `true`, this is equivalent to passing the [--recurse-submodules](https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---recurse-submodules) flag to `git ls-files`.
 
-    `path`
-    : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
-    This directory must contain a `.git` file or subdirectory.
+      `path`
+      : The [path](https://nixos.org/manual/nix/stable/language/values#type-path) to the working directory of a local Git repository.
+        This directory must contain a `.git` file or subdirectory.
 
     # Type
 
