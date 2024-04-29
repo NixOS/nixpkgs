@@ -6639,6 +6639,8 @@ self: super: with self; {
 
   libfsext-python = callPackage ../development/python-modules/libfsext-python { };
 
+  libfsfat-python = callPackage ../development/python-modules/libfsfat-python { };
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
