@@ -1577,13 +1577,11 @@ self: super: {
       doJailbreak
     ];
 
-  # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
-      sed -i 's/lens.*4.20/lens/' jsaddle-dom.cabal
       rm Setup.hs
     '';
-  }) (doJailbreak super.jsaddle-dom);
+  }) super.jsaddle-dom;
   jsaddle-hello = doJailbreak super.jsaddle-hello;
   ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
 
