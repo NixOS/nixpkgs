@@ -13582,12 +13582,6 @@
     githubId = 20026143;
     name = "Katona László";
   };
-  MP2E = {
-    email = "MP2E@archlinux.us";
-    github = "MP2E";
-    githubId = 167708;
-    name = "Cray Elliott";
-  };
   mpcsh = {
     email = "m@mpc.sh";
     github = "mpcsh";
@@ -22476,12 +22470,6 @@
     github = "zokrezyl";
     githubId = 51886259;
     name = "Zokre Zyl";
-  };
-  zombiezen = {
-    name = "Ross Light";
-    email = "ross@zombiezen.com";
-    github = "zombiezen";
-    githubId = 181535;
   };
   zookatron = {
     email = "tim@zookatron.com";
