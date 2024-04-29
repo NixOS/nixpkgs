@@ -22477,12 +22477,6 @@
     githubId = 51886259;
     name = "Zokre Zyl";
   };
-  zombiezen = {
-    name = "Ross Light";
-    email = "ross@zombiezen.com";
-    github = "zombiezen";
-    githubId = 181535;
-  };
   zookatron = {
     email = "tim@zookatron.com";
     github = "zookatron";
