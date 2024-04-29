@@ -91,7 +91,7 @@ in
     defaultArgs = {
       inherit version src;
 
-      outputs = ["out" "dev"];
+      outputs = ["out" "dev" "devtools"];
 
       nativeBuildInputs = [cmake qt6.wrapQtAppsHook moveDevHook] ++ extraNativeBuildInputs;
       buildInputs = [qt6.qtbase] ++ extraBuildInputs;
