@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, pytest-metadata
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  pytest-metadata,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-hMB/atDuo7CjwhHFUOxVfgJ7Qp4AA9J428iv7hyQFcs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  dependencies = [
-    pytest-metadata
-  ];
+  dependencies = [ pytest-metadata ];
 
   nativeCheckInputs = [
     pytest-xdist
@@ -49,9 +44,7 @@ buildPythonPackage rec {
     "test_report_crash_and_traceback"
   ];
 
-  pythonImportsCheck = [
-    "pytest_jsonreport"
-  ];
+  pythonImportsCheck = [ "pytest_jsonreport" ];
 
   meta = with lib; {
     description = "Pytest plugin to report test results as JSON";
