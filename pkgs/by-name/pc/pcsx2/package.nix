@@ -2,16 +2,17 @@
 , fetchFromGitHub
 , lib
 , llvmPackages_17
+, callPackage
 , cubeb
 , curl
 , extra-cmake-modules
+, fetchpatch
 , ffmpeg
 , libaio
 , libbacktrace
 , libpcap
 , libwebp
 , libXrandr
-, libzip
 , lz4
 , makeWrapper
 , pkg-config
@@ -22,18 +23,18 @@
 , vulkan-headers
 , vulkan-loader
 , wayland
-, xz
 , zip
 , zstd
 }:
 
 let
+  shaderc-patched = callPackage ./shaderc-patched.nix { };
   # The pre-zipped files in releases don't have a versioned link, we need to zip them ourselves
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "e3b354f144de71d2b87471166cca8911867c1dfd";
-    sha256 = "sha256-H7cFyBYZumcCZ0/FFOFZoChoi0XPs4siA4dHcFt9U7k=";
+    rev = "b3a788e16ea12efac006cbbe1ece45b6b9b34326";
+    sha256 = "sha256-Uvpz2Gpj533Sr6wLruubZxssoXefQDey8GHIDKWhW3s=";
   };
   inherit (qt6)
     qtbase
@@ -45,24 +46,33 @@ let
 in
 llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "1.7.5587";
+  version = "1.7.5779";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PCZ1r6x28Z5FEVMXWm4oxpTknz/XEiwo0rRGhn4B33g=";
+    sha256 = "sha256-WiwnP5yoBy8bRLUPuCZ7z4nhIzrY8P29KS5ZjErM/A4=";
   };
 
   patches = [
     ./define-rev.patch
+    # Backport patches to fix random crashes on startup
+    (fetchpatch {
+      url = "https://github.com/PCSX2/pcsx2/commit/e47bcf8d80df9a93201eefbaf169ec1a0673a833.patch";
+      sha256 = "sha256-7CL1Kpu+/JgtKIenn9rQKAs3A+oJ40W5XHlqSg77Q7Y=";
+    })
+    (fetchpatch {
+      url = "https://github.com/PCSX2/pcsx2/commit/92b707db994f821bccc35d6eef67727ea3ab496b.patch";
+      sha256 = "sha256-HWJ8KZAY/qBBotAJerZg6zi5QUHuTD51zKH1rAtZ3tc=";
+    })
   ];
 
   cmakeFlags = [
-    "-DDISABLE_ADVANCE_SIMD=ON"
-    "-DUSE_LINKED_FFMPEG=ON"
-    "-DPCSX2_GIT_REV=v${finalAttrs.version}"
+    (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
+    (lib.cmakeBool "USE_LINKED_FFMPEG" true)
+    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
   ];
 
   nativeBuildInputs = [
@@ -82,17 +92,16 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     libpcap
     libwebp
     libXrandr
-    libzip
     lz4
     qtbase
     qtsvg
     qttools
     qtwayland
     SDL2
+    shaderc-patched
     soundtouch
     vulkan-headers
     wayland
-    xz
     zstd
   ]
   ++ cubeb.passthru.backendLibs;
@@ -135,9 +144,9 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
-    license = with licenses; [ gpl3 lgpl3 ];
+    license = with licenses; [ gpl3Plus lgpl3Plus ];
     maintainers = with maintainers; [ hrdinka govanify ];
     mainProgram = "pcsx2-qt";
-    platforms = platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
   };
 })
