@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vms-empire";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchurl{
     url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-XETIbt/qVU+TpamPc2WQynqqUuZqkTUnItBprjg+gPk=";
+    hash = "sha256-AmHs6ojVcfglvvFvC9JzNWVS2t4Coqg8WwyNCM+sEno=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
