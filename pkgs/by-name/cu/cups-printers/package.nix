@@ -19,12 +19,15 @@ python3.pkgs.buildPythonApplication rec {
     "validators"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pycups
     typer
     validators
