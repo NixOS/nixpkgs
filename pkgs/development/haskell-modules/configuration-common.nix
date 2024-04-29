@@ -2085,9 +2085,14 @@ self: super: {
 
   ginger = doJailbreak super.ginger;
 
-  # Too strict version bounds on cryptonite
-  # https://github.com/obsidiansystems/haveibeenpwned/issues/7
-  haveibeenpwned = doJailbreak super.haveibeenpwned;
+  # 2024-05-05 syntax changes: https://github.com/obsidiansystems/haveibeenpwned/pull/9
+  haveibeenpwned = appendPatch
+    (fetchpatch {
+      url = "https://github.com/obsidiansystems/haveibeenpwned/pull/9/commits/14c134eec7de12f755b2d4667727762a8a1a6476.patch";
+      sha256 = "sha256-fau5+b6tufJ+MscrLgbYvvBsekPe8R6QAy/4H31dcQ4";
+    })
+    (doJailbreak super.haveibeenpwned);
+
 
   # Too strict version bounds on ghc-events
   # https://github.com/mpickering/hs-speedscope/issues/16
