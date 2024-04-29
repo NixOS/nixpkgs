@@ -6641,6 +6641,8 @@ self: super: with self; {
 
   libfsfat-python = callPackage ../development/python-modules/libfsfat-python { };
 
+  libfshfs-python = callPackage ../development/python-modules/libfshfs-python { };
+
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
