@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Open-source alternative of Discord desktop's \"app.asar\".";
     homepage = "https://openasar.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ Scrumplex jopejoe1 ];
     platforms = nodejs.meta.platforms;
   };
 }
