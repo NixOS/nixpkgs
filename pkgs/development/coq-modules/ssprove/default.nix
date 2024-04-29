@@ -12,9 +12,9 @@
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [coq.coq-version mathcomp.version] [
-    { cases = ["8.19" "2.2.0" ]; out = "0.2.0"; }
-    { cases = ["8.18" "2.1.0" ]; out = "0.2.0"; }
-    { cases = ["8.17" "1.17.0"]; out = "0.1.0"; }
+    { cases = [(isEq "8.19") (isEq "2.2.0") ]; out = "0.2.0"; }
+    { cases = [(isEq "8.18") (isEq "2.1.0") ]; out = "0.2.0"; }
+    { cases = [(isEq "8.17") (isEq "1.17")]; out = "0.1.0"; }
   ] null;
 
   releaseRev = v: "v${v}";
@@ -34,7 +34,4 @@
     maintainers = [ "Theo Winterhalter" ];
   };
 
-}).overrideAttrs (o: {
-  propagatedBuildInputs = o.propagatedBuildInputs;
-#  ++ lib.optional (lib.versionAtLeast o.version "0.3.0") deriving;
 })
