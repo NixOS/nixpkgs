@@ -541,6 +541,7 @@ in {
 
             bridge = {
               username_template = mkDefault "facebook_{{.}}";
+              management_room_text.welcome = "Hello, I'm an Facebook bridge bot.";
             };
 
             appservice = {
