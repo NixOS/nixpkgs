@@ -17,7 +17,7 @@ let
   };
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSEnv rec {
-  name = "quartus-prime-lite"; # wrapped
+  pname = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
     (runCommand "ld-lsb-compat" {} (''
@@ -80,7 +80,7 @@ in buildFHSEnv rec {
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/${name}
+    wrapper=$out/bin/${pname}
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
