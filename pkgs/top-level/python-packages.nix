@@ -6757,6 +6757,7 @@ self: super: with self; {
 
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
+  libscca-python = callPackage ../development/python-modules/libscca-python { };
 
   libsixel = callPackage ../development/python-modules/libsixel {
     inherit (pkgs) libsixel;
