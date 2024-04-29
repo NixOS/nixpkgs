@@ -4,8 +4,8 @@
 , fetchFromGitHub
 , makeWrapper
 , gdb
+,
 }:
-
 let
   pwndbg-py = python3.pkgs.pwndbg;
 
@@ -13,7 +13,8 @@ let
 
   binPath = lib.makeBinPath ([
     python3.pkgs.pwntools # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/wrappers/checksec.py#L8
-  ] ++ lib.optionals stdenv.isLinux [
+  ]
+  ++ lib.optionals stdenv.isLinux [
     python3.pkgs.ropper # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/ropper.py#L30
     python3.pkgs.ropgadget # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/commands/rop.py#L32
   ]);
@@ -40,7 +41,13 @@ stdenv.mkDerivation rec {
     makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
       --add-flags "-q -x $out/share/pwndbg/gdbinit.py" \
       --prefix PATH : ${binPath} \
+      --set PYTHONPATH ${pythonPath}
+
+    makeWrapper ${gdb}/bin/gdb $out/bin/gdb-with-pwndbg-env \
+      --add-flags "-q" \
+      --prefix PATH : ${binPath} \
       --set PYTHONPATH ${pythonPath} \
+      --set PWNDBG_VENV_PATH PWNDBG_PLEASE_SKIP_VENV
 
     runHook postInstall
   '';
