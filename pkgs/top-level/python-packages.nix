@@ -6806,6 +6806,8 @@ self: super: with self; {
     inherit (pkgs) libversion;
   };
 
+  libvhdi-python = callPackage ../development/python-modules/libvhdi-python { };
+
   libvirt = callPackage ../development/python-modules/libvirt {
     inherit (pkgs) libvirt;
   };
