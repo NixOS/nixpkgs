@@ -146,6 +146,16 @@ in
     '';
   });
 
+  # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
+  # we have to invoke busted manually
+  fzy = prev.fzy.overrideAttrs(oa: {
+    doCheck = true;
+    nativeCheckInputs = [ final.busted ];
+    checkPhase = ''
+      busted
+    '';
+  });
+
   http = prev.http.overrideAttrs (oa: {
     patches = [
       (fetchpatch {
