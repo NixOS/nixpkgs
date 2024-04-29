@@ -17,7 +17,7 @@ let
     categories = [ "Network" ];
   });
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
@@ -26,7 +26,6 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
-    ln -sf rambox-${version} $out/bin/${pname}
     install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/rambox*.png $out/share/icons/hicolor/256x256/apps/${pname}.png
     install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
