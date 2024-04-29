@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, bash, asar, unzip }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater, nodejs, bash, asar, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "openasar";
@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
+
+  passthru.updateScript = unstableGitUpdater {
+    # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Open-source alternative of Discord desktop's \"app.asar\".";
