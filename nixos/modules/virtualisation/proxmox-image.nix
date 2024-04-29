@@ -16,7 +16,7 @@ with lib;
       };
       scsihw = mkOption {
         type = types.str;
-        default = "virtio-scsi-pci";
+        default = "virtio-scsi-single";
         example = "lsi";
         description = ''
           SCSI controller type. Must be one of the supported values given in
