@@ -6,7 +6,7 @@ import re
 import requests
 import sys
 
-feature_versions = (8, 11, 16, 17)
+feature_versions = (8, 11, 16, 17, 21)
 oses = ("mac", "linux")
 types = ("jre", "jdk")
 impls = ("openj9",)
