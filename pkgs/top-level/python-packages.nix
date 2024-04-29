@@ -53,6 +53,8 @@ self: super: with self; {
 
   acquire = callPackage ../development/python-modules/acquire { };
 
+  acstore = callPackage ../development/python-modules/acstore { };
+
   actdiag = callPackage ../development/python-modules/actdiag { };
 
   acunetix = callPackage ../development/python-modules/acunetix { };
