@@ -264,7 +264,7 @@ stdenv.mkDerivation rec {
     # indicates the system fonts.conf being used instead.
     FONTCONFIG_FILE=$TBB_IN_STORE/fontconfig/fonts.conf
     sed -i "$FONTCONFIG_FILE" \
-      -e "s,<dir>fonts</dir>,<dir>$TBB_IN_STORE/fonts</dir>,"
+      -e "s,<dir prefix=\"cwd\">fonts</dir>,<dir>$TBB_IN_STORE/fonts</dir>,"
 
     # Hard-code paths to geoip data files.  TBB resolves the geoip files
     # relative to torrc-defaults_path but if we do not hard-code them
