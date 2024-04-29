@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-bGLmrFkONP7dc5/iSzGzdQcToBRhZpbqjUTHvMgcBrc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
