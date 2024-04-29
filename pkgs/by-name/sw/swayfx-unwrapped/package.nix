@@ -26,6 +26,7 @@
   wayland-scanner,
   xcbutilwm,
   wlroots,
+  testers,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
@@ -117,6 +118,16 @@ stdenv.mkDerivation (finalAttrs: {
       (mesonEnable "xwayland" finalAttrs.enableXWayland)
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "sway --version";
+        version = "swayfx version ${finalAttrs.version}";
+      };
+    };
+  };
 
   meta = {
     description = "Sway, but with eye candy!";
