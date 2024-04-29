@@ -29,6 +29,7 @@ buildGoModule rec {
 
     installShellCompletion --cmd clusterctl \
       --bash <($out/bin/clusterctl completion bash) \
+      --fish <($out/bin/clusterctl completion fish) \
       --zsh <($out/bin/clusterctl completion zsh)
   '';
 
