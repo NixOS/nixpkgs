@@ -19,6 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   passthru.updateScript = nix-update-script {};
 
+  strictDeps = true;
   nativeBuildInputs = [ cmake validatePkgConfig ];
 
   postFixup = ''
