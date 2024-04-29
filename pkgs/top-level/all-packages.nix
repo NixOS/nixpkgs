@@ -15071,6 +15071,9 @@ with pkgs;
 
   ### DEVELOPMENT / COMPILERS
 
+  temurin-bin-22 = javaPackages.compiler.temurin-bin.jdk-22;
+  temurin-jre-bin-22 = javaPackages.compiler.temurin-bin.jre-22;
+
   temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
   temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
 
@@ -15092,8 +15095,8 @@ with pkgs;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-21;
-  temurin-jre-bin = temurin-jre-bin-21;
+  temurin-bin = temurin-bin-22;
+  temurin-jre-bin = temurin-jre-bin-22;
 
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
