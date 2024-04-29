@@ -3,7 +3,7 @@
 , withCurses ? false, ncurses
 }:
 stdenv.mkDerivation rec {
-  version = "12.1";
+  version = "12.3";
   pname = "textadept";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "orbitalquark";
     repo = "textadept";
     rev = "textadept_${version}";
-    sha256 = "sha256-ce7U/GR/4zkjnRN3fx3FLecc9vuvFqCONy275SWnpNc=";
+    sha256 = "sha256-35jQfu2zpgGev+9Xon+S4aD0lPWNXNeBfNvtmtzrpMc=";
   };
 
   nativeBuildInputs = [ cmake ]

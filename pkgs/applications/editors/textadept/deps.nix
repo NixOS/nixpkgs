@@ -1,8 +1,8 @@
 {
   # scintilla
-  "scintilla536.tgz" = {
-    url = "https://www.scintilla.org/scintilla536.tgz";
-    sha256 = "sha256-ib6CeKg+eBOSWq/il32quH0r1r69F7AXn+cq/dVIyyQ=";
+  "scintilla541.tgz" = {
+    url = "https://www.scintilla.org/scintilla541.tgz";
+    sha256 = "sha256-dSqFm1tb++fdGJ7OdHsg2NqivKc+mLz4vx5y8pzhTV4=";
   };
   # lexilla
   "lexilla510.tgz" = {
@@ -15,9 +15,9 @@
     sha256 = "sha256-l1qeLMCrhyoZA/GfmXFR20rY5EsUoO5e+1vZJtYdb24=";
   };
   # scintillua
-  "e88bbcfecae46b48b79d8156ea7129411b5c847d.zip" = {
-    url = "https://github.com/orbitalquark/scintillua/archive/e88bbcfecae46b48b79d8156ea7129411b5c847d.zip";
-    sha256 = "sha256-sWqpVtcAwysGn86XFwaEkKSPemk2247SydOQi6klFrQ=";
+  "48a6fc9511ec67993e43ac7f5a33efc616b7ea32.zip" = {
+    url = "https://github.com/orbitalquark/scintillua/archive/48a6fc9511ec67993e43ac7f5a33efc616b7ea32.zip";
+    sha256 = "sha256-om4AwDaAIg+iPteR5bt9innH41Bi5U/10W0UzJBVi/Y=";
   };
   # lua
   "lua-5.4.6.tar.gz" = {
@@ -48,6 +48,11 @@
   "1.0.zip" = {
     url = "https://github.com/orbitalquark/lua-std-regex/archive/1.0.zip";
     sha256 = "sha256-W2hKHOfqYyo3qk+YvPJlzZfZ1wxZmMVphSlcaql+dOE=";
+  };
+  # SingleApplication
+  "v3.4.0.zip" = {
+    url = "https://github.com/itay-grudev/SingleApplication/archive/refs/tags/v3.4.0.zip";
+    sha256 = "sha256-FwyzM+R9ALpGH9u2RXab4Sqi4Q+p3Qs+8EdfhjPGcXY=";
   };
 }
 
