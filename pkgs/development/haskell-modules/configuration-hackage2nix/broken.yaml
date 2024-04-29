@@ -707,7 +707,6 @@ broken-packages:
   - cayene-lpp # failure in job https://hydra.nixos.org/build/233228959 at 2023-09-02
   - cayley-client # failure in job https://hydra.nixos.org/build/233260112 at 2023-09-02
   - cblrepo # failure in job https://hydra.nixos.org/build/233251926 at 2023-09-02
-  - cbor-tool # failure in job https://hydra.nixos.org/build/233198797 at 2023-09-02
   - CCA # failure in job https://hydra.nixos.org/build/233206723 at 2023-09-02
   - ccast # failure in job https://hydra.nixos.org/build/233254517 at 2023-09-02
   - CC-delcont-cxe # failure in job https://hydra.nixos.org/build/233190865 at 2023-09-02
