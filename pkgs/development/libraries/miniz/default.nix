@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    versionCheck = true;
+  };
 
   meta = with lib; {
     description = "Single C source file zlib-replacement library";
