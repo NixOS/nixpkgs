@@ -1,23 +1,24 @@
-{ lib
-, aiohttp
-, anthropic
-, buildPythonPackage
-, docstring-parser
-, fetchFromGitHub
-, openai
-, poetry-core
-, pydantic
-, pytest-examples
-, pytest-asyncio
-, pytestCheckHook
-, fastapi
-, diskcache
-, redis
-, pythonOlder
-, pythonRelaxDepsHook
-, rich
-, tenacity
-, typer
+{
+  lib,
+  aiohttp,
+  anthropic,
+  buildPythonPackage,
+  docstring-parser,
+  fetchFromGitHub,
+  openai,
+  poetry-core,
+  pydantic,
+  pytest-examples,
+  pytest-asyncio,
+  pytestCheckHook,
+  fastapi,
+  diskcache,
+  redis,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  rich,
+  tenacity,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -39,13 +40,9 @@ buildPythonPackage rec {
     "pydantic"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp
