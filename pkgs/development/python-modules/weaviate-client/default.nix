@@ -2,7 +2,13 @@
 , authlib
 , buildPythonPackage
 , fetchPypi
+, grpcio
+, grpcio-health-checking
+, grpcio-tools
+, httpx
+, pydantic
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools-scm
 , tqdm
 , validators
@@ -11,27 +17,35 @@
 buildPythonPackage rec {
   pname = "weaviate-client";
   version = "4.5.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-gElboFIwEMiwN6HhpPPT+tcmh0pMiDjq7R8TG2eMMKI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "validators>=0.18.2,<=0.21.0" "validators>=0.18.2" \
-      --replace "requests>=2.28.0,<2.29.0" "requests>=2.28.0"
-  '';
+  pythonRelaxDeps = [
+    "httpx"
+    "validators"
+  ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     authlib
+    grpcio
+    grpcio-health-checking
+    grpcio-tools
+    httpx
+    pydantic
     tqdm
     validators
   ];
