@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, pytestCheckHook
-, setuptools
-, pythonOlder
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gevent,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
+  watchdog,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +31,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ gevent watchdog ];
+  dependencies = [
+    gevent
+    watchdog
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
