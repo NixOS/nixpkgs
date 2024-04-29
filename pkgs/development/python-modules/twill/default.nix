@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpx
-, lxml
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, quixote
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  lxml,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  quixote,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-YlZKvOGxLWwGh+MqCXf8tfruxLK60H73k1VQhGOSTc8=";
   };
 
-  pythonRelaxDeps = [
-    "lxml"
-  ];
+  pythonRelaxDeps = [ "lxml" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     httpx
@@ -51,9 +46,7 @@ buildPythonPackage rec {
     "tests/test_tidy.py"
   ];
 
-  pythonImportsCheck = [
-    "twill"
-  ];
+  pythonImportsCheck = [ "twill" ];
 
   meta = with lib; {
     description = "A simple scripting language for Web browsing";
