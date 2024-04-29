@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelle";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labelle-org";
     repo = "labelle";
     rev = "v${version}";
-    hash = "sha256-JnV5A3/toTCHCEb0dygouR9MZfk2kdmsKVscwYI2y/Y=";
+    hash = "sha256-fLlYqJs/V5t8IdfVkfBsjtjM1rRdCyTYF87G+h1VU5Y=";
   };
 
   postPatch = ''
@@ -39,6 +39,8 @@ python3Packages.buildPythonApplication rec {
     pyqt6
     python-barcode
     pyusb
+    rich
+    typer
   ];
 
   desktopItems = [

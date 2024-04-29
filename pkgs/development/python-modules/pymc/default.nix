@@ -10,6 +10,7 @@
 , pythonOlder
 , scipy
 , typing-extensions
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-tiOXbryY2TmeBVrG5cIMeDJ4alolBQ5LosdfH3tpVOA=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -13,6 +13,7 @@
   enableSass ? true,
   enableX11 ? true,
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "mixxc";
   version = "0.2.2";
@@ -26,10 +27,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-l9inqqUiLObrqd/8pNobwBbLaiPJD39YK/38CWfDh+Q=";
 
   cargoBuildFlags = [ "--locked" ];
-  buildFeatures = with lib; [
-    (optionals enableWayland "Wayland")
-    (optionals enableX11 "X11")
-    (optionals enableSass "Sass")
+
+  buildFeatures = [
+    (lib.optionals enableWayland "Wayland")
+    (lib.optionals enableX11 "X11")
+    (lib.optionals enableSass "Sass")
   ];
 
   nativeBuildInputs = [
@@ -37,11 +39,12 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     wrapGAppsHook4
   ];
-  buildInputs = with lib; [
+
+  buildInputs = [
     libpulseaudio
     gtk4
-    (optionals enableWayland gtk4-layer-shell)
-    (optionals enableX11 libxcb)
+    (lib.optionals enableWayland gtk4-layer-shell)
+    (lib.optionals enableX11 libxcb)
   ];
 
   outputs = [
@@ -53,12 +56,12 @@ rustPlatform.buildRustPackage rec {
     installManPage $src/doc/mixxc.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A minimalistic and customizable volume mixer";
     homepage = "https://github.com/Elvyria/mixxc";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ daru-san ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ daru-san ];
     mainProgram = "mixxc";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

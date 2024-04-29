@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
     license = [ lib.licenses.mit ];
-    maintainers = with lib.maintainers; [ fridh doronbehar ];
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

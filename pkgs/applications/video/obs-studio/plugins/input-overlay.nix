@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-input-overlay";
-  version = "5.0.4";
+  version = "5.0.5";
   src = fetchFromGitHub {
     owner = "univrsal";
     repo = "input-overlay";
     rev = "v${version}";
-    sha256 = "sha256-MON68yjHUOF/bggWqhw8D0+23HpKQN3jWs+5lLAacaQ=";
+    sha256 = "sha256-9HqEz+KnTt8MyhwqFWjalbl3H/DCzumckXMctCGhs3o=";
     fetchSubmodules = true;
   };
 
