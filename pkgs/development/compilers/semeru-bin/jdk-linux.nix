@@ -13,4 +13,6 @@ in
   jre-16 = common { sourcePerArch = sources.jre.openjdk16; };
   jdk-17 = common { sourcePerArch = sources.jdk.openjdk17; };
   jre-17 = common { sourcePerArch = sources.jre.openjdk17; };
+  jdk-21 = common { sourcePerArch = sources.jdk.openjdk21; };
+  jre-21 = common { sourcePerArch = sources.jre.openjdk21; };
 }
