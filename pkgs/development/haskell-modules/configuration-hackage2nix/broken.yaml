@@ -4770,7 +4770,6 @@ broken-packages:
   - protocol-buffers # failure in job https://hydra.nixos.org/build/233220653 at 2023-09-02
   - protocol-buffers-fork # failure in job https://hydra.nixos.org/build/233228361 at 2023-09-02
   - protocol # failure in job https://hydra.nixos.org/build/233224436 at 2023-09-02
-  - proto-lens-arbitrary # failure in job https://hydra.nixos.org/build/233239393 at 2023-09-02
   - proto-lens-combinators # failure in job https://hydra.nixos.org/build/252726979 at 2024-03-16
   - protolude-lifted # failure in job https://hydra.nixos.org/build/233196312 at 2023-09-02
   - proton-haskell # failure in job https://hydra.nixos.org/build/233214383 at 2023-09-02
