@@ -35,6 +35,5 @@ buildGoModule rec {
     description = "Simple gRPC benchmarking and load testing tool";
     homepage = "https://ghz.sh";
     license = licenses.asl20;
-    maintainers = [ maintainers.zombiezen ];
   };
 }
