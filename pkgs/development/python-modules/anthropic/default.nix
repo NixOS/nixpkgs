@@ -1,21 +1,22 @@
-{ lib
-, anyio
-, buildPythonPackage
-, dirty-equals
-, distro
-, fetchFromGitHub
-, google-auth
-, hatch-fancy-pypi-readme
-, hatchling
-, httpx
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
-, sniffio
-, tokenizers
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  dirty-equals,
+  distro,
+  fetchFromGitHub,
+  google-auth,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpx,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  sniffio,
+  tokenizers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -58,9 +59,7 @@ buildPythonPackage rec {
     respx
   ];
 
-  pythonImportsCheck = [
-    "anthropic"
-  ];
+  pythonImportsCheck = [ "anthropic" ];
 
   disabledTests = [
     # Test require network access
