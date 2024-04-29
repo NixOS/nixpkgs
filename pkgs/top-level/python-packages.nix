@@ -2964,6 +2964,8 @@ self: super: with self; {
 
   devtools = callPackage ../development/python-modules/devtools { };
 
+  dfdatetime = callPackage ../development/python-modules/dfdatetime { };
+
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
   diagrams = callPackage ../development/python-modules/diagrams { };
