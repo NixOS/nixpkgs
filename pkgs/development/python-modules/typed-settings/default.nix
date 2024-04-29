@@ -1,17 +1,18 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cattrs
-, click
-, click-option-group
-, fetchPypi
-, hatchling
-, jinja2
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, tomli
-, typing-extensions
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cattrs,
+  click,
+  click-option-group,
+  fetchPypi,
+  hatchling,
+  jinja2,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-BuosfIlCgCD+h7eA/6/oE98zdURaT3eik+dysBpJR+Y=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   passthru.optional-dependencies = {
     all = [
@@ -44,25 +41,15 @@ buildPythonPackage rec {
       jinja2
       pydantic
     ];
-    attrs = [
-      attrs
-    ];
-    cattrs = [
-      cattrs
-    ];
-    click = [
-      click
-    ];
+    attrs = [ attrs ];
+    cattrs = [ cattrs ];
+    click = [ click ];
     option-groups = [
       click
       click-option-group
     ];
-    jinja = [
-      jinja2
-    ];
-    pydantic = [
-      pydantic
-    ];
+    jinja = [ jinja2 ];
+    pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
@@ -70,9 +57,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
     # AssertionError: assert [OptionInfo(p...
@@ -87,15 +72,13 @@ buildPythonPackage rec {
     "tests/test_onepassword.py"
   ];
 
-  pythonImportsCheck = [
-    "typed_settings"
-  ];
+  pythonImportsCheck = [ "typed_settings" ];
 
   meta = with lib; {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }
