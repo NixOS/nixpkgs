@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
@@ -16,8 +15,14 @@
 , pytestCheckHook
 , redis-server
 , sentry-sdk
+, writeText
 }:
 
+let
+  redisConf = writeText "redis.conf" ''
+    bind 127.0.0.1 ::1
+  '';
+in
 buildPythonPackage rec {
   pname = "rq";
   version = "1.16.1";
@@ -47,13 +52,14 @@ buildPythonPackage rec {
     sentry-sdk
   ];
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  __darwinAllowLocalNetworking = true;
+  preCheck = ''
     PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
+    ${redis-server}/bin/redis-server ${redisConf} &
     REDIS_PID=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
+  postCheck = ''
     kill $REDIS_PID
   '';
 
