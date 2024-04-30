@@ -1,13 +1,12 @@
-{ fetchFromGitHub
-, gitMinimal
-, gfold
-, lib
-, libiconv
-, makeWrapper
-, rustPlatform
-, Security
-, stdenv
-, testers
+{
+  fetchFromGitHub,
+  gfold,
+  lib,
+  libiconv,
+  rustPlatform,
+  Security,
+  stdenv,
+  testers,
 }:
 
 let
@@ -26,7 +25,10 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-wDUOYK9e0i600UnJ0w0FPI2GhTa/QTq/2+ICiDWrmEU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = gfold;
@@ -35,11 +37,10 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description =
-      "CLI tool to help keep track of your Git repositories, written in Rust";
+    description = "CLI tool to help keep track of your Git repositories, written in Rust";
     homepage = "https://github.com/nickgerace/gfold";
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = [ maintainers.sigmanificient ];
     platforms = platforms.unix;
     mainProgram = "gfold";
   };

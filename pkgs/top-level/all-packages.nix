@@ -4386,8 +4386,6 @@ with pkgs;
   bozohttpd = callPackage ../servers/http/bozohttpd { };
   bozohttpd-minimal = callPackage ../servers/http/bozohttpd { minimal = true; };
 
-  bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
-
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
@@ -6276,8 +6274,6 @@ with pkgs;
   step-ca = callPackage ../tools/security/step-ca {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
-
-  step-cli = callPackage ../tools/security/step-cli { };
 
   step-kms-plugin = callPackage ../tools/security/step-kms-plugin { };
 
@@ -15327,6 +15323,8 @@ with pkgs;
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
+  opensplatWithCuda = opensplat.override { cudaSupport = true; };
+
   chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
   chickenPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/chicken/5 { });
   chickenPackages = dontRecurseIntoAttrs chickenPackages_5;
@@ -16675,7 +16673,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed {
     rustPlatform = makeRustPlatform {
@@ -24594,8 +24592,6 @@ with pkgs;
 
   stb = callPackage ../development/libraries/stb { };
 
-  stduuid = callPackage ../development/libraries/stduuid { };
-
   steghide = callPackage ../tools/graphics/steghide { };
 
   stegsolve = callPackage ../tools/graphics/stegsolve { };
@@ -31382,8 +31378,6 @@ with pkgs;
   gnucash = callPackage ../applications/office/gnucash { };
 
   goffice = callPackage ../development/libraries/goffice { };
-
-  got = darwin.apple_sdk_11_0.callPackage ../applications/version-management/got { };
 
   gtkterm = callPackage ../tools/misc/gtkterm { };
 

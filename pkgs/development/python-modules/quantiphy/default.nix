@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "quantiphy";
-  version = "2.19";
+  version = "2.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "quantiphy";
-    rev = "v${version}";
-    hash = "sha256-oSWq/D1EX6mxUDElfujyOSEtql0csAm72u2B5RuQddE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QXCs93plNSVNiCLEoXx2raH6EbH1rXyjvpBfl+8eXjc=";
   };
 
   nativeBuildInputs = [

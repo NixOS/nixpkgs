@@ -1,15 +1,15 @@
-{ stdenv, lib, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
+{ stdenv, lib, fetchFromGitLab, gitUpdater, doxygen, glib, libaccounts-glib, pkg-config, qmake, qtbase, wrapQtAppsHook }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "accounts-qt";
-  version = "1.16-unstable-2023-11-24";
+  version = "1.17";
 
   # pinned to fork with Qt6 support
   src = fetchFromGitLab {
-    owner = "nicolasfella";
+    owner = "accounts-sso";
     repo = "libaccounts-qt";
-    rev = "18557f7def9af8f4a9e0e93e9f575ae11e5066aa";
-    hash = "sha256-8FGZmg2ljSh1DYZfklMTrWN7Sdlk/Atw0qfpbb+GaBc=";
+    rev = "refs/tags/VERSION_${finalAttrs.version}";
+    hash = "sha256-mPZgD4r7vlUP6wklvZVknGqTXZBckSOtNzK7p6e2qSA=";
   };
 
   propagatedBuildInputs = [ glib libaccounts-glib ];
@@ -21,11 +21,15 @@ stdenv.mkDerivation {
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 
+  passthru.updateScript = gitUpdater {
+    rev = "VERSION_";
+  };
+
   meta = with lib; {
     description = "Qt library for accessing the online accounts database";
     mainProgram = "accountstest";
-    homepage = "https://gitlab.com/accounts-sso";
+    homepage = "https://gitlab.com/accounts-sso/libaccounts-qt";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };
-}
+})
