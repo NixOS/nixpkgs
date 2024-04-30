@@ -60,7 +60,6 @@ buildPythonPackage rec {
     jax
     jaxlib
     numba
-    numba-scipy
     pytest-mock
     pytestCheckHook
     tensorflow-probability
