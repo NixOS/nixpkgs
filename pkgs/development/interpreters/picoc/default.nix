@@ -1,29 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, readline }:
+{ lib, stdenv, fetchFromGitLab, readline }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "picoc";
-  version = "2015-05-04";
+  version = "2.1-unstable-2018-06-05";
 
-  src = fetchFromGitHub {
-    sha256 = "01w3jwl0vn9fsmh7p20ad4nl9ljzgfn576yvncd9pk9frx3pd8y4";
-    rev = "4555e8456f020554bcac50751fbb9b36c7d8c13b";
-    repo = "picoc";
+  src = fetchFromGitLab {
     owner = "zsaleeba";
+    repo = "picoc";
+    rev = "dc85a51e9211cfb644f0a85ea9546e15dc1141c3";
+    hash = "sha256-yWPRbJLT09E7pqqs9E2k48ECoRR2nhcgTgK5pumkrxo=";
   };
 
   buildInputs = [ readline ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  postPatch = ''
-    substituteInPlace Makefile --replace '`svnversion -n`' "${version}"
-  '';
-
   enableParallelBuilding = true;
 
   # Tests are currently broken on i686 see
   # https://hydra.nixos.org/build/24003763/nixlog/1
-  doCheck = if stdenv.isi686 then false else true;
+  doCheck = !stdenv.isi686;
   checkTarget = "test";
 
   installPhase = ''
