@@ -84,7 +84,7 @@ let
   };
   in
   buildFHSEnv {
-    inherit (package) pname meta;
+    inherit (package) pname version meta;
     runScript = "${package.outPath}/bin/stm32cubemx";
     targetPkgs = pkgs:
       with pkgs; [
