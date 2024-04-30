@@ -6,6 +6,7 @@
 , pdm-backend
 , pytest-freezegun
 , pytest-xdist
+, pytest
 , pytestCheckHook
 , pythonOlder
 , ruyaml
@@ -26,12 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-nadyBIzXHbWm0QvympRaYU38tuPJ3TPJg8EbvVv+4L0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     maison
     ruyaml
@@ -51,24 +52,9 @@ buildPythonPackage rec {
     "yamlfix"
   ];
 
-  disabledTests = [
-    # AssertionError: assert ... Fixed <stdin> in...
-    "test_check_one_file_no_changes"
-    "test_config_parsing"
-    "test_corrects_code_from_stdin"
-    "test_corrects_one_file"
-    "test_corrects_three_files"
-    "test_empty_list_inline_comment_indentation"
-    "test_find_files"
-    "test_fix_code_converts_non_valid_false_booleans"
-    "test_ignores_correct_files"
-    "test_include_exclude_files"
-    "test_read_prefixed_environment_variables"
-    "test_section_whitelines"
-    "test_whitelines"
-    "test_sequence_style_env_enum_parsing"
-    "test_verbose_option"
-    "test_enforcing_flow_style_together_with_adjustable_newlines"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
