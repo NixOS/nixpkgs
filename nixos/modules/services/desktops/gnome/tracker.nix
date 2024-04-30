@@ -2,15 +2,13 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.services.gnome.tracker;
 in
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -19,8 +17,8 @@ in
 
     services.gnome.tracker = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Tracker services, a search engine,
@@ -28,8 +26,8 @@ in
         '';
       };
 
-      subcommandPackages = mkOption {
-        type = types.listOf types.package;
+      subcommandPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         internal = true;
         description = ''
@@ -44,7 +42,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.tracker ];
 

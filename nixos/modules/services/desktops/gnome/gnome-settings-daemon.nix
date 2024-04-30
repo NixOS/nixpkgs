@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.services.gnome.gnome-settings-daemon;
@@ -13,7 +11,7 @@ in
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -22,7 +20,7 @@ in
 
     services.gnome.gnome-settings-daemon = {
 
-      enable = mkEnableOption "GNOME Settings Daemon";
+      enable = lib.mkEnableOption "GNOME Settings Daemon";
 
     };
 
@@ -31,7 +29,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [
       pkgs.gnome.gnome-settings-daemon
