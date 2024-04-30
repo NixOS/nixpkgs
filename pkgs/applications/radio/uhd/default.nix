@@ -155,10 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Build only the host software
   preConfigure = "cd host";
-  # TODO: Check if this still needed, perhaps relevant:
-  # https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html#build_instructions_unix_arm
   patches = [
-    # Disable tests that fail in the sandbox
+    # Disable tests that fail in the sandbox, last checked at version 4.6.0.0
     ./no-adapter-tests.patch
   ];
 
