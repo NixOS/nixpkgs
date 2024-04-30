@@ -71,7 +71,7 @@ rec {
     else if isGVariant v then
       v
     else
-      throw "The GVariant type of ${v} can't be inferred.";
+      throw "The GVariant type of “${builtins.typeOf v}” can't be inferred.";
 
   /* Returns the GVariant array from the given type of the elements and a Nix list.
 
