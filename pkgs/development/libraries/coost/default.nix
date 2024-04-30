@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, gitUpdater
-, withCurl ? true, withOpenSSL ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  openssl,
+  gitUpdater,
+  withCurl ? true,
+  withOpenSSL ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "coost";
@@ -21,9 +30,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional withCurl curl ++ lib.optional withOpenSSL openssl;
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ]
-    ++ lib.optional withCurl "-DWITH_LIBCURL=ON"
-    ++ lib.optional withOpenSSL "-DWITH_OPENSSL=ON";
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ] ++ lib.optional withCurl "-DWITH_LIBCURL=ON" ++ lib.optional withOpenSSL "-DWITH_OPENSSL=ON";
 
   passthru.updateScript = gitUpdater { };
 
