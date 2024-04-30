@@ -717,6 +717,7 @@ let
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
     spaMM = [ pkgs.gsl ];
+    shrinkTVP = [ pkgs.gsl ];
     unigd = with pkgs; [ cairo.dev libpng.dev ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
