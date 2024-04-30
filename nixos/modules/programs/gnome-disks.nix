@@ -10,13 +10,6 @@ with lib;
     maintainers = teams.gnome.members;
   };
 
-  # Added 2019-08-09
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-disks" "enable" ]
-      [ "programs" "gnome-disks" "enable" ])
-  ];
-
   ###### interface
 
   options = {

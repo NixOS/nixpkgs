@@ -6,14 +6,6 @@ with lib;
 
 {
 
- # Added 2019-08-27
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "seahorse" "enable" ]
-      [ "programs" "seahorse" "enable" ])
-  ];
-
-
   ###### interface
 
   options = {

@@ -11,15 +11,6 @@ with lib;
   };
 
   ###### interface
-
-  # Added 2021-05-07
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "at-spi2-core" "enable" ]
-      [ "services" "gnome" "at-spi2-core" "enable" ]
-    )
-  ];
-
   options = {
 
     services.gnome.at-spi2-core = {

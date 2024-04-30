@@ -8,13 +8,6 @@ let cfg = config.programs.evince;
 
 in {
 
-  # Added 2019-08-09
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "evince" "enable" ]
-      [ "programs" "evince" "enable" ])
-  ];
-
   ###### interface
 
   options = {
