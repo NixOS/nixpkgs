@@ -5251,6 +5251,8 @@ with pkgs;
 
   pgfplots = callPackage ../tools/typesetting/tex/pgf-tikz/pgfplots.nix { };
 
+  pgsrip = with python3Packages; toPythonApplication pgsrip;
+
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
