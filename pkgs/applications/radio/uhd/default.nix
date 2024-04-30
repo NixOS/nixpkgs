@@ -82,7 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
     "-DENABLE_USB=ON"
-    "-DENABLE_TESTS=ON" # This installs tests as well so we delete them via postPhases
+    # Regardless of doCheck, we want to build the tests to help us gain
+    # confident that the package is OK.
+    "-DENABLE_TESTS=ON"
     (cmakeBool "ENABLE_EXAMPLES" enableExamples)
     (cmakeBool "ENABLE_UTILS" enableUtils)
     (cmakeBool "ENABLE_C_API" enableCApi)
