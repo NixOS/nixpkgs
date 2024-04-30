@@ -940,6 +940,7 @@ let
     "OmnipathR"
     "precommit"
     "protGear"
+    "PCRA"
     "PSCBS"
     "iemisc"
     "repmis"
