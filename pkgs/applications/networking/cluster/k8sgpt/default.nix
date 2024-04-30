@@ -22,12 +22,12 @@ buildGoModule rec {
     "-X main.date=1970-01-01-00:00:01"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Giving Kubernetes Superpowers to everyone";
     mainProgram = "k8sgpt";
     homepage = "https://k8sgpt.ai";
     changelog = "https://github.com/k8sgpt-ai/k8sgpt/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ developer-guy kranurag7 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ developer-guy kranurag7 ];
   };
 }
