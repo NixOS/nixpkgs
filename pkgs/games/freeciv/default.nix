@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer (or single player), turn-based strategy game";
     longDescription = ''
       Freeciv is a Free and Open Source empire-building strategy game
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
       to the space age...
     '';
     homepage = "http://www.freeciv.org"; # http only
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ pierron ];
-    platforms = platforms.unix;
-    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ pierron ];
+    platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
     broken = qtClient && stdenv.isDarwin; # Missing Qt5 development files
   };
 }
