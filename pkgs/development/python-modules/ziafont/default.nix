@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.7";
+  version = "0.8";
 
   format = "pyproject";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-DQEVWYOgiGSP3WlmZzEweyRa0UY7fxjjpbued+5EH5I=";
+    hash = "sha256-C+dC+mNquDuj6RfJpiEbeuGZOIXcgSrTB4XM21reBPs=";
   };
 
   nativeBuildInputs = [
