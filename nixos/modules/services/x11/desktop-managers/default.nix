@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types;
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
@@ -59,7 +58,7 @@ in
       session = mkOption {
         internal = true;
         default = [];
-        example = singleton
+        example = lib.singleton
           { name = "kde";
             bgSupport = true;
             start = "...";
@@ -73,10 +72,10 @@ in
           manage = "desktop";
           start = d.start
           # literal newline to ensure d.start's last line is not appended to
-          + optionalString (needBGCond d) ''
+          + lib.optionalString (needBGCond d) ''
 
             if [ -e $HOME/.background-image ]; then
-              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${lib.optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
             fi
           '';
         });
