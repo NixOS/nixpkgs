@@ -54,6 +54,15 @@ in
             When set to `false` the wallpaper is duplicated to all screens.
           '';
         };
+
+        file = mkOption {
+          type = types.str;
+          default = ''$HOME/.background-image'';
+          example = "/nix/store/k25jwgh7hjm2nbp77xq0vcl5dx3j7l9h-Tux.png";
+          description = lib.mdDoc ''
+            Set a file path to a wallpaper (e.g. in the nix store). As string value.
+          '';
+        };
       };
 
       session = mkOption {
@@ -75,8 +84,8 @@ in
           # literal newline to ensure d.start's last line is not appended to
           + optionalString (needBGCond d) ''
 
-            if [ -e $HOME/.background-image ]; then
-              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+            if [ -e ${cfg.wallpaper.file} ]; then
+              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} ${cfg.wallpaper.file}
             fi
           '';
         });
