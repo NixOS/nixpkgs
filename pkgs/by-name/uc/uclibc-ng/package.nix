@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./RV32_TIME64_3.patch
     ./riscv32.patch
+    ./0001-Define-__USE_TIME_BITS64-when-it-is-necessary.patch
   ];
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -115,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     ${stdenv.hostPlatform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
-    grep --color SHARED .config
   '';
 
   hardeningDisable = [ "stackprotector" ];
@@ -148,8 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $dev/lib/
     cp .config $dev/
-    ls -ltrh lib/
     cp -va lib/ld-uClibc* $out/lib/
+    ls -ltrh lib/
 
     #mv $out/lib/*.{o,a} $dev/lib/
 
