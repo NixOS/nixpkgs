@@ -227,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
