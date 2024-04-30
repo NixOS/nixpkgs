@@ -584,6 +584,7 @@ let
     archive = [ pkgs.libarchive];
     gdalcubes = with pkgs; [ proj.dev gdal sqlite.dev netcdf ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
+    specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
