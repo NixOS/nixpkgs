@@ -10,14 +10,6 @@ with lib;
     maintainers = teams.gnome.members;
   };
 
-  imports = [
-    # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "sushi" "enable" ]
-      [ "services" "gnome" "sushi" "enable" ]
-    )
-  ];
-
   ###### interface
 
   options = {
