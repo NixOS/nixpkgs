@@ -2,12 +2,10 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -16,8 +14,8 @@ with lib;
 
     services.gnome.gnome-online-miners = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable GNOME Online Miners, a service that
@@ -32,7 +30,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome.gnome-online-miners.enable {
+  config = lib.mkIf config.services.gnome.gnome-online-miners.enable {
 
     environment.systemPackages = [ pkgs.gnome.gnome-online-miners ];
 

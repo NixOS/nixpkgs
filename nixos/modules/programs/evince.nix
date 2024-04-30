@@ -2,8 +2,6 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let cfg = config.programs.evince;
 
 in {
@@ -14,9 +12,9 @@ in {
 
     programs.evince = {
 
-      enable = mkEnableOption "Evince, the GNOME document viewer";
+      enable = lib.mkEnableOption "Evince, the GNOME document viewer";
 
-      package = mkPackageOption pkgs "evince" { };
+      package = lib.mkPackageOption pkgs "evince" { };
 
     };
 
@@ -25,7 +23,7 @@ in {
 
   ###### implementation
 
-  config = mkIf config.programs.evince.enable {
+  config = lib.mkIf config.programs.evince.enable {
 
     environment.systemPackages = [ cfg.package ];
 

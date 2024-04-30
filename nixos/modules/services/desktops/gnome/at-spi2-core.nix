@@ -2,12 +2,10 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -15,8 +13,8 @@ with lib;
 
     services.gnome.at-spi2-core = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable at-spi2-core, a service for the Assistive Technologies
@@ -34,14 +32,14 @@ with lib;
 
   ###### implementation
 
-  config = mkMerge [
-    (mkIf config.services.gnome.at-spi2-core.enable {
+  config = lib.mkMerge [
+    (lib.mkIf config.services.gnome.at-spi2-core.enable {
       environment.systemPackages = [ pkgs.at-spi2-core ];
       services.dbus.packages = [ pkgs.at-spi2-core ];
       systemd.packages = [ pkgs.at-spi2-core ];
     })
 
-    (mkIf (!config.services.gnome.at-spi2-core.enable) {
+    (lib.mkIf (!config.services.gnome.at-spi2-core.enable) {
       environment.sessionVariables = {
         NO_AT_BRIDGE = "1";
         GTK_A11Y = "none";

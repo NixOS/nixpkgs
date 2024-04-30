@@ -2,8 +2,6 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
 
   # GNOME initial setup's run is conditioned on whether
@@ -45,7 +43,7 @@ in
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -54,7 +52,7 @@ in
 
     services.gnome.gnome-initial-setup = {
 
-      enable = mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
+      enable = lib.mkEnableOption "GNOME Initial Setup, a Simple, easy, and safe way to prepare a new system";
 
     };
 
@@ -63,12 +61,12 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.gnome.gnome-initial-setup.enable {
+  config = lib.mkIf config.services.gnome.gnome-initial-setup.enable {
 
     environment.systemPackages = [
       pkgs.gnome.gnome-initial-setup
     ]
-    ++ optional (versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart
+    ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart
     ;
 
     systemd.packages = [

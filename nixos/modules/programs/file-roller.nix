@@ -2,8 +2,6 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let cfg = config.programs.file-roller;
 
 in {
@@ -14,9 +12,9 @@ in {
 
     programs.file-roller = {
 
-      enable = mkEnableOption "File Roller, an archive manager for GNOME";
+      enable = lib.mkEnableOption "File Roller, an archive manager for GNOME";
 
-      package = mkPackageOption pkgs [ "gnome" "file-roller" ] { };
+      package = lib.mkPackageOption pkgs [ "gnome" "file-roller" ] { };
 
     };
 
@@ -25,7 +23,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package ];
 

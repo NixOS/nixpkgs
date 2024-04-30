@@ -2,12 +2,10 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
 
   ###### interface
@@ -16,8 +14,8 @@ with lib;
 
     programs.gnome-disks = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable GNOME Disks daemon, a program designed to
@@ -32,7 +30,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.programs.gnome-disks.enable {
+  config = lib.mkIf config.programs.gnome-disks.enable {
 
     environment.systemPackages = [ pkgs.gnome.gnome-disk-utility ];
 

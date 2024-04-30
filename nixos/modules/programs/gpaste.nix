@@ -1,15 +1,13 @@
 # GPaste.
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
 
   ###### interface
   options = {
      programs.gpaste = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable GPaste, a clipboard manager.
@@ -19,7 +17,7 @@ with lib;
   };
 
   ###### implementation
-  config = mkIf config.programs.gpaste.enable {
+  config = lib.mkIf config.programs.gpaste.enable {
     environment.systemPackages = [ pkgs.gnome.gpaste ];
     services.dbus.packages = [ pkgs.gnome.gpaste ];
     systemd.packages = [ pkgs.gnome.gpaste ];
