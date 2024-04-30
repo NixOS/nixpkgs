@@ -9094,6 +9094,12 @@
     github = "joshua-cooper";
     githubId = 35612334;
   };
+  jcaesar = {
+    name = "Julius Michaelis";
+    matrix = "@julius:mtx.liftm.de";
+    github = "jcaesar";
+    githubId = 1753388;
+  };
   jceb = {
     name = "Jan Christoph Ebersbach";
     email = "jceb@e-jc.de";
@@ -10787,6 +10793,12 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kotatsuyaki = {
+    email = "kotatsuyaki@mail.kotatsu.dev";
+    github = "kotatsuyaki";
+    githubId = 17219127;
+    name = "kotatsuyaki";
+  };
   kouyk = {
     email = "skykinetic@stevenkou.xyz";
     github = "kouyk";
@@ -11583,12 +11595,6 @@
     github = "lodi";
     githubId = 918448;
     name = "Anthony Lodi";
-  };
-  loewenheim = {
-    email = "loewenheim@mailbox.org";
-    github = "loewenheim";
-    githubId = 7622248;
-    name = "Sebastian Zivota";
   };
   logo = {
     email = "logo4poop@protonmail.com";
@@ -13575,12 +13581,6 @@
     github = "Mounium";
     githubId = 20026143;
     name = "Katona László";
-  };
-  MP2E = {
-    email = "MP2E@archlinux.us";
-    github = "MP2E";
-    githubId = 167708;
-    name = "Cray Elliott";
   };
   mpcsh = {
     email = "m@mpc.sh";
@@ -22470,12 +22470,6 @@
     github = "zokrezyl";
     githubId = 51886259;
     name = "Zokre Zyl";
-  };
-  zombiezen = {
-    name = "Ross Light";
-    email = "ross@zombiezen.com";
-    github = "zombiezen";
-    githubId = 181535;
   };
   zookatron = {
     email = "tim@zookatron.com";

@@ -29,7 +29,6 @@ buildLua {
   extraScripts = [ "c_concat.sh" ];
 
   postInstall = ''
-    chmod 0755 $out/share/mpv/scripts/c_concat.sh
     wrapProgram $out/share/mpv/scripts/c_concat.sh \
       --run "mkdir -p ~/.config/mpv/cutter/"
   '';

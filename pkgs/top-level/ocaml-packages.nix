@@ -1184,7 +1184,6 @@ let
 
     msat = callPackage ../development/ocaml-modules/msat { };
 
-    mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
@@ -1194,6 +1193,8 @@ let
     ### N ###
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
+
+    ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
@@ -1385,7 +1386,7 @@ let
       inherit (pkgs) unzip;
     };
 
-    opium = callPackage ../development/ocaml-modules/opium { mtime = mtime_1; };
+    opium = callPackage ../development/ocaml-modules/opium { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 

@@ -2,7 +2,10 @@
 , stdenvNoCC }:
 
 let
-  escapedList = with lib; concatMapStringsSep " " (s: "'${escape [ "'" ] s}'");
+  # Escape strings for embedding in shell scripts
+  escaped = s: "'${lib.escape [ "'" ] s}'";
+  escapedList = lib.concatMapStringsSep " " escaped;
+
   fileName = pathStr: lib.last (lib.splitString "/" pathStr);
   scriptsDir = "$out/share/mpv/scripts";
 
@@ -50,14 +53,14 @@ lib.makeOverridable (args: stdenvNoCC.mkDerivation (extendedBy
         }
         [ ${with builtins; toString (length extraScripts)} -eq 0 ] || {
           echo "mpvScripts.buildLua does not support 'extraScripts'" \
-               "when 'scriptPath' is a directory"
+               "when 'scriptPath' is a directory" >&2
           exit 1
         }
         mkdir -p "${scriptsDir}"
         cp -a "${scriptPath}" "${scriptsDir}/${scriptName}"
       else
-        install -m644 -Dt "${scriptsDir}" \
-          ${escapedList ([ scriptPath ] ++ extraScripts)}
+        install -m644 -Dt "${scriptsDir}" ${escaped scriptPath}
+        ${lib.optionalString (extraScripts != []) ''cp -at "${scriptsDir}/" ${escapedList extraScripts}''}
       fi
 
       runHook postInstall
