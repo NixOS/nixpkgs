@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,17 +20,13 @@ python3.pkgs.buildPythonApplication rec {
     "requests"
     "rich"
     "distro"
-    "typer" 
+    "typer"
     "instructor"
   ];
 
-  build-system = with python3.pkgs; [
-    hatchling
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click
