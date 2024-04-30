@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "OpenPathGuidingLibrary";
-    repo = finalAttrs.pname;
+    repo = "openpgl";
     rev = "v${finalAttrs.version}";
     hash = "sha256-dbHmGGiHQkU0KPpQYpY/o0uCWdb3L5namETdOcOREgs=";
   };
