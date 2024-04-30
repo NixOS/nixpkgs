@@ -37,8 +37,7 @@ buildPythonPackage rec {
       (fetchpatch {
         url = "https://github.com/python-lsp/python-lsp-black/commit/9298585a9d14d25920c33b188d79e820dc98d4a9.patch";
         hash = "sha256-4u0VIS7eidVEiKRW2wc8lJVkJwhzJD/M+uuqmTtiZ7E=";
-      })
-    ++ [ ];
+      });
 
   nativeBuildInputs = [
     setuptools
