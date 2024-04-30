@@ -64,6 +64,8 @@ let
     longDescription = ''
       This package cannot be installed directly. Please use `texlive.withPackages`.
     '';
+    # discourage nix-env from matching this package
+    priority = 10;
   } // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
   };
