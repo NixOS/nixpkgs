@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-jrtGq+iOGpSm/aQM7aaY9mmH2j7IfncEN2EtgT3rG3k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     rich
     typing-extensions
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to format click help output nicely with rich";
-    mainProgram = "rich-click";
     homepage = "https://github.com/ewels/rich-click";
     changelog = "https://github.com/ewels/rich-click/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "rich-click";
   };
 }
