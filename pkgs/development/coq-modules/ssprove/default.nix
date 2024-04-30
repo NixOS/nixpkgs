@@ -20,11 +20,8 @@
     # will always only output version 1.18.0 for Coq 8.17.
     # Hence, the Coq 8.17 and math-comp 1.17.0 must be explicitly set
     # to load it.
-    # With the below statement, one gets math-comp 1.18.0 even for
-    # coqPackages_8_17. Yet it is possible to override math-comp to version
-    # 1.17.0 and still get SSProve version 0.1.0. But for math-comp
-    # version 1.17.0 there is no CI job.
-    { cases = ["8.17" (range "1.17.0" "1.18.0")]; out = "0.1.0"; }
+    # (This version is not on the math-comp CI and hence not checked.)
+    { cases = ["8.17" "1.17.0"]; out = "0.1.0"; }
   ] null;
 
   releaseRev = v: "v${v}";
@@ -41,7 +38,7 @@
   meta = with lib; {
     description = "SSProve: A Foundational Framework for Modular Cryptographic Proofs in Coq";
     license = licenses.mit;
-    maintainers = [ "Theo Winterhalter" ];
+    maintainers = [ "Philipp Haselwarter <philipp@haselwarter.org>" ];
   };
 
 })
