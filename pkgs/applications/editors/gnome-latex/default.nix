@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , gtk-doc
 , vala
@@ -8,10 +9,9 @@
 , wrapGAppsHook
 , gsettings-desktop-schemas
 , gspell
-, libgedit-amtk
 , libgedit-gtksourceview
+, libgedit-tepl
 , libgee
-, tepl
 , gnome
 , glib
 , pkg-config
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
     sha256 = "1nVVY5sqFaiuvVTzNTVORP40MxQ648s8ynqOJvgRKto=";
   };
 
+  patches = [
+    # Adapt for Tepl -> libgedit-tepl rename
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/swilmet/gnome-latex/-/commit/41e532c427f43a5eed9081766963d6e29a9975a1.patch";
+      hash = "sha256-gu8o/er4mP92dE5gWg9lGx5JwTHB8ytk3EMNlwlIpq4=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
@@ -45,11 +53,10 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gspell
-    libgedit-amtk
     libgedit-gtksourceview
+    libgedit-tepl
     libgee
     libxml2
-    tepl
   ];
 
   configureFlags = [
@@ -66,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";
+    homepage = "https://gitlab.gnome.org/swilmet/gnome-latex";
     description = "A LaTeX editor for the GNOME desktop";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.gpl3Plus;

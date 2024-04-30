@@ -1229,6 +1229,7 @@ mapAliases ({
   teleport_12 = throw "teleport 12 has been removed as it is EOL. Please upgrade to Teleport 13 or later"; # Added 2024-02-04
   teleprompter = throw "teleprompter has been removed. reason: upstream dead and does not work with recent electron versions"; # Added 2024-03-14
   tensile = throw "'tensile' has been replaced with 'rocmPackages.tensile'"; # Added 2023-10-08
+  tepl = libgedit-tepl; # Added 2024-04-29
   testVersion = testers.testVersion; # Added 2022-04-20
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01
   thrift-0_10 = throw "'thrift-0_10' has been removed because it is impacted by security issues and not used in nixpkgs, move to 'thrift'"; # Added 2024-03-17
