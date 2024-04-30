@@ -54,6 +54,7 @@
 , texi2html
 , vamp-plugin-sdk
 , wrapGAppsHook4
+, writeScript
 , xdg-utils
 , xxHash
 , yyjson
@@ -84,6 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.zrythm.org/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Ljbw7bjGI6js4OP9KEXCkhC9AMbInSz0nn+pROm4vXw=";
   };
+
+  passthru.updateScript = writeScript "update-zrythm" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    version="$(curl -s https://www.zrythm.org/releases/ | grep -o -m 1 'href="zrythm-[^"]*\.tar\.xz"' | head -1 | sed 's/href="zrythm-\(.*\)\.tar\.xz"/\1/')"
+    update-source-version zrythm "$version"
+  '';
 
   nativeBuildInputs = [
     chromaprint
