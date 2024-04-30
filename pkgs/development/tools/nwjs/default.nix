@@ -17,6 +17,7 @@
 , lib
 , libcap
 , libdrm
+, libGL
 , libnotify
 , libuuid
 , libxcb
@@ -55,6 +56,7 @@ let
       gtk3
       libcap
       libdrm
+      libGL
       libnotify
       libxkbcommon
       mesa
