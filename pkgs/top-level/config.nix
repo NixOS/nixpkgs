@@ -74,6 +74,14 @@ let
       feature = "set `__contentAddressed` to true by default";
     };
 
+    freebsdBranch = mkMassRebuild {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Default FreeBSD release to use for FreeBSD packages
+      '';
+    };
+
     allowAliases = mkOption {
       type = types.bool;
       default = true;
