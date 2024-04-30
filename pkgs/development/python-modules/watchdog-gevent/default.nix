@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   gevent,
   pytestCheckHook,
   setuptools,
@@ -22,6 +23,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-FESm3fNuLmOg2ilI/x8U9LuAimHLnahcTHYzW/nzOVY=";
   };
+
+  patches = [
+    # Add new event_filter argument to GeventEmitter
+    (fetchpatch {
+      name = "new-event_filter-argument.patch";
+      url = "https://github.com/Bogdanp/watchdog_gevent/commit/a98b6599aefb6f1ea6f9682485ed460c52f6e55f.patch";
+      hash = "sha256-lbUtl8IbnJjlsIpbC+wXLvYB+ZtUuHWqFtf31Bfqc2I=";
+    })
+  ];
 
   postPatch = ''
     sed -i setup.cfg \
