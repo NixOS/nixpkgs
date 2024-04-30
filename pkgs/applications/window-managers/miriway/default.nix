@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "unstable-2024-04-25";
+  version = "0-unstable-2024-04-25";
 
   src = fetchFromGitHub {
     owner = "Miriway";
