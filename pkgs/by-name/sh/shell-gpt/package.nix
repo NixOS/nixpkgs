@@ -1,48 +1,54 @@
 { lib
+, fetchFromGitHub
 , python3
-, fetchPypi
-, nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "shell_gpt";
+  pname = "shell-gpt";
   version = "1.4.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-zSgWSC60ypOQ1IENcxObBezAfHosQWBD9ft06yh5iV4=";
+  src = fetchFromGitHub {
+    owner = "TheR1D";
+    repo = "shell_gpt";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T37L4U1kOrrIQJ2znq2UupD3pyit9xd8rAsEwUvGiQ8=";
   };
 
+  pythonRelaxDeps = [
+    "requests"
+    "rich"
+    "distro"
+    "typer" 
+    "instructor"
+  ];
+
+  build-system = with python3.pkgs; [
+    hatchling
+  ];
+
   nativeBuildInputs = with python3.pkgs; [
-    python3.pkgs.pythonRelaxDepsHook
-    python3
-    pip
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    markdown-it-py
-    rich
+    click
     distro
-    typer
-    requests
-    hatchling
-    openai
     instructor
+    openai
+    rich
+    typer
   ];
 
-  pythonRelaxDeps = [ "requests" "rich" "distro" "typer" ];
-
-  passthru.updateScript = nix-update-script { };
-
+  # Tests want to read the OpenAI API key from stdin
   doCheck = false;
 
   meta = with lib; {
-    mainProgram = "sgpt";
-    homepage = "https://github.com/TheR1D/shell_gpt";
     description = "Access ChatGPT from your terminal";
-    platforms = platforms.unix;
+    homepage = "https://github.com/TheR1D/shell_gpt";
+    changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mglolenstine ];
+    mainProgram = "sgpt";
   };
 }
