@@ -23,10 +23,14 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 picoc $out/bin/picoc
 
     mkdir -p $out/include
     install -m644 *.h $out/include
+
+    runHook postInstall
   '';
 
   meta = with lib; {
