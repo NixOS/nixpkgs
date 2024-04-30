@@ -310,12 +310,18 @@ in rec {
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
-    version = "unstable-2021-12-27";
+    version = "unstable-2024-04-14";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-fzf-url";
-      rev = "1241fc5682850fe41812cad81c76541674ee305b";
-      sha256 = "1270c5nfvgsdajgfahlacqfb5xwg4hwfrciiy0v03d50vg4h0kdi";
+      rev = "28ed7ce3c73a328d8463d4f4aaa6ccb851e520fa";
+      hash = "sha256-tl0SjG/CeolrN7OIHj6MgkB9lFmFgEuJevsSuwVs+78=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/wfxr/tmux-fzf-url";
+      description = "Quickly open urls on your terminal screen!";
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
