@@ -2125,6 +2125,8 @@ with pkgs;
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
+  cleanit = with python3Packages; toPythonApplication cleanit;
+
   clickgen = with python3Packages; toPythonApplication clickgen;
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { inherit systemd; };
