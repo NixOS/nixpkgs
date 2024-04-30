@@ -1,8 +1,19 @@
 # cd nixpkgs
 # nix-build -A tests.testers.hasPkgConfigModule
-{ lib, testers, zlib, openssl, runCommand }:
+{ lib, testers, miniz, zlib, openssl, runCommand }:
 
 lib.recurseIntoAttrs {
+
+  miniz-versions-match = testers.hasPkgConfigModules {
+    package = miniz;
+    versionCheck = true;
+  };
+
+  miniz-versions-mismatch = testers.testBuildFailure (testers.hasPkgConfigModules {
+    package = miniz;
+    version = "1.2.3";
+    versionCheck = true;
+  });
 
   zlib-has-zlib = testers.hasPkgConfigModules {
     package = zlib;
