@@ -2245,6 +2245,8 @@ self: super: with self; {
 
   clean-fid = callPackage ../development/python-modules/clean-fid { };
 
+  cleanit = callPackage ../development/python-modules/cleanit { };
+
   cleanlab = callPackage ../development/python-modules/cleanlab { };
 
   cleo = callPackage ../development/python-modules/cleo { };
