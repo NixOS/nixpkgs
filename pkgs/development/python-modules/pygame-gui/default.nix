@@ -2,7 +2,7 @@
 , pkgs
 , buildPythonPackage
 , fetchFromGitHub
-, pygame
+, pygame-ce
 , python-i18n
 , pytestCheckHook
 }:
@@ -20,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-IXU00Us1odbfS7jLPMYuCPv2l/5TUZdYKES7xHs+EWg=";
   };
 
-  propagatedBuildInputs = [ pygame python-i18n ];
+  propagatedBuildInputs = [
+    pygame-ce
+    python-i18n
+  ];
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
