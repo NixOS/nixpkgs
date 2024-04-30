@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
     mainProgram = "tracker3";
     maintainers = teams.gnome.members;
