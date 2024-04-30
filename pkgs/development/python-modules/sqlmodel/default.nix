@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, dirty-equals
-, fastapi
-, fetchFromGitHub
-, pdm-backend
-, pydantic
-, pytest-asyncio
-, pytest7CheckHook
-, pythonOlder
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  dirty-equals,
+  fastapi,
+  fetchFromGitHub,
+  pdm-backend,
+  pydantic,
+  pytest-asyncio,
+  pytest7CheckHook,
+  pythonOlder,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-2ens+wEFJThccBTBeBy8j1AzKJtebg3dJTGG6+Cpt+Q=";
   };
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     pydantic
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  pythonImportsCheck = [
-    "sqlmodel"
-  ];
+  pythonImportsCheck = [ "sqlmodel" ];
 
   disabledTests = [
     # AssertionError: assert 'enum_field VARCHAR(1)
