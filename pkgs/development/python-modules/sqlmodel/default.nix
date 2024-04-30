@@ -3,7 +3,7 @@
 , dirty-equals
 , fastapi
 , fetchFromGitHub
-, poetry-core
+, pdm-backend
 , pydantic
 , pytest-asyncio
 , pytest7CheckHook
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sqlmodel";
-  version = "0.0.16";
+  version = "0.0.18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "sqlmodel";
     rev = "refs/tags/${version}";
-    hash = "sha256-hDJcekn0ExYUCs8kBZkJzsWqXsB/cI6RbW3EhRCCioM=";
+    hash = "sha256-2ens+wEFJThccBTBeBy8j1AzKJtebg3dJTGG6+Cpt+Q=";
   };
 
   build-system = [
-    poetry-core
+    pdm-backend
   ];
 
   dependencies = [
