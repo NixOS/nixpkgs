@@ -20,7 +20,9 @@ luarocks.overrideAttrs (old: {
     };
   };
 
-  meta = old.meta // {
+  # old.meta // { /* ... */ } doesn't update meta.position, which breaks the updateScript
+  meta = {
+    inherit (old.meta) description license maintainers platforms;
     mainProgram = "luarocks";
   };
 })
