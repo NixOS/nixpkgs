@@ -29,12 +29,6 @@ let
         fi
       '') cfg.sessionPackages}
     '';
-
-  dmDefault = config.services.xserver.desktopManager.default;
-  # fallback default for cases when only default wm is set
-  dmFallbackDefault = if dmDefault != null then dmDefault else "none";
-  wmDefault = config.services.xserver.windowManager.default;
-  defaultSessionFromLegacyOptions = dmFallbackDefault + lib.optionalString (wmDefault != null && wmDefault != "none") "+${wmDefault}";
 in
 {
   options = {
@@ -125,14 +119,7 @@ in
                   ${lib.concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
               '';
         };
-        default =
-          if dmDefault != null || wmDefault != null then
-            defaultSessionFromLegacyOptions
-          else
-            null;
-        defaultText = lib.literalMD ''
-          Taken from display manager settings or window manager settings, if either is set.
-        '';
+        default = null;
         example = "gnome";
         description = ''
           Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).
@@ -191,20 +178,6 @@ in
         '';
       }
     ];
-
-    warnings =
-      lib.mkIf (dmDefault != null || wmDefault != null) [
-        ''
-          The following options are deprecated:
-            ${lib.concatStringsSep "\n  " (map ({c, t}: t) (lib.filter ({c, t}: c != null) [
-            { c = dmDefault; t = "- services.xserver.desktopManager.default"; }
-            { c = wmDefault; t = "- services.xserver.windowManager.default"; }
-            ]))}
-          Please use
-            services.displayManager.defaultSession = "${defaultSessionFromLegacyOptions}";
-          instead.
-        ''
-      ];
 
     # Make xsessions and wayland sessions available in XDG_DATA_DIRS
     # as some programs have behavior that depends on them being present

@@ -222,13 +222,6 @@ in
   };
 
   config = {
-    assertions = [
-      {
-        assertion = cfg.desktopManager.default != null || cfg.windowManager.default != null -> cfg.displayManager.defaultSession == defaultSessionFromLegacyOptions;
-        message = "You cannot use both services.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";
-      }
-    ];
-
     services.displayManager.sessionData.wrapper = xsessionWrapper;
 
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";

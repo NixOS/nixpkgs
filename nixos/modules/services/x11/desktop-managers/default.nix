@@ -82,17 +82,6 @@ in
         });
       };
 
-      default = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "none";
-        description = ''
-          **Deprecated**, please use [](#opt-services.displayManager.defaultSession) instead.
-
-          Default desktop manager loaded if none have been chosen.
-        '';
-      };
-
     };
 
   };
