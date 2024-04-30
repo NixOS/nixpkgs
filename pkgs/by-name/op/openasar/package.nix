@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, unstableGitUpdater, nodejs, bash, asar, unzip }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  nodejs,
+  bash,
+  asar,
+  unzip,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openasar";
   version = "0-unstable-2024-01-13";
 
@@ -23,7 +32,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
     bash scripts/injectPolyfills.sh
-    substituteInPlace src/index.js --replace 'nightly' '${version}'
+    substituteInPlace src/index.js --replace 'nightly' '${finalAttrs.version}'
     ${nodejs}/bin/node scripts/strip.js
     ${asar}/bin/asar pack src app.asar
 
@@ -49,7 +58,10 @@ stdenv.mkDerivation rec {
     description = "Open-source alternative of Discord desktop's \"app.asar\".";
     homepage = "https://openasar.dev";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ Scrumplex jopejoe1 ];
+    maintainers = with maintainers; [
+      Scrumplex
+      jopejoe1
+    ];
     platforms = nodejs.meta.platforms;
   };
-}
+})
