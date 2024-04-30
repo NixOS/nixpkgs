@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pythonOlder
-, rich
-, setuptools
-, typer
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pythonOlder,
+  rich,
+  setuptools,
+  typer,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-jrtGq+iOGpSm/aQM7aaY9mmH2j7IfncEN2EtgT3rG3k=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -36,9 +35,7 @@ buildPythonPackage rec {
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rich_click"
-  ];
+  pythonImportsCheck = [ "rich_click" ];
 
   meta = with lib; {
     description = "Module to format click help output nicely with rich";
