@@ -106,7 +106,12 @@ flutter.buildFlutterApplication {
   version = "0-unstable-2023-04-30";
 
   # To build for the Web, use the targetFlutterPlatform argument.
-  # targetFlutterPlatform = "web";
+  # targetFlutterPlatform = "web"; # other currently supported options: android, linux
+
+  # If building for android, you can provide which outputs you want to build.
+  # androidOutputs = [ "split" "fat" "bundle" ];
+  # a custom android sdk can also be provided
+  # androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
 
   src = fetchFromGitHub {
     owner = "canonical";
