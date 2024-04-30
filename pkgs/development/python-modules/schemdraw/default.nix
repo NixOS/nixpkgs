@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.18";
+  version = "0.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-JJc3LA+fqB+2g7pPIZ8YMV921EyYpLZrHSJCYyYThZg=";
+    hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
   '';
+
+  preCheck = "rm test/test_pictorial.ipynb";   # Tries to download files
 
   pytestFlagsArray = [ "--nbval-lax" ];
 
