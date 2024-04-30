@@ -37204,6 +37204,8 @@ with pkgs;
 
   trackballs = callPackage ../games/trackballs { };
 
+  trakit = with python3Packages; toPythonApplication trakit;
+
   try = callPackage ../tools/admin/try { };
 
   tumiki-fighters = callPackage ../games/tumiki-fighters { };
