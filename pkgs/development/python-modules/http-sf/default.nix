@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "http-sf";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mnot";
     repo = "http-sf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8xK8/IVrhqMDgkxZY10QqSGswCrttc29FZLCntmSUQ4=";
+    hash = "sha256-p2GTCvuRhQVchFiLzoDYop9TUz/DT7eVY6Zioh+/rE8=";
   };
 
   nativeBuildInputs = [
