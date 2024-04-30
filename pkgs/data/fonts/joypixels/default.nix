@@ -20,9 +20,9 @@ let
   };
 
   joypixels-free-license = with systemSpecific; {
-    spdxId = "LicenseRef-JoyPixels-Free-6.5";
-    fullName = "JoyPixels Free License Agreement 6.5";
-    url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.pdf";
+    spdxId = "LicenseRef-JoyPixels-Free";
+    fullName = "JoyPixels Free License Agreement";
+    url = "https://cdn.joypixels.com/free-license.pdf";
     free = false;
   };
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
         free-license = joypixels-free-license;
         appendix = joypixels-license-appendix;
       in with systemSpecific; {
-        spdxId = "LicenseRef-JoyPixels-Free-6.5-with-${capitalized}-Appendix";
+        spdxId = "LicenseRef-JoyPixels-Free-with-${capitalized}-Appendix";
         fullName = "${free-license.fullName} with ${appendix.fullName}";
         url = free-license.url;
         appendixUrl = appendix.url;
