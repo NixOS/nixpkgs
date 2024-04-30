@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-zwkbSo20ogq24YtvFOCYICk25XS8FuxRbW5jfX4gDJM=";
+    hash = "sha256-mWXEc54JsZAl6KD33RF8juzDhFheQOLviJbM1B8RPSo=";
   };
 
   postPatch = ''
