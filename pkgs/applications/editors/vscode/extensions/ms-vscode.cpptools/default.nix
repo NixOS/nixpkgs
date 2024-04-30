@@ -32,11 +32,11 @@ let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   supported = {
     x86_64-linux = {
-      hash = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
+      hash = "sha256-p8WFmkQKdzXF0FTWHabyeFMkwXa2RkDRM9SvvkBIOLY=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-Kjl8mEpayA1xMHEAMJ5k3Ctk3l48KlUBU5w3dL4pGWM=";
+      hash = "sha256-HISE8/M9IpeI8iX0mmw9owExnpgiwpesE7YG/+QFYgc=";
       arch = "linux-arm64";
     };
   };
@@ -47,7 +47,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.17.3";
+    version = "1.20.2";
   };
 
   nativeBuildInputs = [
