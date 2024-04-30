@@ -72,17 +72,6 @@ in
         });
       };
 
-      default = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "wmii";
-        description = ''
-          **Deprecated**, please use [](#opt-services.displayManager.defaultSession) instead.
-
-          Default window manager loaded if none have been chosen.
-        '';
-      };
-
     };
 
   };
