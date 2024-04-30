@@ -12899,6 +12899,8 @@ self: super: with self; {
 
   quil = callPackage ../development/python-modules/quil { };
 
+  quixote = callPackage ../development/python-modules/quixote { };
+
   qutip = callPackage ../development/python-modules/qutip { };
 
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
