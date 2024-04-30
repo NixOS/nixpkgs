@@ -9452,6 +9452,12 @@
       fingerprint = "B768 6CD7 451A 650D 9C54  4204 6710 CF0C 1CBD 7762";
     }];
   };
+  jlbribeiro = {
+    email = "nix@jlbribeiro.com";
+    github = "jlbribeiro";
+    githubId = 1015816;
+    name = "José Ribeiro";
+  };
   jleightcap = {
     email = "jack@leightcap.com";
     github = "jleightcap";
