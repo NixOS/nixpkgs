@@ -6,22 +6,26 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "route-graph";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "route-graph";
     rev = "refs/tags/${version}";
-    hash = "sha256-OOXLmHxWre5t4tysDXV23PTkyUG6Zcpanw0fVCOLFTM=";
+    hash = "sha256-HmfmUeT5vt0yWVs7GhIPVt4NZtTfe7HYPLRqfQE/tZM=";
   };
 
   pythonRelaxDeps = [
+    "typer"
     "typing-extensions"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
   ];
 

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , pkg-config
-, openssl
+, libressl
 , libbsd
 , libevent
 , libuuid
@@ -12,21 +12,22 @@
 , ncurses
 , bison
 , autoPatchelfHook
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.97";
+  version = "0.98.2";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4HpIlKRYUDoymCBH8GS8DDXaY0nYiVvotpBkwglOO3I=";
+    hash = "sha256-/11K2ZIu3xyAVbI5hlCXL9RjyAlZDb544uqxv3ihUMg=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
+  buildInputs = [ libressl libbsd libevent libuuid libmd zlib ncurses ]
     ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
   configureFlags = [ "--enable-gotd" ];
@@ -45,13 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-include getopt.h"
   ]);
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-    test "$($out/bin/got --version)" = "got ${finalAttrs.version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     changelog = "https://gameoftrees.org/releases/CHANGES";

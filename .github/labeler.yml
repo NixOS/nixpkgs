@@ -369,3 +369,8 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/modules/**/*
+"8.has: maintainer-list (update)":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - maintainers/maintainer-list.nix

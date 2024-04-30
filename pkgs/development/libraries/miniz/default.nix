@@ -1,23 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+, testers
+, validatePkgConfig
+, cmake
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miniz";
-  version = "2.2.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "richgel999";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-7hc/yNJh4sD5zGQLeHjowbUtV/1mUDQre1tp9yKMSSY=";
+    repo = "miniz";
+    rev = finalAttrs.version;
+    hash = "sha256-3J0bkr2Yk+MJXilUqOCHsWzuykySv5B1nepmucvA4hg=";
   };
+  passthru.updateScript = nix-update-script {};
 
-  nativeBuildInputs = [ cmake ];
+  strictDeps = true;
+  nativeBuildInputs = [ cmake validatePkgConfig ];
 
   postFixup = ''
-    substituteInPlace "$out"/share/pkgconfig/miniz.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace '=''${exec_prefix}//' '=/'
+    substituteInPlace "$out"/lib/pkgconfig/miniz.pc \
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Single C source file zlib-replacement library";
@@ -25,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ astro ];
     platforms = platforms.unix;
+    pkgConfigModules = [ "miniz" ];
   };
-}
+})
