@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-storage-plugin-s3";
-  version = "0.2.10";
+  version = "0.2.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-k21DRQdSUFkdwNb7MZJmClhIg+pdSc7H6FkDrbf4DT8=";
+    hash = "sha256-pAMrWJe4+PWHglZ/C83Af+uHBg9wupfSlH4W8CvO9as=";
   };
 
   postPatch = ''
