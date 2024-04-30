@@ -10,10 +10,7 @@
 stdenv.mkDerivation {
   name = "nixos-option";
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.fileFilter (file: file.name != "default.nix") ./.;
-  };
+  src = ./.;
   postInstall = ''
     installManPage ${./nixos-option.8}
   '';
