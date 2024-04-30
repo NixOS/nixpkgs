@@ -725,6 +725,7 @@ let
     ijtiff = [ pkgs.libtiff ];
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ] ++ lib.optional stdenv.isDarwin lerc.dev;
     qqconf = [ pkgs.fftw.dev ];
+    spFW = [ pkgs.fftw.dev ];
     qspray = with pkgs; [ gmp.dev mpfr.dev ];
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
