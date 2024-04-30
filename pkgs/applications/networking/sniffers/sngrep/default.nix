@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/irontec/sngrep/commit/ad1daf15c8387bfbb48097c25197bf330d2d98fc.patch";
       hash = "sha256-g8fxvxi3d7jmZEKTbxqw29hJbm/ShsKKxstsOUGxTug=";
     })
+    ./1.7.0-CVE-2024-3119-CVE-2024-3120.patch
   ];
 
   nativeBuildInputs = [
