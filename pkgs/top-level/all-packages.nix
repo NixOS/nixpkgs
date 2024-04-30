@@ -30700,8 +30700,6 @@ with pkgs;
 
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
-  eww = callPackage ../applications/window-managers/eww { };
-
   exaile = callPackage ../applications/audio/exaile { };
 
   exercism = callPackage ../applications/misc/exercism { };
