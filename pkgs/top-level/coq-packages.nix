@@ -214,7 +214,7 @@ in rec {
   coqPackages_8_18 = mkCoqPackages coq_8_18 // { __attrsFailEvaluation = true; };
   coqPackages_8_19 = mkCoqPackages coq_8_19 // { __attrsFailEvaluation = true; };
   coqPackages =
-    let cp = recurseIntoAttrs coqPackages_8_18;
+    let cp = recurseIntoAttrs coqPackages_8_19;
     in cp // { coqPackages = cp.coqPackages // { __attrsFailEvaluation = true; }; } // { __recurseIntoDerivationForReleaseJobs = true; };
   coq = coqPackages.coq;
 
