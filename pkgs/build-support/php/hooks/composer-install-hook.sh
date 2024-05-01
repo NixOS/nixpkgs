@@ -117,8 +117,9 @@ composerInstallInstallHook() {
 
     # Create symlinks for the binaries.
     jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json | while read -r bin; do
-        mkdir -p "$out"/share/php/"${pname}" "$out"/bin
-        makeWrapper "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
+        echo -e "\e[32mCreating symlink ${bin}...\e[0m"
+        mkdir -p "$out"/bin
+        ln -s "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
     done
 
     echo "Finished composerInstallInstallHook"
