@@ -61,9 +61,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME translation making program";
     mainProgram = "gtranslator";
-    homepage = "https://wiki.gnome.org/Apps/Gtranslator";
+    homepage = "https://gitlab.gnome.org/GNOME/gtranslator";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ bobby285271 ];
     platforms = platforms.linux;
   };
 }
