@@ -1395,8 +1395,6 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch ./patches/xattr-fix-build.patch super.xattr;
 
-  patch = dontCheck super.patch;
-
   esqueleto =
     overrideCabal
       (drv: {
