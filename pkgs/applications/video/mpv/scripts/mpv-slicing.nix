@@ -3,6 +3,7 @@
   buildLua,
   fetchFromGitHub,
   ffmpeg,
+  unstableGitUpdater,
 }:
 
 buildLua {
@@ -15,6 +16,7 @@ buildLua {
     rev = "d09c11227704c8d5bdaa2c799ef64dce881c63a7";
     hash = "sha256-MKoM0f74/XoctiHQVOB3LzFWtJXpsREfQh5icaebCJo=";
   };
+  passthru.updateScript = unstableGitUpdater { };
 
   postPatch = ''
     substituteInPlace slicing.lua \
