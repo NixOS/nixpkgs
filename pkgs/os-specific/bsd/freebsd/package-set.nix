@@ -1,6 +1,6 @@
 { stdenv, lib, stdenvNoCC
 , fetchzip
-, sourceData, versionData, buildFreebsd
+, sourceData, versionData, buildFreebsd, patchesRoot
 }:
 
 self:
@@ -9,7 +9,7 @@ lib.packagesFromDirectoryRecursive {
   callPackage = self.callPackage;
   directory = ./pkgs;
 } // {
-  inherit sourceData versionData;
+  inherit sourceData patchesRoot versionData;
 
   # Keep the crawled portion of Nixpkgs finite.
   buildFreebsd = lib.dontRecurseIntoAttrs buildFreebsd;

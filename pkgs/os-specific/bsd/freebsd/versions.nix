@@ -33,6 +33,7 @@ let
           buildFreebsd = otherSplices.selfBuildHost;
           inherit sourceData;
           versionData = sourceData.version;
+          patchesRoot = ./patches/${sourceData.version.revision};
         }
         // extraArgs
       );
