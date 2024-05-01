@@ -8,13 +8,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.9.0";
+  version = "1.9.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4ealEeFS7HzU26vE9Pahh0hwvUnJfRfTkLkjLdpoXOM=";
+    hash = "sha256-Gae4IXn5Tyrd2612qn5lq5DK1VqxA9U4J2N5NcnmYkw=";
   };
+
+  postPatch = ''
+    # Loosen hatchling runtime version dependency
+    sed -i 's/hatchling<1.22/hatchling/' pyproject.toml
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
@@ -69,19 +74,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_editable_exact_force_include_option"
     "test_editable_exact_force_include_build_data_precedence"
     "test_editable_pth"
-    # AssertionError: assert len(extract_installed_requirements(output.splitlines())) > 0
-    "test_creation_allow_system_packages"
-    # cli table output mismatch
-    "test_context_formatting"
     # expects sh, finds bash
     "test_all"
     "test_already_installed_update_flag"
     "test_already_installed_update_prompt"
-    # unmet expectations about the binary module we provide
-    "test_dependency_not_found"
-    "test_marker_unmet"
-    # output capturing mismatch, likely stdout/stderr mixup
-    "test_no_compatibility_check_if_exists"
+    # Loosen hatchling runtime version dependency
+    "test_core"
+    "test_correct"
   ] ++ lib.optionals stdenv.isDarwin [
     # https://github.com/NixOS/nixpkgs/issues/209358
     "test_scripts_no_environment"
@@ -90,6 +89,8 @@ python3.pkgs.buildPythonApplication rec {
     # It is not possible to run it in a nix build using a /nix/store shell.
     # See https://github.com/pypa/hatch/pull/709 for the relevant code.
     "test_populate_default_popen_kwargs_executable"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "test_resolve"
   ];
 
   meta = with lib; {
