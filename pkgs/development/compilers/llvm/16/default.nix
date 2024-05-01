@@ -62,6 +62,9 @@ in let
     llef = callPackage ../common/lldb-plugins/llef.nix {};
   });
 
+  isDarwinCross = stdenv.hostPlatform.isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform);
+  stdenvNoCF = if stdenv.hostPlatform.isDarwin then darwin.stdenvNoCF else stdenv;
+
   tools = lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
     major = lib.versions.major release_version;
@@ -375,9 +378,14 @@ in let
         # ../common/compiler-rt/armv7l-15.patch
       ];
       inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
-               then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
-               else stdenv;
+      stdenv =
+        # Darwin requires libc++ to build analyzers.
+        if stdenv.hostPlatform.isDarwin then
+          overrideCC stdenv (buildLlvmTools.clangNoCompilerRtWithLibc.override { inherit (targetLlvmLibraries) libcxx; })
+        else if stdenv.hostPlatform.useLLVM or false then
+          overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
+        else
+          stdenv;
     };
 
     compiler-rt-no-libc = callPackage ../common/compiler-rt {
@@ -396,7 +404,7 @@ in let
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
+               then overrideCC stdenvNoCF buildLlvmTools.clangNoCompilerRt
                else stdenv;
     };
 
@@ -414,7 +422,15 @@ in let
     # stdenv's compiler.
     libcxx = callPackage ../common/libcxx {
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      stdenv =
+        # Avoid an infinite recursion between libc++ and compiler-rt on Darwin by building without compiler-rt.
+        if stdenv.hostPlatform.isDarwin then
+          overrideCC stdenvNoCF (buildLlvmTools.clangNoCompilerRtWithLibc.override {
+            nixSupport.cc-cflags = [ "-nostdlib" ];
+            nixSupport.cc-ldflags = [ "-lSystem" ];
+          })
+        else
+          overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ../common/libunwind {
@@ -422,7 +438,7 @@ in let
         ./libunwind/gnu-install-dirs.patch
       ];
       inherit llvm_meta;
-      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
+      stdenv = overrideCC stdenvNoCF buildLlvmTools.clangNoLibcxx;
     };
 
     openmp = callPackage ../common/openmp {
