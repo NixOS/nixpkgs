@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "0.15.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
@@ -30,14 +30,14 @@ buildPythonPackage rec {
     hash = "sha256-UCzPD+3v74eB32q0/blsyHAsN0yNskGky5nrBKzFFaE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];
 
   PBR_VERSION = version;
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     pycryptodome
     pyjwt
