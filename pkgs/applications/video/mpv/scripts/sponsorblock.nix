@@ -28,7 +28,7 @@ buildLua {
 
   postPatch = ''
     substituteInPlace sponsorblock.lua \
-      --replace-fail "python3" "${python3}/bin/python3" \
+      --replace-fail "python3" "${lib.getExe python3}" \
       --replace-fail 'mp.find_config_file("scripts")' "\"$out/share/mpv/scripts\""
   '';
 

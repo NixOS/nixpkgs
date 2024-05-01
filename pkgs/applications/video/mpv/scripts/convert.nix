@@ -23,13 +23,13 @@ buildLua {
   postPatch = ''
     substituteInPlace convert_script.lua \
       --replace-fail 'mkvpropedit_exe = "mkvpropedit"' \
-                'mkvpropedit_exe = "${mkvtoolnix-cli}/bin/mkvpropedit"' \
+                'mkvpropedit_exe = "${lib.getExe' mkvtoolnix-cli "mkvpropedit"}"' \
       --replace-fail 'mkvmerge_exe = "mkvmerge"' \
-                'mkvmerge_exe = "${mkvtoolnix-cli}/bin/mkvmerge"' \
+                'mkvmerge_exe = "${lib.getExe' mkvtoolnix-cli "mkvmerge"}"' \
       --replace-fail 'yad_exe = "yad"' \
-                'yad_exe = "${yad}/bin/yad"' \
+                'yad_exe = "${lib.getExe yad}"' \
       --replace-fail 'notify_send_exe = "notify-send"' \
-                'notify_send_exe = "${libnotify}/bin/notify-send"' \
+                'notify_send_exe = "${lib.getExe libnotify}"' \
   '';
 
   scriptPath = "convert_script.lua";
