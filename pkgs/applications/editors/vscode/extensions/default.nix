@@ -4601,6 +4601,22 @@ let
         };
       };
 
+      vue.vscode-typescript-vue-plugin = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-typescript-vue-plugin";
+          publisher = "Vue";
+          version = "1.8.27";
+          hash = "sha256-ym1+WPKBcn4h9lqSFVehfiDoGUEviOSEVXVLhHcYvfc=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/Vue.vscode-typescript-vue-plugin/changelog";
+          description = "Vue VSCode extension for TypeScript";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin";
+          homepage = "https://github.com/vuejs/language-tools";
+          license = lib.licenses.mit;
+        };
+      };
+
       waderyan.gitblame = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitblame";
