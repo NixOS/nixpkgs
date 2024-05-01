@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "069";
+  version = "0610";
   format = "setuptools";
   # nixpkgs-update: no auto update
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    hash = "sha256-IXU00Us1odbfS7jLPMYuCPv2l/5TUZdYKES7xHs+EWg=";
+    hash = "sha256-PVNi/I174AyEEjc+N2UGtgOYSGAgVQbqrKkWZnjOxFY=";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [ emilytrau pbsds ];
   };
 }
