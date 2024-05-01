@@ -2,16 +2,16 @@
 
 maven.buildMavenPackage rec {
   pname = "gol";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "clarisma";
     repo = "gol-tool";
     rev = version;
-    hash = "sha256-UeuLXYGTmoAlrDm8c/Ibgi2q7G5MZJV3gGS+o5W3iOI=";
+    hash = "sha256-F/tMRD+nWn/fRPX7cTan371zlOTxh7oR98wREmokULo=";
   };
 
-  mvnHash = "sha256-GWGhx0pbojQhYshmrJ2sXMJJt4mhd3XBwAfzy9dCSMs=";
+  mvnHash = "sha256-b0nkp23gv4kejac/xrvm3xWo3Z8if7zveNUHBg7ZBm4=";
   mvnParameters = "compile assembly:single -Dmaven.test.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
