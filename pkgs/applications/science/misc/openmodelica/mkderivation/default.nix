@@ -42,7 +42,15 @@ let
   omdir = getAttrDef "omdir" pkg.pname pkg;
 
   # Simple to to m4 configuration scripts
-  postPatch = lib.optionalString ifDeps ''
+  postPatch = ''
+    sed -i '/OM_USE_CCACHE/s|ON|OFF|g' CMakeLists.txt
+    #patch refs to $HOME and patch out the check against MODELICAPATH
+    #these must be done in omc rather than omlibrary since omc contains PackageManagement.mo
+    sed -i OMCompiler/Compiler/Script/PackageManagement.mo -e '
+      s|listMember(userLibraries.*|true then|g
+      s|getInstallationCachePath()|getCachePath()|g
+    '
+  '' + lib.optionalString ifDeps ''
     sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
   '' +
   appendByAttr "postPatch" "\n" pkg;
@@ -87,7 +95,7 @@ stdenv.mkDerivation (pkg // {
   inherit omtarget postPatch preAutoreconf configureFlags configurePhase preBuild makeFlags installFlags;
 
   src = fetchgit (import ./src-main.nix);
-  version = "1.18.0";
+  version = "1.22.3";
 
   nativeBuildInputs = getAttrDef "nativeBuildInputs" [ ] pkg
     ++ [ autoconf automake libtool cmake autoreconfHook ];
