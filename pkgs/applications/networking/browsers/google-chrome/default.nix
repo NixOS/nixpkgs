@@ -28,9 +28,6 @@
 ## Gentoo
 , bzip2, libcap
 
-# Which distribution channel to use.
-, channel ? "stable"
-
 # Necessary for USB audio devices.
 , pulseSupport ? true, libpulseaudio
 
@@ -70,16 +67,10 @@ let
     ++ lib.optional libvaSupport libva
     ++ [ gtk3 gtk4 ];
 
-  suffix = lib.optionalString (channel != "stable") "-${channel}";
-
-  crashpadHandlerBinary = if lib.versionAtLeast version "94"
-    then "chrome_crashpad_handler"
-    else "crashpad_handler";
-
 in stdenv.mkDerivation {
   inherit version;
 
-  name = "google-chrome${suffix}-${version}";
+  pname = "google-chrome";
 
   src = chromium.chromeSrc;
 
@@ -103,11 +94,8 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    case ${channel} in
-      beta) appname=chrome-beta      dist=beta     ;;
-      dev)  appname=chrome-unstable  dist=unstable ;;
-      *)    appname=chrome           dist=stable   ;;
-    esac
+    appname=chrome
+    dist=stable
 
     exe=$out/bin/google-chrome-$dist
 
@@ -149,7 +137,7 @@ in stdenv.mkDerivation {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary}}; do
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
@@ -167,8 +155,6 @@ in stdenv.mkDerivation {
     # will try to merge PRs and respond to issues but I'm not actually using
     # Google Chrome.
     platforms = [ "x86_64-linux" ];
-    mainProgram =
-      if (channel == "dev") then "google-chrome-unstable"
-      else "google-chrome-${channel}";
+    mainProgram = "google-chrome-stable";
   };
 }
