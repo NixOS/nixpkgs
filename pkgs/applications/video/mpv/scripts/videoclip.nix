@@ -6,7 +6,6 @@
 , stdenv
 , buildLua
 , unstableGitUpdater
-,
 }:
 buildLua {
   pname = "videoclip";
