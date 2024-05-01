@@ -5366,8 +5366,6 @@ with pkgs;
 
   fx-cast-bridge = callPackage ../tools/misc/fx-cast-bridge { };
 
-  fzf = callPackage ../tools/misc/fzf { };
-
   fzf-obc = callPackage ../shells/bash/fzf-obc { };
 
   fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
@@ -11007,17 +11005,18 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud26 nextcloud27 nextcloud28;
+    nextcloud27 nextcloud28 nextcloud29;
 
-  nextcloud26Packages = callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/26.json;
-  };
   nextcloud27Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/27.json;
   };
   nextcloud28Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/28.json;
   };
+  nextcloud29Packages = callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/29.json;
+  };
+
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 

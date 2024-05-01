@@ -6,7 +6,7 @@
 buildLua {
   pname = "chapterskip";
 
-  version = "unstable-2022-09-08";
+  version = "0-unstable-2022-09-08";
   src = fetchFromGitHub {
     owner = "po5";
     repo  = "chapterskip";
