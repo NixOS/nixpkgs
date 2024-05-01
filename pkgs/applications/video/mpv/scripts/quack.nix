@@ -6,7 +6,7 @@
 buildLua rec {
   pname = "mpv-quack";
 
-  version = "unstable-2020-05-26";
+  version = "0-unstable-2020-05-27";
   src = fetchFromGitHub {
     owner = "CounterPillow";
     repo  = pname;

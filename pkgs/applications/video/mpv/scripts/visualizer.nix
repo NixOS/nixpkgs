@@ -6,7 +6,7 @@
 }:
 buildLua {
   pname = "visualizer";
-  version = "unstable-2024-03-10";
+  version = "0-unstable-2024-03-10";
 
   src = fetchFromGitHub {
     owner = "mfcc64";
