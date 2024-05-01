@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "retool";
-  version = "2.3.6";
+  version = "2.3.7";
 
   pyproject = true;
   disabled = python3.pkgs.pythonOlder "3.10";
@@ -15,8 +15,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "unexpectedpanda";
     repo = "retool";
-    rev = "v${version}";
-    hash = "sha256-6RE2sbL8e9D+czFebLagRiw2wmU78TbajIs9VdFgF0Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WEx/S6+8lJXu+4yKazzJ55HTGKr38GMRL242FV7KdLQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

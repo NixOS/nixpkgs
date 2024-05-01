@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineMiners";
+    homepage = "https://gitlab.gnome.org/Archive/gnome-online-miners";
     description = "A set of crawlers that go through your online content and index them locally in Tracker";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

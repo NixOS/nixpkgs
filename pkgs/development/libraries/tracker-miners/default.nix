@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://gitlab.gnome.org/GNOME/tracker-miners";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

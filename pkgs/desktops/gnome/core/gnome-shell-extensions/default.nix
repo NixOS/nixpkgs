@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

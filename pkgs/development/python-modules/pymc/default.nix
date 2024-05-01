@@ -3,46 +3,48 @@
 , buildPythonPackage
 , cachetools
 , cloudpickle
-, fastprogress
 , fetchFromGitHub
 , numpy
+, pandas
 , pytensor
 , pythonOlder
+, rich
 , scipy
-, typing-extensions
 , setuptools
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.10.4";
+  version = "5.13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tiOXbryY2TmeBVrG5cIMeDJ4alolBQ5LosdfH3tpVOA=";
+    hash = "sha256-SSAn7nbKhXGeEvASKQITUs3+ix3j37u9JTkNiG+1tZ0=";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail ', "pytest-cov"' ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     arviz
     cachetools
     cloudpickle
-    fastprogress
     numpy
+    pandas
     pytensor
+    rich
     scipy
     typing-extensions
   ];

@@ -77,7 +77,7 @@ let
 
     meta = with lib; {
       description = "Compiler for GObject type system";
-      homepage = "https://wiki.gnome.org/Projects/Vala";
+      homepage = "https://vala.dev";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
       maintainers = with maintainers; [ antono jtojnar ] ++ teams.pantheon.members;
