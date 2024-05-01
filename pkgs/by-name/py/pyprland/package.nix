@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
     description = "An hyperland plugin system";
     homepage = "https://github.com/hyprland-community/pyprland";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iliayar ];
+    maintainers = with lib.maintainers; [ iliayar johnrtitor ];
     platforms = lib.platforms.linux;
   };
 }
