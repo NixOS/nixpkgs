@@ -164,7 +164,7 @@ let
 
       homepage = "http://www.simutrans.com/";
       license = with licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ sodiboo ];
       platforms = with platforms; linux; # TODO: ++ darwin;
     };
   };
