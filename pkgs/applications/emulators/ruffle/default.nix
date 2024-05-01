@@ -20,13 +20,16 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "ruffle";
+let
   version = "nightly-2024-03-25";
+in
+rustPlatform.buildRustPackage {
+  pname = "ruffle";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
-    repo = pname;
+    repo = "ruffle";
     rev = version;
     hash = "sha256-3G5xSGdMl4ISQmb2BVGdKz1cXU5Mnl+VkVYpJ6P12og=";
   };
