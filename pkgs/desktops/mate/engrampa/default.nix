@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , itstool
@@ -22,6 +23,15 @@ stdenv.mkDerivation rec {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "8CJBB6ek6epjCcnniqX6rIAsTPcqSawoOqnnrh6KbEo=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/mate-desktop/engrampa/security/advisories/GHSA-c98h-v39w-3r7v
+      name = "CVE-2023-52138.patch";
+      url = "https://github.com/mate-desktop/engrampa/commit/63d5dfa9005c6b16d0f0ccd888cc859fca78f970.patch";
+      hash = "sha256-0N5JifaT/uX3KJd11CDLxl/woBNVpFoaz8xYQsacH+8=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
