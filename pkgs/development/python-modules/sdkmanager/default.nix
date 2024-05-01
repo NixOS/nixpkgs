@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "sdkmanager";
-  version = "0.6.6";
+  version = "0.6.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fdroid";
     repo = pname;
     rev = version;
-    hash = "sha256-Vuht2gH9ivNG7PgG+XKtkdKoszkkoI91reQKg6D50xs=";
+    hash = "sha256-8Iq3sVp9/dZi4zNZIgNm38ntoA2koS/Ism+pIVATr4Q=";
   };
 
   propagatedBuildInputs = [
