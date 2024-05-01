@@ -138,9 +138,8 @@ let
 
         inherit config;
 
-        extraBuildInputs = [ prevStage.darwin.CF ];
-        extraNativeBuildInputs = extraNativeBuildInputs
-          ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
+        extraBuildInputs = [ prevStage.darwin.CF prevStage.darwin.apple_sdk.sdkRoot ];
+        extraNativeBuildInputs = extraNativeBuildInputs;
 
         preHook = lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
           # Don't patch #!/interpreter because it leads to retained
@@ -789,7 +788,7 @@ in
           # libc++, and libc++abi do not need CoreFoundation. Avoid propagating the CF from prior
           # stages to the final stdenv via rpath by dropping it from `extraBuildInputs`.
           stdenvNoCF = self.stdenv.override {
-            extraBuildInputs = [ ];
+            extraBuildInputs = [ prevStage.darwin.apple_sdk.sdkRoot ];
           };
 
           libcxxBootstrapStdenv = self.overrideCC stdenvNoCF (self.llvmPackages.clangNoCompilerRtWithLibc.override {
@@ -917,7 +916,7 @@ in
             compiler-rt = superLib.compiler-rt.override ({
               inherit (self.llvmPackages) libllvm;
               stdenv = self.stdenv.override {
-                extraBuildInputs = [ self.darwin.CF ];
+                extraBuildInputs = [ self.darwin.CF prevStage.darwin.apple_sdk.sdkRoot ];
               };
             });
           });
@@ -930,7 +929,7 @@ in
       stdenv =
         let
           stdenvNoCF = super.stdenv.override {
-            extraBuildInputs = [ ];
+            extraBuildInputs = [ prevStage.darwin.apple_sdk.sdkRoot ];
           };
         in
         self.overrideCC stdenvNoCF (self.llvmPackages.clangNoCompilerRtWithLibc.override {
@@ -1240,9 +1239,9 @@ in
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
         prevStage.updateAutotoolsGnuConfigScriptsHook
-      ] ++ [ prevStage.darwin.apple_sdk.sdkRoot ];
+      ];
 
-      extraBuildInputs = [ prevStage.darwin.CF ];
+      extraBuildInputs = [ prevStage.darwin.CF prevStage.darwin.apple_sdk.sdkRoot ];
 
       inherit cc;
 
