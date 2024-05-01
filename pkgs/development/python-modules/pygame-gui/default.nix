@@ -2,6 +2,7 @@
 , pkgs
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pygame-ce
 , python-i18n
 , pytestCheckHook
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pygame-gui";
   version = "0610";
-  format = "setuptools";
+  pyproject = true;
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-PVNi/I174AyEEjc+N2UGtgOYSGAgVQbqrKkWZnjOxFY=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     pygame-ce
     python-i18n
@@ -27,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
-      --replace "xsel" "${pkgs.xsel}/bin/xsel"
+      --replace-fail "xsel" "${lib.getExe pkgs.xsel}"
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
