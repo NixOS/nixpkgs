@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "total-connect-client";
   version = "2024.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-LuPyhidbAzt/AU5WuXyxggGxjm9yArHsbn6iAaccMEc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     zeep
   ];
 
