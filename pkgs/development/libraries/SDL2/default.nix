@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       rpath = lib.makeLibraryPath (finalAttrs.dlopenPropagatedBuildInputs ++ finalAttrs.dlopenBuildInputs);
     in
-    lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
+    lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary or "none" == ".so") ''
       for lib in $out/lib/*.so* ; do
         if ! [[ -L "$lib" ]]; then
           patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
