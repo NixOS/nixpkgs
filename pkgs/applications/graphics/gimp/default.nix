@@ -79,7 +79,7 @@ in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
   version = "2.99.18-unstable-2024-05-01";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   # src = fetchurl {
   #   url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
