@@ -89,6 +89,7 @@ let
     thumbfast = callPackage ./thumbfast.nix { };
     thumbnail = callPackage ./thumbnail.nix { };
     uosc = callPackage ./uosc.nix { };
+    videoclip = callPackage ./videoclip.nix { };
     visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
