@@ -5,6 +5,7 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, nix-update-script
 , pkg-config
 , udev
 , openssl
@@ -19,23 +20,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-rc.16";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    # Latest revision of 1.1.0-rc.16 stable branch
-    rev = "e51d0dee44ecabbf7be9e855753453bb2f61cced";
-    hash = "sha256-YgrlmSrjOzn/oFWmYy/71xwcq53lJbmiLIFzn2sIFAk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Clg9jQgKvWP9LniHmNq+WjRmEOzJGfuCU2K9ActZhzo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "base64urlsafedata-0.1.3" = "sha256-lYVWuKqF4c34LpFmTIg98TEXIlP4dHen0XkGnLOiq8Q=";
-      "sshkeys-0.3.2" = "sha256-CNG9HW8kSwezAdIYW+CR5rqFfmuso4R0+m4OpIyXbSM=";
-    };
-  };
+  cargoHash = "sha256-m3H2mQm+k6vFH+nP+hWl07Z7NJKJlt1E4eRDRA2Z0+o=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -87,7 +81,13 @@ rustPlatform.buildRustPackage rec {
     mv $out/lib/libpam_kanidm.so $out/lib/pam_kanidm.so
   '';
 
-  passthru.tests = { inherit (nixosTests) kanidm; };
+  passthru = {
+    tests = {
+      inherit (nixosTests) kanidm;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
