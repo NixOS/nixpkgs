@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ lib.maintainers.puffnfresh ];
     platforms = lib.platforms.linux;
+    mainProgram = "RSDKv5U";
   };
 }
