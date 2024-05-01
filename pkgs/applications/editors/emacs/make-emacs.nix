@@ -307,31 +307,33 @@ mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "--disable-build-details" # for a (more) reproducible build
-    "--with-modules"
+    (lib.enableFeature false "build-details") # for a (more) reproducible build
+    (lib.withFeature true "modules")
   ] ++ (if withNS then [
-    "--disable-ns-self-contained"
+    (lib.enableFeature false "ns-self-contained")
   ] else if withX then [
-    "--with-x-toolkit=${toolkit}"
-    "--with-xft"
-    "--with-cairo"
+    (lib.withFeatureAs true "x-toolkit" toolkit)
+    (lib.withFeature true "cairo")
+    (lib.withFeature true "xft")
   ] else if withPgtk then [
-    "--with-pgtk"
+    (lib.withFeature true "pgtk")
   ] else [
-    "--with-gif=no"
-    "--with-jpeg=no"
-    "--with-png=no"
-    "--with-tiff=no"
-    "--with-x=no"
-    "--with-xpm=no"
+    (lib.withFeature false "gif")
+    (lib.withFeature false "jpeg")
+    (lib.withFeature false "png")
+    (lib.withFeature false "tiff")
+    (lib.withFeature false "x")
+    (lib.withFeature false "xpm")
   ])
   ++ lib.optionals (variant == "macport") [
-    "--enable-mac-app=$$out/Applications"
-    "--with-gnutls=yes"
-    "--with-mac"
-    "--with-xml2=yes"
+    (lib.enableFeatureAs true "mac-app" "$$out/Applications")
+    (lib.withFeature true "gnutls")
+    (lib.withFeature true "mac")
+    (lib.withFeature true "xml2")
   ]
-  ++ (lib.optional stdenv.isDarwin (lib.withFeature withNS "ns"))
+  ++ lib.optionals stdenv.isDarwin [
+    (lib.withFeature withNS "ns")
+  ]
   ++ [
     (lib.withFeature withCompressInstall "compress-install")
     (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
