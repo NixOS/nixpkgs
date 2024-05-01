@@ -33780,7 +33780,7 @@ with pkgs;
     enableDbusUi = false;
   };
 
-  parsec-bin = callPackage ../applications/misc/parsec/bin.nix { };
+  parsec-bin = callPackage ../applications/misc/parsec { };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
