@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl, writeTextDir
-, withCMake ? true, cmake
-
-# sensitive downstream packages
-, curl
-, grpc # consumes cmake config
+{
+  lib,
+  cmake,
+  curl, # sensitive downstream package
+  fetchurl,
+  grpc, # sensitive downstream package; consumes cmake config
+  stdenv,
+  writeTextDir,
+  # Boolean flags
+  withCMake ? true,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -11,36 +15,38 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "c-ares";
   version = "1.27.0";
 
   src = fetchurl {
-    url = "https://c-ares.org/download/${pname}-${version}.tar.gz";
+    url = "https://c-ares.org/download/c-ares-${finalAttrs.version}.tar.gz";
     hash = "sha256-CnK+ZpWZVcQ+KvL70DQY6Cor1UZGBOyaYhR+N6zrQgs=";
   };
 
-  outputs = [ "out" "dev" "man" ];
-
   nativeBuildInputs = lib.optionals withCMake [ cmake ];
 
-  cmakeFlags = [] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "-DCARES_SHARED=OFF"
-    "-DCARES_STATIC=ON"
+  cmakeFlags = lib.optionals withCMake [
+    (lib.cmakeBool "ARES_SHARED" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "ARES_STATIC" stdenv.hostPlatform.isStatic)
   ];
 
+  outputs = [ "out" "dev" "man" ];
+
   enableParallelBuilding = true;
+
+  strictDeps = true;
 
   passthru.tests = {
     inherit grpc;
     curl = (curl.override { c-aresSupport = true; }).tests.withCheck;
   };
 
-  meta = with lib; {
+  meta = {
+    homepage = "https://c-ares.org";
     description = "A C library for asynchronous DNS requests";
-    homepage = "https://c-ares.haxx.se";
-    changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
-    license = licenses.mit;
-    platforms = platforms.all;
+    changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
-}
+})
