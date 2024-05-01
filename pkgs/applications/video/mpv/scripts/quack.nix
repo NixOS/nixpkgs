@@ -6,10 +6,10 @@
 buildLua rec {
   pname = "mpv-quack";
 
-  version = "unstable-2020-05-26";
+  version = "0-unstable-2020-05-27";
   src = fetchFromGitHub {
     owner = "CounterPillow";
-    repo  = pname;
+    repo  = "mpv-quack";
     rev   = "1c87f36f9726d462dd112188c04be54d85692cf3";
     hash  = "sha256-dEnJbS8RJoAxpKINdoMHN4l7vpEdf7+C5JVWpK0VXMw=";
   };
@@ -24,8 +24,8 @@ buildLua rec {
       The volume is linearly increased back up to its original level.
       Repeated seeks before the transition is done work as well.
     '';
-    homepage = "https://github.com/CounterPillow/quack";
-    license = lib.licenses.gpl3;
+    homepage = "https://github.com/CounterPillow/mpv-quack";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nicoo ];
   };
 }

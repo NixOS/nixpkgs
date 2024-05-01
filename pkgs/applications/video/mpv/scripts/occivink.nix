@@ -13,7 +13,7 @@ let
   mkScript = name: args:
     let self = rec {
       pname = camelToKebab name;
-      version = "unstable-2024-01-11";
+      version = "0-unstable-2024-01-11";
       src = fetchFromGitHub {
         owner = "occivink";
         repo = "mpv-scripts";

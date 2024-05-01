@@ -819,7 +819,8 @@ in {
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"));
+        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
+        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -832,10 +833,12 @@ in {
           else if versionOlder stateVersion "23.05" then nextcloud25
           else if versionOlder stateVersion "23.11" then nextcloud26
           else if versionOlder stateVersion "24.05" then nextcloud27
-          else nextcloud28
+          else nextcloud29
         );
 
-      services.nextcloud.phpPackage = pkgs.php82;
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "29" then pkgs.php82
+        else pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
