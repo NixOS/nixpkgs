@@ -2,13 +2,18 @@
 
 let
   cfg = config.services.temp-throttle;
-  configFile = let toString = builtins.toString; in
-    "MAX_TEMP=${toString cfg.max_temp}\n" +
-    lib.optionalString (cfg.interval  != null) "INTERVAL=${toString cfg.interval}\n" +
-    lib.optionalString (cfg.temp_file != null) "TEMP_FILE=${cfg.temp_file}\n" +
-    lib.optionalString (cfg.core      != null) "CORE=${toString cfg.core}\n" +
-    lib.optionalString (cfg.log_file  != null) "LOG_FILE=${cfg.log_file}\n"
-  ;
+  configFile = let toString = builtins.toString;
+  in ''
+    MAX_TEMP=${toString cfg.max_temp}
+  '' + lib.optionalString (cfg.interval != null) ''
+    INTERVAL=${toString cfg.interval}
+  '' + lib.optionalString (cfg.temp_file != null) ''
+    TEMP_FILE=${cfg.temp_file}
+  '' + lib.optionalString (cfg.core != null) ''
+    CORE=${toString cfg.core}
+  '' + lib.optionalString (cfg.log_file != null) ''
+    LOG_FILE=${cfg.log_file}
+  '';
 in {
   options = let
     mkOption = lib.mkOption;
