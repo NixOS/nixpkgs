@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchsvn, fetchzip, pkg-config, zlib, libpng, bzip2
-, SDL2, SDL2_mixer, config, symlinkJoin, makeWrapper, runCommand, cabextract }:
+, SDL2, SDL2_mixer, symlinkJoin, makeWrapper, runCommand, cabextract }:
 let
   fetchcab = args:
     let src = fetchurl args;
@@ -8,15 +8,6 @@ let
     '';
 
   fetchzip' = defaults: args: fetchzip (defaults // args);
-
-  # Choose your "paksets" of objects, images, text, music, etc.
-  paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
-
-  result = with lib;
-    withPaks (if paksets == "*" then
-      attrValues pakSpec # taking all
-    else
-      map (name: pakSpec.${name}) (splitString " " paksets));
 
   version = "123.0.1";
 
@@ -187,6 +178,7 @@ let
 
       passthru.meta = binaries.meta // { hydraPlatforms = [ ]; };
       passthru.binaries = binaries;
+      passthru.pakSpec = pakSpec;
     };
 
   binaries = stdenv.mkDerivation {
@@ -272,4 +264,7 @@ let
       platforms = with platforms; linux; # TODO: ++ darwin;
     };
   };
-in result
+in
+  lib.makeOverridable ({ paks }: withPaks paks) {
+    paks = lib.attrValues pakSpec;
+  }
