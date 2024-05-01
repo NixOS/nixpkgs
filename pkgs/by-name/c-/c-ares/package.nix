@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "c-ares";
-  version = "1.27.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://c-ares.org/download/c-ares-${finalAttrs.version}.tar.gz";
-    hash = "sha256-CnK+ZpWZVcQ+KvL70DQY6Cor1UZGBOyaYhR+N6zrQgs=";
+    hash = "sha256-Z1pp/FTdv0LmgwvGce62zYnuykOCjrQTJD/SwKdggJ0=";
   };
 
   nativeBuildInputs = lib.optionals withCMake [ cmake ];
