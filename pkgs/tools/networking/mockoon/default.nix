@@ -6,11 +6,11 @@
 
 let
   pname = "mockoon";
-  version = "8.0.0";
+  version = "8.1.1";
 
   src = fetchurl {
     url = "https://github.com/mockoon/mockoon/releases/download/v${version}/mockoon-${version}.x86_64.AppImage";
-    hash = "sha256-mhUjV8yFXS76kJDj28VeIv4/PlnKos/Ugo9k3RHnRaM=";
+    hash = "sha256-USL/arTewBOe6xiN5iIB5eayU62xHY47y5OS8YWtIUs=";
   };
 
   appimageContents = appimageTools.extractType2 {
