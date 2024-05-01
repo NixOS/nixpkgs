@@ -102,7 +102,7 @@ python3.pkgs.buildPythonApplication rec  {
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     description = "A modern music player for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/Lollypop";
+    homepage = "https://gitlab.gnome.org/World/lollypop";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
