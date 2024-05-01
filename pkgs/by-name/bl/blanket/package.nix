@@ -1,31 +1,34 @@
-{ lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, desktop-file-utils
-, appstream-glib
-, python3Packages
-, glib
-, gtk4
-, libadwaita
-, gobject-introspection
-, gst_all_1
+{
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  blueprint-compiler,
+  desktop-file-utils,
+  appstream-glib,
+  python3Packages,
+  glib,
+  gtk4,
+  libadwaita,
+  gobject-introspection,
+  gst_all_1,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "blanket";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "blanket";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-4gthT1x76IfXWkLaLMPtFS4TRlRGk5Enbu/k1jAHzwE=";
+    rev = version;
+    hash = "sha256-mY7c5i0me7mMbD8c6eGJeaZpR8XI5QVL4n3M+j15Z1c=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -44,9 +47,7 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-bad
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pygobject3
-  ];
+  propagatedBuildInputs = with python3Packages; [ pygobject3 ];
 
   format = "other";
 
@@ -56,12 +57,12 @@ python3Packages.buildPythonApplication rec {
       --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/rafaelmardojai/blanket";
+  meta = {
     description = "Listen to different sounds";
+    homepage = "https://github.com/rafaelmardojai/blanket";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "blanket";
-    maintainers = with maintainers; [ onny ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
   };
 }
