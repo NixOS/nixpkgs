@@ -37,7 +37,7 @@ maven.buildMavenPackage rec {
       - perform GOQL queries and export the results in a variety of formats.
     '';
     homepage = "https://docs.geodesk.com/gol";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = [ maintainers.starsep ];
     platforms = platforms.all;
   };
