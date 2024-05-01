@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An input assistive technology intended for switch and pointer users";
     mainProgram = "caribou-preferences";
-    homepage = "https://wiki.gnome.org/Projects/Caribou";
+    homepage = "https://gitlab.gnome.org/Archive/caribou";
     license = licenses.lgpl21;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
