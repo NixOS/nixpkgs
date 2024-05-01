@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.18.1";
+  version = "2.19.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-fzxshqh2QurpbilG0gC3NWnUntTRoxOHPpfpg6bPI98=";
+    hash = "sha256-kXRz78UHQtVyHFFnURSjOOXX8Me2I5tG2bX+u2yGyzY=";
   };
 
   build-system = [
