@@ -179,6 +179,19 @@ in lib.makeExtensible (self: ({
     hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
   };
 
+  git = common rec {
+    version = "2.23.0";
+    suffix = "pre20240426_${lib.substring 0 8 src.rev}";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "2f678331d59451dd6f1d9512cb6d92e4ecb9750f";
+      hash = "sha256-4AwaLB/gTRgvZG4FmFY6OY52yeLAnj0a6rtJCz7TRXA=";
+    };
+  };
+
+  latest = self.nix_2_21;
+
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
   # making this package an inaccurate representation of what features are available
@@ -197,8 +210,6 @@ in lib.makeExtensible (self: ({
       nix;
 
   stable = addFallbackPathsCheck self.nix_2_18;
-
-  unstable = self.nix_2_22;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -207,4 +218,7 @@ in lib.makeExtensible (self: ({
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
   ) (lib.range 4 17))
+  // {
+    unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
+  }
 )))
