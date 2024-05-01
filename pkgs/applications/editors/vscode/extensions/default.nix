@@ -4573,6 +4573,22 @@ let
         };
       };
 
+      vue.volar = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "volar";
+          publisher = "Vue";
+          version = "2.0.16";
+          hash = "sha256-RTBbF7qahYP4L7SZ/5aCM/e5crZAyyPRcgL48FVL1jk=";
+        };
+        meta = {
+          changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
+          description = "The official Vue VSCode extension";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Vue.volar";
+          homepage = "https://github.com/vuejs/language-tools";
+          license = lib.licenses.mit;
+        };
+      };
+
       vspacecode.whichkey = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "whichkey";
