@@ -178,9 +178,6 @@ stdenv.mkDerivation rec {
     "-Druntime_cxxmodules=OFF"
   ];
 
-  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
-
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
