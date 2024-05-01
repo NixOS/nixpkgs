@@ -1,4 +1,4 @@
-{ lib, stdenv, patchelf, makeWrapper
+{ lib, stdenv, patchelf, makeWrapper, fetchurl
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
@@ -31,9 +31,6 @@
 # Necessary for USB audio devices.
 , pulseSupport ? true, libpulseaudio
 
-# Only needed for getting information about upstream binaries
-, chromium
-
 , gsettings-desktop-schemas
 , gnome
 
@@ -48,8 +45,6 @@ let
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
   };
-
-  version = chromium.upstream-info.version;
 
   deps = [
     glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
@@ -67,12 +62,14 @@ let
     ++ lib.optional libvaSupport libva
     ++ [ gtk3 gtk4 ];
 
-in stdenv.mkDerivation {
-  inherit version;
-
+in stdenv.mkDerivation (finalAttrs: {
   pname = "google-chrome";
+  version = "124.0.6367.118";
 
-  src = chromium.chromeSrc;
+  src = fetchurl {
+    url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
+    hash = "sha256-H3bv6WiVBl4j38ROZ80+SD9UO9ok+xxcKFxDd9yjWNY=";
+  };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
@@ -150,11 +147,8 @@ in stdenv.mkDerivation {
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ primeos ];
-    # Note from primeos: By updating Chromium I also update Google Chrome and
-    # will try to merge PRs and respond to issues but I'm not actually using
-    # Google Chrome.
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "google-chrome-stable";
   };
-}
+})
