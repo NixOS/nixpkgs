@@ -184,6 +184,32 @@ Alternatively, extra apps can also be declared with the [](#opt-services.nextclo
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
 that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
 
+## Known warnings {#module-services-nextcloud-known-warnings}
+
+### Failed to get an iterator for log entries: Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+
+This is because
+
+* our module writes logs into the journal (`journalctl -t Nextcloud`)
+* the Logreader application that allows reading logs in the admin panel is enabled
+  by default and requires logs written to a file.
+
+The logreader application doesn't work, as it was the case before. The only change is that
+it complains loudly now. So nothing actionable here by default. Alternatively you can
+
+* disable the logreader application to shut up the "error".
+
+  We can't really do that by default since whether apps are enabled/disabled is part
+  of the application's state and tracked inside the database.
+
+* set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
+  from the admin panel.
+
+### Your web server is not properly set up to resolve `.well-known` URLs, failed on: `/.well-known/caldav` {#module-services-nextcloud-warning-wellknown-caldav}
+
+This warning appearing seems to be an upstream issue and is being sorted out
+in [nextcloud/server#45033](https://github.com/nextcloud/server/issues/45033).
+
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
 As stated in the previous paragraph, we must provide a clean upgrade-path for Nextcloud
