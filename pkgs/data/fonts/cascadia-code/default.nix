@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cascadia-code";
-  version = "2111.01";
+  version = "2404.23";
 
   src = fetchzip {
     url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
     stripRoot = false;
-    hash = "sha256-v9Vm5X80wEvorMhIlRw3MnyuSOdBpTl9ibBPpmm1vig=";
+    hash = "sha256-Z2AzBeNiM6mc1OHCJRv0rUvH8WRygyQGSOvwbAISYHE=";
   };
 
   installPhase = ''
