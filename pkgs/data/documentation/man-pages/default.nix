@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
 
   enableParallelInstalling = true;
 
+  postInstall = ''
+    # The manpath executable looks up manpages from PATH. And this package won't
+    # appear in PATH unless it has a /bin folder. Without the change
+    # 'nix-shell -p man-pages' does not pull in the search paths.
+    # See 'man 5 manpath' for the lookup order.
+    mkdir -p $out/bin
+  '';
+
   meta = with lib; {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
