@@ -48,7 +48,6 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps

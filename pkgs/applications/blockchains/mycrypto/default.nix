@@ -1,5 +1,4 @@
-{ lib, appimageTools, fetchurl, makeDesktopItem
-}:
+{ lib, appimageTools, fetchurl, makeDesktopItem }:
 
 let
   pname = "MyCrypto";
@@ -26,8 +25,6 @@ let
 
 in appimageTools.wrapType2 {
   inherit pname version src;
-
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share

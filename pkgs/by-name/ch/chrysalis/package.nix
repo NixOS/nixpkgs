@@ -14,7 +14,7 @@ let
 in appimageTools.wrapType2 rec {
   inherit name pname src;
 
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.glib ];
+  extraPkgs = pkgs: [ pkgs.glib ];
 
   # Also expose the udev rules here, so it can be used as:
   #   services.udev.packages = [ pkgs.chrysalis ];

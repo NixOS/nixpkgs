@@ -31,7 +31,6 @@ in appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
     mkdir "$out/share"
     ln -s "${desktopItem}/share/applications" "$out/share/"

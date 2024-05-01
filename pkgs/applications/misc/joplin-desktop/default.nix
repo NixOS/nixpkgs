@@ -49,7 +49,6 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \

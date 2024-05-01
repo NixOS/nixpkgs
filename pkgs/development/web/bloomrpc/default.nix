@@ -21,8 +21,6 @@ appimageTools.wrapType2 {
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
-
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png \
