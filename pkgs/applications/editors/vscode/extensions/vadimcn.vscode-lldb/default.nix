@@ -1,5 +1,20 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
-, buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret, darwin
+{
+  pkgs,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  rustPlatform,
+  makeWrapper,
+  llvmPackages,
+  buildNpmPackage,
+  cmake,
+  nodejs,
+  unzip,
+  python3,
+  pkg-config,
+  libsecret,
+  darwin,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
@@ -31,9 +46,7 @@ let
 
     nativeBuildInputs = [ makeWrapper ];
 
-    env = lib.optionalAttrs stdenv.isDarwin {
-      NIX_LDFLAGS = "-llldb -lc++abi";
-    };
+    env = lib.optionalAttrs stdenv.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
 
     buildAndTestSubdir = "adapter";
 
@@ -76,12 +89,15 @@ let
       pkg-config
     ];
 
-    buildInputs = [
-      libsecret
-    ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      Security
-      AppKit
-    ]);
+    buildInputs =
+      [ libsecret ]
+      ++ lib.optionals stdenv.isDarwin (
+        with darwin.apple_sdk.frameworks;
+        [
+          Security
+          AppKit
+        ]
+      );
 
     dontNpmBuild = true;
 
@@ -103,14 +119,25 @@ let
       "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
     else
       "${lldb.out}/bin/lldb-server";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
-  inherit src version vscodeExtUniqueId vscodeExtPublisher vscodeExtName;
+  inherit
+    src
+    version
+    vscodeExtUniqueId
+    vscodeExtPublisher
+    vscodeExtName
+    ;
 
   installPrefix = "share/vscode/extensions/${vscodeExtUniqueId}";
 
-  nativeBuildInputs = [ cmake nodejs unzip makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    nodejs
+    unzip
+    makeWrapper
+  ];
 
   patches = [ ./cmake-build-extension-only.patch ];
 
@@ -120,12 +147,14 @@ in stdenv.mkDerivation {
       --replace "1.9.2" ${version}
   '';
 
-  postConfigure = ''
-    cp -r ${nodeDeps}/lib/node_modules .
-  '' + lib.optionalString stdenv.isDarwin ''
-    export HOME="$TMPDIR/home"
-    mkdir $HOME
-  '';
+  postConfigure =
+    ''
+      cp -r ${nodeDeps}/lib/node_modules .
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      export HOME="$TMPDIR/home"
+      mkdir $HOME
+    '';
 
   cmakeFlags = [
     # Do not append timestamp to version.

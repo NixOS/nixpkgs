@@ -1,8 +1,19 @@
-{ lib, vscode-utils
-, fetchurl, writeScript, runtimeShell
-, jq, clang-tools
-, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
-, autoPatchelfHook, makeWrapper, stdenv, lttng-ust, libkrb5, zlib
+{
+  lib,
+  vscode-utils,
+  fetchurl,
+  writeScript,
+  runtimeShell,
+  jq,
+  clang-tools,
+  gdbUseFixed ? true,
+  gdb, # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+  autoPatchelfHook,
+  makeWrapper,
+  stdenv,
+  lttng-ust,
+  libkrb5,
+  zlib,
 }:
 
 /*
@@ -94,7 +105,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.jraygauthier lib.maintainers.stargate01 ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = [
+      lib.maintainers.jraygauthier
+      lib.maintainers.stargate01
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

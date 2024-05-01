@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "whenever";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ariebovenberg";
     repo = "whenever";
     rev = "refs/tags/${version}";
-    hash = "sha256-RH2614M91zYULNTQsr6JoKfxlnGyAJsCkB7oeiz7urs=";
+    hash = "sha256-bG8LV+r5MjA1JwBHWy9/Io4daldAlyEGYNLW+5ITuOw=";
   };
 
   postPatch = ''
