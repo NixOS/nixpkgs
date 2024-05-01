@@ -316,9 +316,9 @@ in
       };
 
       mailErrorSummaryTo = mkOption {
-        type = str;
+        type = singleLineStr;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Email address to send a summary to if "send task(s) failed".
         '';
       };
