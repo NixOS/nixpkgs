@@ -11,14 +11,14 @@
 }:
 beamPackages.mixRelease rec {
   pname = "akkoma";
-  version = "3.12.2";
+  version = "3.13.1";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
-    hash = "sha256-eKvfuHTLmUU6Dom/GctPSbhrAAik1T/7bYY5j3YUkRo=";
+    hash = "sha256-KRU7uEiwBimPz0HA+SClYt9/ubKNaRCArTGSiWvvVg8=";
   };
 
   postPatch = ''
