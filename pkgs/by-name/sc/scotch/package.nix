@@ -1,24 +1,39 @@
-{ lib, stdenv, fetchurl, bison, mpi, flex, zlib}:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  bison,
+  mpi,
+  flex,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
-  version = "6.1.1";
+stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
-  src_name = "scotch_${version}";
+  version = "6.1.1";
 
-  buildInputs = [ bison mpi flex zlib ];
+  buildInputs = [
+    bison
+    mpi
+    flex
+    zlib
+  ];
 
-  src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/34618/${src_name}.tar.gz";
-    sha256 = "sha256-OQUvWf9HSkppzvwlzzyvhClACIneugEO5kA8oYj4sxE=";
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = "scotch";
+    repo = "scotch";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GUV6s+P56OAJq9AMe+LZOMPICQO/RuIi+hJAecmO5Wc=";
   };
 
-  sourceRoot = "${src_name}/src";
-
   preConfigure = ''
+    cd src
     ln -s Make.inc/Makefile.inc.x86-64_pc_linux2 Makefile.inc
   '';
 
   buildFlags = [ "scotch ptscotch" ];
+
   installFlags = [ "prefix=\${out}" ];
 
   meta = {
@@ -32,5 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };
-}
-
+})

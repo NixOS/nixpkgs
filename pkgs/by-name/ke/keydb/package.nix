@@ -18,14 +18,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keydb";
   version = "6.3.4";
 
   src = fetchFromGitHub {
     owner = "snapchat";
     repo = "keydb";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j6qgK6P3Fv+b6k9jwKQ5zW7XLkKbXXcmHKBCQYvwEIU=";
   };
 
@@ -94,13 +94,13 @@ stdenv.mkDerivation rec {
   passthru.tests.redis = nixosTests.redis;
   passthru.serverBin = "keydb-server";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://keydb.dev";
     description = "A Multithreaded Fork of Redis";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    changelog = "https://github.com/Snapchat/KeyDB/raw/v${version}/00-RELEASENOTES";
-    maintainers = teams.helsinki-systems.members;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    changelog = "https://github.com/Snapchat/KeyDB/raw/v${finalAttrs.version}/00-RELEASENOTES";
+    maintainers = lib.teams.helsinki-systems.members;
     mainProgram = "keydb-cli";
   };
-}
+})

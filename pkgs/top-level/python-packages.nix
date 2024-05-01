@@ -7114,6 +7114,8 @@ self: super: with self; {
 
   manhole = callPackage ../development/python-modules/manhole { };
 
+  manim = callPackage ../development/python-modules/manim { };
+
   manimpango = callPackage ../development/python-modules/manimpango {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
@@ -13404,6 +13406,8 @@ self: super: with self; {
   ruamel-yaml = callPackage ../development/python-modules/ruamel-yaml { };
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
+
+  rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 

@@ -1,8 +1,31 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    attrValues
+    concatMapStrings
+    concatStringsSep
+    const
+    elem
+    filterAttrs
+    isString
+    literalExpression
+    mapAttrs
+    mapAttrsToList
+    mkAfter
+    mkBefore
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optionalString
+    types
+    versionAtLeast
+    ;
 
   cfg = config.services.postgresql;
 
@@ -24,7 +47,7 @@ let
     if true == value then "yes"
     else if false == value then "no"
     else if isString value then "'${lib.replaceStrings ["'"] ["''"] value}'"
-    else toString value;
+    else builtins.toString value;
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)));
@@ -439,7 +462,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = map ({ name, ensureDBOwnership, ... }: {
-      assertion = ensureDBOwnership -> builtins.elem name cfg.ensureDatabases;
+      assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
         `ensureDBOwnership = true;`, a database with the same name must be defined
@@ -537,7 +560,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="psql --port=${toString cfg.settings.port}"
+            PSQL="psql --port=${builtins.toString cfg.settings.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi

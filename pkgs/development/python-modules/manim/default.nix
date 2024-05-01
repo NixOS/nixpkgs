@@ -1,11 +1,43 @@
 { lib
+, buildPythonPackage
 , fetchFromGitHub
+, poetry-core
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 
 , cairo
 , ffmpeg
 , texliveInfraOnly
 
-, python3
+, click
+, click-default-group
+, cloup
+, colour
+, grpcio
+, grpcio-tools
+, importlib-metadata
+, isosurfaces
+, jupyterlab
+, manimpango
+, mapbox-earcut
+, moderngl
+, moderngl-window
+, networkx
+, numpy
+, pillow
+, pycairo
+, pydub
+, pygments
+, rich
+, scipy
+, screeninfo
+, skia-pathops
+, srt
+, svgelements
+, tqdm
+, watchdog
 }:
 
 let
@@ -42,13 +74,11 @@ let
     babel-english gnu-freefont mathastext cbfonts-fd
   ]);
 
-  python = python3;
-
-in python.pkgs.buildPythonApplication rec {
+in buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
   version = "0.18.1";
-  disabled = python3.pythonOlder "3.9";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner  = "ManimCommunity";
@@ -57,7 +87,7 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
   ];
@@ -81,7 +111,7 @@ in python.pkgs.buildPythonApplication rec {
 
   buildInputs = [ cairo ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = [
     click
     click-default-group
     cloup
@@ -101,7 +131,6 @@ in python.pkgs.buildPythonApplication rec {
     pycairo
     pydub
     pygments
-    pysrt
     rich
     scipy
     screeninfo
@@ -122,10 +151,9 @@ in python.pkgs.buildPythonApplication rec {
   nativeCheckInputs = [
     ffmpeg
     manim-tinytex
-  ] ++ (with python.pkgs; [
     pytest-xdist
     pytestCheckHook
-  ]);
+  ];
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;

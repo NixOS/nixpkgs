@@ -25,15 +25,15 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-linux";
   version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DU9tvIvDfOtBydR68yeRMFYdMjiBrOobCDXIZMmm7pQ=";
+    repo = "whatsapp-for-linux";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DU9tvIvDfOtBydR68yeRMFYdMjiBrOobCDXIZMmm7pQ=";
   };
 
   nativeBuildInputs = [
@@ -68,12 +68,12 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/eneshecan/whatsapp-for-linux";
     description = "Whatsapp desktop messaging app";
     mainProgram = "whatsapp-for-linux";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bartuka ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ bartuka ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
