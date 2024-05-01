@@ -27,6 +27,7 @@
 , libkrb5
 , libfido2
 , libxcrypt
+, shadow
 , hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
@@ -86,6 +87,7 @@ stdenv.mkDerivation {
     "--with-mantype=man"
     "--with-libedit=yes"
     "--disable-strip"
+    "ac_cv_path_PATH_PASSWD_PROG=${shadow}/bin/passwd"
     (lib.withFeature withPAM "pam")
     (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
