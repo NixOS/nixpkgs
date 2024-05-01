@@ -17,7 +17,7 @@
 , capnproto
 }:
 rustPlatform.buildRustPackage rec{
-  pname = "turbo";
+  pname = "turbo-unwrapped";
   version = "1.13.2";
   src = fetchFromGitHub {
     owner = "vercel";
