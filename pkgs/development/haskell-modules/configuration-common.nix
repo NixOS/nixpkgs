@@ -1847,9 +1847,6 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
-  # https://github.com/obsidiansystems/dependent-sum/issues/55
-  dependent-sum = doJailbreak super.dependent-sum;
-
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
 
