@@ -23,11 +23,11 @@ buildLua rec {
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \
-      --replace "'curl" "'${curl}/bin/curl"
+      --replace-fail "'curl" "'${curl}/bin/curl"
     substituteInPlace platform/nix.lua \
-      --replace "'curl" "'${curl}/bin/curl" \
-      --replace "'wl-copy" "'${wl-clipboard}/bin/wl-copy" \
-      --replace "'xclip" "'${xclip}/bin/xclip"
+      --replace-fail "'curl" "'${curl}/bin/curl" \
+      --replace-fail "'wl-copy" "'${wl-clipboard}/bin/wl-copy" \
+      --replace-fail "'xclip" "'${xclip}/bin/xclip"
   '';
 
   installPhase = ''

@@ -14,7 +14,7 @@ buildLua rec {
 
   postPatch = ''
     substituteInPlace playlistmanager.lua \
-      --replace 'youtube_dl_executable = "youtube-dl",' \
+      --replace-fail 'youtube_dl_executable = "youtube-dl",' \
       'youtube_dl_executable = "${lib.getBin yt-dlp}/bin/yt-dlp"',
   '';
 
