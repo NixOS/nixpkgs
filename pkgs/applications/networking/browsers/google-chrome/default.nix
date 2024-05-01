@@ -147,7 +147,7 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ jnsgruk ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "google-chrome-stable";
   };
