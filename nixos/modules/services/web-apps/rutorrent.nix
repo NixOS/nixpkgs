@@ -109,7 +109,7 @@ in {
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = lib.mdDoc ''
+          description = ''
             These lines go to the end of the vhost verbatim.
           '';
         };
