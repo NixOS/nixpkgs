@@ -29,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.44.0";
+  version = "2.45.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-41hzjctbXqNAzpAKABXAOuhugE5/9k5HqkYx3e5oHeM=";
+    hash = "sha256-CqwgC9BkduffH/Am6xI8aCe8EP5p0oI7S/Lr6+WVNCk=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -318,7 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t0001-init 'shared overrides system'
     disable_test t0001-init 'init honors global core.sharedRepository'
     disable_test t1301-shared-repo
-    # /build/git-2.44.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
+    # /build/git-2.45.0/contrib/completion/git-completion.bash: line 452: compgen: command not found
     disable_test t9902-completion
 
     # Our patched gettext never fallbacks
