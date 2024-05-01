@@ -35,11 +35,6 @@ stdenv'.mkDerivation {
     hash = "sha256-2NcKb2SWU/vNsnd2KhdU85J60fJPuc44ZxIle/1UT6g=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail glm::glm-header-only glm::glm
-  '';
-
   nativeBuildInputs = [
     cmake
     ninja
