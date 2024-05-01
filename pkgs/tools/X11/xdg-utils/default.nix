@@ -3,6 +3,7 @@
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
 , resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
+, shared-mime-info
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -121,6 +122,7 @@ let
         "$KTRADER" = true;
       };
       prologue = "${writeText "xdg-mime-prologue" ''
+        export XDG_DATA_DIRS="$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${shared-mime-info}/share"
         export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
         export PATH=$PATH:${lib.makeBinPath [ coreutils perlPackages.FileMimeInfo ]}
       ''}";
