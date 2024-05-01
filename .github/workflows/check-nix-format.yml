@@ -37,6 +37,7 @@ jobs:
             pkgs/development/cuda-modules
             pkgs/test/cuda
             pkgs/top-level/cuda-packages.nix
+          NIX_FMT_PATHS_VSCODE_EXTS: pkgs/applications/editors/vscode/extensions
         # Iterate over all environment variables beginning with NIX_FMT_PATHS_.
         run: |
           for env_var in "${!NIX_FMT_PATHS_@}"; do
