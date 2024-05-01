@@ -13490,6 +13490,8 @@ self: super: with self; {
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
 
+  sanix = callPackage ../development/python-modules/sanix { };
+
   sansio-multipart = callPackage ../development/python-modules/sansio-multipart { };
 
   sarif-om = callPackage ../development/python-modules/sarif-om { };
