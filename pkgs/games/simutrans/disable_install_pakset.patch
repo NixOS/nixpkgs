@@ -1,0 +1,25 @@
+--- a/gui/optionen.cc
++++ b/gui/optionen.cc
+@@ -63,6 +63,12 @@
+ 
+ 		add_component(option_buttons + i);
+ 		option_buttons[i].init(button_t::roundbox | button_t::flexible, option_buttons_text[i]);
++		if (i == BUTTON_INSTALL) {
++		    option_buttons[i].set_visible(false);
++		    // Rigid means that it will still affect layout when invisible.
++		    // If we didn't set it rigid, the quit button would shift to the left.
++		    option_buttons[i].set_rigid(true);
++		}
+ 		option_buttons[i].add_listener(this);
+ 
+ 		if (i == BUTTON_SCENARIO_INFO) {
+--- a/gui/pakselector.cc
++++ b/gui/pakselector.cc
+@@ -37,6 +37,7 @@
+ 	add_component(&notice_label);
+ 
+ 	installbutton.init( button_t::roundbox, "Install" );
++	installbutton.set_visible(false);
+ 	installbutton.add_listener( &ps );
+ 	add_component(&installbutton);
+ 
