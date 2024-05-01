@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "3.18.0";
+  version = "3.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1UXByc3jjp8GN7+aI2GBohJ0DFxgp604QOsXp5GaL4Q=";
+    hash = "sha256-/P1cgAC+a2YCcvbsysYdD+fEwibo+GyE0XY4A0+gMh4=";
   };
 
   nativeBuildInputs = [
