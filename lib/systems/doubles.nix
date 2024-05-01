@@ -56,6 +56,9 @@ let
 
     # Windows
     "x86_64-windows" "i686-windows"
+
+    # UEFI
+    "x86_64-uefi" "i686-uefi" "aarch64-uefi"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -112,6 +115,7 @@ in {
   redox         = filterDoubles predicates.isRedox;
   windows       = filterDoubles predicates.isWindows;
   genode        = filterDoubles predicates.isGenode;
+  uefi          = filterDoubles predicates.isEfiEnvironment;
 
   embedded      = filterDoubles predicates.isNone;
 
