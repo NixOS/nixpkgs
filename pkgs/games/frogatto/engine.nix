@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     glm
   ];
 
-  env.CXXFLAGS = "-DGLM_ENABLE_EXPERIMENTAL";
+  env.CXXFLAGS = "-DGLM_ENABLE_EXPERIMENTAL -Wno-error=deprecated-declarations";
 
   enableParallelBuilding = true;
 
