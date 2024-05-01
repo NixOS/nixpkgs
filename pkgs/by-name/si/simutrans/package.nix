@@ -10,7 +10,6 @@
   bzip2,
   SDL2,
   SDL2_mixer,
-  config,
   symlinkJoin,
   makeWrapper,
   runCommand,
@@ -24,16 +23,6 @@ let
     '';
 
   fetchzip' = defaults: args: fetchzip (defaults // args);
-
-  # Choose your "paksets" of objects, images, text, music, etc.
-  paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
-
-  result = withPaks (
-    if paksets == "*" then
-      lib.attrValues pakSpec # taking all
-    else
-      map (name: pakSpec.${name}) (lib.splitString " " paksets)
-  );
 
   version = "123.0.1";
 
@@ -241,6 +230,7 @@ let
         hydraPlatforms = [ ];
       };
       passthru.binaries = binaries;
+      passthru.pakSpec = pakSpec;
     };
 
   binaries = stdenv.mkDerivation {
@@ -338,4 +328,6 @@ let
     };
   };
 in
-result
+lib.makeOverridable ({ paks }: withPaks paks) {
+  paks = lib.attrValues pakSpec;
+}
