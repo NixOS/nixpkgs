@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "SDL multiplatform networking library";
     homepage = "https://www.libsdl.org/projects/SDL_net";
     license = licenses.zlib;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
 }
