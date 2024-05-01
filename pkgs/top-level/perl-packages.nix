@@ -16598,16 +16598,16 @@ with self; {
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.35";
+    version = "9.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.35.tar.gz";
-      hash = "sha256-akpEbuB/ynxtty9dgXVA1oMwCcuN58zkxvskoV7n1Gs=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.36.tar.gz";
+      hash = "sha256-UX7Pb9hqC3xhadVRAiOL+YUWGNt2L7ANTPDZTGJSAV8=";
     };
     meta = {
       description = "Real-time web framework";
       homepage = "https://mojolicious.org";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = with maintainers; [ thoughtpolice sgo ];
+      maintainers = with maintainers; [ marcusramberg sgo thoughtpolice ];
       mainProgram = "mojo";
     };
   };
