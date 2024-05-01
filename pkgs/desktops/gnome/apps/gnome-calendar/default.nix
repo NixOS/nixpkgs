@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Calendar";
+    homepage = "https://apps.gnome.org/Calendar/";
     description = "Simple and beautiful calendar application for GNOME";
     mainProgram = "gnome-calendar";
     maintainers = teams.gnome.members;

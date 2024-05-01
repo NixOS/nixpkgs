@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tweaks";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-tweaks";
     description = "A tool to customize advanced GNOME 3 options";
     mainProgram = "gnome-tweaks";
     maintainers = teams.gnome.members;

@@ -35,8 +35,6 @@
 , gsettings-desktop-schemas
 }:
 
-# for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
   version = "0.32.6";
@@ -97,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
     mainProgram = "shotwell";
-    homepage = "https://wiki.gnome.org/Apps/Shotwell";
+    homepage = "https://gitlab.gnome.org/GNOME/shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ bobby285271 ];
     platforms = platforms.linux;
   };
 })

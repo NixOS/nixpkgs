@@ -185,7 +185,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
-    homepage = "https://wiki.gnome.org/Apps/Evolution";
+    homepage = "https://gitlab.gnome.org/GNOME/evolution-data-server";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Contacts";
+    homepage = "https://apps.gnome.org/Contacts/";
     description = "GNOME’s integrated address book";
     mainProgram = "gnome-contacts";
     maintainers = teams.gnome.members;
