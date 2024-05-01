@@ -20288,9 +20288,7 @@ with pkgs;
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
-  c-ares = callPackage ../development/libraries/c-ares { };
-
-  c-aresMinimal = callPackage ../development/libraries/c-ares {
+  c-aresMinimal = c-ares.override {
     withCMake = false;
   };
 
