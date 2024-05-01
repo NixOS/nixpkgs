@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bdraco/uart-devices/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
