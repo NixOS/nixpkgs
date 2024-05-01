@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "modulo"
-  ] ++ lib.optionals waylandSupport[
+  ] ++ lib.optionals waylandSupport [
     "wayland"
   ] ++ lib.optionals stdenv.isLinux [
     "vendored-tls"
@@ -123,21 +123,22 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  postInstall = if stdenv.isDarwin then ''
-    EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
-  '' else ''
-    wrapProgram $out/bin/espanso \
-      --prefix PATH : ${lib.makeBinPath (
-        lib.optionals stdenv.isLinux [
-          libnotify
-          setxkbmap
-        ] ++ lib.optionals waylandSupport [
-          wl-clipboard
-        ] ++ lib.optionals x11Support [
-          xclip
-        ]
-      )}
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+    '' else ''
+      wrapProgram $out/bin/espanso \
+        --prefix PATH : ${lib.makeBinPath (
+          lib.optionals stdenv.isLinux [
+            libnotify
+            setxkbmap
+          ] ++ lib.optionals waylandSupport [
+            wl-clipboard
+          ] ++ lib.optionals x11Support [
+            xclip
+          ]
+        )}
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = espanso;
