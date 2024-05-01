@@ -27,9 +27,9 @@ composerInstallConfigureHook() {
         setComposeRootVersion
 
         composer \
-            --no-ansi \
             --no-install \
             --no-interaction \
+            --no-progress \
             ${composerNoDev:+--no-dev} \
             ${composerNoPlugins:+--no-plugins} \
             ${composerNoScripts:+--no-scripts} \
@@ -104,8 +104,8 @@ composerInstallInstallHook() {
     # Finally, run `composer install` to install the dependencies and generate
     # the autoloader.
     composer \
-      --no-ansi \
       --no-interaction \
+      --no-progress \
       ${composerNoDev:+--no-dev} \
       ${composerNoPlugins:+--no-plugins} \
       ${composerNoScripts:+--no-scripts} \
