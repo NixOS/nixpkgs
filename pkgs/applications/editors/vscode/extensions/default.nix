@@ -3446,6 +3446,8 @@ let
         };
       };
 
+      reditorsupport.r = callPackage ./reditorsupport.r { };
+
       reloadedextensions.reloaded-cpp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "reloaded-cpp";
