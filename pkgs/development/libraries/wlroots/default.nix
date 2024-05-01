@@ -127,9 +127,11 @@ rec {
   wlroots_0_17 = generic {
     version = "0.17.3";
     hash = "sha256-jth6BKci3sVDC86o+gSHKyDWnibVcNmipm7nn0S6LTg=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
     extraBuildInputs = [
       ffmpeg
-      hwdata
       libliftoff
       libdisplay-info
     ];
