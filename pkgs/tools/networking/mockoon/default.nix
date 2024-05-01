@@ -31,7 +31,7 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "The easiest and quickest way to run mock APIs locally";
