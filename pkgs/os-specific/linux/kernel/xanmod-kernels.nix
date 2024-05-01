@@ -12,9 +12,8 @@ let
   };
 
   mainVariant = {
-    version = "6.8.7";
-    suffix = "xanmod2";
-    hash = "sha256-/RhtRASEedYI4Zf9pUiiyDD3SgOL46cutTXo68gjBg8=";
+    version = "6.8.8";
+    hash = "sha256-6fT9vRjHw775m4ySUAUWU9R0dz/cWYYdZsPCwZjGiXM=";
     variant = "main";
   };
 
