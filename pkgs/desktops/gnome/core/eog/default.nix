@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME image viewer";
-    homepage = "https://wiki.gnome.org/Apps/EyeOfGnome";
+    homepage = "https://gitlab.gnome.org/GNOME/eog";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

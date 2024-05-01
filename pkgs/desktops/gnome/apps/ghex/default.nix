@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Ghex";
+    homepage = "https://gitlab.gnome.org/GNOME/ghex";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
     platforms = platforms.linux;

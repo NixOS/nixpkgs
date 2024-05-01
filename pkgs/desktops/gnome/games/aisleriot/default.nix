@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Aisleriot";
+    homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
     description = "A collection of patience games written in guile scheme";
     mainProgram = "sol";
     maintainers = teams.gnome.members;
