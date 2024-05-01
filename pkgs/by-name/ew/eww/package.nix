@@ -7,24 +7,30 @@
 , librsvg
 , gtk-layer-shell
 , stdenv
+, libdbusmenu-gtk3
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "v${version}";
-    hash = "sha256-HBBz1NDtj2TnDK5ghDLRrAOwHXDZlzclvVscYnmKGck=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rzDnplFJNiHe+XbxbhZMEhPJMiJsmdVqtZxlxhzzpTk=";
   };
 
-  cargoHash = "sha256-IirFE714NZmppLjwbWk6fxcmRXCUFzB4oxOxBvmYu5U=";
+  cargoHash = "sha256-n9nd5E/VO+0BgkhrfQpeihlIkoVQRf6CMiPCK5opvvw=";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 librsvg gtk-layer-shell ];
+  buildInputs = [
+    gtk3
+    gtk-layer-shell
+    libdbusmenu-gtk3
+    librsvg
+  ];
 
   cargoBuildFlags = [ "--bin" "eww" ];
 
@@ -33,11 +39,11 @@ rustPlatform.buildRustPackage rec {
   # requires unstable rust features
   RUSTC_BOOTSTRAP = 1;
 
-  meta = with lib; {
+  meta = {
     description = "ElKowars wacky widgets";
     homepage = "https://github.com/elkowar/eww";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lom coffeeispower ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ coffeeispower eclairevoyant figsoda lom w-lfchen ];
     mainProgram = "eww";
     broken = stdenv.isDarwin;
   };

@@ -32,20 +32,20 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.105.1";
+  version = "1.106.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-sul9wz9NXz87ZIbvSHWYQabTW/PlwAJJ2keaO0NbHHU=";
+    hash = "sha256-FnWYfFlzl6+K5dLhJ+mdphC6E6cA+HewGTUXakRHKEo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Cp1Bnf96invtmYayGfBVGwxW2jk/nRVCzueubd9HIG4=";
+    hash = "sha256-7X0lXiD+7irex8A3Tnfq65P6BinMje4Bc1MuCI3dSyg=";
   };
 
   postPatch = ''

@@ -10,7 +10,9 @@ let
   # We check the source code in a derivation that does not depend on the
   # system configuration so that most users don't have to redo the check and require
   # the necessary dependencies.
-  checkedSource = pkgs.runCommand "systemd-boot" { } ''
+  checkedSource = pkgs.runCommand "systemd-boot" {
+    preferLocalBuild = true;
+  } ''
     install -m755 -D ${./systemd-boot-builder.py} $out
     ${lib.getExe pkgs.buildPackages.mypy} \
       --no-implicit-optional \

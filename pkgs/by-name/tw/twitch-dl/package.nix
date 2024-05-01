@@ -17,14 +17,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Os27uqH3MA3v9+8WzfL5KIEUewAzf8JUyRtsWSzw81o=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'm3u8>=1.0.0,<4.0.0' 'm3u8>=1.0.0'
-  '';
+  pythonRelaxDeps = [
+    "m3u8"
+  ];
 
   nativeBuildInputs = [
     python3Packages.setuptools
     python3Packages.setuptools-scm
+    python3Packages.pythonRelaxDepsHook
     installShellFiles
     scdoc
   ];
@@ -46,6 +46,16 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [
     "twitchdl"
+    "twitchdl.cli"
+    "twitchdl.download"
+    "twitchdl.entities"
+    "twitchdl.http"
+    "twitchdl.output"
+    "twitchdl.playlists"
+    "twitchdl.progress"
+    "twitchdl.twitch"
+    "twitchdl.utils"
+    "twitchdl.commands"
   ];
 
   postInstall = ''
@@ -58,7 +68,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ihabunek/twitch-dl";
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pbsds ];
     mainProgram = "twitch-dl";
   };
 }

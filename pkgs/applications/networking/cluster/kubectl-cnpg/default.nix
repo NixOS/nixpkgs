@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "kubectl-cnpg";
-  version = "1.23.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "cloudnative-pg";
     repo = "cloudnative-pg";
     rev = "v${version}";
-    hash = "sha256-pNyXi3IjEMwAUdNzDw8WttQzmtHja2YfTHntowLrQOo=";
+    hash = "sha256-sh9ogECNEZ6AYhdJD87ELnr8E0iWPLhDu3Qkdpb2194=";
   };
 
   vendorHash = "sha256-3yh6b0dB2JC0t2EwykWiLk6glyKUhTpqmqvfFZ4RekE=";

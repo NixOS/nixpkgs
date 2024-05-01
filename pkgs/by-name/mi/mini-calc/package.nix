@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  gnuplot,
+  makeWrapper,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "mini-calc";
   version = "2.13.0";
@@ -11,6 +17,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-QFzrJBnGKAgDhjbbik0WP3Y1fNoHMAiWpEHfidFQGPk=";
+
+  nativeBuildInputs = [ makeWrapper ];
+  postFixup = ''
+    wrapProgram $out/bin/mini-calc \
+      --prefix PATH : "${lib.makeBinPath [ gnuplot ]}"
+
+  '';
+
   meta = {
     description = "A fully-featured minimalistic configurable calculator written in Rust";
     changelog = "https://github.com/coco33920/calc/blob/${version}/CHANGELOG.md";

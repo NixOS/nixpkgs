@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "wdt";
-  version = "unstable-2024-02-05";
+  version = "1.27.1612021-unstable-2024-02-05";
 
   src = fetchFromGitHub {
     owner = "facebook";
@@ -37,7 +37,9 @@ stdenv.mkDerivation {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
   };
 
   meta = with lib; {

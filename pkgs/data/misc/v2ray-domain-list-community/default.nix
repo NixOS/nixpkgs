@@ -1,14 +1,14 @@
-{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib }:
+{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib, nix-update-script }:
 
 let
   generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-domain-list-community";
-    version = "20240410101316";
+    version = "20240426060244";
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "domain-list-community";
       rev = version;
-      hash = "sha256-llj1z9fIzELeIIhyW6dmAl8Z/0DtZq3tkMrfwSJkZbE=";
+      hash = "sha256-DkZcqjYwXRNlRnfwbRZL6zlkYL9kig3cZ5H6LEzakeY=";
     };
     vendorHash = "sha256-azvMUi8eLNoNofRa2X4SKTTiMd6aOyO6H/rOiKjkpIY=";
     meta = with lib; {
@@ -31,5 +31,8 @@ stdenv.mkDerivation {
     install -Dm644 dlc.dat $out/share/v2ray/geosite.dat
     runHook postInstall
   '';
-  passthru.generator = generator;
+  passthru = {
+    inherit generator;
+    updateScript = nix-update-script { };
+  };
 }
