@@ -199,8 +199,8 @@ stdenv.mkDerivation rec {
     ''}
 
     # Fixup paths to pluggable transports.
-    sed -i TorBrowser/Data/Tor/torrc-defaults \
-        -e "s,./TorBrowser,$TBB_IN_STORE/TorBrowser,g"
+    substituteInPlace TorBrowser/Data/Tor/torrc-defaults \
+      --replace-fail './TorBrowser' "$TBB_IN_STORE/TorBrowser"
 
     # Fixup obfs transport.  Work around patchelf failing to set
     # interpreter for pre-compiled Go binaries by invoking the interpreter
@@ -263,8 +263,8 @@ stdenv.mkDerivation rec {
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
     FONTCONFIG_FILE=$TBB_IN_STORE/fontconfig/fonts.conf
-    sed -i "$FONTCONFIG_FILE" \
-      -e "s,<dir>fonts</dir>,<dir>$TBB_IN_STORE/fonts</dir>,"
+    substituteInPlace "$FONTCONFIG_FILE" \
+      --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$TBB_IN_STORE/fonts</dir>"
 
     # Hard-code paths to geoip data files.  TBB resolves the geoip files
     # relative to torrc-defaults_path but if we do not hard-code them
