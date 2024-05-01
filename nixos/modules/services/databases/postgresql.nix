@@ -29,20 +29,6 @@ let
 
   cfg = config.services.postgresql;
 
-  postgresql =
-    let
-      # ensure that
-      #   services.postgresql = {
-      #     enableJIT = true;
-      #     package = pkgs.postgresql_<major>;
-      #   };
-      # works.
-      base = if cfg.enableJIT then cfg.package.withJIT else cfg.package;
-    in
-    if cfg.extraPlugins == []
-      then base
-      else base.withPackages cfg.extraPlugins;
-
   toStr = value:
     if true == value then "yes"
     else if false == value then "no"
@@ -57,7 +43,7 @@ let
     touch $out
   '';
 
-  groupAccessAvailable = versionAtLeast postgresql.version "11.0";
+  groupAccessAvailable = versionAtLeast cfg.finalPackage.version "11.0";
 
 in
 
@@ -81,6 +67,27 @@ in
 
       package = mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
+      };
+
+      finalPackage = mkOption {
+        type = types.package;
+        internal = true;
+        readOnly = true;
+        default =
+          let
+            # ensure that
+            #   services.postgresql = {
+            #     enableJIT = true;
+            #     package = pkgs.postgresql_<major>;
+            #   };
+            # works.
+            base = if cfg.enableJIT then cfg.package.withJIT else cfg.package;
+          in
+          if cfg.extraPlugins == [ ] then base else base.withPackages cfg.extraPlugins;
+        description = ''
+          The postgresql package that will effectively be used in the system.
+          It consists of the base package with plugins applied to it.
+        '';
       };
 
       checkConfig = mkOption {
@@ -519,7 +526,7 @@ in
 
     users.groups.postgres.gid = config.ids.gids.postgres;
 
-    environment.systemPackages = [ postgresql ];
+    environment.systemPackages = [ cfg.finalPackage ];
 
     environment.pathsToLink = [
      "/share/postgresql"
@@ -535,7 +542,7 @@ in
 
         environment.PGDATA = cfg.dataDir;
 
-        path = [ postgresql ];
+        path = [ cfg.finalPackage ];
 
         preStart =
           ''
@@ -620,7 +627,7 @@ in
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
 
-            ExecStart = "${postgresql}/bin/postgres";
+            ExecStart = "${cfg.finalPackage}/bin/postgres";
           }
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
