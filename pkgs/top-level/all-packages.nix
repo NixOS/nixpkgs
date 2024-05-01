@@ -39046,8 +39046,6 @@ with pkgs;
 
   scilla = callPackage ../tools/security/scilla { };
 
-  scotch = callPackage ../applications/science/math/scotch { };
-
   mininet = callPackage ../tools/virtualization/mininet { };
 
   msieve = callPackage ../applications/science/math/msieve { };
