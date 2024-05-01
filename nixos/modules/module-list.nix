@@ -559,6 +559,7 @@
   ./services/hardware/joycond.nix
   ./services/hardware/kanata.nix
   ./services/hardware/lcd.nix
+  ./services/hardware/libinput.nix
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-container-toolkit
   ./services/hardware/monado.nix
@@ -1473,7 +1474,6 @@
   ./services/x11/gdk-pixbuf.nix
   ./services/x11/hardware/cmt.nix
   ./services/x11/hardware/digimend.nix
-  ./services/x11/hardware/libinput.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/imwheel.nix

@@ -1,12 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
-buildGoModule rec {
-  pname = "go-toml";
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
+let
   version = "2.2.1";
+in
+buildGoModule {
+  pname = "go-toml";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pelletier";
-    repo = pname;
+    repo = "go-toml";
     rev = "v${version}";
     sha256 = "sha256-DAtp9ovl6cny0rom80aK+bGe9U/p6zmTQo1Z3MscCjg=";
   };
@@ -19,13 +25,21 @@ buildGoModule rec {
     "cmd/tomltestgen"
   ];
 
-  ldflags = [ "-s" "-w" ];
+  # allowGoReference adds the flag `-trimpath` which is also denoted by, go-toml's goreleaser config
+  #  <https://github.com/pelletier/go-toml/blob/a3d5a0bb530b5206c728eed9cb57323061922bcb/.goreleaser.yaml#L13>
+  allowGoReference = true;
 
-  meta = with lib; {
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  meta = {
     description = "Go library for the TOML language";
     homepage = "https://github.com/pelletier/go-toml";
     changelog = "https://github.com/pelletier/go-toml/releases/tag/v${version}";
-    maintainers = [ ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.isabelroses ];
+    license = lib.licenses.mit;
   };
 }

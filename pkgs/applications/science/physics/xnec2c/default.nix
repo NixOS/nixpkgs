@@ -14,11 +14,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "xnec2c";
-  version = "4.4.12";
+  version = "4.4.16";
 
   src = fetchurl {
     url = "https://www.xnec2c.org/releases/${pname}-v${version}.tar.gz";
-    hash = "sha256-6Yrx6LkJjfnMA/kJUDWLhGzGopZeecARSrcR++UScsU=";
+    hash = "sha256-XiZi8pfmfHjGpePkRy/pF1TA+5RdxX4AGuKzG5Wqrmk=";
   };
 
   nativeBuildInputs = [

@@ -4,11 +4,12 @@
 , pythonOlder
 , packaging
 , torch
+, kornia-rs
 }:
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,10 +18,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gHMrA4Uzazpw4TdswrXdoZG4+ek5g+wtLXNmhH3SlOM=";
+    hash = "sha256-DmXttvKoLqny0mt3SUonidNxDkNX7N0LdTxy/H32R/4=";
   };
 
   propagatedBuildInputs = [
+    kornia-rs
     packaging
     torch
   ];
@@ -39,7 +41,6 @@ buildPythonPackage rec {
     "kornia.metrics"
     "kornia.morphology"
     "kornia.tracking"
-    "kornia.testing"
     "kornia.utils"
   ];
 

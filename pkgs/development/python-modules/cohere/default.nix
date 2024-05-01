@@ -1,40 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , poetry-core
 , pythonOlder
-, aiohttp
-, backoff
 , fastavro
-, importlib-metadata
+, httpx
+, httpx-sse
+, pydantic
 , requests
-, urllib3
+, tokenizers
+, types-requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "4.56";
+  version = "5.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rOAQzT1A/q74WnfazCMDtou7SnP0h+UGCyBxihqLmzc=";
+    hash = "sha256-+/WcC6sN7U0oCR+gwZOhFtgwPEwLCaQnId2KEjDqJ8M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    backoff
+  dependencies = [
     fastavro
-    importlib-metadata
+    httpx
+    httpx-sse
+    pydantic
     requests
-    urllib3
+    tokenizers
+    types-requests
+    typing-extensions
   ];
 
   # tests require CO_API_KEY
@@ -47,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simplify interfacing with the Cohere API";
     homepage = "https://docs.cohere.com/docs";
-    changelog = "https://github.com/cohere-ai/cohere-python/blob/main/CHANGELOG.md#${builtins.replaceStrings ["."] [""] version}";
+    changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

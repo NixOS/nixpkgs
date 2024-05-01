@@ -53,6 +53,6 @@ buildGoModule rec {
     changelog = "https://github.com/errata-ai/vale/releases/tag/v${version}";
     mainProgram = "vale";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.pbsds ];
   };
 }

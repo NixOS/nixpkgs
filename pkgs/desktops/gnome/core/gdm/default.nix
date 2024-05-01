@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A program that manages graphical display servers and handles graphical user logins";
-    homepage = "https://wiki.gnome.org/Projects/GDM";
+    homepage = "https://gitlab.gnome.org/GNOME/gdm";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

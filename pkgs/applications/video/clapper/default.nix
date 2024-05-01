@@ -5,8 +5,6 @@
 , gobject-introspection
 , pkg-config
 , ninja
-, wayland
-, wayland-protocols
 , desktop-file-utils
 , makeWrapper
 , shared-mime-info
@@ -56,13 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libadwaita
     libsoup_3
-    wayland
-    wayland-protocols
     libmicrodns
   ];
 
   postPatch = ''
     patchShebangs --build build-aux/meson/postinstall.py
+  '';
+
+  # The package uses "clappersink" provided by itself
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $out/lib/gstreamer-1.0
+    )
   '';
 
   meta = with lib; {
@@ -73,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/Rafostar/clapper";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
   };
 })

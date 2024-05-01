@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Mutter/RemoteDesktop";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-remote-desktop";
     description = "GNOME Remote Desktop server";
     mainProgram = "grdctl";
     maintainers = teams.gnome.members;

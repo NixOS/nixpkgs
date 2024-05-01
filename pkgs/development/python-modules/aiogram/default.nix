@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, pytestCheckHook
-, aiohttp
-, aiohttp-socks
-, aiofiles
-, aresponses
-, babel
-, certifi
-, magic-filter
-, pycryptodomex
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-lazy-fixture
-, redis
-, hatchling
-, pydantic
-, pytz
-, gitUpdater
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aiohttp-socks,
+  aresponses,
+  babel,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  gitUpdater,
+  hatchling,
+  magic-filter,
+  pycryptodomex,
+  pydantic,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.4.1";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,19 +34,16 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2of4KHdpAATOt0dCqI3AmTJtdeN5SdiWydeGjtagABI=";
+    hash = "sha256-NOaI01Lb969Lp/v38u2UipN9UbOQNJQEbN2JS3lmFno=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "pydantic" ];
+
+  dependencies = [
     aiofiles
     aiohttp
     babel
@@ -67,15 +65,17 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::pluggy.PluggyTeardownRaisedWarning"
-    "-W" "ignore::pytest.PytestDeprecationWarning"
+    "-W"
+    "ignore::pluggy.PluggyTeardownRaisedWarning"
+    "-W"
+    "ignore::pytest.PytestDeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "aiogram" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";

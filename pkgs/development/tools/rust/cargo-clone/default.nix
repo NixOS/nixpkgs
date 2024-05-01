@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , stdenv
+, CoreServices
 , Security
 , SystemConfiguration
 }:
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
     Security
     SystemConfiguration
   ];

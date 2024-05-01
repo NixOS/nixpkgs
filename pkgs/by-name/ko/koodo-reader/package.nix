@@ -7,6 +7,7 @@
   fetchYarnDeps,
   makeDesktopItem,
   copyDesktopItems,
+  makeWrapper,
   wrapGAppsHook,
   electron,
 }:
@@ -37,6 +38,7 @@ mkYarnPackage rec {
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeWrapper
     wrapGAppsHook
   ];
 
@@ -77,8 +79,9 @@ mkYarnPackage rec {
     runHook postInstall
   '';
 
+  # we use makeShellWrapper instead of the makeBinaryWrapper provided by wrapGAppsHook for proper shell variable expansion
   postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/koodo-reader \
+    makeShellWrapper ${electron}/bin/electron $out/bin/koodo-reader \
       --add-flags $out/share/lib/koodo-reader/resources/app.asar \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

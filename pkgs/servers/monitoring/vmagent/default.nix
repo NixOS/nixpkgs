@@ -22,6 +22,6 @@ buildGoModule rec {
     mainProgram = "vmagent";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nullx76 ];
+    maintainers = with maintainers; [ nullx76 leona ];
   };
 }
