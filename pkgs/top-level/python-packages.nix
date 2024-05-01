@@ -14971,6 +14971,8 @@ self: super: with self; {
 
   sybil = callPackage ../development/python-modules/sybil { };
 
+  symbolic = callPackage ../development/python-modules/symbolic { };
+
   symengine = callPackage ../development/python-modules/symengine {
     inherit (pkgs) symengine;
   };
