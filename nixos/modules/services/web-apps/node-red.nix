@@ -11,7 +11,7 @@ let
   }
   ''
     mkdir -p $out/bin
-    makeWrapper ${pkgs.nodePackages.node-red}/bin/node-red $out/bin/node-red \
+    makeWrapper ${cfg.package}/bin/node-red $out/bin/node-red \
       --set PATH '${lib.makeBinPath [ pkgs.nodePackages.npm pkgs.gcc ]}:$PATH' \
   '';
 in
