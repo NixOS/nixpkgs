@@ -33,6 +33,8 @@ stdenv.mkDerivation {
     glm
   ];
 
+  env.CXXFLAGS = "-DGLM_ENABLE_EXPERIMENTAL";
+
   enableParallelBuilding = true;
 
   installPhase = ''
