@@ -2919,14 +2919,14 @@ let
       };
 
       systemd.services."systemd-network-wait-online@" = {
-        description = "Wait for Network Interface %I to be Configured";
+        description = "Wait for Network Interface %i to be Configured";
         conflicts = [ "shutdown.target" ];
         requisite = [ "systemd-networkd.service" ];
         after = [ "systemd-networkd.service" ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %i ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
         };
       };
 
