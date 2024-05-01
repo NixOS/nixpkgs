@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
+    (lib.mesonOption "ipc_actor_msg_max_members_number" "40")
   ];
 
   postPatch = ''
@@ -92,12 +93,15 @@ stdenv.mkDerivation rec {
     cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
     popd
 
-    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${lib.getExe gawk} -f'
+    patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/emilua \
-      --run 'export EMILUA_PATH=$EMILUA_PATH''${EMILUA_PATH:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/emilua-${(with lib; concatStringsSep "." (take 2 (splitVersion version)))}''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
+  doCheck = true;
+
+  # Skipped test: libpsx
+  # Known issue with no-new-privs disabled in the Nix build environment.
+  checkPhase = ''
+    meson test --print-errorlogs --no-suite libpsx
   '';
 
   meta = with lib; {
