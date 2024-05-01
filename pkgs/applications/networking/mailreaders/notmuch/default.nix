@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, makeWrapper
+{ fetchurl, lib, stdenv, makeWrapper, buildEnv
 , pkg-config, gnupg
 , xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
@@ -77,8 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "out" "man" "info" "bindingconfig" ]
-    ++ lib.optional withEmacs "emacs"
-    ++ lib.optional withRuby "ruby";
+    ++ lib.optional withEmacs "emacs";
 
   # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
   # passes if notmuch-git can be executed, so we need to patch its shebang.
@@ -124,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/notmuch-emacs-mua $emacs
   '' + lib.optionalString withRuby ''
     make -C bindings/ruby install \
-      vendordir=$ruby/lib/ruby \
+      vendordir=$out/lib/ruby \
       SHELL=$SHELL \
       $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
@@ -138,10 +137,26 @@ stdenv.mkDerivation (finalAttrs: {
     make -C vim DESTDIR="$out/share/vim-plugins/notmuch" prefix="" install
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/notmuch $out/share/nvim/site
+  '' + lib.optionalString (withVim && withRuby) ''
+    PLUG=$out/share/vim-plugins/notmuch/plugin/notmuch.vim
+    cat >> $PLUG << EOF
+      let \$GEM_PATH=\$GEM_PATH . ":${finalAttrs.passthru.gemEnv}/${ruby.gemPath}"
+      let \$RUBYLIB=\$RUBYLIB . ":$out/${ruby.libPath}/${ruby.system}"
+      if has('nvim')
+    EOF
+    for gem in ${finalAttrs.passthru.gemEnv}/${ruby.gemPath}/gems/*/lib; do
+      echo "ruby \$LOAD_PATH.unshift('$gem')" >> $PLUG
+    done
+    echo 'endif' >> $PLUG
   '';
 
   passthru = {
     pythonSourceRoot = "notmuch-${finalAttrs.version}/bindings/python";
+    gemEnv = buildEnv {
+      name = "notmuch-vim-gems";
+      paths = with ruby.gems; [ mail ];
+      pathsToLink = [ "/lib" "/nix-support" ];
+    };
     tests.version = testers.testVersion { package = notmuch; };
 
     updateScript = gitUpdater {
