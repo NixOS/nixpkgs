@@ -54,10 +54,17 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {
+    # Make glib-compile-schemas available
+    nativeBuildInputs = [ glib ];
     # Has a hard-coded path to a run-time dependency
     # https://github.com/NixOS/nixpkgs/issues/136111
     postPatch = ''
-      substituteInPlace "extension.js" --replace "/usr/bin/ddcutil" "${ddcutil}/bin/ddcutil"
+      substituteInPlace "schemas/org.gnome.shell.extensions.display-brightness-ddcutil.gschema.xml" \
+        --replace-fail "/usr/bin/ddcutil" ${lib.getExe ddcutil}
+    '';
+    postFixup = ''
+      rm "$out/share/gnome-shell/extensions/display-brightness-ddcutil@themightydeity.github.com/schemas/gschemas.compiled"
+      glib-compile-schemas "$out/share/gnome-shell/extensions/display-brightness-ddcutil@themightydeity.github.com/schemas"
     '';
   }))
 
