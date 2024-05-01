@@ -300,6 +300,7 @@ in stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater {
       stableVersion = true;
       tagPrefix = "GIMP_";
+      tagConverter = "sed s/_/./g";
     };
   };
 
