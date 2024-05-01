@@ -2,13 +2,13 @@
 
 buildGoModule {
   pname = "txtpbfmt";
-  version = "unstable-2023-10-25";
+  version = "0-unstable-2024-04-16";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "txtpbfmt";
-    rev = "084445ff1adf0d8a27429bba65dbde5663f02d26";
-    hash = "sha256-SoU1GON9avesty6FSZ+z6o2JHInUtwv+PVOzqCu+8L8=";
+    rev = "1e18ef0a7fdc4d28b9223d2d50b4b2be7024519e";
+    hash = "sha256-L96aEAlPvdBXxAbH8IszQK0r7ouICmFrkHtTJe/dD+E=";
   };
 
   vendorHash = "sha256-IdD+R8plU4/e9fQaGSM5hJxyMECb6hED0Qg8afwHKbY=";
@@ -17,9 +17,9 @@ buildGoModule {
 
   meta = with lib; {
     description = "Formatter for text proto files";
-    mainProgram = "txtpbfmt";
     homepage = "https://github.com/protocolbuffers/txtpbfmt";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "txtpbfmt";
   };
 }

@@ -3,25 +3,24 @@
 , fetchurl
 , appimageTools
 , undmg
-, nix-update-script
 }:
 
 let
   pname = "hoppscotch";
-  version = "23.12.5";
+  version = "24.3.1-2";
 
   src = fetchurl {
     aarch64-darwin = {
-      url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_mac_aarch64.dmg";
-      hash = "sha256-WUJW38vQ7o5KEmCxhVnJ03/f5tPOTYcczrEcmt6NSCY=";
+      url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
+      hash = "sha256-F4vQwdNObIE8Fx75TfwI0QxbY5n2syT4sEIhgAu2Z5c=";
     };
     x86_64-darwin = {
-      url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_mac_x64.dmg";
-      hash = "sha256-bQFD+9IoelinWYUndzbVvPNaRde6ACPvw9ifX9mYdno=";
+      url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
+      hash = "sha256-itC6PdNdzcw5Lv/hQkT0AsTGQ8kmTwT6cipyaAynph8=";
     };
     x86_64-linux = {
-      url = "https://github.com/hoppscotch/releases/releases/download/v${version}-1/Hoppscotch_linux_x64.AppImage";
-      hash = "sha256-MYQ7SRm+CUPIXROZxejbbZ0/wH+U5DQO4YGbE/HQAj8=";
+      url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
+      hash = "sha256-vj9UYizRmyIK9mLNSW/qFc/QmnWNhniqJf3gG66WPb0=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 

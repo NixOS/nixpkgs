@@ -78,7 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
   ];
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   enableParallelBuilding = true;
 

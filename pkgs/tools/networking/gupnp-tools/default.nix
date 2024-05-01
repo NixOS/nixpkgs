@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Set of utilities and demos to work with UPnP";
-    homepage = "https://wiki.gnome.org/Projects/GUPnP";
+    homepage = "https://gitlab.gnome.org/GNOME/gupnp-tools";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

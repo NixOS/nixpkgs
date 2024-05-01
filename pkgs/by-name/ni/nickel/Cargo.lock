@@ -1242,25 +1242,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ipc-channel"
-version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ab3a34c91b7e84a72643bd75d1bac3afd241f78f9859fe0b5e5b2a6a75732c2"
-dependencies = [
- "bincode",
- "crossbeam-channel",
- "fnv",
- "lazy_static",
- "libc",
- "mio",
- "rand",
- "serde",
- "tempfile",
- "uuid",
- "windows",
-]
-
-[[package]]
 name = "is-terminal"
 version = "0.4.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1668,7 +1649,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-cli"
-version = "1.5.0"
+version = "1.6.0"
 dependencies = [
  "clap 4.5.2",
  "clap_complete",
@@ -1686,7 +1667,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-core"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "ansi_term",
  "assert_matches",
@@ -1741,7 +1722,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-lsp"
-version = "1.5.0"
+version = "1.6.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1757,7 +1738,6 @@ dependencies = [
  "env_logger",
  "glob",
  "insta",
- "ipc-channel",
  "lalrpop",
  "lalrpop-util",
  "lazy_static",
@@ -1769,6 +1749,7 @@ dependencies = [
  "nickel-lang-utils",
  "pretty_assertions",
  "regex",
+ "scopeguard",
  "serde",
  "serde_json",
  "test-generator",
@@ -1788,7 +1769,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-wasm-repl"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "nickel-lang-core",
 ]
@@ -2049,12 +2030,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ppv-lite86"
-version = "0.2.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
-
-[[package]]
 name = "precomputed-hash"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2139,7 +2114,7 @@ dependencies = [
 
 [[package]]
 name = "pyckel"
-version = "1.5.0"
+version = "1.6.0"
 dependencies = [
  "codespan-reporting",
  "nickel-lang-core",
@@ -2267,36 +2242,6 @@ checksum = "c069c179fcdc6a2fe24d8d18305cf085fdbd4f922c041943e203685d6a1c58fd"
 dependencies = [
  "endian-type",
  "nibble_vec",
-]
-
-[[package]]
-name = "rand"
-version = "0.8.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34af8d1a0e25924bc5b7c43c079c942339d8f0a8b57c39049bef581b46327404"
-dependencies = [
- "libc",
- "rand_chacha",
- "rand_core",
-]
-
-[[package]]
-name = "rand_chacha"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6c10a63a0fa32252be49d21e7709d4d4baf8d231c2dbce1eaa8141b9b127d88"
-dependencies = [
- "ppv-lite86",
- "rand_core",
-]
-
-[[package]]
-name = "rand_core"
-version = "0.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
-dependencies = [
- "getrandom",
 ]
 
 [[package]]
@@ -3066,7 +3011,7 @@ dependencies = [
 [[package]]
 name = "topiary-core"
 version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=614abf5d1a5cc3118c9687e18dc1c70a00c3e686#614abf5d1a5cc3118c9687e18dc1c70a00c3e686"
+source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
 dependencies = [
  "futures",
  "itertools 0.11.0",
@@ -3084,12 +3029,12 @@ dependencies = [
 [[package]]
 name = "topiary-queries"
 version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=9ae9ef49c2fa968d15107b817864ff6627e0983e#9ae9ef49c2fa968d15107b817864ff6627e0983e"
+source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
 
 [[package]]
 name = "topiary-tree-sitter-facade"
 version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=614abf5d1a5cc3118c9687e18dc1c70a00c3e686#614abf5d1a5cc3118c9687e18dc1c70a00c3e686"
+source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
 dependencies = [
  "js-sys",
  "topiary-web-tree-sitter-sys",
@@ -3101,7 +3046,7 @@ dependencies = [
 [[package]]
 name = "topiary-web-tree-sitter-sys"
 version = "0.3.0"
-source = "git+https://github.com/tweag/topiary.git?rev=614abf5d1a5cc3118c9687e18dc1c70a00c3e686#614abf5d1a5cc3118c9687e18dc1c70a00c3e686"
+source = "git+https://github.com/tweag/topiary.git?rev=82a94a9f57104b89d4316afaeeab271cc51f7698#82a94a9f57104b89d4316afaeeab271cc51f7698"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
@@ -3122,7 +3067,7 @@ dependencies = [
 [[package]]
 name = "tree-sitter-nickel"
 version = "0.1.0"
-source = "git+https://github.com/nickel-lang/tree-sitter-nickel?rev=091b5dcc7d138901bcc162da9409c0bb626c0d27#091b5dcc7d138901bcc162da9409c0bb626c0d27"
+source = "git+https://github.com/nickel-lang/tree-sitter-nickel?rev=58baf89db8fdae54a84bcf22c80ff10ee3f929ed#58baf89db8fdae54a84bcf22c80ff10ee3f929ed"
 dependencies = [
  "cc",
  "tree-sitter",
@@ -3226,9 +3171,6 @@ name = "uuid"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f00cc9702ca12d3c81455259621e676d0f7251cec66a21e98fe2e9a37db93b2a"
-dependencies = [
- "getrandom",
-]
 
 [[package]]
 name = "version_check"
@@ -3395,15 +3337,6 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
-
-[[package]]
-name = "windows"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e686886bc078bc1b0b600cac0147aadb815089b6e4da64016cbd754b6342700f"
-dependencies = [
- "windows-targets 0.48.5",
-]
 
 [[package]]
 name = "windows-sys"
