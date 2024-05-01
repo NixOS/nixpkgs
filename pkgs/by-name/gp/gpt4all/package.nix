@@ -11,22 +11,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-hIfeADP3tiooGZr/OMVFIkOAniMWXj9AsVzMPlVbucE=";
+    hash = "sha256-G22d2Q6z7DmPHM/DEE7iyJ8SWRZdoVdSWw+gnPVHdEg=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
   };
 
   sourceRoot = "${finalAttrs.src.name}/gpt4all-chat";
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'set(CMAKE_INSTALL_PREFIX ''${CMAKE_BINARY_DIR}/install)' ""
-  '';
 
   nativeBuildInputs = [
     cmake
