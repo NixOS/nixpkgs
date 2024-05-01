@@ -89,7 +89,7 @@ in
       };
 
       batteryNotifier = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Settings for device battery notifications.
         '';
         default = {};
@@ -98,14 +98,14 @@ in
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Mouse battery notifier.
               '';
             };
             frequency = mkOption {
               type = types.int;
               default = 600;
-              description = lib.mdDoc ''
+              description = ''
                 How often battery notifications should be shown (in seconds).
                 A value of 0 disables notifications.
               '';
@@ -114,7 +114,7 @@ in
             percentage = mkOption {
               type = types.int;
               default = 33;
-              description = lib.mdDoc ''
+              description = ''
                 At what battery percentage the device should reach before
                 sending notifications.
               '';
