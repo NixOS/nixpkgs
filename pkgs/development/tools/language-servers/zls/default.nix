@@ -1,24 +1,34 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zig_0_11
+, fetchurl
+, zig_0_12
 , callPackage
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zls";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = "zls";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-WrbjJyc4pj7R4qExdzd0DOQ9Tz3TFensAfHdecBA8UI=";
+    hash = "sha256-2iVDPUj9ExgTooDQmCCtZs3wxBe2be9xjzAk9HedPNY=";
   };
 
+  langref = fetchurl {
+    url = "https://raw.githubusercontent.com/ziglang/zig/a685ab1499d6560c523f0dbce2890dc140671e43/doc/langref.html.in";
+    hash = "sha256-7lFSfkVLOrn42nYnYyDmBkkRfM903lUUJZ5Sg+eBUpE=";
+  };
+
+  zigBuildFlags = [
+    "-Dversion_data_path=${finalAttrs.langref}"
+  ];
+
   nativeBuildInputs = [
-    zig_0_11.hook
+    zig_0_12.hook
   ];
 
   postPatch = ''
