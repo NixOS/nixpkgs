@@ -31,8 +31,6 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  passthru.updateScript = ./update.sh;
-
   meta = with lib; {
     description = "The easiest and quickest way to run mock APIs locally";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
