@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tetravex";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-tetravex";
     description = "Complete the puzzle by matching numbered tiles";
     mainProgram = "gnome-tetravex";
     maintainers = teams.gnome.members;

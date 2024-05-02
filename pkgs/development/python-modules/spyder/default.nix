@@ -15,6 +15,7 @@
 , nbconvert
 , numpy
 , numpydoc
+, pickleshare
 , psutil
 , pygments
 , pylint-venv
@@ -33,6 +34,7 @@
 , rope
 , rtree
 , scipy
+, setuptools
 , spyder-kernels
 , textdistance
 , three-merge
@@ -42,7 +44,7 @@
 buildPythonPackage rec {
   pname = "spyder";
   version = "5.5.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -55,11 +57,12 @@ buildPythonPackage rec {
     ./dont-clear-pythonpath.patch
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pyqtwebengine.wrapQtAppsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     chardet
     cloudpickle
@@ -73,6 +76,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    pickleshare
     psutil
     pygments
     pylint-venv

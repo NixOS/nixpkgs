@@ -10977,6 +10977,12 @@ self: super: with self; {
     SDL2_image = pkgs.SDL2_image_2_0;
   };
 
+  pygame-ce = callPackage ../development/python-modules/pygame-ce {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+    SDL2_image = pkgs.SDL2_image_2_0;
+    SDL2_mixer = pkgs.SDL2_mixer_2_0;
+  };
+
   pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
   pygame-gui = callPackage ../development/python-modules/pygame-gui { };
@@ -13490,6 +13496,8 @@ self: super: with self; {
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
+
+  sanix = callPackage ../development/python-modules/sanix { };
 
   sansio-multipart = callPackage ../development/python-modules/sansio-multipart { };
 
@@ -16288,6 +16296,8 @@ self: super: with self; {
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   uarray = callPackage ../development/python-modules/uarray { };
+
+  uart-devices = callPackage ../development/python-modules/uart-devices { };
 
   uasiren = callPackage ../development/python-modules/uasiren { };
 

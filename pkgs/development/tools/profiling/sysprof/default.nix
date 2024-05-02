@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "System-wide profiler for Linux";
-    homepage = "https://wiki.gnome.org/Apps/Sysprof";
+    homepage = "https://gitlab.gnome.org/GNOME/sysprof";
     longDescription = ''
       Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open
       system call to profile the entire system, not just a single

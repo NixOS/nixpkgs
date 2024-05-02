@@ -75,6 +75,7 @@ let
     modernx-zydezu = callPackage ./modernx-zydezu.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
+    mpv-notify-send = callPackage ./mpv-notify-send.nix { };
     mpv-osc-modern = callPackage ./mpv-osc-modern.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-slicing = callPackage ./mpv-slicing.nix { };

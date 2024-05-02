@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Characters";
+    homepage = "https://apps.gnome.org/Characters/";
     description = "Simple utility application to find and insert unusual characters";
     mainProgram = "gnome-characters";
     maintainers = teams.gnome.members;

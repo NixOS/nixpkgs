@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
     mainProgram = "almanah";
-    homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
+    homepage = "https://gitlab.gnome.org/GNOME/almanah";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

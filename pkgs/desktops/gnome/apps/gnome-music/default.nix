@@ -102,7 +102,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Music";
+    homepage = "https://apps.gnome.org/Music/";
     description = "Music player and management application for the GNOME desktop environment";
     mainProgram = "gnome-music";
     maintainers = teams.gnome.members;

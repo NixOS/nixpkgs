@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
-    homepage = "https://wiki.gnome.org/Apps/Keysign";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

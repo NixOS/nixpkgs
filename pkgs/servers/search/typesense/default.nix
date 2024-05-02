@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     #     This is where I stopped trying for now.
     # XXX: retry once typesense has officially released their bazel based build.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with maintainers; [ oddlama ];
   };
 }
