@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, prompt-toolkit
-, pythonOlder
-, setuptools
-, winacl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pythonOlder,
+  setuptools,
+  winacl,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-XQDBvBfocz5loUg9eZQz4FKGiCGCaczwhYE/vhy7mC0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     prompt-toolkit
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiowinreg"
-  ];
+  pythonImportsCheck = [ "aiowinreg" ];
 
   meta = with lib; {
     description = "Python module to parse the registry hive";
