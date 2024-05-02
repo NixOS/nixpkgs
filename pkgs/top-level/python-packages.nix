@@ -1947,16 +1947,6 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
-  caffe = toPythonModule (pkgs.caffe.override {
-    pythonSupport = true;
-    inherit (self) python numpy boost;
-  });
-
-  caffeWithCuda = toPythonModule (pkgs.caffeWithCuda.override {
-    pythonSupport = true;
-    inherit (self) python numpy boost;
-  });
-
   caio = callPackage ../development/python-modules/caio { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi { };

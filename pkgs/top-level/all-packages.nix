@@ -37516,16 +37516,6 @@ with pkgs;
 
   ### SCIENCE / MATH
 
-  caffe = callPackage ../applications/science/math/caffe ({
-    inherit (config) cudaSupport;
-    cudaPackages = cudaPackages_10_1;
-    opencv4 = opencv4WithoutCuda; # Used only for image loading.
-    blas = openblas;
-    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
-  } // (config.caffe or {}));
-
-  caffeWithCuda = caffe.override { cudaSupport = true; };
-
   caffeine-ng = callPackage ../tools/X11/caffeine-ng { };
 
   dap = callPackage ../applications/science/math/dap { };
