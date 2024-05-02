@@ -4,6 +4,7 @@
 , importlib-metadata
 , mypy-extensions
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytz
 , setuptools
@@ -21,6 +22,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-ojvR2k3Wpj5Ej0OS57I4aFX/cGFVeL/PmT7riCTelws=";
   };
+
+  postPatch = lib.optionals (pythonAtLeast "3.12") ''
+    substituteInPlace logilab/common/testlib.py \
+      --replace-fail "_TextTestResult" "TextTestResult"
+  '';
 
   build-system = [
     setuptools
