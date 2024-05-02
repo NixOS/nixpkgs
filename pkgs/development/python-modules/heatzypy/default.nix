@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, requests
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -23,19 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-A01e3duNQmVv9vyOs6+gF/BdevLiYi/uXSq5bKmuRao=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "replace_by_workflow" "${version}"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    requests
   ];
 
   # Module has no tests
