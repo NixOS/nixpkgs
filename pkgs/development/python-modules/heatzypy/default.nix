@@ -6,12 +6,12 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, wheel
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.2.0";
+  version = "2.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Cyr-ius";
     repo = "heatzypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Q6v1Ob1PY8tpMnd8hchepq983dsZ6lJPCKz83RRwL3w=";
+    hash = "sha256-A01e3duNQmVv9vyOs6+gF/BdevLiYi/uXSq5bKmuRao=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
