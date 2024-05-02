@@ -24196,8 +24196,6 @@ with pkgs;
 
   SDL_net = callPackage ../development/libraries/SDL_net { };
 
-  SDL_Pango = callPackage ../development/libraries/SDL_Pango { };
-
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
   SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
