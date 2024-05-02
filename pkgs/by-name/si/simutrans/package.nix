@@ -189,8 +189,8 @@ let
         };
 
         "pak192.comic" = {
-          url = "https://github.com/Flemmbrav/Pak192.Comic/releases/download/V0.7.1/pak192.comic-serverset.zip";
-          hash = "sha256-T3FdreBWA76wGdPSSF0G0YWQoPsmancJe2Nl7akFBz0=";
+          url = "https://github.com/Flemmbrav/Pak192.Comic/releases/download/V0.6/pak192.comic-serverset.zip";
+          hash = "sha256-1TXSiRrulcUM/bfHmADau5p0OD0mESn0hhOtMn355/Q=";
         };
       };
 
