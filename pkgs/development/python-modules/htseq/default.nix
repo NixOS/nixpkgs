@@ -9,6 +9,7 @@
   python,
   isPy27,
   isPy3k,
+  nix-update-script,
 }:
 buildPythonPackage rec {
   version = "0.12.4";
@@ -36,6 +37,13 @@ buildPythonPackage rec {
     + lib.optionalString isPy3k ''
       ${python.interpreter} python3/test/test_general.py
     '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release_(.+)"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://htseq.readthedocs.io/";
