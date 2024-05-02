@@ -16841,6 +16841,12 @@
     githubId = 18155001;
     name = "Gabe Dunn";
   };
+  redyf = {
+    email = "mateusalvespereira7@gmail.com";
+    github = "redyf";
+    githubId = 98139059;
+    name = "Mateus Alves";
+  };
   reedrw = {
     email = "reedrw5601@gmail.com";
     github = "reedrw";
