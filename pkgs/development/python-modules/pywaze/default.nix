@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  httpx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
       --replace-fail "--cov --cov-report term-missing --cov=src/pywaze " ""
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    httpx
-  ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -42,9 +39,7 @@ buildPythonPackage rec {
     respx
   ];
 
-  pythonImportsCheck = [
-    "pywaze"
-  ];
+  pythonImportsCheck = [ "pywaze" ];
 
   meta = with lib; {
     description = "Module for calculating WAZE routes and travel times";
