@@ -707,6 +707,7 @@ let
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
+    markets = [ pkgs.gsl ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
     PoissonMultinomial = [ pkgs.fftw.dev ];
