@@ -2,7 +2,7 @@
 
 buildLua {
   pname = "mpv_sponsorblock_minimal";
-  version = "unstable-2023-08-20";
+  version = "0-unstable-2023-08-20";
   scriptPath = "sponsorblock_minimal.lua";
 
   src = fetchFromGitea {

@@ -534,14 +534,11 @@ in {
               hyperkittyApiKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
               secretKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
 
-              mailmanWebCfgTmp=$(mktemp)
-              jq -n '.MAILMAN_ARCHIVER_KEY=$archiver_key | .SECRET_KEY=$secret_key' \
+              install -m 0440 -o root -g mailman \
+                <(jq -n '.MAILMAN_ARCHIVER_KEY=$archiver_key | .SECRET_KEY=$secret_key' \
                   --arg archiver_key "$hyperkittyApiKey" \
-                  --arg secret_key "$secretKey" \
-                  >"$mailmanWebCfgTmp"
-              chown root:mailman "$mailmanWebCfgTmp"
-              chmod 440 "$mailmanWebCfgTmp"
-              mv -n "$mailmanWebCfgTmp" "$mailmanWebCfg"
+                  --arg secret_key "$secretKey") \
+                "$mailmanWebCfg"
           fi
 
           hyperkittyApiKey="$(jq -r .MAILMAN_ARCHIVER_KEY "$mailmanWebCfg")"

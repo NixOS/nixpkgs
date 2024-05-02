@@ -632,6 +632,11 @@ in mkLicense lset) ({
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
+  icu = {
+    spdxId = "ICU";
+    fullName = "ICU";
+  };
+
   ijg = {
     spdxId = "IJG";
     fullName = "Independent JPEG Group License";

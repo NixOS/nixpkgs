@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for fname in lib/{simulation,simset}.c; do
       substituteInPlace "$fname" \
-        --replace \
+        --replace-fail \
           '#include "../../lib/cim.h"' \
           '#include "../lib/cim.h"'
     done

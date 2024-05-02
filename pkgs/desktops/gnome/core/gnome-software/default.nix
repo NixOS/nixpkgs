@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Software store that lets you install and update applications and system extensions";
     mainProgram = "gnome-software";
-    homepage = "https://wiki.gnome.org/Apps/Software";
+    homepage = "https://apps.gnome.org/Software/";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

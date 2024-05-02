@@ -40,7 +40,7 @@ ps.buildPythonApplication rec {
   postPatch = ''
     # disable coverage testing
     substituteInPlace pyproject.toml \
-      --replace "addopts = [" "addopts_ = ["
+      --replace-fail "addopts = [" "addopts_ = ["
   '';
 
   pythonRemoveDeps = [
@@ -57,7 +57,7 @@ ps.buildPythonApplication rec {
     ps.babel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ps.pyside6
     ps.jeepney
   ];

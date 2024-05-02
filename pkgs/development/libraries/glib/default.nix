@@ -24,14 +24,6 @@
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
-/*
-  * TODO:
-  * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests run by Hydra
-      (they should test an already installed package)
-      https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
-  * Support org.freedesktop.Application, including D-Bus activation from desktop files
-*/
 let
   # Some packages don't get "Cflags" from pkg-config correctly
   # and then fail to build when directly including like <glib/...>.

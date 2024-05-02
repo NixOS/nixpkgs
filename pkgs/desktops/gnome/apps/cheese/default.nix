@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Cheese";
+    homepage = "https://gitlab.gnome.org/GNOME/cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     mainProgram = "cheese";
     maintainers = teams.gnome.members;

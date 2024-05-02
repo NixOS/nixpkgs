@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
+, prefetch-yarn-deps
 , fixup-yarn-lock
 , nodejs
 , yarn
@@ -11,21 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.75.2";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-jK1jZ9NyBl3Dioh/7gXWx6XyyI6xJKt2a/XXzbhllZM=";
+    hash = "sha256-pTu1/7hEYvo/6MuN0yC+nrPCwUYqvcc2hZuiPtVFlwU=";
   };
 
-  nativeBuildInputs = [ makeWrapper fixup-yarn-lock ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
   buildInputs = [ yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-8CfaP5T/pf/xq1lOfdOW4n2m12QLnkLFynHABjZwNiY=";
+    hash = "sha256-10kqC4A9OFrpZzTBJIZ6I5TCOVgpX+h+hwfOWhXdhHs=";
   };
 
   configurePhase = ''

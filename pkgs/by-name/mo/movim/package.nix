@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , fetchFromGitHub
 , writeShellScript
 , dash
@@ -39,21 +38,14 @@ let
 in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.24";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-t63POjywZLk5ulppuCedFhhEhOsnB90vy3k/HhM3MGc=";
+    hash = "sha256-Ai82d1VwtAlKmM8N/hazMWsn5F6HS4I1do3VkpLPlBo=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/movim/movim/commit/4dd2842f4617f3baaa166157892a532ad07df80d.patch";
-      hash = "sha256-32MLS5g60Rhm8HQDBPnUo9k+aB7L8dNMcnSjPIlooks=";
-    })
-  ];
 
   php = php.buildEnv ({
     extensions = ({ all, enabled }:
@@ -75,7 +67,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-SinS5ocf4kLMBR2HF3tcdmEomw9ICUqTg2IXPJFoujU=";
+  vendorHash = "sha256-1sQm+eRrs9m52CepPXahsOJhyLZ68+FIDNHyY33IoD4=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;

@@ -97,50 +97,50 @@ in
 
     logs = {
       main = mkOption {
-        type = types.enum [ "error" "notice" "info" "debug"];
+        type = types.enum [ "none" "error" "notice" "info" "debug"];
         default = "info";
         description = ''
-          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (error|notice|info|debug) [all:notice].
+          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (none|error|notice|info|debug) [all:notice].
         '';
       };
 
       network = mkOption {
-        type = types.enum [ "error" "notice" "info" "debug"];
+        type = types.enum [ "none" "error" "notice" "info" "debug"];
         default = "info";
         description = ''
-          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (error|notice|info|debug) [all:notice].
+          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (none|error|notice|info|debug) [all:notice].
         '';
       };
 
       bus = mkOption {
-        type = types.enum [ "error" "notice" "info" "debug"];
+        type = types.enum [ "none" "error" "notice" "info" "debug"];
         default = "info";
         description = ''
-          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (error|notice|info|debug) [all:notice].
+          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (none|error|notice|info|debug) [all:notice].
         '';
       };
 
       update = mkOption {
-        type = types.enum [ "error" "notice" "info" "debug"];
+        type = types.enum [ "none" "error" "notice" "info" "debug"];
         default = "info";
         description = ''
-          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (error|notice|info|debug) [all:notice].
+          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (none|error|notice|info|debug) [all:notice].
         '';
       };
 
       other = mkOption {
-        type = types.enum [ "error" "notice" "info" "debug"];
+        type = types.enum [ "none" "error" "notice" "info" "debug"];
         default = "info";
         description = ''
-          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (error|notice|info|debug) [all:notice].
+          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (none|error|notice|info|debug) [all:notice].
         '';
       };
 
       all = mkOption {
-        type = types.enum [ "error" "notice" "info" "debug"];
+        type = types.enum [ "none" "error" "notice" "info" "debug"];
         default = "info";
         description = ''
-          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (error|notice|info|debug) [all:notice].
+          Only write log for matching AREAs (main|network|bus|update|other|all) below or equal to LEVEL (none|error|notice|info|debug) [all:notice].
         '';
       };
     };
