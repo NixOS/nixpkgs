@@ -8,7 +8,6 @@
 , ninja
 , pkg-config
 , babl
-, cfitsio
 , gegl
 , gtk3
 , glib
@@ -77,7 +76,7 @@ let
   ]);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.18-unstable-2024-05-01";
+  version = "2.99.14-unstable-2023-03-17";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -93,10 +92,8 @@ in stdenv.mkDerivation (finalAttrs: {
     name = "gimp-dev-${rev}"; # to make sure the hash is updated
     owner = "GNOME";
     repo = "gimp";
-    rev = "254d4270e6084f6794e737c561d9a5460df9df4c";
-    hash = "sha256-dCddCFCRDTT4iY+kepKKu413ezWOMEQ1m4hxBptBCfU=";
-    # For gimp-data containing assets.
-    fetchSubmodules = true;
+    rev = "ad7a2e53eb72ef471566fa2d0ce9faeec929fbcf";
+    sha256 = "IJMUJc817EDWIRqqkCuwAcSw7gcgCkXxPan5fEq1AO0=";
   };
 
   patches = [
@@ -154,7 +151,6 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     appstream-glib # for library
     babl
-    cfitsio
     gegl
     gtk3
     glib
@@ -225,8 +221,6 @@ in stdenv.mkDerivation (finalAttrs: {
     "-Dcheck-update=no"
     # Requires neweer appstreamcli and not necessary
     "-Dappdata-test=disabled"
-    # Not yet packaged.
-    "-Dilbm=disabled"
   ] ++ lib.optionals stdenv.isDarwin [
     "-Dalsa=disabled"
     "-Djavascript=false"
