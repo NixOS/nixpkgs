@@ -15,12 +15,12 @@
 , withVim ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notmuch";
   version = "0.38.3";
 
   src = fetchurl {
-    url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
+    url = "https://notmuchmail.org/releases/notmuch-${finalAttrs.version}.tar.xz";
     hash = "sha256-mvRsyA2li0MByiuu/MJaQNES0DFVB+YywPPw8IMo0FQ=";
   };
 
@@ -141,9 +141,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    pythonSourceRoot = "notmuch-${version}/bindings/python";
+    pythonSourceRoot = "notmuch-${finalAttrs.version}/bindings/python";
     tests.version = testers.testVersion { package = notmuch; };
-    inherit version;
 
     updateScript = gitUpdater {
       url = "https://git.notmuchmail.org/git/notmuch";
@@ -160,4 +159,4 @@ stdenv.mkDerivation rec {
     platforms   = platforms.unix;
     mainProgram = "notmuch";
   };
-}
+})
