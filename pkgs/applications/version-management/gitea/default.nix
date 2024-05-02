@@ -39,6 +39,9 @@ buildGoModule rec {
       hash = "sha256-cThW3EnHR695thajbnmfNziVB/iBP9OPeDgWbszYIeg=";
     })
     ./XSS-vulnerabilities-1.21.6.patch
+
+    # Derived from https://github.com/go-gitea/gitea/pull/30136
+    ./csp-early-1.21.11.patch
   ];
 
   postPatch = ''

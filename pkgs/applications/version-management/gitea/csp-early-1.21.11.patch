@@ -1,0 +1,20 @@
+diff --git a/routers/web/repo/render.go b/routers/web/repo/render.go
+index f07b4e8c11..1fcaa83c4f 100644
+--- a/routers/web/repo/render.go
++++ b/routers/web/repo/render.go
+@@ -44,6 +44,7 @@ func RenderFile(ctx *context.Context) {
+ 	isTextFile := st.IsText()
+ 
+ 	rd := charset.ToUTF8WithFallbackReader(io.MultiReader(bytes.NewReader(buf), dataRc))
++	ctx.Resp.Header().Add("Content-Security-Policy", "frame-src 'self'; sandbox allow-scripts")
+ 
+ 	if markupType := markup.Type(blob.Name()); markupType == "" {
+ 		if isTextFile {
+@@ -62,7 +63,6 @@ func RenderFile(ctx *context.Context) {
+ 		treeLink += "/" + util.PathEscapeSegments(ctx.Repo.TreePath)
+ 	}
+ 
+-	ctx.Resp.Header().Add("Content-Security-Policy", "frame-src 'self'; sandbox allow-scripts")
+ 	err = markup.Render(&markup.RenderContext{
+ 		Ctx:              ctx,
+ 		RelativePath:     ctx.Repo.TreePath,
