@@ -16300,6 +16300,8 @@ self: super: with self; {
 
   uarray = callPackage ../development/python-modules/uarray { };
 
+  uart-devices = callPackage ../development/python-modules/uart-devices { };
+
   uasiren = callPackage ../development/python-modules/uasiren { };
 
   ubelt = callPackage ../development/python-modules/ubelt { };
