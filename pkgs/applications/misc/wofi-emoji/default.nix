@@ -1,18 +1,18 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, jq, wofi, wtype, wl-clipboard }:
 
 let emojiJSON = fetchurl {
-  url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.10/dist/emoji-en-US.json";
-  hash = "sha256-UhAB5hVp5vV2d1FjIb2TBd2FJ6OPBbiP31HGAEDQFnA=";};
+  url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.12/dist/emoji-en-US.json";
+  hash = "sha256-q6YcO8Fd1RuQe9rgY25Ga+cD7OULdDRC8Ck4or9h9oQ="; };
 in
 stdenv.mkDerivation rec {
   pname = "wofi-emoji";
-  version = "unstable-2023-12-22";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Zeioth";
-    repo = pname;
-    rev = "2cc95880848134a3bbe0675bcb62a0dae1d0f572";
-    hash = "sha256-t9M8z8JxuvBDzNs98L7YTNUfTK23W1DYGdHDiXNQOgk=";
+    repo = "wofi-emoji";
+    rev = "v${version}";
+    hash = "sha256-wLZK7RcDxxlYuu27WNj+SoRoBiCqk9whp4Fyg0SOoPA=";
   };
 
   nativeBuildInputs = [ jq ];
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple emoji selector for Wayland using wofi and wl-clipboard";
     homepage = "https://github.com/Zeioth/wofi-emoji";
-    license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ymarkus ];
+    platforms = lib.platforms.all;
     mainProgram = "wofi-emoji";
   };
 }
