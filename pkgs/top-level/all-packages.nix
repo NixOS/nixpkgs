@@ -3394,8 +3394,6 @@ with pkgs;
 
   bitwise = callPackage ../tools/misc/bitwise { };
 
-  blanket = callPackage ../applications/audio/blanket { };
-
   blisp = darwin.apple_sdk_11_0.callPackage ../development/embedded/blisp {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit;
   };
