@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , callPackage
+, fetchgit
 , fetchurl
 , fetchpatch
 , makeWrapper
@@ -68,6 +69,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-MA237RtnjtL7ljXKZ1khoZRcfCED2oQAM7STCR9VcAw=";
   };
 
+  clad_src = fetchgit {
+    url = "https://github.com/vgvassilev/clad";
+    rev = "refs/tags/v1.4"; # Make sure that this is the same tag as in the ROOT build files!
+    hash = "sha256-OI9PaS7kQ/ewD5Soe3gG5FZdlR6qG6Y3mfHwi5dj1sI=";
+  };
+
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
   propagatedBuildInputs = [
     nlohmann_json
@@ -131,6 +138,23 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
+    # We have to bypass the connection check, because it would disable clad.
+    # This should probably be fixed upstream with a flag to disable the
+    # connectivity check!
+    substituteInPlace CMakeLists.txt \
+      --replace 'if(NO_CONNECTION)' 'if(FALSE)'
+    substituteInPlace interpreter/cling/tools/plugins/CMakeLists.txt \
+      --replace 'if(NOT DEFINED NO_CONNECTION OR NOT NO_CONNECTION)' 'if(TRUE)'
+    # Make sure that clad is not downloaded when building
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+    # Make sure that clad is finding the right llvm version
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_13.dev}/lib/cmake/llvm'
+    # Fix that will also be upstream in ROOT 6.32. TODO: remove it when updating to 6.32
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace 'set(_CLAD_LIBRARY_PATH ''${clad_install_dir}/plugins/lib)' 'set(_CLAD_LIBRARY_PATH ''${CMAKE_CURRENT_BINARY_DIR}/clad-prefix/src/clad-build/lib''${LLVM_LIBDIR_SUFFIX})'
+
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
       --replace 'add_clang_symlink(''${link} clang)' ""
 
@@ -155,7 +179,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
-    "-Dclad=OFF"
     "-Dfail-on-missing=ON"
     "-Dfitsio=OFF"
     "-Dgnuinstall=ON"
