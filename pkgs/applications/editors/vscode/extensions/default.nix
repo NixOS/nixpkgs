@@ -970,7 +970,7 @@ let
             version = "0.8.25";
           }
           // sources.${stdenv.system};
-        nativeBuildInputs = [ autoPatchelfHook ];
+        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
         buildInputs = [ stdenv.cc.cc.lib ];
         meta = {
           description = "Open-source autopilot for software development - bring the power of ChatGPT to your IDE";
