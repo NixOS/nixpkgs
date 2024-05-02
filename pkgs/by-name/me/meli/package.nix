@@ -22,7 +22,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.4";
+  version = "0.8.5-rc.3";
 
   src = fetchzip {
     urls = [
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-wmIlYgXB17/i9Q+6C7pbcEjVlEuvhmqrSH+cDmaBKLs=";
+    hash = "sha256-FGyV94XtRSR3CUMbhF50qqDWJcIrknQA3EPwVLwTF1k=";
   };
 
-  cargoHash = "sha256-gYS/dxNMz/HkCmRXH5AdHPXJ2giqpAHc4eVXJGOpMDM=";
+  cargoHash = "sha256-jA8ZOTo8ATb78PIZMMEmwFgIdo1uugk0O//GVN2L5eY=";
 
   # Needed to get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR=1;
