@@ -18034,6 +18034,8 @@ self: super: with self; {
 
   uxsim = callPackage ../development/python-modules/uxsim { };
 
+  uwsgi-chunked = callPackage ../development/python-modules/uwsgi-chunked { };
+
   vaa = callPackage ../development/python-modules/vaa { };
 
   vacuum-map-parser-base = callPackage ../development/python-modules/vacuum-map-parser-base { };
