@@ -16,7 +16,18 @@ php.buildComposerProject (finalAttrs: {
     url = "https://github.com/bobthecow/psysh/releases/download/v${finalAttrs.version}/composer-v${finalAttrs.version}.lock";
     hash = "sha256-ur6mzla3uXeFL6aEHAPdpxGdvcgzOgTLW/CKPbNqeCg=";
   };
-  vendorHash = "";
+
+  composerRepository = {
+    preBuild = ''
+      setComposeRootVersion
+      composer config platform.php 7.4
+      composer require --no-update symfony/polyfill-iconv symfony/polyfill-mbstring
+      composer require --no-update --dev roave/security-advisories:dev-latest
+      composer update --no-interaction --no-progress --prefer-stable --no-dev --classmap-authoritative --prefer-dist --lock
+    '';
+  };
+
+  vendorHash = "sha256-vlEbehxy6xi2qLKG32fV0OJVSphWjqKUVHbWOhoWjoI=";
 
   meta = {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";
