@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "nightly-2024-03-25";
+  version = "nightly-2024-05-01";
 in
 rustPlatform.buildRustPackage {
   pname = "ruffle";
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     owner = "ruffle-rs";
     repo = "ruffle";
     rev = version;
-    hash = "sha256-3G5xSGdMl4ISQmb2BVGdKz1cXU5Mnl+VkVYpJ6P12og=";
+    hash = "sha256-WfoYQku1NFhvWyqeSVKtsMMEyUA97YFD7cvdn4XYIPI=";
   };
 
   nativeBuildInputs = [
