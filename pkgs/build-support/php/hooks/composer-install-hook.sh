@@ -23,6 +23,10 @@ composerInstallConfigureHook() {
         cp "$composerLock" composer.lock
     fi
 
+    chmod +w composer.{json,lock}
+    cp ${composerRepository}/composer.{json,lock} .
+    chmod +w composer.{json,lock}
+
     if [[ ! -f "composer.lock" ]]; then
         setComposeRootVersion
 
@@ -70,8 +74,6 @@ composerInstallConfigureHook() {
 
         exit 1
     fi
-
-    chmod +w composer.json composer.lock
 
     echo "Finished composerInstallConfigureHook"
 }

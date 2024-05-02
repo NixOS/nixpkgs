@@ -19,6 +19,8 @@ composerRepositoryConfigureHook() {
         cp $composerLock composer.lock
     fi
 
+    chmod +w composer.{json,lock}
+
     if [[ ! -f "composer.lock" ]]; then
         setComposeRootVersion
 
@@ -85,7 +87,7 @@ composerRepositoryInstallHook() {
 
     # Copy the composer.lock files to the output directory, to be able to validate consistency with
     # the src composer.lock file where this fixed-output derivation is used
-    cp composer.lock $out/
+    cp composer.{json,lock} $out/
 
     echo "Finished composerRepositoryInstallHook"
 }
