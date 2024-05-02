@@ -2,6 +2,8 @@
 , buildNpmPackage
 , fetchFromGitHub
 , makeWrapper
+, redocly
+, testers
 }:
 
 buildNpmPackage rec {
@@ -32,24 +34,25 @@ buildNpmPackage rec {
 
     mkdir $out/bin
     makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
-      $out/bin/redocly-cli \
+      $out/bin/redocly \
       --set-default REDOCLY_TELEMETRY off \
       --set-default CI true # Silence update messages
+
+    # Symlink for backwards compatibility. Remove after 24.05.
+    ln -s $out/bin/redocly $out/bin/redocly-cli
   '';
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/redocly-cli --version
-    runHook postInstallCheck
-  '';
-
-  doInstallCheck = true;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = redocly;
+    };
+  };
 
   meta = {
-    description = "Redocly CLI makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more.";
+    description = "Makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more";
     homepage = "https://github.com/Redocly/redocly-cli";
     license = lib.licenses.mit;
-    mainProgram = "redocly-cli";
+    mainProgram = "redocly";
     maintainers = with lib.maintainers; [ szlend ];
   };
 }
