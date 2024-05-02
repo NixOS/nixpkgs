@@ -157,7 +157,23 @@ let
     in universal // {
 
       nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
-        args.androidSdk or androidenv.androidPkgs_9_0.androidsdk
+        (args.androidSdk or (let buildToolsVersionForAapt2 = "34.0.0"; in androidenv.composeAndroidPackages {
+          buildToolsVersions = [buildToolsVersionForAapt2 "30.0.3"];
+          platformVersions = ["34" "33" "31" "30"];
+          abiVersions = ["armeabi-v7a" "arm64-v8a" "x86" "x86_64"];
+          toolsVersion = "26.1.1";
+          platformToolsVersion = "33.0.3";
+          extraLicenses = [
+            "android-googletv-license"
+            "android-sdk-arm-dbt-license"
+            "android-sdk-license"
+            "android-sdk-preview-license"
+            "google-gdk-license"
+            "intel-android-extra-license"
+            "intel-android-sysimage-license"
+            "mips-android-sysimage-license"
+          ];
+        }).androidsdk)
         jdk17
         # pkgs-stable.androidenv.emulateApp #TODO: output avd running the apk into $out/bin/${pname} to make nix run .#android available or something
       ];
