@@ -91,7 +91,7 @@ let
           publisher = "42Crunch";
           name = "vscode-openapi";
           version = "4.25.3";
-          sha256 = "1kz/M2od2gLSFgqW6LsPHgtm+BwXA+0+7z3HyqNmsOg=";
+          hash = "sha256-1kz/M2od2gLSFgqW6LsPHgtm+BwXA+0+7z3HyqNmsOg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
