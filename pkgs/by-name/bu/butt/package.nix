@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "butt";
-  version = "0.1.41";
+  version = "1.41.1";
 
   src = fetchurl {
     url = "https://danielnoethen.de/butt/release/${finalAttrs.version}/butt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-wTypjqd2PpmDSA8vScMLkAL44xE/WAccm747PS9ClVA=";
+    hash = "sha256-y/XIcFm1TWVd5SL+kDCJc21CtMwipMQgRE4gPra5+98=";
   };
 
   postPatch = ''
