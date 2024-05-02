@@ -50,7 +50,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycairo
-    gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
 
   mesonFlags = [
