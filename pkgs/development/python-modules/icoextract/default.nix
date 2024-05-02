@@ -31,6 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extract icons from Windows PE files";
     homepage = "https://github.com/jlu5/icoextract";
+    changelog = "https://github.com/jlu5/icoextract/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bryanasdev000 donovanglover ];
   };
