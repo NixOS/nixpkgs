@@ -1,18 +1,22 @@
-{ fetchFromGitHub, lib, php }:
+{ fetchFromGitHub, fetchurl, lib, php }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "psysh";
-  version = "0.11.21";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "bobthecow";
     repo = "psysh";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YuBn4mrgOzGeMGfGcyZySAISmQdv3WRGn91PRozyxdI=";
+    hash = "sha256-v2UAhxnfnVwA05sxcqMU5vmQcwlBcc901PYJqYf+pCw=";
   };
 
-  composerLock = ./composer.lock;
-  vendorHash = "sha256-FZFeO7UiVssxTf0JX6wdjrAE+jucYnfQJA1eOng39lQ=";
+  composerLock = fetchurl {
+    name = "composer.lock";
+    url = "https://github.com/bobthecow/psysh/releases/download/v${finalAttrs.version}/composer-v${finalAttrs.version}.lock";
+    hash = "sha256-ur6mzla3uXeFL6aEHAPdpxGdvcgzOgTLW/CKPbNqeCg=";
+  };
+  vendorHash = "";
 
   meta = {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";
