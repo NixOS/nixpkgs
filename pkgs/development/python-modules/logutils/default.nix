@@ -24,6 +24,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tests/test_dictconfig.py \
       --replace-fail "assertEquals" "assertEqual"
+    substituteInPlace tests/test_redis.py \
+      --replace-fail "'redis-server'" "'${redis-server}/bin/redis-server'"
   '';
 
   build-system = [
@@ -33,7 +35,6 @@ buildPythonPackage rec {
   dependencies = [
     pytestCheckHook
     redis
-    redis-server
   ];
 
   disabledTests = [
