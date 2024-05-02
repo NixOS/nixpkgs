@@ -1,12 +1,13 @@
-{ lib
-, olefile
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  olefile,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-1LTFwXTIvFdrYyI1pDUPzQHw3/043+FGHDnKYWaomY0=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     cryptography
@@ -33,18 +32,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Test fails with AssertionError
     "test_cli"
   ];
 
-  pythonImportsCheck = [
-    "msoffcrypto"
-  ];
+  pythonImportsCheck = [ "msoffcrypto" ];
 
   meta = with lib; {
     description = "Python tool and library for decrypting MS Office files with passwords or other keys";
