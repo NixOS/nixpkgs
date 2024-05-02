@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-SZ9mWV5PjkQ2OiScPSMrunkKQWmuYW2lB2JvpTGNbY4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bitstruct
     jinja2
     lark
@@ -50,10 +50,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "LIN Description File parser written in Python";
-    mainProgram = "ldfparser";
     homepage = "https://github.com/c4deszes/ldfparser";
     changelog = "https://github.com/c4deszes/ldfparser/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ldfparser";
   };
 }
