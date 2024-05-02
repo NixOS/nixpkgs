@@ -120,5 +120,7 @@ buildPythonApplication rec {
     mainProgram = "mkosi";
     maintainers = with maintainers; [ malt3 katexochen ];
     platforms = platforms.linux;
+    # `mkosi qemu` boot fails in the uefi shell, image isn't found.
+    broken = withQemu;
   };
 }
