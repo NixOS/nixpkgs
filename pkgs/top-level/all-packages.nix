@@ -24186,8 +24186,6 @@ with pkgs;
 
   SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
 
-  SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
-
   SDL_gpu = callPackage ../development/libraries/SDL_gpu { };
 
   SDL_image = callPackage ../development/libraries/SDL_image { };
