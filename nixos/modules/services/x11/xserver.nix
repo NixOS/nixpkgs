@@ -174,6 +174,7 @@ in
       (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
       (lib.mkRenamedOptionModule [ "services" "xserver" "layout" ] [ "environment" "xkb" "layout" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "extraLayouts" ] [ "environment" "xkb" "extraLayouts" ])
       (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "layout" ] [ "environment" "xkb" "layout" ])
       (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "dir" ] [ "environment" "xkb" "dir" ])
       (lib.mkRenamedOptionModule [ "services" "xserver" "xkb" "model" ] [ "environment" "xkb" "model" ])
