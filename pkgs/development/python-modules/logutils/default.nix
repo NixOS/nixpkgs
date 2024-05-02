@@ -3,21 +3,29 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 , redis
 , redis-server
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "logutils";
   version = "0.3.5";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc058a25d5c209461f134e1f03cab637d66a7a5ccc12e593db56fbb279899a82";
+    hash = "sha256-vAWKJdXCCUYfE04fA8q2N9ZqelzMEuWT21b7snmJmoI=";
   };
 
-  nativeCheckInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pytestCheckHook
     redis
     redis-server
@@ -33,9 +41,14 @@ buildPythonPackage rec {
     "tests/test_redis.py"
   ];
 
+  pythonImportsCheck = [
+    "logutils"
+  ];
+
   meta = with lib; {
     description = "Logging utilities";
     homepage = "https://bitbucket.org/vinay.sajip/logutils/";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
   };
 }
