@@ -11,6 +11,7 @@
 , meson
 , ninja
 , pythonOlder
+, runCommandLocal
 , gnome
 , python
 }:
@@ -46,6 +47,15 @@ buildPythonPackage rec {
     glib
   ] ++ lib.optionals stdenv.isDarwin [
     ncurses
+  ];
+
+  depsBuildBuildPropagated = [
+    glib # TODO: Not sure why it works here, when the proper place is depsHostHostPropagated IMO.
+    gobject-introspection.setupHook
+  ];
+
+  depsHostHostPropagated = [
+    glib
   ];
 
   propagatedBuildInputs = [
