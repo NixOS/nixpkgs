@@ -192,6 +192,7 @@
   ./programs/fzf.nix
   ./programs/gamemode.nix
   ./programs/gamescope.nix
+  ./programs/gdk-pixbuf.nix
   ./programs/geary.nix
   ./programs/git.nix
   ./programs/gnome-disks.nix
@@ -1472,7 +1473,6 @@
   ./services/x11/display-managers/xpra.nix
   ./services/x11/extra-layouts.nix
   ./services/x11/fractalart.nix
-  ./services/x11/gdk-pixbuf.nix
   ./services/x11/hardware/cmt.nix
   ./services/x11/hardware/digimend.nix
   ./services/x11/hardware/synaptics.nix

@@ -1,16 +1,20 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.services.xserver.gdk-pixbuf;
+  cfg = config.programs.gdk-pixbuf;
 
   loadersCache = pkgs.gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-    extraLoaders = lib.unique (cfg.modulePackages);
+    extraLoaders = lib.unique cfg.modulePackages;
   };
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "xserver" "gdk-pixbuf" ] [ "programs" "gdk-pixbuf" ])
+  ];
+
   options = {
-    services.xserver.gdk-pixbuf.modulePackages = lib.mkOption {
+    programs.gdk-pixbuf.modulePackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
       description = "Packages providing GDK-Pixbuf modules, for cache generation.";
@@ -22,7 +26,7 @@ in
   # GDK_PIXBUF_MODULE_FILE to point to it.
   config = lib.mkIf (cfg.modulePackages != []) {
     environment.sessionVariables = {
-      GDK_PIXBUF_MODULE_FILE = "${loadersCache}";
+      GDK_PIXBUF_MODULE_FILE = loadersCache;
     };
   };
 }
