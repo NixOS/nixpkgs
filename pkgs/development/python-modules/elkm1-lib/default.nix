@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "elkm1-lib";
   version = "2.2.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-5Jmn/ywyg6fmp0ZxPf79ET+JWPF4VjDJMwj/qU6ckS0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     pyserial-asyncio
   ];
