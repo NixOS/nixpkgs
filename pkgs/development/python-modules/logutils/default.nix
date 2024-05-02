@@ -21,6 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-vAWKJdXCCUYfE04fA8q2N9ZqelzMEuWT21b7snmJmoI=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_dictconfig.py \
+      --replace-fail "assertEquals" "assertEqual"
+  '';
+
   build-system = [
     setuptools
   ];
