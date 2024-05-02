@@ -4115,8 +4115,6 @@ self: super: with self; {
 
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
-  fastpair = callPackage ../development/python-modules/fastpair { };
-
   fastparquet = callPackage ../development/python-modules/fastparquet { };
 
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 { };
