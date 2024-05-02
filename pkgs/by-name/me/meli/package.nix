@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchzip
 , rustPlatform
 
 # native build inputs
@@ -24,9 +24,12 @@ rustPlatform.buildRustPackage rec {
   pname = "meli";
   version = "0.8.4";
 
-  src = fetchgit {
-    url = "https://git.meli-email.org/meli/meli.git";
-    rev = "v${version}";
+  src = fetchzip {
+    urls = [
+      "https://git.meli-email.org/meli/meli/archive/v${version}.tar.gz"
+      "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
+      "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
+    ];
     hash = "sha256-wmIlYgXB17/i9Q+6C7pbcEjVlEuvhmqrSH+cDmaBKLs=";
   };
 
