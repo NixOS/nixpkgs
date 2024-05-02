@@ -1,11 +1,12 @@
-{ lib
-, antlr4-python3-runtime
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  antlr4-python3-runtime,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -27,22 +28,16 @@ buildPythonPackage rec {
       --replace-fail "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     antlr4-python3-runtime
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "stix2patterns"
-  ];
+  pythonImportsCheck = [ "stix2patterns" ];
 
   disabledTestPaths = [
     # Exception: Could not deserialize ATN with version  (expected 4)
