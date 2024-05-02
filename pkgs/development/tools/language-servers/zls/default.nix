@@ -18,13 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2iVDPUj9ExgTooDQmCCtZs3wxBe2be9xjzAk9HedPNY=";
   };
 
-  langref = fetchurl {
-    url = "https://raw.githubusercontent.com/ziglang/zig/a685ab1499d6560c523f0dbce2890dc140671e43/doc/langref.html.in";
-    hash = "sha256-7lFSfkVLOrn42nYnYyDmBkkRfM903lUUJZ5Sg+eBUpE=";
-  };
-
   zigBuildFlags = [
-    "-Dversion_data_path=${finalAttrs.langref}"
+    "-Dversion_data_path=${zig_0_12.src}/doc/langref.html.in"
   ];
 
   nativeBuildInputs = [
