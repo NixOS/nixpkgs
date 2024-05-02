@@ -124,6 +124,12 @@ in stdenv.mkDerivation (finalAttrs: {
     # the correct directory at the moment. There is a MR against isocodes to fix that:
     # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
     ./fix-isocodes-paths.patch
+
+    # Fix build with current libjxl.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/a4f02398188bc36d1808ef802082b3856cc73741.patch";
+      hash = "sha256-I5a86tPtKs2I2dAJW17kDwGOG2I+5MblJCjb8gNT8+I=";
+    })
   ];
 
   nativeBuildInputs = [
