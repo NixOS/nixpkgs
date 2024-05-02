@@ -40,10 +40,12 @@
 , udev
 , upower
 , wayland
+, wayland-scanner
 , wireplumber
 , wrapGAppsHook
 
 , cavaSupport ? true
+, enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , evdevSupport ? true
 , experimentalPatches ? true
 , hyprlandSupport ? true
@@ -55,7 +57,7 @@
 , pipewireSupport ? true
 , pulseSupport ? true
 , rfkillSupport ? true
-, runTests ? true
+, runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , sndioSupport ? true
 , swaySupport ? true
 , traySupport ? true
@@ -97,17 +99,16 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    scdoc
+    wayland-scanner
     wrapGAppsHook
-  ] ++ lib.optional withMediaPlayer gobject-introspection;
+  ] ++ lib.optional withMediaPlayer gobject-introspection
+    ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
     playerctl
     python3.pkgs.pygobject3
   ];
-
-  strictDeps = false;
 
   buildInputs = [
     gtk-layer-shell
@@ -154,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     "libinput" = inputSupport;
     "libnl" = nlSupport;
     "libudev" = udevSupport;
-    "man-pages" = true;
+    "man-pages" = enableManpages;
     "mpd" = mpdSupport;
     "mpris" = mprisSupport;
     "pipewire" = pipewireSupport;

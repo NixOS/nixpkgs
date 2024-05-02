@@ -10,7 +10,7 @@
 
 buildLua {
   pname = "mpv-convert-script";
-  version = "unstable-2015-07-02";
+  version = "0-unstable-2015-07-02";
   src = fetchgit {
     url = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
     rev = "f95cee43e390e843a47e8ec9d1711a12a8cd343d";

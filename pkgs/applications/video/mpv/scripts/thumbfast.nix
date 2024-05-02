@@ -2,7 +2,7 @@
 
 buildLua {
   pname = "mpv-thumbfast";
-  version = "unstable-2023-12-08";
+  version = "0-unstable-2023-12-08";
 
   src = fetchFromGitHub {
     owner = "po5";

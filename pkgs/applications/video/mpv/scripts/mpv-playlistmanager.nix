@@ -2,7 +2,7 @@
 
 buildLua rec {
   pname = "mpv-playlistmanager";
-  version = "unstable-2024-02-26";
+  version = "0-unstable-2024-02-26";
 
   src = fetchFromGitHub {
     owner = "jonniek";

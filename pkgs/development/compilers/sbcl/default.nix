@@ -19,11 +19,11 @@
 
 let
   versionMap = {
-    "2.4.2" = {
-      sha256 = "sha256-/APLUtEqr+h1nmMoRQogG73fibFwcaToPznoC0Pd7w8=";
-    };
     "2.4.3" = {
       sha256 = "sha256-icmq35K4KtPHSj1PFYoDiJPeoOTzlNyvyWNYPDC3w/I=";
+    };
+    "2.4.4" = {
+      sha256 = "sha256-ipMmJ7Px2OlhjxzcIl7csAJFaARpfiyH0UBoN2ShBtU=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for

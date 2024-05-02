@@ -70,12 +70,14 @@ let
     dynamic-crop = callPackage ./dynamic-crop.nix { };
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     memo = callPackage ./memo.nix { };
+    manga-reader = callPackage ./manga-reader.nix { };
     modernx = callPackage ./modernx.nix { };
     modernx-zydezu = callPackage ./modernx-zydezu.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
     mpv-osc-modern = callPackage ./mpv-osc-modern.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
+    mpv-slicing = callPackage ./mpv-slicing.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quack = callPackage ./quack.nix { };
@@ -87,9 +89,11 @@ let
     thumbfast = callPackage ./thumbfast.nix { };
     thumbnail = callPackage ./thumbnail.nix { };
     uosc = callPackage ./uosc.nix { };
+    videoclip = callPackage ./videoclip.nix { };
     visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
+    youtube-upnext = callPackage ./youtube-upnext.nix { };
   };
 
   aliases = {

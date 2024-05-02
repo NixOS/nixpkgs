@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Videos";
+    homepage = "https://apps.gnome.org/Totem/";
     description = "Movie player for the GNOME desktop based on GStreamer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins

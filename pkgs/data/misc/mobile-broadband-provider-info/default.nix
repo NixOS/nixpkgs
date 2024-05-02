@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mobile broadband service provider database";
-    homepage = "https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders";
+    homepage = "https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info";
     license = licenses.publicDomain;
     maintainers = [ ];
     platforms = platforms.all;

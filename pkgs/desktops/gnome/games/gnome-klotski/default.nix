@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Klotski";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-klotski";
     description = "Slide blocks to solve the puzzle";
     mainProgram = "gnome-klotski";
     maintainers = teams.gnome.members;

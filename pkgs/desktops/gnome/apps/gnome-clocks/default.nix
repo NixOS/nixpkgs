@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Clocks";
+    homepage = "https://apps.gnome.org/Clocks/";
     description = "Clock application designed for GNOME 3";
     mainProgram = "gnome-clocks";
     maintainers = teams.gnome.members;

@@ -8,7 +8,7 @@ Programs in the GNOME universe are written in various languages but they all use
 
 [GSettings](https://developer.gnome.org/gio/stable/GSettings.html) API is often used for storing settings. GSettings schemas are required, to know the type and other metadata of the stored values. GLib looks for `glib-2.0/schemas/gschemas.compiled` files inside the directories of `XDG_DATA_DIRS`.
 
-On Linux, GSettings API is implemented using [dconf](https://wiki.gnome.org/Projects/dconf) backend. You will need to add `dconf` [GIO module](#ssec-gnome-gio-modules) to `GIO_EXTRA_MODULES` variable, otherwise the `memory` backend will be used and the saved settings will not be persistent.
+On Linux, GSettings API is implemented using [dconf](https://gitlab.gnome.org/GNOME/dconf) backend. You will need to add `dconf` [GIO module](#ssec-gnome-gio-modules) to `GIO_EXTRA_MODULES` variable, otherwise the `memory` backend will be used and the saved settings will not be persistent.
 
 Last you will need the dconf database D-Bus service itself. You can enable it using `programs.dconf.enable`.
 
@@ -76,11 +76,11 @@ Previously, a GTK theme needed to be in `XDG_DATA_DIRS`. This is no longer neces
 
 ### GObject introspection typelibs {#ssec-gnome-typelibs}
 
-[GObject introspection](https://wiki.gnome.org/Projects/GObjectIntrospection) allows applications to use C libraries in other languages easily. It does this through `typelib` files searched in `GI_TYPELIB_PATH`.
+[GObject introspection](https://gitlab.gnome.org/GNOME/gobject-introspection) allows applications to use C libraries in other languages easily. It does this through `typelib` files searched in `GI_TYPELIB_PATH`.
 
 ### Various plug-ins {#ssec-gnome-plugins}
 
-If your application uses [GStreamer](https://gstreamer.freedesktop.org/) or [Grilo](https://wiki.gnome.org/Projects/Grilo), you should set `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH`, respectively.
+If your application uses [GStreamer](https://gstreamer.freedesktop.org/) or [Grilo](https://gitlab.gnome.org/GNOME/grilo), you should set `GST_PLUGIN_SYSTEM_PATH_1_0` and `GRL_PLUGIN_PATH`, respectively.
 
 ## Onto `wrapGAppsHook` {#ssec-gnome-hooks}
 

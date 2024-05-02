@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pdm-backend ];
-  propagatedBuildInputs = [ amaranth ];
+  dependencies = [ amaranth ];
 
   preBuild = ''
     export PDM_BUILD_SCM_VERSION="${realVersion}"

@@ -35,14 +35,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     watchdog
     portalocker
   ];
 
   preCheck = ''
     substituteInPlace pyproject.toml \
-      --replace  \
+      --replace-fail  \
         '"--cov' \
         '#"--cov'
   '';

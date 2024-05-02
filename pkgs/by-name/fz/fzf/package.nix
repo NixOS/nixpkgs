@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.50.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
-    repo = pname;
+    repo = "fzf";
     rev = version;
-    hash = "sha256-b8B05aj0+c620K6ftCXx1EGUt8mdqQYTE0D9aPU+/wA=";
+    hash = "sha256-ybg2Zq2J/3lyIFnQpnPbRe6D8iD+hgiiA02EatOQVkI=";
   };
 
   vendorHash = "sha256-Ho2jVD/U/2BFt3BF5w+KHp5nSVmukx0o2l3ISDGDSt0=";
@@ -79,13 +79,13 @@ buildGoModule rec {
     package = fzf;
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/junegunn/fzf";
-    description = "A command-line fuzzy finder written in Go";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
-    platforms = platforms.unix;
+  meta = {
     changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
+    description = "Command-line fuzzy finder written in Go";
+    homepage = "https://github.com/junegunn/fzf";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Br1ght0ne ma27 zowoq ];
     mainProgram = "fzf";
+    platforms = lib.platforms.unix;
   };
 }
