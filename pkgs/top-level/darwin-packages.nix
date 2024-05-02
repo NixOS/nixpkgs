@@ -83,8 +83,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
   # x86-64 Darwin gnat-bootstrap emits assembly
@@ -124,20 +123,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
-  };
-
-  cctools = self.cctools-llvm;
-
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
