@@ -43,7 +43,9 @@ in
 
     programs.gnupg.agent.pinentryPackage = lib.mkOverride 1100 pkgs.pinentry-gnome3;
 
-    systemd.defaultUnit = lib.mkIf (xcfg.autorun || dmcfg.enable) "graphical.target";
+    services.xkb.enable = true;
+
+    systemd.defaultUnit = lib.mkIf (config.services.xserver.autorun || dmcfg.enable) "graphical.target";
 
     xdg = {
       autostart.enable = true;

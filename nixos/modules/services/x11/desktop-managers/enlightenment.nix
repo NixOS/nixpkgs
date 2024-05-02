@@ -68,6 +68,8 @@ in
       fi
     '';
 
+    services.xkb.enable = true;
+
     # Wrappers for programs installed by enlightenment that should be setuid
     security.wrappers = {
       enlightenment_ckpasswd =
@@ -89,8 +91,6 @@ in
           source = "${pkgs.enlightenment.enlightenment}/lib/enlightenment/utils/enlightenment_system";
         };
     };
-
-    environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
     fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 

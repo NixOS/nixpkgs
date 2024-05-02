@@ -622,8 +622,6 @@ in
       (optionalAttrs cfg.exportConfiguration
         {
           "X11/xorg.conf".source = "${configFile}";
-          # -xkbdir command line option does not seems to be passed to xkbcomp.
-          "X11/xkb".source = "${config.services.xkb.dir}";
         })
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
       // (let cfgPath = "X11/xorg.conf.d/10-evdev.conf"; in

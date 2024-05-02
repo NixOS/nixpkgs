@@ -52,7 +52,9 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
+    environment.etc."X11/xkb".source = config.services.xkb.dir;
+
     system.checks = lib.singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) dir model layout variant options;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];

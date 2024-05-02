@@ -311,8 +311,6 @@ in
         "/share"
       ];
 
-      environment.etc."X11/xkb".source = xcfg.xkb.dir;
-
       environment.sessionVariables = {
         PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
 
@@ -537,6 +535,8 @@ in
           };
         };
       };
+
+      services.xkb.enable = true;
 
       services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-mobile ];
     })
