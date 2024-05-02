@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "icoextract";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-x0GEV0PUbkAzoUJgAqup9bHd7iYttGyzIZNdo8KsFyo=";
+    hash = "sha256-/UxnWNyRNtwI4Rxx97i5QyjeMrUr5Sq+TfLTmU0xWyc=";
   };
 
   propagatedBuildInputs = [
