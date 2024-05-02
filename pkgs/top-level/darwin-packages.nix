@@ -83,8 +83,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   };
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (self) cctools;
+    inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
   binutils = pkgs.wrapBintoolsWith {
@@ -114,7 +114,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  cctools = self.cctools-llvm;
+  cctools = self.cctools-port;
 
   cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
