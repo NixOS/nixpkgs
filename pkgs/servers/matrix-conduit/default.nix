@@ -6,16 +6,13 @@
 , stdenv
 , darwin
 , nixosTests
-, rocksdb_8_3
+, rocksdb
 , rust-jemalloc-sys
 }:
 
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
