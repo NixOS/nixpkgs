@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, mypy-extensions
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pytz
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  mypy-extensions,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -28,17 +29,13 @@ buildPythonPackage rec {
       --replace-fail "_TextTestResult" "TextTestResult"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     setuptools
     mypy-extensions
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook
