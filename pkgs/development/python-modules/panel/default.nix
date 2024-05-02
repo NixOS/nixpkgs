@@ -26,6 +26,8 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version format;
     hash = "sha256-x7ywbO2uY1r06bDXV/+X/7cs9f6jFawyDHeo8pLWZVE=";
+    dist = "py3";
+    python = "py3";
   };
 
   nativeBuildInputs = [

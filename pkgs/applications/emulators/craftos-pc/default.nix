@@ -1,10 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , patchelf
-, unzip
 , poco
 , openssl
 , SDL2
@@ -16,18 +14,18 @@
 }:
 
 let
-  version = "2.8.1";
+  version = "2.8.2";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
     rev = "v${version}";
-    hash = "sha256-8bl83AOIWtUQ06F2unYEF08VT13o9EGo9YDZpdNxd8w=";
+    hash = "sha256-Kv0supnYKWLaVqOeZAzQNd3tQRP2KJugZqytyoj8QtY=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
     rev = "v${version}";
-    hash = "sha256-aCRJ3idSrRM8ydt8hP8nA1RR0etPnWpQKphXcOGgTfk=";
+    hash = "sha256-5ZsLsqrkO02NLJCzsgf0k/ifsqNybTi4DcB9GLmWDHw=";
   };
 in
 
@@ -39,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    hash = "sha256-iQCv4EDdqmnU0fYxMwpCZ2Z5p43P0MGBNIG/dZrWndg=";
+    hash = "sha256-ozebHgUgwdqYtWAyL+EdwpjEvZC+PkWcLYCPWz2FjSw=";
   };
 
   buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];

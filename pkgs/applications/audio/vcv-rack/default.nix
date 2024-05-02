@@ -250,6 +250,7 @@ stdenv.mkDerivation rec {
     # no-derivatives clause
     license = with licenses; [ gpl3Plus cc-by-nc-40 unfreeRedistributable ];
     maintainers = with maintainers; [ nathyong jpotier ddelabru ];
+    mainProgram = "Rack";
     platforms = platforms.linux;
   };
 }

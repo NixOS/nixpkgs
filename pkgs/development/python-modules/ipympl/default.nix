@@ -21,6 +21,8 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version format;
     hash = "sha256-WwwIxvT26mVbpYI5NjRXwQ+5IVV/UDjBpG20RX1taw4=";
+    dist = "py3";
+    python = "py3";
   };
 
   propagatedBuildInputs = [
