@@ -34,5 +34,6 @@ gccStdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;
+    mainProgram = "migrate-n";
   };
 }
