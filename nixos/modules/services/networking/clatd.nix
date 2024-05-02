@@ -43,7 +43,6 @@ in
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/clatd -c ${configFile}";
-        startLimitIntervalSec = 0;
 
         # Hardening
         CapabilityBoundingSet = [
