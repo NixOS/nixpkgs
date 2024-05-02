@@ -190,7 +190,7 @@ in lib.makeExtensible (self: ({
     };
   };
 
-  latest = self.nix_2_21;
+  latest = self.nix_2_22;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
