@@ -57,6 +57,12 @@ python3Packages.buildPythonApplication rec {
       --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "Listen to different sounds";
     homepage = "https://github.com/rafaelmardojai/blanket";
