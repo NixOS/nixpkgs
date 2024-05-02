@@ -19,16 +19,16 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
-    repo = pname;
+    repo = "aioshelly";
     rev = "refs/tags/${version}";
     hash = "sha256-yVjQlP4vIs3Nk94ZcafpLzxVMIJfLsPGee5G5IdnCRs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     bluetooth-data-tools
     habluetooth
