@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pywaze";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov --cov-report term-missing --cov=src/pywaze " ""
+      --replace-fail "--cov --cov-report term-missing --cov=src/pywaze " ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
   ];
 
