@@ -2880,10 +2880,10 @@ buildLuarocksPackage {
 sofa = callPackage({ argparse, buildLuarocksPackage, compat53, fetchFromGitHub, fetchurl, lua, luaAtLeast, luaOlder, lyaml }:
 buildLuarocksPackage {
   pname = "sofa";
-  version = "0.4.0-0";
+  version = "0.4.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/sofa-0.4.0-0.rockspec";
-    sha256 = "180i44bisv3g5asrmr5pyq28d1k5q8fw36pjbnf6dhnlq3azq829";
+    url    = "mirror://luarocks/sofa-0.4.0-1.rockspec";
+    sha256 = "0h40d5665cdnlqjq7xddqdbjn5ls970nk5c0wfp75qhs0s4xm4mc";
   }).outPath;
   src = fetchFromGitHub {
     owner = "f4z3r";
