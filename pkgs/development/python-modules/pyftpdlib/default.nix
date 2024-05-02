@@ -6,12 +6,13 @@
 , pyopenssl
 , pysendfile
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
   version = "1.5.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-Mj1MQvFAau203xj69oD2TzLAgP9m9sJgkLpZL1v8Sg8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pysendfile
   ];
 
@@ -45,9 +50,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asynchronous FTP server library";
-    mainProgram = "ftpbench";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
+    changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "ftpbench";
   };
 }
