@@ -35,6 +35,7 @@ in
         nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
         xdg-utils
       ];
+      xkb.enable = true;
     };
 
     fonts.enableDefaultPackages = lib.mkDefault true;
