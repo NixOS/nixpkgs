@@ -91,6 +91,7 @@ in buildPythonPackage {
     addToSearchPath program_PYTHONPATH $out/${python.sitePackages}
     patchPythonScript $out/share/matrix.py
     substituteInPlace $out/${python.sitePackages}/matrix/server.py --replace \"matrix_sso_helper\" \"$out/bin/matrix_sso_helper\"
+    substituteInPlace $out/${python.sitePackages}/matrix/uploads.py --replace \"matrix_upload\" \"$out/bin/matrix_upload\"
   '';
 
   meta = with lib; {
