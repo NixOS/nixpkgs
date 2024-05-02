@@ -25957,8 +25957,6 @@ with pkgs;
 
   kamailio = callPackage ../servers/sip/kamailio { };
 
-  kanidm = callPackage ../servers/kanidm { };
-
   kapowbang = callPackage ../servers/kapowbang { };
 
   keycloak = callPackage ../servers/keycloak { };
