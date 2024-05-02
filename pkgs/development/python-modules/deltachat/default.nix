@@ -4,13 +4,11 @@
 , pkg-config
 , pkgconfig
 , setuptools-scm
-, wheel
 , libdeltachat
 , cffi
 , imap-tools
 , requests
 , pluggy
-, setuptools
 , pytestCheckHook
 }:
 
@@ -20,15 +18,13 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = [
     cffi
     pkg-config
     pkgconfig
-    setuptools
     setuptools-scm
-    wheel
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
