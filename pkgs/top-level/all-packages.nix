@@ -24297,8 +24297,6 @@ with pkgs;
 
   SDL_net = callPackage ../development/libraries/SDL_net { };
 
-  SDL_sound = callPackage ../development/libraries/SDL_sound { };
-
   SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
