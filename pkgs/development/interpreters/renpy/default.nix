@@ -8,8 +8,8 @@ let
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.1.3";
-  vc_version = "23091805";
+  base_version = "8.2.1";
+  vc_version = "24030407";
 in stdenv.mkDerivation rec {
   pname = "renpy";
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-bYqnKSWY8EEGr1+12cWeT9/ZSv5OrKLsRqCnnIruDQw=";
+    sha256 = "sha256-07Hj8mJGR0+Pn1DQ+sK5YQ3x3CTMsZ5h5yEoz44b2TM=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     official = False
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
-    version_name = 'Where No One Has Gone Before'
+    version_name = '64bit Sensation'
     EOF
   '';
 
