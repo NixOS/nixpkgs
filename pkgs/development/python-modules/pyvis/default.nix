@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , buildPythonPackage
+, setuptools
 , networkx
 , jinja2
 , ipython
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyvis";
   version = "0.3.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "WestHealth";
@@ -22,7 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-eo9Mk2c0hrBarCrzwmkXha3Qt4Bl1qR7Lhl9EkUx96E=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  dependencies = [
     jinja2
     networkx
     ipython

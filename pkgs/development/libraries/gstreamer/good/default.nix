@@ -41,6 +41,7 @@
 , enableJack ? true, libjack2
 , enableX11 ? stdenv.isLinux, xorg
 , ncurses
+, enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
 , libgudev
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals qt6Support (with qt6; [
     qtbase
     qttools
-  ]) ++ lib.optionals stdenv.isLinux [
+  ]) ++ lib.optionals enableWayland [
     wayland-protocols
   ];
 
@@ -154,6 +155,7 @@ stdenv.mkDerivation rec {
     libavc1394
     libiec61883
     libgudev
+  ] ++ lib.optionals enableWayland [
     wayland
   ] ++ lib.optionals enableJack [
     libjack2

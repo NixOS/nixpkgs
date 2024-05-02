@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Mahjongg";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
     maintainers = teams.gnome.members;

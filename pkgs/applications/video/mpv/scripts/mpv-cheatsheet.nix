@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, nodePackages, stdenvNoCC }:
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, nodePackages
+, stdenvNoCC
+}:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpv-cheatsheet";
   version = "0.30.0.2";
@@ -9,6 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-MWK0CYto3zgn3fivmL43tvgZn6XrjPxKLp0lgTFdplM=";
   };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   nativeBuildInputs = [
     nodePackages.browserify

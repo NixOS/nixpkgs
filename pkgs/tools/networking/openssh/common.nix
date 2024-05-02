@@ -26,6 +26,7 @@
 , withLdns ? true
 , libkrb5
 , libfido2
+, libxcrypt
 , hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
@@ -63,7 +64,8 @@ stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/107606
     ++ lib.optional withKerberos pkgs.libkrb5
     ++ extraNativeBuildInputs;
-  buildInputs = [ zlib openssl libedit ]
+  buildInputs = [ zlib libedit ]
+    ++ [ (if linkOpenssl then openssl else libxcrypt) ]
     ++ lib.optional withFIDO libfido2
     ++ lib.optional withKerberos libkrb5
     ++ lib.optional withLdns ldns

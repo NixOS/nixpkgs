@@ -23,14 +23,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyunpack/__init__.py \
-      --replace \
+      --replace-fail \
        '_exepath("patool")' \
        '"${lib.getBin patool}/bin/.patool-wrapped"'
   '';
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     easyprocess
     entrypoint2
   ];
