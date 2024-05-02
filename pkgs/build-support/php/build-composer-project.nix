@@ -62,7 +62,7 @@ let
         runHook postInstallCheck
       '';
 
-      composerRepository = phpDrv.mkComposerRepository {
+      composerRepository = phpDrv.mkComposerRepository ({
         inherit composer composer-local-repo-plugin;
         inherit (finalAttrs) patches pname src vendorHash version;
 
@@ -71,7 +71,7 @@ let
         composerNoPlugins = previousAttrs.composerNoPlugins or true;
         composerNoScripts = previousAttrs.composerNoScripts or true;
         composerStrictValidation = previousAttrs.composerStrictValidation or true;
-      };
+      } // (previousAttrs.composerRepository or {}));
 
       COMPOSER_CACHE_DIR="/dev/null";
       COMPOSER_DISABLE_NETWORK="1";
