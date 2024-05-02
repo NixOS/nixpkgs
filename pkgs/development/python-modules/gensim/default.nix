@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , cython
+, fetchpatch
 , fetchPypi
 , mock
 , numpy
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
   };
+
+  patches = [
+    # Remove after next release version: https://github.com/piskvorky/gensim/pull/3524
+    (fetchpatch {
+      name = "replace-deprecated-scipy-triu.patch";
+      url = "https://github.com/piskvorky/gensim/commit/ad68ee3f105fc37cf8db333bfb837fe889ff74ac.patch";
+      hash = "sha256-Ij6HvVD8M2amzcjihu5bo8Lk0iCPl3iIq0lcOnI6G2s=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython
