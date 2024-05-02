@@ -1,50 +1,51 @@
-{ lib
-, stdenv
-, bcrypt
-, build
-, buildPythonPackage
-, cargo
-, chroma-hnswlib
-, darwin
-, fastapi
-, fetchFromGitHub
-, grpcio
-, hypothesis
-, importlib-resources
-, kubernetes
-, mmh3
-, numpy
-, onnxruntime
-, openssl
-, opentelemetry-api
-, opentelemetry-exporter-otlp-proto-grpc
-, opentelemetry-instrumentation-fastapi
-, opentelemetry-sdk
-, orjson
-, overrides
-, pkg-config
-, posthog
-, protobuf
-, pulsar-client
-, pydantic
-, pypika
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, rustc
-, rustPlatform
-, setuptools
-, setuptools-scm
-, tenacity
-, tokenizers
-, tqdm
-, typer
-, typing-extensions
-, uvicorn
-, zstd
+{
+  lib,
+  stdenv,
+  bcrypt,
+  build,
+  buildPythonPackage,
+  cargo,
+  chroma-hnswlib,
+  darwin,
+  fastapi,
+  fetchFromGitHub,
+  grpcio,
+  hypothesis,
+  importlib-resources,
+  kubernetes,
+  mmh3,
+  numpy,
+  onnxruntime,
+  openssl,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-grpc,
+  opentelemetry-instrumentation-fastapi,
+  opentelemetry-sdk,
+  orjson,
+  overrides,
+  pkg-config,
+  posthog,
+  protobuf,
+  pulsar-client,
+  pydantic,
+  pypika,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  rustc,
+  rustPlatform,
+  setuptools,
+  setuptools-scm,
+  tenacity,
+  tokenizers,
+  tqdm,
+  typer,
+  typing-extensions,
+  uvicorn,
+  zstd,
 }:
 
 buildPythonPackage rec {
@@ -67,9 +68,7 @@ buildPythonPackage rec {
     hash = "sha256-zyiFv/gswGupm7Y8BhviklqJzM914v0QyUsRwbGKZ48=";
   };
 
-  pythonRelaxDeps = [
-    "orjson"
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
   nativeBuildInputs = [
     cargo
@@ -85,9 +84,7 @@ buildPythonPackage rec {
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   propagatedBuildInputs = [
     bcrypt
@@ -126,9 +123,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "chromadb"
-  ];
+  pythonImportsCheck = [ "chromadb" ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
