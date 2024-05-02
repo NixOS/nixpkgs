@@ -8,12 +8,12 @@
 }:
 
 gccStdenv.mkDerivation rec {
-  version = "3.7.2";
+  version = "5.0.6";
   pname = "migrate";
 
   src = fetchurl {
-    url = "https://peterbeerli.com/migrate-html5/download_version3/${pname}-${version}.src.tar.gz";
-    sha256 = "1p2364ffjc56i82snzvjpy6pkf6wvqwvlvlqxliscx2c303fxs8v";
+    url = "https://peterbeerli.com/migrate-html5/download_version4/${pname}-${version}.src.tar.gz";
+    hash = "sha256-twkoR9L6VPUye12OC0B5w0PxcxyKain6RkhCswLEdwg=";
   };
 
   buildInputs = [
