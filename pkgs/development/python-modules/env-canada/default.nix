@@ -10,13 +10,14 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, setuptools
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "env-canada";
   version = "0.6.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,7 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-2lrZpjOdijE/udGRzUXT63xI+f9yI+04arfWdt6fMSA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     geopy
     imageio
