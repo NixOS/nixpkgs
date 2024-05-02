@@ -1,13 +1,14 @@
-{ lib
-, bitstruct
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, jsonschema
-, lark
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  bitstruct,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  jsonschema,
+  lark,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-SZ9mWV5PjkQ2OiScPSMrunkKQWmuYW2lB2JvpTGNbY4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bitstruct
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ldfparser"
-  ];
+  pythonImportsCheck = [ "ldfparser" ];
 
   disabledTestPaths = [
     # We don't care about benchmarks
