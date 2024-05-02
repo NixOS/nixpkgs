@@ -664,7 +664,7 @@ self: super:
   });
 
   # xkeyboardconfig variant extensible with custom layouts.
-  # See nixos/modules/services/x11/extra-layouts.nix
+  # See nixos/modules/config/xkb.nix
   xkeyboardconfig_custom = { layouts ? { } }:
   let
     patchIn = name: layout:
