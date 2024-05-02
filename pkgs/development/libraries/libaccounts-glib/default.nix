@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    rev = "VERSION_";
+    rev-prefix = "VERSION_";
   };
 
   meta = with lib; {
