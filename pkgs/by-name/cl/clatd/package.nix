@@ -7,6 +7,7 @@
 , tayga
 , iproute2
 , iptables
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,8 @@ stdenv.mkDerivation rec {
         ]
       }
   '';
+
+  passthru.tests.clatd = nixosTests.clatd;
 
   meta = with lib; {
     description = "A 464XLAT CLAT implementation for Linux";

@@ -4791,9 +4791,7 @@ with pkgs;
 
   clipster = callPackage ../tools/misc/clipster { };
 
-  clockify = callPackage ../applications/office/clockify {
-    electron = electron_24;
-  };
+  clockify = callPackage ../applications/office/clockify { };
 
   contrast = callPackage ../applications/accessibility/contrast { };
 
@@ -14766,7 +14764,9 @@ with pkgs;
 
   clipboard-jh = callPackage ../tools/misc/clipboard-jh { };
 
-  clipbuzz = callPackage ../tools/misc/clipbuzz { };
+  clipbuzz = callPackage ../tools/misc/clipbuzz {
+    zig = zig_0_12;
+  };
 
   xclip = callPackage ../tools/misc/xclip { };
 
@@ -16765,6 +16765,7 @@ with pkgs;
   };
   cargo-insta = callPackage ../development/tools/rust/cargo-insta { };
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
+    zig = zig_0_12;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-limit = callPackage ../development/tools/rust/cargo-limit { };
@@ -16837,7 +16838,9 @@ with pkgs;
 
   cargo-public-api = callPackage ../development/tools/rust/cargo-public-api { };
 
-  cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild { };
+  cargo-zigbuild = callPackage ../development/tools/rust/cargo-zigbuild {
+    zig = zig_0_12;
+  };
 
   cauwugo = callPackage ../development/tools/rust/cauwugo { };
 
@@ -20202,6 +20205,10 @@ with pkgs;
   azmq = callPackage ../development/libraries/azmq { };
 
   babl = callPackage ../development/libraries/babl { };
+
+  backlight-auto = callPackage ../by-name/ba/backlight-auto/package.nix {
+    zig = zig_0_11;
+  };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
 
@@ -25162,7 +25169,7 @@ with pkgs;
   zig_0_12 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.12.nix {
     llvmPackages = llvmPackages_17;
   };
-  zig = zig_0_11;
+  zig = zig_0_12;
 
   zig-shell-completions = callPackage ../development/compilers/zig/shell-completions.nix { };
 
@@ -25624,8 +25631,6 @@ with pkgs;
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
   asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
-
-  sabnzbd = callPackage ../servers/sabnzbd { };
 
   baserow = callPackage ../servers/baserow { };
 
@@ -37180,8 +37185,6 @@ with pkgs;
   nsnake = callPackage ../games/nsnake { };
 
   nudoku = callPackage ../games/nudoku { };
-
-  nxengine-evo = callPackage ../games/nxengine-evo { };
 
   oilrush = callPackage ../games/oilrush { };
 
