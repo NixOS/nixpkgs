@@ -13,6 +13,7 @@
 
 let
   pythonEnv = python3.withPackages(ps: with ps; [
+    apprise
     babelfish
     cffi
     chardet
@@ -47,14 +48,14 @@ let
   ]);
   path = lib.makeBinPath [ coreutils par2cmdline-turbo unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {
-  version = "4.2.3";
+  version = "4.3.0";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-DM+sgrb7Zvtvp0th8GlOloSBcD8mG1RYyM91+uvCOgU=";
+    sha256 = "sha256-2zRhDFKbWq4JA7XE5/VFbfkN2ZQcqcuqGD5kjHmeXUA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

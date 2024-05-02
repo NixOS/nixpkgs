@@ -25632,8 +25632,6 @@ with pkgs;
 
   asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
 
-  sabnzbd = callPackage ../servers/sabnzbd { };
-
   baserow = callPackage ../servers/baserow { };
 
   bftpd = callPackage ../servers/ftp/bftpd { };
