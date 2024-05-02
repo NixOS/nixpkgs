@@ -10215,6 +10215,8 @@ self: super: with self; {
 
   pweave = callPackage ../development/python-modules/pweave { };
 
+  pwkit = callPackage ../development/python-modules/pwkit { };
+
   pwlf = callPackage ../development/python-modules/pwlf { };
 
   pwntools = callPackage ../development/python-modules/pwntools {
