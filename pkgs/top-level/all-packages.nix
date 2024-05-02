@@ -11981,8 +11981,6 @@ with pkgs;
 
   plotutils = callPackage ../tools/graphics/plotutils { };
 
-  plowshare = callPackage ../tools/misc/plowshare { };
-
   pmenu = callPackage ../tools/X11/pmenu { };
 
   pngcheck = callPackage ../tools/graphics/pngcheck { };
