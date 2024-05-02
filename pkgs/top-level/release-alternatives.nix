@@ -17,7 +17,7 @@ let
     "lammps" "lammps-mpi"
 
     # requires openblas
-    # "caffe" "mxnet" "flint" "sage" "sageWithDoc"
+    # "mxnet" "flint" "sage" "sageWithDoc"
 
     # broken
     # "gnss-sdr" "octave-jit" "openmodelica" "torch"
