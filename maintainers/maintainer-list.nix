@@ -1448,6 +1448,12 @@
     githubId = 5411704;
     name = "Manuel Sanchez Pinar";
   };
+  aos = {
+    email = "n@aos.sh";
+    github = "aos";
+    githubId = 25783780;
+    name = "aos";
+  };
   apeschar = {
     email = "albert@peschar.net";
     github = "apeschar";
