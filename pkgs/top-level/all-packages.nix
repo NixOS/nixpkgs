@@ -11018,8 +11018,6 @@ with pkgs;
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
-  nextcloud-client-bin = callPackage ../applications/networking/nextcloud-client-bin { };
-
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
