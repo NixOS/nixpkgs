@@ -57,17 +57,29 @@ in
     };
   };
 
-  config = {
-    system.checks = lib.singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg) dir model layout variant options;
-      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
-      preferLocalBuild = true;
-    } ''
-      ${lib.optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
-        "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
-      }
-      XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
-      touch "$out"
-    '');
+  config = lib.mkIf cfg.enable {
+    environment.etc."X11/xkb".source = cfg.dir;
+
+    system.checks = lib.singleton (
+      pkgs.runCommand "xkb-validated"
+        {
+          inherit (cfg)
+            dir
+            model
+            layout
+            variant
+            options
+            ;
+          nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
+          preferLocalBuild = true;
+        }
+        ''
+          ${lib.optionalString (
+            config.environment.sessionVariables ? XKB_CONFIG_ROOT
+          ) "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"}
+          XKB_CONFIG_ROOT="$dir" xkbvalidate "$model" "$layout" "$variant" "$options"
+          touch "$out"
+        ''
+    );
   };
 }
