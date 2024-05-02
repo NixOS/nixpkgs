@@ -25950,8 +25950,6 @@ with pkgs;
 
   kamailio = callPackage ../servers/sip/kamailio { };
 
-  kanidm = callPackage ../servers/kanidm { };
-
   kapowbang = callPackage ../servers/kapowbang { };
 
   keycloak = callPackage ../servers/keycloak { };
@@ -35344,8 +35342,6 @@ with pkgs;
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
-  vis = callPackage ../applications/editors/vis { };
-
   viw = callPackage ../applications/editors/viw { };
 
   virter = callPackage ../applications/virtualization/virter { };
@@ -40008,8 +40004,6 @@ with pkgs;
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
 
   OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
-
-  parsedmarc = with python3Packages; toPythonApplication parsedmarc;
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
