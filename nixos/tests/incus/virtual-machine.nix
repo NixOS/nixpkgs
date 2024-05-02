@@ -75,5 +75,11 @@ in
         machine.succeed("incus config set ${instance-name} limits.cpu=2")
         count = int(machine.succeed("incus exec ${instance-name} -- nproc").strip())
         assert count == 2, f"Wrong number of CPUs reported, want: 2, got: {count}"
+
+    with subtest("Instance remains running when softDaemonRestart is enabled and services is stopped"):
+        pid = machine.succeed("incus info ${instance-name} | grep 'PID'").split(":")[1].strip()
+        machine.succeed(f"ps {pid}")
+        machine.succeed("systemctl stop incus")
+        machine.succeed(f"ps {pid}")
   '';
 })
