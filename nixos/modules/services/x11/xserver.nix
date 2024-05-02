@@ -685,7 +685,7 @@ in
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
-        "-xkbdir" "${config.services.xkb.dir}"
+        "-xkbdir" config.services.xkb.dir
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
