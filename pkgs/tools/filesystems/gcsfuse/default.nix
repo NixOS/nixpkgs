@@ -20,17 +20,15 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.gcsfuseVersion=${version}" ];
 
-  preCheck =
+  checkFlags =
     let
       skippedTests = [
+        # Disable flaky tests
         "Test_Main"
         "TestFlags"
       ];
     in
-    ''
-      # Disable flaky tests
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.gcsfuse

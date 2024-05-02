@@ -19,7 +19,7 @@ buildGoModule rec {
     "-X github.com/wakatime/wakatime-cli/pkg/version.Version=${version}"
   ];
 
-  preCheck =
+  checkFlags =
     let
       skippedTests = [
         # Tests requiring network
@@ -33,10 +33,7 @@ buildGoModule rec {
         "TestLoadParams_ApiKey_FromVault_Err_Darwin"
       ];
     in
-    ''
-      # Disable tests
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
     package = wakatime;
