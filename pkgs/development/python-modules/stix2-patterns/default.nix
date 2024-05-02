@@ -2,10 +2,9 @@
 , antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 , setuptools
-, pytestCheckHook
-, wheel
 , six
 }:
 
@@ -25,15 +24,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
+      --replace-fail "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     antlr4-python3-runtime
     six
   ];
