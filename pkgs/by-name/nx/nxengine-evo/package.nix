@@ -2,6 +2,7 @@
   lib,
   SDL2,
   SDL2_mixer,
+  callPackage,
   cmake,
   pkg-config,
   ninja,
@@ -61,31 +62,28 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e "s,/usr/share/,$out/share/," src/ResourceManager.cpp
   '';
 
-  installPhase = let
-    assetsVersion = "2.6.4";
-    assets = fetchurl {
-      url = "https://github.com/nxengine/nxengine-evo/releases/download/v${assetsVersion}/NXEngine-v${assetsVersion}-Linux.tar.xz";
-      hash = "sha256-/pVXwv6HbI83ZsGVfShv1I01hbEm5iKQk9LCnHWdsKw=";
-    };
-  in ''
+  installPhase = ''
     runHook preInstall
 
     cd ..
-    unpackFile ${assets}
     mkdir -p $out/bin/ $out/share/nxengine/
     install bin/* $out/bin/
-    cp -r NXEngine-evo-${assetsVersion}-Linux/data/ $out/share/nxengine/data
+  '' + ''
+    cp -r ${finalAttrs.finalPackage.assets}/share/nxengine/data $out/share/nxengine/data
     chmod -R a=r,a+X $out/share/nxengine/data
-
+  '' + ''
     runHook postInstall
   '';
+
+  passthru = {
+    assets = callPackage ./assets.nix { };
+  };
 
   meta = {
     homepage = "https://github.com/nxengine/nxengine-evo";
     description = "A complete open-source clone/rewrite of the masterpiece jump-and-run platformer Doukutsu Monogatari (also known as Cave Story)";
     license = with lib.licenses; [
-      gpl3Plus # Game engine
-      unfreeRedistributable  # Game assets, freeware
+      gpl3Plus
     ];
     mainProgram = "nx";
     maintainers = with lib.maintainers; [ AndersonTorres ];
