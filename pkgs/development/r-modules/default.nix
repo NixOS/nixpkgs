@@ -308,6 +308,7 @@ let
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
     rmsb = [ self.rstantools ];
+    gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
   };
 
