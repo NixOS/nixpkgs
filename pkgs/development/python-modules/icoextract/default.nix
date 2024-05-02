@@ -1,9 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pefile, pillow}:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pefile
+, pillow
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "icoextract";
   version = "0.1.5";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,7 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-/UxnWNyRNtwI4Rxx97i5QyjeMrUr5Sq+TfLTmU0xWyc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pefile
     pillow
   ];
