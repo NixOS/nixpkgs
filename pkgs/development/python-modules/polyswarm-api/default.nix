@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, responses
-, setuptools
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  responses,
+  setuptools,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-iY0I5z+aDLQekjgHT5v/ZprCkCgNPkyImmmaCQgnoYc=";
   };
 
-  pythonRelaxDeps = [
-    "future"
-  ];
+  pythonRelaxDeps = [ "future" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     future
@@ -52,9 +47,7 @@ buildPythonPackage rec {
     vcrpy
   ];
 
-  pythonImportsCheck = [
-    "polyswarm_api"
-  ];
+  pythonImportsCheck = [ "polyswarm_api" ];
 
   meta = with lib; {
     description = "Library to interface with the PolySwarm consumer APIs";
