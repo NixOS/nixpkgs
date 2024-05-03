@@ -1,8 +1,9 @@
-{ lib
-, buildLua
-, fetchFromGitHub
-, makeFontsConf
-, nix-update-script
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  makeFontsConf,
+  nix-update-script,
 }:
 buildLua (finalAttrs: {
   pname = "modernx-zydezu";
