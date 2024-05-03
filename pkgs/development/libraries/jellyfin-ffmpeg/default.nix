@@ -1,5 +1,6 @@
 { ffmpeg_6-full
 , fetchFromGitHub
+, fetchpatch
 , lib
 }:
 
@@ -19,7 +20,13 @@ in
   pname = "jellyfin-ffmpeg";
 
   # Clobber upstream patches as they don't apply to the Jellyfin fork
-  patches = [];
+  patches = [
+    (fetchpatch {
+      name = "fix_build_failure_due_to_libjxl_version_to_new";
+      url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
+      hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
+    })
+  ];
 
   configureFlags = old.configureFlags ++ [
     "--extra-version=Jellyfin"
