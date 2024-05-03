@@ -250,6 +250,9 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  passthru = { inherit python; };
+  passthru.tests.roottest = callPackage ./roottest.nix { };
+
   meta = with lib; {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
