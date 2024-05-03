@@ -52,6 +52,12 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A screencasting program created with design in mind";
     homepage = "https://github.com/niknah/kazam";

@@ -44,6 +44,12 @@ in buildPythonApplication rec {
     sed -i '/localmpd/d' sonata/consts.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "An elegant client for the Music Player Daemon";
     mainProgram = "sonata";

@@ -47,6 +47,12 @@ python3Packages.buildPythonPackage rec {
     ln -s ${setup} setup.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Active window border replacement for window managers";
     homepage = "https://github.com/deter0/xborder";

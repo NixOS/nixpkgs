@@ -24,6 +24,12 @@ pythonPackages.buildPythonApplication rec {
     wxpython
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://git.sr.ht/~thestr4ng3r/mymcplus";
     description = "A PlayStation 2 memory card manager";

@@ -37,6 +37,12 @@ python3Packages.buildPythonApplication rec {
   # No test exist
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Template based wallpaper/colorscheme generator and manager";
     longDescription = ''

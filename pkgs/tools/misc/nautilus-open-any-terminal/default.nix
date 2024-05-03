@@ -53,6 +53,12 @@ python3.pkgs.buildPythonPackage rec {
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Extension for nautilus, which adds an context-entry for opening other terminal-emulators then `gnome-terminal`";
     license = licenses.gpl3Plus;

@@ -70,6 +70,12 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = "xvfb-run pytest ../tests/";
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = " A personal tasks and TODO-list items organizer";
     mainProgram = "gtg";

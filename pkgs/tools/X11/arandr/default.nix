@@ -31,6 +31,12 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";

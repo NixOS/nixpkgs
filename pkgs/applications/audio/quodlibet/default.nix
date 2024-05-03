@@ -150,8 +150,12 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  dontWrapGApps = true;
+
   preFixup = lib.optionalString (kakasi != null) ''
-    gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)
+    makeWrapperArgs+=(--prefix PATH : ${kakasi}/bin)
+  '' + ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   meta = with lib; {

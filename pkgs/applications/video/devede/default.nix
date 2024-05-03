@@ -35,6 +35,12 @@ in buildPythonApplication rec {
       --replace "/usr/local/share" "$out/share"
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "DVD Creator for Linux";
     homepage = "http://www.rastersoft.com/programas/devede.html";

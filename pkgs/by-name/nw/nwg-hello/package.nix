@@ -56,6 +56,12 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "nwg_hello" ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-hello";
     description = "GTK3-based greeter for the greetd daemon, written in python";

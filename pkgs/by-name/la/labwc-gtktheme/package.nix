@@ -41,6 +41,12 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

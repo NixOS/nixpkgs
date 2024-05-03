@@ -116,6 +116,12 @@ python.pkgs.buildPythonApplication rec {
     done
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
     mainProgram = "sublime-music";

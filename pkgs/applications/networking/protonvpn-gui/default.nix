@@ -92,6 +92,12 @@ buildPythonApplication rec {
   # Gets a segmentation fault after the widgets test
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Proton VPN GTK app for Linux";
     homepage = "https://github.com/ProtonVPN/proton-vpn-gtk-app";

@@ -68,6 +68,12 @@ buildPythonApplication rec {
   # Project has a dummy test
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Official ProtonVPN Linux app";
     homepage = "https://github.com/ProtonVPN/linux-app";

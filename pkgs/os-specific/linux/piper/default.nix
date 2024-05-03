@@ -31,6 +31,12 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_install.sh data/generate-piper-gresource.xml.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "GTK frontend for ratbagd mouse config daemon";
     mainProgram = "piper";

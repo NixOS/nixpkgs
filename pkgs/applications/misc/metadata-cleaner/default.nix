@@ -55,6 +55,12 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Python GTK application to view and clean metadata in files, using mat2";
     mainProgram = "metadata-cleaner";

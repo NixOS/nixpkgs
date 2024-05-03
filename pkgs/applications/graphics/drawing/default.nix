@@ -61,6 +61,12 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "A free basic image editor, similar to Microsoft Paint, but aiming at the GNOME desktop";
     mainProgram = "drawing";

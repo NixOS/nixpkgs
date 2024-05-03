@@ -20,6 +20,8 @@ python3Packages.buildPythonPackage rec {
   # No tests
   doCheck = false;
 
+  dontWrapGApps = true;
+
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"

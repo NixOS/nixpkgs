@@ -33,8 +33,13 @@ buildPythonApplication rec {
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 udev bluez ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH"
+    )
   '';
 
   postFixup = ''

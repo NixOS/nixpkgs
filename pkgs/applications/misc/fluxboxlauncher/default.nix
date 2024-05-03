@@ -39,9 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     fluxbox
   ];
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-                      "--set CHARSET en_us.UTF-8" ];
-
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
   ];
@@ -49,6 +46,16 @@ python3.pkgs.buildPythonApplication rec {
   postInstall = ''
     install -Dm444 fluxboxlauncher.desktop -t $out/share/applications
     install -Dm444 fluxboxlauncher.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive
+      --set CHARSET en_us.UTF-8
+    )
   '';
 
   meta = with lib; {

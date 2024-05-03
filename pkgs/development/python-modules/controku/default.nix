@@ -40,6 +40,12 @@ python3Packages.buildPythonPackage rec {
     pygobject3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   pythonImportsCheck = [ "controku" ];
 
   meta = with lib; {

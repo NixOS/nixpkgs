@@ -42,6 +42,12 @@ buildPythonApplication rec {
       > $out/etc/udev/rules.d/60-cm-rgb.rules
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Control AMD Wraith Prism RGB LEDs";
     longDescription = ''

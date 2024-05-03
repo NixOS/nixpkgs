@@ -62,6 +62,12 @@ python3Packages.buildPythonApplication rec {
     install -Dm444 installer/skytemple.ico $out/share/icons/hicolor/256x256/apps/org.skytemple.SkyTemple.ico
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";

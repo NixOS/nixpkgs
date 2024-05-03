@@ -52,6 +52,12 @@ python3Packages.buildPythonApplication rec {
     keybinder3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Sound input/output selector indicator for Linux";
     mainProgram = "indicator-sound-switcher";

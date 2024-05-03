@@ -59,6 +59,12 @@ python3Packages.buildPythonApplication rec {
     webkitgtk
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # Run Linux games using the Steam Runtime by using steam-run in the wrapper
   # FIXME: not working with makeBinaryWrapper
   postFixup = ''

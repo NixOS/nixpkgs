@@ -164,6 +164,12 @@ python3.pkgs.buildPythonApplication rec {
     glib-compile-schemas $out/share/glib-2.0/schemas/
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # Remove ubuntu icons.
   postFixup = ''
     rm -rf  $out/share/icons/ubuntu-mono-*

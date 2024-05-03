@@ -59,6 +59,12 @@ python3.pkgs.buildPythonApplication rec {
     schwifty
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "Banking application for small screens";
     homepage = "https://tabos.gitlab.io/projects/banking/";

@@ -42,6 +42,12 @@ buildPythonPackage rec {
     gtk3
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://kryogenix.org/code/pick/";
     license = licenses.mit;

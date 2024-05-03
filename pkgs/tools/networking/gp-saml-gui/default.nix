@@ -31,8 +31,11 @@ buildPythonPackage rec {
     openconnect
   ] ++ lib.optional stdenv.isLinux webkitgtk;
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --set WEBKIT_DISABLE_COMPOSITING_MODE "1"
     )
   '';

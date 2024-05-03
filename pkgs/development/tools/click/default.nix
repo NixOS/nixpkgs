@@ -39,8 +39,11 @@ buildPythonApplication {
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
     makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix LD_LIBRARY_PATH : "$out/lib"
     )
   '';

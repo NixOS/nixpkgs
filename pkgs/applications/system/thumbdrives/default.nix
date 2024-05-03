@@ -52,6 +52,12 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     description = "USB mass storage emulator for Linux handhelds";
     homepage = "https://sr.ht/~martijnbraam/thumbdrives/";

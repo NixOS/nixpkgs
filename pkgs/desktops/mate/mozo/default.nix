@@ -42,6 +42,12 @@ python3.pkgs.buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {

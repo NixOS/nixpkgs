@@ -60,10 +60,6 @@ in python.pkgs.buildPythonApplication rec {
     gdk-pixbuf
   ];
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
-  ];
-
   nativeCheckInputs = [
     glibcLocales
     perl
@@ -86,6 +82,15 @@ in python.pkgs.buildPythonApplication rec {
       LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
       ${python.interpreter} setup.py test
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix PATH : ${lib.makeBinPath [ perl gpsbabel ]}
+    )
   '';
 
   meta = with lib; {

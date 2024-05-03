@@ -42,8 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     vte
   ];
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
-
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
     pycairo
@@ -56,8 +54,14 @@ python3.pkgs.buildPythonApplication rec {
     "PREFIX=${placeholder "out"}"
   ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libutempter ]}")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libutempter ]}"
+    )
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.guake;

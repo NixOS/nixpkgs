@@ -24,10 +24,13 @@ buildPythonApplication {
 
   propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix PYTHONPATH : "$out/share/GScrabble/modules"
-      )
+    )
   '';
 
   meta = with lib; {

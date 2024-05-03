@@ -63,6 +63,12 @@ buildPythonApplication {
   # There are no tests
   doCheck = false;
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "https://kryogenix.org/code/hushboard/";
     license = licenses.mit;

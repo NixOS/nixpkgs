@@ -46,6 +46,12 @@ python3Packages.buildPythonApplication rec {
     export HOME=$TMPDIR
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
