@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycryptodomex
-, pyotp
-, pythonOlder
-, requests
-, roadlib
-, selenium
-, selenium-wire
-, setuptools
-, signxml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycryptodomex,
+  pyotp,
+  pythonOlder,
+  requests,
+  roadlib,
+  selenium,
+  selenium-wire,
+  setuptools,
+  signxml,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-hhxmwD1+mZtU/VmB8yXeQESh0AGtjhdpDXRG3+mYfEk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pycryptodomex
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     signxml
   ];
 
-  pythonImportsCheck = [
-    "roadtools.roadtx"
-  ];
+  pythonImportsCheck = [ "roadtools.roadtx" ];
 
   meta = with lib; {
     description = "ROADtools Token eXchange";
