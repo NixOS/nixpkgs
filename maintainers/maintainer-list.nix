@@ -17325,6 +17325,12 @@
     githubId = 69053978;
     name = "rogarb";
   };
+  rohanssrao = {
+    email = "rohanssrao@gmail.com";
+    github = "rohanssrao";
+    githubId = 17805516;
+    name = "Rohan Rao";
+  };
   rollf = {
     email = "rolf.schroeder@limbus-medtec.com";
     github = "rollf";
