@@ -31,7 +31,10 @@
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
 , capstoneSupport ? !toolsOnly, capstone
+, pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? true
+, enableTools ? true
+, enableBlobs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if toolsOnly
                     then [ ]
@@ -70,8 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config flex bison dtc meson ninja
 
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
+    python3Packages.python
   ]
+    ++ lib.optionals enableDocs [ python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
@@ -108,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals capstoneSupport [ capstone ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
@@ -136,7 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+
+  ## FIXME: libaio does not provide a pkg-info file;
+  # and meson does not support static libraries lookup path using -L, relying on LIBRARY_PATH (https://github.com/mesonbuild/meson/issues/10172);
+  # and musl-gcc does not support LIBRARY_PATH overrides (https://www.openwall.com/lists/musl/2017/02/22/7);
+  # so we have to patch the meson.build to add the libaio path to the search path manually.
+  ++ lib.optional stdenv.hostPlatform.isStatic ./aio-find-static-library.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -160,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
     (lib.enableFeature enableDocs "docs")
-    "--enable-tools"
+    (lib.enableFeature enableTools "tools")
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
@@ -184,7 +195,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional capstoneSupport "--enable-capstone";
+    ++ lib.optional capstoneSupport "--enable-capstone"
+    ++ lib.optional (!pluginsSupport) "--disable-plugins"
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs"
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "--static"
+      # FIXME: "multiple definition of `strtoll'" with libnbcompat
+      "--extra-ldflags=-Wl,--allow-multiple-definition"
+      "-Dlinux_aio_path=${libaio}/lib"
+    ];
 
   dontWrapGApps = true;
 
@@ -248,7 +267,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = lib.optionalString (!toolsOnly) ''
-    ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    if [ -f $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    fi
   '';
 
   passthru = {
