@@ -10,16 +10,17 @@
 , unzip
 , nixosTests
 , nix-update-script
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nagios";
   version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "NagiosEnterprises";
     repo = "nagioscore";
-    rev = "refs/tags/nagios-${version}";
+    rev = "refs/tags/nagios-${finalAttrs.version}";
     hash = "sha256-LD572aR6g67pH3QllnLD3g0bnck+vlC/YTN83WamHRs=";
   };
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
 
   # Do not create /var directories
   preInstall = ''
-    substituteInPlace Makefile --replace '$(MAKE) install-basic' ""
+    substituteInPlace Makefile --replace-fail '$(MAKE) install-basic' ""
   '';
   installTargets = "install install-config";
   postInstall = ''
@@ -59,6 +60,10 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit (nixosTests) nagios;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "nagios --version";
+      };
     };
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "nagios-(.*)" ];
@@ -68,10 +73,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A host, service and network monitoring program";
     homepage = "https://www.nagios.org/";
-    changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${version}/Changelog";
+    changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${finalAttrs.version}/Changelog";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     mainProgram = "nagios";
     maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];
   };
-}
+})
