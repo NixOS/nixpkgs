@@ -1,10 +1,11 @@
-{ lib
-, betamax
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pyyaml
-, setuptools
+{
+  lib,
+  betamax,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,26 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-NFxBmxtzFx8pUcYqw8cBd1rEt24T6GRk6/D/KpeOSUk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    betamax
-  ];
+  dependencies = [ betamax ];
 
   passthru.optional-dependencies = {
-    yaml11 = [
-      pyyaml
-    ];
+    yaml11 = [ pyyaml ];
   };
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "betamax_serializers"
-  ];
+  pythonImportsCheck = [ "betamax_serializers" ];
 
   meta = with lib; {
     description = "A set of third-party serializers for Betamax";
