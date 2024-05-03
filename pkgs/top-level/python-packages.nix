@@ -2448,6 +2448,8 @@ self: super: with self; {
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
+  contextvars = callPackage ../development/python-modules/contextvars { };
+
   contourpy = callPackage ../development/python-modules/contourpy { };
 
   controku = callPackage ../development/python-modules/controku { };
@@ -5462,6 +5464,8 @@ self: super: with self; {
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
+
+  htmltools = callPackage ../development/python-modules/htmltools { };
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
@@ -13385,6 +13389,10 @@ self: super: with self; {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rsconnect-jupyter = callPackage ../development/python-modules/rsconnect-jupyter { };
+
+  rsconnect-python = callPackage ../development/python-modules/rsconnect-python { };
+
   rsskey = callPackage ../development/python-modules/rsskey { };
 
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
@@ -13798,6 +13806,10 @@ self: super: with self; {
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
     inherit (pkgs) cmake llvmPackages;
   });
+
+  shiny = callPackage ../development/python-modules/shiny { };
+
+  shinywidgets = callPackage ../development/python-modules/shinywidgets { };
 
   shippai = callPackage ../development/python-modules/shippai { };
 
