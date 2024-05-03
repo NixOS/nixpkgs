@@ -670,7 +670,7 @@ rec {
 
   mypy-boto3-shield = buildMypyBoto3Package "shield" "1.34.0" "sha256-w0D4JKdlitCBIF3NaKn+POYch5CPGIiUZXqBoFzjzz4=";
 
-  mypy-boto3-signer = buildMypyBoto3Package "signer" "1.34.0" "sha256-wR7ZQ8zTjuVPwMqQ7TR+93DWld9JU16rlt2X+z29xZI=";
+  mypy-boto3-signer = buildMypyBoto3Package "signer" "1.34.95" "sha256-ARiFTxZk9+J+A/XOL+ozRMxJhfpu0VoNXHpxRrSkMm8=";
 
   mypy-boto3-simspaceweaver = buildMypyBoto3Package "simspaceweaver" "1.34.0" "sha256-3J7s6FMRBcI7XaVoXjB3gSNI/Eh7TrE5ij8wRmagK/M=";
 
