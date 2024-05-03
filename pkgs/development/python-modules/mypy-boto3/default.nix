@@ -740,7 +740,7 @@ rec {
 
   mypy-boto3-wafv2 = buildMypyBoto3Package "wafv2" "1.34.58" "sha256-gPNY3XJr/50nejQFzti9igktryZHsgQDiB9BOYnT94I=";
 
-  mypy-boto3-wellarchitected = buildMypyBoto3Package "wellarchitected" "1.34.0" "sha256-tzXpOWC6/WJ+/wUgwYtgI7scq7wRpACW8q1z9RwyhbA=";
+  mypy-boto3-wellarchitected = buildMypyBoto3Package "wellarchitected" "1.34.85" "sha256-UTH4Ls+W6rWrZ+77P17b9cws/BlO3UWMI/Uy+27LmxA=";
 
   mypy-boto3-wisdom = buildMypyBoto3Package "wisdom" "1.34.16" "sha256-VhRrQLqmrHn/uWI6lWFJ27hiSmZbW1y+VE2Uf8ssrOw=";
 
