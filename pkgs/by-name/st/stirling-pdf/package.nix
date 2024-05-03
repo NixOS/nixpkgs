@@ -7,6 +7,7 @@
   perl,
   makeWrapper,
   jre,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,6 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) stirling-pdf;
+  };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/${finalAttrs.src.rev}";
