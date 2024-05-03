@@ -1,10 +1,11 @@
 {
   lib,
-  config,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
   callPackage,
   crossLibcStdenv,
+  attributePathToSplice ? [ "freebsd" ],
+  branch ? "release/13.1.0",
 }:
 
 let
@@ -20,33 +21,8 @@ let
       * `stable/<major>` for stable versions working towards the next minor release
       * `main` for the latest development version
 
-      Set one with the NIXPKGS_FREEBSD_BRANCH environment variable or by setting `nixpkgs.config.freebsdBranch`.
+      Branches can be selected by overriding the `branch` attribute on the freebsd package set.
     '';
-
-  attributes =
-    let
-      supported13 = "release/13.1.0";
-      supported14 = "release/14.0.0";
-      branch =
-        let
-          fallbackBranch = supported13;
-          envBranch = builtins.getEnv "NIXPKGS_FREEBSD_BRANCH";
-          selectedBranch =
-            if config.freebsdBranch != null then
-              config.freebsdBranch
-            else if envBranch != "" then
-              envBranch
-            else
-              null;
-          chosenBranch = if selectedBranch != null then selectedBranch else fallbackBranch;
-        in
-        chosenBranch;
-    in
-    {
-      freebsd = versions.${branch} or (badBranchError branch);
-      freebsd13 = versions.${supported13} or (badBranchError supported13);
-      freebsd14 = versions.${supported14} or (badBranchError supported14);
-    };
 
   # `./package-set.nix` should never know the name of the package set we
   # are constructing; just this function is allowed to know that. This
@@ -57,31 +33,32 @@ let
   #  - construct the *anonymized* `buildFreebsd` attribute to be passed
   #    to `./package-set.nix`.
   callFreeBSDWithAttrs =
-    extraArgs: attribute: sourceData:
+    extraArgs:
     let
-      otherSplices = generateSplicesForMkScope [ attribute ];
+      # we do not include the branch in the splice here because the branch
+      # parameter to this file will only ever take on one value - more values
+      # are provided through overrides.
+      otherSplices = generateSplicesForMkScope attributePathToSplice;
     in
     makeScopeWithSplicing' {
       inherit otherSplices;
-      f = callPackage ./package-set.nix (
+      f =
+        self:
         {
-          buildFreebsd = otherSplices.selfBuildHost;
-          inherit sourceData;
-          versionData = sourceData.version;
-          patchesRoot = ./patches/${sourceData.version.revision};
+          inherit branch;
         }
-        // extraArgs
-      );
+        // callPackage ./package-set.nix (
+          {
+            sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
+            versionData = self.sourceData.version;
+            buildFreebsd = otherSplices.selfBuildHost;
+            patchesRoot = ./patches/${self.versionData.revision};
+          }
+          // extraArgs
+        ) self;
     };
-
-  exportedAttrSetsNative = lib.mapAttrs (callFreeBSDWithAttrs { }) attributes;
-
-  exportedAttrSetsCross = lib.mapAttrs' (
-    name: sourceData:
-    lib.nameValuePair (name + "Cross") (
-      callFreeBSDWithAttrs { stdenv = crossLibcStdenv; } name sourceData
-    )
-  ) attributes;
 in
-
-exportedAttrSetsNative // exportedAttrSetsCross
+{
+  freebsd = callFreeBSDWithAttrs { };
+  freebsdCross = callFreeBSDWithAttrs { stdenv = crossLibcStdenv; };
+}
