@@ -13,11 +13,11 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-NrTBVr4WcCukxteBotqLoUYrIjcNFVcOERYFbL8CUjM=";
+    hash = "sha256-W76Xb5hPwq/m6g309fU1ofCyJPbcMv2uVUagRh8wHY0=";
   };
 
   nativeBuildInputs = [
