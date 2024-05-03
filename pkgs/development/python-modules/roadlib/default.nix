@@ -20,11 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-+5vR2iTFu50PJIsj4sW6McH1sg3yyEIwk15W8Jk0GKA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     adal
     pyjwt
     sqlalchemy
