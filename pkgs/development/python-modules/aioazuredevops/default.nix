@@ -1,30 +1,56 @@
 { lib
 , buildPythonPackage
-, isPy27
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
 , aiohttp
-, click
+, incremental
+
+# tests
+, aioresponses
+, pytest-aiohttp
+, pytest-asyncio
+, pytest-socket
+, pytestCheckHook
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "aioazuredevops";
-  version = "1.4.3";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vNTvSQYjjptdPsHz0zM9paq3iodZrhcEralPm6YRZJE=";
+  src = fetchFromGitHub {
+    owner = "timmo001";
+    repo = "aioazuredevops";
+    rev = "refs/tags/${version}";
+    hash = "sha256-QEIVAcBoTvuOeLN2kfDa3uYfrUm5Qu1TLp9C0uU+mW4=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-    click
+  build-system = [
+    incremental
+    setuptools
   ];
 
-  # no tests implemented
-  doCheck = false;
+  dependencies = [
+    aiohttp
+    incremental
+  ];
+
+  nativeCheckInputs = [
+    aioresponses
+    pytest-aiohttp
+    pytest-asyncio
+    pytest-socket
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [
     "aioazuredevops.builds"
@@ -33,6 +59,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/timmo001/aioazuredevops/releases/tag/${version}";
     description = "Get data from the Azure DevOps API";
     mainProgram = "aioazuredevops";
     homepage = "https://github.com/timmo001/aioazuredevops";
