@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "PIXMAPS=$(out)/share/pixmaps"
     "UDEVBIN=$(out)/bin"
     "UDEVDIR=$(out)/etc/udev/rules.d"
-    "UDEVD=${systemd}/sbin/udevd"
+    "UDEVD=${systemd}/bin/udevd"
     "LIBUDEVDIR=$(out)/lib/udev/rules.d"
     "USBDIR=$(out)/etc/hotplug/usb"
     "FOODB=$(out)/share/foomatic/db/source"

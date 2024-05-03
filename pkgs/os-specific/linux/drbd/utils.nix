@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    export PATH=${systemd}/sbin:$PATH
+    export PATH=${systemd}/bin:$PATH
   '';
 
   enableParallelBuilding = true;

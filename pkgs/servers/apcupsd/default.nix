@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "--with-lock-dir=/run/lock"
     "--with-pid-dir=/run"
     "--enable-usb"
-    "ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown"
+    "ac_cv_path_SHUTDOWN=${systemd}/bin/shutdown"
     "ac_cv_path_WALL=${wall}/bin/wall"
   ] ++ lib.optionals enableCgiScripts [
     "--enable-cgi"

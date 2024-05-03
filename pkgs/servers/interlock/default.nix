@@ -31,7 +31,7 @@ buildGoModule rec {
       -e 's|/bin/mv|${coreutils}/bin/mv|' \
       -e 's|/bin/chown|${coreutils}/bin/chown|' \
       -e 's|/bin/date|${coreutils}/bin/date|' \
-      -e 's|/sbin/poweroff|${systemd}/sbin/poweroff|' \
+      -e 's|/sbin/poweroff|${systemd}/bin/poweroff|' \
       -e 's|/usr/bin/sudo|/run/wrappers/bin/sudo|' \
       -e 's|/sbin/cryptsetup|${cryptsetup}/bin/cryptsetup|'
   '';
