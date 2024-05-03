@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
 }:
@@ -36,6 +37,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyzabbix" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'RawConfigParser' object has no attribute 'readfp'
+    "config"
+  ];
 
   meta = with lib; {
     description = "Python module to interact with Zabbix";
