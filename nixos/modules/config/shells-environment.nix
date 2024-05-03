@@ -42,7 +42,7 @@ in
         strings.  The latter is concatenated, interspersed with colon
         characters.
       '';
-      type = with types; attrsOf (oneOf [ (listOf (oneOf [ float int str ])) float int str path ]);
+      type = with types; attrsOf (oneOf [ (listOf (oneOf [ int str ])) int str path ]);
       apply = mapAttrs (n: v: if isList v then concatMapStringsSep ":" toString v else toString v);
     };
 
