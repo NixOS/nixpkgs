@@ -6,23 +6,28 @@
 , pythonOlder
 , requests
 , requests-toolbelt
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "webexteamssdk";
   version = "1.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CiscoDevNet";
-    repo = pname;
-    rev = "v${version}";
+    repo = "webexteamssdk";
+    rev = "refs/tags/v${version}";
     hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     future
     pyjwt
     requests
@@ -39,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Webex Teams APIs";
     homepage = "https://github.com/CiscoDevNet/webexteamssdk";
+    changelog = "https://github.com/WebexCommunity/WebexPythonSDK/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
