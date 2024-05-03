@@ -43,7 +43,9 @@ in
         characters.
       '';
       type = with types; attrsOf (oneOf [ (listOf (oneOf [ int str ])) int str path ]);
-      apply = mapAttrs (n: v: if isList v then concatMapStringsSep ":" toString v else toString v);
+      apply = let
+        toStr = v: if isPath v then "${v}" else toString v;
+      in mapAttrs (n: v: if isList v then concatMapStringsSep ":" toStr v else toStr v);
     };
 
     environment.profiles = mkOption {
