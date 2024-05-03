@@ -552,7 +552,7 @@ rec {
 
   mypy-boto3-personalize-runtime = buildMypyBoto3Package "personalize-runtime" "1.34.96" "sha256-ow6sIZHOV3h7WHAX+il95ZPB/Cjk2bICLjf+BHHQzoY=";
 
-  mypy-boto3-pi = buildMypyBoto3Package "pi" "1.34.0" "sha256-97giGYtpINPHxtcUU6cE/mPF0/r6YfLixAdcC/LGKC0=";
+  mypy-boto3-pi = buildMypyBoto3Package "pi" "1.34.90" "sha256-I3/KIChrU027zebbQ5yPzoFaanuEM3UqAH/mfhE2y/k=";
 
   mypy-boto3-pinpoint = buildMypyBoto3Package "pinpoint" "1.34.81" "sha256-vs7gJCsMrpXBhPFwcHmQ/IT4sOYBMJ6IlcCLGMPuog8=";
 
