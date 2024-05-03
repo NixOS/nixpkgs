@@ -82,11 +82,7 @@
 
   rust_1_77-6_8 = {
     name = "rust-1.77.patch";
-    patch = fetchurl {
-      name = "rust-1.77.patch";
-      url = "https://lore.kernel.org/rust-for-linux/20240217002717.57507-1-ojeda@kernel.org/raw";
-      hash = "sha256-0KW9nHpJeMSDssCPXWZbrN8kxq5bA434t+XuPfwslUc=";
-    };
+    patch = ./rust-1.77-6.8.patch;
   };
 
   rust_1_77-6_9 = {
