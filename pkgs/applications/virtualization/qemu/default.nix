@@ -111,6 +111,77 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-1.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/eb546a3f49f45e6870ec91d792cd09f8a662c16e.patch";
+      hash = "sha256-YJCyTH/dtE3j1UnFkXB3COCKLhyeZlnHI+NCYC++urM=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-2.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/1b2a52712b249e14d246cd9c7db126088e6e64db.patch";
+      hash = "sha256-N7rvrYZEAXL/f5LhKrPYhzoV6dLdUMolNMvmJTdkTVk=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-3.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/fbeb0a160cbcc067c0e1f0d380cea4a31de213e3.patch";
+      hash = "sha256-fgB7tS0+303mHPpvNzvZT7xib6yCcVzvnGccFJnCTaY=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-4.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/4f01537ced3e787bd985b8f8de5869b92657160a.patch";
+      hash = "sha256-ssp/MefVQMfHh2q2m/MRzyu57D3q/cCiabOtUT/BQ0k=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-5.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/5d53ff200b5b0e02473b4f38bb6ea74e781115d9.patch";
+      hash = "sha256-UzPONq9AcmdXK+c40eftJA7JRiNiprM4U9Na78fFp+8=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-6.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/15b41461ea7386005194d79d0736f1975c6301d7.patch";
+      hash = "sha256-dXBbWh0ep6+oEXE/i51m6r0iX19qISpmLy2Uw/rtR0I=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-7.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/ab995895adcf30d0be416da281a0bcf3dd3f93a5.patch";
+      hash = "sha256-74xgr+mZ/EPdv/919G/useydya58mHczca8AZkobg5Q=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-8.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/6e7e387b7931d8f6451128ed06f8bca8ffa64fda.patch";
+      hash = "sha256-nj12/4EzZnLfL6NjX2X0dnXa42ESmqVuk8NcU7gZtTQ=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-9.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/1c5005c450928c77056621a561568cdea2ee24db.patch";
+      hash = "sha256-sAaQwv/JY8IWhNQcvFMl0w4c1AqiVGuZJ/a0OLhFx2s=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-10.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/516bdbc2341892fb3b3173ec393c6dfc9515608f.patch";
+      hash = "sha256-VTD8QlqPUs+QZMBU9qisilpClYMvSJY9J0dsUFods5M=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-11.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/4e6240e184cd6303b7275118c7d574c973a3be35.patch";
+      hash = "sha256-NlgzWoWmik4aDGuYiZlvn28HL2ZhBcjv7TgC5Wo+Vrk=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-12.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/9666bd2b7967182d7891e83187f41f0ae3c3cb05.patch";
+      hash = "sha256-w+ZSXkME6wtsYlDE9ELHl6CjvkLjRtTuxqF15u5mQWU=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-13.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/35a67d2aa8caf8eb0bee7d38515924c95417047e.patch";
+      hash = "sha256-3kL8HMjTe3mbvb7K07zJOHbp676oBsynLi24k2N1iBY=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-3446.CVE-2024-3447.CVE-2024-3567.part-14.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/1cfe45956e03070f894e91b304e233b4d5b99719.patch";
+      hash = "sha256-jnZ/kvKugCc5EjETuyXQ8v3zlpkay1J9BaopmlRIRgE=";
+    })
+
     ./fix-qemu-ga.patch
 
     # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
