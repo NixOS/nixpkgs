@@ -462,7 +462,7 @@ rec {
 
   mypy-boto3-marketplace-catalog = buildMypyBoto3Package "marketplace-catalog" "1.34.74" "sha256-+ehJMgzEt0R0sV1IL4/eEEltEIcFDqr4GzeTraabW90=";
 
-  mypy-boto3-marketplace-entitlement = buildMypyBoto3Package "marketplace-entitlement" "1.34.0" "sha256-yGaeDZLEmp/Nap++wI6GgQvVW3HxQFcM+ipk7RAuG4g=";
+  mypy-boto3-marketplace-entitlement = buildMypyBoto3Package "marketplace-entitlement" "1.34.93" "sha256-E2v4sw1hQYCQ/2EDELnVAT6jCEzS+tk7hYRkrs6cBwc=";
 
   mypy-boto3-marketplacecommerceanalytics = buildMypyBoto3Package "marketplacecommerceanalytics" "1.34.0" "sha256-Gzmd4GQnM2sRrL4/FE9kI0R9ItKJ5xdaC/cCGqQ0XAY=";
 
