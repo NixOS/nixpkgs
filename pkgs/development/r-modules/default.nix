@@ -497,7 +497,7 @@ let
     Rsubread = [ pkgs.zlib.dev ];
     XVector = [ pkgs.zlib.dev ];
     Rsamtools = with pkgs; [ zlib.dev curl.dev bzip2 xz ];
-    rtracklayer = [ pkgs.zlib.dev ];
+    rtracklayer = with pkgs; [ zlib.dev curl.dev ];
     affyio = [ pkgs.zlib.dev ];
     snpStats = [ pkgs.zlib.dev ];
     vcfppR = [ pkgs.curl.dev pkgs.bzip2 pkgs.zlib.dev pkgs.xz];
