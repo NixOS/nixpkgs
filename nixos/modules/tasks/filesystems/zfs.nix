@@ -447,9 +447,9 @@ in
       enable = mkEnableOption "periodic scrubbing of ZFS pools";
 
       interval = mkOption {
-        default = "Sun, 02:00";
+        default = "monthly";
         type = types.str;
-        example = "daily";
+        example = "quarterly";
         description = ''
           Systemd calendar expression when to scrub ZFS pools. See
           {manpage}`systemd.time(7)`.
