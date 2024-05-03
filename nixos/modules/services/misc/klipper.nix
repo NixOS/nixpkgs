@@ -162,11 +162,11 @@ in
         assertion =
           cfg.settings != null
           -> lib.foldl (a: b: a && b) true (
-            lib.mapAttrsToList (
-              mcu: _: mcu != null -> (lib.hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)
-            ) cfg.firmwares
+            lib.mapAttrsToList (mcu: _: mcu != null -> (lib.hasAttrByPath [ "${mcu}" "serial" ] cfg.settings)) (
+              lib.filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) cfg.firmwares
+            )
           );
-        message = "Option services.klipper.settings.$mcu.serial must be set when settings.klipper.firmware.$mcu is specified";
+        message = "Option services.klipper.settings.$mcu.serial must be set when settings.klipper.firmware.$mcu.enableKlipperFlash is specified";
       }
       {
         assertion = (cfg.configFile != null) != (cfg.settings != null);
