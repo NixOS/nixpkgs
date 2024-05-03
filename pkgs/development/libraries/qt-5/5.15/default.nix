@@ -285,6 +285,7 @@ let
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
       qtquick1 = null;
+      qtquick3d = callPackage ../modules/qtquick3d.nix { };
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
