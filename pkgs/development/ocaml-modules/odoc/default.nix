@@ -1,4 +1,5 @@
 { lib, fetchurl, buildDunePackage, ocaml
+, ocaml-crunch
 , astring, cmdliner, cppo, fpath, result, tyxml
 , markup, yojson, sexplib0, jq
 , odoc-parser, ppx_expect, bash, fmt
@@ -6,14 +7,9 @@
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "2.2.1";
+  inherit (odoc-parser) version src;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
-    sha256 = "sha256-F4blO/CCT+HHx7gdKn2EaEal0RZ3lp5jljYfd6OBaAM=";
-  };
-
-  nativeBuildInputs = [ cppo ];
+  nativeBuildInputs = [ cppo ocaml-crunch ];
   buildInputs = [ astring cmdliner fpath result tyxml odoc-parser fmt ];
 
   nativeCheckInputs = [ bash jq ];
