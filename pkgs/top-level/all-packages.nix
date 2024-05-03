@@ -24318,10 +24318,6 @@ with pkgs;
     };
   });
 
-  SDL2_sound = callPackage ../by-name/sd/SDL2_sound/package.nix {
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
-  };
-
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
   sdrpp = callPackage ../applications/radio/sdrpp {
