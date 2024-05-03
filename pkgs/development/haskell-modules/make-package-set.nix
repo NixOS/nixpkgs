@@ -178,9 +178,37 @@ let
       };
     }) (self.callPackage src args);
 
+    # Creates a Haskell package from a source package by calling cabal2nix on the source.
+    callCabal2nixWithOptions' =
+      { name
+      , src
+      , extraCabal2nixOptions ? ""
+      , pathFilter ? path: type:
+          pkgs.lib.hasSuffix ".cabal" path || baseNameOf path == "package.yaml"
+      }: args:
+        let
+          expr = self.haskellSrc2nix {
+            inherit name extraCabal2nixOptions;
+            src = if pkgs.lib.canCleanSource src
+            then pkgs.lib.cleanSourceWith { inherit src; filter = pathFilter; }
+            else src;
+          };
+        in
+          overrideCabal (
+            orig: {
+              inherit src;
+            }
+          ) (callPackageKeepDeriver expr args);
+
+    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
+      self.callCabal2nixWithOptions' {
+        inherit name src extraCabal2nixOptions;
+      } args;
+
 in package-set { inherit pkgs lib callPackage; } self // {
 
-    inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages;
+    inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages
+      callCabal2nixWithOptions callCabal2nixWithOptions';
 
     inherit (haskellLib) packageSourceOverrides;
 
@@ -209,22 +237,6 @@ in package-set { inherit pkgs lib callPackage; } self // {
         revision = rev.revision;
         editedCabalFile = rev.sha256;
       }) firstRevision;
-
-    # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
-      let
-        filter = path: type:
-                   pkgs.lib.hasSuffix ".cabal" path ||
-                   baseNameOf path == "package.yaml";
-        expr = self.haskellSrc2nix {
-          inherit name extraCabal2nixOptions;
-          src = if pkgs.lib.canCleanSource src
-                  then pkgs.lib.cleanSourceWith { inherit src filter; }
-                else src;
-        };
-      in overrideCabal (orig: {
-           inherit src;
-         }) (callPackageKeepDeriver expr args);
 
     callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
