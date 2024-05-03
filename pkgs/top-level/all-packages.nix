@@ -3664,6 +3664,10 @@ with pkgs;
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
+  gancioPlugins = recurseIntoAttrs (
+    callPackage ../by-name/ga/gancio/plugins.nix { inherit (gancio) nodejs; }
+  );
+
   gem = callPackage ../applications/audio/pd-plugins/gem { };
 
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
