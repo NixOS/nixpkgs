@@ -24293,8 +24293,6 @@ with pkgs;
 
   SDL = SDL_classic;
 
-  SDL_net = callPackage ../development/libraries/SDL_net { };
-
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
