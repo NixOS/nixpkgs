@@ -7,13 +7,15 @@ let
   # kernel config in the xanmod version commit
   ltsVariant = {
     version = "6.6.28";
-    hash = "sha256-0ld4pZIddfkGytxzqgC7AGD3gc2H9mhZbhpbFLD3G+s=";
+    suffix = "xanmod2";
+    hash = "sha256-U5L7i/g808GuUZhLjHE+v0VOQVdTPe+Tnx/rLQoGxx4=";
     variant = "lts";
   };
 
   mainVariant = {
     version = "6.8.7";
-    hash = "sha256-S9UooZhMtvfyL2BVUfMBxvPLkZvXm37duWSjcpk5dvY=";
+    suffix = "xanmod2";
+    hash = "sha256-/RhtRASEedYI4Zf9pUiiyDD3SgOL46cutTXo68gjBg8=";
     variant = "main";
   };
 
@@ -45,6 +47,9 @@ let
       HZ = freeform "250";
       HZ_250 = yes;
       HZ_1000 = no;
+
+      # Disable writeback throttling by default
+      BLK_WBT_MQ = lib.mkOverride 60 no;
     };
 
     extraMeta = {

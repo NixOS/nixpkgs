@@ -27,9 +27,9 @@ composerInstallConfigureHook() {
         setComposeRootVersion
 
         composer \
-            --no-ansi \
             --no-install \
             --no-interaction \
+            --no-progress \
             ${composerNoDev:+--no-dev} \
             ${composerNoPlugins:+--no-plugins} \
             ${composerNoScripts:+--no-scripts} \
@@ -104,8 +104,8 @@ composerInstallInstallHook() {
     # Finally, run `composer install` to install the dependencies and generate
     # the autoloader.
     composer \
-      --no-ansi \
       --no-interaction \
+      --no-progress \
       ${composerNoDev:+--no-dev} \
       ${composerNoPlugins:+--no-plugins} \
       ${composerNoScripts:+--no-scripts} \
@@ -116,9 +116,10 @@ composerInstallInstallHook() {
     cp -r . "$out"/share/php/"${pname}"/
 
     # Create symlinks for the binaries.
-    jq -r -c 'try .bin[]' composer.json | while read -r bin; do
-        mkdir -p "$out"/share/php/"${pname}" "$out"/bin
-        makeWrapper "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
+    jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json | while read -r bin; do
+        echo -e "\e[32mCreating symlink ${bin}...\e[0m"
+        mkdir -p "$out"/bin
+        ln -s "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
     done
 
     echo "Finished composerInstallInstallHook"
