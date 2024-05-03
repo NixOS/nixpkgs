@@ -24182,8 +24182,6 @@ with pkgs;
 
   SDL = SDL_classic;
 
-  SDL_mixer = callPackage ../development/libraries/SDL_mixer { };
-
   SDL_net = callPackage ../development/libraries/SDL_net { };
 
   SDL2 = callPackage ../development/libraries/SDL2 {
