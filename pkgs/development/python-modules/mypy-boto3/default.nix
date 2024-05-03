@@ -204,7 +204,7 @@ rec {
 
   mypy-boto3-connectcampaigns = buildMypyBoto3Package "connectcampaigns" "1.34.93" "sha256-XmnjWCTnGjjkqxgk54GCOVU20vO+3yQPVjGshYaimJk=";
 
-  mypy-boto3-connectcases = buildMypyBoto3Package "connectcases" "1.34.24" "sha256-a3P7wPx2FQ3V5T68B4fYzuq2juiqs7R8K5WSbyWu5ug=";
+  mypy-boto3-connectcases = buildMypyBoto3Package "connectcases" "1.34.98" "sha256-1qUQcATJ+XaMggwhaQNOIok0W4qHnmRZID68SiW9J5Q=";
 
   mypy-boto3-connectparticipant = buildMypyBoto3Package "connectparticipant" "1.34.44" "sha256-kP4ovwHfJoeRjSyfeL0M1U70aJoApMUUWOLFRpt6H+w=";
 
