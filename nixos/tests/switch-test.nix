@@ -1,6 +1,6 @@
 # Test configuration switching.
 
-import ./make-test-python.nix ({ lib, pkgs, ...} : let
+import ./make-test-python.nix ({ lib, pkgs, ng, ...} : let
 
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
@@ -48,6 +48,11 @@ in {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
+      system.switch = {
+        enable = !ng;
+        enableNg = ng;
+      };
+
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
 
