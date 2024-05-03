@@ -118,11 +118,11 @@ in stdenv.mkDerivation {
      # we don't take any chances and only apply it if people actually want to use KVM support.
   ++ optional enableKvm (fetchpatch
     (let
-      patchVersion = "20240325";
+      patchVersion = "20240502";
     in {
       name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
       url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
-      hash = "sha256-D1ua8X5Iyw/I89PtskiGdnGr4NhdFtI93ThltiOcu8w=";
+      hash = "sha256-KokIrrAoJutHzPg6e5YAJgDGs+nQoVjapmyn9kG5tV0=";
     }))
   ++ [
     ./qt-dependency-paths.patch
