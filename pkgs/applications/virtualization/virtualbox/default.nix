@@ -24,6 +24,9 @@
 # See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
 assert enableKvm -> !enableHardening;
 
+# The web services use Java infrastructure.
+assert enableWebService -> javaBindings;
+
 with lib;
 
 let
