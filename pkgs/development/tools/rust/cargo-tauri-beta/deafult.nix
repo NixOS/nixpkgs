@@ -16,13 +16,10 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
 in
 rustPlatform.buildRustPackage rec {
-  pname = "tauri";
-  version = "2.0.0-beta.17";
-
   src = fetchFromGitHub {
     owner = "tauri-apps";
-    repo = pname;
-    rev = "tauri-v${version}";
+    repo = "tauri";
+    rev = "tauri-v2.0.0-beta.17";
     hash = "sha256-M+L8R4DIiWBVYFSBYc6rcsxEqJipDfK0R5KqSTldQjE";
   };
 
@@ -32,15 +29,29 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-45R8oyWwI1rgclhC7jehZQrDEPanJPqLSpg0v6TimQo=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ glibc libsoup cairo gtk3 webkitgtk ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security SystemConfiguration ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ 
+	    pkg-config
+	  ];
+	
+	  buildInputs = [ 
+	    openssl
+	  ] 
+	  ++ lib.optionals stdenv.isLinux [ 
+	    glibc libsoup cairo gtk3 webkitgtk 
+	  ]
+	  ++ lib.optionals stdenv.isDarwin [ 
+	    CoreServices 
+	    Security 
+	    SystemConfiguration 
+	  ];
+	  
+	  strictDeps = true;
 
-  meta = with lib; {
-    description = "Build smaller, faster, and more secure desktop applications with a web frontend";
-    mainProgram = "cargo-tauri-beta";
-    homepage = "https://tauri.app/";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dit7ya happysalada ];
-  };
-}
+  meta = {
+	    description = "Build smaller, faster, and more secure desktop applications with a web frontend";
+	    homepage = "https://tauri.app/";
+	    license = with lib.licenses; [ asl20 /* or */ mit ];
+	    mainProgram = "cargo-tauri-beta";
+	    maintainers = with lib.maintainers; [ dit7ya happysalada ];
+	  };
+	}
