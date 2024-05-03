@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, pyjwt
-, pythonOlder
-, requests
-, requests-toolbelt
-, setuptools
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  pyjwt,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
   # Tests require a Webex Teams test domain
   doCheck = false;
 
-  pythonImportsCheck = [
-    "webexteamssdk"
-  ];
+  pythonImportsCheck = [ "webexteamssdk" ];
 
   meta = with lib; {
     description = "Python module for Webex Teams APIs";
