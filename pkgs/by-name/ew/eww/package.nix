@@ -26,7 +26,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ClnIW7HxbQcC85OyoMhBLFjVtdEUCOARuimfS4uRi+E=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     gtk3
@@ -35,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     librsvg
   ];
 
-  cargoBuildFlags = [ "--bin" "eww" ];
+  cargoBuildFlags = [
+    "--bin"
+    "eww"
+  ];
 
   cargoTestFlags = cargoBuildFlags;
 
@@ -43,10 +49,23 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   meta = {
-    description = "ElKowars wacky widgets";
+    description = "A widget system made in Rust to create widgets for any WM";
+    longDescription = ''
+      Eww (ElKowar's Wacky Widgets) is a widget system made in Rust which lets
+      you create your own widgets similarly to how you can in AwesomeWM.
+      The key difference: It is independent of your window manager!
+      It can be configured in yuck and themed using CSS, is very easy
+      to customize and provides all the flexibility you need!
+    '';
     homepage = "https://github.com/elkowar/eww";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ coffeeispower eclairevoyant figsoda lom w-lfchen ];
+    maintainers = with lib.maintainers; [
+      coffeeispower
+      eclairevoyant
+      figsoda
+      lom
+      w-lfchen
+    ];
     mainProgram = "eww";
     broken = stdenv.isDarwin;
   };
