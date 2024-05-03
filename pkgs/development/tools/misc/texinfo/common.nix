@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib, gawk
+, gnulib, gawk, libiconv
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -13,10 +13,9 @@
 # files.
 
 let
+  inherit (lib) getDev getLib optional optionals optionalString;
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
-
-with lib;
 
 stdenv.mkDerivation {
   pname = "texinfo${optionalString interactive "-interactive"}";
@@ -83,7 +82,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The GNU documentation system";
     homepage = "https://www.gnu.org/software/texinfo/";
     changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
