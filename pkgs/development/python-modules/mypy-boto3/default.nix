@@ -160,7 +160,7 @@ rec {
 
   mypy-boto3-cloudwatch = buildMypyBoto3Package "cloudwatch" "1.34.83" "sha256-dm4WbFtGPZiFpZKdwWu1kuD6fXvq9WmqT1AdhahIvBM=";
 
-  mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.68" "sha256-Ey0cmx0OxN1/VXIyvn0EOBP9qYIuc/XyFVZniHLaNEY=";
+  mypy-boto3-codeartifact = buildMypyBoto3Package "codeartifact" "1.34.95" "sha256-NZ0KUOqyp0s7AbUfF2Cdd4O4R5jJPNdeTsw6F+314Es=";
 
   mypy-boto3-codebuild = buildMypyBoto3Package "codebuild" "1.34.83" "sha256-nf1rO/BmEFenb/Z/bWKHRDpZVG3WZb9OPIsxcKOdATo=";
 
