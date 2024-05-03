@@ -19209,7 +19209,7 @@ with pkgs;
 
   modd = callPackage ../development/tools/modd { };
 
-  mold = callPackage ../development/tools/mold {
+  mold = callPackage ../by-name/mo/mold/package.nix {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     tbb = tbb_2021_11;
   };
