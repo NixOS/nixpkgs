@@ -4,9 +4,8 @@
 , libiconv
 , openssl
 , rustPlatform
-, Security
 , stdenv
-, SystemConfiguration
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ libiconv openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   doCheck = false;
 
