@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, gitMinimal
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  gitMinimal,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,13 +17,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-W1UeTiyyYZzxu3XQ/6VkTvEyqPWl1Du6QutuoPhaSfs=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     androguard
@@ -40,16 +37,12 @@ python3.pkgs.buildPythonApplication rec {
     tqdm
   ];
 
-  pythonRelaxDeps = [
-    "r2pipe"
-  ];
+  pythonRelaxDeps = [ "r2pipe" ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "quark"
-  ];
+  pythonImportsCheck = [ "quark" ];
 
   meta = with lib; {
     description = "Android malware (analysis and scoring) system";
