@@ -80,6 +80,7 @@ let
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-slicing = callPackage ./mpv-slicing.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
+    mpv-youtube-chat = callPackage ./mpv-youtube-chat.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quack = callPackage ./quack.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
