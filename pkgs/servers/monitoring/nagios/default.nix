@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nagios";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "NagiosEnterprises";
     repo = "nagioscore";
     rev = "refs/tags/nagios-${version}";
-    hash = "sha256-+U2k3w3Yr0qZjHwjRpKZVucB3a35PSZr1Sqa8k0ssq8=";
+    hash = "sha256-LD572aR6g67pH3QllnLD3g0bnck+vlC/YTN83WamHRs=";
   };
 
   patches = [ ./nagios.patch ];
