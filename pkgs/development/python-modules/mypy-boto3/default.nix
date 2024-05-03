@@ -120,7 +120,7 @@ rec {
 
   mypy-boto3-budgets = buildMypyBoto3Package "budgets" "1.34.0" "sha256-gs8JYnpFNOMWppBO2R3DO+c6RecQC0vzaox5DqXCKOA=";
 
-  mypy-boto3-ce = buildMypyBoto3Package "ce" "1.34.71" "sha256-VfB823/q+ie97Bv5GXhsBaGxAuXSDbfFq2rO6TjThXY=";
+  mypy-boto3-ce = buildMypyBoto3Package "ce" "1.34.90" "sha256-4lyLHiv0fZmeZr1Y15MQ2JiJWW2YO1IAZMstbrGKKeE=";
 
   mypy-boto3-chime = buildMypyBoto3Package "chime" "1.34.0" "sha256-/IBkHJf4t1K/Ubdf/hUw5XToNBTCziMfTSdksxMwA2Q=";
 
