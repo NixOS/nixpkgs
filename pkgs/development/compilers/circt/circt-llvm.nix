@@ -1,16 +1,19 @@
 { stdenv
+, lib
 , cmake
 , ninja
 , circt
 , llvm
 , python3
+, fixDarwinDylibNames
 }: stdenv.mkDerivation {
   pname = circt.pname + "-llvm";
   inherit (circt) version src;
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  nativeBuildInputs = [ cmake ninja python3 ];
+  nativeBuildInputs = [ cmake ninja python3 ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   preConfigure = ''
     cd llvm/llvm
@@ -48,7 +51,9 @@
       --replace "\''${_IMPORT_PREFIX}/lib/lib" "$lib/lib/lib" \
       --replace "\''${_IMPORT_PREFIX}/lib/objects-Release" "$lib/lib/objects-Release" \
       --replace "$out/bin/llvm-config" "$dev/bin/llvm-config" # patch path for llvm-config
-  '';
+  '' + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    find "$out/bin/" -type f -exec install_name_tool -add_rpath "$lib/lib" {} \;
+  '');
 
   # circt only use the mlir part of llvm, occasionally there are some unrelated failure from llvm,
   # disable the llvm check, but keep the circt check enabled.
