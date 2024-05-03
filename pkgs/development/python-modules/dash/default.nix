@@ -4,12 +4,12 @@
   pythonOlder,
   fetchFromGitHub,
 
-  setuptools,
   nodejs,
   yarn,
   fixup-yarn-lock,
   fetchYarnDeps,
 
+  setuptools,
   flask,
   werkzeug,
   plotly,
@@ -50,7 +50,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
     nodejs
     yarn
     fixup-yarn-lock
@@ -68,18 +67,19 @@ buildPythonPackage rec {
 
     yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
     fixup-yarn-lock yarn.lock
-
-    substituteInPlace package.json --replace jlpm yarn
+    substituteInPlace package.json --replace-fail jlpm yarn
     yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts
     patchShebangs node_modules
 
     # Generates the jupyterlab extension files
-    yarn run build:pack
+    yarn --offline run build:pack
 
     popd
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     flask
     werkzeug
     plotly
@@ -93,7 +93,7 @@ buildPythonPackage rec {
     nest-asyncio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     celery = [
       celery
       redis
