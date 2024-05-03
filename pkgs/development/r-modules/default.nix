@@ -534,6 +534,7 @@ let
     Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
+    Rsymphony = [ pkgs.pkg-config ];
     NanoMethViz = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.pkg-config ];
     HilbertVisGUI = with pkgs; [ pkg-config which ];
@@ -620,7 +621,7 @@ let
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
     AMOUNTAIN = [ pkgs.gsl ];
-    Rsymphony = with pkgs; [ pkg-config doxygen graphviz subversion ];
+    Rsymphony = with pkgs; [ symphony doxygen graphviz subversion cgl clp];
     tcltk2 = with pkgs; [ tcl tk ];
     rswipl = with pkgs; [ ncurses.dev libxcrypt zlib.dev ];
     tikzDevice = with pkgs; [ which texliveMedium ];
