@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opustags";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "fmang";
     repo = "opustags";
     rev = version;
-    sha256 = "sha256-cRDyE6/nv8g0OWxZ/AqfwVrk3cSIycvbjvQm9CyQK7g=";
+    sha256 = "sha256-2t6fhA1s1sKpHTmaMtK+DZ8xLpS6ntq33b4ycuMc8x8=";
   };
 
 
