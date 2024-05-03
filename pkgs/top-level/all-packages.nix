@@ -13951,7 +13951,9 @@ with pkgs;
 
   tuptime = callPackage ../tools/system/tuptime { };
 
-  turbo = callPackage ../tools/misc/turbo {
+  turbo = callPackage ../tools/misc/turbo/wrapper.nix { };
+
+  turbo-unwrapped = callPackage ../tools/misc/turbo {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreServices CoreFoundation;
   };
 
@@ -24337,8 +24339,6 @@ with pkgs;
   # SDL2_mixer_2_0 pinned for lzwolf
   SDL2_mixer_2_0 = callPackage ../development/libraries/SDL2_mixer/2_0.nix { };
 
-  SDL2_net = callPackage ../development/libraries/SDL2_net { };
-
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
   SDL2_sound = callPackage ../development/libraries/SDL2_sound {
@@ -32824,8 +32824,6 @@ with pkgs;
   meteo = callPackage ../applications/networking/weather/meteo { };
 
   meld = callPackage ../applications/version-management/meld { };
-
-  meli = callPackage ../applications/networking/mailreaders/meli { };
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 

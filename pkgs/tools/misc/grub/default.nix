@@ -207,7 +207,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = if xenSupport then [ "x86_64-linux" "i686-linux" ] else platforms.gnu ++ platforms.linux;
 
     maintainers = [ maintainers.samueldr ];
   };
