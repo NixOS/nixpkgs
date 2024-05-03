@@ -22606,6 +22606,15 @@
     githubId = 332534;
     name = "Zach Shipko";
   };
+  ztmr = {
+    name = "Tomas Morstein";
+    github = "ztmr";
+    githubId = 1504424;
+    matrix = "@ztmr:matrix.org";
+    keys = [{
+      fingerprint = "A8C4 D329 0201 B564 7F55  7BC8 1352 80C2 690F CF0F";
+    }];
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
