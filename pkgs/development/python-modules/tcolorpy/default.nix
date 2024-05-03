@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "tcolorpy";
-  version = "0.1.4";
+  version = "0.1.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cCdKeixRfXkvEGBqozMWw2RjliLdzhlMv8GE2Q40LZQ=";
+    hash = "sha256-esucU+So1YKzkuMt6ICCrQ5SzQVv24lh12SE1Jl5Y/w=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
