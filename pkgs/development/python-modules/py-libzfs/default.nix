@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "py-libzfs";
-  version = "22.12.4.2";
+  version = "24.04.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = pname;
     rev = "TS-${version}";
-    hash = "sha256-vBLbjP1gQEQNsTLc2W6uRzCFHQXZp+jGiwE0Pe8VTuw=";
+    hash = "sha256-Uiu0RNE06++iNWUNcKpbZvreT2D7/EqHlFZJXKe3F4A=";
   };
 
   nativeBuildInputs = [ cython_0 ];
