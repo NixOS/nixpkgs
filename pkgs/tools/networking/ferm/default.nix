@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
       command. The firewall configuration resembles structured programming-like
       language, which can contain levels and lists.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [mic92];
     platforms = lib.platforms.linux;
   };

@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ davidak Madouura ];
     platforms = platforms.linux;
   };
