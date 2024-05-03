@@ -121,7 +121,8 @@ in
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
     in
     mkIf cfg.enable {
-      warnings = lib.optional (cfg.configPackages == [ ] && cfg.config == { }) ''
+      warnings = lib.optionals (cfg.configPackages == [ ] && cfg.config == { }) [
+        ''
         xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
         should either set `xdg.portal.config` or `xdg.portal.configPackages`
         to specify which portal backend to use for the requested interface.
@@ -132,7 +133,8 @@ in
         portal implementation found in lexicographical order, use the following:
 
         xdg.portal.config.common.default = "*";
-      '';
+      ''
+      ];
 
       assertions = [
         {

@@ -10,7 +10,7 @@ lib.makeOverridable (
 } @ args:
 
 let
-  slug = lib.concatStringsSep "/" ((lib.optional (group != null) group) ++ [ owner repo ]);
+  slug = lib.concatStringsSep "/" ([ owner repo ] ++ lib.optionals (group != null) [ group ]);
   escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
   escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
   passthruAttrs = removeAttrs args [ "protocol" "domain" "owner" "group" "repo" "rev" "fetchSubmodules" "forceFetchGit" "leaveDotGit" "deepClone" ];

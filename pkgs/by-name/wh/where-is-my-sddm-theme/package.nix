@@ -42,16 +42,16 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-o9SpzSmHygHix3BUaMQRwLvgy2BdDsBXmiLDU+9u/6Q=";
   };
 
-  propagatedUserEnvPkgs =
-    [ ]
-    ++ lib.optional (lib.elem "qt5" variants) [ libsForQt5.qtgraphicaleffects ]
-    ++ lib.optional (lib.elem "qt6" variants) [
-      qt6.qt5compat
-      qt6.qtsvg
-    ];
+  propagatedUserEnvPkgs = lib.optionals (lib.elem "qt5" variants) [
+    libsForQt5.qtgraphicaleffects
+  ] ++ lib.optionals (lib.elem "qt6" variants) [
+    qt6.qt5compat
+    qt6.qtsvg
+  ];
 
   installPhase =
     ''
+      runHook preInstall
       mkdir -p $out/share/sddm/themes/
     ''
     + lib.optionalString (lib.elem "qt6" variants) (
@@ -69,7 +69,9 @@ stdenvNoCC.mkDerivation rec {
       + lib.optionalString (lib.isAttrs themeConfig) ''
         ln -sf ${user-cfg} $out/share/sddm/themes/where_is_my_sddm_theme_qt5/theme.conf.user
       ''
-    );
+    ) + ''
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "The most minimalistic SDDM theme among all themes";

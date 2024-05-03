@@ -66,7 +66,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     python-dateutil
     tzdata
-  ] ++ lib.optional (!isPyPy) [
+  ] ++ lib.optionals (!isPyPy) [
     time-machine
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo

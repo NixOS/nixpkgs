@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     "-Ddeveloper_mode=disabled"
   ]
   ++ [(if shared then "-Ddefault_library=shared" else "-Ddefault_library=static")]
-  ++ lib.optional (machine != null) "-Dmachine=${machine}"
-  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  ++ lib.optionals (machine != null) [ "-Dmachine=${machine}" ]
+  ++ lib.optionals (withExamples != []) [ "-Dexamples=${builtins.concatStringsSep "," withExamples}" ];
 
   postInstall = ''
     # Remove Sphinx cache files. Not only are they not useful, but they also
@@ -75,9 +75,12 @@ stdenv.mkDerivation rec {
     find examples -type f -executable -exec install {} $examples/bin \;
   '';
 
-  outputs =
-    [ "out" "doc" ]
-    ++ lib.optional (withExamples != []) "examples";
+  outputs = [
+    "out"
+    "doc"
+  ] ++ lib.optionals (withExamples != []) [
+    "examples"
+  ];
 
   meta = with lib; {
     description = "Set of libraries and drivers for fast packet processing";

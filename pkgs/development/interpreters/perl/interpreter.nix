@@ -95,26 +95,33 @@ stdenv.mkDerivation (rec {
   # $out/lib/perl5 - this is the general default, but because $out
   # contains the string "perl", Configure would select $out/lib.
   # Miniperl needs -lm. perl needs -lrt.
-  configureFlags =
-    (if crossCompiling
-    then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
-    else [ "-de" "-Dcc=cc" ])
-    ++ [
+  configureFlags = [
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
-    ] ++ lib.optional (!crossCompiling) "-Duseshrplib" ++ [
       "-Dlocincpth=${libcInc}/include"
       "-Dloclibpth=${libcLib}/lib"
-    ]
-    ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
-    ++ lib.optional stdenv.isSunOS "-Dcc=gcc"
-    ++ lib.optional enableThreading "-Dusethreads"
-    ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--all-static"
-    ++ lib.optionals (!crossCompiling) [
+    ] ++ lib.optionals crossCompiling [
+      "-Dlibpth=\"\""
+      "-Dglibpth=\"\""
+      "-Ddefault_inc_excludes_dot"
+    ] ++ lib.optionals (!crossCompiling) [
+      "-de"
+      "-Dcc=cc"
+      "-Duseshrplib"
       "-Dprefix=${placeholder "out"}"
       "-Dman1dir=${placeholder "out"}/share/man/man1"
       "-Dman3dir=${placeholder "out"}/share/man/man3"
+    ] ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [
+      "-Dusedevel"
+      "-Uversiononly"
+    ] ++ lib.optionals stdenv.isSunOS [
+      "-Dcc=gcc"
+    ] ++ lib.optionals enableThreading [
+      "-Dusethreads"
+    ] ++ lib.optionals (!enableCrypt) [
+      "-A clear:d_crypt_r"
+    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "--all-static"
     ];
 
   configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";

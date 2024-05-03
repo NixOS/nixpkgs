@@ -56,9 +56,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
-    lib.optional withWayland wayland ++
-    lib.optional (runtimeLibs != [ ]) makeWrapper;
+  nativeBuildInputs = [
+    pkg-config
+    wrapQtAppsHook
+  ] ++ lib.optionals withWayland [
+    wayland
+  ] ++ lib.optionals (runtimeLibs != [ ]) [
+    makeWrapper
+  ];
 
   buildInputs = [
     ffmpeg_4

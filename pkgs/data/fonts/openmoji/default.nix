@@ -48,10 +48,14 @@ stdenvNoCC.mkDerivation rec {
 
   methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
   methods_color = builtins.filter (m: builtins.elem m fontFormats) methods.color;
-  saturations = lib.optional (methods_black != [ ]) "black" ++ lib.optional (methods_color != [ ]) "color";
+  saturations = lib.optionals (methods_black != [ ]) [
+    "black"
+  ] ++ lib.optionals (methods_color != [ ]) [
+    "color"
+  ];
   maximumColorVersions = lib.optionals (buildMaximumColorFonts != "none") (
-    lib.optional (builtins.elem "glyf_colr_0" fontFormats) "0"
-    ++ lib.optional (builtins.elem "glyf_colr_1" fontFormats) "1"
+    lib.optionals (builtins.elem "glyf_colr_0" fontFormats) [ "0" ]
+    ++ lib.optionals (builtins.elem "glyf_colr_1" fontFormats) [ "1" ]
   );
 
   postPatch = lib.optionalString (buildMaximumColorFonts == "bitmap") ''

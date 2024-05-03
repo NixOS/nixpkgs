@@ -43,13 +43,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     blas
-  ]
-  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optionals (gpuBackend == "rocm") [
+  ] ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cudatoolkit
+  ] ++ lib.optionals (gpuBackend == "rocm") [
     rocmPackages.clr
     rocmPackages.rocblas
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
-  ;
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
+  ];
 
   propagatedBuildInputs = [ mpi ];
 
@@ -60,10 +61,11 @@ stdenv.mkDerivation rec {
     # Required due to broken CMake files
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ]
-  ++ lib.optional (gpuBackend == "cuda") "-DSPLA_GPU_BACKEND=CUDA"
-  ++ lib.optional (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ]
-  ;
+  ] ++ lib.optionals (gpuBackend == "cuda") [
+    "-DSPLA_GPU_BACKEND=CUDA"
+  ] ++ lib.optionals (gpuBackend == "rocm") [
+    "-DSPLA_GPU_BACKEND=ROCM"
+  ];
 
   meta = with lib; {
     description = "Specialized Parallel Linear Algebra, providing distributed GEMM functionality for specific matrix distributions with optional GPU acceleration";

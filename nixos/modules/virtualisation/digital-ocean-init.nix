@@ -5,7 +5,7 @@ let
   defaultConfigFile = pkgs.writeText "digitalocean-configuration.nix" ''
     { modulesPath, lib, ... }:
     {
-      imports = lib.optional (builtins.pathExists ./do-userdata.nix) ./do-userdata.nix ++ [
+      imports = lib.optionals (builtins.pathExists ./do-userdata.nix) [ ./do-userdata.nix ] ++ [
         (modulesPath + "/virtualisation/digital-ocean-config.nix")
       ];
     }

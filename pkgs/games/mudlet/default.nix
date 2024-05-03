@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     qtmultimedia
     yajl
     discord-rpc
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     AppKit
   ];
 

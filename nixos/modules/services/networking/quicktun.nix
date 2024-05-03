@@ -137,13 +137,13 @@ in
       (lib.mapAttrsToList (name: value: if value.privateKey != null then name else null))
       (builtins.filter (n: n != null))
       (map (n: "  - services.quicktun.${n}.privateKey"))
-      (services: lib.optional (services != [ ]) ''
+      (services: lib.optionals (services != [ ]) [''
         `services.quicktun.<name>.privateKey` is deprecated.
         Please use `services.quicktun.<name>.privateKeyFile` instead.
 
         Offending options:
         ${lib.concatStringsSep "\n" services}
-      '')
+      ''])
     ];
 
     systemd.services = lib.mkMerge (

@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags = with lib; [
+  configureFlags = [
     # Set the program prefix to the current targetPrefix.
     # This ensures that the prefix always conforms to
     # nixpkgs' expectations instead of relying on the build
@@ -97,7 +97,6 @@ stdenv.mkDerivation rec {
     "--program-prefix=${targetPrefix}"
 
     "--disable-werror"
-  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
     "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
@@ -109,13 +108,22 @@ stdenv.mkDerivation rec {
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
-    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+    "--with-expat"
+    "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-  ] ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
-    ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
-    ++ lib.optional (!enableSim) "--disable-sim";
+  ] ++ lib.optionals (!hostCpuOnly) [
+    "--enable-targets=all"
+  ] ++ lib.optionals (!pythonSupport) [
+    "--without-python"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "--disable-nls"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "--disable-inprocess-agent"
+  ] ++ lib.optionals enableDebuginfod [
+    "--with-debuginfod=yes"
+  ] ++ lib.optionals (!enableSim) [
+    "--disable-sim"
+  ];
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

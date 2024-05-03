@@ -29,7 +29,15 @@ buildPerlPackage rec {
       ''[[ $1 = "article.cls" ]] && echo /dev/null'';
     in
     [ gettext libxslt docbook_xsl docbook_xsl_ns ModuleBuild docbook_xml_dtd_412 docbook_sgml_dtd_41 opensp kpsewhich-stub glibcLocales ];
-  propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isMusl) TextWrapI18N ++ [ LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+  propagatedBuildInputs = [
+    LocaleGettext
+    SGMLSpm
+    UnicodeLineBreak
+    PodParser
+    YAMLTiny
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    TextWrapI18N
+  ];
   # TODO: TermReadKey was temporarily removed from propagatedBuildInputs to unfreeze the build
   buildInputs = [ bash ];
   LC_ALL = "en_US.UTF-8";
