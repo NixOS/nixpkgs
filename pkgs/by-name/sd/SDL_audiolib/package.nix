@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, SDL2
-, pkg-config
+{
+  lib,
+  SDL2,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_audiolib";
-  version = "unstable-2022-04-17";
+  version = "0-unstable-2022-04-17";
 
   src = fetchFromGitHub {
     owner = "realnc";
     repo = "SDL_audiolib";
     rev = "908214606387ef8e49aeacf89ce848fb36f694fc";
-    sha256 = "sha256-11KkwIhG1rX7yDFSj92NJRO9L2e7XZGq2gOJ54+sN/A=";
+    hash = "sha256-11KkwIhG1rX7yDFSj92NJRO9L2e7XZGq2gOJ54+sN/A=";
   };
 
   nativeBuildInputs = [
+    SDL2
     cmake
     pkg-config
   ];
@@ -26,28 +28,32 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
-    "-DUSE_RESAMP_SRC=OFF"
-    "-DUSE_RESAMP_SOXR=OFF"
-    "-DUSE_DEC_DRFLAC=OFF"
-    "-DUSE_DEC_OPENMPT=OFF"
-    "-DUSE_DEC_XMP=OFF"
-    "-DUSE_DEC_MODPLUG=OFF"
-    "-DUSE_DEC_MPG123=OFF"
-    "-DUSE_DEC_SNDFILE=OFF"
-    "-DUSE_DEC_LIBVORBIS=OFF"
-    "-DUSE_DEC_LIBOPUSFILE=OFF"
-    "-DUSE_DEC_MUSEPACK=OFF"
-    "-DUSE_DEC_FLUIDSYNTH=OFF"
-    "-DUSE_DEC_BASSMIDI=OFF"
-    "-DUSE_DEC_WILDMIDI=OFF"
-    "-DUSE_DEC_ADLMIDI=OFF"
+    (lib.cmakeBool "USE_DEC_ADLMIDI" false)
+    (lib.cmakeBool "USE_DEC_BASSMIDI" false)
+    (lib.cmakeBool "USE_DEC_DRFLAC" false)
+    (lib.cmakeBool "USE_DEC_FLUIDSYNTH" false)
+    (lib.cmakeBool "USE_DEC_LIBOPUSFILE" false)
+    (lib.cmakeBool "USE_DEC_LIBVORBIS" false)
+    (lib.cmakeBool "USE_DEC_MODPLUG" false)
+    (lib.cmakeBool "USE_DEC_MPG123" false)
+    (lib.cmakeBool "USE_DEC_MUSEPACK" false)
+    (lib.cmakeBool "USE_DEC_OPENMPT" false)
+    (lib.cmakeBool "USE_DEC_SNDFILE" false)
+    (lib.cmakeBool "USE_DEC_WILDMIDI" false)
+    (lib.cmakeBool "USE_DEC_XMP" false)
+    (lib.cmakeBool "USE_RESAMP_SOXR" false)
+    (lib.cmakeBool "USE_RESAMP_SRC" false)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio decoding, resampling and mixing library for SDL";
     homepage = "https://github.com/realnc/SDL_audiolib";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ ]);
+    inherit (SDL2.meta) platforms;
   };
-}
+})
