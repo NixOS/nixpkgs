@@ -8,16 +8,16 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "DRAGMAP";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Illumina";
-    repo = pname;
-    rev = "${version}";
+    repo = "DRAGMAP";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-f1jsOErriS1I/iUS4CzJ3+Dz8SMUve/ccb3KaE+L7U8=";
+    hash = "sha256-f1jsOErriS1I/iUS4CzJ3+Dz8SMUve/ccb3KaE+L7U8=";
   };
 
   nativebuildInputs = [ boost ];
@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  # cstdint is missing from include in upstream code. This patch add them
+  # Upstream does not accept PR. Issue opened at
+  # https://github.com/Illumina/DRAGMAP/issues/63
   patches = [ ./cstdint.patch ];
 
   GTEST_INCLUDEDIR = "${gtest.dev}/include";
@@ -56,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ apraga ];
   };
-}
+})
