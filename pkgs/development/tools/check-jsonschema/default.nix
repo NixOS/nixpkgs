@@ -1,6 +1,22 @@
 { lib, fetchFromGitHub, python3 }:
 
-with python3.pkgs;
+let
+  inherit (lib) licenses maintainers;
+
+  inherit (python3.pkgs)
+    buildPythonApplication
+    click
+    jsonschema
+    pytestCheckHook
+    pytest-xdist
+    pythonOlder
+    regress
+    requests
+    responses
+    ruamel-yaml
+    setuptools
+    ;
+in
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
@@ -39,7 +55,7 @@ buildPythonApplication rec {
     "test_schemaloader_yaml_data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A jsonschema CLI and pre-commit hook";
     mainProgram = "check-jsonschema";
     homepage = "https://github.com/python-jsonschema/check-jsonschema";

@@ -4,6 +4,8 @@
 }:
 
 let
+  inherit (lib) licenses maintainers;
+
   py = python3.override {
     packageOverrides = self: super: {
       packaging = super.packaging.overridePythonAttrs (oldAttrs: rec {
@@ -17,8 +19,19 @@ let
       });
     };
   };
+
+  inherit (py.pkgs)
+    buildPythonApplication
+    click
+    packaging
+    poetry-core
+    pytestCheckHook
+    pytest-mock
+    pytest-watch
+    pyyaml
+    toml
+    ;
 in
-with py.pkgs;
 
 buildPythonApplication rec {
   pname = "skjold";
@@ -32,18 +45,18 @@ buildPythonApplication rec {
     hash = "sha256-rsdstzNZvokYfTjEyPrWR+0SJpf9wL0HAesq8+A+tPY=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = [
     click
     packaging
     pyyaml
     toml
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = [
     pytest-mock
     pytest-watch
     pytestCheckHook
@@ -71,7 +84,7 @@ buildPythonApplication rec {
     "skjold"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to Python dependencies against security advisory databases";
     homepage = "https://github.com/twu/skjold";
     changelog = "https://github.com/twu/skjold/releases/tag/v${version}";

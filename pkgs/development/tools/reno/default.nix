@@ -5,7 +5,25 @@
 , fetchPypi
 }:
 
-with python3Packages; buildPythonApplication rec {
+let
+  inherit (lib) licenses maintainers;
+
+  inherit (python3Packages)
+    buildPythonApplication
+    docutils
+    dulwich
+    fixtures
+    pbr
+    pytestCheckHook
+    pyyaml
+    setuptools
+    sphinx
+    testscenarios
+    testtools
+    ;
+in
+
+buildPythonApplication rec {
   pname = "reno";
   version = "3.1.0";
 
@@ -50,7 +68,7 @@ with python3Packages; buildPythonApplication rec {
     $out/bin/reno -h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Release Notes Manager";
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";

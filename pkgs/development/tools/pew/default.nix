@@ -1,6 +1,13 @@
-{ lib, python3, fetchPypi }:
+{ lib, python3Packages, fetchPypi }:
 
-with python3.pkgs;
+let
+  inherit (python3Packages)
+    buildPythonApplication
+    setuptools
+    virtualenv
+    virtualenv-clone
+    ;
+in
 
 buildPythonApplication rec {
   pname = "pew";

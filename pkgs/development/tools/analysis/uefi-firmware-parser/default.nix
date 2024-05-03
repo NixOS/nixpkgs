@@ -1,6 +1,9 @@
 { lib, python3, fetchFromGitHub }:
 
-with python3.pkgs;
+let
+  inherit (lib) licenses maintainers platforms;
+  inherit (python3.pkgs) buildPythonApplication;
+in
 
 buildPythonApplication rec {
   pname = "uefi-firmware-parser";
@@ -14,7 +17,7 @@ buildPythonApplication rec {
     sha256 = "1yn9vi91j1yxkn0icdnjhgl0qrqqkzyhccj39af4f19q1gdw995l";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/theopolis/uefi-firmware-parser/";
     description = "Parse BIOS/Intel ME/UEFI firmware related structures: Volumes, FileSystems, Files, etc";
     mainProgram = "uefi-firmware-parser";
