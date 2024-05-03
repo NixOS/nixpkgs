@@ -284,6 +284,9 @@ let
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
+      qtpurchasing = callPackage ../modules/qtpurchasing.nix {
+        inherit (darwin.apple_sdk_11_0.frameworks) Foundation StoreKit;
+      };
       qtquick1 = null;
       qtquick3d = callPackage ../modules/qtquick3d.nix { };
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
