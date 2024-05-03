@@ -37,9 +37,9 @@ buildPythonPackage rec {
 
   env.PROPHET_REPACKAGE_CMDSTAN = "false";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cmdstanpy
     numpy
     matplotlib
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  passthru.optional-dependencies.parallel = [
+  optional-dependencies.parallel = [
     dask
     distributed
   ] ++ dask.optional-dependencies.dataframe;
