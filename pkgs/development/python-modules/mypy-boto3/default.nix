@@ -300,7 +300,7 @@ rec {
 
   mypy-boto3-fis = buildMypyBoto3Package "fis" "1.34.63" "sha256-TJnzgQGDcybpVqg+p7Tuvw/RoY79cQPPChyHWlMxhiY=";
 
-  mypy-boto3-fms = buildMypyBoto3Package "fms" "1.34.0" "sha256-tzaSecIXzkC+Zr5MGpU7GaoiGHGsywEglZ8+Ja0XDDo=";
+  mypy-boto3-fms = buildMypyBoto3Package "fms" "1.34.95" "sha256-9hp977PkFgE/+dbDxnevFbdcR+F67NkS6a6MTWFUxlY=";
 
   mypy-boto3-forecast = buildMypyBoto3Package "forecast" "1.34.0" "sha256-DuNZe9Q7HuEeJYuBqo7JRBTJgclyUpU9fJ62SCGYpLQ=";
 
