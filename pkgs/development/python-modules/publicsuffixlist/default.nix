@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "publicsuffixlist";
-  version = "0.10.0.20240420";
+  version = "0.10.0.20240502";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s8xPkes/xFlejqfOlMZOPLmNK92e2TLK18UZmv3/a6I=";
+    hash = "sha256-Hy0DmawyjUXn35tTV39Mpp+Xe16hDTbkyQoBdKS/d0o=";
   };
 
   build-system = [ setuptools ];

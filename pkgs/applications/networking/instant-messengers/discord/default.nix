@@ -69,14 +69,12 @@ let
     then ./linux.nix
     else ./darwin.nix;
 
-  openasar = callPackage ./openasar.nix { };
-
   packages = (
     builtins.mapAttrs
       (_: value:
         callPackage package (value
           // {
-          inherit src version openasar branch;
+          inherit src version branch;
           meta = meta // { mainProgram = value.binaryName; };
         }))
       {

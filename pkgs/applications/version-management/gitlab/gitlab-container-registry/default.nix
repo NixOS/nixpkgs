@@ -15,11 +15,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-KZWdM8Q8ipsgm7OoLyOuHo+4Vg2Nve+yZtTSUDgjOW4=";
 
-  patches = [
-    ./Disable-inmemory-storage-driver-test.patch
-  ];
-
   postPatch = ''
+    # Disable flaky inmemory storage driver test
+    rm registry/storage/driver/inmemory/driver_test.go
+
     substituteInPlace health/checks/checks_test.go \
       --replace \
         'func TestHTTPChecker(t *testing.T) {' \
