@@ -15,11 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-VFNW13PupJOroIhqnuLOq3mqU9nXEy1hmjHBQfErSN8=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     flask-restx
     gunicorn
     lacuscore
