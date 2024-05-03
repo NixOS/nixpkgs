@@ -724,7 +724,7 @@ rec {
 
   mypy-boto3-transcribe = buildMypyBoto3Package "transcribe" "1.34.94" "sha256-od71jmBUO93xHEXrn6hCXZxgH3bpsua8dH2gE6vs9PA=";
 
-  mypy-boto3-transfer = buildMypyBoto3Package "transfer" "1.34.77" "sha256-fqta7EJ7rP8dIKJTG8sJCYCNmcqqNljqf9jyk0j6feA=";
+  mypy-boto3-transfer = buildMypyBoto3Package "transfer" "1.34.89" "sha256-lp18VvG45hg5lfVkgKIq17iBcsIwPlY7+nlbRf/0Hoc=";
 
   mypy-boto3-translate = buildMypyBoto3Package "translate" "1.34.0" "sha256-4tjjmwMtIPpMwKZ3yqB96XEb1WidCxMIj2Cfjn0nTy8=";
 
