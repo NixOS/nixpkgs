@@ -12,6 +12,22 @@
 , setuptools
 , sphinxcontrib-log-cabinet
 , sphinx-issues
+
+# for passthru.tests
+, aiohttp-jinja2
+, ansible
+, datasette
+, django-jinja
+, flask
+, j2cli
+, jinja2-ansible-filters
+, jinja2-git
+, jinja2-pluralize
+, jinja2-time
+, pyramid-jinja2
+, sphinx-jinja
+, starlette
+, staticjinja
 }:
 
 buildPythonPackage rec {
@@ -74,6 +90,24 @@ buildPythonPackage rec {
 
     inherit (python) pythonVersion;
     inherit meta;
+  };
+  passthru.tests = {
+    inherit
+      aiohttp-jinja2
+      ansible
+      datasette
+      django-jinja
+      flask
+      j2cli
+      jinja2-ansible-filters
+      jinja2-git
+      jinja2-pluralize
+      jinja2-time
+      pyramid-jinja2
+      sphinx-jinja
+      starlette
+      staticjinja
+    ;
   };
 
   meta = with lib; {
