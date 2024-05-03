@@ -706,7 +706,7 @@ rec {
 
   mypy-boto3-sts = buildMypyBoto3Package "sts" "1.34.0" "sha256-s0fgozbWAWLdlAdNnRD2FPKwmkVcm0JBWFDVTWduIGc=";
 
-  mypy-boto3-support = buildMypyBoto3Package "support" "1.34.0" "sha256-3y+uFRJKahLAPoG9gqxK8gqZKJ+OL1Rom/dr/zWIq+k=";
+  mypy-boto3-support = buildMypyBoto3Package "support" "1.34.93" "sha256-aB4BOS7YIis+oKZk4gLlsUKDU4FU2WoAZ4Bnegw/MKk=";
 
   mypy-boto3-support-app = buildMypyBoto3Package "support-app" "1.34.0" "sha256-/aYEPAnGgAPB6Tnh5jwYASbP2kVJth+3ZxcMCYgo9n0=";
 
