@@ -17,8 +17,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "azure-identity"
     "azure-keyvault-keys"
     "azure-mgmt-compute"
+    "azure-mgmt-containerservice"
     "azure-mgmt-network"
     "azure-mgmt-security"
     "azure-storage-blob"
