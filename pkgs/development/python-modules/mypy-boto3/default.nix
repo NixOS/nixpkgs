@@ -662,7 +662,7 @@ rec {
 
   mypy-boto3-servicecatalog-appregistry = buildMypyBoto3Package "servicecatalog-appregistry" "1.34.0" "sha256-XYqa3aiC9pasmkMDXFmHKuK/PWwi6fZs/pt7rXuRFDw=";
 
-  mypy-boto3-servicediscovery = buildMypyBoto3Package "servicediscovery" "1.34.0" "sha256-h9wTiaEakgBlrlwzUulqoEMWmVAKV/METiQppUC+FVI=";
+  mypy-boto3-servicediscovery = buildMypyBoto3Package "servicediscovery" "1.34.89" "sha256-v1UlP5qV/2Wkljj82UgGqOdC+MhkQyXXKPQfnvREkLU=";
 
   mypy-boto3-ses = buildMypyBoto3Package "ses" "1.34.0" "sha256-ieFDjZ8tTPM5wCRWFjNNUuDKOj8K4s4NH1SiJXxbnaQ=";
 
