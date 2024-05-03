@@ -9717,6 +9717,8 @@ self: super: with self; {
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
+  phunspell = callPackage ../development/python-modules/phunspell { };
+
   phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
 
   pi1wire = callPackage ../development/python-modules/pi1wire { };
