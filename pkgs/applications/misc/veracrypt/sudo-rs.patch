@@ -1,0 +1,12 @@
+diff '--color=auto' -urN a/Core/Unix/CoreService.cpp b/Core/Unix/CoreService.cpp
+--- a/Core/Unix/CoreService.cpp	2024-04-18 22:51:05.955873091 +0800
++++ b/Core/Unix/CoreService.cpp	2024-04-18 23:04:18.650426107 +0800
+@@ -413,7 +413,7 @@
+ 					if (appPath.empty())
+ 						appPath = "veracrypt";
+ 
+-					const char *args[] = { "sudo", "-S", "-p", "", appPath.c_str(), TC_CORE_SERVICE_CMDLINE_OPTION, nullptr };
++					const char *args[] = { "sudo", "-S", appPath.c_str(), TC_CORE_SERVICE_CMDLINE_OPTION, nullptr };
+ 					execvp (args[0], ((char* const*) args));
+ 					throw SystemException (SRC_POS, args[0]);
+ 				}
