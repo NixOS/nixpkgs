@@ -29,11 +29,11 @@ buildPythonPackage rec {
       --replace-fail "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-interrupt
     bleak
     bleak-retry-connector
