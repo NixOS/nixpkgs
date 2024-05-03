@@ -151,9 +151,50 @@ let
       '';
     };
 
-    android = with builtins; let
+    android = with builtins; let 
+       readFileAsLines = path:
+        let
+          fileContents = readFile path;
+          lines = filter
+            (line: line != "")
+            (lib.splitString "\n" fileContents);
+        in
+        lines;
+      readEnvFile = path:
+        let
+          lines = readFileAsLines path;
+          keyValuePairs = builtins.map
+            (line: (
+              let
+                kv = lib.splitString "=" line;
+                name = builtins.elemAt kv 0;
+                value = builtins.elemAt kv 1;
+              in
+              { inherit name value; }
+            ))
+            lines;
+        in
+          listToAttrs keyValuePairs;
+
+        removeChar = str: ch:
+          let
+            # Convert the string to a list of characters
+            chars = lib.strings.stringToCharacters str;
+            # Filter out the character to be removed
+            filteredChars = lib.lists.filter (c: c != ch) chars;
+          in 
+            # Convert the list of characters back into a string
+            lib.strings.concatStringsSep "" filteredChars;
+
+      in let
         # androidOutputs = if args.buildTypes then args.buildTypes else [ "fat" "split" "bundle" ];
         outputTypeCheck = type : if (elem type (args.buildTypes or [ "fat" "split" "bundle" ])) then "true" else "false";
+        gradlezip = (args.gradle or (
+          builtins.fetchurl {
+            url =removeChar  (readEnvFile "${args.src}/android/gradle/wrapper/gradle-wrapper.properties").distributionUrl "\\";
+            sha256 = args.gradleHash or "";
+          }
+        ));
     in universal // {
 
       nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
@@ -181,6 +222,14 @@ let
       buildInputs = (universal.buildInputs or [ ]) ++ [ 
 
       ];
+
+      #TODO: make gladlew now, that we already fetched the zip file, so it doesnt try to download anything
+      configurePhase = ''
+        runHook preConfigure
+        mkdir -p android/gradle/wrapper/dists/
+        cp -r ${gradlezip} android/gradle/wrapper/dists/
+        runHook postConfigure
+      '';
 
       dontDartBuild = true;
       buildPhase = universal.buildPhase or ''
