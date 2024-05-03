@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libuuid
-, libsodium
-, keyutils
-, liburcu
-, zlib
-, libaio
-, zstd
-, lz4
-, attr
-, udev
-, nixosTests
-, fuse3
-, cargo
-, rustc
-, rustPlatform
-, makeWrapper
-, writeScript
-, python3
-, fuseSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libuuid,
+  libsodium,
+  keyutils,
+  liburcu,
+  zlib,
+  libaio,
+  zstd,
+  lz4,
+  attr,
+  udev,
+  nixosTests,
+  fuse3,
+  cargo,
+  rustc,
+  rustPlatform,
+  makeWrapper,
+  writeScript,
+  python3,
+  fuseSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
 
-
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 
@@ -107,11 +107,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ davidak johnrtitor Madouura ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      davidak
+      johnrtitor
+      Madouura
+    ];
+    platforms = lib.platforms.linux;
   };
 })
