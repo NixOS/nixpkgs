@@ -242,6 +242,9 @@ let
         disabledTests = old.disabledTests or [ ] ++ [
           "test_export_md5_digest"
         ];
+        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
+          self.flaky
+        ];
       });
 
       # Ceph does not support `kubernetes` >= 19, see:
