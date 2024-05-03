@@ -11,7 +11,7 @@ buildFishPlugin rec {
     owner = "lewisacidic";
     repo = "fish-git-abbr";
     rev = "dc590a5b9d9d2095f95f7d90608b48e55bea0b0e";
-    sha256 = "sha256-6z3Wr2t8CP85xVEp6UCYaM2KC9PX4MDyx19f/wjHkb0=";
+    hash = "sha256-6z3Wr2t8CP85xVEp6UCYaM2KC9PX4MDyx19f/wjHkb0=";
   };
 
   meta = with lib; {
