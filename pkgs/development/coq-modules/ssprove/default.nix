@@ -12,7 +12,7 @@
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [coq.coq-version mathcomp-ssreflect.version] [
-    { cases = ["8.18" (range "2.1.0" "2.2.0")]; out = "0.2.0"; }
+    { cases = [(range "8.18" "8.19") (range "2.1.0" "2.2.0")]; out = "0.2.0"; }
     # This is the original dependency:
     # { cases = ["8.17" "1.18.0"]; out = "0.1.0"; }
     # But it is not loadable. The math-comp nixpkgs configuration
