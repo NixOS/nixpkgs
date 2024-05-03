@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "roadtx";
-  version = "1.7.0";
+  version = "1.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qnumJbuBH+ajzfG+bLTrYPvB5uNnL8dJsTZoT2vo6g0=";
+    hash = "sha256-hhxmwD1+mZtU/VmB8yXeQESh0AGtjhdpDXRG3+mYfEk=";
   };
 
   build-system = [
