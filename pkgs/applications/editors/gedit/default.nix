@@ -15,7 +15,7 @@
 , libpeas
 , libxml2
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk-doc
 , gobject-introspection
 , docbook-xsl-nons
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     python3
     python3Packages.wrapPython
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk-doc
     gobject-introspection
     docbook-xsl-nons

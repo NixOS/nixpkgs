@@ -20,7 +20,7 @@
 , qttools
 , tbb
 , xercesc
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
@@ -38,7 +38,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     eigen # header-only
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 

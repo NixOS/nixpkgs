@@ -11,7 +11,7 @@
 , xorg
 # To define a the gnuradio.pkgs scope
 , newScope
-# For Emulating wrapGAppsHook
+# For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , glib
 , hicolor-icon-theme
@@ -76,7 +76,7 @@ let
   inherit (unwrapped) version;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
-    # Emulating wrapGAppsHook & wrapQtAppsHook working together
+    # Emulating wrapGAppsHook3 & wrapQtAppsHook working together
     ++ lib.optionals (
       (unwrapped.hasFeature "gnuradio-companion")
       || (unwrapped.hasFeature "gr-qtgui")

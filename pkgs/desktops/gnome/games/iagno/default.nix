@@ -6,7 +6,7 @@
 , gnome
 , gdk-pixbuf
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , gsound
 , libxml2
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     vala
     desktop-file-utils
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
     libxml2
   ];

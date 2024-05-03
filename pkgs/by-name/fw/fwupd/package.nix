@@ -228,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_msr=disabled"
   ];
 
-  # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
+  # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
 
   doCheck = true;

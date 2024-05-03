@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.13.1";
+  version = "3.13.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Uh9fVsUPhCb14DrTsoG0kKh+8VvGxSbxaCkPDHFI1E4=";
+    hash = "sha256-0T9GZhi/3nK9LBglXiafclQsbnDnusg6AjLWscxcjPQ=";
   };
 
   nativeBuildInputs = [

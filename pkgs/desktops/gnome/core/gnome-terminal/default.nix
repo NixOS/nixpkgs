@@ -21,7 +21,7 @@
 , vala
 , desktop-file-utils
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , pcre2
 , libxslt
 , docbook-xsl-nons
@@ -30,14 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.50.1";
+  version = "3.52.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
     rev = version;
-    sha256 = "sha256-lJAzmz8tvEbr371VtYjlV4+z3cSy4QrmP0vmD5WiJD4=";
+    hash = "sha256-6+6/fgGlSM/57+n0SopuF0ZY9htma5usIgxy2BBAC+M=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     vala
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     pcre2
     python3
   ];

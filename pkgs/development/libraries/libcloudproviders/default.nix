@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libcloudproviders/${lib.versions.majorMinor version}/libcloudproviders-${version}.tar.xz";
-    sha256 = "O3URCzpP3vTFxaRA5IcB/gVNKuBh0VbIkTa7W6BedLc=";
+    hash = "sha256-O3URCzpP3vTFxaRA5IcB/gVNKuBh0VbIkTa7W6BedLc=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

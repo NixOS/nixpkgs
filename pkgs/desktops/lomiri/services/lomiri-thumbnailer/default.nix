@@ -25,7 +25,7 @@
 , shared-mime-info
 , taglib
 , validatePkgConfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       tornado
     ]))
     validatePkgConfig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

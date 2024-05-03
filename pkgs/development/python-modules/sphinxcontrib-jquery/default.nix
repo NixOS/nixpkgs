@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , flit-core
+, defusedxml
 , pytestCheckHook
 , sphinx
 }:
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
     sphinx
   ];

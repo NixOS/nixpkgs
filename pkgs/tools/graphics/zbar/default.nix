@@ -10,7 +10,7 @@
 , qtbase
 , qtx11extras
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , xmlto
 , docbook_xsl
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook_xsl
   ] ++ lib.optionals enableVideo [
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     qtbase
   ];

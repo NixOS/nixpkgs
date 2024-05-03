@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.1.1";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "build";
     rev = "refs/tags/${version}";
-    hash = "sha256-SGWpm+AGIfqKMpDfmz2aMYmcs+XVREbHIXSuU4R7U/k=";
+    hash = "sha256-G0g+1v19sQMUuQlZKGELZOwwX07i7TIdEdaYzr8bKtI=";
   };
 
   postPatch = ''

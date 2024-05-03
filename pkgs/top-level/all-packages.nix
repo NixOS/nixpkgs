@@ -1434,13 +1434,18 @@ with pkgs;
     name = "find-xml-catalogs-hook";
   } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
-    makeWrapper = makeBinaryWrapper;
+  wrapGAppsHook3 = wrapGAppsNoGuiHook.override {
+    isGraphical = true;
   };
 
-  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = __splicedPackages.gtk4; };
+  wrapGAppsHook4 = wrapGAppsNoGuiHook.override {
+    isGraphical = true;
+    gtk3 = __splicedPackages.gtk4;
+  };
 
-  wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
+  wrapGAppsNoGuiHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
+    makeWrapper = makeBinaryWrapper;
+  };
 
   separateDebugInfo = makeSetupHook {
     name = "separate-debug-info-hook";
@@ -3393,8 +3398,6 @@ with pkgs;
 
   bitwise = callPackage ../tools/misc/bitwise { };
 
-  blanket = callPackage ../applications/audio/blanket { };
-
   blisp = darwin.apple_sdk_11_0.callPackage ../development/embedded/blisp {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit;
   };
@@ -4429,8 +4432,6 @@ with pkgs;
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bundletool = callPackage ../development/tools/bundletool { };
-
-  bustle = haskellPackages.bustle;
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
@@ -18647,15 +18648,7 @@ with pkgs;
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
-  docutils = with python3Packages; toPythonApplication (
-    docutils.overridePythonAttrs (attrs: rec {
-      version = "0.20.1";
-      src = attrs.src.override {
-        inherit version;
-        hash = "sha256-8IpOJ2w6FYOobc4+NKuj/gTQK7ot1R7RYQYkToqSPjs=";
-      };
-    })
-  );
+  docutils = with python3Packages; toPythonApplication docutils;
 
   doctl = callPackage ../development/tools/doctl { };
 
@@ -24999,7 +24992,7 @@ with pkgs;
   whereami = callPackage ../development/libraries/whereami { };
 
   wildmidi = callPackage ../development/libraries/wildmidi {
-    inherit (darwin.apple_sdk.frameworks) OpenAL;
+    inherit (darwin.apple_sdk.frameworks) OpenAL CoreAudioKit;
   };
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
@@ -27171,9 +27164,7 @@ with pkgs;
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = libsForQt5.callPackage ../os-specific/linux/ffado {
-    inherit (linuxPackages) kernel;
-  };
+  ffado = libsForQt5.callPackage ../os-specific/linux/ffado { };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -31273,8 +31264,6 @@ with pkgs;
 
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
-  fragments = callPackage ../applications/networking/p2p/fragments { };
-
   freedv = callPackage ../applications/radio/freedv {
     inherit (darwin.apple_sdk.frameworks) AppKit AVFoundation Cocoa CoreMedia;
     codec2 = codec2.override {
@@ -31317,10 +31306,19 @@ with pkgs;
 
   pulseaudio-module-xrdp = callPackage ../applications/networking/remote/xrdp/pulseaudio-module-xrdp { };
 
-  freerdp = callPackage ../applications/networking/remote/freerdp {
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
-  };
+  inherit
+    ({
+      freerdp = callPackage ../applications/networking/remote/freerdp {
+        inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
+        inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
+      };
+      freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {
+        inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
+      };
+    })
+    freerdp
+    freerdp3
+    ;
 
   freerdpUnstable = freerdp;
 
@@ -33668,10 +33666,6 @@ with pkgs;
   opera = callPackage ../applications/networking/browsers/opera { };
 
   oranda = callPackage ../applications/misc/oranda { };
-
-  orca = python3Packages.callPackage ../applications/misc/orca {
-    inherit pkg-config;
-  };
 
   orca-c = callPackage ../applications/audio/orca-c { };
 
@@ -37804,6 +37798,7 @@ with pkgs;
     gnome43Extensions
     gnome44Extensions
     gnome45Extensions
+    gnome46Extensions
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
@@ -40077,7 +40072,7 @@ with pkgs;
   rfc-bibtex = callPackage ../tools/typesetting/rfc-bibtex { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
-    inherit glib gtk3 gobject-introspection wrapGAppsHook;
+    inherit glib gtk3 gobject-introspection wrapGAppsHook3;
   };
 
   rpl = callPackage ../tools/text/rpl { };

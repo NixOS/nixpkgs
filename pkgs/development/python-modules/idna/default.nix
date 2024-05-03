@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "3.6";
-  format = "pyproject";
+  version = "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ns270IOwZ5iuHoaty/6KsUec+GTk7jD+TkagA9Ekkco=";
+    hash = "sha256-Ao/zqt8GCcH9J42OowiSmUEqeoub0AXdCLn4KFvLXPw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 
@@ -25,6 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/kjd/idna/";
+    changelog = "https://github.com/kjd/idna/releases/tag/v${version}";
     description = "Internationalized Domain Names in Applications (IDNA)";
     license = lib.licenses.bsd3;
   };

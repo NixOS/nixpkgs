@@ -2,7 +2,7 @@
 , ocamlPackages, coqPackages, rubber, hevea, emacs
 , version ? "1.7.2"
 , ideSupport ? true
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = lib.optional ideSupport
-    wrapGAppsHook
+    wrapGAppsHook3
   ++ (with ocamlPackages;  [
     ocaml findlib menhir
   ]) ++ [

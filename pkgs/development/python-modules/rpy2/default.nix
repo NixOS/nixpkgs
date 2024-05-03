@@ -25,26 +25,20 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.5.15";
+    version = "3.5.16";
     format = "setuptools";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      hash = "sha256-RE+uSoTcfyM7cOqrCqgTmO4BR8ThrjjdRSTXedbyWys=";
+      hash = "sha256-g34vdFg2WKXEwzl2GnP5Q08z75ztPjDGTadWIWXCgBs=";
     };
 
     patches = [
       # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
       # This patch sets R_LIBS_SITE when rpy2 is imported.
       ./rpy2-3.x-r-libs-site.patch
-
-      # https://github.com/rpy2/rpy2/pull/1094
-      (fetchpatch {
-        url = "https://github.com/rpy2/rpy2/commit/026d069a008163a62d12567bcb938410d0f9bf7a.diff";
-        hash = "sha256-x778upSY3zab5EiRyOcsbDpPj7vN/7XzefEs+wvkNg0=";
-      })
     ];
 
     postPatch = ''

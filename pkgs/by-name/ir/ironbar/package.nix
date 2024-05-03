@@ -7,7 +7,7 @@
 , glib
 , shared-mime-info
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk-layer-shell
 , gnome
 , libxkbcommon
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

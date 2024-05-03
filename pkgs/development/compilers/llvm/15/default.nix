@@ -86,7 +86,64 @@ in let
 
   in {
 
-    libllvm = callPackage ./llvm {
+    libllvm = callPackage ../common/llvm {
+      patches = [
+        ./llvm/gnu-install-dirs.patch
+
+        # Running the tests involves invoking binaries (like `opt`) that depend on
+        # the LLVM dylibs and reference them by absolute install path (i.e. their
+        # nix store path).
+        #
+        # Because we have not yet run the install phase (we're running these tests
+        # as part of `checkPhase` instead of `installCheckPhase`) these absolute
+        # paths do not exist yet; to work around this we point the loader (`ld` on
+        # unix, `dyld` on macOS) at the `lib` directory which will later become this
+        # package's `lib` output.
+        #
+        # Previously we would just set `LD_LIBRARY_PATH` to include the build `lib`
+        # dir but:
+        #   - this doesn't generalize well to other platforms; `lit` doesn't forward
+        #     `DYLD_LIBRARY_PATH` (macOS):
+        #     + https://github.com/llvm/llvm-project/blob/0d89963df354ee309c15f67dc47c8ab3cb5d0fb2/llvm/utils/lit/lit/TestingConfig.py#L26
+        #   - even if `lit` forwarded this env var, we actually cannot set
+        #     `DYLD_LIBRARY_PATH` in the child processes `lit` launches because
+        #     `DYLD_LIBRARY_PATH` (and `DYLD_FALLBACK_LIBRARY_PATH`) is cleared for
+        #     "protected processes" (i.e. the python interpreter that runs `lit`):
+        #     https://stackoverflow.com/a/35570229
+        #   - other LLVM subprojects deal with this issue by having their `lit`
+        #     configuration set these env vars for us; it makes sense to do the same
+        #     for LLVM:
+        #     + https://github.com/llvm/llvm-project/blob/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae/clang-tools-extra/test/Unit/lit.cfg.py#L22-L31
+        #
+        # !!! TODO: look into upstreaming this patch
+        ./llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch
+
+        # `lit` has a mode where it executes run lines as a shell script which is
+        # constructs; this is problematic for macOS because it means that there's
+        # another process in between `lit` and the binaries being tested. As noted
+        # above, this means that `DYLD_LIBRARY_PATH` is cleared which means that our
+        # tests fail with dyld errors.
+        #
+        # To get around this we patch `lit` to reintroduce `DYLD_LIBRARY_PATH`, when
+        # present in the test configuration.
+        #
+        # It's not clear to me why this isn't an issue for LLVM developers running
+        # on macOS (nothing about this _seems_ nix specific)..
+        ./llvm/lit-shell-script-runner-set-dyld-library-path.patch
+
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+      ];
+      pollyPatches = [
+        ./llvm/gnu-install-dirs-polly.patch
+
+        # Just like the `llvm-lit-cfg` patch, but for `polly`.
+        ./llvm/polly-lit-cfg-add-libs-to-dylib-path.patch
+      ];
       inherit llvm_meta;
     };
 

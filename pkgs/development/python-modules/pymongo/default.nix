@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "4.6.2";
+  version = "4.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q30BrIMqFmPa1ZLMvZK7Dwd1vI+YoZI8Xhp9f+rUla8=";
+    hash = "sha256-QAB0CQuaYx8SC0LGGyIv10NJDBM6XS+ZwCCM78zMlk4=";
   };
 
   propagatedBuildInputs = [

@@ -64,7 +64,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    # https://github.com/mpdavis/python-jose/issues/348
+    "TestBackendEcdsaCompatibility"
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${version}";

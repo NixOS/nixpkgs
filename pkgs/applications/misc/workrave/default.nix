@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoconf
 , autoconf-archive
 , automake
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     intltool
     libtool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     jinja2
     gobject-introspection
   ];

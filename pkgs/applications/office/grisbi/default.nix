@@ -5,7 +5,7 @@
 , libgsf
 , libofx
 , intltool
-, wrapGAppsHook
+, wrapGAppsHook3
 , libsoup
 , gnome
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vTrbq/xLTfwF7/YtKzZFiiSw8A0HzzWin2ry8gPHej8=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
   buildInputs = [
     gtk
     libgsf

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , which
 , gtk3
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     which
   ];

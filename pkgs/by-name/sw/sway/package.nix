@@ -2,7 +2,7 @@
 , sway-unwrapped
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
-, withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
+, withGtkWrapper ? false, wrapGAppsHook3, gdk-pixbuf, glib, gtk3
 , extraOptions ? [] # E.g.: [ "--verbose" ]
 # Used by the NixOS module:
 , isNixOS ? false
@@ -44,7 +44,7 @@ in symlinkJoin rec {
 
   strictDeps = false;
   nativeBuildInputs = [ makeWrapper ]
-    ++ (optional withGtkWrapper wrapGAppsHook);
+    ++ (optional withGtkWrapper wrapGAppsHook3);
 
   buildInputs = optionals withGtkWrapper [ gdk-pixbuf glib gtk3 ];
 

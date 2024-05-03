@@ -20,7 +20,7 @@
 , python3
 , systemd
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace libmessaging-menu/messaging-menu.pc.in \
       --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
       --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+
+    # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
   '' + lib.optionalString (!withDocumentation) ''
     sed -i CMakeLists.txt \
       '/add_subdirectory(doc)/d'
@@ -63,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45

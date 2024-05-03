@@ -1,45 +1,57 @@
 { stdenv
 , lib
-, backports-zoneinfo
-, billiard
-, boto3
 , buildPythonPackage
-, case
+, fetchPypi
+, pythonOlder
+
+# build-system
+, setuptools
+
+# dependencies
+, billiard
+, kombu
+, vine
 , click
 , click-didyoumean
-, click-plugins
 , click-repl
-, dnspython
-, fetchPypi
-, kombu
+, click-plugins
+, tzdata
+, python-dateutil
+
+# optional-dependencies
+, google-cloud-storage
 , moto
+, msgpack
 , pymongo
+, pyyaml
+
+# tests
 , pytest-celery
 , pytest-click
 , pytest-subtests
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
-, python-dateutil
-, pythonOlder
-, tzdata
-, vine
 , nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.3.6";
-  format = "setuptools";
+  version = "5.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hwzHHXN8AgDDlykNcwNEzJkdE6BXU0NT0STJOAJnqrk=";
+    hash = "sha256-UEoZFA6NMCnVrK2IMwxUHUw/ZMeJ2F+UdWdi2Lyn5wY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     billiard
     click
     click-didyoumean
@@ -49,24 +61,29 @@ buildPythonPackage rec {
     python-dateutil
     tzdata
     vine
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
+  optional-dependencies = {
+    gcs = [ google-cloud-storage ];
+    mongodb = [ pymongo ];
+    msgpack = [ msgpack ];
+    yaml = [ pyyaml ];
+  };
+
   nativeCheckInputs = [
-    boto3
-    case
-    dnspython
     moto
-    pymongo
     pytest-celery
     pytest-click
     pytest-subtests
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ];
+  ]
+  # based on https://github.com/celery/celery/blob/main/requirements/test.txt
+  ++ optional-dependencies.yaml
+  ++ optional-dependencies.msgpack
+  ++ optional-dependencies.mongodb
+  ++ optional-dependencies.gcs;
 
   disabledTestPaths = [
     # test_eventlet touches network

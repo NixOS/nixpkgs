@@ -7,7 +7,7 @@
 , gtk3
 , pango
 , python310Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , hyprlandSupport ? true
 , wlr-randr
 }:
@@ -25,7 +25,7 @@ python310Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

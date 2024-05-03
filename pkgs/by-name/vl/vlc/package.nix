@@ -77,7 +77,7 @@
 , unzip
 , wayland
 , wayland-protocols
-, wrapGAppsHook
+, wrapGAppsHook3
 , xcbutilkeysyms
 , zlib
 
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     removeReferencesTo
     unzip
-    wrapGAppsHook
+    wrapGAppsHook3
   ]
   ++ optionals chromecastSupport [ protobuf ]
   ++ optionals withQt5 [ libsForQt5.wrapQtAppsHook ]

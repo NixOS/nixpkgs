@@ -1,47 +1,99 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, python, pkg-config, dbus, dbus-glib, isPyPy
-, ncurses, pygobject3, isPy3k, pythonAtLeast }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
+, isPyPy
+, python
+
+# build-system
+, meson
+, meson-python
+, pkg-config
+
+# native dependencies
+, dbus
+, dbus-glib
+}:
 
 buildPythonPackage rec {
   pname = "dbus-python";
-  version = "1.2.18";
+  version = "1.3.2";
+  pyproject = true;
 
-  # ModuleNotFoundError: No module named 'distutils'
-  disabled = isPyPy || pythonAtLeast "3.12";
-  format = "other";
-  outputs = [ "out" "dev" ];
+  disabled = isPyPy;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q3jrw515z98mqdk9x822nd95rky455zz9876f1nqna5igkd3gcj";
+    hash = "sha256-rWeBkwhhi1BpU3viN/jmjKHH/Mle5KEh/mhFsUGCSPg=";
   };
 
   patches = [
-    ./fix-includedir.patch
+    # reduce required dependencies
+    # https://gitlab.freedesktop.org/dbus/dbus-python/-/merge_requests/23
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/dbus/dbus-python/-/commit/d5e19698a8d6e1485f05b67a5b2daa2392819aaf.patch";
+      hash = "sha256-Rmj/ByRLiLnIF3JsMBElJugxsG8IARcBdixLhoWgIYU=";
+    })
   ];
 
-  preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) ''
-    MACOSX_DEPLOYMENT_TARGET=10.16
+  postPatch = ''
+    # we provide patchelf natively, not through the python package
+    sed -i '/patchelf/d' pyproject.toml
+
+    # dont run autotols configure phase
+    rm configure.ac configure
+
+    patchShebangs test/*.sh
   '';
 
-  configureFlags = [
-    "PYTHON=${python.pythonOnBuildForHost.interpreter}"
+  nativeBuildInputs = [
+    meson
+    meson-python
+    pkg-config
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus dbus-glib ]
-    # My guess why it's sometimes trying to -lncurses.
-    # It seems not to retain the dependency anyway.
-    ++ lib.optional (! python ? modules) ncurses;
+  buildInputs = [
+    dbus
+    dbus-glib
+  ];
 
-  doCheck = isPy3k;
-  nativeCheckInputs = [ dbus.out pygobject3 ];
+  pypaBuildFlags = [
+    # Don't discard meson build directory, still needed for tests!
+    "-Cbuild-dir=_meson-build"
+  ];
 
+  # workaround bug in meson-python
+  # https://github.com/mesonbuild/meson-python/issues/240
   postInstall = ''
-    cp -r dbus_python.egg-info $out/${python.sitePackages}/
+    mkdir -p $dev/lib
+    mv $out/${python.sitePackages}/.dbus_python.mesonpy.libs/pkgconfig/ $dev/lib
+  '';
+
+  # make sure the Cflags in the pkgconfig file are correct and make the structure backwards compatible
+  postFixup = ''
+    ln -s $dev/include/*/dbus_python/dbus-1.0/ $dev/include/dbus-1.0
+  '';
+
+  nativeCheckInputs = [
+    dbus.out
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    meson test -C _meson-build --no-rebuild --print-errorlogs
+
+    runHook postCheck
   '';
 
   meta = with lib; {
     description = "Python DBus bindings";
+    homepage = "https://gitlab.freedesktop.org/dbus/dbus-python";
     license = licenses.mit;
     platforms = dbus.meta.platforms;
     maintainers = with maintainers; [ ];

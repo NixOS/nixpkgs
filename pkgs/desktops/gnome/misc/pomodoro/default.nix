@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , libcanberra
 , gst_all_1
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libxml2
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

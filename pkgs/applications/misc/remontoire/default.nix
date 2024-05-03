@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , glib
 , gtk3
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

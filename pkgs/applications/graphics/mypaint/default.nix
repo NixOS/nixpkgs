@@ -15,7 +15,7 @@
 , pkg-config
 , python3
 , swig
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -75,7 +75,7 @@ in buildPythonApplication rec {
     gettext
     pkg-config
     swig
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection # for setup hook
     hicolor-icon-theme # fór setup hook
     python3.pkgs.setuptools

@@ -2,12 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, typing-extensions
-, wsproto
-, toml
+, exceptiongroup
+, h11
 , h2
 , priority
-, mock
+, wsproto
 , poetry-core
 , pytest-asyncio
 , pytest-trio
@@ -16,33 +15,44 @@
 
 buildPythonPackage rec {
   pname = "hypercorn";
-  version = "0.14.3";
-  disabled = pythonOlder "3.7";
+  version = "0.16.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.11"; # missing taskgroup dependency
 
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "Hypercorn";
     rev = version;
-    hash = "sha256-ECREs8UwqTWUweUrwnUwpVotCII2v4Bz7ZCk3DSAd8I=";
+    hash = "sha256-pIUZCQmC3c6FiV0iMMwJGs9TMi6B/YM+vaSx//sAmKE=";
   };
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [ wsproto toml h2 priority ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  dependencies = [
+    exceptiongroup
+    h11
+    h2
+    priority
+    wsproto
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-trio
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [ mock ];
+  ];
+
+  disabledTests = [
+    # https://github.com/pgjones/hypercorn/issues/217
+    "test_startup_failure"
+  ];
 
   pythonImportsCheck = [ "hypercorn" ];
 

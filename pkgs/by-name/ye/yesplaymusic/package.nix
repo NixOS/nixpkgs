@@ -4,7 +4,7 @@
 , _7zz
 , dpkg
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , alsa-lib
 , at-spi2-atk
@@ -98,7 +98,7 @@ else stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     makeWrapper
   ];
 

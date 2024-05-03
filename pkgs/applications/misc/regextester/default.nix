@@ -13,7 +13,7 @@
 , gsettings-desktop-schemas
 , desktop-file-utils
 , pantheon
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "regextester";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

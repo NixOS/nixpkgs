@@ -31,7 +31,7 @@
 , sord
 , sratom
 , wafHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , zita-convolver
 , zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     wafHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

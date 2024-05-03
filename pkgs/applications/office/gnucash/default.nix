@@ -23,7 +23,7 @@
 , pkg-config
 , swig
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     cmake
     gettext
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 
@@ -117,11 +117,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # wrapGAppsHook would wrap all binaries including the cli utils which need
+  # wrapGAppsHook3 would wrap all binaries including the cli utils which need
   # Perl wrapping
   dontWrapGApps = true;
 
-  # gnucash is wrapped using the args constructed for wrapGAppsHook.
+  # gnucash is wrapped using the args constructed for wrapGAppsHook3.
   # gnc-fq-* are cli utils written in Perl hence the extra wrapping
   postFixup = ''
     wrapProgram $out/bin/gnucash "''${gappsWrapperArgs[@]}"

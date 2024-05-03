@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
+, doxygen
 , pkg-config
 , enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , udev
@@ -11,6 +12,7 @@
 , Security
 , withExamples ? false
 , withStatic ? false
+, withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +26,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OtzYxWwiba0jRK9X+4deWWDDTeZWlysEt0qMyGUarDo=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ] ++ lib.optionals withDocs [ "doc" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ] ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs =
     lib.optional enableUdev udev ++
     lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
@@ -39,6 +44,12 @@ stdenv.mkDerivation rec {
   configureFlags =
     lib.optional (!enableUdev) "--disable-udev"
     ++ lib.optional (withExamples) "--enable-examples-build";
+
+  postBuild = lib.optionalString withDocs ''
+    make -C doc
+    mkdir -p "$doc/share/doc/libusb"
+    cp -r doc/api-1.0/* "$doc/share/doc/libusb/"
+  '';
 
   preFixup = lib.optionalString enableUdev ''
     sed 's,-ludev,-L${lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, unstableGitUpdater, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, unstableGitUpdater, wrapGAppsHook3 }:
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     hash = "sha256-h+aFPhlbEM6EfCKbsJPelBY5ys7kv5K4rbK/HTHeEcw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [ ffmpeg_4 libui ];
 

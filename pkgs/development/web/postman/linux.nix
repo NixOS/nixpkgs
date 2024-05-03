@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , atk
 , at-spi2-atk
 , at-spi2-core
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     xorg.libxshmfence
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
 
   installPhase = ''
     runHook preInstall

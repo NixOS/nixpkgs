@@ -2,9 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , jinja2
-, oldest-supported-numpy
+, setuptools
 , setuptools-scm
-, wheel
 , liberfa
 , packaging
 , numpy
@@ -14,23 +13,27 @@
 
 buildPythonPackage rec {
   pname = "pyerfa";
-  format = "pyproject";
-  version = "2.0.1.1";
+  version = "2.0.1.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-26x07409Ow8i7wrTu72zCyqeEFcLH6Wpi+NMe+Nsmms=";
+    hash = "sha256-rLimcTIy6jXAS8bkCsTkYd/MgX05XvKjyAUcGjMkndM=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+  '';
+
+  build-system = [
     jinja2
-    oldest-supported-numpy
     packaging
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
   ];
   buildInputs = [

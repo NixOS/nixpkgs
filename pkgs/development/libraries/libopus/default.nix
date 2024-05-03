@@ -18,15 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopus";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/opus/opus-${finalAttrs.version}.tar.gz";
-    hash = "sha256-uEYQlZuNQXthGqEqIlZeCjcyCXxjidGQmNhEVD40D4U=";
+    hash = "sha256-ZcHS94ufL7IAgsOMvkfJUa1YOTRYduRpQWEu6H+afOE=";
   };
 
   patches = [
-    ./fix-pkg-config-paths.patch
     # Some tests time out easily on slower machines
     ./test-timeout.patch
   ];

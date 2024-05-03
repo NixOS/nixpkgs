@@ -13,7 +13,7 @@
 , readline
 , withGui ? false
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , withTeensyduino ? false
   /* Packages needed for Teensyduino */
 , upx
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
   # wrapGAppHooks (among other things) adds it to XDG_DATA_DIRS
   # so 'save as...' works:
-  nativeBuildInputs = [ glib stripJavaArchivesHook wrapGAppsHook unzip ];
+  nativeBuildInputs = [ glib stripJavaArchivesHook wrapGAppsHook3 unzip ];
   buildInputs = [
     jdk
     ant

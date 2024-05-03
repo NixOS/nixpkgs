@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mypy-protobuf";
-  version = "3.5.0";
+  version = "3.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IfJw2gqXkqnax2sN9GPAJ+VhZkq2lzxZvk5NBk3+Z9w=";
+    hash = "sha256-AvJC6zQJ9miJ8rGjqlg1bsTZCc3Q+TEVYi6ecDZuyjw=";
   };
 
   propagatedBuildInputs = [

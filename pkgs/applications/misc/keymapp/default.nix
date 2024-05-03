@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , libusb1
 , webkitgtk
 , gtk3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

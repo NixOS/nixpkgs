@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala, gobject-introspection
 }:
 
 let
   generic = lib.makeOverridable ({
-    version, sha256,
+    version, hash,
     extraNativeBuildInputs ? [],
     extraBuildInputs ? [],
     withGraphviz ? false
@@ -30,7 +30,7 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      inherit sha256;
+      inherit hash;
     };
 
     postPatch = ''
@@ -49,7 +49,7 @@ let
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkg-config flex bison libxslt
+      pkg-config flex bison libxslt gobject-introspection
     ] ++ lib.optional (stdenv.isDarwin) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
@@ -86,8 +86,8 @@ let
 
 in rec {
   vala_0_56 = generic {
-    version = "0.56.14";
-    sha256 = "k4LCaMqb3AKq7cgVKpgYvzk1JzBB9inFbeQQ42Cj9Vc=";
+    version = "0.56.17";
+    hash = "sha256-JhAMTk7wBJxhknXxQNl89WWIPQDHVDyCvM5aQmk07Wo=";
   };
 
   vala = vala_0_56;

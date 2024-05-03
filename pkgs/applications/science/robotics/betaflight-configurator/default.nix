@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
+{lib, stdenv, fetchurl, unzip, makeDesktopItem, nwjs, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "betaflight-configurator";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     find -name "lib*.so" -delete
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook unzip ];
+  nativeBuildInputs = [ wrapGAppsHook3 unzip ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 

@@ -934,22 +934,6 @@ self: super: {
   # https://github.com/Euterpea/Euterpea2/issues/40
   Euterpea = doJailbreak super.Euterpea;
 
-  # Install icons, metadata and cli program.
-  bustle = appendPatches [
-    # Fix build with libpcap 1.10.2
-    # https://gitlab.freedesktop.org/bustle/bustle/-/merge_requests/21
-    (pkgs.fetchpatch {
-      url = "https://gitlab.freedesktop.org/bustle/bustle/-/commit/77e2de892cd359f779c84739682431a66eb8cf31.patch";
-      hash = "sha256-sPb6/Z/ANids53aL9VsMHa/v5y+TA1ZY3jwAXlEH3Ec=";
-    })
-  ] (overrideCabal (drv: {
-    buildDepends = [ pkgs.libpcap ];
-    buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
-    postInstall = ''
-      make install PREFIX=$out
-    '';
-  }) super.bustle);
-
   # Byte-compile elisp code for Emacs.
   ghc-mod = overrideCabal (drv: {
     preCheck = "export HOME=$TMPDIR";
@@ -2257,6 +2241,13 @@ self: super: {
   # Tests are flaky on busy machines, upstream doesn't intend to fix
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
+
+  # https://github.com/haskell-gi/haskell-gi/issues/431
+  haskell-gi = appendPatch (fetchpatch {
+      url = "https://github.com/haskell-gi/haskell-gi/pull/430/commits/9ee545ad5028e5de8e1e1d96bbba2b9dbab47480.diff";
+      hash = "sha256-kh32mZ7EdlOsg7HQILB7Y/EkHIqG/mozbnd/kbP+WDk=";
+    })
+    super.haskell-gi;
 
   # Too strict version bounds on haskell-gi
   # https://github.com/owickstrom/gi-gtk-declarative/issues/100

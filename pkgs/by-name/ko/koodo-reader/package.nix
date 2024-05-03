@@ -8,7 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   electron,
 }:
 
@@ -39,7 +39,7 @@ mkYarnPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

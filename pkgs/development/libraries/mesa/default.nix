@@ -1,80 +1,110 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchCrate, buildPackages
-, meson, pkg-config, ninja
-, intltool, bison, flex, file, python3Packages, wayland-scanner
-, expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages, libffi, libomxil-bellagio, libva-minimal
-, elfutils, libvdpau
-, libglvnd, libunwind, lm_sensors
-, vulkan-loader, glslang
-, galliumDrivers ?
-  if stdenv.isLinux then
-    [
-      "d3d12" # WSL emulated GPU (aka Dozen)
-      "kmsro" # special "render only" driver for GPUs without a display controller
-      "nouveau" # Nvidia
-      "radeonsi" # new AMD (GCN+)
-      "r300" # very old AMD
-      "r600" # less old AMD
-      "swrast" # software renderer (aka LLVMPipe)
-      "svga" # VMWare virtualized GPU
-      "virgl" # QEMU virtualized GPU (aka VirGL)
-      "zink" # generic OpenGL over Vulkan, experimental
-    ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
-      "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
-      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-      "lima" # ARM Mali 4xx
-      "panfrost" # ARM Mali Midgard and up (T/G series)
-      "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
-    ] ++ lib.optionals stdenv.isAarch64 [
-      "tegra" # Nvidia Tegra SoCs
-      "v3d" # Broadcom VC5 (Raspberry Pi 4)
-    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
-      "crocus" # Intel legacy, x86 only
-      "i915" # Intel extra legacy, x86 only
-    ]
-  else [ "auto" ]
-, vulkanDrivers ?
-  if stdenv.isLinux then
-    [
-      "amd" # AMD (aka RADV)
-      "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
-      "nouveau-experimental" # Nouveau (aka NVK)
-      "swrast" # software renderer (aka Lavapipe)
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
-      # QEMU virtualized GPU (aka VirGL)
-      # Requires ATOMIC_INT_LOCK_FREE == 2.
-      "virtio"
-    ]
-    ++ lib.optionals stdenv.isAarch64 [
-      "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
-      "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
-      "imagination-experimental" # PowerVR Rogue (currently N/A)
-      "panfrost" # ARM Mali Midgard and up (T/G series)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86 [
-      "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
-      "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
-    ]
-  else [ "auto" ]
-, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
-, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ "device-select" "overlay" "intel-nullhw" ] # No Vulkan support on Darwin
-, OpenGL, Xplugin
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
+{ lib
+, OpenGL
+, Xplugin
+, bison
+, buildPackages
+, directx-headers
+, elfutils
+, expat
+, fetchCrate
+, fetchpatch
+, fetchurl
+, file
+, flex
+, glslang
+, intltool
+, jdupes
+, libdrm
+, libffi
+, libglvnd
+, libomxil-bellagio
+, libunwind
+, libva-minimal
+, libvdpau
+, llvmPackages
+, lm_sensors
+, meson
+, ninja
+, openssl
+, pkg-config
+, python3Packages
+, rust-bindgen
+, rustPlatform
+, rustc
+, spirv-llvm-translator
+, stdenv
+, udev
+, valgrind-light
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xorg
+, zstd
+, withValgrind ?
+  lib.meta.availableOn stdenv.hostPlatform valgrind-light
+  && !valgrind-light.meta.broken
 , withLibunwind ? lib.meta.availableOn stdenv.hostPlatform libunwind
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
 , enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , enablePatentEncumberedCodecs ? true
-, jdupes
-, rustPlatform
-, rust-bindgen
-, rustc
-, spirv-llvm-translator
-, zstd
-, directx-headers
-, udev
+
+, galliumDrivers ?
+  if stdenv.isLinux
+  then [
+    "d3d12" # WSL emulated GPU (aka Dozen)
+    "kmsro" # special "render only" driver for GPUs without a display controller
+    "nouveau" # Nvidia
+    "radeonsi" # new AMD (GCN+)
+    "r300" # very old AMD
+    "r600" # less old AMD
+    "swrast" # software renderer (aka LLVMPipe)
+    "svga" # VMWare virtualized GPU
+    "virgl" # QEMU virtualized GPU (aka VirGL)
+    "zink" # generic OpenGL over Vulkan, experimental
+  ] ++ lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+    "etnaviv" # Vivante GPU designs (mostly NXP/Marvell SoCs)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "lima" # ARM Mali 4xx
+    "panfrost" # ARM Mali Midgard and up (T/G series)
+    "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "tegra" # Nvidia Tegra SoCs
+    "v3d" # Broadcom VC5 (Raspberry Pi 4)
+  ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
+    "crocus" # Intel legacy, x86 only
+    "i915" # Intel extra legacy, x86 only
+  ]
+  else [ "auto" ]
+, vulkanDrivers ?
+  if stdenv.isLinux
+  then [
+    "amd" # AMD (aka RADV)
+    "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
+    "nouveau-experimental" # Nouveau (aka NVK)
+    "swrast" # software renderer (aka Lavapipe)
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
+    # QEMU virtualized GPU (aka VirGL)
+    # Requires ATOMIC_INT_LOCK_FREE == 2.
+    "virtio"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
+    "freedreno" # Qualcomm Adreno (all Qualcomm SoCs)
+    "imagination-experimental" # PowerVR Rogue (currently N/A)
+    "panfrost" # ARM Mali Midgard and up (T/G series)
+  ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+    "intel" # Intel (aka ANV), could work on non-x86 with PCIe cards, but doesn't build
+    "intel_hasvk" # Intel Haswell/Broadwell, "legacy" Vulkan driver (https://www.phoronix.com/news/Intel-HasVK-Drop-Dead-Code)
+  ]
+  else [ "auto" ]
+, eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
+, vulkanLayers ? lib.optionals (!stdenv.isDarwin) [ # No Vulkan support on Darwin
+  "device-select"
+  "overlay"
+  "intel-nullhw"
+]
 }:
 
 # When updating this package, please verify at least these build (assuming x86_64-linux):
@@ -106,7 +136,7 @@ let
       hash = "sha256-VWRCZJO0/DJbNu0/V9TLaqlwMot65YjInWT9VWg57DY=";
     }
     {
-    pname = "syn";
+      pname = "syn";
       version = "2.0.39";
       hash = "sha256-Mjen2L/omhVbhU/+Ao65mogs3BP3fY+Bodab3uU63EI=";
     }
@@ -157,14 +187,20 @@ self = stdenv.mkDerivation {
     ${copyRustDeps}
   '';
 
-  outputs = [ "out" "dev" "drivers" ]
-    ++ lib.optional enableOSMesa "osmesa"
-    ++ lib.optional stdenv.isLinux "driversdev"
-    ++ lib.optional enableOpenCL "opencl"
+  outputs = [
+    "out" "dev" "drivers"
+  ] ++ lib.optionals enableOSMesa [
+    "osmesa"
+  ] ++ lib.optionals stdenv.isLinux [
+    "driversdev"
+  ] ++ lib.optionals enableOpenCL [
+    "opencl"
+  ] ++ lib.optionals haveDozen [
     # the Dozen drivers depend on libspirv2dxil, but link it statically, and
-    # libspirv2dxil itself is pretty chonky, so relocate it to its own output
-    # in case anything wants to use it at some point
-    ++ lib.optional haveDozen "spirv2dxil";
+    # libspirv2dxil itself is pretty chonky, so relocate it to its own output in
+    # case anything wants to use it at some point
+    "spirv2dxil"
+  ];
 
   # Keep build-ids so drivers can use them for caching, etc.
   # Also some drivers segfault without this.
@@ -181,101 +217,152 @@ self = stdenv.mkDerivation {
 
     # Don't build in debug mode
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
-    "-Db_ndebug=true"
+    (lib.mesonBool "b_ndebug" true)
 
-    "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
+    (lib.mesonOption "dri-search-path" "${libglvnd.driverLink}/lib/dri")
 
-    "-Dplatforms=${lib.concatStringsSep "," eglPlatforms}"
-    "-Dgallium-drivers=${lib.concatStringsSep "," galliumDrivers}"
-    "-Dvulkan-drivers=${lib.concatStringsSep "," vulkanDrivers}"
+    (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
+    (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))
+    (lib.mesonOption "vulkan-drivers" (lib.concatStringsSep "," vulkanDrivers))
 
-    "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
-    "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
-    "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
-    "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
-    "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
+    (lib.mesonOption "dri-drivers-path" "${placeholder "drivers"}/lib/dri")
+    (lib.mesonOption "vdpau-libs-path" "${placeholder "drivers"}/lib/vdpau")
+    (lib.mesonOption "omx-libs-path" "${placeholder "drivers"}/lib/bellagio")
+    (lib.mesonOption "va-libs-path" "${placeholder "drivers"}/lib/dri")
+    (lib.mesonOption "d3d-drivers-path" "${placeholder "drivers"}/lib/d3d")
 
-    "-Dgallium-nine=${lib.boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${lib.boolToString enableOSMesa}" # used by wine
-    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonBool "gallium-nine" enableGalliumNine) # Direct3D in Wine
+    (lib.mesonBool "osmesa" enableOSMesa) # used by wine
+    (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
     # To enable non-mesa gbm backends to be found (e.g. Nvidia)
-    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
+    (lib.mesonOption "gbm-backends-path" "${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm")
 
     # meson auto_features enables these features, but we do not want them
-    "-Dandroid-libbacktrace=disabled"
-
+    (lib.mesonEnable "android-libbacktrace" false)
   ] ++ lib.optionals stdenv.isLinux [
-    "-Dglvnd=true"
+    (lib.mesonBool "glvnd" true)
 
     # Enable RT for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
     (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable features that are explicitly unsupported on the platform
-    "-Dgbm=disabled"
-    "-Dxlib-lease=disabled"
-    "-Degl=disabled"
-    "-Dgallium-vdpau=disabled"
-    "-Dgallium-va=disabled"
-    "-Dgallium-xa=disabled"
-    "-Dlmsensors=disabled"
+    (lib.mesonEnable "gbm" false)
+    (lib.mesonEnable "xlib-lease" false)
+    (lib.mesonEnable "egl" false)
+    (lib.mesonEnable "gallium-vdpau" false)
+    (lib.mesonEnable "gallium-va" false)
+    (lib.mesonEnable "gallium-xa" false)
+    (lib.mesonEnable "lmsensors" false)
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
-    "-Dgallium-opencl=icd"
-    "-Dopencl-spirv=true"
+    (lib.mesonOption "gallium-opencl" "icd")
+    (lib.mesonBool "opencl-spirv" true)
 
     # Rusticl, new OpenCL frontend
-    "-Dgallium-rusticl=true"
-    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ]  ++ lib.optionals (!withValgrind) [
-    "-Dvalgrind=disabled"
-  ]  ++ lib.optionals (!withLibunwind) [
-    "-Dlibunwind=disabled"
-  ] ++ lib.optional enablePatentEncumberedCodecs
-    "-Dvideo-codecs=all"
-  ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
+    (lib.mesonBool "gallium-rusticl" true)
+    (lib.mesonOption "clang-libdir" "${llvmPackages.clang-unwrapped.lib}/lib")
+  ] ++ lib.optionals (!withValgrind) [
+    (lib.mesonEnable "valgrind" false)
+  ] ++ lib.optionals (!withLibunwind) [
+    (lib.mesonEnable "libunwind" false)
+  ]
+  ++ lib.optionals enablePatentEncumberedCodecs [
+    (lib.mesonOption "video-codecs" "all")
+  ] ++ lib.optionals (vulkanLayers != []) [
+    (lib.mesonOption "vulkan-layers" (builtins.concatStringsSep "," vulkanLayers))
+  ];
 
   strictDeps = true;
 
   buildInputs = with xorg; [
-    expat glslang llvmPackages.libllvm libglvnd xorgproto
-    libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
-    libffi libvdpau libXvMC
-    libpthreadstubs openssl
+    expat
+    glslang
+    libffi
+    libglvnd
+    libvdpau
+    llvmPackages.libllvm
+    openssl
     zstd
-  ] ++ lib.optionals withLibunwind [
+  ] ++ (with xorg; [
+    libX11
+    libXext
+    libXfixes
+    libXrandr
+    libXt
+    libXvMC
+    libpthreadstubs
+    libxcb
+    libxshmfence
+    xorgproto
+  ]) ++ lib.optionals withLibunwind [
     libunwind
   ] ++ [
     python3Packages.python # for shebang
-  ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ]
-    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator ]
-    ++ lib.optional withValgrind valgrind-light
-    ++ lib.optional haveZink vulkan-loader
-    ++ lib.optional haveDozen directx-headers;
+  ] ++ lib.optionals haveWayland [
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals stdenv.isLinux [
+    libomxil-bellagio
+    libva-minimal
+    lm_sensors
+    udev
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ] ++ lib.optionals enableOpenCL [
+    llvmPackages.libclc
+    llvmPackages.clang
+    llvmPackages.clang-unwrapped
+    spirv-llvm-translator
+  ] ++ lib.optionals withValgrind [
+    valgrind-light
+  ] ++ lib.optionals haveZink [
+    vulkan-loader
+  ] ++ lib.optionals haveDozen [
+    directx-headers
+  ];
 
-  depsBuildBuild = [ pkg-config ]
-    # Adding this unconditionally makes x86_64-darwin pick up an older toolchain, as
-    # we explicitly call Mesa with 11.0 stdenv, but buildPackages is still 10.something,
-    # and Mesa can't build with that.
+  depsBuildBuild = [
+    pkg-config
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # Adding this unconditionally makes x86_64-darwin pick up an older
+    # toolchain, as we explicitly call Mesa with 11.0 stdenv, but buildPackages
+    # is still 10.something, and Mesa can't build with that.
     # FIXME: figure this out, or figure out how to get rid of Mesa on Darwin,
     # whichever is easier.
-    ++ lib.optional (!stdenv.isDarwin) buildPackages.stdenv.cc;
+    buildPackages.stdenv.cc
+  ];
 
   nativeBuildInputs = [
-    meson pkg-config ninja
-    intltool bison flex file
-    python3Packages.python python3Packages.mako python3Packages.ply
-    jdupes glslang
-    rustc rust-bindgen rustPlatform.bindgenHook
-  ] ++ lib.optional haveWayland wayland-scanner;
+    meson
+    pkg-config
+    ninja
+    intltool
+    bison
+    flex
+    file
+    python3Packages.python
+    python3Packages.mako
+    python3Packages.ply
+    jdupes
+    glslang
+    rustc
+    rust-bindgen
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals haveWayland [
+    wayland-scanner
+  ];
 
-  propagatedBuildInputs = with xorg; [
-    libXdamage libXxf86vm
-  ] ++ lib.optional withLibdrm libdrm
-    ++ lib.optionals stdenv.isDarwin [ OpenGL Xplugin ];
+  propagatedBuildInputs = (with xorg; [
+    libXdamage
+    libXxf86vm
+  ]) ++ lib.optionals withLibdrm [
+    libdrm
+  ] ++ lib.optionals stdenv.isDarwin [
+    OpenGL
+    Xplugin
+  ];
 
   doCheck = false;
 
@@ -373,9 +460,12 @@ self = stdenv.mkDerivation {
     ''}
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
-    "-UPIPE_SEARCH_DIR"
-    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      "-fno-common"
+    ] ++ lib.optionals enableOpenCL [
+      "-UPIPE_SEARCH_DIR"
+      "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
   ]);
 
   passthru = {
@@ -395,7 +485,7 @@ self = stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "An open source 3D graphics library";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL
@@ -408,9 +498,9 @@ self = stdenv.mkDerivation {
     '';
     homepage = "https://www.mesa3d.org/";
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
-    license = licenses.mit; # X11 variant, in most files
-    platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
+    license = with lib.licenses; [ mit ]; # X11 variant, in most files
+    platforms = lib.platforms.mesaPlatforms;
+    maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 };
 

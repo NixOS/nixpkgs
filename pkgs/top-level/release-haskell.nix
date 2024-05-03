@@ -266,7 +266,6 @@ let
         agda
         arion
         bench
-        bustle
         blucontrol
         cabal-install
         cabal2nix

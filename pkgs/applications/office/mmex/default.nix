@@ -7,7 +7,7 @@
 , makeWrapper
 , lsb-release
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , curl
 , sqlite
 , wxGTK32
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     git
     makeWrapper
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isLinux [
     lsb-release
   ];

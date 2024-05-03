@@ -5,7 +5,7 @@
 , pkg-config
 , itstool
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , librsvg
 , libxml2
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     appstream-glib

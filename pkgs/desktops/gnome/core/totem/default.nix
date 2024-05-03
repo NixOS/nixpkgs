@@ -13,7 +13,7 @@
 , glib
 , gobject-introspection
 , totem-pl-parser
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , vala
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     python3Packages.python
     itstool
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

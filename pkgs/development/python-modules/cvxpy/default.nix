@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.4.2";
+  version = "1.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CjhqV4jb14t7IN0HFSTsY2yPpys2KOafGrxxTI+YEeU=";
+    hash = "sha256-sbB4yMBZI60Sjn2BSwvhwzesBSYqeLdXqOb5V2SK2VM=";
   };
 
   patches = [

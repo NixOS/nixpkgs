@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.22.0";
+  version = "0.23.0";
 
   disabled = pythonOlder "3.8";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    hash = "sha256-swD5ASCTHUPxHvh8Bk6h2s7BtZpJQKp26/gs8JVIu0k=";
+    hash = "sha256-Ix83s1cB8rox2UlZzKdebaBMLuo6fxTOHHXuOw6udnY=";
   };
 
   nativeBuildInputs = [

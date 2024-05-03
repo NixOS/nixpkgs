@@ -10,7 +10,7 @@
 , libgnomekbd
 , libnotify
 , libxklavier
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , lib
 , stdenv
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 

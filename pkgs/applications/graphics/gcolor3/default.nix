@@ -7,7 +7,7 @@
 , libxml2
 , gtk3
 , libportal-gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     libxml2 # xml-stripblanks preprocessing of GResource
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

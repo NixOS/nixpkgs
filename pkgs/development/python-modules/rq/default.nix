@@ -57,13 +57,13 @@ buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  pythonImportsCheck = [
-    "rq"
+  disabledTests = [
+    # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f
+    "test_clean_large_registry"
   ];
 
-  disabledTests = [
-    # AttributeError
-    "test_clean_large_registry"
+  pythonImportsCheck = [
+    "rq"
   ];
 
   meta = with lib; {

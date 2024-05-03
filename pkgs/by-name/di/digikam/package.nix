@@ -1,4 +1,4 @@
-{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook3
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     libsForQt5.kdoctools
     libsForQt5.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
   ]);

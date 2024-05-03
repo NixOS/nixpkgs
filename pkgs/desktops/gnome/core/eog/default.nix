@@ -20,7 +20,7 @@
 , gdk-pixbuf
 , exempi
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook3
 , libjxl
 , librsvg
 , webp-pixbuf-loader
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     libxml2 # for xmllint for xml-stripblanks
     gobject-introspection
     gi-docgen

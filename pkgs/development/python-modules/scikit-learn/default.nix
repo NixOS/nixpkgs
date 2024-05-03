@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 
 # build-system
 , cython
@@ -16,6 +15,7 @@
 , glibcLocales
 , llvmPackages
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pytest-xdist
 , pillow
 , joblib
@@ -25,23 +25,21 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.4.1.post1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k9PUlv8ZZUcPmXfQXl7DN2+x5jsQ5P2l450jwtiWmjA=";
+    hash = "sha256-2qHEcdlbrQgMbkS0lGyTkKSEKtwwglcsIOT4iE456Vk=";
   };
 
-  patches = [
-    (fetchpatch { # included in >= 1.4.2
-      name = "test_standard_scaler_dtype.patch";
-      url = "https://github.com/jeremiedbb/scikit-learn/commit/87c32d35eeb8f6f7fec63dc3d97d9c416545f053.diff";
-      hash = "sha256-iOBOoWHuWChCTnZ5go7MobPcHRGMChROpCI7V/5ik1Y=";
-    })
-  ];
+  # Avoid build-system requirements causing failure
+  prePatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==2.0.0rc1" "numpy"
+  '';
 
   buildInputs = [
     pillow
@@ -52,6 +50,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
+    pythonRelaxDepsHook
   ];
 
   build-system = [

@@ -9,7 +9,7 @@
 , dconf
 , vte
 , pcre2
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 , nixosTests
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

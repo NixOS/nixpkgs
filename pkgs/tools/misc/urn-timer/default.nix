@@ -4,7 +4,7 @@
 , xxd
 , pkg-config
 , imagemagick
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , jansson
 , nixosTests
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     xxd
     pkg-config
     imagemagick
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchurl
 , gjs
 , glib
 , gobject-introspection
@@ -14,18 +14,16 @@
 , pkg-config
 , vala
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
-stdenv.mkDerivation rec {
-  version = "45";
+stdenv.mkDerivation (finalAttrs: {
+  version = "45.1";
   pname = "gpaste";
 
-  src = fetchFromGitHub {
-    owner = "Keruspe";
-    repo = "GPaste";
-    rev = "v${version}";
-    sha256 = "sha256-MpoeLXGdLfas/E3x5ojJW5Dd3H8XZORtFaBHgRGJXxg=";
+  src = fetchurl {
+    url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
+    hash = "sha256-yYLoHn3/2xlefBeErnydNfkvtJva8/9f9JHhfschBpQ=";
   };
 
   patches = [
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nix/issues/1846
   postPatch = ''
     substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
-      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
+      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
   '';
 
   nativeBuildInputs = [
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -81,10 +79,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";
-    description = "Clipboard management system with GNOME 3 integration";
+    description = "Clipboard management system with GNOME integration";
     mainProgram = "gpaste-client";
-    license = licenses.gpl3;
+    license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };
-}
+})

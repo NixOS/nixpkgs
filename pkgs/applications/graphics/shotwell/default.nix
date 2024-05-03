@@ -27,7 +27,7 @@
 , desktop-file-utils
 , gdk-pixbuf
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , itstool
 , libsecret
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     itstool
     gettext
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

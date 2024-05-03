@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, wrapGAppsHook
+, wrapGAppsHook3
 , quickemu
 , gnome
 }:
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

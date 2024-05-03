@@ -10,7 +10,7 @@
 , librsvg
 , python3
 , runtimeShell
-, wrapGAppsHook
+, wrapGAppsHook3
 , fehSupport ? false
 , feh
 , imagemagickSupport ? true
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, gobject-introspection, wrapGAppsHook
+, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, gobject-introspection, wrapGAppsHook3
 , qrencode, webkitgtk, discount, json-glib, fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cmake pkg-config vala
     # For setup hook
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
