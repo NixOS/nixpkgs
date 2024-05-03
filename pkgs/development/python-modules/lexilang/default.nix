@@ -4,18 +4,21 @@
 , setuptools
 , pytestCheckHook
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "lexilang";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LexiLang";
-    rev = "v${version}";
-    hash = "sha256-TLkaqCE9NDjN2XuYOUkeeWIRcqkxrdg31fS4mEnlcEo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/uSoEz/5HJnFVkXZndIlM+K0OJLJaorFQ6+kWYELjrs=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple, fast dictionary-based language detector for short texts";
     homepage = "https://github.com/LibreTranslate/LexiLang";
+    changelog = "https://github.com/LibreTranslate/LexiLang/releases/tag/v${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ izorkin ];
   };
