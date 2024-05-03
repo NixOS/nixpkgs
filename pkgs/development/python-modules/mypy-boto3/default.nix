@@ -332,7 +332,7 @@ rec {
 
   mypy-boto3-health = buildMypyBoto3Package "health" "1.34.0" "sha256-st3ygy9yZbAbh1ZWnT8XDZTBz1qWhRWXCEfr5ILQHpo=";
 
-  mypy-boto3-healthlake = buildMypyBoto3Package "healthlake" "1.34.43" "sha256-Xci7f0/o60v1TAazFC34GjpzOBQlD+SvAMCF4xM3ymI=";
+  mypy-boto3-healthlake = buildMypyBoto3Package "healthlake" "1.34.84" "sha256-v9+dWCn7JwVNLpPgdM5jXt0pX2AP9+WJ4dsCesHD/dw=";
 
   mypy-boto3-honeycode = buildMypyBoto3Package "honeycode" "1.34.0" "sha256-HNp/STFuMLoO4qyL0iaYeiPpnMV3uzNBNFUDgzrHt9s=";
 
