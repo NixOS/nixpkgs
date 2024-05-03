@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.libinput;
+  xcfg = config.services.xserver;
 
   xorgBool = v: if v then "on" else "off";
 
@@ -250,8 +251,12 @@ in {
 
   options = {
     services.libinput = {
-      enable = mkEnableOption "libinput" // {
-        default = config.services.xserver.enable;
+      enable = mkEnableOption ''libinput.
+        ::: {.note}
+        The mouse and touchpad suboptions only work on X11.
+        :::
+      '' // {
+        default = xcfg.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
       };
       mouse = mkConfigForDevice "mouse";
@@ -260,14 +265,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    services.xserver.modules = lib.mkIf xcfg.enable [ pkgs.xorg.xf86inputlibinput ];
 
-    services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
-
-    environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
+    environment.systemPackages = lib.mkIf xcfg.enable [ pkgs.xorg.xf86inputlibinput ];
 
     environment.etc =
       let cfgPath = "X11/xorg.conf.d/40-libinput.conf";
-      in {
+      in lib.mkIf xcfg.enable {
         ${cfgPath} = {
           source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
         };
@@ -275,7 +279,7 @@ in {
 
     services.udev.packages = [ pkgs.libinput.out ];
 
-    services.xserver.inputClassSections = [
+    services.xserver.inputClassSections = lib.mkIf xcfg.enable [
       (mkX11ConfigForDevice "mouse" "Pointer")
       (mkX11ConfigForDevice "touchpad" "Touchpad")
     ];
