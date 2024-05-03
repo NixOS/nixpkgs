@@ -418,7 +418,7 @@ rec {
 
   mypy-boto3-kms = buildMypyBoto3Package "kms" "1.34.84" "sha256-Sr/Ps4zQPSA3owcNwsiBjelCIst0TaexPEA0+gO5lcw=";
 
-  mypy-boto3-lakeformation = buildMypyBoto3Package "lakeformation" "1.34.7" "sha256-/IPOF44ohg59XX+lmMbx8WsaHFpBaMH440Wm5jgrKD4=";
+  mypy-boto3-lakeformation = buildMypyBoto3Package "lakeformation" "1.34.85" "sha256-VUAy+vhuAniPERCQt/OrudmMj9ZyAdigaFVISQcHmkY=";
 
   mypy-boto3-lambda = buildMypyBoto3Package "lambda" "1.34.77" "sha256-e4HSpWBPtZLpL+CyhOzSWd4HFwM2CjO3HJtU30bYHJw=";
 
