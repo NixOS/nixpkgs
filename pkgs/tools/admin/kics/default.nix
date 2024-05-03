@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "kics";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Checkmarx";
     repo = "kics";
     rev = "v${version}";
-    hash = "sha256-OdX3ipfPj+rope5oT5ND9MEaefW36X6XDV5F7PaQOuw=";
+    hash = "sha256-4WYrKWkcf7AJjogWQcNsIZiCfxf4CmhLW/GJFUWfQzw=";
   };
 
-  vendorHash = "sha256-vYAMzXBQIt8F9DTGLkWNXx6e08MPo12W2ogiTZ8gcjw=";
+  vendorHash = "sha256-N3MJhuzMJW40aMrAyuBsNciwZaNq0K4IUd+0re17AOI=";
 
   subPackages = [ "cmd/console" ];
 
