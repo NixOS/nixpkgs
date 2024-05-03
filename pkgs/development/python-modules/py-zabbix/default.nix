@@ -5,12 +5,13 @@
   fetchpatch,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-zabbix";
   version = "1.1.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -30,6 +31,8 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyzabbix" ];
@@ -37,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to interact with Zabbix";
     homepage = "https://github.com/adubkov/py-zabbix";
+    changelog = "https://github.com/adubkov/py-zabbix/releases/tag/${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
