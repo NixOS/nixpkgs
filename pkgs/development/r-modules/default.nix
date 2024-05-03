@@ -563,6 +563,7 @@ let
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gdalraster = with pkgs; [ gdal proj.dev sqlite.dev ];
+    mitoClone2 = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
