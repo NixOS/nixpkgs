@@ -448,7 +448,7 @@ rec {
 
   mypy-boto3-lookoutvision = buildMypyBoto3Package "lookoutvision" "1.34.0" "sha256-+zl9JmGel0rkmGeYaHMlBIfPQfHdJQOk+sG/nuHnzD0=";
 
-  mypy-boto3-m2 = buildMypyBoto3Package "m2" "1.34.0" "sha256-ZF3ZViV0pN64OEc8aHuCRR0lnVyHOiTRfqVQGCmMMKE=";
+  mypy-boto3-m2 = buildMypyBoto3Package "m2" "1.34.85" "sha256-T5+XEkOEPDO3rx5jcbRY6SCME9jqjloCh6OyX/zIg6E=";
 
   mypy-boto3-machinelearning = buildMypyBoto3Package "machinelearning" "1.34.0" "sha256-DeiBu3PQMageEUlVdjH/1uELsPwo4IVhYzDlJFBohKg=";
 
