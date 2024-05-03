@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       -e 's|install -m 2755 -g $(GRP)|install |g' Makefile
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/usbimager.desktop \
+      --replace-fail "Exec=/usr/bin/usbimager" "Exec=usbimager"
+  '';
+
   dontConfigure = true;
 
   makeFlags =  [ "PREFIX=$(out)" ]

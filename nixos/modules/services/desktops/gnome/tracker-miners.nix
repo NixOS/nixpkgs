@@ -2,21 +2,11 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  imports = [
-    # Added 2021-05-07
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "tracker-miners" "enable" ]
-      [ "services" "gnome" "tracker-miners" "enable" ]
-    )
-  ];
 
   ###### interface
 
@@ -24,8 +14,8 @@ with lib;
 
     services.gnome.tracker-miners = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable Tracker miners, indexing services for Tracker
@@ -39,7 +29,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome.tracker-miners.enable {
+  config = lib.mkIf config.services.gnome.tracker-miners.enable {
 
     environment.systemPackages = [ pkgs.tracker-miners ];
 

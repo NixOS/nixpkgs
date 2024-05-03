@@ -58,6 +58,10 @@ let
   # may wish to wrap GR without python support.
   pythonPkgs = extraPythonPackages
     ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
+    ++ unwrapped.passthru.uhd.pythonPath
+    ++ lib.optionals (unwrapped.passthru.uhd.pythonPath != []) [
+      (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
+    ]
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (

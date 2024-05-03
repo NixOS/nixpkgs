@@ -23,9 +23,9 @@ composerRepositoryConfigureHook() {
         setComposeRootVersion
 
         composer \
-            --no-ansi \
             --no-install \
             --no-interaction \
+            --no-progress \
             ${composerNoDev:+--no-dev} \
             ${composerNoPlugins:+--no-plugins} \
             ${composerNoScripts:+--no-scripts} \
