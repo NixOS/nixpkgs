@@ -185,15 +185,6 @@ let
     src = k3sRepo;
     vendorHash = k3sVendorHash;
 
-    patches =
-      # Disable: Add runtime checking of golang version
-      (fetchpatch {
-        # https://github.com/k3s-io/k3s/pull/9054
-        url = "https://github.com/k3s-io/k3s/commit/b297996b9252b02e56e9425f55f6becbf6bb7832.patch";
-        hash = "sha256-xBOY2jnLhT9dtVKtq26V9QUnuX1q6E/9UcO9IaU719U=";
-        revert = true;
-      });
-
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];
 

@@ -1,14 +1,14 @@
 {
-  k3sVersion = "1.29.3+k3s1";
-  k3sCommit = "8aecc26b0f167d5e9e4e9fbcfd5a471488bf5957";
-  k3sRepoSha256 = "12285mhwi6cifsw3gjxxmd1g2i5f7vkdgzdc6a78rkvnx7z1j3p3";
-  k3sVendorHash = "sha256-pID2h/rvvKyfHWoglYPbbliAby+9R2zoh7Ajd36qjVQ=";
+  k3sVersion = "1.29.4+k3s1";
+  k3sCommit = "94e29e2ef5d79904f730e2024c8d1682b901b2d5";
+  k3sRepoSha256 = "0kkhd2fnlmjanzvwgdclmbg6azw3r1a2lj5207716pavxmb9ld7y";
+  k3sVendorHash = "sha256-wOX+ktGPFYUKLZBK/bQhWWG+SnRCkNYnk3Tz8wpMo5A=";
   chartVersions = import ./chart-versions.nix;
-  k3sRootVersion = "0.12.2";
-  k3sRootSha256 = "1gjynvr350qni5mskgm7pcc7alss4gms4jmkiv453vs8mmma9c9k";
+  k3sRootVersion = "0.13.0";
+  k3sRootSha256 = "1jq5f0lm08abx5ikarf92z56fvx4kjpy2nmzaazblb34lajw87vj";
   k3sCNIVersion = "1.4.0-k3s2";
   k3sCNISha256 = "17dg6jgjx18nrlyfmkv14dhzxsljz4774zgwz5dchxcf38bvarqa";
-  containerdVersion = "1.7.11-k3s2";
-  containerdSha256 = "0279sil02wz7310xhrgmdbc0r2qibj9lafy0i9k24jdrh74icmib";
+  containerdVersion = "1.7.15-k3s1";
+  containerdSha256 = "18hlj4ixjk7wvamfd66xyc0cax2hs9s7yjvlx52afxdc73194y0f";
   criCtlVersion = "1.29.0-k3s1";
 }
