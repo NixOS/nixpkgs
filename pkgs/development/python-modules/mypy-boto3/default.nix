@@ -18,7 +18,8 @@ let
       disabled = pythonOlder "3.7";
 
       src = fetchPypi {
-        inherit pname version hash;
+        pname = "mypy_boto3_${toUnderscore serviceName}";
+        inherit version hash;
       };
 
       build-system = [
@@ -59,7 +60,7 @@ rec {
 
   mypy-boto3-amp = buildMypyBoto3Package "amp" "1.34.39" "sha256-XOousDfEQsZ9z48iH2wVHuUaIwoECwbkHvIAlV3+zu4=";
 
-  mypy-boto3-amplify = buildMypyBoto3Package "amplify" "1.34.63" "sha256-alOtCCZwBcx6g3lm80AzI5aF8WbEABd44A0e6gfZ42o=";
+  mypy-boto3-amplify = buildMypyBoto3Package "amplify" "1.34.94" "sha256-rZyBEY+rR7Lf276X/aQW9ULBpSOsYrTBn3j+yynK6C4=";
 
   mypy-boto3-amplifybackend = buildMypyBoto3Package "amplifybackend" "1.34.0" "sha256-wP6fOHAUg4dvrlQ2rUNk/lgIr6JnpWu/0Tr2prTckOk=";
 
