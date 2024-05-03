@@ -7,6 +7,7 @@
 , requests
 , requests-toolbelt
 , setuptools
+, versioneer
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-xlkmXl4tVm48drXmkUijv9GNXzJcDnfSKbOMciPIRRo=";
   };
 
+  postPatch = ''
+    # Remove vendorized versioneer
+    rm versioneer.py
+  '';
+
   build-system = [
     setuptools
+    versioneer
   ];
 
   dependencies = [
