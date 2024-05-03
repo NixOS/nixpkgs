@@ -328,7 +328,7 @@ rec {
 
   mypy-boto3-groundstation = buildMypyBoto3Package "groundstation" "1.34.77" "sha256-g0pN7BeRZMZqyJVjABaRSE77ZMZxDRcLv+/JHjJ/cQc=";
 
-  mypy-boto3-guardduty = buildMypyBoto3Package "guardduty" "1.34.73" "sha256-DasHgBMa4/hnh/otzh0Zz4nalmESIS2/HkaY4vTltRs=";
+  mypy-boto3-guardduty = buildMypyBoto3Package "guardduty" "1.34.87" "sha256-4txt+SFz1jAHay6t1xamOvNucqC2zuq19vAGbp2zYo0=";
 
   mypy-boto3-health = buildMypyBoto3Package "health" "1.34.0" "sha256-st3ygy9yZbAbh1ZWnT8XDZTBz1qWhRWXCEfr5ILQHpo=";
 
