@@ -142,7 +142,7 @@ rec {
 
   mypy-boto3-clouddirectory = buildMypyBoto3Package "clouddirectory" "1.34.0" "sha256-lWJQClNEhyq9CN8ThcHtVcEsowIp+V8RXh4rgHAclfM=";
 
-  mypy-boto3-cloudformation = buildMypyBoto3Package "cloudformation" "1.34.77" "sha256-mQAUGCaB+d8iV/GFBWEmwNswvxJg9s09Rs7bPPRn8K0=";
+  mypy-boto3-cloudformation = buildMypyBoto3Package "cloudformation" "1.34.84" "sha256-gtFN83V/MLWh00ZQg51BXSZdTeQc81XWPhAiH8xn8Xc=";
 
   mypy-boto3-cloudfront = buildMypyBoto3Package "cloudfront" "1.34.83" "sha256-glPRMg4IS/5Mz6ckyQWgZuu9G3IlPsfA97fx41YpSw0=";
 
