@@ -10,18 +10,21 @@ python3.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "quark-engine";
+    repo = "quark-engine";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-W1UeTiyyYZzxu3XQ/6VkTvEyqPWl1Du6QutuoPhaSfs=";
+    hash = "sha256-W1UeTiyyYZzxu3XQ/6VkTvEyqPWl1Du6QutuoPhaSfs=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     androguard
     click
     colorama
