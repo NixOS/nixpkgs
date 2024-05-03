@@ -15,7 +15,7 @@ buildFishPlugin rec {
   };
 
   meta = with lib; {
-    description = "Abbreviations for git for the fish shell 🐟.";
+    description = "Abbreviations for git for the fish shell 🐟";
     homepage = "https://github.com/lewisacidic/fish-git-abbr";
     license = licenses.mit;
     maintainers = with maintainers; [hmajid2301];
