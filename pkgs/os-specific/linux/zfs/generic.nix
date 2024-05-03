@@ -120,6 +120,7 @@ let
 
     configureFlags = [
       "--with-config=${configFile}"
+      "--with-vendor=nixos"
       "--with-tirpc=1"
       (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
     ] ++ optionals buildUser [
