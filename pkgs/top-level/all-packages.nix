@@ -24318,7 +24318,7 @@ with pkgs;
     };
   });
 
-  SDL2_sound = callPackage ../development/libraries/SDL2_sound {
+  SDL2_sound = callPackage ../by-name/sd/SDL2_sound/package.nix {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
   };
 
