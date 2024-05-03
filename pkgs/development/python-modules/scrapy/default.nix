@@ -2,6 +2,7 @@
 , stdenv
 , botocore
 , buildPythonPackage
+, fetchpatch
 , cryptography
 , cssselect
 , fetchPypi
@@ -42,6 +43,13 @@ buildPythonPackage rec {
     pname = "Scrapy";
     hash = "sha256-czoDnHQj5StpvygQtTMgk9TkKoSEYDWcB7Auz/j3Pr4=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/scrapy/scrapy/commit/b1fe97dc6c8509d58b29c61cf7801eeee1b409a9.patch";
+      hash = "sha256-POlmsuW4SD9baKwZieKfmlp2vtdlb7aKQ62VOmNXsr0=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
