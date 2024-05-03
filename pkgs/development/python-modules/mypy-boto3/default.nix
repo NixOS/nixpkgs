@@ -94,7 +94,7 @@ rec {
 
   mypy-boto3-appstream = buildMypyBoto3Package "appstream" "1.34.5" "sha256-1m9YDw1fzoe4Y37yW6a1545SR2QGSrr5qbqYfXEax7o=";
 
-  mypy-boto3-appsync = buildMypyBoto3Package "appsync" "1.34.49" "sha256-J2qTVaXhqsfdupN6eLgpyGTHkPRRC1TZGNP2PRKF0v0=";
+  mypy-boto3-appsync = buildMypyBoto3Package "appsync" "1.34.92" "sha256-0LO9qZZJfjUb1xddBPE5eWhrWRv3TfBWJkV0AIXS4Fk=";
 
   mypy-boto3-arc-zonal-shift = buildMypyBoto3Package "arc-zonal-shift" "1.34.0" "sha256-FhQaiu0Sc4HkkaRuhtgvUBMOgj80DbIBzZLEbZB41Cs=";
 
