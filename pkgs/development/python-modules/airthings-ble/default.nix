@@ -1,18 +1,19 @@
-{ lib
-, async-interrupt
-, async-timeout
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  async-interrupt,
+  async-timeout,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.7.1";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = "airthings-ble";
     rev = "refs/tags/${version}";
-    hash = "sha256-BeOrGRVxvfQR1xqIpOp4tOTvlqTKCZHUjVKDqVjVnYM=";
+    hash = "sha256-BgjfvKrVpw/cP93JCloZKq+PIyS/w7/v6+obfgDT64A=";
   };
 
   postPatch = ''
@@ -29,25 +30,17 @@ buildPythonPackage rec {
       --replace-fail "-v -Wdefault --cov=airthings_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-interrupt
     bleak
     bleak-retry-connector
-  ]  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "airthings_ble"
-  ];
+  pythonImportsCheck = [ "airthings_ble" ];
 
   meta = with lib; {
     description = "Library for Airthings BLE devices";
