@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, googleapis-common-protos
-, grpcio
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio-status";
-  version = "1.62.1";
-  format = "setuptools";
+  version = "1.62.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NDHIq7qwBUkSxB31xy8D3fO3pnvoooe7PBijRW+W/3c=";
+    hash = "sha256-YuG/ywICWhzXNzKi0zZy0+nQ300hwSxR4LvK8JurdCo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6' 'protobuf'
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     googleapis-common-protos
     grpcio
     protobuf
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Projec thas no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "grpc_status"
-  ];
+  pythonImportsCheck = [ "grpc_status" ];
 
   meta = with lib; {
     description = "GRPC Python status proto mapping";
