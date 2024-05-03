@@ -41,7 +41,7 @@
 , lz4
 , oath-toolkit
 , openldap
-, python310
+, python311
 , rdkafka
 , rocksdb
 , snappy
@@ -168,7 +168,7 @@ let
   };
 
   # Watch out for python <> boost compatibility
-  python = python310.override {
+  python = python311.override {
     packageOverrides = self: super: let
       cryptographyOverrideVersion = "40.0.1";
       bcryptOverrideVersion = "4.0.1";
