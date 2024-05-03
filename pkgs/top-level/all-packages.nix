@@ -4777,8 +4777,6 @@ with pkgs;
 
   wob = callPackage ../tools/wayland/wob { };
 
-  wpaperd = callPackage ../tools/wayland/wpaperd { };
-
   wshowkeys = callPackage ../tools/wayland/wshowkeys { };
 
   wtype = callPackage ../tools/wayland/wtype { };
@@ -4862,8 +4860,6 @@ with pkgs;
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
-
-  csvq = callPackage ../development/tools/csvq { };
 
   csvs-to-sqlite = callPackage ../tools/misc/csvs-to-sqlite { };
 
@@ -24336,12 +24332,6 @@ with pkgs;
       hash = "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw=";
     };
   });
-
-  SDL2_mixer = callPackage ../development/libraries/SDL2_mixer {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
-  };
-  # SDL2_mixer_2_0 pinned for lzwolf
-  SDL2_mixer_2_0 = callPackage ../development/libraries/SDL2_mixer/2_0.nix { };
 
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 

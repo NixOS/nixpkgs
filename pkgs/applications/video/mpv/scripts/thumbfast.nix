@@ -13,7 +13,7 @@ buildLua {
   passthru.updateScript = unstableGitUpdater {};
 
   passthru.extraWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.getBin mpv-unwrapped}/bin"
+    "--prefix" "PATH" ":" (lib.makeBinPath [ mpv-unwrapped ])
   ];
 
   meta = {

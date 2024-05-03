@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multimedia Messaging Service Daemon";
     homepage = "https://01.org/ofono";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

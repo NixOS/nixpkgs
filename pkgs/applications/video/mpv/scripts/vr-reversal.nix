@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   # reset_rot is only available in ffmpeg 5.0, see 5bcc61ce87922ecccaaa0bd303a7e195929859a8
   postPatch = lib.optionalString (lib.versionOlder ffmpeg.version "5.0") ''
-    substituteInPlace 360plugin.lua --replace ":reset_rot=1:" ":"
+    substituteInPlace 360plugin.lua --replace-fail ":reset_rot=1:" ":"
   '';
 
   installPhase = ''

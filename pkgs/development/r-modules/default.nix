@@ -413,6 +413,7 @@ let
     RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
     rgdal = with pkgs; [ proj.dev gdal ];
+    Rhisat2 = [ pkgs.which pkgs.hostname ];
     gdalcubes = [ pkgs.pkg-config ];
     rgeos = [ pkgs.geos ];
     Rglpk = [ pkgs.glpk ];
@@ -533,6 +534,7 @@ let
     Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
+    Rsymphony = [ pkgs.pkg-config ];
     NanoMethViz = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.pkg-config ];
     HilbertVisGUI = with pkgs; [ pkg-config which ];
@@ -562,6 +564,7 @@ let
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gdalraster = with pkgs; [ gdal proj.dev sqlite.dev ];
+    mitoClone2 = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
@@ -618,7 +621,7 @@ let
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
     AMOUNTAIN = [ pkgs.gsl ];
-    Rsymphony = with pkgs; [ pkg-config doxygen graphviz subversion ];
+    Rsymphony = with pkgs; [ symphony doxygen graphviz subversion cgl clp];
     tcltk2 = with pkgs; [ tcl tk ];
     rswipl = with pkgs; [ ncurses.dev libxcrypt zlib.dev ];
     tikzDevice = with pkgs; [ which texliveMedium ];
@@ -1269,6 +1272,17 @@ let
         substituteInPlace "R/quarto.R" \
           --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
       '';
+    });
+
+    # backported patch from 1.9
+    Rhisat2= old.Rhisat2.overrideAttrs (attrs: {
+      patches = [ (pkgs.fetchpatch {
+        url = "https://github.com/fmicompbio/Rhisat2/commit/a0f27b018831b39f080f99e6db8a4b876fd56fc3.patch";
+        sha256 = "sha256-FbYkP/WFmbfQmxArkHgushgVgY0XSypbK8Z5ivQK8k4=";
+      }) ];
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -w";
+      };
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
