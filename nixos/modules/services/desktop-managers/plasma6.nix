@@ -286,6 +286,15 @@ in {
       kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
     };
 
+    security.wrappers = {
+      kwin_wayland = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_sys_nice+ep";
+        source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
+      };
+    };
+
     programs.dconf.enable = true;
 
     programs.firefox.nativeMessagingHosts.packages = [kdePackages.plasma-browser-integration];
