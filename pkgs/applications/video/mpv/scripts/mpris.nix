@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib mpv-unwrapped ffmpeg ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+    substituteInPlace Makefile --replace-fail 'PKG_CONFIG =' 'PKG_CONFIG ?='
   '';
 
   installFlags = [ "SCRIPTS_DIR=${placeholder "out"}/share/mpv/scripts" ];

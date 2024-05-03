@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl3;
+    mainProgram = "yad";
     maintainers = with maintainers; [ smironov ];
     platforms = with platforms; linux;
   };

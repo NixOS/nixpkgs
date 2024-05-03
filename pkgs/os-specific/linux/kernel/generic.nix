@@ -221,7 +221,7 @@ let
     config = {
       CONFIG_MODULES = "y";
       CONFIG_FW_LOADER = "m";
-      CONFIG_RUST = lib.mkIf withRust "y";
+      CONFIG_RUST = if withRust then "y" else "n";
     };
   });
 

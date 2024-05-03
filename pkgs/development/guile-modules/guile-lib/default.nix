@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-lib";
-  version = "0.2.8";
+  version = "0.2.8.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-ZOkC7gy7LO4e+4Fow7+e1J4LMqiiPbhj6DvxSBfXZ9k=";
+    hash = "sha256-E3TC2Dnmoz0ZDNHavZx/h3U/g4T1W4ZvPhQhVcIrSbE=";
   };
 
   strictDeps = true;
