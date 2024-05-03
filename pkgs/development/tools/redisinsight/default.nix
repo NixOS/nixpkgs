@@ -24,28 +24,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "2.32";
+  version = "2.48.0";
 
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-esaH10AyEooym/62F5LJL7oP5UmD6T2UX8g/9QniL9s=";
+    hash = "sha256-ek0Fp8v6j+mZPK2cEuFNrBgInXdYIKBBUg0UD1I51Sg=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-NHKttywAaWAYkciGzYCnm1speHrWsv1t+dxL1DZgM7o=";
+    hash = "sha256-ohtU1h6wrg7asXDxTt1Jlzx9GaS3zDrGQD9P9tgzCOE=";
   };
 
   feOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/redisinsight/yarn.lock";
-    hash = "sha256-1S1KNUOtmywQ0eyqVS2oRlhpjcL9eps8CR7AtC9ujSU=";
+    hash = "sha256-9xbIdDeLUEk4eNeK7RTwidqDGinA8SPfcumqml66kTw=";
   };
 
   apiOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/redisinsight/api/yarn.lock";
-    hash = "sha256-P99+1Dhdg/vznC2KepPrVGNlrofJFydXkZVxgwprIx4=";
+    hash = "sha256-4zbffuneTceMEyKb8atTXTFhTv0DhrsRMdepZWgoxMQ=";
   };
 
   nativeBuildInputs = [
