@@ -222,6 +222,9 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.selenium
   ];
 
+  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
+  doCheck = postgresql.doCheck;
+
   checkPhase = ''
     runHook preCheck
 
