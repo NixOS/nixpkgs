@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-qnumJbuBH+ajzfG+bLTrYPvB5uNnL8dJsTZoT2vo6g0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pycryptodomex
     pyotp
     requests
