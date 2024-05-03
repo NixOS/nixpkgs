@@ -686,7 +686,7 @@ rec {
 
   mypy-boto3-sqs = buildMypyBoto3Package "sqs" "1.34.0" "sha256-C/iZX1iRmrKVOYEA5y6qfaiYrc/Z0zmkLzxIzkc0GdU=";
 
-  mypy-boto3-ssm = buildMypyBoto3Package "ssm" "1.34.61" "sha256-TLyZ9CtpE8U2xsxBwC0/Flkg0ee6u5uxd4K0EFVs3gA=";
+  mypy-boto3-ssm = buildMypyBoto3Package "ssm" "1.34.91" "sha256-MAl7Cy6taZ6YP3+q3YsltljEyrArIfz2c0C3WO1F+HQ=";
 
   mypy-boto3-ssm-contacts = buildMypyBoto3Package "ssm-contacts" "1.34.0" "sha256-wkKPGLm24/zgMKitcF9ZaPt/W4m+yHerR1wbEqJALBM=";
 
