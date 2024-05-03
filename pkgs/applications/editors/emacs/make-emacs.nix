@@ -326,7 +326,7 @@ mkDerivation (finalAttrs: {
     "--with-xpm=no"
   ])
   ++ lib.optionals (variant == "macport") [
-    "--enable-mac-app=$$out/Applications"
+    "--enable-mac-app=${placeholder "out"}/Applications"
     "--with-gnutls=yes"
     "--with-mac"
     "--with-xml2=yes"

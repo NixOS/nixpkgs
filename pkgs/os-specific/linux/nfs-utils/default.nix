@@ -63,8 +63,6 @@ stdenv.mkDerivation rec {
       sed -i "s,/usr/sbin,$out/bin,g" utils/statd/statd.c
       sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
-      configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
-
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"
 
@@ -76,6 +74,10 @@ stdenv.mkDerivation rec {
 
       sed '1i#include <stdint.h>' -i support/nsm/rpc.c
     '';
+
+  configureFlags = [
+    "--with-start-statd=${placeholder "out"}/bin/start-statd"
+  ];
 
   makeFlags = [
     "sbindir=$(out)/bin"

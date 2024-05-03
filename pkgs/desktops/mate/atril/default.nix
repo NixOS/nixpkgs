@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
+  makeFlags = [ "cajaextensiondir=$(out)/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
 

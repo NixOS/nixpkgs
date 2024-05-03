@@ -15,7 +15,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];
   buildInputs = [ apacheHttpd curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
 
-  configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
+  configureFlags = [
+    "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
+    "--exec-prefix=${placeholder "out"}"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

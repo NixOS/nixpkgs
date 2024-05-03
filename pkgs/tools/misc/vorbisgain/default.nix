@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     chmod -v +x configure
-    configureFlags="--mandir=$out/share/man"
   '';
+
+  configureFlags = [ "--mandir=${placeholder "out"}/share/man" ];
 
   meta = with lib; {
     homepage = "https://sjeng.org/vorbisgain.html";

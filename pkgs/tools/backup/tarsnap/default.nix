@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mbzq81l4my5wdhyxyma04sblr43m8p7ryycbpi6n78w1hwfbjmw";
   };
 
-  preConfigure = ''
-    configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
-  '';
+  configureFlags = [ "--with-bash-completion-dir=${placeholder "out"}/share/bash-completion/completions" ];
 
   patchPhase = ''
     substituteInPlace Makefile.in \

@@ -40,7 +40,7 @@ buildRebar3 {
   doCheck     = true;
   checkTarget = "travis";
 
-  makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out"];
+  makeFlags = [ "-e" "MANDB=''" "PREFIX=$(out)"];
 
   # These installPhase tricks are based on Elixir's Makefile.
   # TODO: Make, upload, and apply a patch.

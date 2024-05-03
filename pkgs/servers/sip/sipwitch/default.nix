@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ucommon libosip libexosip gnutls zlib ];
 
-  preConfigure = ''
-    export configureFlags="--sysconfdir=$out/etc"
-  '';
+  configureFlags = [ "--sysconfdir=${placeholder "out"}/etc" ];
 
   doCheck = true;
 

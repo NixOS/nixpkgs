@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     python3Packages.pygobject3
   ];
 
-  configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
+  configureFlags = [ "--with-cajadir=${placeholder "out"}/lib/caja/extensions-2.0" ];
 
   enableParallelBuilding = true;
 

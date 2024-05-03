@@ -94,10 +94,11 @@ let
       export GOPATH=$TMPDIR/go
       export GOPROXY=file://${passthru.boringssl-go-modules}
       export GOSUMDB=off
-
-      # Need to get value of $out for this flag
-      configureFlagsArray+=("--with-libnssckbi=$out/lib")
     '';
+
+    configureFlags = [
+      "with-libnssckbi=${placeholder "out"}/lib"
+    ];
 
     postInstall = ''
       # Remove vestigial *-config script
