@@ -524,7 +524,7 @@ rec {
 
   mypy-boto3-omics = buildMypyBoto3Package "omics" "1.34.95" "sha256-WnppelL6Ms07lOJE2Z/03rgoSEw8X+TeHoESSloZCaY=";
 
-  mypy-boto3-opensearch = buildMypyBoto3Package "opensearch" "1.34.43" "sha256-EOl56YqzuIUWlSewnVCtEdzt3Ei5yueP4emtTQq3QrA=";
+  mypy-boto3-opensearch = buildMypyBoto3Package "opensearch" "1.34.95" "sha256-EIxq65z1V6azqiNG0r1YQvsAMr3LbLjA8jzabtNJRi8=";
 
   mypy-boto3-opensearchserverless = buildMypyBoto3Package "opensearchserverless" "1.34.0" "sha256-YpbQWnVIXMqTzieWya4MiFz9HpN5YYSSmBjUvmO0VMo=";
 
