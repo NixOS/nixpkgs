@@ -92,6 +92,7 @@ self: super: {
   diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
   diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
   diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
+  generics-sop = doJailbreak super.generics-sop_0_5_1_4; # th-abstraction >=0.6 && <0.7
   ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
   primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
   statestack = doJailbreak super.statestack; # base < 4.19
