@@ -2796,7 +2796,11 @@ with pkgs;
   simplenes = callPackage ../applications/emulators/simplenes { };
 
   snes9x-gtk = snes9x.override {
-    withGtk = true;
+    interface = "gtk";
+  };
+
+  snes9x-x11 = snes9x.override {
+    interface = "x11";
   };
 
   tamatool = callPackage ../applications/emulators/tamatool { };
