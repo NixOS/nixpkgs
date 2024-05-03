@@ -31,7 +31,7 @@ appimageTools.wrapType2 {
     homepage = "https://lmstudio.ai/";
     license = lib.licenses.unfree;
     mainProgram = "lmstudio";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ drupol eeedean ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
