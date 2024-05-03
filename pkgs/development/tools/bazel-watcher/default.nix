@@ -29,13 +29,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.24.0";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    hash = "sha256-ebNHAYKyE3226KiCc2/VSz1OSITuPwuYlAIS3JrWzj0=";
+    hash = "sha256-lreGKA0DZiOd1bJq8NNQ+80cyDwiughoXCkKu1RaZmc=";
   };
 
   nativeBuildInputs = [ go_1_21 git python3 ];
