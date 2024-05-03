@@ -369,7 +369,6 @@ broken-packages:
   - bash # failure in job https://hydra.nixos.org/build/252719390 at 2024-03-16
   - basic-gps # failure in job https://hydra.nixos.org/build/252718385 at 2024-03-16
   - basics # failure in job https://hydra.nixos.org/build/236678238 at 2023-10-04
-  - basic-sop # failure in job https://hydra.nixos.org/build/233253357 at 2023-09-02
   - baskell # failure in job https://hydra.nixos.org/build/233246705 at 2023-09-02
   - battlenet # failure in job https://hydra.nixos.org/build/233260076 at 2023-09-02
   - battleplace # failure in job https://hydra.nixos.org/build/233230199 at 2023-09-02
