@@ -1,11 +1,12 @@
-{ lib
-, betamax
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests-toolbelt
-, setuptools
+{
+  lib,
+  betamax,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests-toolbelt,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-BV9DOfZLDAZIr2E75l988QxFWWvazBL9VttxGFIez1M=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     betamax
     requests-toolbelt
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "betamax_matchers"
-  ];
+  pythonImportsCheck = [ "betamax_matchers" ];
 
   meta = with lib; {
     description = "A group of experimental matchers for Betamax";
