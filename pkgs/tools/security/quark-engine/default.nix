@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quark-engine";
-  version = "24.4.1";
+  version = "24.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cWO/avMz9nT9yo10b1ugC0C8NsEp2jAlcR0/+86gFKc=";
+    sha256 = "sha256-W1UeTiyyYZzxu3XQ/6VkTvEyqPWl1Du6QutuoPhaSfs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
