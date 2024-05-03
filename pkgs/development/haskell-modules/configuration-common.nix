@@ -2625,10 +2625,10 @@ self: super: {
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;
 
-  # Raise version bounds for hspec
+  # Raise version bounds: https://github.com/kosmikus/records-sop/pull/15
   records-sop = appendPatch (fetchpatch {
-    url = "https://github.com/kosmikus/records-sop/pull/11/commits/d88831388ab3041190130fec3cdd679a4217b3c7.patch";
-    sha256 = "sha256-O+v/OxvqnlWX3HaDvDIBZnJ+Og3xs/SJqI3gaouU3ZI=";
+    url = "https://github.com/kosmikus/records-sop/commit/fb149f453a816ff14d0cb20b3ea56b80ff49d9f1.patch";
+    sha256 = "sha256-iHiF4EWL/GjJFnr/6aR+yMZKLMLAZK+gsgSxG8YaeDI=";
   }) super.records-sop;
 
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)

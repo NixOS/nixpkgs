@@ -3785,9 +3785,6 @@ dont-distribute-packages:
  - sqlcli-odbc
  - sqlite-simple-interpolate
  - sqlite-simple-typed
- - squeal-postgresql
- - squeal-postgresql-ltree
- - squeal-postgresql-uuid-ossp
  - squeeze
  - sr-extra
  - srt-dhall
