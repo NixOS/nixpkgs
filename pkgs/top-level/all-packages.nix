@@ -24324,8 +24324,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
   };
 
-  SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
-
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
   sdrpp = callPackage ../applications/radio/sdrpp {
