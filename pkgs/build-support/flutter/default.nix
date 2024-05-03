@@ -223,11 +223,14 @@ let
 
       ];
 
-      #TODO: make gladlew now, that we already fetched the zip file, so it doesnt try to download anything
+      #TODO: make gladlew know, that we already fetched the zip file, so it doesnt try to download anything
       configurePhase = ''
         runHook preConfigure
         mkdir -p android/gradle/wrapper/dists/
         cp -r ${gradlezip} android/gradle/wrapper/dists/
+        GRADLEDISTZIPNAME=$(basename ${gradlezip})
+        echo "distributionUrl=dists/$GRADLEDISTZIPNAME" >> android/gradle/wrapper/gradle-wrapper.properties
+        cat android/gradle/wrapper/gradle-wrapper.properties
         runHook postConfigure
       '';
 
