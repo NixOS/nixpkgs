@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.nagios.org/";
     changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${finalAttrs.version}/Changelog";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "nagios";
     maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];
   };
