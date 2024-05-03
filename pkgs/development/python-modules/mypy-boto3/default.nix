@@ -700,7 +700,7 @@ rec {
 
   mypy-boto3-sso-oidc = buildMypyBoto3Package "sso-oidc" "1.34.0" "sha256-uDHRoc7H3vtM/KYSeH95PdibjiEq/pSSJFcm5kgMMAg=";
 
-  mypy-boto3-stepfunctions = buildMypyBoto3Package "stepfunctions" "1.34.0" "sha256-BtIpbO51DRfLYhcUIO6kYU8g8pvkXuNhhU+LWZpugRA=";
+  mypy-boto3-stepfunctions = buildMypyBoto3Package "stepfunctions" "1.34.92" "sha256-SZpd4vhU5ez0X+4ApewgR4tBMK8dnWFyHhdqeHlwOUw=";
 
   mypy-boto3-storagegateway = buildMypyBoto3Package "storagegateway" "1.34.27" "sha256-iKn048AdvM6XSOqT/w6edWoe0VMi3V305oHMth/QkF0=";
 
