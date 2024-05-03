@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, cargo
 , rustPlatform
 , pkg-config
 , gtk3
@@ -8,18 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sirula";
-  version = "1.0.0";
+  version = "unstable-2023-09-02";
 
   src = fetchFromGitHub {
     owner = "DorianRudolph";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-C5mVO10+jD4TDg6R9rVJO6fdDiOD5tT+bEaI53WVdFA=";
+    rev = "b15efe85ef1fe50849a33e5919d53d05f4f66090";
+    sha256 = "sha256-S0WbqY49nKaBUMWfgDKZxFLJuk7uFcnTfV8s86V0Zxs=";
   };
 
-  cargoSha256 = "sha256-pxVEa3m7SWMwOAcR/jRKzEc6MH6YkNfTW0cm6Nid6Zo=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "osstrtools-0.2.2" = "sha256-Co4pcikfN4vtIVK7ZsRGCWMAhMJWNNVZe/AdN1nMlmQ=";
+    };
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  cargoSha256 = lib.fakeSha256;
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [ gtk3 gtk-layer-shell ];
 
