@@ -3,6 +3,8 @@
 , fetchPypi
 , ansible-core
 , flaky
+, jsonschema
+, packaging
 , pytest-mock
 , pytestCheckHook
 , pyyaml
@@ -28,6 +30,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    ansible-core
+    jsonschema
+    packaging
     pyyaml
     subprocess-tee
   ];
