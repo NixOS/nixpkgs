@@ -190,6 +190,8 @@ python.pkgs.buildPythonApplication rec {
   installPhase = let
     pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
   in ''
+    runHook preInstall
+
     mkdir -p $out/lib/paperless-ngx
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
     ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
@@ -200,6 +202,8 @@ python.pkgs.buildPythonApplication rec {
     makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
       --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
+
+    runHook postInstall
   '';
 
   postFixup = ''
