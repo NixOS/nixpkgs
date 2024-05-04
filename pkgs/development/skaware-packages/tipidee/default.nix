@@ -1,4 +1,4 @@
-{ skawarePackages, skalibs }:
+{ skawarePackages, stdenv, skalibs }:
 
 skawarePackages.buildPackage {
   pname = "tipidee";
@@ -35,4 +35,5 @@ skawarePackages.buildPackage {
     mv examples $doc/share/doc/tipidee/examples
   '';
 
+  broken = stdenv.isDarwin;
 }
