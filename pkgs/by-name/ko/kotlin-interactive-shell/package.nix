@@ -11,7 +11,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-3DTyo7rPswpEVzFkcprT6FD+ITGJ+qCXFKXEGoCK+oE=";
   };
 
-  mvnHash = "sha256-MPMGj6lWl38oczBHpOny3eLuBVG0h0VqN4DNdaJY2ps";
+  mvnHash = "sha256-m1o0m0foqJhEzWjC9behBeld5HT08WClcZN2xc3fZrI=";
   mvnParameters = "-DskipTests compile";
 
   nativeBuildInputs = [ makeWrapper ];
