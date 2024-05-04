@@ -35575,8 +35575,6 @@ with pkgs;
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_29; };
 
-  webcord-vencord = callPackage ../applications/networking/instant-messengers/webcord/webcord-vencord { };
-
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {
