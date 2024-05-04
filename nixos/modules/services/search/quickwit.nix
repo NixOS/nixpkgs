@@ -64,7 +64,7 @@ in
     users.groups.quickwit = {};
     system.activationScripts.makeQuickwitDir = ''
       mkdir -p ${cfg.settings.data_dir}
-      chown -R quickwit:quickwit ${cfg.settings.data_dir}
+      chown -R ${config.users.users.quickwit.name}:${config.users.users.quickwit.group} ${cfg.settings.data_dir}
     '';
     systemd.services.quickwit = {
       description = "Quickwit search engine";
@@ -75,8 +75,8 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/quickwit run --config ${configFile}";
         StateDirectory = cfg.settings.data_dir;
-        User = "quickwit";
-        Group = "quickwit";
+        User = "${config.users.users.quickwit.name}";
+        Group = "${config.users.users.quickwit.group}";
         ProtectHome = true;
         NoNewPrivileges = true;
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
