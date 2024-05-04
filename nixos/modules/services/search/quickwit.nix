@@ -22,21 +22,37 @@ in
     };
 
     settings = mkOption {
-      description = "Quickwit settings.";
+      description = "Quickwit node configuration, see <https://quickwit.io/docs/configuration/node-config>";
+      default = { };
       type = types.submodule {
         freeformType = settingsFormat.type;
 
         options = {
+
+          version = mkOption {
+            type = types.str;
+            default = "0.7";
+            description = "Config file version.";
+          };
+
           listen_address = mkOption {
             type = types.str;
             default = "127.0.0.1";
-            description = "Address to listen on.";
+            description = "The IP address or hostname that Quickwit service binds to for starting REST and GRPC server and connecting this node to other nodes.";
+          };
+
+          rest = {
+            listen_port = mkOption {
+              type = types.port;
+              default = 7280;
+              description = "The port on which the REST API listens for HTTP traffic.";
+            };
           };
 
           data_dir = mkOption {
             type = types.path;
             default = "/var/lib/quickwit";
-            description = "Path to the directory where Quickwit will store its data.";
+            description = "Path to directory where data (tmp data, splits kept for caching purpose) is persisted. This is mostly used in indexing.";
           };
 
         };
