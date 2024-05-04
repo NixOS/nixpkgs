@@ -1,6 +1,6 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, doxygen, msgpack, neovim, python3Packages, qtbase, qtsvg }:
+{ lib, libsForQt5, fetchFromGitHub, cmake, doxygen, msgpack, neovim, python3Packages, qtbase, qtsvg }:
 
-mkDerivation rec {
+libsForQt5.mkDerivation rec {
   pname = "neovim-qt-unwrapped";
   version = "0.2.18";
 

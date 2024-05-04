@@ -35328,7 +35328,7 @@ with pkgs;
 
   neovim-gtk = callPackage ../applications/editors/neovim/neovim-gtk.nix { };
 
-  neovim-qt-unwrapped = libsForQt5.callPackage ../applications/editors/neovim/neovim-qt.nix { };
+  neovim-qt-unwrapped = callPackage ../by-name/ne/neovim-qt/package.nix { };
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
