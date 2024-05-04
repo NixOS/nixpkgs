@@ -1377,4 +1377,6 @@ self: super: builtins.intersectAttrs super {
   pvar = dontCheck super.pvar;
 
   kmonad = enableSeparateBinOutput super.kmonad;
+
+  xmobar = enableSeparateBinOutput super.xmobar;
 }
