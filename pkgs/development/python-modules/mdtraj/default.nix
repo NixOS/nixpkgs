@@ -64,7 +64,7 @@ buildPythonPackage rec {
      })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     cython_0
     oldest-supported-numpy
     setuptools
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     llvmPackages.openmp
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astunparse
     numpy
     packaging
