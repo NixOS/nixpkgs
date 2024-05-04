@@ -11,11 +11,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ 
-    kernel.moduleBuildDependencies 
-    flex 
-    coccinelle 
-    python3 
+  nativeBuildInputs = [
+    kernel.moduleBuildDependencies
+    flex
+    coccinelle
+    python3
   ];
 
   makeFlags = kernel.makeFlags ++ [
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${ builtins.getEnv "SHELL" }'
+    substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${builtins.getEnv "SHELL"}'
   '';
 
   passthru.tests.drbd-driver = nixosTests.drbd-driver;
