@@ -249,6 +249,8 @@ self: super: with self; {
 
   aiohttp-fast-url-dispatcher = callPackage ../development/python-modules/aiohttp-fast-url-dispatcher { };
 
+  aiohttp-isal = callPackage ../development/python-modules/aiohttp-isal { };
+
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
   aiohttp-oauthlib = callPackage ../development/python-modules/aiohttp-oauthlib { };
