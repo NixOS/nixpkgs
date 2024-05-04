@@ -115,10 +115,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-supergrafx-libretro",
-            "rev": "e41f864c0abb36aef20f8e37cd9d9a92c00a9221",
-            "hash": "sha256-LkkW5mQmwv89ZECssVh43ezwe4xMagUOiSz82OupISQ="
+            "rev": "77a965d3433b1585638b54aa6a15d0c33a64ea0c",
+            "hash": "sha256-KuXvzse/EnzCcRoWVtZP1f/SKOp6qGrLbzbQEuFQGqA="
         },
-        "version": "unstable-2024-03-22"
+        "version": "unstable-2024-05-03"
     },
     "beetle-vb": {
         "fetcher": "fetchFromGitHub",
@@ -408,10 +408,11 @@
         "src": {
             "owner": "libretro",
             "repo": "mame",
-            "rev": "90714f5cdefb2024dc34fdf3a62bd0d3815460ce",
-            "hash": "sha256-5Fd57fLIEKxr5KaHywGyHgA29midWpWEFotvudQKtjs="
+            "rev": "3272473e69880675756547fc5896d0869ba14255",
+            "hash": "sha256-DWDPQM4YWuH4oH+03VmFs6yXN2dAKxc5zXSV42YbMyg=",
+            "fetchSubmodules": true
         },
-        "version": "unstable-2024-04-26"
+        "version": "unstable-2024-05-04"
     },
     "mame2000": {
         "fetcher": "fetchFromGitHub",
