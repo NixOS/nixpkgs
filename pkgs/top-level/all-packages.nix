@@ -26584,9 +26584,7 @@ with pkgs;
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
-  radicale3 = callPackage ../servers/radicale/3.x.nix { };
-
-  radicale = radicale3;
+  radicale3 = radicale;
 
   qcal = callPackage ../tools/networking/qcal/default.nix { };
 
