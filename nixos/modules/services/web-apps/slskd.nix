@@ -22,7 +22,7 @@ in {
     };
 
     nginx = mkOption {
-      description = mdDoc "options for nginx";
+      description = "options for nginx";
       example = {
         enable = true;
         domain = "example.com";
@@ -39,7 +39,7 @@ in {
           contextPath = mkOption {
             type = path;
             default = "/";
-            description = mdDoc ''
+            description = ''
               The context path, i.e., the last part of the slskd
               URL. Typically '/' or '/slskd'. Default '/'
             '';
@@ -48,7 +48,7 @@ in {
             type = str;
             default = "localhost";
             example = "10.0.0.1";
-            description = mdDoc ''
+            description = ''
               The address at which slskd serves its web interface.
             '';
           };
