@@ -104,6 +104,7 @@ rec {
         ''
           cp -r ${ide} $out
           chmod +w -R $out
+          rm -f $out/${meta.mainProgram}/plugins/plugin-classpath.txt
           IFS=' ' read -ra pluginArray <<< "$newPlugins"
           for plugin in "''${pluginArray[@]}"
           do
