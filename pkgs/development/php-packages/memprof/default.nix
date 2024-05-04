@@ -1,12 +1,14 @@
-{ buildPecl
-, lib
-, fetchFromGitHub
-, judy
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  judy,
 }:
 
 let
   version = "3.0.2";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "memprof";
 
@@ -17,9 +19,7 @@ in buildPecl {
     hash = "sha256-K8YcvCobErBkaWFTkVGLXXguQPOLIgQuRGWJF+HAIRA=";
   };
 
-  configureFlags = [
-    "--with-judy-dir=${judy}"
-  ];
+  configureFlags = [ "--with-judy-dir=${judy}" ];
 
   doCheck = true;
 

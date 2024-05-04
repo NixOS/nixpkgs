@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, php
-, unzip
-, _7zz
-, xz
-, git
-, curl
-, cacert
-, makeBinaryWrapper
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  php,
+  unzip,
+  _7zz,
+  xz,
+  git,
+  curl,
+  cacert,
+  makeBinaryWrapper,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -37,7 +38,16 @@ php.buildComposerProject (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/composer \
-      --prefix PATH : ${lib.makeBinPath [ _7zz cacert curl git unzip xz ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          _7zz
+          cacert
+          curl
+          git
+          unzip
+          xz
+        ]
+      }
   '';
 
   vendorHash = "sha256-dNNV9fTyGyRoGeDV/vBjn0aMgkaUMsrKQv5AOoiYokQ=";
