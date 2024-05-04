@@ -3,10 +3,12 @@
   fetchPypi,
   grpcio-tools,
   lib,
+  mypy-protobuf,
   protobuf,
   pytestCheckHook,
   pythonOlder,
   pythonRelaxDepsHook,
+  testers,
   types-protobuf,
 }:
 
@@ -38,11 +40,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mypy_protobuf" ];
 
+  passthru.tests.version = testers.testVersion {
+    package = mypy-protobuf;
+    command = "${lib.getExe mypy-protobuf} --version";
+  };
+
   meta = {
     changelog = "https://github.com/nipunn1313/mypy-protobuf/blob/v${version}/CHANGELOG.md";
     description = "Generate mypy stub files from protobuf specs";
     homepage = "https://github.com/nipunn1313/mypy-protobuf";
     license = lib.licenses.asl20;
+    mainProgram = "protoc-gen-mypy";
     maintainers = with lib.maintainers; [ lnl7 ];
   };
 }
