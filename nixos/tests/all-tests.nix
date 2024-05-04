@@ -776,6 +776,7 @@ in {
   qtile = handleTest ./qtile.nix {};
   quake3 = handleTest ./quake3.nix {};
   quicktun = handleTest ./quicktun.nix {};
+  quickwit = handleTest ./quickwit.nix {};
   quorum = handleTest ./quorum.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};

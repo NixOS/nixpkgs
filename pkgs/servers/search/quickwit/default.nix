@@ -6,6 +6,7 @@
 , protobuf
 , rust-jemalloc-sys
 , Security
+, nixosTests
 }:
 
 let
@@ -54,6 +55,8 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests.quickwit = nixosTests.quickwit;
 
   checkFlags = [
     # tries to make a network access

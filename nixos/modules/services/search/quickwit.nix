@@ -10,6 +10,7 @@ in
     package = mkOption {
       type = types.package;
       description = "Quickwit package to use.";
+      default = pkgs.quickwit;
     };
 
     enable = mkEnableOption "Quickwit search engine";
