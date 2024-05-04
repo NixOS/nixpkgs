@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lovek323 lovesegfault ];
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin; # last successful build 2023-11-17
   };
 })
