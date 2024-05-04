@@ -408,10 +408,11 @@
         "src": {
             "owner": "libretro",
             "repo": "mame",
-            "rev": "4f9cd11f9c6bbf805886e26529e5f8c8e1c23d1d",
-            "hash": "sha256-pS9kmyez7ciT1dU2aOSpX7XEEqkWVzEan5Evu2L2l/o="
+            "rev": "3272473e69880675756547fc5896d0869ba14255",
+            "hash": "sha256-DWDPQM4YWuH4oH+03VmFs6yXN2dAKxc5zXSV42YbMyg=",
+            "fetchSubmodules": true
         },
-        "version": "unstable-2024-05-03"
+        "version": "unstable-2024-05-04"
     },
     "mame2000": {
         "fetcher": "fetchFromGitHub",
