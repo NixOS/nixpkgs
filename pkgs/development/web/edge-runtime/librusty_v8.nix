@@ -1,4 +1,3 @@
-# auto-generated file -- DO NOT EDIT!
 { stdenv, fetchurl }:
 
 let
