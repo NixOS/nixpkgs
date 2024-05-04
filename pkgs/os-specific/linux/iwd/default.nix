@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchgit
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , ell
@@ -19,6 +20,24 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-i+2R8smgLXooApj0Z5e03FybhYgw1X/kIsJkrDzW8y4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-52161.patch";
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=6415420f1c92012f64063c131480ffcef58e60ca";
+      hash = "sha256-bN5mxdWDyKEC2IyyG2vlzTEAL57C4uC7GAJA3jSXJHg=";
+    })
+    (fetchpatch {
+      name = "netdev-buffer-overflow-32-byte-ssid.patch";
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=8d68b33e763aced6d419df9f6534760d2c890279";
+      hash = "sha256-BSduzwVUTEcqjVwD88qJYgItApcQZwU43u9gbNMDs8I=";
+    })
+    (fetchpatch {
+      name = "erp-buffer-overflow-32-byte-ssid.patch";
+      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=bdaae53cf828a1f6ea7a7b57d7d6ebcc7b70ac43";
+      hash = "sha256-K/Ib0azlZ0UlFqcqs+8dSfj0hh0j0dZYpfB9f6tEqc8=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";

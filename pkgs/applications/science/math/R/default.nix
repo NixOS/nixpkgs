@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+{ lib, stdenv, fetchurl, fetchpatch, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texliveSmall, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
@@ -37,6 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-usr-local-search-paths.patch
+    (fetchpatch {
+      # https://hiddenlayer.com/research/r-bitrary-code-execution/
+      name = "CVE-2024-27322.patch";
+      url = "https://github.com/r-devel/r-svn/commit/f7c46500f455eb4edfc3656c3fa20af61b16abb7.patch";
+      hash = "sha256-CH2mMmie9E96JeGSC7UGm7/roUNhK5xv6HO53N2ixEI=";
+    })
   ];
 
   # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
