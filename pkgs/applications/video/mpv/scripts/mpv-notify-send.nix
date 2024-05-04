@@ -1,9 +1,11 @@
-{ lib
-, buildLua
-, fetchFromGitHub
-, fetchpatch
-, unstableGitUpdater
-, libnotify }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  fetchpatch,
+  unstableGitUpdater,
+  libnotify,
+}:
 
 buildLua rec {
   pname = "mpv-notify-send";
@@ -25,7 +27,10 @@ buildLua rec {
   ];
 
   passthru.extraWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath libnotify)
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath libnotify)
   ];
 
   passthru.updateScript = unstableGitUpdater { };

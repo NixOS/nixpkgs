@@ -1,6 +1,6 @@
 { lib, fetchgit, formats }:
-with lib;
 let
+  inherit (lib) concatStrings listToAttrs makeOverridable mapAttrsToList nameValuePair;
   json = formats.json { };
 in rec {
 

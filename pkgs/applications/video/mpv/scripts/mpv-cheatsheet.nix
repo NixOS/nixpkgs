@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, nodePackages
-, stdenvNoCC
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nodePackages,
+  stdenvNoCC,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mpv-cheatsheet";
@@ -16,9 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  nativeBuildInputs = [
-    nodePackages.browserify
-  ];
+  nativeBuildInputs = [ nodePackages.browserify ];
 
   buildPhase = ''
     runHook preBuild
@@ -35,7 +34,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
 
   passthru.scriptName = "cheatsheet.js";
 

@@ -1,4 +1,10 @@
-{ lib, buildLua, fetchFromGitHub, makeWrapper, unstableGitUpdater }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  makeWrapper,
+  unstableGitUpdater,
+}:
 
 buildLua {
   pname = "video-cutter";
@@ -10,7 +16,7 @@ buildLua {
     rev = "01a0396c075d5f8bbd1de5b571e6231f8899ab65";
     sha256 = "sha256-veoRFzUCRH8TrvR7x+WWoycpDyxqrJZ/bnp61dVc0pE=";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [ makeWrapper ];
 
