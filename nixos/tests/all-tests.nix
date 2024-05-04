@@ -1,11 +1,9 @@
 {
   system,
   pkgs,
-
   # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
   callTest,
-
 }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leaves.
@@ -14,9 +12,7 @@
 # where said tests are unsupported.
 # Example callTest that just extracts the derivation from the test:
 #   callTest = t: t.test;
-
 with pkgs.lib;
-
 let
   discoverTests =
     val:
@@ -140,10 +136,8 @@ let
       _class = "nixosTest";
       node.pkgs = pkgs.pkgsLinux;
     };
-
 in
 {
-
   # Testing the test driver
   nixos-test-driver = {
     extra-python-packages = handleTest ./nixos-test-driver/extra-python-packages.nix { };
@@ -554,9 +548,9 @@ in
   gnome-xorg = handleTest ./gnome-xorg.nix { };
   gns3-server = handleTest ./gns3-server.nix { };
   gnupg = handleTest ./gnupg.nix { };
-  goatcounter = handleTest ./goatcounter.nix { };
   go-camo = handleTest ./go-camo.nix { };
   go-neb = runTest ./go-neb.nix;
+  goatcounter = handleTest ./goatcounter.nix { };
   gobgpd = handleTest ./gobgpd.nix { };
   gocd-agent = handleTest ./gocd-agent.nix { };
   gocd-server = handleTest ./gocd-server.nix { };
@@ -574,6 +568,7 @@ in
   grav = runTest ./web-apps/grav.nix;
   graylog = handleTest ./graylog.nix { };
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix { };
+  grist-core = runTest ./grist-core.nix;
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
   grub = handleTest ./grub.nix { };
