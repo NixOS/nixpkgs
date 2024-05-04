@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 , isPyPy
@@ -28,6 +27,7 @@
 , sphinxcontrib-websupport
 
 # check phase
+, defusedxml
 , filelock
 , html5lib
 , pytestCheckHook
@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "7.2.6";
+  version = "7.3.7";
   format = "pyproject";
   disabled = pythonOlder "3.9";
 
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-IjpRGeGpGfzrEvwIKtuu2l1S74w8W+AbqDOGnWwtRck=";
+    hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +83,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    defusedxml
     filelock
     html5lib
     pytestCheckHook
@@ -110,6 +111,8 @@ buildPythonPackage rec {
     "test_decorators"
     # requires cython_0, but fails miserably on 3.11
     "test_cython"
+    # Could not fetch remote image: http://localhost:7777/sphinx.png
+    "test_copy_images"
   ] ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
@@ -122,9 +125,6 @@ buildPythonPackage rec {
     "test_isattributedescriptor"
     "test_methoddescriptor"
     "test_partialfunction"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/sphinx-doc/sphinx/issues/12202 (Fixed in 7.3)
-    "test_enum_class"
   ];
 
   meta = {

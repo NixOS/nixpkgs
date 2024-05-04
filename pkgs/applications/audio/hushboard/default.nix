@@ -9,7 +9,7 @@
 , pycairo
 , pygobject3
 , six
-, wrapGAppsHook
+, wrapGAppsHook3
 , xlib
 }:
 
@@ -25,7 +25,7 @@ buildPythonApplication {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

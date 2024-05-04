@@ -14,7 +14,7 @@
 , pango
 , fontconfig
 , freetype
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3Packages; [

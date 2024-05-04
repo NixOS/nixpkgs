@@ -1,4 +1,10 @@
-{ buildLua, fetchFromGitHub, curl, unstableGitUpdater, lib }:
+{
+  buildLua,
+  fetchFromGitHub,
+  curl,
+  unstableGitUpdater,
+  lib,
+}:
 
 buildLua rec {
   pname = "youtube-upnext";
@@ -13,7 +19,7 @@ buildLua rec {
 
   postPatch = ''
     substituteInPlace youtube-upnext.lua \
-      --replace '"curl"' '"${lib.getExe curl}"'
+      --replace-fail '"curl"' '"${lib.getExe curl}"'
   '';
 
   passthru.updateScript = unstableGitUpdater { };

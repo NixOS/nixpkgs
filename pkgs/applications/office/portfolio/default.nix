@@ -10,7 +10,7 @@
 , libsecret
 , makeDesktopItem
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeScript
 }:
 let
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

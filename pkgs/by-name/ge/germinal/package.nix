@@ -9,7 +9,7 @@
 , pkg-config
 , tmux
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 , nixosTests
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

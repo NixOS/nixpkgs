@@ -8,7 +8,7 @@
 , appstream-glib
 , desktop-file-utils
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gdk-pixbuf
 , pango
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     glib
     gettext
     itstool

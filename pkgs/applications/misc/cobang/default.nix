@@ -19,7 +19,7 @@
 , setuptools
 , python
 , pytestCheckHook
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
@@ -43,7 +43,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     # Needed to recognize gobject namespaces
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     setuptools
   ];
 

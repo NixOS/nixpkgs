@@ -3,7 +3,7 @@
 , gobject-introspection
 , gtk3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

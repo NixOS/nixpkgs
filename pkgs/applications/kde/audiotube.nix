@@ -2,7 +2,7 @@
 , mkDerivation
 
 , extra-cmake-modules
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , futuresql
 , gst_all_1
@@ -24,7 +24,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.wrapPython
     python3Packages.pybind11
   ];

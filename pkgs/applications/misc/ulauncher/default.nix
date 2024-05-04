@@ -7,7 +7,7 @@
 , gnome
 , gobject-introspection
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , webkitgtk
 , libnotify
 , keybinder3
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     distutils-extra
     gobject-introspection
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     gdk-pixbuf
   ];
 

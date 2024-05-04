@@ -54,7 +54,7 @@
 , libgpg-error
 , libxkbcommon
 , osm-gps-map
-, wrapGAppsHook
+, wrapGAppsHook3
 , rav1e
 , dav1d
 , libgcrypt
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
     pkg-config
     perlPackages.perl
     python3Packages.jsonschema
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

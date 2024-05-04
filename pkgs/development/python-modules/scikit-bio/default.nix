@@ -20,14 +20,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.9";
+  version = "0.6.0";
   format = "setuptools";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-euBE3IvuIxkAJIrcOoZZB352FA1WrJ9CvQH7eYEBSRA=";
+    hash = "sha256-EBBafDwVrlkQJEkn8punqjUjSxnr5lE7hIRUc0OywQ8=";
   };
 
   nativeBuildInputs = [ cython ];

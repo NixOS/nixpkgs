@@ -7,7 +7,7 @@
 , gettext
 , libxml2
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , glib
 , gssdp
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 

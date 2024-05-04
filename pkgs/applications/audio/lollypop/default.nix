@@ -18,7 +18,7 @@
 , gdk-pixbuf
 , glib
 , pango
-, wrapGAppsHook
+, wrapGAppsHook3
 , lastFMSupport ? true
 , youtubeSupport ? true
 }:
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec  {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = with gst_all_1; [

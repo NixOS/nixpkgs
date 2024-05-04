@@ -10,7 +10,7 @@
 , stdenv
 , unzip
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 , copyDesktopItems
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
     unzip
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 

@@ -8,7 +8,7 @@
 , makeDesktopItem
 , openjfx
 , stdenvNoCC
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 let
   pname = "maptool";
@@ -82,7 +82,7 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     copyDesktopItems
     libarchive
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   desktopItems = [

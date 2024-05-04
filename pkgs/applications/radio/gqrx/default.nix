@@ -11,7 +11,7 @@
 , fftwFloat
 , alsa-lib
 , libjack2
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 # drivers (optional):
 , rtl-sdr
@@ -40,7 +40,7 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     cmake
     pkg-config
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gnuradioMinimal.unwrapped.logLib

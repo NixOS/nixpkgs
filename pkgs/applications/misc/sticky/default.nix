@@ -5,7 +5,7 @@
 , meson
 , ninja
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , cinnamon
 , glib
 , gspell
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

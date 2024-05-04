@@ -6,7 +6,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , libgnome-games-support
 , gettext
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     vala
   ];
 

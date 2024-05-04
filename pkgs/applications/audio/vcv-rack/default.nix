@@ -24,7 +24,7 @@
 , rtmidi
 , speexdsp
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , zstd
 }:
 
@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
     libicns
     makeWrapper
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     alsa-lib

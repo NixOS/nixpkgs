@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, jdk17, testers, wrapGAppsHook, igv }:
+{ lib, stdenv, fetchzip, jdk17, testers, wrapGAppsHook3, igv }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/igv
     chmod +x $out/bin/igvtools
   '';
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   passthru.tests.version = testers.testVersion {
     package = igv;

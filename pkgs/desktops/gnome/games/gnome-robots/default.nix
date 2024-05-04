@@ -4,7 +4,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gsound
 , gettext
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     vala
     python3
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     itstool
     desktop-file-utils

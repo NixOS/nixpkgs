@@ -76,6 +76,8 @@ buildPythonPackage rec {
     "test_cyrillic"
     # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/tmpfseetobk/test/\xc0'
     "test_commit_no_encode_decode"
+    # https://github.com/jelmer/dulwich/issues/1279
+    "test_init_connector"
   ];
 
   disabledTestPaths = [

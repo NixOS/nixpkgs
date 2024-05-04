@@ -1,36 +1,45 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
+, fetchpatch2
 , gi-docgen
 , meson
 , ninja
 , pkg-config
 , vala
 , gobject-introspection
+, gperf
 , glib
 , cairo
 , sqlite
 , libsoup_3
 , gtk4
 , libsysprof-capture
+, json-glib
+, protobufc
 , xvfb-run
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.1.3";
+  version = "1.2.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libshumate";
-    rev = version;
-    sha256 = "+h0dKLECtvfsxwD5aRTIgiNI9jG/tortUJYFiYMe60g=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-EQXuB34hR/KgOc3fphb6XLlDiIPdlAQn4RaZ3NZUnBE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Fix tests https://gitlab.gnome.org/GNOME/libshumate/-/merge_requests/236
+      url = "https://gitlab.gnome.org/GNOME/libshumate/-/commit/852615b0df2252ea67f4f82e9ace2fc2794467b3.patch";
+      hash = "sha256-Ksye3zNNYmzP4O+QFDVODXUkFJOLDVMEZNfGXwbxWhs=";
+    })
+  ];
 
   depsBuildBuild = [
     # required to find native gi-docgen when cross compiling
@@ -44,6 +53,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     gobject-introspection
+    gperf
   ];
 
   buildInputs = [
@@ -53,6 +63,8 @@ stdenv.mkDerivation rec {
     libsoup_3
     gtk4
     libsysprof-capture
+    json-glib
+    protobufc
   ];
 
   nativeCheckInputs = [

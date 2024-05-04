@@ -16,7 +16,9 @@
 , libavc1394
 , libiec61883
 , libvpx
+, libdrm
 , speex
+, opencore-amr
 , flac
 , taglib
 , libshout
@@ -56,13 +58,13 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.9";
+  version = "1.24.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-JpWfz+v/9jfU6gjvQDFrrzG2G7dymCCwaE6ADDoUeLY=";
+    hash = "sha256-bjR8ctS4sohtiQ/+n2dnqe2wLyAViOjDpXLc0I2YUr0=";
   };
 
   patches = [
@@ -106,6 +108,7 @@ stdenv.mkDerivation rec {
     libdv
     libvpx
     speex
+    opencore-amr
     flac
     taglib
     cairo
@@ -128,6 +131,8 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libXfixes
     xorg.libXdamage
+    xorg.libXtst
+    xorg.libXi
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -143,6 +148,7 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.isLinux [
+    libdrm
     libGL
     libv4l
     libpulseaudio

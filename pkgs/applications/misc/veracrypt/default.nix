@@ -13,7 +13,7 @@
 , ntfs3g
 , btrfs-progs
 , pcsclite
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "src";
 
-  nativeBuildInputs = [ makeself pkg-config yasm wrapGAppsHook ];
+  nativeBuildInputs = [ makeself pkg-config yasm wrapGAppsHook3 ];
   buildInputs = [ fuse lvm2 wxGTK pcsclite ];
 
   enableParallelBuilding = true;

@@ -6,7 +6,7 @@
 , stdenv
 , lib
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 , cpio
 , xar
 , libdbusmenu
@@ -98,7 +98,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook3
 , withLibui ? true, gtk3
 , withUdisks ? stdenv.isLinux, udisks, glib
 , libX11 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;

@@ -4,7 +4,7 @@
 , appstream-glib
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , ibus
 , libhangul
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     appstream-glib
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "Ibus Hangul engine";
     mainProgram = "ibus-setup-hangul";
     homepage = "https://github.com/libhangul/ibus-hangul";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ericsagnes ];
     platforms = platforms.linux;
   };

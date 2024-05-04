@@ -10,7 +10,7 @@
 , gtk3
 , glib
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , gnupg
 , desktop-file-utils
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     openssh
     gnupg

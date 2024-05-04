@@ -5,7 +5,7 @@
 , gettext
 , pkg-config
 , jq
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , libgnome-keyring
 , gtk3
@@ -47,7 +47,7 @@ buildGoModule rec {
     gettext
     pkg-config
     jq
-    wrapGAppsHook
+    wrapGAppsHook3
     glib
   ];
 

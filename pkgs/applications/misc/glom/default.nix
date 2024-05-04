@@ -31,7 +31,7 @@
 , postgresql_15
 , gobject-introspection
 , yelp-tools
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     doxygen
     graphviz
     sphinx-build
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection # for setup hook
   ];
 

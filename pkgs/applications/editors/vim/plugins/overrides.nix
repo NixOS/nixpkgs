@@ -78,7 +78,7 @@
 , # sved dependencies
   glib
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , # sniprun dependencies
   bashInteractive
 , coreutils
@@ -1335,11 +1335,11 @@
 
   sved =
     let
-      # we put the script in its own derivation to benefit the magic of wrapGAppsHook
+      # we put the script in its own derivation to benefit the magic of wrapGAppsHook3
       svedbackend = stdenv.mkDerivation {
         name = "svedbackend-${super.sved.name}";
         inherit (super.sved) src;
-        nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+        nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
         buildInputs = [
           glib
           (python3.withPackages (ps: with ps; [ pygobject3 pynvim dbus-python ]))

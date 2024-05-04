@@ -3,7 +3,7 @@
 , git
 , git-lfs
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , cairo
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     asar
   ];

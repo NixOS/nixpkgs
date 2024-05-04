@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "zip password cracker, similar to fzc, zipcrack and others";
     homepage = "http://oldhome.schmorp.de/marc/fcrackzip.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ nico202 ];
     platforms = with platforms; unix;
   };

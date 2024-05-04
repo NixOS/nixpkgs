@@ -14,7 +14,7 @@
   minizip,
   pkg-config,
   stdenv,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   enableDiscordRpc ? false,
 }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

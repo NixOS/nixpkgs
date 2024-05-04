@@ -13,7 +13,7 @@
 , jre_minimal
 , cairo
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , glib
 , libxkbcommon
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

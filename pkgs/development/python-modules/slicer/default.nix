@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "slicer";
-  version = "0.0.7";
+  version = "0.0.8";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9dX3tF+Y0VW5wLplVPqXcMaybVeTo+d6EDD7VpEOvuw=";
+    hash = "sha256-LnVTr3PwwMLTVfSvzD7Pl8byFW/PRZOVXD9Wz2xNbrc=";
   };
 
   prePatch = ''

@@ -5,7 +5,7 @@
 , gtk3
 , vala
 , enchant2
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , ninja
 , desktop-file-utils
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

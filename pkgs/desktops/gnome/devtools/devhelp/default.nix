@@ -6,7 +6,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gobject-introspection
 , gi-docgen
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     gi-docgen
     # post install script

@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , atk
 , bzip2
 , cairo
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
     copyDesktopItems
     pkg-config
     rustPlatform.bindgenHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildFeatures = lib.optionals stdenv.isLinux [ "linux-pkg-config" ];

@@ -16,7 +16,7 @@
 , libdiscid
 , isocodes
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     itstool
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

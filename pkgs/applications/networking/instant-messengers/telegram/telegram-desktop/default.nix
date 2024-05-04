@@ -7,7 +7,7 @@
 , ninja
 , python3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
@@ -63,14 +63,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.16.8";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-M8wFhuTTEJippgvS93LNRqREV2TGF04ccps5oOmSr+0=";
+    hash = "sha256-BjXz2LwsvmJIaN+FZ4+mLu01jaajPvwf8YPqCjx7Kw4=";
   };
 
   patches = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.isLinux [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     extra-cmake-modules
   ] ++ lib.optionals stdenv.isDarwin [
     lld

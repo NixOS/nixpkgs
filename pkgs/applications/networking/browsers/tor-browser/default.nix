@@ -6,7 +6,7 @@
 , makeWrapper
 , writeText
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , callPackage
 
 , atk
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper wrapGAppsHook3 ];
   buildInputs = [
     gtk3
     alsa-lib

@@ -23,7 +23,7 @@
 , libarchive
 , libhandy
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gobject-introspection
 , yelp-tools
@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "45.0";
+  version = "46.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0YZH1Cdcvd8NMoF7HQTjBzQqhb6RTsTa0tgIKq+KpKg=";
+    hash = "sha256-r/avaTksBJVr+tl23sXRWDtB1aM06TeZX3w8oHQN4iE=";
   };
 
   depsBuildBuild = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 

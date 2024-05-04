@@ -3,7 +3,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , itstool
 , libxml2
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     libxml2
     pkg-config
     dbus
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -77,5 +77,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ albakham luc65r ];
+    mainProgram = "rbw";
   };
 }

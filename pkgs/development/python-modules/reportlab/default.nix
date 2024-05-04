@@ -14,7 +14,7 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -22,7 +22,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Opn69BJpEVnAaLP/AcFTB84v0s9rhgGZQ0h04AIECoQ=";
+    hash = "sha256-R0+yjWNDGl1H11yQ1YA5MFDffUkaCceHffMpGi6fbQo=";
   };
 
   postPatch = ''

@@ -8,7 +8,7 @@
 , gettext
 , itstool
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , glib
 , libsoup
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

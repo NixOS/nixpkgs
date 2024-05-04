@@ -9,7 +9,7 @@
 , pkg-config
 , vala
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

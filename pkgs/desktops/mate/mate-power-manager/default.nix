@@ -16,7 +16,7 @@
 , gtk3
 , libtool
 , polkit
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libtool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

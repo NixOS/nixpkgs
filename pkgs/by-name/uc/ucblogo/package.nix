@@ -4,7 +4,7 @@
 , wxGTK32
 , texinfo
 , tetex
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoconf-archive
 , autoreconfHook
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf-archive
     texinfo
     tetex
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

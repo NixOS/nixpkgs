@@ -3,7 +3,7 @@
   stdenv,
   buildDotnetModule,
   fetchFromGitHub,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   dotnetCorePackages,
   fontconfig,
   gtk3,
@@ -39,7 +39,7 @@ buildDotnetModule rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

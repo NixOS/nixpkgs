@@ -12,7 +12,7 @@
 , glib
 , desktop-file-utils
 , gtk-doc
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , yelp-tools
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
     intltool
     itstool

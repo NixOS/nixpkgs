@@ -40,12 +40,14 @@
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
 , withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
+, withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
+, withCodec2 ? withFullDeps # codec2 en/decoding
 , withCoreImage ? withHeadlessDeps && stdenv.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withFullDeps
@@ -68,6 +70,7 @@
 , withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1" # Needed for drawtext filter
 , withIconv ? withHeadlessDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
+, withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
@@ -211,9 +214,11 @@
  *  External libraries options
  */
 , alsa-lib
+, avisynthplus
 , bzip2
 , celt
 , chromaprint
+, codec2
 , clang
 , dav1d
 , fdk_aac
@@ -243,6 +248,7 @@
 , libGLU
 , libiconv
 , libjack2
+, libjxl
 , libmodplug
 , libmysofa
 , libogg
@@ -415,6 +421,13 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       }
     ]
+    ++ (lib.optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
+      {
+        name = "fix_build_failure_due_to_libjxl_version_to_new";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
+        hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
+      }
+    ])
     ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
@@ -527,12 +540,14 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAss "libass")
     (enableFeature withAudioToolbox "audiotoolbox")
     (enableFeature withAvFoundation "avfoundation")
+    (enableFeature withAvisynth "avisynth")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCaca "libcaca")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
+    (enableFeature withCodec2 "libcodec2")
     (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
@@ -560,6 +575,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     (enableFeature withIconv "iconv")
     (enableFeature withJack "libjack")
+  ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
+    (enableFeature withJxl "libjxl")
+  ] ++ [
     (enableFeature withLadspa "ladspa")
     (enableFeature withLzma "lzma")
     (enableFeature withMfx "libmfx")
@@ -671,12 +689,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withAss [ libass ]
   ++ optionals withAudioToolbox [ AudioToolbox ]
   ++ optionals withAvFoundation [ AVFoundation ]
+  ++ optionals withAvisynth [ avisynthplus ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
+  ++ optionals withCodec2 [ codec2 ]
   ++ optionals withCoreImage [ CoreImage ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
@@ -696,6 +716,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withHarfbuzz [ harfbuzz ]
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
+  ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]

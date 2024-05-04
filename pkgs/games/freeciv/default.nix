@@ -2,7 +2,7 @@
 , zlib, bzip2, curl, xz, gettext, libiconv, icu
 , SDL2, SDL2_mixer, SDL2_image, SDL2_ttf, SDL2_gfx, freetype, fluidsynth
 , sdl2Client ? false
-, gtkClient ? true, gtk3, wrapGAppsHook
+, gtkClient ? true, gtk3, wrapGAppsHook3
 , qtClient ? false, qt5
 , server ? true, readline
 , enableSqlite ? true, sqlite
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]
     ++ lib.optionals qtClient [ qt5.wrapQtAppsHook ]
-    ++ lib.optionals gtkClient [ wrapGAppsHook ];
+    ++ lib.optionals gtkClient [ wrapGAppsHook3 ];
 
   buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv icu ]
     ++ [ SDL2 SDL2_mixer SDL2_image SDL2_ttf SDL2_gfx freetype fluidsynth ]

@@ -21,7 +21,7 @@
 , pcre2
 , pkg-config
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

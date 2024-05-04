@@ -3530,6 +3530,8 @@ self: super: with self; {
 
   drawilleplot = callPackage ../development/python-modules/drawilleplot { };
 
+  drawsvg = callPackage ../development/python-modules/drawsvg { };
+
   dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
 
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
@@ -8710,10 +8712,9 @@ self: super: with self; {
 
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
-  nftables = toPythonModule (pkgs.nftables.override {
-    python3 = python;
-    withPython = true;
-  });
+  nftables = callPackage ../os-specific/linux/nftables/python.nix {
+    inherit (pkgs) nftables;
+  };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
@@ -10470,6 +10471,8 @@ self: super: with self; {
   pvo = callPackage ../development/python-modules/pvo { };
 
   pweave = callPackage ../development/python-modules/pweave { };
+
+  pwkit = callPackage ../development/python-modules/pwkit { };
 
   pwlf = callPackage ../development/python-modules/pwlf { };
 

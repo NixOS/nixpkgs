@@ -16,7 +16,7 @@
 , openssh
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gi-docgen
 , vala
 , gnome
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gi-docgen
-    wrapGAppsHook
+    wrapGAppsHook3
     vala
     shared-mime-info
     openssh

@@ -3312,6 +3312,9 @@ with self; {
       "-Wno-error=implicit-int"
       "-Wno-error=int-conversion"
     ]);
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
+    '';
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;
@@ -29042,10 +29045,10 @@ with self; {
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.88";
+    version = "0.89";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-LibYAML-0.88.tar.gz";
-      hash = "sha256-qKJzjMzDMqj3VJxMJ/PgCQyasR7vD2yFZEUXc5gTVng=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.89.tar.gz";
+      hash = "sha256-FVq4NnU0XFCt0DMRrPndkVlVcH+Qmiq9ixfXeShZsuw=";
     };
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";

@@ -35,6 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AbiWord/wv";
     description = "Converter from Microsoft Word formats to human-editable ones";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 })

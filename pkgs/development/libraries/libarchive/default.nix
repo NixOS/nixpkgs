@@ -1,12 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , acl
 , attr
 , autoreconfHook
 , bzip2
 , e2fsprogs
+, glibcLocalesUtf8
 , lzo
 , openssl
 , pkg-config
@@ -28,28 +28,14 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-p2JgJ/rvqaQ6yyXSh+ehScUH565ud5bQncl+lOnsWfc=";
+    hash = "sha256-bfuEhw8l/flGyHNRguVcygyTYCLdnv5PAo7QGb2LybQ=";
   };
-
-  patches = [
-    # Pull fix for test failure on 32-bit systems:
-    (fetchpatch {
-      name = "32-bit-tests-fix.patch";
-      url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
-      hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
-    })
-    (fetchpatch {
-      name = "fix-suspicious-commit-from-known-bad-actor.patch";
-      url = "https://github.com/libarchive/libarchive/commit/6110e9c82d8ba830c3440f36b990483ceaaea52c.patch";
-      hash = "sha256-/j6rJ0xWhtXU0YCu1LOokxxNppy5Of6Q0XyO4U6la7M=";
-    })
-  ];
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -70,17 +56,18 @@ stdenv.mkDerivation (finalAttrs: {
       "cpio/test/test_format_newc.c"
     ];
     removeTest = testPath: ''
-      substituteInPlace Makefile.am --replace "${testPath}" ""
+      substituteInPlace Makefile.am --replace-fail "${testPath}" ""
       rm "${testPath}"
     '';
   in ''
-    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
+    substituteInPlace Makefile.am --replace-fail '/bin/pwd' "$(type -P pwd)"
 
     ${lib.concatStringsSep "\n" (map removeTest skipTestPaths)}
   '';
 
   nativeBuildInputs = [
     autoreconfHook
+    glibcLocalesUtf8 # test_I test requires an UTF-8 locale
     pkg-config
   ];
 
@@ -106,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
+
+  preCheck = ''
+    # Need an UTF-8 locale for test_I test.
+    export LANG=en_US.UTF-8
+  '';
 
   preFixup = ''
     sed -i $lib/lib/libarchive.la \

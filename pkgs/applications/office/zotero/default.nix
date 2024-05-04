@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 , atk
 , cairo
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HAVLmamEPuFf0548/iEXes+f4XnQ7kU1u9hyOYhVyZ0=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs =
     [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 

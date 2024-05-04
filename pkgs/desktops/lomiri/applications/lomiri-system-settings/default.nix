@@ -37,7 +37,7 @@
 , ubports-click
 , upower
 , validatePkgConfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , xvfb-run
 }:
