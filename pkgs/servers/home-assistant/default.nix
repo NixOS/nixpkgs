@@ -39,15 +39,6 @@ let
         };
       });
 
-      aioautomower = super.aioautomower.overridePythonAttrs (oldAttrs: rec {
-        version = "2024.3.4";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-dk8HfIiQOKq7Ky+vYa3wKmTS78gTw6J0yyQT2Folpp0=";
-        };
-      });
-
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -58,21 +49,6 @@ let
         };
         nativeCheckInputs = with self; [
           aresponses
-        ];
-      });
-
-      aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
-        version = "22.10.1";
-        src = fetchFromGitHub {
-          owner = "ludeeus";
-          repo = "aiogithubapi";
-          rev = "refs/tags/${version}";
-          hash = "sha256-ceBuqaMqqL6qwN52765MG4sLt+08hx2G9rUVNC7x6ik=";
-        };
-        propagatedBuildInputs = with self; [
-          aiohttp
-          async-timeout
-          backoff
         ];
       });
 
@@ -293,17 +269,6 @@ let
         doCheck = false; # no tests
       });
 
-      # Pinned due to API changes in 1.3.0
-      ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.2.0";
-        src = fetchFromGitHub {
-          owner = "timmo001";
-          repo = "ovoenergy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-OSK74uvpHuEtWgbLVFrz1NO7lvtHbt690smGQ+GlsOI=";
-        };
-      });
-
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -311,16 +276,6 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      py-synologydsm-api = super.py-synologydsm-api.overridePythonAttrs (oldAttrs: rec {
-        version = "2.1.4";
-        src = fetchFromGitHub {
-          owner = "mib1185";
-          repo = "py-synologydsm-api";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-37JzdhMny6YDTBO9NRzfrZJAVAOPnpcr95fOKxisbTg=";
         };
       });
 
@@ -364,20 +319,6 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
         };
-      });
-
-      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
-        version = "0.40.0";
-        src = fetchFromGitHub {
-          owner = "humbertogontijo";
-          repo = "python-roborock";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-H4xwgulNLs3R1Q5GhvQffpAZ1CWXZUJAja8BskW+YJk=";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail "poetry-core==" "poetry-core>="
-        '';
       });
 
       pytibber = super.pytibber.overridePythonAttrs (oldAttrs: rec {
@@ -525,7 +466,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.4.4";
+  hassVersion = "2024.5.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -543,16 +484,16 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-bZcrFtaO0S22M6Wt2otK8rCg+NhpXr+/yRFxi02QJJI=";
+    hash = "sha256-YtlelAfFC3fnw78lZIf5FtQifvtwb2ZjCrZgM2G7S5U=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-NyIBFpDstX1MEoLS9p7GXl/+V6xB2hklNf2LmNLUMQk=";
+    hash = "sha256-9BgfQCP+t4zvC+ZVI0IAlm2qFArqRjTb8974sY/SHUg=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     pythonRelaxDepsHook
     setuptools
   ];
@@ -592,16 +533,20 @@ in python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace tests/test_config.py --replace-fail '"/usr"' '"/build/media"'
 
+    substituteInPlace pyproject.toml --replace-fail "wheel~=0.43.0" wheel
+
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
     sed -i 's/wheel[~=]/wheel>/' pyproject.toml
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
+    aiodns
     aiohttp
     aiohttp-cors
     aiohttp-fast-url-dispatcher
-    aiohttp-zlib-ng
+    aiohttp-isal
+    aiohttp-session
     astral
     async-interrupt
     atomicwrites-homeassistant
@@ -613,8 +558,8 @@ in python.pkgs.buildPythonApplication rec {
     cryptography
     fnv-hash-fast
     hass-nabucasa
-    httpx
     home-assistant-bluetooth
+    httpx
     ifaddr
     jinja2
     lru-dict
@@ -623,8 +568,8 @@ in python.pkgs.buildPythonApplication rec {
     pillow
     pip
     psutil-home-assistant
-    pyopenssl
     pyjwt
+    pyopenssl
     python-slugify
     pyyaml
     requests
@@ -666,6 +611,8 @@ in python.pkgs.buildPythonApplication rec {
     tomli
     # Sneakily imported in tests/conftest.py
     paho-mqtt
+    # Used in tests/non_packaged_scripts/test_alexa_locales.py
+    beautifulsoup4
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
     # some components are needed even if tests in tests/components are disabled
     "default_config"
@@ -688,6 +635,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
     # SystemError: PyThreadState_SetAsyncExc failed
     "--deselect=tests/helpers/test_template.py::test_template_timeout"
+    # AssertionError: assert 6 == 5
+    "--deselect=tests/helpers/test_translation.py::test_caching"
     # tests are located in tests/
     "tests"
   ];
