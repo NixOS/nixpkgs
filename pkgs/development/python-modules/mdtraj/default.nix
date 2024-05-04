@@ -11,6 +11,7 @@
 , wheel
 , astunparse
 , numpy
+, packaging
 , pyparsing
 , scipy
 , gsd
@@ -46,6 +47,21 @@ buildPythonPackage rec {
       url = "https://github.com/mdtraj/mdtraj/commit/02d44d4db7039fceb199c85b4f993244804f470d.patch";
       hash = "sha256-nhbi3iOrDSM87DyIp1KVt383Vvb6aYOgkjuYzviqiq8=";
     })
+    # remove distutils usage
+    # https://github.com/mdtraj/mdtraj/pull/1834
+    (fetchpatch {
+      name = "python312-compatibility.patch";
+      url = "https://github.com/mdtraj/mdtraj/commit/95d79747deef42c976ca362a57806b61933409f3.patch";
+      hash = "sha256-Cq7/d745q6ZgAyWGM4ULnSsWezsbnu1CjSz5eqYSb+g=";
+    })
+    # disable intrinsics when SIMD is not available
+    # TODO: enable SIMD with python3.12
+    # https://github.com/mdtraj/mdtraj/pull/1884
+    (fetchpatch {
+      name = "fix-intrinsics-flag.patch";
+      url = "https://github.com/mdtraj/mdtraj/commit/d6041c645d51898e2a09030633210213eec7d4c5.patch";
+      hash = "sha256-kcnlHMoA/exJzV8iQltH+LWXrvSk7gsUV+yWK6xn0jg=";
+     })
   ];
 
   nativeBuildInputs = [
@@ -64,6 +80,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     astunparse
     numpy
+    packaging
     pyparsing
     scipy
   ];
