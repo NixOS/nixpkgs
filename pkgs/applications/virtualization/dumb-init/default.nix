@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glibc, }:
+{ lib, stdenv, fetchFromGitHub, glibc }:
 
 stdenv.mkDerivation rec {
   pname = "dumb-init";
