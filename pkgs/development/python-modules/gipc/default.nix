@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gevent
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gevent,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,39 +27,30 @@ buildPythonPackage rec {
       --replace-fail "gevent>=1.5,<=23.9.1" "gevent>=1.5"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    gevent
-  ];
+  dependencies = [ gevent ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gipc"
-  ];
+  pythonImportsCheck = [ "gipc" ];
 
   disabledTests = [
-    # 
-    "test_singlemsg"
-    "test_singlemsg"
+    # AttributeError
     "test_all_handles_length"
-    "test_write_closewrite_read"
-    "test_handlecount"
-    "test_twochannels_singlemsg"
-    "test_onewriter"
-    "test_twowriters"
-    "test_twoclose"
-    "test_closewrite"
-    "test_closeread"
-    "test_readclose"
     "test_child"
-    "test_handler"
+    "test_closeread"
+    "test_closewrite"
     "test_early_readchild_exit"
+    "test_handlecount"
+    "test_handler"
+    "test_onewriter"
+    "test_readclose"
+    "test_singlemsg"
+    "test_twochannels_singlemsg"
+    "test_twoclose"
+    "test_twowriters"
+    "test_write_closewrite_read"
   ];
 
   meta = with lib; {
