@@ -85,6 +85,7 @@ luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
 luasystem,,,,,,
+luatext,https://github.com/f4z3r/luatext,,,,,
 luaunbound,,,,,,
 luaunit,,,,,,lockejan
 luautf8,,,,,,pstn
