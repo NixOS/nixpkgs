@@ -3,19 +3,19 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "drbd";
   version = "9.2.9";
-  
-   src = fetchurl {
+
+  src = fetchurl {
     url = "https://pkg.linbit.com//downloads/drbd/9/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-MLG0hGvAjjkNxhszbpnb8fkzWUQC1zPhkeOaU0V5x3g=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [
-    kernel.moduleBuildDependencies
-    flex
-    coccinelle
-    python3
+  nativeBuildInputs = [ 
+    kernel.moduleBuildDependencies 
+    flex 
+    coccinelle 
+    python3 
   ];
 
   makeFlags = kernel.makeFlags ++ [
@@ -27,10 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  
+
   postPatch = ''
     patchShebangs .
-    substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${builtins.getEnv "SHELL"}'
+    substituteInPlace Makefile --replace 'SHELL=/bin/bash' 'SHELL=${ builtins.getEnv "SHELL" }'
   '';
 
   passthru.tests.drbd-driver = nixosTests.drbd-driver;
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [ birkb ];
     longDescription = ''
-       DRBD is a software-based, shared-nothing, replicated storage solution
-       mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
+      DRBD is a software-based, shared-nothing, replicated storage solution
+      mirroring the content of block devices (hard disks, partitions, logical volumes, and so on) between hosts.
     '';
   };
 })
