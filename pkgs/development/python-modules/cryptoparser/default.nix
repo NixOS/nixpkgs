@@ -1,15 +1,16 @@
-{ lib
-, asn1crypto
-, attrs
-, buildPythonPackage
-, cryptodatahub
-, fetchPypi
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, unittestCheckHook
-, urllib3
+{
+  lib,
+  asn1crypto,
+  attrs,
+  buildPythonPackage,
+  cryptodatahub,
+  fetchPypi,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  unittestCheckHook,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     asn1crypto
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "cryptoparser"
-  ];
+  pythonImportsCheck = [ "cryptoparser" ];
 
   meta = with lib; {
     description = "Security protocol parser and generator";
