@@ -1487,9 +1487,6 @@ dont-distribute-packages:
  - galois-fft
  - galois-field
  - gamma
- - gargoyle-postgresql
- - gargoyle-postgresql-connect
- - gargoyle-postgresql-nix
  - gbs-downloader
  - gbu
  - gdax
