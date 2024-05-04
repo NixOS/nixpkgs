@@ -20520,8 +20520,6 @@ with pkgs;
 
   cre2 = callPackage ../development/libraries/cre2 { };
 
-  criterion = callPackage ../development/libraries/criterion { };
-
   croaring = callPackage ../development/libraries/croaring { };
 
   crocoddyl = callPackage ../development/libraries/crocoddyl { };
