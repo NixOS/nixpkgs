@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     libsamplerate
   ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
 
+  env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -47,8 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ relrod ftrvxmtrx ];
     platforms = platforms.unix;
-    # unable to execute command: posix_spawn failed: Argument list too long
-    # Builds fine on aarch64-darwin
-    broken = stdenv.system == "x86_64-darwin";
   };
 }
