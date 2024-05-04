@@ -28351,8 +28351,6 @@ with pkgs;
 
   ananicy-cpp = callPackage ../misc/ananicy-cpp { };
 
-  ananicy-rules-cachyos = callPackage ../misc/ananicy-rules-cachyos { };
-
   andagii = callPackage ../data/fonts/andagii { };
 
   andika = callPackage ../data/fonts/andika { };
