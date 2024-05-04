@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       thesola10
       Yumasi
+      sigmanificient
     ];
     platforms = platforms.unix;
   };
