@@ -29738,10 +29738,6 @@ with pkgs;
 
   appgate-sdp = callPackage ../applications/networking/appgate-sdp { };
 
-  apostrophe = callPackage ../applications/editors/apostrophe {
-    pythonPackages = python3Packages;
-  };
-
   ardour = callPackage ../applications/audio/ardour { };
   ardour_7 = callPackage ../applications/audio/ardour/7.nix { };
 

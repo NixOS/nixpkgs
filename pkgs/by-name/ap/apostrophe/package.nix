@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja
 , wrapGAppsHook3, pkg-config, desktop-file-utils
-, appstream-glib, pythonPackages, glib, gobject-introspection
+, appstream-glib, python3Packages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome, gspell, texliveMedium
 , shared-mime-info, libhandy, fira, sassc
 }:
 
 let
-  pythonEnv = pythonPackages.python.withPackages(p: with p; [
+  pythonEnv = python3Packages.python.withPackages(p: with p; [
     regex setuptools levenshtein pyenchant
     pygobject3 pycairo pypandoc chardet
   ]);
