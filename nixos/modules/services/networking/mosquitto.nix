@@ -133,6 +133,7 @@ let
     }) users;
 
   listenerScope = index: "listener-${toString index}";
+  bridgeScope = name: "bridge-${name}";
   userScope = prefix: index: "${prefix}-user-${toString index}";
   credentialID = prefix: credential: "${prefix}-${credential}";
 
@@ -475,6 +476,34 @@ let
           example = [ "# both 2 local/topic/ remote/topic/" ];
         };
 
+        localPasswordFile = lib.mkOption {
+          type = uniq (nullOr path);
+          example = "/path/to/file";
+          default = null;
+          description = ''
+            Specifies the path to a file containing the
+            clear text password for the MQTT local user
+            for bridge.
+            The file is securely passed to mosquitto by
+            leveraging systemd credentials. No special
+            permissions need to be set on this file.
+          '';
+        };
+
+        remotePasswordFile = lib.mkOption {
+          type = uniq (nullOr path);
+          example = "/path/to/file";
+          default = null;
+          description = ''
+            Specifies the path to a file containing the
+            clear text password for the MQTT remote user
+            for bridge.
+            The file is securely passed to mosquitto by
+            leveraging systemd credentials. No special
+            permissions need to be set on this file.
+          '';
+        };
+
         settings = lib.mkOption {
           type = submodule {
             freeformType = attrsOf optionType;
@@ -504,7 +533,13 @@ let
       "addresses ${lib.concatMapStringsSep " " (a: "${a.address}:${toString a.port}") bridge.addresses}"
     ]
     ++ map (t: "topic ${t}") bridge.topics
-    ++ formatFreeform { } bridge.settings;
+    ++ formatFreeform { } bridge.settings
+    ++ lib.optional (
+      bridge.localPasswordFile != null
+    ) "local_password cred://${credentialID (bridgeScope name) "localPasswordFile"}"
+    ++ lib.optional (
+      bridge.remotePasswordFile != null
+    ) "remote_password cred://${credentialID (bridgeScope name) "remotePasswordFile"}";
 
   freeformGlobalKeys = {
     allow_duplicate_messages = 1;
@@ -673,6 +708,7 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      path = [ pkgs.gawk ];
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "main";
@@ -681,7 +717,7 @@ in
         RuntimeDirectory = "mosquitto";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/bin/mosquitto -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/mosquitto -c /run/mosquitto/mosquitto.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         # Credentials
@@ -704,8 +740,19 @@ in
                 "passwordFile"
                 "hashedPasswordFile"
               ];
+            bridgeCredentials = lib.concatLists (
+              lib.mapAttrsToList (
+                name: bridge:
+                lib.optional (
+                  bridge.localPasswordFile != null
+                ) "${credentialID (bridgeScope name) "localPasswordFile"}:${bridge.localPasswordFile}"
+                ++ lib.optional (
+                  bridge.remotePasswordFile != null
+                ) "${credentialID (bridgeScope name) "remotePasswordFile"}:${bridge.remotePasswordFile}"
+              ) cfg.bridges
+            );
           in
-          systemdCredentials cfg.listeners listenerCredentials;
+          systemdCredentials cfg.listeners listenerCredentials ++ bridgeCredentials;
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -754,6 +801,7 @@ in
             ]
           )
         );
+
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"
@@ -772,12 +820,27 @@ in
         ];
         UMask = "0077";
       };
-      preStart = lib.concatStringsSep "\n" (
-        lib.imap0 (idx: listener: ''
-          ${makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"}
-          install -m 0700 ${makeACLFile idx listener} ${cfg.dataDir}/acl-${toString idx}.conf
-        '') cfg.listeners
-      );
+      preStart =
+        let
+          passwordFiles = lib.imap0 (idx: listener: ''
+            ${makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"}
+            install -m 0700 ${makeACLFile idx listener} ${cfg.dataDir}/acl-${toString idx}.conf
+          '') cfg.listeners;
+          substitutePasswordFiles = pkgs.writeShellScript "substitute-password-files" ''
+            set -eo pipefail
+            gawk -v cred_dir="$CREDENTIALS_DIRECTORY" '{
+              if (match($0, /^([^\s]+password\s)cred:\/\/(.+)/, m)) {
+                cred_file = cred_dir "/" m[2]
+                getline f < cred_file
+                close(cred_file)
+                print m[1] f
+              } else {
+                print $0
+              }
+            }' ${configFile} | install -m 400 /dev/stdin /run/mosquitto/mosquitto.conf
+          '';
+        in
+        lib.concatStringsSep "\n" (passwordFiles ++ [ substitutePasswordFiles ]);
     };
 
     users.users.mosquitto = {
