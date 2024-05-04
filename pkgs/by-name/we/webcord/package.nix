@@ -7,7 +7,6 @@
   xdg-utils,
   electron,
   makeDesktopItem,
-  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -76,7 +75,7 @@ buildNpmPackage rec {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "A Discord and SpaceBar electron-based client implemented without Discord API";
