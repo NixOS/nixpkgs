@@ -16,14 +16,13 @@ webcord.overrideAttrs (old: {
     })
   ];
 
-  meta =
-    with lib;
-    old.meta
-    // {
-      description = "Webcord with Vencord web extension";
-      maintainers = with maintainers; [
-        FlafyDev
-        NotAShelf
-      ];
-    };
+  meta = {
+    inherit (old.meta) license mainProgram platforms;
+
+    description = "Webcord with Vencord web extension";
+    maintainers = with lib.maintainers; [
+      FlafyDev
+      NotAShelf
+    ];
+  };
 })
