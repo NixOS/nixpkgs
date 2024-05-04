@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "0.12.2";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,19 +25,19 @@ buildPythonPackage rec {
     owner = "coroner";
     repo = "cryptodatahub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zVHHBQYcl26zTtXPAs/AgKOojKQORu08rpkfY0l1zjM=";
+    hash = "sha256-+IGzXYSaeZjN5AxBu7jXgrnGtrtaSveFiVeNQRBZMNg=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt  \
-      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
+      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     attrs
     pathlib2
