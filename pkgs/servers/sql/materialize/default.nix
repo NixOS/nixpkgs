@@ -70,7 +70,6 @@ rustPlatform.buildRustPackage rec {
   # needed for internal protobuf c wrapper library
   env.PROTOC = "${protobuf}/bin/protoc";
   env.PROTOC_INCLUDE = "${protobuf}/include";
-  env.LIBCLANG_PATH = "${libclang.lib}/lib";
   # needed to dynamically link rdkafka
   env.CARGO_FEATURE_DYNAMIC_LINKING=1;
 

@@ -20,6 +20,7 @@
 , cereal
 , cmake
 , asciidoctor
+, makeWrapper
 }:
 
 let
@@ -33,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitLab {
       owner = "emilua";
       repo = "emilua";
       rev = "v${version}";
-      hash = "sha256-cW2b+jUQT60hCCirBzxZltzA7KvBihnzWNPkKDID6kU=";
+      hash = "sha256-gt+THEr3nilweDEDmEMwIsU4i9own4ICJlZD+z8XWRQ=";
   };
 
   buildInputs = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     meson
     cmake
     ninja
+    makeWrapper
   ];
 
   dontUseCmakeConfigure = true;
@@ -81,6 +83,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
+    (lib.mesonOption "ipc_actor_msg_max_members_number" "40")
   ];
 
   postPatch = ''
@@ -90,7 +93,17 @@ stdenv.mkDerivation rec {
     cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
     popd
 
-    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${gawk}/bin/gawk -f'
+    patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
+  '';
+
+  doCheck = true;
+
+  # Skipped test: libpsx
+  # Known issue with no-new-privs disabled in the Nix build environment.
+  checkPhase = ''
+    runHook preCheck
+    meson test --print-errorlogs --no-suite libpsx
+    runHook postCheck
   '';
 
   meta = with lib; {
