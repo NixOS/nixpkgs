@@ -4,12 +4,12 @@
 , v4l-utils
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtv-scan-tables";
   version = "2022-04-30-57ed29822750";
 
   src = fetchurl {
-    url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
+    url = "https://linuxtv.org/downloads/dtv-scan-tables/dtv-scan-tables-${finalAttrs.version}.tar.bz2";
     hash = "sha256-amJoqjkkWTePo6E5IvwBWj+mP/gi9LDWTTPXE1Cm7J4=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ yarny ];
   };
-}
+})
