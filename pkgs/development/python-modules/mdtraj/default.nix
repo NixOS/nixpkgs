@@ -39,6 +39,13 @@ buildPythonPackage rec {
       url = "https://github.com/mdtraj/mdtraj/commit/81209d00817ab07cfc4668bf5ec88088d16904c0.patch";
       hash = "sha256-ttNmij7csxF0Z5wPPwhGumRX055W2IgFjRAe6nI6GNY=";
     })
+    # remove pkg_resources usage
+    # https://github.com/mdtraj/mdtraj/pull/1837
+    (fetchpatch {
+      name = "fix-runtime-error.patch";
+      url = "https://github.com/mdtraj/mdtraj/commit/02d44d4db7039fceb199c85b4f993244804f470d.patch";
+      hash = "sha256-nhbi3iOrDSM87DyIp1KVt383Vvb6aYOgkjuYzviqiq8=";
+    })
   ];
 
   nativeBuildInputs = [
