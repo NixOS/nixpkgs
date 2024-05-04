@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glibc }:
+{ lib, stdenv, fetchFromGitHub, glibc, }:
 
 stdenv.mkDerivation rec {
   pname = "dumb-init";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Yelp/dumb-init";
     license = licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "dumb-init";
   };
 }
