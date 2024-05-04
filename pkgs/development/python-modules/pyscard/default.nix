@@ -16,8 +16,8 @@ let
 in
 
 buildPythonPackage rec {
-  version = "2.0.9";
   pname = "pyscard";
+  version = "2.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -27,8 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-DO4Ea+mlrWPpOLI8Eki+03UnsOXEhN2PAl0+gdN5sTo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = [
     swig
   ] ++ lib.optionals (!withApplePCSC) [
     pkg-config
@@ -43,12 +46,12 @@ buildPythonPackage rec {
   postPatch =
     if withApplePCSC then ''
       substituteInPlace smartcard/scard/winscarddll.c \
-        --replace "/System/Library/Frameworks/PCSC.framework/PCSC" \
+        --replace-fail "/System/Library/Frameworks/PCSC.framework/PCSC" \
                   "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
     '' else ''
       substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
       substituteInPlace smartcard/scard/winscarddll.c \
-        --replace "libpcsclite.so.1" \
+        --replace-fail "libpcsclite.so.1" \
                   "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
 
@@ -66,7 +69,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Smartcard library for python";
     homepage = "https://pyscard.sourceforge.io/";
-    license = licenses.lgpl21;
+    changelog = "https://github.com/LudovicRousseau/pyscard/releases/tag/${version}";
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ layus ];
   };
 }
