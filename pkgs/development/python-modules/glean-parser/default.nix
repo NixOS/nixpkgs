@@ -9,6 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , setuptools-scm
 , yamllint
 }:
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     jinja2
     jsonschema
     pyyaml
+    setuptools
     yamllint
   ];
 
