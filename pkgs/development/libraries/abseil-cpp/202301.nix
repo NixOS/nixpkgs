@@ -24,6 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-core-foundation.patch
   ];
 
+  # abseil-cpp tries to build for both aarch64 and x86_64, which fails due to passing unrecognized flags.
+  # Only build for the host platform instead.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace absl/copts/AbseilConfigureCopts.cmake \
+      --replace-fail 'APPLE AND CMAKE_CXX_COMPILER_ID MATCHES [[Clang]]' 'false'
+  '';
+
   cmakeFlags = [
     "-DABSL_BUILD_TEST_HELPERS=ON"
     "-DABSL_USE_EXTERNAL_GOOGLETEST=ON"
