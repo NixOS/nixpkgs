@@ -3,9 +3,9 @@
 , lib
 , fetchFromGitHub
 , Foundation
+, fetchFromGitLab
 , abseil-cpp
 , cmake
-, eigen
 , gtest
 , libpng
 , nlohmann_json
@@ -19,12 +19,12 @@
 , protobuf_21
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+, cudaPackages ? { }
 }@inputs:
 
 
 let
-  version = "1.16.3";
+  version = "1.17.3";
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
@@ -34,18 +34,25 @@ let
   cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
   cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
 
+  eigen = fetchFromGitLab {
+    owner = "libeigen";
+    repo = "eigen";
+    rev = "9700fc847a39e98dfb7bd85331b5206641050e04";
+    hash = "sha256-spaOqh+XS6C4LctvOI2NUjVmvmlK3iMZVHeM2bBCezs=";
+  };
+
   howard-hinnant-date = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
-    rev = "v2.4.1";
-    sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
+    rev = "v3.0.1";
+    sha256 = "sha256-ZSjeJKAcT7mPym/4ViDvIR9nFMQEBCSUtPEuMO27Z+I=";
   };
 
   mp11 = fetchFromGitHub {
     owner = "boostorg";
     repo = "mp11";
-    rev = "boost-1.79.0";
-    hash = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+    rev = "boost-1.82.0";
+    hash = "sha256-cLPvjkf2Au+B19PJNrUkTW/VPxybi1MpPxnIl4oo4/o=";
   };
 
   safeint = fetchFromGitHub {
@@ -59,8 +66,8 @@ let
     owner = "pytorch";
     repo = "cpuinfo";
     # There are no tags in the repository
-    rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
-    hash = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+    rev = "3c8b1533ac03dd6531ab6e7b9245d488f13a82a5";
+    hash = "sha256-eshoHmGiu5k0XE/A1SWf7OvBj7/YD9JNSZgoyGzGcLA=";
   };
 
   flatbuffers = fetchFromGitHub {
@@ -73,16 +80,16 @@ let
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v1.14.1";
-    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+    rev = "v1.15.0";
+    hash = "sha256-Jzga1IiUO5LN5imSUmnbsjYtapRatTihx38EOUjm9Os=";
   };
 
-   cutlass = fetchFromGitHub {
+  cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "v3.0.0";
-    sha256 = "sha256-YPD5Sy6SvByjIcGtgeGH80TEKg2BtqJWSg46RvnJChY=";
-   };
+    rev = "v3.1.0";
+    hash = "sha256-mpaiCxiYR1WaSSkcEPTzvcREenJWklD+HRdTT5/pD54=";
+  };
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
@@ -92,24 +99,9 @@ effectiveStdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bTW9Pc3rvH+c8VIlDDEtAXyA3sajVyY5Aqr6+SxaMF4=";
+    hash = "sha256-BDNw/k5BFCdX9P4wV2kLU/YWTFRgLi9jcyRIik/OS80=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # If you stumble on these patches trying to update onnxruntime, check
-    # `git blame` and ping the introducers.
-
-    # Context: we want the upstream to
-    # - always try find_package first (FIND_PACKAGE_ARGS),
-    # - use MakeAvailable instead of the low-level Populate,
-    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
-    ./0001-eigen-allow-dependency-injection.patch
-  ] ++ lib.optionals cudaSupport [
-    # We apply the referenced 1064.patch ourselves to our nix dependency.
-    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
-    ./nvcc-gsl.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -147,6 +139,7 @@ effectiveStdenv.mkDerivation rec {
     libcufft # cufft.h
     cudnn # cudnn.h
     cuda_cudart
+    nccl # cudnn.h
   ]);
 
   nativeCheckInputs = [
@@ -170,6 +163,7 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_EIGEN=${eigen}"
     "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
     "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
@@ -183,8 +177,17 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
+    "-Donnxruntime_USE_ACL_2308=False"
+    "-Donnxruntime_USE_CUDA_NHWC_OPS=False"
+    "-Donnxruntime_ENABLE_CUDA_EP_INTERNAL_TESTS=False"
+    # Should be cpuinfo disable ? It's failing to build with it on "ld: cannot find -lclog: No such file or directory"
+    "-Donnxruntime_ENABLE_CPUINFO=False"
+    "-Donnxruntime_USE_NEURAL_SPEED=False"
+    "-Donnxruntime_USE_MEMORY_EFFICIENT_ATTENTION=True"
+    "-D_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS=1"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" cudaSupport)
+    (lib.cmakeBool "onnxruntime_DISABLE_CONTRIB_OPS" cudaSupport)
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ] ++ lib.optionals cudaSupport [
@@ -249,6 +252,6 @@ effectiveStdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau ];
+    maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau wexder ];
   };
 }
