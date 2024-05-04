@@ -435,6 +435,12 @@
     github = "a-camarillo";
     githubId = 58638902;
   };
+  acesyde = {
+    name = "Pierre-Emmanuel Mercier";
+    email = "acesyde@gmail.com";
+    github = "acesyde";
+    githubId = 958435;
+  };
   aciceri = {
     name = "Andrea Ciceri";
     email = "andrea.ciceri@autistici.org";
@@ -17318,6 +17324,12 @@
     github = "rogarb";
     githubId = 69053978;
     name = "rogarb";
+  };
+  rohanssrao = {
+    email = "rohanssrao@gmail.com";
+    github = "rohanssrao";
+    githubId = 17805516;
+    name = "Rohan Rao";
   };
   rollf = {
     email = "rolf.schroeder@limbus-medtec.com";

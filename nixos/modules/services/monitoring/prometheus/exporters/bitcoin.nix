@@ -7,6 +7,8 @@ in
 {
   port = 9332;
   extraOpts = {
+    package = lib.mkPackageOption pkgs "prometheus-bitcoin-exporter" { };
+
     rpcUser = mkOption {
       type = types.str;
       default = "bitcoinrpc";
@@ -65,7 +67,7 @@ in
   serviceOpts = {
     script = ''
       export BITCOIN_RPC_PASSWORD=$(cat ${cfg.rpcPasswordFile})
-      exec ${pkgs.prometheus-bitcoin-exporter}/bin/bitcoind-monitor.py
+      exec ${cfg.package}/bin/bitcoind-monitor.py
     '';
 
     environment = {
