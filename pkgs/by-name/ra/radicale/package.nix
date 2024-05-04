@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.1.9";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "v${version}";
-    hash = "sha256-i4NQ1+ltRE0g8AoyGKKVcgZgSmLeppnobu6bf2+XmWY=";
+    hash = "sha256-RxC8VOfdTXJZiAroDHTKjJqGWu65Z5uyb4WK1LOqubQ=";
   };
 
   postPatch = ''
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     defusedxml
     passlib
     vobject
+    pika
     python-dateutil
     pytz # https://github.com/Kozea/Radicale/issues/816
   ] ++ passlib.optional-dependencies.bcrypt;
