@@ -40,6 +40,8 @@
   gobject-introspection,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
+  replaceVars,
+  openssl,
 }:
 
 let
@@ -64,6 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
     hash = "sha256-8kSkCMkJmYp3jhJ/zCLBtQK00BPxXyaUj0fMcv/i7vQ=";
   };
+
+  patches = [
+    # Workarounds for installed tests failing in pseudoterminal
+    # https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+
+    # Hard-code paths in installed tests
+    (replaceVars ./fix-test-paths.patch {
+      python3 = testPython.interpreter;
+      openssl = "${openssl}/bin/openssl";
+    })
+  ];
 
   nativeBuildInputs =
     [
