@@ -7,11 +7,7 @@ let
 in
 {
   options.services.quickwit = {
-    package = mkOption {
-      type = types.package;
-      description = "Quickwit package to use.";
-      default = pkgs.quickwit;
-    };
+    package = mkPackageOptionMD pkgs "quickwit" { };
 
     enable = mkEnableOption "Quickwit search engine";
 
