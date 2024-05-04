@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-ozebHgUgwdqYtWAyL+EdwpjEvZC+PkWcLYCPWz2FjSw=";
   };
 
-  buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
+  nativeBuildInputs = [ patchelf ];
+  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
 
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
