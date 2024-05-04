@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.4.3";
+  version = "2024.4.24";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,8 +29,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "intents-package";
-    rev = "refs/tags/${version}";
-    hash = "sha256-hcstD1qkngZAl/jKLez+4qDs/ZIandkVkY2jrvZqph8=";
+    # https://github.com/home-assistant/intents-package/issues/3
+    rev = "a68176a189c3def87cb11ad39baacea2440ce668";
+    hash = "sha256-SUIJWoA0ltg+bjYn4J5kvAk4Eh23uxEcdxonkTSV0m0=";
     fetchSubmodules = true;
   };
 
