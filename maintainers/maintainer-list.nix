@@ -16483,6 +16483,12 @@
     githubId = 137406;
     name = "Joachim Schiele";
   };
+  qkqsb = {
+    email = "omg.qkqsb@aleeas.com";
+    github = "qkqsb";
+    githubId = 90565973;
+    name = "Dustin Smith";
+  };
   qoelet = {
     email = "kenny@machinesung.com";
     github = "qoelet";
