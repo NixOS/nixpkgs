@@ -135,14 +135,11 @@ in {
         ksystemstats
         libksysguard
 
-        spectacle
         systemsettings
         kcmutils
 
         # Gear
         baloo
-        dolphin
-        dolphin-plugins
         ffmpegthumbs
         kdegraphics-thumbnailers
         kde-inotify-survey
@@ -154,7 +151,6 @@ in {
         plasma-browser-integration
         konsole
         (lib.getBin qttools) # Expose qdbus in PATH
-
         ark
         elisa
         gwenview
@@ -162,6 +158,9 @@ in {
         kate
         khelpcenter
         print-manager
+        dolphin
+        dolphin-plugins
+        spectacle
       ];
     in
       requiredPackages
