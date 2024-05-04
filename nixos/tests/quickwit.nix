@@ -5,8 +5,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     services.quickwit = {
       enable = true;
       settings = {
-        Listen = "127.0.0.1";
-        Port = 7280;
+        version = "0.7";
+        listen_address = "127.0.0.1";
+        rest = {
+          listen_port = 7280;
+        };
       };
     };
   };
