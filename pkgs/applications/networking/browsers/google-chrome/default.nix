@@ -1,4 +1,4 @@
-{ lib, stdenv, patchelf, makeWrapper
+{ lib, stdenv, patchelf, makeWrapper, fetchurl
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
@@ -28,14 +28,8 @@
 ## Gentoo
 , bzip2, libcap
 
-# Which distribution channel to use.
-, channel ? "stable"
-
 # Necessary for USB audio devices.
 , pulseSupport ? true, libpulseaudio
-
-# Only needed for getting information about upstream binaries
-, chromium
 
 , gsettings-desktop-schemas
 , gnome
@@ -51,8 +45,6 @@ let
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
   };
-
-  version = chromium.upstream-info.version;
 
   deps = [
     glib fontconfig freetype pango cairo libX11 libXi atk nss nspr
@@ -70,18 +62,14 @@ let
     ++ lib.optional libvaSupport libva
     ++ [ gtk3 gtk4 ];
 
-  suffix = lib.optionalString (channel != "stable") "-${channel}";
+in stdenv.mkDerivation (finalAttrs: {
+  pname = "google-chrome";
+  version = "124.0.6367.118";
 
-  crashpadHandlerBinary = if lib.versionAtLeast version "94"
-    then "chrome_crashpad_handler"
-    else "crashpad_handler";
-
-in stdenv.mkDerivation {
-  inherit version;
-
-  name = "google-chrome${suffix}-${version}";
-
-  src = chromium.chromeSrc;
+  src = fetchurl {
+    url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
+    hash = "sha256-H3bv6WiVBl4j38ROZ80+SD9UO9ok+xxcKFxDd9yjWNY=";
+  };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
@@ -103,11 +91,8 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    case ${channel} in
-      beta) appname=chrome-beta      dist=beta     ;;
-      dev)  appname=chrome-unstable  dist=unstable ;;
-      *)    appname=chrome           dist=stable   ;;
-    esac
+    appname=chrome
+    dist=stable
 
     exe=$out/bin/google-chrome-$dist
 
@@ -149,7 +134,7 @@ in stdenv.mkDerivation {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary}}; do
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
@@ -162,13 +147,8 @@ in stdenv.mkDerivation {
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ primeos ];
-    # Note from primeos: By updating Chromium I also update Google Chrome and
-    # will try to merge PRs and respond to issues but I'm not actually using
-    # Google Chrome.
+    maintainers = with maintainers; [ jnsgruk ];
     platforms = [ "x86_64-linux" ];
-    mainProgram =
-      if (channel == "dev") then "google-chrome-unstable"
-      else "google-chrome-${channel}";
+    mainProgram = "google-chrome-stable";
   };
-}
+})
