@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "click_spinner"
-  ];
+  pythonImportsCheck = [ "click_spinner" ];
 
   meta = with lib; {
     description = "Add support for showwing that command line app is active to Click";
