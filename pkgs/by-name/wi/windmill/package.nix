@@ -74,7 +74,10 @@ rustPlatform.buildRustPackage {
             name = "librusty_v8-${args.version}";
             url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a";
             sha256 = args.shas.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-            meta = { inherit (args) version; };
+            meta = {
+              inherit (args) version;
+              sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+            };
           };
       in
       fetch_librusty_v8 {
