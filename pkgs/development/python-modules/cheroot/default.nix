@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "cheroot";
-  version = "10.0.0";
+  version = "10.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WcShh3/vmWmzw8CAyqrzd+J4CRlDeFP8DTKp30CzEfA=";
+    hash = "sha256-4LgveXZY0muGE+yOtWPDsI5r1qeSHp1Qib0Rda0bF0A=";
   };
 
   # remove setuptools-scm-git-archive dependency
