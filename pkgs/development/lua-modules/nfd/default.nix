@@ -22,7 +22,7 @@ buildLuarocksPackage {
   ];
   knownRockspec = "lua/nfd-scm-1.rockspec";
 
-  luarocksConfig.LUA_LIBDIR = "${lua}/lib";
+  luarocksConfig.variables.LUA_LIBDIR = "${lua}/lib";
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
