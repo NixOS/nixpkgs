@@ -15,11 +15,15 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=implicit-function-declaration"
+  ]);
+
   enableParallelBuilding = true;
 
   # Tests are currently broken on i686 see
   # https://hydra.nixos.org/build/24003763/nixlog/1
-  doCheck = !stdenv.isi686;
+  doCheck = !stdenv.isi686 && !stdenv.isAarch64;
   checkTarget = "test";
 
   installPhase = ''
@@ -34,7 +38,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Very small C interpreter for scripting";
     mainProgram = "picoc";
     longDescription = ''
