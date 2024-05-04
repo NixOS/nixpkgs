@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pkg-config
-, swig
-, pcsclite
-, PCSC
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  PCSC,
+  pcsclite,
+  pkg-config,
+  pytestCheckHook,
+  setuptools,
+  stdenv,
+  swig,
 }:
 
 let
@@ -27,33 +28,28 @@ buildPythonPackage rec {
     hash = "sha256-DO4Ea+mlrWPpOLI8Eki+03UnsOXEhN2PAl0+gdN5sTo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    swig
-  ] ++ lib.optionals (!withApplePCSC) [
-    pkg-config
-  ];
+  nativeBuildInputs = [ swig ] ++ lib.optionals (!withApplePCSC) [ pkg-config ];
 
   buildInputs = if withApplePCSC then [ PCSC ] else [ pcsclite ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch =
-    if withApplePCSC then ''
-      substituteInPlace smartcard/scard/winscarddll.c \
-        --replace-fail "/System/Library/Frameworks/PCSC.framework/PCSC" \
-                  "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
-    '' else ''
-      substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
-      substituteInPlace smartcard/scard/winscarddll.c \
-        --replace-fail "libpcsclite.so.1" \
-                  "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
-    '';
+    if withApplePCSC then
+      ''
+        substituteInPlace smartcard/scard/winscarddll.c \
+          --replace-fail "/System/Library/Frameworks/PCSC.framework/PCSC" \
+                    "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
+      ''
+    else
+      ''
+        substituteInPlace setup.py --replace "pkg-config" "$PKG_CONFIG"
+        substituteInPlace smartcard/scard/winscarddll.c \
+          --replace-fail "libpcsclite.so.1" \
+                    "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+      '';
 
   preCheck = ''
     # remove src module, so tests use the installed module instead
