@@ -3,12 +3,16 @@
 , fetchFromGitHub
 , gevent
 , pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
   version = "1.4.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jgehrcke";
@@ -19,15 +23,23 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "gevent>=1.5,<=21.12.0" "gevent>=1.5"
+      --replace-fail "gevent>=1.5,<=21.12.0" "gevent>=1.5"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     gevent
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "gipc"
   ];
 
   meta = with lib; {
@@ -42,6 +54,6 @@ buildPythonPackage rec {
     '';
     homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }
