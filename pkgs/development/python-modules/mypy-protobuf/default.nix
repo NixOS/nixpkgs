@@ -22,6 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-AvJC6zQJ9miJ8rGjqlg1bsTZCc3Q+TEVYi6ecDZuyjw=";
   };
 
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "protobuf" ];
+
   propagatedBuildInputs = [
     grpcio-tools
     protobuf
@@ -35,6 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mypy_protobuf" ];
 
   meta = {
+    changelog = "https://github.com/nipunn1313/mypy-protobuf/blob/v${version}/CHANGELOG.md";
     description = "Generate mypy stub files from protobuf specs";
     homepage = "https://github.com/nipunn1313/mypy-protobuf";
     license = lib.licenses.asl20;
