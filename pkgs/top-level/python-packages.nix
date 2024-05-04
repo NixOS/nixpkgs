@@ -309,6 +309,8 @@ self: super: with self; {
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
 
+  aiomcache = callPackage ../development/python-modules/aiomcache { };
+
   aiomisc = callPackage ../development/python-modules/aiomisc { };
 
   aiomisc-pytest = callPackage ../development/python-modules/aiomisc-pytest { };
