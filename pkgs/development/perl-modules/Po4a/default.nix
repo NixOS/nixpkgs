@@ -6,7 +6,7 @@
 , gettext
 , libxslt
 , glibcLocales
-, docbook_xml_dtd_412
+, docbook_xml_dtd_45
 , docbook_sgml_dtd_41
 , opensp
 , bash
@@ -19,27 +19,18 @@
 , UnicodeLineBreak
 , PodParser
 , YAMLTiny
-, fetchpatch
+, SyntaxKeywordTry
 , writeShellScriptBin
 }:
 
 buildPerlPackage rec {
   pname = "po4a";
-  version = "0.62";
+  version = "0.71";
 
   src = fetchurl {
     url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
-    sha256 = "0eb510a66f59de68cf7a205342036cc9fc08b39334b91f1456421a5f3359e68b";
+    hash = "sha256-xXJAHknMEXV8bTBgkW/ftagzJR7R1K65ibZnBLzyg/k=";
   };
-
-  patches = [
-    (fetchpatch {
-      # make devdoc output reproducible
-      # https://github.com/mquinson/po4a/pull/387
-      url = "https://github.com/mquinson/po4a/commit/df7433b58f6570558d44b6aac885c2a8f7862e51.patch";
-      sha256 = "9MVkYiItR2P3PBCUc4OhEOUHQuLqTWUYtYlZ3L8miC8=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -58,7 +49,7 @@ buildPerlPackage rec {
       docbook_xsl
       docbook_xsl_ns
       ModuleBuild
-      docbook_xml_dtd_412
+      docbook_xml_dtd_45
       docbook_sgml_dtd_41
       opensp
       kpsewhich-stub
@@ -74,12 +65,13 @@ buildPerlPackage rec {
     UnicodeLineBreak
     PodParser
     YAMLTiny
+    SyntaxKeywordTry
   ];
 
   buildInputs = [ bash ];
 
   LC_ALL = "en_US.UTF-8";
-  SGML_CATALOG_FILES = "${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
+  SGML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
   preConfigure = ''
     touch Makefile.PL
@@ -115,6 +107,6 @@ buildPerlPackage rec {
   meta = {
     description = "Tools for helping translation of documentation";
     homepage = "https://po4a.org";
-    license = with lib.licenses; [ gpl2Only ];
+    license = with lib.licenses; [ gpl2Plus ];
   };
 }
