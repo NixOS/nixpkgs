@@ -1093,6 +1093,21 @@ let
       ];
     });
 
+    timeless = old.timeless.overrideAttrs (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = attrs.src;
+        sourceRoot = "timeless/src/rust";
+        hash = "sha256-n0/52CV3NzWe7T3N6VoaURMxWrnqeYaUMPKkUy+LRQs=";
+      };
+
+      cargoRoot = "src/rust";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
+      ];
+    });
+
     stringi = old.stringi.overrideAttrs (attrs: {
       postInstall = let
         icuName = "icudt52l";
