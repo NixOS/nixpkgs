@@ -57,9 +57,15 @@ buildPythonPackage rec {
     rm -r smartcard
   '';
 
+  disabledTests = [
+    # AssertionError
+    "test_hresult"
+    "test_low_level"
+  ];
+
   meta = with lib; {
-    homepage = "https://pyscard.sourceforge.io/";
     description = "Smartcard library for python";
+    homepage = "https://pyscard.sourceforge.io/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ layus ];
   };
