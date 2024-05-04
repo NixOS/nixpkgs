@@ -2,15 +2,31 @@
 , cmake, ninja, protobuf, libffi, libgit2, dyncall, nanomsg, nanopbMalloc
 , python3Packages }:
 
-stdenv.mkDerivation rec {
+let
+  # follow revisions defined in .wrap files
+  debugbreak = fetchFromGitHub {
+    owner = "MrAnno";
+    repo = "debugbreak";
+    rev = "83bf7e933311b88613cbaadeced9c2e2c811054a";
+    sha256 = "sha256-OPrPGBUZN73Nl5NMEf/nME843yTolt913yjut3rAos0=";
+  };
+
+  klib = fetchFromGitHub {
+    owner = "attractivechaos";
+    repo = "klib";
+    rev = "cdb7e9236dc47abf8da7ebd702cc6f7f21f0c502";
+    sha256 = "sha256-+GaI5nXz4jYI0rO17xDhNtFpLlGL2WzeSVLMfB6Cl6E=";
+  };
+
+in stdenv.mkDerivation rec {
   pname = "criterion";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
     rev = "v${version}";
-    sha256 = "KT1XvhT9t07/ubsqzrVUp4iKcpVc1Z+saGF4pm2RsgQ=";
+    sha256 = "sha256-5GH7AYjrnBnqiSmp28BoaM1Xmy8sPs1atfqJkGy3Yf0=";
     fetchSubmodules = true;
   };
 
@@ -30,6 +46,18 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = with python3Packages; [ cram ];
 
   doCheck = true;
+
+  prePatch = ''
+    cp -r ${debugbreak} subprojects/debugbreak
+    cp -r ${klib} subprojects/klib
+
+    for dep in "debugbreak" "klib"; do
+      local meson="$dep/meson.build"
+
+      chmod +w subprojects/$dep
+      cp subprojects/packagefiles/$meson subprojects/$meson
+    done
+  '';
 
   postPatch = ''
     patchShebangs ci/isdir.py src/protocol/gen-pb.py
