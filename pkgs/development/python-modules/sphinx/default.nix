@@ -10,6 +10,7 @@
 # propagatedBuildInputs
 , babel
 , alabaster
+, defusedxml
 , docutils
 , imagesize
 , importlib-metadata
@@ -27,7 +28,6 @@
 , sphinxcontrib-websupport
 
 # check phase
-, defusedxml
 , filelock
 , html5lib
 , pytestCheckHook
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     alabaster
     babel
+    defusedxml
     docutils
     imagesize
     jinja2
@@ -83,7 +84,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    defusedxml
     filelock
     html5lib
     pytestCheckHook
