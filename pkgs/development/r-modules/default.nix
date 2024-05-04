@@ -1179,6 +1179,11 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+   rsgeo = old.rsgeo.overrideAttrs (attrs: {
+      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
+    });
+
     exifr = old.exifr.overrideAttrs (attrs: {
       postPatch = ''
         for f in .onLoad .onAttach ; do
