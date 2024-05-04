@@ -16,14 +16,13 @@
   pandas,
   pyarrow,
   requests,
-  responses,
   tqdm,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "evaluate";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-axcJg0ZalEd4FOySCiFReKL7wmTCtLaw71YqyLHq8fc=";
+    hash = "sha256-CGBluY7wFr+RdUW4QTUN18z1WKAB104ayrkzzPZHZ/w=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
@@ -52,7 +51,6 @@ buildPythonPackage rec {
     huggingface-hub
     packaging
     pyarrow
-    responses
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # most tests require internet access.
