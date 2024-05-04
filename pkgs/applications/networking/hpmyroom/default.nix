@@ -56,5 +56,6 @@ mkDerivation rec {
     # TODO: A Darwin binary is available upstream
     platforms = [ "x86_64-linux" ];
     mainProgram = "hpmyroom";
+    broken = true; # requires libpng15
   };
 }
