@@ -1,11 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, protobuf
-, types-protobuf
-, grpcio-tools
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchPypi,
+  grpcio-tools,
+  lib,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  types-protobuf,
 }:
 
 buildPythonPackage rec {
@@ -21,25 +23,21 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    grpcio-tools
     protobuf
     types-protobuf
-    grpcio-tools
   ];
 
   doCheck = false; # ModuleNotFoundError: No module named 'testproto'
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mypy_protobuf"
-  ];
+  pythonImportsCheck = [ "mypy_protobuf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate mypy stub files from protobuf specs";
-    homepage = "https://github.com/dropbox/mypy-protobuf";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lnl7 ];
+    homepage = "https://github.com/nipunn1313/mypy-protobuf";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lnl7 ];
   };
 }
