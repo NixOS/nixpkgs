@@ -1,5 +1,5 @@
 { lib, stdenv
-, mkDerivation
+, mkDerivation, patchesRoot
 , bsdSetupHook, freebsdSetupHook, makeMinimal, mandoc, groff
 , boot-install, install
 , compatIfNeeded
@@ -15,8 +15,8 @@ mkDerivation {
      else install)
   ];
   patches = lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
-    ./libnetbsd-do-install.patch
-    #./libnetbsd-define-__va_list.patch
+    /${patchesRoot}/libnetbsd-do-install.patch
+    #/${patchesRoot}/libnetbsd-define-__va_list.patch
   ];
   makeFlags = [
     "STRIP=-s" # flag to install, not command
