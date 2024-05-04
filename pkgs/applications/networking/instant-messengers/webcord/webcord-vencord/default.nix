@@ -4,6 +4,7 @@
 , vencord-web-extension
 }:
 
+# nixpkgs-update: no auto update
 webcord.overrideAttrs (old: {
   pname = "webcord-vencord";
 
