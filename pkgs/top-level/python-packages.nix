@@ -261,6 +261,8 @@ self: super: with self; {
 
   aiohttp-retry = callPackage ../development/python-modules/aiohttp-retry { };
 
+  aiohttp-session = callPackage ../development/python-modules/aiohttp-session { };
+
   aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
