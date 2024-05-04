@@ -597,8 +597,6 @@ with pkgs;
 
   dt = callPackage ../tools/text/dt { };
 
-  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
-
   dufs = callPackage ../servers/http/dufs { };
 
   dynein = callPackage ../development/tools/database/dynein {
