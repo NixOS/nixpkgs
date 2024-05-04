@@ -101,9 +101,9 @@ stdenv.mkDerivation rec {
   # Skipped test: libpsx
   # Known issue with no-new-privs disabled in the Nix build environment.
   checkPhase = ''
-  runHook preTest
+  runHook preCheck
     meson test --print-errorlogs --no-suite libpsx
-  runHook postTest
+  runHook postCheck
   '';
 
   meta = with lib; {
