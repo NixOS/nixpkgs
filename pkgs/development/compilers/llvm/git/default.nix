@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, fetchpatch, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -359,7 +359,23 @@ in let
         ../common/compiler-rt/darwin-plistbuddy-workaround.patch
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         # ../common/compiler-rt/armv7l-15.patch
-      ];
+      ]
+      ++ lib.optionals
+        (
+          stdenv.hostPlatform.isDarwin
+          && lib.versionAtLeast release_version "17"
+          && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "10.15"
+        )
+        [
+          # As of LLVM 17, compiler-rt weakly links `_availability_version_check` instead of looking it up at runtime.
+          # That causes link failures on older SDKs, so revert to using `dlsym` when the SDK isn’t new enough.
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/b653a2823fe4b4c9c6d85cfe119f31d8e70c2fa0.patch";
+            hash = "sha256-OknHXQGalj7400ESm9wjmKFohpLyYmbwUdNCiQsp9sY=";
+            stripLen = 1;
+            revert = true;
+          })
+        ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
@@ -376,7 +392,23 @@ in let
         ../common/compiler-rt/darwin-plistbuddy-workaround.patch
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         # ../common/compiler-rt/armv7l-15.patch
-      ];
+      ]
+      ++ lib.optionals
+        (
+          stdenv.hostPlatform.isDarwin
+          && lib.versionAtLeast release_version "17"
+          && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "10.15"
+        )
+        [
+          # As of LLVM 17, compiler-rt weakly links `_availability_version_check` instead of looking it up at runtime.
+          # That causes link failures on older SDKs, so revert to using `dlsym` when the SDK isn’t new enough.
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/b653a2823fe4b4c9c6d85cfe119f31d8e70c2fa0.patch";
+            hash = "sha256-OknHXQGalj7400ESm9wjmKFohpLyYmbwUdNCiQsp9sY=";
+            stripLen = 1;
+            revert = true;
+          })
+        ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
