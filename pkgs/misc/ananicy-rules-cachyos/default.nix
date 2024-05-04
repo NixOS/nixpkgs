@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ananicy-rules-cachyos";
@@ -27,6 +31,10 @@ stdenvNoCC.mkDerivation {
     description = "CachyOS' ananicy-rules meant to be used with ananicy-cpp";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ artturin johnrtitor diniamo ];
+    maintainers = with lib.maintainers; [
+      artturin
+      diniamo
+      johnrtitor
+    ];
   };
 }
