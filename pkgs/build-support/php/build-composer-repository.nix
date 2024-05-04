@@ -1,4 +1,11 @@
-{ callPackage, stdenvNoCC, lib, writeTextDir, fetchFromGitHub, php }:
+{
+  callPackage,
+  stdenvNoCC,
+  lib,
+  writeTextDir,
+  fetchFromGitHub,
+  php,
+}:
 
 let
   mkComposerRepositoryOverride =
@@ -22,12 +29,24 @@ let
       composer-local-repo-plugin = callPackage ./pkgs/composer-local-repo-plugin.nix { };
     in
     assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
-    assert (lib.assertMsg (previousAttrs ? vendorHash) "mkComposerRepository expects vendorHash argument.");
+    assert (
+      lib.assertMsg (previousAttrs ? vendorHash) "mkComposerRepository expects vendorHash argument."
+    );
     assert (lib.assertMsg (previousAttrs ? version) "mkComposerRepository expects version argument.");
     assert (lib.assertMsg (previousAttrs ? pname) "mkComposerRepository expects pname argument.");
-    assert (lib.assertMsg (previousAttrs ? composerNoDev) "mkComposerRepository expects composerNoDev argument.");
-    assert (lib.assertMsg (previousAttrs ? composerNoPlugins) "mkComposerRepository expects composerNoPlugins argument.");
-    assert (lib.assertMsg (previousAttrs ? composerNoScripts) "mkComposerRepository expects composerNoScripts argument.");
+    assert (
+      lib.assertMsg (previousAttrs ? composerNoDev) "mkComposerRepository expects composerNoDev argument."
+    );
+    assert (
+      lib.assertMsg (
+        previousAttrs ? composerNoPlugins
+      ) "mkComposerRepository expects composerNoPlugins argument."
+    );
+    assert (
+      lib.assertMsg (
+        previousAttrs ? composerNoScripts
+      ) "mkComposerRepository expects composerNoScripts argument."
+    );
     {
       composerNoDev = previousAttrs.composerNoDev or true;
       composerNoPlugins = previousAttrs.composerNoPlugins or true;
@@ -51,37 +70,42 @@ let
       strictDeps = previousAttrs.strictDeps or true;
 
       # Should we keep these empty phases?
-      configurePhase = previousAttrs.configurePhase or ''
-        runHook preConfigure
+      configurePhase =
+        previousAttrs.configurePhase or ''
+          runHook preConfigure
 
-        runHook postConfigure
-      '';
+          runHook postConfigure
+        '';
 
-      buildPhase = previousAttrs.buildPhase or ''
-        runHook preBuild
+      buildPhase =
+        previousAttrs.buildPhase or ''
+          runHook preBuild
 
-        runHook postBuild
-      '';
+          runHook postBuild
+        '';
 
       doCheck = previousAttrs.doCheck or true;
-      checkPhase = previousAttrs.checkPhase or ''
-        runHook preCheck
+      checkPhase =
+        previousAttrs.checkPhase or ''
+          runHook preCheck
 
-        runHook postCheck
-      '';
+          runHook postCheck
+        '';
 
-      installPhase = previousAttrs.installPhase or ''
-        runHook preInstall
+      installPhase =
+        previousAttrs.installPhase or ''
+          runHook preInstall
 
-        runHook postInstall
-      '';
+          runHook postInstall
+        '';
 
       doInstallCheck = previousAttrs.doInstallCheck or false;
-      installCheckPhase = previousAttrs.installCheckPhase or ''
-        runHook preInstallCheck
+      installCheckPhase =
+        previousAttrs.installCheckPhase or ''
+          runHook preInstallCheck
 
-        runHook postInstallCheck
-      '';
+          runHook postInstallCheck
+        '';
 
       COMPOSER_CACHE_DIR = "/dev/null";
       COMPOSER_MIRROR_PATH_REPOS = "1";
@@ -89,7 +113,8 @@ let
       COMPOSER_DISABLE_NETWORK = "0";
 
       outputHashMode = "recursive";
-      outputHashAlgo = if (finalAttrs ? vendorHash && finalAttrs.vendorHash != "") then null else "sha256";
+      outputHashAlgo =
+        if (finalAttrs ? vendorHash && finalAttrs.vendorHash != "") then null else "sha256";
       outputHash = finalAttrs.vendorHash or "";
     };
 in

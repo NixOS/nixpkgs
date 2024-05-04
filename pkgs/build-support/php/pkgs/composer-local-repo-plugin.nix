@@ -1,9 +1,14 @@
-{ php, callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
+{
+  php,
+  callPackage,
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+}:
 
 let
-  composer = callPackage ./composer-phar.nix {
-    inherit (php.packages.composer) version pharHash;
-  };
+  composer = callPackage ./composer-phar.nix { inherit (php.packages.composer) version pharHash; };
 
   composerKeys = stdenvNoCC.mkDerivation (finalComposerKeysAttrs: {
     pname = "composer-keys";
@@ -43,13 +48,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   COMPOSER_HTACCESS_PROTECT = "0";
   COMPOSER_DISABLE_NETWORK = "1";
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
-    composer
-  ];
+  buildInputs = [ composer ];
 
   configurePhase = ''
     runHook preConfigure
