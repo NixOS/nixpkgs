@@ -113,8 +113,8 @@
       publish = mkDotnetTest {
         name = "publish";
         template = "console";
-        build = "dotnet publish -o $out";
-        run = checkConsoleOutput "$src/test";
+        build = "dotnet publish -o $out/bin";
+        run = checkConsoleOutput "$src/bin/test";
       };
 
       self-contained = mkDotnetTest {
@@ -130,20 +130,20 @@
         name = "single-file";
         template = "console";
         usePackageSource = true;
-        build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out";
+        build = "dotnet publish --use-current-runtime -p:PublishSingleFile=true -o $out/bin";
         runtime = null;
-        run = checkConsoleOutput "$src/test";
+        run = checkConsoleOutput "$src/bin/test";
       };
 
       web = mkDotnetTest {
         name = "web";
         template = "web";
-        build = "dotnet publish -o $out";
+        build = "dotnet publish -o $out/bin";
         runInputs = [ expect curl ];
         run = ''
           expect <<"EOF"
             set status 1
-            spawn $env(src)/test
+            spawn $env(src)/bin/test
             proc abort { } { exit 2 }
             expect_before default abort
             expect -re {Now listening on: ([^\r]+)\r} {
