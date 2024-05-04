@@ -8,6 +8,7 @@
   pytestCheckHook,
   pythonOlder,
   pythonRelaxDepsHook,
+  setuptools,
   testers,
   types-protobuf,
 }:
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "mypy-protobuf";
   version = "3.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,7 +29,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "protobuf" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     grpcio-tools
     protobuf
     types-protobuf
