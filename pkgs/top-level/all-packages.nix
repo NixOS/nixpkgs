@@ -2566,13 +2566,6 @@ with pkgs;
 
   qgit = qt5.callPackage ../applications/version-management/qgit { };
 
-  radicle-cli = callPackage ../applications/version-management/radicle-cli {
-    inherit (darwin) DarwinTools;
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-  };
-
-  radicle-upstream = callPackage ../applications/version-management/radicle-upstream { };
-
   rs-git-fsmonitor = callPackage ../applications/version-management/rs-git-fsmonitor { };
 
   scmpuff = callPackage ../applications/version-management/scmpuff { };
