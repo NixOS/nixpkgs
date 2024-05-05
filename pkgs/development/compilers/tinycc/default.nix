@@ -10,15 +10,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27-unstable-2022-07-15";
+  version = "0.9.27-unstable-2024-04-27";
 
   src = fetchFromRepoOrCz {
     repo = "tinycc";
-    rev = "af1abf1f45d45b34f0b02437f559f4dfdba7d23c";
-    hash = "sha256-jY0P2GErmo//YBaz6u4/jj/voOE3C2JaIDRmo0orXN8=";
+    rev = "0aca861194089e9122faa7d04717f45a9b412287";
+    hash = "sha256-W5EnOMbmy++BX6ivtivVcVx5ngmMOWiOd3iIQK3RLgw=";
   };
 
-  outputs = [ "out" "info" "man" ];
+  # dev and lib were removed, since palceholder can't find them
+  outputs = [ "out" "doc" "info" "man" ];
 
   nativeBuildInputs = [
     copyPkgconfigItems
@@ -41,18 +42,14 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       variables = {
         prefix = "${placeholder "out"}";
-        includedir = "${placeholder "dev"}/include";
-        libdir = "${placeholder "lib"}/lib";
+        includedir = "${placeholder "out"}/include";
+        libdir = "${placeholder "out"}/lib";
       };
       description = "Tiny C compiler backend";
     };
   in [
     (makePkgconfigItem libtcc-pcitem)
   ];
-
-  postPatch = ''
-    patchShebangs texi2pod.pl
-  '';
 
   configureFlags = [
     "--cc=$CC"
@@ -65,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "--config-musl"
   ];
+
+  postPatch = ''
+    patchShebangs texi2pod.pl
+  '';
 
   preConfigure = let
     # To avoid "malformed 32-bit x.y.z" error on mac when using clang
