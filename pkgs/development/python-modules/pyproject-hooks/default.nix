@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyproject-hooks";
-  version = "1.1.0";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi rec {
     pname = "pyproject_hooks";
     inherit version;
-    hash = "sha256-SzdzCDTtvWvTfybs5rRIAvscHuLs4OVN3/i/wG24aWU=";
+    hash = "sha256-8nGymLl/WVXVP7ErcsH7GUjCLBprcLMVxUztrKAmTvU=";
   };
 
   nativeBuildInputs = [
