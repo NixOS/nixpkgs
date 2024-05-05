@@ -4,6 +4,8 @@
 , fasteners
 , fetchFromGitHub
 , freezegun
+, google-auth
+, google-auth-httplib2
 , google-reauth
 , httplib2
 , oauth2client
@@ -13,33 +15,43 @@
 , pythonRelaxDepsHook
 , retry-decorator
 , rsa
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "gcs-oauth2-boto-plugin";
-  version = "3.0";
-  format = "setuptools";
+  version = "3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = pname;
+    repo = "gcs-oauth2-boto-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-slTxh2j9VhLiSyiTmJIFFakzpzH/+mgilDRxx0VqqKQ=";
+    hash = "sha256-lEcty0Eqe2FvjMWkPBYHHM9eL5Wsqr53TGSS9bfCBrQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rsa==4.7.2" "rsa" \
-      --replace "version='2.7'" "version='${version}'"
-  '';
+  pythonRelaxDeps = [
+    "google-auth"
+    "rsa"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     boto
     freezegun
+    google-auth
     google-reauth
+    google-auth-httplib2
     httplib2
     oauth2client
     pyopenssl
