@@ -251,7 +251,8 @@ in {
   sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonOnBuildForHost.pkgs.sphinx installShellFiles ]
+        ++ lib.optionals (python.pythonOlder "3.11") [ pythonOnBuildForHost.pkgs.tomli ];
       substitutions = {
         sphinxBuild = "${pythonOnBuildForHost.pkgs.sphinx}/bin/sphinx-build";
       };
