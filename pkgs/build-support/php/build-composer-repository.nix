@@ -2,7 +2,6 @@
   callPackage,
   stdenvNoCC,
   lib,
-  fetchFromGitHub,
   php,
 }:
 
