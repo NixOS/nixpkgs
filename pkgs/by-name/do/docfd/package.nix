@@ -21,7 +21,7 @@ let
 in
 buildDunePackage' rec {
   pname = "docfd";
-  version = "4.0.0";
+  version = "5.1.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -29,7 +29,7 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-fgwUXRZ6k5i3XLxXpjbrl0TJZMT+NkGXf7KNwRgi+q8=";
+    hash = "sha256-54gsX5C8AJAOkqnBxHLI76k6cEqWqEydxbZjJZl7FjE=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +49,9 @@ buildDunePackage' rec {
     notty
     ocolor
     oseq
+    ppx_deriving
+    ppxlib
+    re
     spelll
     timedesc
     yojson
