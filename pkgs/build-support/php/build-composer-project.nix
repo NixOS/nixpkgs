@@ -1,4 +1,10 @@
-{ callPackage, stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper, fetchFromGitHub, fetchurl }:
+{
+  callPackage,
+  stdenvNoCC,
+  lib,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   buildComposerProjectOverride = finalAttrs: previousAttrs:
@@ -62,20 +68,29 @@ let
         runHook postInstallCheck
       '';
 
-      composerRepository = phpDrv.mkComposerRepository {
-        inherit composer composer-local-repo-plugin;
-        inherit (finalAttrs) patches pname src vendorHash version;
+      composerRepository =
+        previousAttrs.composerRepository or (phpDrv.mkComposerRepository {
+          inherit composer composer-local-repo-plugin;
+          inherit (finalAttrs)
+            patches
+            pname
+            src
+            vendorHash
+            version
+            ;
 
-        composerLock = previousAttrs.composerLock or null;
-        composerNoDev = previousAttrs.composerNoDev or true;
-        composerNoPlugins = previousAttrs.composerNoPlugins or true;
-        composerNoScripts = previousAttrs.composerNoScripts or true;
-        composerStrictValidation = previousAttrs.composerStrictValidation or true;
+          composerLock = previousAttrs.composerLock or null;
+          composerNoDev = previousAttrs.composerNoDev or true;
+          composerNoPlugins = previousAttrs.composerNoPlugins or true;
+          composerNoScripts = previousAttrs.composerNoScripts or true;
+          composerStrictValidation = previousAttrs.composerStrictValidation or true;
+        });
+
+      env = {
+        COMPOSER_CACHE_DIR = "/dev/null";
+        COMPOSER_DISABLE_NETWORK = "1";
+        COMPOSER_MIRROR_PATH_REPOS = "1";
       };
-
-      COMPOSER_CACHE_DIR="/dev/null";
-      COMPOSER_DISABLE_NETWORK="1";
-      COMPOSER_MIRROR_PATH_REPOS="1";
 
       meta = previousAttrs.meta or { } // {
         platforms = lib.platforms.all;

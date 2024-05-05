@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     install -D $src $out/libexec/composer/composer.phar
-    makeWrapper ${php}/bin/php $out/bin/composer \
+    makeWrapper ${lib.getExe php} $out/bin/composer \
       --add-flags "$out/libexec/composer/composer.phar" \
       --prefix PATH : ${lib.makeBinPath [ _7zz cacert curl git unzip xz ]}
 
@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Dependency Manager for PHP, shipped from the PHAR file";
     homepage = "https://getcomposer.org/";
     license = lib.licenses.mit;
+    mainProgram = "composer";
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
