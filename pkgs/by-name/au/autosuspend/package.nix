@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
   version = "7.0.0";
 
-  disabled = python3.pythonOlder "3.8";
+  disabled = python3.pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "languitar";
