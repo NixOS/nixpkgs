@@ -1,15 +1,16 @@
-{ lib
-, ocamlPackages
-, stdenv
-, overrideSDK
-, fetchFromGitHub
-, python3
-, dune_3
-, makeWrapper
-, pandoc
-, poppler_utils
-, testers
-, docfd
+{
+  lib,
+  ocamlPackages,
+  stdenv,
+  overrideSDK,
+  fetchFromGitHub,
+  python3,
+  dune_3,
+  makeWrapper,
+  pandoc,
+  poppler_utils,
+  testers,
+  docfd,
 }:
 
 let
@@ -31,7 +32,12 @@ buildDunePackage' rec {
     hash = "sha256-fgwUXRZ6k5i3XLxXpjbrl0TJZMT+NkGXf7KNwRgi+q8=";
   };
 
-  nativeBuildInputs = [ python3 dune_3 makeWrapper ];
+  nativeBuildInputs = [
+    python3
+    dune_3
+    makeWrapper
+  ];
+
   buildInputs = with ocamlPackages; [
     cmdliner
     containers-data
@@ -49,12 +55,15 @@ buildDunePackage' rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/docfd --prefix PATH : "${lib.makeBinPath [ pandoc poppler_utils ]}"
+    wrapProgram $out/bin/docfd --prefix PATH : "${
+      lib.makeBinPath [
+        pandoc
+        poppler_utils
+      ]
+    }"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = docfd;
-  };
+  passthru.tests.version = testers.testVersion { package = docfd; };
 
   meta = with lib; {
     description = "TUI multiline fuzzy document finder";
