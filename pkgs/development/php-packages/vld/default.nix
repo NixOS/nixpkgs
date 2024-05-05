@@ -1,11 +1,13 @@
-{ lib
-, buildPecl
-, fetchFromGitHub
+{
+  lib,
+  buildPecl,
+  fetchFromGitHub,
 }:
 
 let
   version = "0.18.0";
-in buildPecl {
+in
+buildPecl {
   inherit version;
 
   pname = "vld";
@@ -20,7 +22,7 @@ in buildPecl {
   # Tests relies on PHP 7.0
   doCheck = false;
 
-  meta =  {
+  meta = {
     changelog = "https://github.com/derickr/vld/releases/tag/${version}";
     description = "The Vulcan Logic Dumper hooks into the Zend Engine and dumps all the opcodes (execution units) of a script.";
     homepage = "https://github.com/derickr/vld";

@@ -276,8 +276,11 @@ in {
             ${lib.optionalString (cfg.mail.smtp.passwordFile != null)
               ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
 
-            # setup
-            ${cfg.package}/createdb.sh
+            ${lib.optionalString cfg.database.postgres.setup ''
+              # setup
+              ${cfg.package}/createdb.sh"
+            ''}
+
             ${cfg.package}/migrate.sh
             export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
             ${cfg.package}/bin/plausible eval "(Plausible.Release.prepare() ; Plausible.Auth.create_user(\"$ADMIN_USER_NAME\", \"$ADMIN_USER_EMAIL\", \"$ADMIN_USER_PWD\"))"

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, freebsd-lib
+{ stdenv, mkDerivation, freebsd-lib, patchesRoot
 , buildPackages
 , bsdSetupHook, freebsdSetupHook
 , makeMinimal, install, mandoc, groff
@@ -19,8 +19,8 @@ in rec {
   ];
 
   patches = [
-    ./sys-gnu-date.patch
-    ./sys-no-explicit-intrinsics-dep.patch
+    /${patchesRoot}/sys-gnu-date.patch
+    /${patchesRoot}/sys-no-explicit-intrinsics-dep.patch
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.

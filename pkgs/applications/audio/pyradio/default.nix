@@ -28,6 +28,12 @@ python3Packages.buildPythonApplication rec {
     rich
   ];
 
+  postPatch = ''
+    # Disable update check
+    substituteInPlace pyradio/config \
+      --replace-fail "distro = None" "distro = NixOS"
+  '';
+
   checkPhase = ''
     $out/bin/pyradio --help
   '';

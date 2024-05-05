@@ -249,6 +249,8 @@ self: super: with self; {
 
   aiohttp-fast-url-dispatcher = callPackage ../development/python-modules/aiohttp-fast-url-dispatcher { };
 
+  aiohttp-isal = callPackage ../development/python-modules/aiohttp-isal { };
+
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
   aiohttp-oauthlib = callPackage ../development/python-modules/aiohttp-oauthlib { };
@@ -258,6 +260,8 @@ self: super: with self; {
   aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
   aiohttp-retry = callPackage ../development/python-modules/aiohttp-retry { };
+
+  aiohttp-session = callPackage ../development/python-modules/aiohttp-session { };
 
   aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
 
@@ -306,6 +310,8 @@ self: super: with self; {
   aiolivisi = callPackage ../development/python-modules/aiolivisi { };
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
+
+  aiomcache = callPackage ../development/python-modules/aiomcache { };
 
   aiomisc = callPackage ../development/python-modules/aiomisc { };
 
@@ -5897,6 +5903,8 @@ self: super: with self; {
 
   irctokens = callPackage ../development/python-modules/irctokens { };
 
+  isal = callPackage ../development/python-modules/isal { };
+
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
   islpy = callPackage ../development/python-modules/islpy { };
@@ -6563,6 +6571,8 @@ self: super: with self; {
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
+
+  lib4sbom = callPackage ../development/python-modules/lib4sbom { };
 
   libais = callPackage ../development/python-modules/libais { };
 

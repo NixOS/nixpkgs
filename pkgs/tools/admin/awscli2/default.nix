@@ -59,14 +59,14 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.15.38"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.15.43"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-ddZqexGrO2m8iUE9RDkks0ohm27dpitbsj+20aWUrJw=";
+    hash = "sha256-L+1+4QXDya8wwjexPB0fwx6/nRDPDrMYaaYeRm2SEU8=";
   };
 
   postPatch = ''
@@ -78,7 +78,7 @@ with py.pkgs; buildPythonApplication rec {
       --replace-fail 'prompt-toolkit>=3.0.24,<3.0.39' 'prompt-toolkit>=3.0.24'
 
     substituteInPlace requirements-base.txt \
-      --replace-fail "wheel==0.38.4" "wheel>=0.38.4"
+      --replace-fail "wheel==0.43.0" "wheel>=0.43.0"
 
     # Upstream needs pip to build and install dependencies and validates this
     # with a configure script, but we don't as we provide all of the packages

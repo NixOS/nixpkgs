@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wbg";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "wbg";
     rev = version;
-    sha256 = "sha256-JJIIqSc0qHgjtpGKai8p6vihXg16unsO7vW91pioAmc=";
+    sha256 = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
   };
 
   nativeBuildInputs = [

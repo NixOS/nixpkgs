@@ -67,7 +67,7 @@ let
       cp $out/lib/* $out/share/adapter
       cp -r adapter/scripts $out/share/adapter
       cp -t $out/share/formatters formatters/*.py
-      ln -s ${lldb.lib} $out/share/lldb
+      ln -s ${lib.getLib lldb} $out/share/lldb
       makeWrapper $out/share/adapter/codelldb $out/bin/codelldb \
         --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     '';

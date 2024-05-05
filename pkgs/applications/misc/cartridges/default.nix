@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       and more with no login necessary.
       You can sort and hide games or download cover art from SteamGridDB.
     '';
-    homepage = "https://apps.gnome.org/app/hu.kramo.Cartridges/";
+    homepage = "https://apps.gnome.org/Cartridges/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.getchoo ];
     platforms = platforms.linux;
