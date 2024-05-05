@@ -285,12 +285,8 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   ''
-  + lib.optionalString (version == "9.0.2" || lib.versionAtLeast version "9.4") ''
-
-  '' + ''
+  + ''
     echo -n "${buildMK}" > mk/build.mk
-  '' + lib.optionalString (lib.versionAtLeast version "9.4") ''
-
   ''
   + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
