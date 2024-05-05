@@ -1,12 +1,13 @@
-{ lib
-, astropy
-, buildPythonPackage
-, dask
-, fetchPypi
-, numpy
-, oldest-supported-numpy
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  astropy,
+  buildPythonPackage,
+  dask,
+  fetchPypi,
+  numpy,
+  oldest-supported-numpy,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-FpQj0XeZ7vvOzUM/+5qG6FRwNXl3gzoUBItYdQ1M4m4=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    oldest-supported-numpy
-  ];
+  nativeBuildInputs = [ oldest-supported-numpy ];
 
   dependencies = [
     astropy
