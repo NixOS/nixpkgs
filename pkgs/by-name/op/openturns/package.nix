@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ceres-solver
     dlib
     hdf5
-    primesieve
+    (lib.getLib primesieve)
     pagmo2
     ipopt
   ] ++ lib.optionals enablePython [
