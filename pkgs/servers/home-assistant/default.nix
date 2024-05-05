@@ -52,6 +52,16 @@ let
         ];
       });
 
+      aiolyric = super.aiolyric.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "timmo001";
+          repo = "aiolyric";
+          rev = "refs/tags/${version}";
+          hash = "sha256-FZhLjVrLzLv6CZz/ROlvbtBK9XnpO8pG48aSIoBxhCo=";
+        };
+      });
+
       aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
         version = "2022.12.1";
         src = fetchFromGitHub {
