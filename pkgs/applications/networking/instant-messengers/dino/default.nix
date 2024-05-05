@@ -21,6 +21,7 @@
 , gst-plugins-bad
 , gst-vaapi
 , webrtc-audio-processing
+, fetchpatch2
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,20 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-smy/t6wTCnG0kuRFKwyeLENKqOQDhL0fZTtj3BHo6kw=";
   };
+
+  patches = [
+    # see https://github.com/dino/dino/issues/1576
+    # remove after next release
+    (fetchpatch2 {
+      name = "fix-build-with-newer-vala.patch";
+      url = "https://github.com/dino/dino/commit/657502955567dd538e56f300e075c7db52e25d74.patch";
+      # plugin was moved from plugins/gpgme-vala/vapi/gpgme_public.vapi to plugins/openpgp/vapi/gpgme.vapi
+      # hence, move the patch back so it applies properly
+      # also, unindent patch by 4 spaces
+      decode = "sed -e 's|        |    |g' -e 's|plugins/openpgp/vapi/gpgme.vapi|plugins/gpgme-vala/vapi/gpgme_public.vapi|g'";
+      hash = "sha256-WFKgAvtg9jACujwFz60hMBNdp29HSgz0JZWcWKaeJeo=";
+    })
+  ];
 
   postPatch = ''
     # don't overwrite manually set version information
