@@ -2759,20 +2759,38 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp-sdl = ppsspp.override {
-    enableQt = false;
-    enableVulkan = true;
-  };
+  ppsspp-sdl = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = false;
+      enableVulkan = true;
+      forceWayland = false;
+    };
+  in
+    ppsspp.override argset;
 
-  ppsspp-sdl-wayland = ppsspp.override {
-    forceWayland = true;
-    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
-  };
+  ppsspp-sdl-wayland = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = false;
+      enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
+      forceWayland = true;
+    };
+  in
+    ppsspp.override argset;
 
-  ppsspp-qt = ppsspp.override {
-    enableQt = true;
-    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
-  };
+  ppsspp-qt = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = true;
+      enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
+      forceWayland = false;
+    };
+  in
+    ppsspp.override argset;
 
   proton-caller = callPackage ../applications/emulators/proton-caller { };
 
