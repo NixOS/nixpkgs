@@ -53,6 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Dependency Manager for PHP, shipped from the PHAR file";
     homepage = "https://getcomposer.org/";
     license = lib.licenses.mit;
+    mainProgram = "composer";
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
