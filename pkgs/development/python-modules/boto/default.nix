@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpretty
-, mock
-, nose
-, python
-, pythonAtLeast
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpretty,
+  mock,
+  nose,
+  python,
+  pythonAtLeast,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
       --replace-fail 'import collections' 'import collections.abc as collections'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
@@ -57,9 +56,7 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  pythonImportsCheck = [
-    "boto"
-  ];
+  pythonImportsCheck = [ "boto" ];
 
   meta = with lib; {
     description = "Python interface to Amazon Web Services";
