@@ -4,10 +4,10 @@
 , fetchFromGitHub
 , isPyPy
 
-# nativeBuildInputs
+# build-system
 , flit-core
 
-# propagatedBuildInputs
+# dependencies
 , babel
 , alabaster
 , docutils
@@ -25,6 +25,7 @@
 , sphinxcontrib-qthelp
 , sphinxcontrib-serializinghtml
 , sphinxcontrib-websupport
+, tomli
 
 # check phase
 , defusedxml
@@ -54,11 +55,11 @@ buildPythonPackage rec {
     hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alabaster
     babel
     docutils
@@ -76,6 +77,8 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
