@@ -2,11 +2,8 @@
   callPackage,
   stdenvNoCC,
   lib,
-  writeTextDir,
   php,
-  makeBinaryWrapper,
   fetchFromGitHub,
-  fetchurl,
 }:
 
 let

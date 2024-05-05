@@ -2,7 +2,6 @@
   callPackage,
   stdenvNoCC,
   lib,
-  writeTextDir,
   fetchFromGitHub,
   php,
 }:
