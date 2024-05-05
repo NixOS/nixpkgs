@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "4.1.0";
+  version = "4.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -36,19 +36,8 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-Z3flDC102FwEaNtef0YAfmAFSxpimQNyxt9tRfpKueg=";
+    hash = "sha256-ksLpxfRxrNVXezF0VjbAqadpF6bv/SAOOnCKabhugo0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # add missing test marker on networked test
-      url = "https://github.com/py-pdf/pypdf/commit/f43268734a529d4098e6258bf346148fd24c54f0.patch";
-      includes = [
-        "tests/test_generic.py"
-      ];
-      hash = "sha256-Ow32UB4crs3OgT+AmA9TNmcO5Y9SoSahybzD3AmWmVk=";
-    })
-  ];
 
   outputs = [
     "out"
