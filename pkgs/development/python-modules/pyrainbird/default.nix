@@ -4,9 +4,9 @@
 , fetchFromGitHub
 , freezegun
 , ical
+, mashumaro
 , parameterized
 , pycryptodome
-, pydantic
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-golden
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "4.0.2";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "pyrainbird";
     rev = "refs/tags/${version}";
-    hash = "sha256-4AoxLZv0u8wCG3ihw0JqsqsO5zG5UyP4ebSX99ve8sg=";
+    hash = "sha256-72FmcZOCe90Yt/Osa5YALMbdZwxwNgTbpXSmvJdkC8Q=";
   };
 
   postPatch = ''
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp-retry
     ical
+    mashumaro
     pycryptodome
-    pydantic
     python-dateutil
     pyyaml
     requests
