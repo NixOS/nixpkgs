@@ -4,6 +4,8 @@
 {
   android-tv-card = callPackage ./android-tv-card { };
 
+  button-card = callPackage ./button-card { };
+
   light-entity-card = callPackage ./light-entity-card { };
 
   mini-graph-card = callPackage ./mini-graph-card {};
