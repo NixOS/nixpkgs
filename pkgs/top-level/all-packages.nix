@@ -7025,7 +7025,8 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
-  clamav = darwin.apple_sdk_11_0.callPackage ../tools/security/clamav {
+  clamav = callPackage ../tools/security/clamav {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
