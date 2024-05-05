@@ -1,22 +1,23 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
-, python
-, nose
-, mock
-, requests
 , httpretty
+, mock
+, nose
+, python
+, pythonAtLeast
+, requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a";
+    hash = "sha256-6g07QKLYUnZ753yjQ7WKnjpLANnbRA77jadLTlgCXlo=";
   };
 
   patches = [
@@ -32,26 +33,43 @@ buildPythonPackage rec {
   # this patch is a bit simpler than https://github.com/boto/boto/pull/3898
   # as we don't have to take care of pythonOlder "3.3".
   postPatch = ''
-    substituteInPlace boto/dynamodb/types.py --replace 'from collections import Mapping' 'from collections.abc import Mapping'
-    substituteInPlace boto/mws/connection.py --replace 'import collections' 'import collections.abc as collections'
+    substituteInPlace boto/dynamodb/types.py \
+      --replace-fail 'from collections import Mapping' 'from collections.abc import Mapping'
+    substituteInPlace boto/mws/connection.py \
+      --replace-fail 'import collections' 'import collections.abc as collections'
   '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    requests
+    httpretty
+  ];
+
+  nativeCheckInputs = [
+    mock
+    nose
+  ];
 
   checkPhase = ''
     ${python.interpreter} tests/test.py default
   '';
 
-  nativeCheckInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  pythonImportsCheck = [
+    "boto"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/boto/boto";
-    license = licenses.mit;
     description = "Python interface to Amazon Web Services";
     longDescription = ''
       The boto module is an integrated interface to current and
       future infrastructural services offered by Amazon Web
-      Services.  This includes S3, SQS, EC2, among others.
+      Services. This includes S3, SQS, EC2, among others.
     '';
-    maintainers = [ ];
+    homepage = "https://github.com/boto/boto";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }
