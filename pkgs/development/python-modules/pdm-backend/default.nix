@@ -9,25 +9,26 @@
 # tests
 , editables
 , git
+, mercurial
 , pytestCheckHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.2.1";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
     rev = "refs/tags/${version}";
-    hash = "sha256-WvRpZD486yGP9qqxZyiErfEuIyrULDbzKAoFwroV1KE=";
+    hash = "sha256-V+NESf7NavR6L6ko4Oh4KhAR2iIN5GiHZPELwvkpr4c=";
   };
 
   env.PDM_BUILD_SCM_VERSION = version;
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+  dependencies = lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
 
@@ -38,12 +39,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     editables
     git
+    mercurial
     pytestCheckHook
     setuptools
   ];
 
   preCheck = ''
     unset PDM_BUILD_SCM_VERSION
+
+    # tests require a configured git identity
+    export HOME=$TMPDIR
+    git config --global user.email nixbld@localhost
   '';
 
   setupHook = ./setup-hook.sh;
