@@ -6,6 +6,8 @@
 
   button-card = callPackage ./button-card { };
 
+  card-mod = callPackage ./card-mod { };
+
   light-entity-card = callPackage ./light-entity-card { };
 
   mini-graph-card = callPackage ./mini-graph-card {};
