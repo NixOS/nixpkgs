@@ -1,101 +1,115 @@
 {
   lib,
-  stdenv,
   fetchFromGitLab,
+  gtksourceview5,
+  libspelling,
+  fetchFromGitHub,
+  python3Packages,
   meson,
   ninja,
-  wrapGAppsHook3,
   pkg-config,
+  wrapGAppsHook4,
   desktop-file-utils,
-  appstream-glib,
-  python3Packages,
-  glib,
   gobject-introspection,
-  gtk3,
-  webkitgtk,
-  glib-networking,
-  gnome,
-  gspell,
+  libadwaita,
+  webkitgtk_6_0,
   texliveMedium,
   shared-mime-info,
-  libhandy,
-  fira,
-  sassc,
 }:
 
 let
-  pythonEnv = python3Packages.python.withPackages (
-    p: with p; [
-      regex
-      setuptools
-      levenshtein
-      pyenchant
-      pygobject3
-      pycairo
-      pypandoc
-      chardet
-    ]
-  );
-in
-stdenv.mkDerivation rec {
-  pname = "apostrophe";
-  version = "2.6.3";
+  version = "3.0";
 
   src = fetchFromGitLab {
     owner = "World";
-    repo = pname;
+    repo = "apostrophe";
     domain = "gitlab.gnome.org";
     rev = "v${version}";
-    sha256 = "sha256-RBrrG1TO810LidIelYGNaK7PjDq84D0cA8VcMojAW3M=";
+    sha256 = "sha256-wKxRCU00nSk7F8IZNWoLRtGs3m6ol3UBnArtppUOz/g=";
   };
+
+  # Patches are required by upstream. Without the patches
+  # typing `- aaa`, newline, `- bbb` the program crashes
+  gtksourceview5-patched = gtksourceview5.overrideAttrs (prev: {
+    patches = (prev.patches or [ ]) ++ [ "${src}/build-aux/flatpak/sourceview_text_commits.patch" ];
+  });
+
+  libspelling-patched =
+    (libspelling.override { gtksourceview5 = gtksourceview5-patched; }).overrideAttrs
+      (prev: {
+        patches = (prev.patches or [ ]) ++ [ "${src}/build-aux/flatpak/libspelling_text_commits.patch" ];
+      });
+
+  reveal-js = fetchFromGitHub {
+    owner = "hakimel";
+    repo = "reveal.js";
+
+    # keep in sync with upstream shipped version
+    # in build-aux/flatpak/org.gnome.gitlab.somas.Apostrophe.json
+    rev = "4.6.0";
+    hash = "sha256-a+J+GasFmRvu5cJ1GLXscoJ+owzFXsLhCbeDbYChkyQ=";
+  };
+in
+python3Packages.buildPythonApplication rec {
+  inherit version src;
+  pname = "apostrophe";
+  pyproject = false;
+
+  postPatch =
+    ''
+      substituteInPlace build-aux/meson_post_install.py \
+        --replace-fail 'gtk-update-icon-cache' 'gtk4-update-icon-cache'
+
+      patchShebangs --build build-aux/meson_post_install.py
+    ''
+    # Should be done in postInstall, but meson checks this eagerly before build
+    + ''
+      install -d $out/share/apostrophe/libs
+      cp -r ${reveal-js} $out/share/apostrophe/libs/reveal.js
+    '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wrapGAppsHook4
     desktop-file-utils
-    appstream-glib
-    wrapGAppsHook3
-    sassc
     gobject-introspection
   ];
 
   buildInputs = [
-    glib
-    pythonEnv
-    gtk3
-    gnome.adwaita-icon-theme
-    webkitgtk
-    gspell
-    texliveMedium
-    glib-networking
-    libhandy
+    libadwaita
+    gtksourceview5-patched
+    libspelling-patched
+    webkitgtk_6_0
   ];
 
-  postPatch = ''
-    substituteInPlace data/media/css/web/base.css                                        \
-      --replace 'url("/app/share/fonts/FiraSans-Regular.ttf") format("ttf")'             \
-                'url("${fira}/share/fonts/opentype/FiraSans-Regular.otf") format("otf")' \
-      --replace 'url("/app/share/fonts/FiraMono-Regular.ttf") format("ttf")'             \
-                'url("${fira}/share/fonts/opentype/FiraMono-Regular.otf") format("otf")'
+  propagatedBuildInputs = with python3Packages; [
+    pygobject3
+    pypandoc
+    chardet
+  ];
 
-    patchShebangs --build build-aux/meson_post_install.py
-  '';
+  dontWrapGApps = true;
 
   preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
+    makeWrapperArgs+=(
+      ''${gappsWrapperArgs[@]}
       --prefix PATH : "${texliveMedium}/bin"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';
 
-  meta = with lib; {
+  passthru = {
+    inherit gtksourceview5-patched libspelling-patched reveal-js;
+  };
+
+  meta = {
     homepage = "https://gitlab.gnome.org/World/apostrophe";
     description = "A distraction free Markdown editor for GNU/Linux";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sternenseemann ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sternenseemann ];
     mainProgram = "apostrophe";
   };
 }
