@@ -1,4 +1,10 @@
-{ callPackage, stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper, fetchFromGitHub, fetchurl }:
+{
+  callPackage,
+  stdenvNoCC,
+  lib,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   buildComposerProjectOverride = finalAttrs: previousAttrs:

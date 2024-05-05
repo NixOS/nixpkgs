@@ -1,4 +1,10 @@
-{ callPackage, stdenvNoCC, lib, writeTextDir, fetchFromGitHub, php }:
+{
+  callPackage,
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  php,
+}:
 
 let
   mkComposerRepositoryOverride =
