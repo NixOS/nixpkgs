@@ -19,7 +19,7 @@
 , mpi
 , ninja
 , ode
-, opencascade-occt
+, opencascade-occt_7_6
 , pkg-config
 , python3Packages
 , runCommand  # for passthru.tests
@@ -33,6 +33,7 @@
 }:
 
 let
+  opencascade-occt = opencascade-occt_7_6;
   boost = python3Packages.boost;
   inherit (libsForQt5)
     qtbase
