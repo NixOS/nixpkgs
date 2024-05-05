@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ patchelf unzip ];
   buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
+  strictDeps = true;
 
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
