@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "wsgidav";
-  version = "4.3.2";
+  version = "4.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,10 @@ buildPythonPackage rec {
     owner = "mar10";
     repo = "wsgidav";
     rev = "refs/tags/v${version}";
-    hash = "sha256-93+8h+vRLnspQ/lmdjKYpzSEJSKcqCkB4qRqTuKHNRA=";
+    hash = "sha256-vUqNC7ixpta0s7wRC5ROSKMa/MsgEBu5rr0XNu69FRw=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [
     setuptools
@@ -39,8 +41,6 @@ buildPythonPackage rec {
     python-pam
     pyyaml
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     cheroot
