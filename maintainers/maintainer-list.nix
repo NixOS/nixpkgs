@@ -20484,6 +20484,12 @@
     email = "tomaszierl@outlook.com";
     name = "Tomkoid";
   };
+  Tommimon = {
+    name = "Tommaso Montanari";
+    email = "sefymw7q8@mozmail.com";
+    github = "Tommimon";
+    githubId = 37435103;
+  };
   tomodachi94 = {
     email = "tomodachi94+nixpkgs@protonmail.com";
     matrix = "@tomodachi94:matrix.org";
