@@ -6,6 +6,7 @@
 , asciidoc
 , makeWrapper
 , iw
+, wrapGAppsNoGuiHook
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     asciidoc
     makeWrapper
     python3Packages.wrapPython
+    wrapGAppsNoGuiHook
   ];
 
   checkInputs = with python3Packages; [
