@@ -18,13 +18,13 @@ let
 in
 buildPythonPackage rec {
   pname = "argostranslate";
-  version = "1.9.3";
+  version = "1.9.6";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N1Dh8238cDKpIMeQT645lDvYMbOWjVqGuWxt37+TQmQ=";
+    sha256 = "sha256-3YzBMnqmcTIpn5UOFg3SDTFLjPSE9UDw0i8fB8LYh2s=";
   };
 
   propagatedBuildInputs = [
