@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , installShellFiles
 , mock
@@ -12,6 +13,7 @@
 
 # docs
 , sphinx
+, tomli
 
 # coupled downsteam dependencies
 , pip-tools
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
     # docs
     sphinx
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   outputs = [
     "out"
