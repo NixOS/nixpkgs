@@ -14077,6 +14077,8 @@ with pkgs;
 
   viking = callPackage ../applications/misc/viking { };
 
+  vikunja = callPackage ../by-name/vi/vikunja/package.nix { pnpm = pnpm_8; };
+
   vim-vint = callPackage ../development/tools/vim-vint { };
 
   vimer = callPackage ../tools/misc/vimer { };
