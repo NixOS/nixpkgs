@@ -37,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ bmanuel linj ];
     platforms = platforms.unix;
     mainProgram = "kanata";
+    broken = stdenv.isDarwin;
   };
 }
