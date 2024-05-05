@@ -31877,8 +31877,6 @@ with pkgs;
 
   waylevel = callPackage ../tools/misc/waylevel { };
 
-  wbg = callPackage ../applications/misc/wbg { };
-
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
