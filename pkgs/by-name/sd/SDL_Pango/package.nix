@@ -1,33 +1,57 @@
-{ lib, stdenv, fetchpatch, fetchurl, SDL, autoreconfHook, pango, pkg-config }:
+{
+  lib,
+  SDL,
+  autoreconfHook,
+  fetchpatch,
+  fetchurl,
+  pango,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  enableSdltest ? (!stdenv.isDarwin),
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_Pango";
   version = "0.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sdlpango/${pname}-${version}.tar.gz";
-    sha256 = "197baw1dsg0p4pljs5k0fshbyki00r4l49m1drlpqw6ggawx6xbz";
+    url = "mirror://sourceforge/sdlpango/SDL_Pango-${finalAttrs.version}.tar.gz";
+    hash = "sha256-f3XTuXrPcHxpbqEmQkkGIE6/oHZgFi3pJRc83QJX66Q=";
   };
 
   patches = [
     (fetchpatch {
+      name = "0000-api_additions.patch";
       url = "https://sources.debian.org/data/main/s/sdlpango/0.1.2-6/debian/patches/api_additions.patch";
-      sha256 = "00p5ry5gd3ixm257p9i2c4jg0qj8ipk8nf56l7c9fma8id3zxyld";
+      hash = "sha256-jfr+R4tIVZfYoaY4i+aNSGLwJGEipnuKqD2O9orP5QI=";
     })
-    ./fixes.patch
+    ./0001-fixes.patch
   ];
 
-  preConfigure = "autoreconf -i -f";
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  nativeBuildInputs = [
+    SDL
+    autoreconfHook
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ SDL pango ];
+  buildInputs = [
+    SDL
+    pango
+  ];
 
-  meta = with lib; {
-    description = "Connects the Pango rendering engine to SDL";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+  configureFlags = [
+    (lib.enableFeature enableSdltest "sdltest")
+  ];
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://sdlpango.sourceforge.net/";
-    maintainers = with maintainers; [ puckipedia ];
+    description = "Connects the Pango rendering engine to SDL";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ puckipedia ]);
+    inherit (SDL.meta) platforms;
   };
-}
+})
