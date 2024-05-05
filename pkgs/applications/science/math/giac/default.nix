@@ -94,6 +94,8 @@ stdenv.mkDerivation rec {
     "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
     "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
     "--enable-ao" "--enable-ecm" "--enable-glpk"
+    # fails to build with more recent standards, eg on darwin
+    "CXXFLAGS=-std=c++11" "CFLAGS=-Wno-error=implicit-function-declaration"
   ] ++ lib.optionals enableGUI [
     "--enable-gui" "--with-x"
   ] ++ lib.optionals (!enableGUI) [
