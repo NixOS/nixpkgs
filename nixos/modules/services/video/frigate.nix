@@ -429,7 +429,7 @@ in
         CacheDirectoryMode = "0750";
 
         BindPaths = [
-          "/migrations:${cfg.package}/share/frigate/migrations:ro"
+          "${cfg.package}/share/frigate/migrations:/migrations"
         ];
       };
     };
