@@ -72,22 +72,23 @@ let
           runHook postInstallCheck
         '';
 
-      composerRepository = phpDrv.mkComposerRepository {
-        inherit composer composer-local-repo-plugin;
-        inherit (finalAttrs)
-          patches
-          pname
-          src
-          vendorHash
-          version
-          ;
+      composerRepository =
+        previousAttrs.composerRepository or (phpDrv.mkComposerRepository {
+          inherit composer composer-local-repo-plugin;
+          inherit (finalAttrs)
+            patches
+            pname
+            src
+            vendorHash
+            version
+            ;
 
-        composerLock = previousAttrs.composerLock or null;
-        composerNoDev = previousAttrs.composerNoDev or true;
-        composerNoPlugins = previousAttrs.composerNoPlugins or true;
-        composerNoScripts = previousAttrs.composerNoScripts or true;
-        composerStrictValidation = previousAttrs.composerStrictValidation or true;
-      };
+          composerLock = previousAttrs.composerLock or null;
+          composerNoDev = previousAttrs.composerNoDev or true;
+          composerNoPlugins = previousAttrs.composerNoPlugins or true;
+          composerNoScripts = previousAttrs.composerNoScripts or true;
+          composerStrictValidation = previousAttrs.composerStrictValidation or true;
+        });
 
       env = {
         COMPOSER_CACHE_DIR = "/dev/null";
