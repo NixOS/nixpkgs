@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform }:
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
-  version = "1.0.1";
+  version = "1.1.0";
 
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
@@ -9,10 +9,10 @@ rustPlatform.buildRustPackage rec {
     owner = "LucasPickering";
     repo = "slumber";
     rev = "v${version}";
-    hash = "sha256-FXw3hVVY/f49leo9t+z52+Ti9XGk6UJDtd0VpQDQb/o=";
+    hash = "sha256-398XqowI3zEgiU1XolLj3q1m4foC6aGGL+B3Q4plbTw=";
   };
 
-  cargoHash = "sha256-odLFfq3qjCQUNDauFtlOaKrsYVspAIxAc/pRSEZyIwo=";
+  cargoHash = "sha256-AK/+1tCdvNucIbxwyqOt/TbOaJPVDOKFEx5NqW2Yd4U=";
 
   meta = with lib; {
     description = "Terminal-based HTTP/REST client";
