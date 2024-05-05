@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytado";
-  version = "0.17.5";
+  version = "0.17.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "wmalgadey";
     repo = "PyTado";
     rev = "refs/tags/${version}";
-    hash = "sha256-FjdqZc4Zt2sLYJpnD/MAzr8Y9lGHteHB5psQqheS84I=";
+    hash = "sha256-KcYxUKQuO7TLS4YPg2mrBjP+DMnvZeJokGzwmeM/CvE=";
   };
 
   nativeBuildInputs = [
