@@ -1,24 +1,25 @@
-{ lib
-, aiohttp-retry
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, ical
-, mashumaro
-, parameterized
-, pycryptodome
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-golden
-, pytest-mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pyyaml
-, requests
-, requests-mock
-, responses
-, setuptools
+{
+  lib,
+  aiohttp-retry,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  ical,
+  mashumaro,
+  parameterized,
+  pycryptodome,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-golden,
+  pytest-mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  requests-mock,
+  responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
       --replace-fail "--cov=pyrainbird --cov-report=term-missing" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp-retry
@@ -68,9 +67,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "pyrainbird"
-  ];
+  pythonImportsCheck = [ "pyrainbird" ];
 
   meta = with lib; {
     description = "Module to interact with Rainbird controllers";
