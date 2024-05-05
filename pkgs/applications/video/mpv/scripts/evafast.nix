@@ -21,7 +21,7 @@ buildLua {
   meta = with lib; {
     description = "Seeking and hybrid fastforwarding like VHS";
     homepage = "https://github.com/po5/evafast";
-    license = licenses.unfree; # no explicit licensing information available
+    license = licenses.unfree; # no license; see https://github.com/po5/evafast/issues/15
     maintainers = with lib.maintainers; [ purrpurrn ];
   };
 }
