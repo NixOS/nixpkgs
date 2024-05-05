@@ -82,9 +82,6 @@ self: super: {
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
 
-  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
-  monoidal-containers = doJailbreak super.monoidal-containers;
-
   # Jailbreak to fix the build.
   brick = doJailbreak super.brick;
   exact-pi = doJailbreak super.exact-pi;
