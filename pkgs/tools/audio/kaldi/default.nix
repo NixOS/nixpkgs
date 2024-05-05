@@ -19,7 +19,7 @@
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaldi";
-  version = "unstable-2024-01-31";
+  version = "0-unstable-2024-01-31";
 
   src = fetchFromGitHub {
     owner = "kaldi-asr";

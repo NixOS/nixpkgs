@@ -31,14 +31,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.76.0";
+  version = "0.76.1";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-u84wuPUENwsS1kOcB6gpk+l9fpr+LdNngXzVj/Ap/9o=";
+    hash = "sha256-CE6D73ZXdCaaSynfl8oi7cNDuaHYFDPTALjLLQh6HsI=";
   };
 
   patches = [
@@ -101,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs perf/*
-    patchShebangs src/box_drawing_generate.sh
     patchShebangs src/parser-seq.py
     patchShebangs src/modes.py
   '';
