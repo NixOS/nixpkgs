@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers._1000101 ];
     mainProgram = "swagger-codegen3";
+    platforms = platforms.all;
   };
 }
