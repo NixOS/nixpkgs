@@ -1,26 +1,45 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, jq, wofi, wtype, wl-clipboard }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  jq,
+  wofi,
+  wtype,
+  wl-clipboard,
+}:
 
-let emojiJSON = fetchurl {
-  url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.10/dist/emoji-en-US.json";
-  hash = "sha256-UhAB5hVp5vV2d1FjIb2TBd2FJ6OPBbiP31HGAEDQFnA=";};
+let
+  emojiJSON = fetchurl {
+    url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.11/dist/emoji-en-US.json";
+    hash = "sha256-WHqCSNgDzc6ZASdVrwPvsU4MtBcYLKDp2D2Hykrq1sI=";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "wofi-emoji";
-  version = "unstable-2023-06-19";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Zeioth";
-    repo = pname;
-    rev = "796d688b71ac9fa1e5b2c1b9a3fa11dba801b02b";
-    hash = "sha256-HBsqekNuKqxaKaSeLboukLm4Lkg9JakPO7uN3Z8QBC8=";
+    repo = "wofi-emoji";
+    rev = "v${version}";
+    hash = "sha256-wLZK7RcDxxlYuu27WNj+SoRoBiCqk9whp4Fyg0SOoPA=";
   };
 
   nativeBuildInputs = [ jq ];
-  buildInputs = [ wofi wtype wl-clipboard ];
+  buildInputs = [
+    wofi
+    wtype
+    wl-clipboard
+  ];
 
   postPatch = ''
     substituteInPlace build.sh \
       --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
+    substituteInPlace wofi-emoji \
+      --replace 'wofi' '${wofi}/bin/wofi' \
+      --replace 'wtype' '${wtype}/bin/wtype' \
+      --replace 'wl-copy' '${wl-clipboard}/bin/wl-copy'
   '';
 
   buildPhase = ''
@@ -40,11 +59,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple emoji selector for Wayland using wofi and wl-clipboard";
-    homepage = "https://github.com/dln/wofi-emoji";
-    license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
-    platforms = platforms.all;
+    homepage = "https://github.com/Zeioth/wofi-emoji";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ymarkus ];
+    platforms = lib.platforms.all;
+    mainProgram = "wofi-emoji";
   };
 }
