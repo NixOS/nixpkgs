@@ -8,6 +8,8 @@
 
   card-mod = callPackage ./card-mod { };
 
+  decluttering-card = callPackage ./decluttering-card { };
+
   light-entity-card = callPackage ./light-entity-card { };
 
   mini-graph-card = callPackage ./mini-graph-card {};
