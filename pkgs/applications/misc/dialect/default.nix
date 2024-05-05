@@ -20,7 +20,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.2.0";
+  version = "2.3.0";
 
   format = "other";
 
@@ -29,19 +29,10 @@ python3.pkgs.buildPythonApplication rec {
     repo = "dialect";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-+0qA+jFYrK3K3mJNvxTvnT/3q4c51H0KgEMjzvV34Zs=";
+    hash = "sha256-A6jZHcSzHSmHLvyegyzxjQ6+jL6rLb7oefhryXoSrH4=";
   };
 
-  # FIXME: remove in next release
-  postPatch = ''
-    substituteInPlace dialect/providers/lingva.py \
-      --replace-fail 'lingva.ml' 'lingva.dialectapp.org'
-    substituteInPlace dialect/providers/libretrans.py \
-      --replace-fail 'libretranslate.de' 'lt.dialectapp.org'
-  '';
-
   nativeBuildInputs = [
-    appstream-glib
     blueprint-compiler
     desktop-file-utils
     gobject-introspection

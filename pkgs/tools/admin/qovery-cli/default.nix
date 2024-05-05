@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "qovery-cli";
-  version = "0.91.3";
+  version = "0.92.2";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kdk3T699cfyIDAt1vo8nQAmkR7TanNmjjI9v80PMTuE=";
+    hash = "sha256-V5CUDBQL5ZqurNSowfh+916BScqg0o5O37pl1o8W96g=";
   };
 
-  vendorHash = "sha256-8u+V/D8Pr+VIy+6QbJYRQcfcpAbHEHN6TBitoYxgKHw=";
+  vendorHash = "sha256-6gjYnDv4L2AO47uWcp/MySX9i3IDMIWQUvgglxPCvGo=";
 
   nativeBuildInputs = [ installShellFiles ];
 

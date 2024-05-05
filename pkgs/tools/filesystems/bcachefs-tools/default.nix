@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libuuid
-, libsodium
-, keyutils
-, liburcu
-, zlib
-, libaio
-, zstd
-, lz4
-, attr
-, udev
-, nixosTests
-, fuse3
-, cargo
-, rustc
-, rustPlatform
-, makeWrapper
-, writeScript
-, python3
-, fuseSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libuuid,
+  libsodium,
+  keyutils,
+  liburcu,
+  zlib,
+  libaio,
+  zstd,
+  lz4,
+  attr,
+  udev,
+  nixosTests,
+  fuse3,
+  cargo,
+  rustc,
+  rustPlatform,
+  makeWrapper,
+  writeScript,
+  python3,
+  fuseSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.4.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+KqTiIp9dIJWG2KvgvPwXC7p754XfgvKHjvwjCdbvCs=";
+    hash = "sha256-nHT18bADESDBHoo9P+J3gGc092hRYs2vaWupgqlkvaA=";
   };
 
   nativeBuildInputs = [
@@ -42,14 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
   ];
-
-  cargoRoot = "rust-src";
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bindgen-0.64.0" = "sha256-GNG8as33HLRYJGYe0nw6qBzq86aHiGonyynEM7gaEE4=";
-    };
-  };
 
   buildInputs = [
     libaio
@@ -65,20 +58,24 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
-  # FIXME: Try enabling this once the default linux kernel is at least 6.7
-  doCheck = false; # needs bcachefs module loaded on builder
-  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    src = finalAttrs.src;
+    hash = "sha256-RsRz/nb8L+pL1U4l6RnvqeDFddPvcBFH4wdV7G60pxA=";
+  };
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
-    "BCACHEFS_FUSE=${toString fuseSupport}"
-  ];
+  ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+
+  # FIXME: Try enabling this once the default linux kernel is at least 6.7
+  doCheck = false; # needs bcachefs module loaded on builder
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
   '';
+  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
   # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
   installFlags = [
@@ -105,19 +102,20 @@ stdenv.mkDerivation (finalAttrs: {
 
       version="$(echo $res | jq '.[0].name | split("v") | .[1]' --raw-output)"
       update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
-
-      curl "https://raw.githubusercontent.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/v$version/rust-src/Cargo.lock" > \
-        "$(git rev-parse --show-toplevel)/pkgs/tools/filesystems/bcachefs-tools/Cargo.lock"
     '';
   };
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ davidak Madouura ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      davidak
+      johnrtitor
+      Madouura
+    ];
+    platforms = lib.platforms.linux;
   };
 })

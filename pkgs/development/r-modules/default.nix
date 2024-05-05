@@ -1093,6 +1093,21 @@ let
       ];
     });
 
+    timeless = old.timeless.overrideAttrs (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = attrs.src;
+        sourceRoot = "timeless/src/rust";
+        hash = "sha256-n0/52CV3NzWe7T3N6VoaURMxWrnqeYaUMPKkUy+LRQs=";
+      };
+
+      cargoRoot = "src/rust";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
+      ];
+    });
+
     stringi = old.stringi.overrideAttrs (attrs: {
       postInstall = let
         icuName = "icudt52l";
@@ -1177,6 +1192,11 @@ let
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
       };
       patchPhase = "patchShebangs configure";
+    });
+
+   rsgeo = old.rsgeo.overrideAttrs (attrs: {
+      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
     });
 
     exifr = old.exifr.overrideAttrs (attrs: {
@@ -1440,6 +1460,10 @@ let
     });
 
     OpenMx = old.OpenMx.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
       preConfigure = ''
         patchShebangs configure
         '';

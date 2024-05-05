@@ -1,4 +1,4 @@
-{ lib, mkDerivation
+{ lib, mkDerivation, patchesRoot
 , buildPackages
 , bsdSetupHook, freebsdSetupHook
 , makeMinimal
@@ -26,7 +26,7 @@ mkDerivation {
   ];
 
   patches = [
-    ./no-perms-BSD.include.dist.patch
+    /${patchesRoot}/no-perms-BSD.include.dist.patch
   ];
 
   # The makefiles define INCSDIR per subdirectory, so we have to set

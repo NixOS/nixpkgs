@@ -1,4 +1,4 @@
-{ lib, mkDerivation, stdenv }:
+{ lib, mkDerivation, stdenv, patchesRoot }:
 
 mkDerivation rec {
   path = "usr.bin/rpcgen";
@@ -12,11 +12,11 @@ mkDerivation rec {
     # those headers ends up included other headers...which ends up
     # including the other one, this means by the first time we reach
     # `#include `<bits/waitflags.h>`, both `_SYS_WAIT_H` and
-    # `_STDLIB_H` are already defined! Thus, we never ned up including
+    # `_STDLIB_H` are already defined! Thus, we never end up including
     # `<bits/waitflags.h>` and defining `WUNTRACED`.
     #
     # This hacks around this by manually including `WUNTRACED` until
     # the problem is fixed properly in glibc.
-    ./rpcgen-glibc-hack.patch
+    /${patchesRoot}/rpcgen-glibc-hack.patch
   ];
 }
