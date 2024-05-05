@@ -68,16 +68,23 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = foldr ({ oldDependency, newDependency }: drv:
+  systemWithReplacedDependencies = foldr ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
-  systemWithBuildDeps = system.overrideAttrs (o: {
-    systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
-    buildCommand = o.buildCommand + ''
-      ln -sn $systemBuildClosure $out/build-closure
-    '';
-  });
+  system = systemWithReplacedDependencies.overrideAttrs (o:
+    lib.optionalAttrs config.system.includeBuildDependencies {
+      systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
+      buildCommand = o.buildCommand + ''
+        ln -sn $systemBuildClosure $out/build-closure
+      '';
+    } // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") rec {
+      systemWithoutExtraDependencies = systemWithReplacedDependencies.overrideAttrs (_: { systemWithoutExtraDependencies = null; extraDependencies = []; closureInfo = null; });
+      closureInfo = pkgs.closureInfo { rootPaths = [
+        # override to avoid infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
+        systemWithoutExtraDependencies
+      ]; };
+    });
 
 in
 
@@ -167,6 +174,8 @@ in
       description = ''
         A POSIX Extended Regular Expression that matches store paths that
         should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
+
+        Similar to the disallowedRequisites field on derivations.
       '';
     };
 
@@ -293,7 +302,11 @@ in
         ''
           if [[ $forbiddenDependenciesRegex != "" && -n $closureInfo ]]; then
             if forbiddenPaths="$(grep -E -- "$forbiddenDependenciesRegex" $closureInfo/store-paths)"; then
-              echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
+              ${config.nix.package}/bin/nix-store --load-db < $closureInfo/registration --store $PWD
+              echo "System depends on paths forbidden by system.forbiddenDependenciesRegex:"
+              for path in $forbiddenPaths; do
+                PAGER= ${config.nix.package}/bin/nix --offline --store $PWD why-depends --experimental-features nix-command $systemWithoutExtraDependencies $path
+              done
               exit 1
             fi
           fi
@@ -321,14 +334,9 @@ in
     }
     // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
       inherit (config.system) forbiddenDependenciesRegex;
-      closureInfo = pkgs.closureInfo { rootPaths = [
-        # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
-        (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
-      ]; };
     };
 
-
-    system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
+    system.build.toplevel = system;
 
   };
 

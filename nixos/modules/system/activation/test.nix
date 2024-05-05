@@ -2,6 +2,7 @@
 , nixos
 , expect
 , testers
+, runCommand
 }:
 let
   node-forbiddenDependencies-fail = nixos ({ ... }: {
@@ -21,7 +22,14 @@ let
     boot.loader.grub.enable = false;
   });
 in
-lib.recurseIntoAttrs {
+lib.recurseIntoAttrs rec {
   test-forbiddenDependencies-fail = testers.testBuildFailure node-forbiddenDependencies-fail.config.system.build.toplevel;
+  # The build log for the system with the forbidden dependency should
+  # show the path to the dependency, via the etc derivation.
+  test-forbiddenDependencies-fail-message = runCommand "check-failure-message" {} ''
+    grep ${node-forbiddenDependencies-fail.config.system.build.etc} ${test-forbiddenDependencies-fail}/testBuildFailure.log
+    grep ${expect.dev} ${test-forbiddenDependencies-fail}/testBuildFailure.log
+    touch $out
+  '';
   test-forbiddenDependencies-succeed = node-forbiddenDependencies-succeed.config.system.build.toplevel;
 }
