@@ -16,6 +16,9 @@
   nanomsg,
   nanopbMalloc,
   python3Packages,
+  testers,
+  criterion,
+  callPackage
 }:
 
 let
@@ -89,6 +92,16 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  passthru.tests.version =
+    let
+      tester = callPackage ./tests/001-version.nix {};
+    in
+    testers.testVersion {
+      package = criterion;
+      command = "${lib.getExe tester} --version";
+      version = "v${version}";
+    };
 
   meta = {
     description = "A cross-platform C and C++ unit testing framework for the 21th century";
