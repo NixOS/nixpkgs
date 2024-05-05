@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/biojppm/rapidyaml";
     license = licenses.mit;
     maintainers = with maintainers; [ martfont ];
+    platforms = platforms.all;
   };
 }
