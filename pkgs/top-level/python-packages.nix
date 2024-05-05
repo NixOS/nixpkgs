@@ -14283,6 +14283,8 @@ self: super: with self; {
 
   sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp { };
 
+  sphinxcontrib-ditaa = callPackage ../development/python-modules/sphinxcontrib-ditaa { };
+
   sphinxcontrib-excel-table = callPackage ../development/python-modules/sphinxcontrib-excel-table { };
 
   sphinxcontrib-fulltoc = callPackage ../development/python-modules/sphinxcontrib-fulltoc { };
