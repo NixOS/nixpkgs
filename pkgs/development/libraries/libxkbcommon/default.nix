@@ -13,6 +13,7 @@
 , libX11
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
+, xorgserver # for Xvfb in tests
 , withWaylandTools ? stdenv.isLinux
 , wayland
 , wayland-protocols
@@ -22,17 +23,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxkbcommon";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchurl {
     url = with finalAttrs; "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Vg8RxLu8oQ9JXz7306aqTKYrT4+wtS59RZ0Yom5G4Bc=";
+    hash = "sha256-ZXgvChCktFWvnGuqtwQOL1N1IMqi7CCSgFzf02hjskc=";
   };
+
+  patches = [
+    # Disable one Xvfb test as it fails for permission checks.
+    ./disable-x11com.patch
+  ];
 
   outputs = [ "out" "dev" "doc" ];
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
+  nativeBuildInputs = [ meson ninja pkg-config bison doxygen xorgserver ]
     ++ lib.optional withWaylandTools wayland-scanner;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
@@ -42,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
+    "-Denable-docs=true"
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
   ];
 

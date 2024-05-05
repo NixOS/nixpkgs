@@ -6,6 +6,7 @@
 , gflanguages
 , glyphslib
 , pytestCheckHook
+, pyyaml
 , requests
 , setuptools
 , setuptools-scm
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     fonttools
     gflanguages
     glyphslib
+    pyyaml
     requests
     setuptools
     unicodedata2

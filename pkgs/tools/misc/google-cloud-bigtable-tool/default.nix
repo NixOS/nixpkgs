@@ -16,9 +16,9 @@ buildGoModule rec {
 
   vendorHash = "sha256-kwvEfvHs6XF84bB3Ss1307OjId0nh/0Imih1fRFdY0M=";
 
-  preCheck = ''
-    buildFlagsArray+="-short"
-  '';
+  checkFlags = [
+    "-short"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Bigtable Tool";
