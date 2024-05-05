@@ -1,17 +1,17 @@
 {
-  _7zz
-  , cacert
-  , curl
-  , fetchurl
-  , git
-  , lib
-  , makeBinaryWrapper
-  , php
-  , stdenvNoCC
-  , unzip
-  , xz
-  , version
-  , pharHash
+  _7zz,
+  cacert,
+  curl,
+  fetchurl,
+  git,
+  lib,
+  makeBinaryWrapper,
+  php,
+  stdenvNoCC,
+  unzip,
+  xz,
+  version,
+  pharHash,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -34,7 +34,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D $src $out/libexec/composer/composer.phar
     makeWrapper ${php}/bin/php $out/bin/composer \
       --add-flags "$out/libexec/composer/composer.phar" \
-      --prefix PATH : ${lib.makeBinPath [ _7zz cacert curl git unzip xz ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          _7zz
+          cacert
+          curl
+          git
+          unzip
+          xz
+        ]
+      }
 
     runHook postInstall
   '';
