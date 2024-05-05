@@ -1,85 +1,99 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, swig
-, boost
-, spectra
-, libxml2
-, tbb
-, hmat-oss
-, nlopt
-, cminpack
-, ceres-solver
-, dlib
-, hdf5
-, primesieve
-, pagmo2
-, ipopt
-, darwin
-# tests take an hour to build on a 48-core machine
-, runTests ? false
-, enablePython ? false
-, python3Packages
+{
+  lib,
+  boost,
+  ceres-solver,
+  cmake,
+  cminpack,
+  darwin,
+  dlib,
+  fetchFromGitHub,
+  fetchpatch,
+  hdf5,
+  hmat-oss,
+  ipopt,
+  libxml2,
+  nlopt,
+  pagmo2,
+  primesieve,
+  python3Packages,
+  spectra,
+  stdenv,
+  swig,
+  tbb,
+  # Boolean flags
+  runTests ? false, # tests take an hour to build on a 48-core machine
+  enablePython ? false,
 }:
 
 let
   inherit (darwin.apple_sdk.frameworks) Accelerate;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openturns";
   version = "1.22";
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
-    rev = "v${version}";
-    sha256 = "sha256-ku3/mPoa1YJVJB99R/kWlOubIO+OZAiKfPqS/DrtJQk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ku3/mPoa1YJVJB99R/kWlOubIO+OZAiKfPqS/DrtJQk=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional enablePython python3Packages.sphinx;
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enablePython [ python3Packages.sphinx ];
+
   buildInputs = [
-    swig
+    (lib.getLib primesieve)
     boost
-    spectra
-    libxml2
-    tbb
-    hmat-oss
-    nlopt
-    cminpack
     ceres-solver
+    cminpack
     dlib
     hdf5
-    (lib.getLib primesieve)
-    pagmo2
+    hmat-oss
     ipopt
-  ] ++ lib.optionals enablePython [
-    python3Packages.python
+    libxml2
+    nlopt
+    pagmo2
+    spectra
+    swig
+    tbb
+  ]
+  ++ lib.optionals enablePython [
+    python3Packages.dill
     python3Packages.matplotlib
     python3Packages.psutil
-    python3Packages.dill
-  ] ++ lib.optional stdenv.isDarwin Accelerate;
+    python3Packages.python
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    Accelerate
+  ];
 
   cmakeFlags = [
-    "-DOPENTURNS_SYSCONFIG_PATH=$out/etc"
-    "-DCMAKE_UNITY_BUILD=ON"
-    "-DCMAKE_UNITY_BUILD_BATCH_SIZE=32"
-    "-DSWIG_COMPILE_FLAGS='-O1'"
-    "-DUSE_SPHINX=${if enablePython then "ON" else "OFF"}"
-    "-DBUILD_PYTHON=${if enablePython then "ON" else "OFF"}"
+    (lib.cmakeBool "BUILD_PYTHON" enablePython)
+    (lib.cmakeBool "CMAKE_UNITY_BUILD" true)
+    (lib.cmakeBool "USE_SPHINX" enablePython)
+    (lib.cmakeFeature "CMAKE_UNITY_BUILD_BATCH_SIZE" "32")
+    (lib.cmakeFeature "SWIG_COMPILE_FLAGS" "-O1")
+    (lib.cmakeOptionType "PATH" "OPENTURNS_SYSCONFIG_PATH" "$out/etc")
   ];
+
+  checkTarget = lib.concatStringsSep " " [
+    "tests"
+    "check"
+  ];
+
+  strictDeps = true;
 
   doCheck = runTests;
 
-  checkTarget = "tests check";
-
-  meta = with lib; {
-    description = "Multivariate probabilistic modeling and uncertainty treatment library";
-    license = with licenses; [ lgpl3 gpl3 ];
+  meta = {
     homepage = "https://openturns.github.io/www/";
-    changelog = "https://github.com/openturns/openturns/raw/v${version}/ChangeLog";
-    maintainers = with maintainers; [ gdinh ];
-    platforms = platforms.unix;
+    description = "Multivariate probabilistic modeling and uncertainty treatment library";
+    changelog = "https://github.com/openturns/openturns/raw/v${finalAttrs.version}/ChangeLog";
+    license = with lib.licenses; [ lgpl3Plus gpl3Plus ];
+    maintainers = with lib.maintainers; [ gdinh ];
+    platforms = lib.platforms.unix;
   };
-}
+})
