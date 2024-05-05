@@ -17,14 +17,14 @@
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
     rev = "refs/tags/${version}";
-    hash = "sha256-1xbdZlZa3YPz+33AMgvhiMO12vc/ej0RybypQUzEn+8=";
+    hash = "sha256-AspX95feWrHGykYB7KQVbCpTDz22JtlNL5QREX9Cvfc=";
   };
 
   nativeBuildInputs = [
