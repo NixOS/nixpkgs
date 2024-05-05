@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, which
-, fltk
-, mbedtls_2
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  fltk,
+  mbedtls_2,
+  pkg-config,
+  stdenv,
+  which,
 }:
 
 stdenv.mkDerivation {
   pname = "dillong";
-  version = "unstable-2021-12-13";
+  version = "0-unstable-2021-12-13";
 
   src = fetchFromGitHub {
     owner = "w00fpack";
@@ -21,6 +22,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
+    fltk
     pkg-config
     which
   ];
@@ -29,6 +31,19 @@ stdenv.mkDerivation {
     fltk
     mbedtls_2
   ];
+
+  outputs = [ "out" "doc" "man" ];
+
+  configureFlags = [
+    (lib.enableFeature true "ssl")
+  ];
+
+  strictDeps = true;
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: main.o:/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set';
+  #     dpid.o:/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # The start_page and home settings refer to /usr.
   # We can't change /usr to $out because dillorc is copied to the home directory
@@ -40,19 +55,12 @@ stdenv.mkDerivation {
       --replace "home=" "#home="
   '';
 
-  configureFlags = [ "--enable-ssl=yes" ];
-
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: main.o:/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set';
-  #     dpid.o:/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
-
-  meta = with lib; {
-    description = "Fork of Dillo, a lightweight web browser";
+  meta = {
     homepage = "https://github.com/w00fpack/dilloNG";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fgaz ];
+    description = "Fork of Dillo, a lightweight web browser";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "dillo";
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
   };
 }
