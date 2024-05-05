@@ -184,7 +184,7 @@ with lib;
 
     kTLS = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Whether to enable kTLS support.
         Implementing TLS in the kernel (kTLS) improves performance by significantly
