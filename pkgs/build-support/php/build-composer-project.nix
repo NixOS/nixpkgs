@@ -89,9 +89,11 @@ let
         composerStrictValidation = previousAttrs.composerStrictValidation or true;
       };
 
-      COMPOSER_CACHE_DIR = "/dev/null";
-      COMPOSER_DISABLE_NETWORK = "1";
-      COMPOSER_MIRROR_PATH_REPOS = "1";
+      env = {
+        COMPOSER_CACHE_DIR = "/dev/null";
+        COMPOSER_DISABLE_NETWORK = "1";
+        COMPOSER_MIRROR_PATH_REPOS = "1";
+      };
 
       meta = previousAttrs.meta or { } // {
         platforms = lib.platforms.all;
