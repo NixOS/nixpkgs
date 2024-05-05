@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkterm";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Jeija";
     repo = "gtkterm";
     rev = version;
-    sha256 = "sha256-4Z+8fs4VEk2+Ci1X3oUuInylTdIbQ5AiPenFqnyNXvc=";
+    sha256 = "sha256-KYkAHpyDl47LBKb7ZjxPCGw9XuMrqHPyejMhIvYAr68=";
   };
 
   nativeBuildInputs = [
