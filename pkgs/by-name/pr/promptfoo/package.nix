@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "promptfoo";
-  version = "0.54.1";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "promptfoo";
     repo = "promptfoo";
     rev = "${version}";
-    hash = "sha256-ZDr2sJRiy26a+NPAcsqTTAuccQQmvmDdMtrr1FGzaSk=";
+    hash = "sha256-XQnsOr+L2MCKPzZeIKzx4XjWF6B18gBVDU0j31CgjUc=";
   };
 
-  npmDepsHash = "sha256-ZPwEkhINT0sQc4BNUVbJzI1ffJZzXJa7Ld+0am6MYtM=";
+  npmDepsHash = "sha256-f7tlRZHjdeIk17hQhzmIbhMwUkoca3J+F65cr0dvSmU=";
 
   dontNpmBuild = true;
 

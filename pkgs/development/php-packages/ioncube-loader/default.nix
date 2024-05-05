@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchzip
-, php
+{
+  stdenv,
+  lib,
+  fetchzip,
+  php,
 }:
 
 let
@@ -42,7 +43,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/lib/php/extensions
-    cp $src/ioncube_loader_${variant.${stdenv.hostPlatform.system}.prefix}_${phpVersion}.so $out/lib/php/extensions/ioncube-loader.so
+    cp $src/ioncube_loader_${
+      variant.${stdenv.hostPlatform.system}.prefix
+    }_${phpVersion}.so $out/lib/php/extensions/ioncube-loader.so
   '';
 
   meta = with lib; {
@@ -52,6 +55,11 @@ stdenv.mkDerivation {
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ neverbehave ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

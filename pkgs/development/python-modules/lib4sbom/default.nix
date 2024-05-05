@@ -1,9 +1,13 @@
 { lib
-, python3Packages
+, buildPythonPackage
 , fetchFromGitHub
+, pyyaml
+, semantic-version
+, defusedxml
+, pytestCheckHook
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "lib4sbom";
   version = "0.7.1";
   format = "setuptools";
@@ -15,13 +19,13 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-UQZZYTRDbUqSH6F8hjhp9L70025cRO3zXQ8Aoznotg4=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = [
     pyyaml
     semantic-version
     defusedxml
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

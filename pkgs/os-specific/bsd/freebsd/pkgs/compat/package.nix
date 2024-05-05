@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation
+{ lib, stdenv, mkDerivation, patchesRoot
 , bsdSetupHook, freebsdSetupHook
 , makeMinimal, boot-install
 , which
@@ -85,8 +85,8 @@ mkDerivation rec {
   ];
 
   patches = [
-    ./compat-install-dirs.patch
-    ./compat-fix-typedefs-locations.patch
+    /${patchesRoot}/compat-install-dirs.patch
+    /${patchesRoot}/compat-fix-typedefs-locations.patch
   ];
 
   preBuild = ''

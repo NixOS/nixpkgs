@@ -116,7 +116,7 @@ in
             lib.assertMsg (d != null -> (lib.types.str.check d && lib.elem d config.services.displayManager.sessionData.sessionNames)) ''
                 Default graphical session, '${d}', not found.
                 Valid names for 'services.displayManager.defaultSession' are:
-                  ${lib.concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
+                  ${lib.concatStringsSep "\n  " cfg.sessionData.sessionNames}
               '';
         };
         default = null;

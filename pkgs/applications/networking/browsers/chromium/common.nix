@@ -272,15 +272,6 @@ let
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-121-rust.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "124" && !chromiumVersionAtLeast "124.0.6367.118") [
-      # M124 < 124.0.6367.118 shipped with broken --ozone-platform-hint flag handling, which we rely on
-      # for our NIXOS_OZONE_WL (wayland) environment variable.
-      # See <https://issues.chromium.org/issues/329678163>.
-      # This is the commit for the fix that landed in M125, which applies clean on M124.
-      (githubPatch {
-        commit = "c7f4c58f896a651eba80ad805ebdb49d19ebdbd4";
-        hash = "sha256-6nYWT2zN+j73xAIXLdGYT2eC71vGnGfiLCB0OwT0CAI=";
-      })
     ];
 
     postPatch = ''
