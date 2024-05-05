@@ -358,6 +358,12 @@ in let
         ../common/compiler-rt/darwin-plistbuddy-workaround.patch
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         # ../common/compiler-rt/armv7l-15.patch
+        # Fix build with clang 18 due to https://github.com/llvm/llvm-project/commit/d506aa4edfa66074db3dc1fa84da9d9c80d71500.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
+          stripLen = 1;
+          hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
+        })
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
@@ -378,6 +384,12 @@ in let
         ../common/compiler-rt/darwin-plistbuddy-workaround.patch
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         # ../common/compiler-rt/armv7l-15.patch
+        # Fix build with clang 18 due to https://github.com/llvm/llvm-project/commit/d506aa4edfa66074db3dc1fa84da9d9c80d71500.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
+          stripLen = 1;
+          hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
+        })
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
