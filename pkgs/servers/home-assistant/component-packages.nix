@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.5.0";
+  version = "2024.5.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -3083,7 +3083,8 @@
     ];
     "nws" = ps: with ps; [
       pynws
-    ];
+    ]
+    ++ pynws.optional-dependencies.retry;
     "nx584" = ps: with ps; [
       pynx584
     ];
