@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 , buildGoModule
 , installShellFiles
@@ -41,6 +42,12 @@ let
       # Fix shebangs in the NSS build script
       # (can't just patchShebangs since makefile unpacks it)
       ./curl-impersonate-0.5.2-fix-shebangs.patch
+
+      # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
+      (fetchpatch {
+        url = "https://github.com/lwthiker/curl-impersonate/commit/e7b90a0d9c61b6954aca27d346750240e8b6644e.patch";
+        hash = "sha256-jFrz4Q+MJGfNmwwzHhThado4c9hTd/+b/bfRsr3FW5k=";
+      })
     ];
 
     # Disable blanket -Werror to fix build on `gcc-13` related to minor
@@ -159,12 +166,6 @@ let
       license = with licenses; [ curl mit ];
       maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];
       platforms = platforms.unix;
-      knownVulnerabilities = [
-        "CVE-2023-38545"  # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
-        "CVE-2023-32001"  # fopen TOCTOU race condition - https://curl.se/docs/CVE-2023-32001.html
-        "CVE-2022-43551"  # HSTS bypass - https://curl.se/docs/CVE-2022-43551.html
-        "CVE-2022-42916"  # HSTS bypass - https://curl.se/docs/CVE-2022-42916.html
-      ];
     };
   };
 in
