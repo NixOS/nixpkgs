@@ -14248,6 +14248,11 @@ with pkgs;
 
   typos = callPackage ../development/tools/typos { };
 
+  # Requires rustc 1.75 or newer
+  typos-lsp = callPackage ../by-name/ty/typos-lsp/package.nix {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
+
   typst = callPackage ../tools/typesetting/typst { };
 
   typstfmt = callPackage ../tools/typesetting/typstfmt { };
