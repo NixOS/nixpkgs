@@ -19,7 +19,7 @@ buildLua {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "Seeking and Hybrid fastforwarding like VHS";
+    description = "Seeking and hybrid fastforwarding like VHS";
     homepage = "https://github.com/po5/evafast";
     license = licenses.unfree; # no explicit licensing information available
     maintainers = with lib.maintainers; [ purrpurrn ];
