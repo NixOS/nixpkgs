@@ -4,6 +4,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+, makeWrapper
 , wrapGAppsHook3
 , ...
 }:
@@ -17,7 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9UfyCqgsg9XAFyZ7V7TogkQou4x+ixFUfjXZ1/qlDmA=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   buildInputs = with pkgs;[
     alsa-lib
@@ -59,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin && ln -s $out/lib/figma-linux $_/figma-linux
 
     cp -r usr/* $out
+
+    wrapProgramShell $out/bin/figma-linux \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
   '';
