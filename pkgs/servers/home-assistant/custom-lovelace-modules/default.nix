@@ -10,6 +10,8 @@
 
   decluttering-card = callPackage ./decluttering-card { };
 
+  lg-webos-remote-control = callPackage ./lg-webos-remote-control { };
+
   light-entity-card = callPackage ./light-entity-card { };
 
   mini-graph-card = callPackage ./mini-graph-card {};
