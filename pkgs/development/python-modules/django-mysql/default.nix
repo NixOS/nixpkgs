@@ -7,7 +7,6 @@
 
 # dependencies
 , django
-, mysqlclient
 
 # tests
 , pytest-django
@@ -16,23 +15,22 @@
 
 buildPythonPackage rec {
   pname = "django-mysql";
-  version = "4.12.0";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-mysql";
     rev = "refs/tags/${version}";
-    hash = "sha256-AieI6zUPFXQsrvoms5bu/Bb3J+DvfLA4rCCsjhYBEZQ=";
+    hash = "sha256-hIvkLLv9R23u+JC6t/zwbMvmgLMstYp0ytuSqNiohJg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  buildInputs = [
+  dependencies = [
     django
-    mysqlclient
   ];
 
   doCheck = false; # requires mysql/mariadb server
@@ -42,6 +40,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "django_mysql"
   ];
 
   meta = with lib; {
