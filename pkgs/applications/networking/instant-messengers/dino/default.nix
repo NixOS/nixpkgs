@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , buildPackages
 , vala, cmake, ninja, wrapGAppsHook4, pkg-config, gettext
 , gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
@@ -33,6 +33,17 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-smy/t6wTCnG0kuRFKwyeLENKqOQDhL0fZTtj3BHo6kw=";
   };
+
+  patches = [
+    # Backport to fix build after Vala-c update to 0.56.17
+    (fetchpatch {
+      url = "https://github.com/dino/dino/commit/657502955567dd538e56f300e075c7db52e25d74.patch";
+      postFetch = ''
+        substituteInPlace $out --replace plugins/openpgp/vapi/gpgme.vapi plugins/gpgme-vala/vapi/gpgme.vapi
+      '';
+      hash = "sha256-95YhtcgfrqcnF6oRUyv/F6NLeLF3qO5h0p60VDqOnzc=";
+    })
+  ];
 
   postPatch = ''
     # don't overwrite manually set version information
