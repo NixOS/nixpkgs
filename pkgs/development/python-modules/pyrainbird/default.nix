@@ -40,11 +40,11 @@ buildPythonPackage rec {
       --replace-fail "--cov=pyrainbird --cov-report=term-missing" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp-retry
     ical
     pycryptodome
