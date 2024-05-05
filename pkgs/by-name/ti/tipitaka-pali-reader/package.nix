@@ -49,6 +49,5 @@ appimageTools.wrapType2 {
     homepage = "https://americanmonk.org/tipitaka-pali-reader/";
     license = licenses.gpl3;
     mainProgram = "tipitaka-pali-reader";
-    maintainers = with maintainers; [ paladhammika ];
   };
 }
