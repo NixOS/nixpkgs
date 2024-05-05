@@ -20592,10 +20592,6 @@ with pkgs;
 
   digiham = callPackage ../applications/radio/digiham { };
 
-  dillo = callPackage ../applications/networking/browsers/dillo {
-    fltk = fltk13;
-  };
-
   directfb = callPackage ../development/libraries/directfb { };
 
   discord-gamesdk = callPackage ../development/libraries/discord-gamesdk { };
@@ -41184,4 +41180,8 @@ with pkgs;
   insulator2 = callPackage ../applications/misc/insulator2 {};
 
   animdl = python3Packages.callPackage ../applications/video/animdl { };
+
+  dillo = callPackage ../by-name/di/dillo/package.nix {
+    fltk = fltk13;
+  };
 }
