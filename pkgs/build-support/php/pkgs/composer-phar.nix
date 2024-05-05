@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     install -D $src $out/libexec/composer/composer.phar
-    makeWrapper ${php}/bin/php $out/bin/composer \
+    makeWrapper ${lib.getExe php} $out/bin/composer \
       --add-flags "$out/libexec/composer/composer.phar" \
       --prefix PATH : ${
         lib.makeBinPath [
