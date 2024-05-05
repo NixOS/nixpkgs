@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "5.3.2";
+  version = "5.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tkem";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CmyAW9uV63OV/zZsWwZkXOWbHfHAJdYFGJsRhpqQ1f4=";
+    hash = "sha256-G+TkS6NsaiPGzNLk3DbBH8D1yLM8bFVLtHioNcIZMHw=";
   };
 
   nativeBuildInputs = [
