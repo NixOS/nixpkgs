@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";
-  version = "unstable-2023-05-23";
+  version = "202008-unstable-2023-05-22";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
