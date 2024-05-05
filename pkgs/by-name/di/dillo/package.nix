@@ -1,29 +1,41 @@
 {
   lib,
   autoreconfHook,
-  fetchhg,
+  fetchFromGitHub,
   fltk,
+  giflib,
   libXcursor,
   libXi,
   libXinerama,
   libjpeg,
   libpng,
-  mbedtls_2,
+  libressl,
+  mbedtls,
   openssl,
   perl,
   pkg-config,
   stdenv,
   which,
+  # Configurable options
+  tlsLibrary? "libressl"
 }:
 
-stdenv.mkDerivation {
+let
+  ssl = {
+    "libressl" = libressl;
+    "mbedtls" = mbedtls;
+    "openssl" = openssl;
+  }.${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.0.5-unstable-2021-02-09";
+  version = "3.1.0";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~seirdy/dillo-mirror";
-    rev = "67b70f024568b505633524be61fcfbde5337849f";
-    hash = "sha256-lbn5u9oEL0zt9yBhznBS9Dz9/6kSwRDJeNXKEojty1g=";
+  src = fetchFromGitHub {
+    owner = "dillo-browser";
+    repo = "dillo";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AqffkUPLvVSGq9iYksyvHf3HQ3DLWNlB3CYw4GCAAEI=";
   };
 
   nativeBuildInputs = [
@@ -35,38 +47,41 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fltk
+    giflib
     libXcursor
     libXi
     libXinerama
     libjpeg
     libpng
-    mbedtls_2
-    openssl
     perl
+    ssl
   ];
 
   outputs = [ "out" "doc" "man" ];
 
-  configureFlags = [
-    (lib.enableFeature true "ssl")
-  ];
-
-  # Workaround build failure on -fno-common toolchains:
-  #   ld: main.o:/build/dillo-3.0.5/dpid/dpid.h:64: multiple definition of `sock_set';
-  #     dpid.o:/build/dillo-3.0.5/dpid/dpid.h:64: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
-
   strictDeps = true;
 
   meta = {
-    homepage = "https://hg.sr.ht/~seirdy/dillo-mirror";
+    homepage = "https://dillo-browser.github.io/";
     description = "A fast graphical web browser with a small footprint";
     longDescription = ''
-      Dillo is a small, fast web browser, tailored for older machines.
+      Dillo is a fast and small graphical web browser with the following
+      features:
+
+      - Multi-platform, running on Linux, BSD, MacOS, Windows (via Cygwin) and
+        even Atari.
+      - Written in C and C++ with few dependencies.
+      - Implements its own real-time rendering engine.
+      - Low memory usage and fast rendering, even with large pages.
+      - Uses the fast and bloat-free FLTK GUI library.
+      - Support for HTTP, HTTPS, FTP and local files.
+      - Extensible with plugins written in any language.
+      - Is free software licensed with the GPLv3.
+      - Helps authors to comply with web standards by using the bug meter.
     '';
     mainProgram = "dillo";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})
