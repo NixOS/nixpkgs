@@ -4094,6 +4094,8 @@ let
         };
       };
 
+      tekumara.typos-vscode = callPackage ./tekumara.typos-vscode { };
+
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-pascal";

@@ -1,14 +1,18 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ananicy-rules-cachyos";
-  version = "unstable-2024-04-22";
+  version = "unstable-2024-05-04";
 
   src = fetchFromGitHub {
     owner = "CachyOS";
     repo = "ananicy-rules";
-    rev = "8646faa8c0c8fc16d78ca3a25d65ddbd86b9d468";
-    hash = "sha256-b9M6Uqlb6Ysp8BRe1QV62sjVOU6tgFbrjTxDc3B4xlg=";
+    rev = "5276c6dd11966dcf6f9588c6148949837abb8200";
+    hash = "sha256-we2kdQb5rSJldP0HxBLAR5czTc3aayWElp5vAfmQ4ag=";
   };
 
   dontConfigure = true;
@@ -27,6 +31,10 @@ stdenvNoCC.mkDerivation {
     description = "CachyOS' ananicy-rules meant to be used with ananicy-cpp";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ artturin johnrtitor diniamo ];
+    maintainers = with lib.maintainers; [
+      artturin
+      diniamo
+      johnrtitor
+    ];
   };
 }

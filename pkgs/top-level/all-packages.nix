@@ -4142,8 +4142,6 @@ with pkgs;
 
   aptdec = callPackage ../development/libraries/aptdec { };
 
-  argc = callPackage ../development/tools/argc { };
-
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7454,8 +7452,6 @@ with pkgs;
   domoticz = callPackage ../servers/domoticz { };
 
   dorkscout = callPackage ../tools/security/dorkscout { };
-
-  downonspot = callPackage ../applications/misc/downonspot { };
 
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
@@ -26584,9 +26580,7 @@ with pkgs;
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
-  radicale3 = callPackage ../servers/radicale/3.x.nix { };
-
-  radicale = radicale3;
+  radicale3 = radicale;
 
   qcal = callPackage ../tools/networking/qcal/default.nix { };
 
@@ -28350,8 +28344,6 @@ with pkgs;
   ananicy = callPackage ../misc/ananicy { };
 
   ananicy-cpp = callPackage ../misc/ananicy-cpp { };
-
-  ananicy-rules-cachyos = callPackage ../misc/ananicy-rules-cachyos { };
 
   andagii = callPackage ../data/fonts/andagii { };
 
@@ -40887,10 +40879,8 @@ with pkgs;
     name = "bsd-setup-hook";
   } ../os-specific/bsd/setup-hook.sh;
 
-  freebsd = callPackage ../os-specific/bsd/freebsd { };
-  freebsdCross = callPackage ../os-specific/bsd/freebsd {
-    stdenv = crossLibcStdenv;
-  };
+  inherit (callPackage ../os-specific/bsd/freebsd { })
+    freebsd freebsdCross;
 
   netbsd = callPackage ../os-specific/bsd/netbsd { };
   netbsdCross = callPackage ../os-specific/bsd/netbsd {
