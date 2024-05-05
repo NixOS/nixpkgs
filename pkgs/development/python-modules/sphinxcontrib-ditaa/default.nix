@@ -21,7 +21,7 @@ buildPythonPackage rec {
   buildInputs = [ mock sphinx-testing ];
   propagatedBuildInputs = [ sphinx ditaa ];
 
-  # no tests provided 
+  # no tests provided
   doCheck = false;
 
   nativeCheckInputs = [ unittestCheckHook ];
