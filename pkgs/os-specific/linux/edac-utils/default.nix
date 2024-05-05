@@ -25,21 +25,20 @@ stdenv.mkDerivation {
       --replace-fail '"$sysconfdir/edac/mainboard"' '"/etc/edac/mainboard"'
   '';
 
+  # NB edac-utils needs Perl for configure script, but also edac-ctl program is
+  # a Perl script. Perl from buildInputs is used by patchShebangsAuto in
+  # fixupPhase to update the hash bang line.
+  strictDeps = true;
   nativeBuildInputs = [ perl ];
   buildInputs = [ perl sysfsutils ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ];
-
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sbindir=${placeholder "out"}/bin"
   ];
 
   # SysV init script is not relevant.
-  postFixup = ''
-    rm -r $out/etc/init.d
+  postInstall = ''
+    rm -r "$out"/etc/init.d
   '';
 
   meta = with lib; {
