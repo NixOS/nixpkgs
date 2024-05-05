@@ -63,8 +63,8 @@ in
     };
     users.groups.quickwit = {};
     system.activationScripts.makeQuickwitDir = ''
-      mkdir -p ${cfg.settings.data_dir}
-      chown -R ${config.users.users.quickwit.name}:${config.users.users.quickwit.group} ${cfg.settings.data_dir}
+      mkdir -p "${cfg.settings.data_dir}"
+      chown -R "${config.users.users.quickwit.name}:${config.users.users.quickwit.group}" "${cfg.settings.data_dir}"
     '';
     systemd.services.quickwit = {
       description = "Quickwit search engine";
