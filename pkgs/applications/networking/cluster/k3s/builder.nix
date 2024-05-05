@@ -30,7 +30,6 @@ lib:
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
 { lib
-, fetchpatch
 , makeWrapper
 , socat
 , iptables
@@ -56,6 +55,7 @@ lib:
 , sqlite
 , nixosTests
 , pkgsBuildBuild
+, go
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -93,8 +93,9 @@ let
 
   # https://github.com/k3s-io/k3s/blob/5fb370e53e0014dc96183b8ecb2c25a61e891e76/scripts/build#L19-L40
   versionldflags = [
-    "-X github.com/rancher/k3s/pkg/version.Version=v${k3sVersion}"
-    "-X github.com/rancher/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+    "-X github.com/k3s-io/k3s/pkg/version.Version=v${k3sVersion}"
+    "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
     "-X k8s.io/client-go/pkg/version.gitVersion=v${k3sVersion}"
     "-X k8s.io/client-go/pkg/version.gitCommit=${k3sCommit}"
     "-X k8s.io/client-go/pkg/version.gitTreeState=clean"
@@ -184,15 +185,6 @@ let
 
     src = k3sRepo;
     vendorHash = k3sVendorHash;
-
-    patches =
-      # Disable: Add runtime checking of golang version
-      (fetchpatch {
-        # https://github.com/k3s-io/k3s/pull/9054
-        url = "https://github.com/k3s-io/k3s/commit/b297996b9252b02e56e9425f55f6becbf6bb7832.patch";
-        hash = "sha256-xBOY2jnLhT9dtVKtq26V9QUnuX1q6E/9UcO9IaU719U=";
-        revert = true;
-      });
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];

@@ -27,6 +27,7 @@
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , nixosTests
+, blackbox-terminal
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -117,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     tests = {
       inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
+      blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
     };
   };
 

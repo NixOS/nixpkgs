@@ -47,10 +47,10 @@ let
     x11Support = false;
   };
 
-  librarySuffix = if (stdenv.targetPlatform.extensions.library == ".so") then "2.0.so.0"
-                  else if (stdenv.targetPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
-                  else if (stdenv.targetPlatform.extensions.library == ".a") then "2.0.a"
-                  else if (stdenv.targetPlatform.extensions.library == ".dll") then "2.0-0.dll"
+  librarySuffix = if (stdenv.hostPlatform.extensions.library == ".so") then "2.0.so.0"
+                  else if (stdenv.hostPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
+                  else if (stdenv.hostPlatform.extensions.library == ".a") then "2.0.a"
+                  else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
                   else "2.0-0.lib";
 in
 
@@ -238,6 +238,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
+  # Conditional necessary to break infinite recursion with passthru.tests
   preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
