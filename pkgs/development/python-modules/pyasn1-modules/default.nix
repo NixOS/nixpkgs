@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pyasn1";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-AAS1VuppCIxgswpLSHFAc6q9cyJBLpdDuU9D1KU13vg=";
+    hash = "sha256-UJycVfj08+3zjHPji5Qlh3yqeS30dEwu1pyrN1yo1Vc=";
   };
 
   propagatedBuildInputs = [
