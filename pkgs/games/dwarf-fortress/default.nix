@@ -49,7 +49,7 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this. Note that unfuck and twbt are not required for 50.
-  latestVersion = "50.12";
+  latestVersion = "50.13";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${replaceStrings ["."] ["_"] version}";
