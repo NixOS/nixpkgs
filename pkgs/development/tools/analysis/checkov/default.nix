@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cyclonedx-python-lib"
     "dpath"
     "igraph"
     "license-expression"
