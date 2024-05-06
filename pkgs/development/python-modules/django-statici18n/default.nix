@@ -16,15 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-statici18n";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zyegfryed";
     repo = "django-statici18n";
-    # https://github.com/zyegfryed/django-statici18n/issues/59
-    rev = "9b83a8f0f2e625dd5f56d53cfe4e07aca9479ab6";
-    hash = "sha256-KrIlWmN7um9ad2avfANOza579bjYkxTo9F0UFpvLu3A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-n6HqHcXvz2ihwN+gJr5P+/Yt4RpuOu2yAjo9fiNZB54=";
   };
 
   build-system = [

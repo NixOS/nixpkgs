@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, chromium, makeWrapper }:
 
 buildGoModule rec {
   pname = "grafana-kiosk";
@@ -12,6 +12,11 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-sXaxyPNuHDUOkYcWYm94YvJmr1mGe4HdzttWrNSK2Pw=";
+
+  nativeBuildInputs = [ makeWrapper ];
+  postFixup = ''
+    wrapProgram $out/bin/grafana-kiosk --prefix PATH : ${lib.makeBinPath [ chromium ]}
+  '';
 
   meta = with lib; {
     description = "Kiosk Utility for Grafana";
