@@ -1,15 +1,16 @@
-{ lib
-, base58
-, buildPythonPackage
-, ecdsa
-, fetchPypi
-, hidapi
-, noiseprotocol
-, protobuf
-, pythonOlder
-, semver
-, setuptools
-, typing-extensions
+{
+  lib,
+  base58,
+  buildPythonPackage,
+  ecdsa,
+  fetchPypi,
+  hidapi,
+  noiseprotocol,
+  protobuf,
+  pythonOlder,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-0D+yIovlYw8dfDUeW+vcualbvmLs+IySkTpmHwk2meM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     base58
@@ -41,9 +40,7 @@ buildPythonPackage rec {
   # does not contain tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bitbox02"
-  ];
+  pythonImportsCheck = [ "bitbox02" ];
 
   meta = with lib; {
     description = "Firmware code of the BitBox02 hardware wallet";
