@@ -19,12 +19,7 @@ let
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages.override {
-    overrides = self: super: {
-      pydantic = python3Packages.pydantic_1;
-    };
-  };
-  python = pythonpkgs.python;
+  python = python3Packages.python;
 
   crfpp = stdenv.mkDerivation {
     pname = "mealie-crfpp";
@@ -37,14 +32,14 @@ let
     };
   };
 
-in pythonpkgs.buildPythonPackage rec {
+in python3Packages.buildPythonPackage rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
   nativeBuildInputs = [
-    pythonpkgs.poetry-core
-    pythonpkgs.pythonRelaxDepsHook
+    python3Packages.poetry-core
+    python3Packages.pythonRelaxDepsHook
     makeWrapper
   ];
 
@@ -53,7 +48,7 @@ in pythonpkgs.buildPythonPackage rec {
   doCheck = false;
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with pythonpkgs; [
+  propagatedBuildInputs = with python3Packages; [
     aiofiles
     alembic
     aniso8601
@@ -94,7 +89,7 @@ in pythonpkgs.buildPythonPackage rec {
 
   postInstall = let
     start_script = writeShellScript "start-mealie" ''
-      ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
+      ${lib.getExe python3Packages.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
     '';
     init_db = writeShellScript "init-mealie-db" ''
       ${python.interpreter} $OUT/${python.sitePackages}/mealie/scripts/install_model.py
