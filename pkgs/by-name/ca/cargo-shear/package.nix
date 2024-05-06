@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shear";
-  version = "0.0.24";
+  version = "0.0.25";
 
   src = fetchFromGitHub {
     owner = "Boshen";
     repo = "cargo-shear";
     rev = "v${version}";
-    sha256 = "sha256-7eBFDmeFOXqZhNE4RDlIq991xEoCGL6XLMmUQuLJvrE=";
+    sha256 = "sha256-4NnCUe4DrnSeveicxvvDF49hrc4NdRx/N10PH7Q0k8k=";
   };
 
-  cargoSha256 = "sha256-DQjLW6NtUPERT82zIlrGRk3FffU/EfLBMgAeFfFdDxE=";
+  cargoHash = "sha256-gHXJz3Xw9vC04q001kd6AgEKKaRtAK3oGMn7JJh+Neo=";
 
   meta = with lib; {
     description = "Detect and remove unused dependencies from Cargo.toml";
