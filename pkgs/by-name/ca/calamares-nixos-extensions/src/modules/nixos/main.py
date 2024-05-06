@@ -229,7 +229,6 @@ cfgmisc = """  # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -397,7 +396,7 @@ def run():
                     ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
                 libcalamares.utils.host_env_process_output(
                     ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
-                
+
             except subprocess.CalledProcessError:
                 libcalamares.utils.error(
                     "Failed to create /crypto_keyfile.bin")
