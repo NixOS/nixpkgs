@@ -293,10 +293,11 @@ addFlagTo() {
 
     shift
 
-    if [[ "${_nameref[*]}" != *"${*}"* ]]; then
-        appendToVar "${varname}" "${@}"
-    else
+    # If the variable already contains the flag, we don't add it again
+    if [[ "${_nameref[*]}" =~ ^(.* )*"${*}"( .*)*$ ]]; then
         echo "${_nameref}"
+    else
+        appendToVar "${varname}" "${@}"
     fi
 }
 

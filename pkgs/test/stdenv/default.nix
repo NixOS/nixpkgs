@@ -130,6 +130,14 @@ let
           [[ "$string" = "$expected" ]] \
             || (echo "'\$string' was not '$expected', got '$string'" && false)
 
+          # Check that we handle word boundaries correctly
+          string=""
+          addFlagTo string --foo-bar
+          addFlagTo string bar
+          expected=" --foo-bar bar"
+          [[ "$string" = "$expected" ]] \
+            || (echo "'\$string' was not '$expected', got '$string'" && false)
+
           declare -A associativeArray=(["X"]="Y")
           [[ $(addFlagTo associativeArray "fail" 2>&1) =~ "trying to use" ]] || (echo "addFlagTo did not catch prepending associativeArray" && false)
 
@@ -325,6 +333,7 @@ in
           addFlagTo list hello
           declare -p list
           addFlagTo list "\"--foo bar\""
+          addFlagTo list bar
           # test that quoted strings work
           addFlagTo list "world"
           declare -p list
@@ -334,6 +343,7 @@ in
             "b"
             "hello"
             "\"--foo bar\""
+            bar
             "world"
           )
           for i in {-1..3}; do
