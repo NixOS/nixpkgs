@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "lux";
-  version = "0.24.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "iawia002";
     repo = "lux";
     rev = "v${version}";
-    hash = "sha256-FwHoxTcEr0u7GPSdl1A8gsx9GCb9QuD/5ospaPOxZrI=";
+    hash = "sha256-3d8EQ7GzufZvMfjHbVMdpuGE+vPdSir4diSnB29v0sw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
