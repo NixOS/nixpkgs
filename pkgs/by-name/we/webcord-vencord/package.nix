@@ -1,9 +1,11 @@
-{ webcord
-, substituteAll
-, lib
-, vencord-web-extension
+{
+  webcord,
+  substituteAll,
+  lib,
+  vencord-web-extension,
 }:
 
+# nixpkgs-update: no auto update
 webcord.overrideAttrs (old: {
   pname = "webcord-vencord";
 
@@ -14,8 +16,13 @@ webcord.overrideAttrs (old: {
     })
   ];
 
-  meta = with lib; old.meta // {
+  meta = {
+    inherit (old.meta) license mainProgram platforms;
+
     description = "Webcord with Vencord web extension";
-    maintainers = with maintainers; [ FlafyDev NotAShelf ];
+    maintainers = with lib.maintainers; [
+      FlafyDev
+      NotAShelf
+    ];
   };
 })
