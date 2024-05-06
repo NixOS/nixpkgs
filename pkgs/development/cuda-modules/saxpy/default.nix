@@ -10,8 +10,9 @@ let
     cuda_cccl
     cuda_cudart
     cuda_nvcc
+    cudaAtLeast
+    cudaOlder
     cudatoolkit
-    cudaVersion
     flags
     libcublas
     setupCudaHook
@@ -24,6 +25,7 @@ backendStdenv.mkDerivation {
 
   src = ./.;
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs =
@@ -31,24 +33,22 @@ backendStdenv.mkDerivation {
       cmake
       autoAddDriverRunpath
     ]
-    ++ lib.optionals (lib.versionOlder cudaVersion "11.4") [ cudatoolkit ]
-    ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [ cuda_nvcc ];
+    ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
+    ++ lib.optionals (cudaAtLeast "11.4") [ cuda_nvcc ];
 
   buildInputs =
-    lib.optionals (lib.versionOlder cudaVersion "11.4") [ cudatoolkit ]
-    ++ lib.optionals (lib.versionAtLeast cudaVersion "11.4") [
+    lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
+    ++ lib.optionals (cudaAtLeast "11.4") [
       (getDev libcublas)
       (getLib libcublas)
       (getOutput "static" libcublas)
       cuda_cudart
     ]
-    ++ lib.optionals (lib.versionAtLeast cudaVersion "12.0") [ cuda_cccl ];
+    ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
 
-  cmakeFlags = [
+  cmakeFlagsArray = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-      with flags; lib.concatStringsSep ";" (lib.lists.map dropDot cudaCapabilities)
-    ))
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
   ];
 
   meta = rec {
@@ -56,6 +56,6 @@ backendStdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = lib.teams.cuda.members;
     platforms = lib.platforms.unix;
-    badPlatforms = lib.optionals flags.isJetsonBuild platforms;
+    badPlatforms = lib.optionals (flags.isJetsonBuild && cudaOlder "11.4") platforms;
   };
 }

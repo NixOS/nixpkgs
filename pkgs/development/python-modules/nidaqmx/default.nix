@@ -55,6 +55,5 @@ buildPythonPackage rec {
   meta = {
     description = "API for interacting with the NI-DAQmx driver";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
   };
 }

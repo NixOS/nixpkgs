@@ -10,13 +10,13 @@
 
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.17.3";
+  version = "3.17.4";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aqQGOqPLKKTBjWjL3KyRD4paBGCQLhCBjXwVVhoHDSk=";
+    hash = "sha256-GW+17DfPiFxw2QyJ5KTMZLDWmqXfnHfkg+QpM5XOP0M=";
   };
 
   npmDepsHash = "sha256-lhFyiWy9dgnxxaElavzqA4YpRm7cVC23pvL5Kwve58E=";

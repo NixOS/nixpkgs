@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pysigma
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pysigma,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-elasticsearch";
-  version = "1.0.12";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ibCwTZymgd+VuE4UXbYxUyIbzlpfIdc2zE8Nz/vhBGQ=";
+    hash = "sha256-1tCn0aPYhjyOQJxN0cqTMDCcE0eZwRtTK6OV3rU1a1E=";
   };
 
   postPatch = ''
@@ -27,22 +28,16 @@ buildPythonPackage rec {
       --replace-fail " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pysigma
-  ];
+  dependencies = [ pysigma ];
 
   nativeCheckInputs = [
     pytestCheckHook
     requests
   ];
 
-  pythonImportsCheck = [
-    "sigma.backends.elasticsearch"
-  ];
+  pythonImportsCheck = [ "sigma.backends.elasticsearch" ];
 
   disabledTests = [
     # Tests requires network access

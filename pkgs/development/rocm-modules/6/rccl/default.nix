@@ -65,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Really strange behavior, `#!/usr/bin/env perl` should work...
     substituteInPlace CMakeLists.txt \
-      --replace "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl"
+      --replace "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl" \
+      --replace-warn "-parallel-jobs=12" "-parallel-jobs=1" \
+      --replace-warn "-parallel-jobs=16" "-parallel-jobs=1"
   '';
 
   postInstall = lib.optionalString buildTests ''

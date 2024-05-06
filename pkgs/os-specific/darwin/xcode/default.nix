@@ -3,7 +3,7 @@
 let requireXcode = version: sha256:
   let
     xip = "Xcode_" + version +  ".xip";
-    # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
+
     unxip = if stdenv.buildPlatform.isDarwin
             then ''
               open -W ${xip}
@@ -14,7 +14,9 @@ let requireXcode = version: sha256:
               rm -rf ${xip}
               pbzx -n Content | cpio -i
               rm Content Metadata
+              rcodesign verify Xcode.app/Contents/MacOS/Xcode
             '';
+
     app = requireFile rec {
       name     = "Xcode.app";
       url      = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
@@ -83,4 +85,3 @@ in lib.makeExtensible (self: {
   xcode_15_1 = requireXcode "15.1" "sha256-0djqoSamU87rCpjo50Un3cFg9wKf+pSczRko6uumGM0=";
   xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
 })
-

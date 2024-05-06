@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ ... }:
 
       test-support.displayManager.auto.user = "alice";
 
-      services.xserver.libinput = {
+      services.libinput = {
         enable = true;
         mouse = {
           naturalScrolling = true;

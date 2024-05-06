@@ -8,9 +8,9 @@ in
 
 buildDotnetGlobalTool rec {
   pname = "csharp-ls";
-  version = "0.11.0";
+  version = "0.12.0";
 
-  nugetSha256 = "sha256-zB8uJqlf8kL8jh3WNsPQF7EJpONqi23co3O/iBzfEoU=";
+  nugetSha256 = "sha256-JQPIFgVisw/rRUcWpRGrFI3S67f5mOl0CWG1i8BlsXQ=";
 
   dotnet-sdk = sdk_8_0;
   dotnet-runtime = sdk_8_0;

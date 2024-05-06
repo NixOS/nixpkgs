@@ -9,6 +9,7 @@
 , jbig2enc
 , packaging
 , pdfminer-six
+, pillow-heif
 , pikepdf
 , pillow
 , pluggy
@@ -18,19 +19,17 @@
 , pythonOlder
 , rich
 , reportlab
-, setuptools
 , setuptools-scm
 , substituteAll
 , tesseract
 , tqdm
-, typing-extensions
 , unpaper
 , installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.1.2";
+  version = "16.2.0";
 
   disabled = pythonOlder "3.10";
 
@@ -46,10 +45,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-nZvfkfO5u3iuN0g/KITWbhYCRAJngEOKCW48z6IEPMI=";
+    hash = "sha256-sqhuQ+no6UymxbVtDtWiYQK8kKpO1y37NxLDmRT1LEQ=";
   };
 
   patches = [
+    ./use-pillow-heif.patch
     (substituteAll {
       src = ./paths.patch;
       gs = lib.getExe ghostscript;
@@ -60,30 +60,31 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     setuptools-scm
+  ];
+
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecation
     img2pdf
     packaging
     pdfminer-six
+    pillow-heif
     pikepdf
     pillow
     pluggy
-    reportlab
     rich
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
     hypothesis
     pytest-xdist
     pytestCheckHook
+    reportlab
   ];
 
   pythonImportsCheck = [

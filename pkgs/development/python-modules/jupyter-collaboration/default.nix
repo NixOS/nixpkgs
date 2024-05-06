@@ -64,6 +64,10 @@ buildPythonPackage rec {
     export HOME=$TEMP
   '';
 
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
     "test_dirty"

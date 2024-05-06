@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "speedtest-go";
-  version = "1.6.10";
+  version = "1.6.12";
 
   src = fetchFromGitHub {
     owner = "showwin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Uk7ZKGxyK4b7P87qN7rGgj4oXJgYhH4NzZa+4fOkh14=";
+    hash = "sha256-YXLa/0WCWDhQNIDM4kY/5BvUnb+GMmNzAZcYewrMYeg=";
   };
 
   vendorHash = "sha256-wQqAX7YuxxTiMWmV9LRoXunGMMzs12UyHbf4VvbQF1E=";

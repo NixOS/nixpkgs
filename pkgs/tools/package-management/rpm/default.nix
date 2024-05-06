@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
-    ++ lib.optional stdenv.isLinux elfutils;
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 

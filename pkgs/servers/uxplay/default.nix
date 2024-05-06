@@ -5,7 +5,7 @@
 , openssl
 , libplist
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , avahi
 , avahi-compat
 , gst_all_1
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
-  version = "1.68.2";
+  version = "1.68.3";
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ax2RhIIWb7BvBvE8GQlR3lwTSA5P5Qpj45cOc8xZNtY=";
+    hash = "sha256-Ev+VXI37zLRQ3yqllJVo1JZK/U82HeB65Hi9+c0O8Ks=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     libplist
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

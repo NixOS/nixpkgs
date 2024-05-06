@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , jaraco-classes
+, jaraco-context
 , keyring
 , pytestCheckHook
 , pythonOlder
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "keyrings-alt";
-  version = "5.0.0";
+  version = "5.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "keyrings.alt";
     inherit version;
-    hash = "sha256-nURstHu86pD/ouzD6AA6z0FXP8IBv0S0vxO9DhFISCg=";
+    hash = "sha256-zTcqHsRGobxakGJKUsiOg7kzAhjjkEemyaSK430RZ0U=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jaraco-classes
+    jaraco-context
   ];
 
   nativeCheckInputs = [

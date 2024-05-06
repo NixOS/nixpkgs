@@ -31,6 +31,6 @@ buildPythonPackage rec {
     mainProgram = "merge3";
     homepage = "https://github.com/breezy-team/merge3";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

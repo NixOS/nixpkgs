@@ -15,7 +15,7 @@
 , libdvdread
 , libxmlxx
 , mjpegtools
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
+  nativeBuildInputs = [ wrapGAppsHook3 scons pkg-config gettext ];
 
   buildInputs = [
     boost

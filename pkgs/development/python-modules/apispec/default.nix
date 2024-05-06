@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.6.0";
+  version = "6.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wIRvjqpRGcRrLs/pvCTtGduohF+GVdALUd3SlqEOpMs=";
+    hash = "sha256-9cqkfO51/gO5xQtVlASLTAUu7KLCEuDawS27YXXZplk=";
   };
 
   nativeBuildInputs = [

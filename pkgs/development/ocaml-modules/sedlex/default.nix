@@ -80,6 +80,6 @@ buildDunePackage rec {
     changelog = "https://github.com/ocaml-community/sedlex/raw/v${version}/CHANGES";
     description = "An OCaml lexer generator for Unicode";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.marsam ];
+    maintainers = [ ];
   };
 }

@@ -12,15 +12,16 @@
 , libxkbcommon
 , pkg-config
 }:
+
 stdenv.mkDerivation rec {
   pname = "showmethekey";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eeObomb4Gv/vpvViHsi3+O0JR/rYamrlZNZaXKL6KJw=";
+    repo = "showmethekey";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pVFkO/+a7GAOXbYBfU0zcO/uD26PX+y02bEZa3f1ZP8=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +41,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://showmethekey.alynx.one/";
     description = "Show keys you typed on screen";
+    homepage = "https://showmethekey.alynx.one/";
+    changelog = "https://github.com/AlynxZhou/showmethekey/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ocfox ];

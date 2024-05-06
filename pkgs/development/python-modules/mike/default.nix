@@ -56,6 +56,6 @@ buildPythonPackage rec {
     mainProgram = "mike";
     homepage = "https://github.com/jimporter/mike";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

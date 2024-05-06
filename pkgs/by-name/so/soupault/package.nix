@@ -7,13 +7,9 @@
 , testers
 }:
 
-let
+ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-
-  version = "4.9.0";
-in
-ocamlPackages.buildDunePackage {
-  inherit pname version;
+  version = "4.10.0";
 
   minimalOCamlVersion = "4.13";
 
@@ -22,7 +18,7 @@ ocamlPackages.buildDunePackage {
       "https://github.com/PataphysicalSociety/soupault/archive/${version}.tar.gz"
       "https://codeberg.org/PataphysicalSociety/soupault/archive/${version}.tar.gz"
     ];
-    hash = "sha256-vGTJUbAeYs/EYFykNSmCc4c9G66/Lz3BsUYnZQ8feFo=";
+    hash = "sha256-mkbRWw4Qj7pk2MQJERA9cAuC8DXD/fOShVXz2zPtXZ4=";
   };
 
   nativeBuildInputs = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ darwin.sigtool ];

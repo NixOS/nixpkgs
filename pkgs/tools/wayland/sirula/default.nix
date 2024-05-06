@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple app launcher for wayland written in rust";
     homepage = "https://github.com/DorianRudolph/sirula";
     license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ twitchyliquid64 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

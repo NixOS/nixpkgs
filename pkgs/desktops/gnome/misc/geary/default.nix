@@ -5,7 +5,7 @@
 , gtk3
 , vala
 , enchant2
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , ninja
 , desktop-file-utils
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Geary";
+    homepage = "https://gitlab.gnome.org/GNOME/geary";
     description = "Mail client for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.lgpl21Plus;

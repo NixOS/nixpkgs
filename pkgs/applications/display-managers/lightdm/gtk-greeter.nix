@@ -6,7 +6,7 @@
 , pkg-config
 , intltool
 , linkFarm
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , xfce4-dev-tools
 , at-spi2-core
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
     intltool
     xfce4-dev-tools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-indicator-services-command"
-    "--sbindir=${placeholder "out"}/bin" # for wrapGAppsHook to wrap automatically
+    "--sbindir=${placeholder "out"}/bin" # for wrapGAppsHook3 to wrap automatically
   ];
 
   preConfigure = ''

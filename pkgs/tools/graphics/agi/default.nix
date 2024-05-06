@@ -5,7 +5,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gdk-pixbuf
 , jre
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gdk-pixbuf
     gobject-introspection
     autoPatchelfHook

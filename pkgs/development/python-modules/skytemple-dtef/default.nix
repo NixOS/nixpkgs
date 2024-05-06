@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "A format for standardized rule-based tilesets with 256 adjacency combinations";
     homepage = "https://github.com/SkyTemple/skytemple-dtef";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

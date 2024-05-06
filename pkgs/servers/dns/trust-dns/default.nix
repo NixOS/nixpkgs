@@ -13,9 +13,9 @@ rustPlatform.buildRustPackage rec {
     owner = "hickory-dns";
     repo = "hickory-dns";
     rev = "v${version}";
-    hash = "sha256-+vZnozPsORe7nK6jL/yt/wp2qjwBTqyxZYz+cXaKNFk=";
+    hash = "sha256-szq21RuRmkhAfHlzhGQYpwjiIRkavFCPETOt+6TxhP4=";
   };
-  cargoHash = "sha256-VLpl6eMOstD0FsuPeHngKQitv1jcb+0dx2pc8ic3Cf4=";
+  cargoHash = "sha256-zGn5vHwsHgpkgOr30QiyScqnfXjH55LQIVtxoUUox64=";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

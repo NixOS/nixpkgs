@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "frozendict";
   version = "2.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -31,6 +32,10 @@ buildPythonPackage rec {
       export FROZENDICT_PURE_PY=1
     fi
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -6,7 +6,7 @@ let
   cfg = config.services.pixiecore;
 in
 {
-  meta.maintainers = with maintainers; [ bbigras danderson ];
+  meta.maintainers = with maintainers; [ bbigras ];
 
   options = {
     services.pixiecore = {

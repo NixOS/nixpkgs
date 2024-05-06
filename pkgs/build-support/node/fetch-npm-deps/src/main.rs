@@ -8,7 +8,7 @@ use std::{
     collections::HashMap,
     env, fs,
     path::{Path, PathBuf},
-    process::{self, Command},
+    process,
 };
 use tempfile::tempdir;
 use url::Url;
@@ -266,10 +266,7 @@ fn main() -> anyhow::Result<()> {
     fs::write(out.join("package-lock.json"), lock_content)?;
 
     if print_hash {
-        Command::new("nix")
-            .args(["--experimental-features", "nix-command", "hash", "path"])
-            .arg(out.as_os_str())
-            .status()?;
+        println!("{}", util::make_sri_hash(out)?);
     }
 
     Ok(())

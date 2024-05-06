@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
+{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook3, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, gst_all_1, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    pytest7CheckHook
     cpio
     cdrtools
     xorriso

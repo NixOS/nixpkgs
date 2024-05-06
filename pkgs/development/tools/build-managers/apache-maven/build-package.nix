@@ -28,7 +28,7 @@ let
 
     nativeBuildInputs = [
       maven
-    ];
+    ] ++ args.nativeBuildInputs or [ ];
 
     buildPhase = ''
       runHook preBuild

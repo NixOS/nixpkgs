@@ -11,7 +11,7 @@
   isort,
   python,
   pydantic,
-  pytestCheckHook,
+  pytest7CheckHook,
   pytest-asyncio,
   pytest-mock,
   typing-extensions,
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pydantic
     pytest-asyncio
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
     tomlkit
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitLab, fetchpatch, pkg-config, meson, ninja, cmake
 , git, criterion, gtk3, libconfig, gnuplot, opencv, json-glib
 , fftwFloat, cfitsio, gsl, exiv2, librtprocess, wcslib, ffmpeg
-, libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook
+, libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja cmake pkg-config git criterion wrapGAppsHook
+    meson ninja cmake pkg-config git criterion wrapGAppsHook3
   ];
 
   buildInputs = [

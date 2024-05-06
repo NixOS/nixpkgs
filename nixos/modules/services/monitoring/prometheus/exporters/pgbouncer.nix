@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.pgbouncer;
+  inherit (lib)
+    mkOption
+    types
+    optionals
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9127;

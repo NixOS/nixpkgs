@@ -1,32 +1,34 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
 , kwindowsystem
+, layer-shell-qt
 , liblxqt
 , libqtxdg
+, lxqt-build-tools
 , lxqt-globalkeys
-, qtx11extras
 , menu-cache
 , muparser
 , pcre
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-runner";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-NGytLQ2D5t1UdMGZoeHxHaXPwbRFDx+11ocjImXqZBU=";
+    hash = "sha256-r9rz6rJX60+1/+Wd5APobyZRioXzD1xveFIMToTvpXQ=";
   };
 
   nativeBuildInputs = [
@@ -34,19 +36,21 @@ mkDerivation rec {
     pkg-config
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qtx11extras
     kwindowsystem
+    layer-shell-qt
     liblxqt
     libqtxdg
     lxqt-globalkeys
     menu-cache
     muparser
     pcre
+    qtbase
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };

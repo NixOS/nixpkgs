@@ -4,7 +4,7 @@
 , gettext
 , gdk-pixbuf
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

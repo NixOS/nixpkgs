@@ -10,17 +10,17 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "3.0.8";
+  version = "3.0.9";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZGDE9go8BmaXE1YFT/z5Nob90MhsKZ6oKrodDMu2npY=";
+    hash = "sha256-pAe289XwKq/PO39/Wt60uipt4Z0ZD5f73pDaOTXXwi0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-qFJVoWzU9rqpYbb8gzdK33rq///zizxVkWhsNV8OXOM=";
+  vendorHash = "sha256-UWmsS79N8ooFr4qpKqOVC14cgf5ckAQwzROHGl1smD8=";
 
   subPackages = [
     "."
@@ -49,7 +49,6 @@ buildGoModule rec {
     rm core/cautils/getter/downloadreleasedpolicy_test.go
     rm core/core/initutils_test.go
     rm core/core/list_test.go
-    rm core/pkg/resourcehandler/remotegitutils_test.go
 
     # Remove tests that use networking
     substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \

@@ -74,7 +74,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     mainProgram = "apprise";
   };
 }

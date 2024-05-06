@@ -1,7 +1,5 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.imap-mailstat;
   valueToString = value:
@@ -13,6 +11,15 @@ let
         else "XXX ${toString value}"
       )
     );
+  inherit (lib)
+    mkOption
+    types
+    concatStrings
+    concatStringsSep
+    attrValues
+    mapAttrs
+    optionalString
+    ;
   createConfigFile = accounts:
     # unfortunately on toTOML yet
     # https://github.com/NixOS/nix/issues/3929

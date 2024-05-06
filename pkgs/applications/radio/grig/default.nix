@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk2
 , hamlib_4 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OgIgHW9NMW/xSSti3naIR8AQWUtNSv5bYdOcObStBlM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
   buildInputs = [ hamlib_4 gtk2 ];
 
   meta = with lib; {

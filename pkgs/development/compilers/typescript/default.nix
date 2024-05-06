@@ -28,7 +28,7 @@ buildNpmPackage rec {
     homepage = "https://www.typescriptlang.org/";
     changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "tsc";
   };
 }

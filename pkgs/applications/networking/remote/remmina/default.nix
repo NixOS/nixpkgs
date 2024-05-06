@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook3
 , desktopToDarwinBundle
 , glib, gtk3, gettext, libxkbfile, libX11, python3
 , freerdp, libssh, libgcrypt, gnutls, vte
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-3HyG2PBnTq/fVsvWA81fQ2gCOoAxINWeUDwzKcOuECk=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ]
+  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook3 ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [

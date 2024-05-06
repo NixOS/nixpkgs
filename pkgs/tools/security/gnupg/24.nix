@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
-    "--with-npth-prefix=${npth}"
+    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
   ++ lib.optional withTpm2Tss "--with-tss=intel"

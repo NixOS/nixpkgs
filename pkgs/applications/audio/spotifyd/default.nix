@@ -42,7 +42,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
     homepage = "https://spotifyd.rs/";
     changelog = "https://github.com/Spotifyd/spotifyd/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ anderslundstedt Br1ght0ne marsam ];
+    maintainers = with maintainers; [ anderslundstedt Br1ght0ne ];
     platforms = platforms.unix;
     mainProgram = "spotifyd";
   };

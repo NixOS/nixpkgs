@@ -116,7 +116,7 @@ in
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
-      services.xserver.libinput.enable = mkDefault true;
+      services.libinput.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
       networking.networkmanager.enable = mkDefault true;
 
@@ -157,6 +157,7 @@ in
 
         # packages
         nemo-with-extensions
+        gnome-online-accounts-gtk
         cinnamon-control-center
         cinnamon-settings-daemon
         libgnomekbd

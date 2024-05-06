@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "45.3";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "bDAum91mKQyw4m9ihDzUxDWklVq9u08VHwfcgEldZzA=";
+    hash = "sha256-9DSPLPUcB8DBBtEwFy1NI/LNQGh3Hh3gB7dYyireVmA=";
   };
 
   nativeBuildInputs = [
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Epiphany";
+    homepage = "https://apps.gnome.org/Epiphany/";
     description = "WebKit based web browser for GNOME";
     mainProgram = "epiphany";
     maintainers = teams.gnome.members ++ teams.pantheon.members;

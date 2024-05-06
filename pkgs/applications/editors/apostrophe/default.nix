@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja
-, wrapGAppsHook, pkg-config, desktop-file-utils
+, wrapGAppsHook3, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome, gspell, texliveMedium
 , shared-mime-info, libhandy, fira, sassc
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config desktop-file-utils
-    appstream-glib wrapGAppsHook sassc gobject-introspection ];
+    appstream-glib wrapGAppsHook3 sassc gobject-introspection ];
 
   buildInputs = [ glib pythonEnv gtk3
     gnome.adwaita-icon-theme webkitgtk gspell texliveMedium

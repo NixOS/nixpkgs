@@ -82,7 +82,9 @@ in rec {
         (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
-        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
+        # FIXME: broken by QEMU 8.2.3 upgrade, reenable when fixed
+        # Upstream issue: https://gitlab.com/qemu-project/qemu/-/issues/2321
+        # (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
@@ -168,7 +170,10 @@ in rec {
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
-        ["nixpkgs.tarball"]
+        [
+          "nixpkgs.tarball"
+          "nixpkgs.release-checks"
+        ]
       ];
     };
 }

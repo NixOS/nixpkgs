@@ -50,6 +50,10 @@ buildPythonPackage rec {
     uncertainties
   ];
 
+  pytestFlagsArray = [
+    "--benchmark-disable"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -57,6 +61,8 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/hgrecco/pint/issues/1898
     "test_load_definitions_stage_2"
+    # pytest8 deprecation
+    "test_nonnumeric_magnitudes"
   ];
 
   meta = with lib; {

@@ -1,12 +1,13 @@
 { stdenv
 , lib
 , substituteAll
+, fetchpatch
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , setuptools
 , pkg-config
 
@@ -61,6 +62,13 @@ buildPythonPackage rec {
     })
     # Skip tests that should be disabled without video driver
     ./skip-surface-tests.patch
+
+    # removes distutils unbreaking py312, part of https://github.com/pygame/pygame/pull/4211
+    (fetchpatch {
+      name = "remove-distutils.patch";
+      url = "https://github.com/pygame/pygame/commit/6038e7d6583a7a25fcc6e15387cf6240e427e5a7.patch";
+      hash = "sha256-HxcYjjhsu/Y9HiK9xDvY4X5dgWPP4XFLxdYGXC6tdWM=";
+    })
   ];
 
   postPatch = ''
@@ -70,7 +78,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     pkg-config
     SDL2
     setuptools

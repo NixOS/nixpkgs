@@ -27,15 +27,13 @@
 , desktop-file-utils
 , gdk-pixbuf
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , itstool
 , libsecret
 , libportal-gtk3
 , gsettings-desktop-schemas
 }:
-
-# for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
@@ -54,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     itstool
     gettext
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -97,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
     mainProgram = "shotwell";
-    homepage = "https://wiki.gnome.org/Apps/Shotwell";
+    homepage = "https://gitlab.gnome.org/GNOME/shotwell";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ bobby285271 ];
     platforms = platforms.linux;
   };
 })

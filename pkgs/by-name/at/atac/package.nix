@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "atac";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Julien-cpsn";
     repo = "ATAC";
     rev = "v${version}";
-    hash = "sha256-yR+w6zrX7XHrK6XGWM7J74XPxGEmy8Gf6guOH/Du6rc=";
+    hash = "sha256-d5qUleQrwWWTIEDj3VvJKpINHpc0rko18if4pv5GonU=";
   };
 
-  cargoHash = "sha256-Ez8d1tb0Xi91e3+U1/LDmj5u/oORQzelEQPFAC96yEI=";
+  cargoHash = "sha256-vlrllbcf5Y9DFwdekAHE5xtGlloKxTExXkp1LySEUK0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   env = {

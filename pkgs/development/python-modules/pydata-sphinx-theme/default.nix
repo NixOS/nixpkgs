@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pydata/pydata-sphinx-theme";
     changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

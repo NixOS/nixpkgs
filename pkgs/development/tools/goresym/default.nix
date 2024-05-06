@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/mandiant/GoReSym";
     changelog = "https://github.com/mandiant/GoReSym/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ thehedgeh0g ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

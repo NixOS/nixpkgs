@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/artemsen/swayimg";
     description = "Image viewer for Sway/Wayland";
-    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${version}";
+    changelog = "https://github.com/artemsen/swayimg/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;

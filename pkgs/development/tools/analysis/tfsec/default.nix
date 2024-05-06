@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/tfsec";
     changelog = "https://github.com/aquasecurity/tfsec/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab marsam peterromfeldhk ];
+    maintainers = with maintainers; [ fab peterromfeldhk ];
   };
 }

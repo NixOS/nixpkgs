@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , curl
 , freetype
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

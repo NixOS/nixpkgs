@@ -23,7 +23,7 @@
 , stdenv
 , vte
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ (with python3Packages; [
     python
     pyyaml

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , atk
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , click
 , hidapi
 , psutil
@@ -26,7 +26,7 @@ buildPythonApplication rec {
 
     # Populate GI_TYPELIB_PATH
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [

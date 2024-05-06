@@ -21,15 +21,15 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
 lib.checkListOfEnum "${pname}: tweaks" [ "solid" "float" "round" "blur" "noborder" "square" ] tweaks
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2023-06-20";
+  version = "2024-04-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
-    rev = version;
-    hash = "sha256-hUXlzLdcWeOHEJx3+vCMpxvJst6Rr8ISvlzlsUgCrhg=";
+    repo = "fluent-gtk-theme";
+    rev = finalAttrs.version;
+    hash = "sha256-0zf3fHtWcrbT26jgwgsPEDDhBWErOkgXyvGwSWV8rGs=";
   };
 
   nativeBuildInputs = [
@@ -67,11 +67,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Fluent design gtk theme";
     homepage = "https://github.com/vinceliuice/Fluent-gtk-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

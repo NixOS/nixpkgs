@@ -514,7 +514,7 @@ let
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
 
-    # TODO(kasper): use wrapGAppsHook
+    # TODO(kasper): use wrapGAppsHook3
     installPhase = ''
       mkdir -pv $out
       cp -r * $out

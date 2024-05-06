@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rocmUpdateScript
 , pkg-config
 , cmake
@@ -40,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     valgrind
     libxml2
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "extend-isa-compatibility-check.patch";
+      url = "https://salsa.debian.org/rocm-team/rocr-runtime/-/raw/076026d43bbee7f816b81fea72f984213a9ff961/debian/patches/0004-extend-isa-compatibility-check.patch";
+      hash = "sha256-cC030zVGS4kNXwaztv5cwfXfVwOldpLGV9iYgEfPEnY=";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''

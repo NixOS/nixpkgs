@@ -23,6 +23,6 @@ stdenvNoCC.mkDerivation rec {
     description = "A contemporary sans serif, with characters composed of modified-geometric curves and arches";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

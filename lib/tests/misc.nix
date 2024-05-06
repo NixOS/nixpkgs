@@ -33,7 +33,7 @@ let
     boolToString
     callPackagesWith
     callPackageWith
-    cartesianProductOfSets
+    cartesianProduct
     cli
     composeExtensions
     composeManyExtensions
@@ -63,18 +63,20 @@ let
     hasAttrByPath
     hasInfix
     id
+    ifilter0
     isStorePath
     lazyDerivation
+    length
     lists
     listToAttrs
     makeExtensible
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapCartesianProduct
     matchAttrs
     mergeAttrs
     meta
-    mkOption
     mod
     nameValuePair
     optionalDrvAttr
@@ -117,7 +119,6 @@ let
     expr = (builtins.tryEval expr).success;
     expected = true;
   };
-  testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -650,6 +651,31 @@ runTests {
   testFilter = {
     expr = filter (x: x != "a") ["a" "b" "c" "a"];
     expected = ["b" "c"];
+  };
+
+  testIfilter0Example = {
+    expr = ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ];
+    expected = [ 1 3 ];
+  };
+  testIfilter0Empty = {
+    expr = ifilter0 (i: v: abort "shouldn't be evaluated!") [ ];
+    expected = [ ];
+  };
+  testIfilter0IndexOnly = {
+    expr = length (ifilter0 (i: v: mod i 2 == 0) [ (throw "0") (throw "1") (throw "2") (throw "3")]);
+    expected = 2;
+  };
+  testIfilter0All = {
+    expr = ifilter0 (i: v: true) [ 10 11 12 13 14 15 ];
+    expected = [ 10 11 12 13 14 15 ];
+  };
+  testIfilter0First = {
+    expr = ifilter0 (i: v: i == 0) [ 10 11 12 13 14 15 ];
+    expected = [ 10 ];
+  };
+  testIfilter0Last = {
+    expr = ifilter0 (i: v: i == 5) [ 10 11 12 13 14 15 ];
+    expected = [ 15 ];
   };
 
   testFold =
@@ -1415,7 +1441,7 @@ runTests {
     };
 
   testToPrettyMultiline = {
-    expr = mapAttrs (const (generators.toPretty { })) rec {
+    expr = mapAttrs (const (generators.toPretty { })) {
       list = [ 3 4 [ false ] ];
       attrs = { foo = null; bar.foo = "baz"; };
       newlinestring = "\n";
@@ -1429,7 +1455,7 @@ runTests {
         there
         test'';
     };
-    expected = rec {
+    expected = {
       list = ''
         [
           3
@@ -1467,13 +1493,10 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist =
-    let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
-    in {
+  testToPlist = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
-        nested.values = rec {
+        nested.values = {
           int = 42;
           float = 0.1337;
           bool = true;
@@ -1686,17 +1709,17 @@ runTests {
   };
 
   testCartesianProductOfEmptySet = {
-    expr = cartesianProductOfSets {};
+    expr = cartesianProduct {};
     expected = [ {} ];
   };
 
   testCartesianProductOfOneSet = {
-    expr = cartesianProductOfSets { a = [ 1 2 3 ]; };
+    expr = cartesianProduct { a = [ 1 2 3 ]; };
     expected = [ { a = 1; } { a = 2; } { a = 3; } ];
   };
 
   testCartesianProductOfTwoSets = {
-    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ 1 ]; b = [ 10 20 ]; };
     expected = [
       { a = 1; b = 10; }
       { a = 1; b = 20; }
@@ -1704,12 +1727,12 @@ runTests {
   };
 
   testCartesianProductOfTwoSetsWithOneEmpty = {
-    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ ]; b = [ 10 20 ]; };
     expected = [ ];
   };
 
   testCartesianProductOfThreeSets = {
-    expr = cartesianProductOfSets {
+    expr = cartesianProduct {
       a = [   1   2   3 ];
       b = [  10  20  30 ];
       c = [ 100 200 300 ];
@@ -1751,6 +1774,30 @@ runTests {
       { a = 3; b = 30; c = 200; }
       { a = 3; b = 30; c = 300; }
     ];
+  };
+
+  testMapCartesianProductOfOneSet = {
+    expr = mapCartesianProduct ({a}: a * 2) { a = [ 1 2 3 ]; };
+    expected = [ 2 4 6 ];
+  };
+
+  testMapCartesianProductOfTwoSets = {
+    expr = mapCartesianProduct ({a,b}: a + b) { a = [ 1 ]; b = [ 10 20 ]; };
+    expected = [ 11 21 ];
+  };
+
+  testMapCartesianProcutOfTwoSetsWithOneEmpty = {
+    expr = mapCartesianProduct (x: x.a + x.b) { a = [ ]; b = [ 10 20 ]; };
+    expected = [ ];
+  };
+
+  testMapCartesianProductOfThreeSets = {
+    expr = mapCartesianProduct ({a,b,c}: a + b + c) {
+      a = [ 1 2 3 ];
+      b = [ 10 20 30 ];
+      c = [ 100 200 300 ];
+    };
+    expected = [ 111 211 311 121 221 321 131 231 331 112 212 312 122 222 322 132 232 332 113 213 313 123 223 323 133 233 333 ];
   };
 
   # The example from the showAttrPath documentation

@@ -8,7 +8,7 @@
 , jsonschema
 , jupyterlab-widgets
 , lib
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 , traitlets
 , widgetsnbextension
@@ -40,19 +40,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipykernel
     jsonschema
-    pytestCheckHook
+    pytest7CheckHook
     pytz
-  ];
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

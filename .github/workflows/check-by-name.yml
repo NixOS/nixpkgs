@@ -20,6 +20,13 @@ permissions:
   # We need this permission to cancel the workflow run if there's a merge conflict
   actions: write
 
+# Create a check-by-name concurrency group based on the pull request number. if
+# an event triggers a run on the same PR while a previous run is still in
+# progress, the previous run will be canceled and the new one will start.
+concurrency:
+  group: check-by-name-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   check:
     # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases
@@ -39,7 +46,7 @@ jobs:
           # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
 
           # Retry the API query this many times
-          retryCount=3
+          retryCount=5
           # Start with 5 seconds, but double every retry
           retryInterval=5
           while true; do
@@ -84,7 +91,7 @@ jobs:
             exit 1
           fi
           echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           # pull_request_target checks out the base branch by default
           ref: ${{ env.mergedSha }}
@@ -107,6 +114,10 @@ jobs:
           # Adds a result symlink as a GC root
           nix-store --realise "$toolPath" --add-root result
       - name: Running nixpkgs-check-by-name
+        env:
+          # Force terminal colors to be enabled. The library that
+          # nixpkgs-check-by-name uses respects: https://bixense.com/clicolors/
+          CLICOLOR_FORCE: 1
         run: |
           if result/bin/nixpkgs-check-by-name --base "$base" .; then
             exit 0

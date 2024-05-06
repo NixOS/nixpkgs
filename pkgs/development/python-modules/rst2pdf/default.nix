@@ -72,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://rst2pdf.org/";
     changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

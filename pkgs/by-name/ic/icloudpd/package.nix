@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.17.4";
+  version = "1.17.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     rev = "v${version}";
-    hash = "sha256-xsUayewn6c+TFqQnvDWe+1y4o76Quq8sK1WkSFFgPkc=";
+    hash = "sha256-1tyvoDAlh2UuPWDqA7mwC1v5kij3v3aBZBfIG/vluJo=";
   };
 
   pythonRelaxDeps = true;

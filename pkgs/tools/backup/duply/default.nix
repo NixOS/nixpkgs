@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       secure backups on non-trusted spaces are no child's play?
     '';
     homepage = "https://duply.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
     platforms = lib.platforms.unix;
   };

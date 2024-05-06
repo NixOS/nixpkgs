@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://hebcal.github.io";
     description = "A perpetual Jewish Calendar";
     longDescription = "Hebcal is a program which prints out the days in the Jewish calendar for a given Gregorian year. Hebcal is fairly flexible in terms of which events in the Jewish calendar it displays.";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.hhm ];
     platforms = platforms.all;
     mainProgram = "hebcal";

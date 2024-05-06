@@ -63,7 +63,7 @@
           '' + build);
         in
           if run == null
-            then build
+            then built
           else
             runCommand "${built.name}-run" { src = built; nativeBuildInputs = runInputs; } (
               lib.optionalString (runtime != null) ''
@@ -71,8 +71,10 @@
                 export DOTNET_ROOT=${runtime}
               '' + run);
 
+      # Setting LANG to something other than 'C' forces the runtime to search
+      # for ICU, which will be required in most user environments.
       checkConsoleOutput = command: ''
-        output="$(${command})"
+        output="$(LANG=C.UTF-8 ${command})"
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
@@ -95,6 +97,15 @@
         name = "publish";
         template = "console";
         build = "dotnet publish -o $out";
+        run = checkConsoleOutput "$src/test";
+      };
+
+      self-contained = mkDotnetTest {
+        name = "self-contained";
+        template = "console";
+        usePackageSource = true;
+        build = "dotnet publish --use-current-runtime --sc -o $out";
+        runtime = null;
         run = checkConsoleOutput "$src/test";
       };
 

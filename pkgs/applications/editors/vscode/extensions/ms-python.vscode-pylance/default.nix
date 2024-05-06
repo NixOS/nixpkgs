@@ -1,6 +1,6 @@
 {
   lib,
-  nodePackages,
+  pyright,
   vscode-utils,
 }:
 
@@ -8,11 +8,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "vscode-pylance";
     publisher = "MS-python";
-    version = "2023.8.50";
-    hash = "sha256-xJU/j5r/Idp/0VorEfciT4SFKRBpMCv9Z0LKO/++1Gk=";
+    version = "2024.4.1";
+    hash = "sha256-huKu6yefGXOay5Az4vksopRt8heoLxvKUrg/J1NlQFo=";
   };
 
-  buildInputs = [ nodePackages.pyright ];
+  buildInputs = [ pyright ];
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";

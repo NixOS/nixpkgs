@@ -66,6 +66,5 @@ buildPythonPackage rec {
     homepage = "https://ipyparallel.readthedocs.io/";
     changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

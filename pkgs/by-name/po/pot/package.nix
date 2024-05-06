@@ -3,7 +3,7 @@
 , stdenvNoCC
 , rustPlatform
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , cargo
 , rustc
 , cargo-tauri
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     cargo
     rustc
     cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook3
     nodePackages.pnpm
     pkg-config
   ];

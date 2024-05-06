@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "castopod";
   meta = with lib.maintainers; {
-    maintainers = [ alexoundos misuzu ];
+    maintainers = [ alexoundos ];
   };
 
   nodes.castopod = { nodes, ... }: {

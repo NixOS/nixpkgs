@@ -71,6 +71,6 @@ buildPythonPackage rec {
     description = "PDF parser and analyzer";
     homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy marsam ];
+    maintainers = with maintainers; [ psyanticy ];
   };
 }

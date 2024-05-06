@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "gamble";
-  version = "0.11";
+  version = "0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zsEBqhKidgO1e0lpKhw+LY75I2Df+IefNLaSkBBFKFU=";
+    hash = "sha256-P0w1Q1Kus742Yu/MpqheEbp1+Pt21f163JWZfKJj3SA=";
   };
 
   nativeCheckInputs = [

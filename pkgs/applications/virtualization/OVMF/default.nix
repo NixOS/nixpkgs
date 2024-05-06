@@ -24,41 +24,39 @@
 # Usually, this option is broken, do not use it except if you know what you are
 # doing.
 , sourceDebug ? false
+, projectDscPath ? {
+    i686 = "OvmfPkg/OvmfPkgIa32.dsc";
+    x86_64 = "OvmfPkg/OvmfPkgX64.dsc";
+    aarch64 = "ArmVirtPkg/ArmVirtQemu.dsc";
+    riscv64 = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
+  }.${stdenv.hostPlatform.parsed.cpu.name}
+  or (throw "Unsupported OVMF `projectDscPath` on ${stdenv.hostPlatform.parsed.cpu.name}")
+, fwPrefix ? {
+    i686 = "OVMF";
+    x86_64 = "OVMF";
+    aarch64 = "AAVMF";
+    riscv64 = "RISCV_VIRT";
+  }.${stdenv.hostPlatform.parsed.cpu.name}
+  or (throw "Unsupported OVMF `fwPrefix` on ${stdenv.hostPlatform.parsed.cpu.name}")
+, metaPlatforms ? edk2.meta.platforms
 }:
 
 let
 
   platformSpecific = {
-    i686 = {
-      projectDscPath = "OvmfPkg/OvmfPkgIa32.dsc";
-      fwPrefix = "OVMF";
+    x86_64.msVarsArgs = {
+      flavor = "OVMF_4M";
+      archDir = "X64";
     };
-    x86_64 = {
-      projectDscPath = "OvmfPkg/OvmfPkgX64.dsc";
-      fwPrefix = "OVMF";
-      msVarsArgs = {
-        flavor = "OVMF_4M";
-        archDir = "X64";
-      };
-    };
-    aarch64 = {
-      projectDscPath = "ArmVirtPkg/ArmVirtQemu.dsc";
-      fwPrefix = "AAVMF";
-      msVarsArgs = {
-        flavor = "AAVMF";
-        archDir = "AARCH64";
-      };
-    };
-    riscv64 = {
-      projectDscPath = "OvmfPkg/RiscVVirt/RiscVVirtQemu.dsc";
-      fwPrefix = "RISCV_VIRT";
+    aarch64.msVarsArgs = {
+      flavor = "AAVMF";
+      archDir = "AARCH64";
     };
   };
 
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
-  inherit (platformSpecific.${cpuName})
-    projectDscPath fwPrefix msVarsArgs;
+  inherit (platformSpecific.${cpuName}) msVarsArgs;
 
   version = lib.getVersion edk2;
 
@@ -152,6 +150,9 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
   # release notes accordingly.
   postInstall = ''
     mkdir -vp $fd/FV
+  '' + lib.optionalString (builtins.elem fwPrefix [
+    "OVMF" "AAVMF" "RISCV_VIRT"
+  ]) ''
     mv -v $out/FV/${fwPrefix}_{CODE,VARS}.fd $fd/FV
   '' + lib.optionalString stdenv.hostPlatform.isx86 ''
     mv -v $out/FV/${fwPrefix}.fd $fd/FV
@@ -184,7 +185,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
-    inherit (edk2.meta) platforms;
+    platforms = metaPlatforms;
     maintainers = with lib.maintainers; [ adamcstephens raitobezarius ];
     broken = stdenv.isDarwin;
   };

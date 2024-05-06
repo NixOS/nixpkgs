@@ -6,7 +6,7 @@
 , ninja
 , wayland
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , installShellFiles
 }:
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     vc = "hg";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook3 installShellFiles ];
   buildInputs = [ wayland gtk3 ];
 
   patches = [

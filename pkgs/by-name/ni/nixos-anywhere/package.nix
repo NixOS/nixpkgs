@@ -12,11 +12,11 @@
 , gnused
 , lib
 , makeWrapper
+, sshpass
 }:
 let
   runtimeDeps = [
     gitMinimal # for git flakes
-    rsync
     nix
     coreutils
     curl # when uploading tarballs
@@ -24,16 +24,18 @@ let
     gawk
     findutils
     gnused # needed by ssh-copy-id
+    sshpass # used to provide password for ssh-copy-id
+    rsync # used to upload extra-files
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.1.2";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-JzgZnHQ4Bknh1ebE4iMVzR3cWZG+8k7MRy0X7cNSnBE=";
+    hash = "sha256-u3PFJup/XOz2MBhvqCzm94iH6Z4nrE0KmBgT/OnNDqU=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''

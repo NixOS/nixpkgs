@@ -10,13 +10,13 @@
 , cython
 , gfortran
 , meson-python
+, nukeReferences
 , pkg-config
 , pythran
 , wheel
 , setuptools
 , hypothesis
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pytest-xdist
 , numpy
 , pybind11
@@ -34,8 +34,8 @@ let
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
   # The update script uses sed regexes to replace them with the updated hashes.
-  version = "1.12.0";
-  srcHash = "sha256-PuiyYTgSegDTV9Kae5N68FOXT1jyJrNv9p2aFP70Z20=";
+  version = "1.13.0";
+  srcHash = "sha256-HaYk92hOREHMOXppK+Bs9DrBu9KUVUsZ0KV+isTofUo=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -76,24 +76,28 @@ in buildPythonPackage {
         "doc/source/dev/contributor/meson_advanced.rst"
       ];
     })
-    (fetchpatch {
-      name = "openblas-0.3.26-compat.patch";
-      url = "https://github.com/scipy/scipy/commit/8c96a1f742335bca283aae418763aaba62c03378.patch";
-      hash = "sha256-SGoYDxwSAkr6D5/XEqHLerF4e4nmmI+PX+z+3taWAps=";
-    })
+    # Fix for https://github.com/scipy/scipy/issues/20300 until 1.13.1 is
+    # released. Patch is based upon:
+    # https://github.com/scipy/pocketfft/commit/9367142748fcc9696a1c9e5a99b76ed9897c9daa
+    # Couldn't use fetchpatch because it is a submodule of scipy, and
+    # extraPrefix doesn't fit this purpose.
+    ./pocketfft-aligned_alloc.patch
   ];
 
-  # Upstream complicated numpy version pinning is causing issues in the
-  # configurePhase, so we pass on it.
+  # Upstream says in a comment in their pyproject.toml that building against
+  # both numpy 2 and numpy 1 should work, but they seem to worry about numpy
+  # incompatibilities that we here with Nixpkgs' Python ecosystem, shouldn't
+  # experience.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'numpy==' 'numpy>=' \
+      --replace-fail 'numpy>=2.0.0rc1,' 'numpy' \
   '';
 
   nativeBuildInputs = [
     cython
     gfortran
     meson-python
+    nukeReferences
     pythran
     pkg-config
     wheel
@@ -117,7 +121,7 @@ in buildPythonPackage {
   nativeCheckInputs = [
     hypothesis
     # Failed: DID NOT WARN. No warnings of type (<class 'DeprecationWarning'>, <class 'PendingDeprecationWarning'>, <class 'FutureWarning'>) were emitted.
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     pytest-xdist
   ];
 
@@ -166,6 +170,12 @@ in buildPythonPackage {
   #
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
+  # remove references to dev dependencies
+  postInstall = ''
+    nuke-refs $out/${python.sitePackages}/scipy/__config__.py
+    rm $out/${python.sitePackages}/scipy/__pycache__/__config__.*.opt-1.pyc
+  '';
+
   preCheck = ''
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
     cd $out
@@ -193,6 +203,6 @@ in buildPythonPackage {
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh doronbehar ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

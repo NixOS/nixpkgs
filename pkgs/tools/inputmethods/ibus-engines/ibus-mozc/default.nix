@@ -12,19 +12,19 @@ let
   zip-codes = fetchFromGitHub {
     owner = "musjj";
     repo = "jp-zip-codes";
-    rev = "a1eed9bae0ba909c8c8f5387008b08ff490f5e57";
-    hash = "sha256-VfI8qAMPPCC2H4vjm4a6sAmSwc1YkXlMyLm1cnufvrU=";
+    rev = "119c888a38032a92e139c52cd26f45bb495c4d54";
+    hash = "sha256-uyAL2TcFJsYZACFDAxIQ4LE40Hi4PVrQRnJl5O5+RmU=";
   };
 in
 buildBazelPackage rec {
   pname = "ibus-mozc";
-  version = "2.29.5268.102";
+  version = "2.29.5374.102";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
     rev = version;
-    hash = "sha256-B7hG8OUaQ1jmmcOPApJlPVcB8h1Rw06W5LAzlTzI9rU=";
+    hash = "sha256-AcIN5sWPBe4JotAUYv1fytgQw+mJzdFhKuVPLR48soA=";
     fetchSubmodules = true;
   };
 
@@ -38,11 +38,11 @@ buildBazelPackage rec {
   inherit bazel;
 
   fetchAttrs = {
-    sha256 = "sha256-17QHh1MJUu8OK/T+WSpLXEx83DmRORLN7yLzILqP7vw=";
+    sha256 = "sha256-ToBLVJpAQErL/P1bfWJca2FjhDW5XTrwuJQLquwlrhA=";
 
-    # remove references of buildInputs
+    # remove references of buildInputs and zip code files
     preInstall = ''
-      rm -rv $bazelOut/external/{ibus,qt_linux}
+      rm -rv $bazelOut/external/{ibus,qt_linux,zip_code_*}
     '';
   };
 

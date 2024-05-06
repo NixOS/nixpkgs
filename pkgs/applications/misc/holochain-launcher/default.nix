@@ -7,7 +7,7 @@
 , openssl
 , webkitgtk
 , libappindicator
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , glib-networking
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook # required for FileChooser
+    wrapGAppsHook3 # required for FileChooser
   ];
 
   buildInputs = [

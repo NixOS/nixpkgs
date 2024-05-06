@@ -12,7 +12,6 @@ mkDerivation {
     description = "Scientific calculator";
     mainProgram = "kcalc";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = [ lib.maintainers.fridh ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [

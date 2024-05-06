@@ -44,7 +44,7 @@ buildGoModule rec {
     description = "Database migration tool which supports SQL migrations and Go functions";
     homepage = "https://pressly.github.io/goose/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with maintainers; [ ];
     mainProgram = "goose";
   };
 }

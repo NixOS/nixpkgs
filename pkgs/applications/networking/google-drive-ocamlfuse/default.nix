@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "google-drive-ocamlfuse";
-  version = "0.7.31";
+  version = "0.7.32";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";
     rev = "v${version}";
-    hash = "sha256-4Fs4e4rXSeumaMDXRqGLpPuFs6DC8dmkywGaBqR5sFA=";
+    hash = "sha256-AWr1tcium70rXFKMTv6xcWxndOJua3UXG8Q04TN1Siw=";
   };
 
   doCheck = lib.versionOlder ocaml.version "5.0";

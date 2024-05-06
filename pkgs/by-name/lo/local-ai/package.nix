@@ -6,6 +6,8 @@
 , fetchpatch
 , fetchFromGitHub
 , protobuf
+, protoc-gen-go
+, protoc-gen-go-grpc
 , grpc
 , openssl
 , llama-cpp
@@ -61,8 +63,8 @@ let
 
   inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
 
-  go-llama-ggml = effectiveStdenv.mkDerivation {
-    name = "go-llama-ggml";
+  go-llama = effectiveStdenv.mkDerivation {
+    name = "go-llama";
     src = fetchFromGitHub {
       owner = "go-skynet";
       repo = "go-llama.cpp";
@@ -98,8 +100,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "1b67731e184e27a465b8c5476061294a4af668ea";
-      hash = "sha256-0WWbsklpW6HhFRkvWpYh8Lhi8VIansS/zmyIKNQRkIs=";
+      rev = "784e11dea1f5ce9638851b2b0dddb107e2a609c8";
+      hash = "sha256-yAQAUo5J+a6O2kTqhFL1UH0tANxpQn3JhAd3MByaC6I=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -252,8 +254,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "8f253ef3af1c62c04316ba4afa7145fc4d701a8c";
-      hash = "sha256-yHHjhpQIn99A/hqFwAb7TfTf4Q9KnKat93zyXS70bT8=";
+      rev = "858452d58dba3acdc3431c9bced2bb8cfd9bf418";
+      hash = "sha256-2fT3RgGpBex1mF6GJsVDo4rb0F31YqxTymsXcrpQAZk=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
@@ -371,18 +373,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.12.4";
+  version = "2.13.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-piu2B6u4ZfxiOd9SXrE7jiiiwL2SM8EqXo2s5qeKRl0=";
+    hash = "sha256-jZE8Ow9FFhnx/jvsURLYlYtSuKpE4UWBezxg/mpHs9g=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-8Hu1y/PK21twnB7D22ltslFFzRrsB8d1R2hkgIFB/XY=";
+    vendorHash = "sha256-nWNK2YekQnBSLx4ouNSe6esIe0yFuo69E0HStYLQANg=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -392,12 +394,12 @@ let
       in
       ''
         sed -i Makefile \
-          -e 's;git clone.*go-llama-ggml$;${cp} ${go-llama-ggml} sources/go-llama-ggml;' \
+          -e 's;git clone.*go-llama\.cpp$;${cp} ${go-llama} sources/go-llama\.cpp;' \
           -e 's;git clone.*gpt4all$;${cp} ${gpt4all} sources/gpt4all;' \
           -e 's;git clone.*go-piper$;${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper;' \
-          -e 's;git clone.*go-rwkv$;${cp} ${go-rwkv} sources/go-rwkv;' \
+          -e 's;git clone.*go-rwkv\.cpp$;${cp} ${go-rwkv} sources/go-rwkv\.cpp;' \
           -e 's;git clone.*whisper\.cpp$;${cp} ${whisper-cpp.src} sources/whisper\.cpp;' \
-          -e 's;git clone.*go-bert$;${cp} ${go-bert} sources/go-bert;' \
+          -e 's;git clone.*go-bert\.cpp$;${cp} ${go-bert} sources/go-bert\.cpp;' \
           -e 's;git clone.*diffusion$;${cp} ${if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src} sources/go-stable-diffusion;' \
           -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
           -e 's, && git checkout.*,,g' \
@@ -415,14 +417,19 @@ let
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
       ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [ makeWrapper ]
-      ++ lib.optionals with_cublas [ cuda_nvcc ];
+    nativeBuildInputs = [
+      protobuf
+      protoc-gen-go
+      protoc-gen-go-grpc
+      makeWrapper
+    ]
+    ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
     modBuildPhase = ''
       mkdir sources
-      make prepare-sources
+      make prepare-sources protogen-go
       go mod tidy -v
     '';
 
@@ -486,7 +493,7 @@ let
 
     passthru.local-packages = {
       inherit
-        go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
+        go-tiny-dream go-rwkv go-bert go-llama gpt4all go-piper
         llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn espeak-ng' piper-phonemize
         piper-tts';
     };
@@ -498,6 +505,7 @@ let
     };
 
     passthru.tests = callPackages ./tests.nix { inherit self; };
+    passthru.lib = callPackages ./lib.nix { };
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";

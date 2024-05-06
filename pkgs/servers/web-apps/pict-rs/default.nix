@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pict-rs";
-  version = "0.5.11";
+  version = "0.5.13";
 
   src = fetchFromGitea {
     domain = "git.asonix.dog";
     owner = "asonix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xZN9ifeI0cEz9i8JWTgvU0CZhukxwzJY6vwe7TJWkRc=";
+    sha256 = "sha256-zFsxX7pZc8Hm8XcKWZK5zE3XAYmFPT0IJKD0+zazaeI=";
   };
 
-  cargoHash = "sha256-g1N7yziPbQthdNcwZeDbOQpGFePUf4LXqMyWkS6c1AQ=";
+  cargoHash = "sha256-NjNfMyNEliyJQuwWJ/owyKOz+P5gT8Ov0w298I6A/Bk=";
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
