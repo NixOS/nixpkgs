@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, makeWrapper
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-5qmwCcrhDkJlyeTS+waMiTxro1HjMHiQE5Ds/4sVpx4=";
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
   ];
 
@@ -36,6 +38,11 @@ rustPlatform.buildRustPackage rec {
     Foundation
     PCSC
   ];
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/age-plugin-yubikey \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pcsclite ]} \
+  '';
 
   meta = with lib; {
     description = "YubiKey plugin for age";
