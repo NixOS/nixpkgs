@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "execnb";
   version = "0.1.6";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -25,10 +26,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "execnb" ];
 
   meta = with lib; {
-    homepage = "https://github.com/fastai/execnb";
     description = "Execute a jupyter notebook, fast, without needing jupyter";
-    mainProgram = "exec_nb";
+    homepage = "https://github.com/fastai/execnb";
+    changelog = "https://github.com/fastai/execnb/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rxiao ];
+    mainProgram = "exec_nb";
   };
 }
