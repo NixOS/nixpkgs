@@ -780,6 +780,12 @@
     github = "akgrant43";
     githubId = 2062166;
   };
+  akhilmhdh = {
+    email = "akhilmhdh@infisical.com";
+    github = "akhilmhdh";
+    githubId = 31166322;
+    name = "Akhil Mohan";
+  };
   akho = {
     name = "Alexander Khodyrev";
     email = "a@akho.name";
@@ -9420,12 +9426,6 @@
     github = "jglukasik";
     githubId = 6445082;
     name = "Joseph Lukasik";
-  };
-  jgoux = {
-    email = "hi@jgoux.dev";
-    github = "jgoux";
-    githubId = 1443499;
-    name = "Julien Goux";
   };
   jhh = {
     email = "jeff@j3ff.io";
