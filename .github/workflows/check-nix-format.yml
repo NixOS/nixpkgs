@@ -32,6 +32,7 @@ jobs:
         # Each environment variable beginning with NIX_FMT_PATHS_ is a list of
         # paths to check with nixfmt.
         env:
+          NIX_FMT_PATHS_BSD: pkgs/os-specific/bsd
           NIX_FMT_PATHS_MPVSCRIPTS: pkgs/applications/video/mpv/scripts
           # Format paths related to the Nixpkgs CUDA ecosystem.
           NIX_FMT_PATHS_CUDA: |
