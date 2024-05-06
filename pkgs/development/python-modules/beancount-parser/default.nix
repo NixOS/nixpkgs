@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "beancount-parser";
-  version = "0.2.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beancount-parser";
     rev = "refs/tags/${version}";
-    hash = "sha256-VSl+Jde/mDSUpICXjmPKID6qZiKUUaK8ixztP1qaoDM=";
+    hash = "sha256-uZcaIKlrHNJFt7dLBeaVgaNP8n+/79MwxK5oY1OxKNo=";
   };
 
   buildInputs = [
