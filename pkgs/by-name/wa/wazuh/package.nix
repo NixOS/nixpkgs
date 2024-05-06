@@ -244,6 +244,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Wazuh agent for NixOS";
     homepage = "https://wazuh.com";
-    maintainers = with maintainers; [ V3ntus ];
+    maintainers = with maintainers; [ V3ntus sjdwhiting ];
   };
 }
