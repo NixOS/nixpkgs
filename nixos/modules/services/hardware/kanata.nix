@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.kanata;
 
+  upstreamDoc = "See [the upstream documentation](https://github.com/jtroo/kanata/blob/main/docs/config.adoc) and [example config files](https://github.com/jtroo/kanata/tree/main/cfg_samples) for more information.";
+
   keyboard = {
     options = {
       devices = mkOption {
@@ -42,8 +44,7 @@ let
         description = ''
           Configuration other than `defcfg`.
 
-          See [example config files](https://github.com/jtroo/kanata)
-          for more information.
+          ${upstreamDoc}
         '';
       };
       extraDefCfg = mkOption {
@@ -55,8 +56,7 @@ let
           from the devices option) and
           `linux-continue-if-no-devs-found` (hardcoded to be yes).
 
-          See [example config files](https://github.com/jtroo/kanata)
-          for more information.
+          ${upstreamDoc}
         '';
       };
       extraArgs = mkOption {
