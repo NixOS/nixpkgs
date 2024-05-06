@@ -16,7 +16,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0dlsy0c46781sb652kp80pvga7pzx6xla64axir92fcgg8k803bi";
   };
 
-  cargoSha256 = "1ar62dn0khlbm47chakrsrxd1y76gpq0sql4g9j7dqqrvkavgd7w";
+  cargoHash = "sha256-Ygya/9keRyIQyjrO6medtcXww9LMG3ne6I/8q35lJPo=";
+
+  cargoPatches = [ ./update-gerber-types-to-0.3.patch ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
