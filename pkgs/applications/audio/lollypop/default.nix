@@ -23,7 +23,7 @@
 , youtubeSupport ? true
 }:
 
-python3.pkgs.buildPythonApplication rec  {
+python3.pkgs.buildPythonApplication rec {
   pname = "lollypop";
   version = "1.4.37";
 
@@ -48,32 +48,28 @@ python3.pkgs.buildPythonApplication rec  {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    gdk-pixbuf
-    glib
-    glib-networking
-    gst-libav
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
-    gtk3
-    libhandy
-    libsoup_3
-    pango
-    totem-pl-parser
-  ] ++ lib.optional lastFMSupport libsecret;
+  buildInputs = with gst_all_1;
+    [
+      gdk-pixbuf
+      glib
+      glib-networking
+      gst-libav
+      gst-plugins-bad
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gstreamer
+      gtk3
+      libhandy
+      libsoup_3
+      pango
+      totem-pl-parser
+    ] ++ lib.optional lastFMSupport libsecret;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    beautifulsoup4
-    pillow
-    pycairo
-    pygobject3
-  ]
-  ++ lib.optional lastFMSupport pylast
-  ++ lib.optional youtubeSupport youtube-dl
-  ;
+  propagatedBuildInputs = with python3.pkgs;
+    [ beautifulsoup4 pillow pycairo pygobject3 ]
+    ++ lib.optional lastFMSupport pylast
+    ++ lib.optional youtubeSupport youtube-dl;
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -95,9 +91,7 @@ python3.pkgs.buildPythonApplication rec  {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  passthru = { updateScript = nix-update-script { }; };
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
