@@ -35,12 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-z+QBjMT0L7dqCJvbwok9TWQajIPzmAq3XPLWFxmhPsk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     license-expression
     packageurl-python
