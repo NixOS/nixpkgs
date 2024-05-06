@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xjdnfLrESU6q+LDgOGFzFGhFgw76/+To3JL7O0KOWtI=";
   };
 
+  patches = [
+    ./CVE-2024-28182.patch
+  ];
+
   outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [ pkg-config ]

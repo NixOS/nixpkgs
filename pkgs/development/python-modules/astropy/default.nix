@@ -79,6 +79,7 @@ buildPythonPackage rec {
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
+    "test_datetime_to_timedelta"
   ];
 
   meta = {

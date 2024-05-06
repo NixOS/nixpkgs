@@ -49,6 +49,24 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libarchive/libarchive/commit/6110e9c82d8ba830c3440f36b990483ceaaea52c.patch";
       hash = "sha256-/j6rJ0xWhtXU0YCu1LOokxxNppy5Of6Q0XyO4U6la7M=";
     })
+    (fetchpatch {
+      # https://github.com/advisories/GHSA-2jc9-36w4-pmqw
+      name = "CVE-2024-26256.patch";
+      url = "https://github.com/libarchive/libarchive/commit/eb7939b24a681a04648a59cdebd386b1e9dc9237.patch";
+      hash = "sha256-w/WuOGlx5pSw4LwMgvL6arrL1Huhg45bitoRRVEHcec=";
+    })
+    (fetchpatch {
+      # https://github.com/libarchive/libarchive/pull/2108 (needed to cleanly apply the ZIP OOB patch)
+      name = "update-appledouble-support-directories.patch";
+      url = "https://github.com/libarchive/libarchive/commit/91f27004a5c88589658e38d68e46d223da6b75ca.patch";
+      hash = "sha256-q8x5NPmMh2P4j4fMEdjAWG2srzJCyF37SEW42kRuAZM=";
+    })
+    (fetchpatch {
+      # https://github.com/libarchive/libarchive/pull/2145
+      name = "zip-out-of-bound-access.patch";
+      url = "https://github.com/libarchive/libarchive/commit/b6a979481b7d77c12fa17bbed94576b63bbcb0c0.patch";
+      hash = "sha256-9TRJzV1l13Fk2JKqoejDM/kl0BsaD8EuIa11+aGnShM=";
+    })
   ];
 
   outputs = [ "out" "lib" "dev" ];
