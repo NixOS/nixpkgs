@@ -117,6 +117,7 @@ rocks.nvim,,,,,,mrcjkb
 rocks-git.nvim,,,,,,mrcjkb
 rocks-config.nvim,,,,,,mrcjkb
 rocks-dev.nvim,,,,,,mrcjkb
+rtp.nvim,,,,,,GaetanLepage
 rustaceanvim,,,,,,mrcjkb
 say,https://github.com/Olivine-Labs/say.git,,,,,
 serpent,,,,,,lockejan
