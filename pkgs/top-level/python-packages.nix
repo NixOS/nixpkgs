@@ -931,6 +931,8 @@ self: super: with self; {
 
   atsim-potentials = callPackage ../development/python-modules/atsim-potentials { };
 
+  attacut = callPackage ../development/python-modules/attacut { };
+
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
