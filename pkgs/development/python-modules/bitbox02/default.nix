@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bitbox02";
-  version = "6.2.0";
+  version = "6.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zt4G45nJjtU2/tbYpCEgjaoA+Xtpe9g2OpQaxfMzCb8=";
+    hash = "sha256-0D+yIovlYw8dfDUeW+vcualbvmLs+IySkTpmHwk2meM=";
   };
 
   propagatedBuildInputs = [
