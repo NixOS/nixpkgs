@@ -27872,13 +27872,20 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  pdfstudio2021 = callPackage ../applications/misc/pdfstudio { year = "2021"; };
-
-  pdfstudio2022 = callPackage ../applications/misc/pdfstudio { year = "2022"; };
-
-  pdfstudio2023 = callPackage ../applications/misc/pdfstudio { year = "2023"; };
-
-  pdfstudioviewer = callPackage ../applications/misc/pdfstudio { program = "pdfstudioviewer"; };
+  inherit
+    ({
+       pdfstudio2021 = callPackage ../applications/misc/pdfstudio { year = "2021"; };
+       pdfstudio2022 = callPackage ../applications/misc/pdfstudio { year = "2022"; };
+       pdfstudio2023 = callPackage ../applications/misc/pdfstudio { year = "2023"; };
+       pdfstudio2024 = callPackage ../applications/misc/pdfstudio { year = "2024"; };
+       pdfstudioviewer = callPackage ../applications/misc/pdfstudio { program = "pdfstudioviewer"; };
+    })
+    pdfstudio2021
+    pdfstudio2022
+    pdfstudio2023
+    pdfstudio2024
+    pdfstudioviewer
+    ;
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
