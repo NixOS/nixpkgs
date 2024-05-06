@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "A FOSS Git multiplatform client based on Compose and JGit";
     homepage = "https://gitnuro.com/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zendo ];
     mainProgram = "gitnuro";
   };
