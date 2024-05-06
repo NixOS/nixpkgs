@@ -66,6 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # pcsc-spy is a debugging utility and it drags python into the closure
     moveToOutput bin/pcsc-spy "$dev"
+
+    # libpcsclite loads its delegate (libpcsclite_real) dynamically.
+    # To avoid downstream wrapping/patching, we add libpcsclite_real to the lib
+    # Relevant code: https://salsa.debian.org/rousseau/PCSC/-/blob/773be65d160da07de2fc34616af475e06dbaa343/src/libredirect.c#L128
+    patchelf $lib/lib/libpcsclite.so.1 \
+      --add-needed libpcsclite_real.so.1
   '';
 
   enableParallelBuilding = true;
