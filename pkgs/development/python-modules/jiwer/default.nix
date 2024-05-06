@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "jiwer";
-  version = "3.0.3";
+  version = "3.04";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jitsi";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-32bpSBYl6yxb4lJhHnfnYhtye7DaBZT0VAe9rDcleTc=";
+    hash = "sha256-2LzAOgABK00Pz3v5WWYUAcZOYcTbRKfgw7U5DOohB/Q=";
   };
 
   nativeBuildInputs = [
