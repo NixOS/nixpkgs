@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "merge3";
-  version = "0.0.14";
+  version = "0.0.15";
 
   format = "pyproject";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MEBumThvSmUoD7nEPmgYkPoqHYOcrCdZ0VbHzBYDAVk=";
+    sha256 = "sha256-0+rCE9hNVt/J45VSrIJGx4YKlAlk6+7YqL5EIvZJK68=";
   };
 
   nativeBuildInputs = [
