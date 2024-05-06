@@ -10,6 +10,9 @@
 , wayland
 , wayland-protocols
 , cairo
+, file
+, libjpeg
+, libwebp
 , pango
 , libdrm
 , mesa
@@ -18,19 +21,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.3.0";
+  version = "0.3.0-unstable-2024-04-24";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rbzVe2WNdHynJrnyJsKOOrV8yuuJ7QIuah3ZHWERSnA=";
+    # FIXME: Change to a stable release once available
+    rev = "415262065fff0a04b229cd00165f346a86a0a73a";
+    hash = "sha256-jla5Wo0Qt3NEnD0OjNj85BGw0pR4Zlz5uy8AqHH7tuE=";
   };
-
-  patches = [
-    # remove PAM file install check
-    ./cmake.patch
-  ];
 
   strictDeps = true;
 
@@ -41,9 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    file
     hyprlang
     libdrm
     libGL
+    libjpeg
+    libwebp
     libxkbcommon
     mesa
     pam
