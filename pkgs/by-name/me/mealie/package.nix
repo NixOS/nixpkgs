@@ -54,6 +54,7 @@ in python3Packages.buildPythonPackage rec {
     aniso8601
     appdirs
     apprise
+    authlib
     bcrypt
     extruct
     fastapi
@@ -66,8 +67,11 @@ in python3Packages.buildPythonPackage rec {
     paho-mqtt
     passlib
     pillow
+    pillow-heif
     psycopg2
+    pydantic-settings
     pyhumps
+    pyjwt
     pytesseract
     python-dotenv
     python-jose
