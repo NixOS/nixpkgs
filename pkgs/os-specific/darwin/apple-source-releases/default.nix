@@ -224,13 +224,16 @@ let
   macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
   developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
 
-  applePackage' = namePath: version: sdkName: sha256:
+  applePackage'' = extra: namePath: version: sdkName: sha256:
     let
       pname = builtins.head (lib.splitString "/" namePath);
       appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
       appleDerivation = appleDerivation' stdenv;
-      callPackage = self.newScope { inherit appleDerivation' appleDerivation; };
+      callPackage = self.newScope
+        ({ inherit appleDerivation' appleDerivation; } // extra);
     in callPackage (./. + "/${namePath}");
+
+  applePackage' = applePackage'' {};
 
   applePackage = namePath: sdkName: sha256: let
     pname = builtins.head (lib.splitString "/" namePath);
@@ -328,4 +331,18 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
     Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
+
+    # To enable splitting up the SDK bump into reviewable chunks before
+    # switching to it wholesale.
+    "10.13.6" = let applePackageMapping = namePath: applePackage''
+                      self."10.13.6" # Have packages depend on each other
+                                     # rather than previous versions.
+                      { }."${namePath}" or namePath;
+                 in import ./macos-10.13.6.nix
+                      { applePackage' = applePackageMapping; }
+                 // { bsdmake = applePackageMapping
+                        "bsdmake" "24" "developer-tools-313"
+                        "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI="
+                        {};
+                    };
 }
