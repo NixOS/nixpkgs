@@ -153,7 +153,7 @@ in
   options.services.kanata = {
     enable = mkEnableOption "kanata, a tool to improve keyboard comfort and usability with advanced customization";
     package = mkPackageOption pkgs "kanata" {
-      example = "kanata-with-cmd";
+      example = [ "kanata-with-cmd" ];
       extraDescription = ''
         ::: {.note}
         If {option}`danger-enable-cmd` is enabled in any of the keyboards, the
