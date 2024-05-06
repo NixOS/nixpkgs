@@ -42,8 +42,6 @@ in pythonpkgs.buildPythonPackage rec {
   inherit version src;
   pyproject = true;
 
-  patches = [ ./mealie-logs-to-stdout.patch ];
-
   nativeBuildInputs = [
     pythonpkgs.poetry-core
     pythonpkgs.pythonRelaxDepsHook
