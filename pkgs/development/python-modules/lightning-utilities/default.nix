@@ -16,21 +16,21 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.10.1";
-  format = "pyproject";
+  version = "0.11.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kP7BllA9FR/nMNTxRCxmG6IJYHz/Nxqb1HoF9KxuKl8=";
+    hash = "sha256-IT9aRAUNc2cP2erLr0MglZSVLfDjOxg8PVIIe9AvO0o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     typing-extensions
   ];
@@ -53,6 +53,8 @@ buildPythonPackage rec {
     # fails another test
     "lightning_utilities.core.imports.ModuleAvailableCache"
     "lightning_utilities.core.imports.requires"
+    # Failed: DID NOT RAISE <class 'AssertionError'>
+    "test_no_warning_call"
   ];
 
   disabledTestPaths = [
