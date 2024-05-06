@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-M6iI554lv6PF5sIdOoaMIlQHP5YU8WM8YxfHMWhLSdE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     netifaces
     pyserial
