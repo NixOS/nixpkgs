@@ -1,11 +1,10 @@
 { lib
 , stdenv
+, fetchzip
 , fetchurl
 , makeWrapper
 , makeDesktopItem
-# sweethome3d 6.5.2 does not yet fully build&run with jdk 9 and later?
-, jdk8
-, jre8
+, jdk
 , ant
 , gtk3
 , gsettings-desktop-schemas
@@ -13,6 +12,7 @@
 , autoPatchelfHook
 , libXxf86vm
 , unzip
+, libGL
 }:
 
 let
@@ -42,7 +42,7 @@ let
     };
 
     postPatch = ''
-      addAutoPatchelfSearchPath ${jre8}/lib/openjdk/jre/lib/
+      addAutoPatchelfSearchPath ${jdk}/lib/openjdk/lib/
       autoPatchelf lib
 
       # Nix cannot see the runtime references to the paths we just patched in
@@ -51,8 +51,11 @@ let
       find . -name '*.so' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
     '';
 
-    nativeBuildInputs = [ makeWrapper unzip autoPatchelfHook ];
-    buildInputs = [ ant jdk8 p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
+    nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+    buildInputs = [ ant jdk p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
+
+    # upstream targets Java 7 by default
+    env.ANT_ARGS = "-DappletClassSource=8 -DappletClassTarget=8 -DclassSource=8 -DclassTarget=8";
 
     buildPhase = ''
       runHook preBuild
@@ -75,13 +78,9 @@ let
 
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
 
-      # MESA_GL_VERSION_OVERRIDE is needed since the update from MESA 19.3.3 to 20.0.2:
-      # without it a "Profiles [GL4bc, GL3bc, GL2, GLES1] not available on device null"
-      # exception is thrown on startup.
-      # https://discourse.nixos.org/t/glx-not-recognised-after-mesa-update/6753
-      makeWrapper ${jre8}/bin/java $out/bin/$exec \
-        --set MESA_GL_VERSION_OVERRIDE 2.1 \
+      makeWrapper ${jdk}/bin/java $out/bin/$exec \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
 
 
@@ -102,22 +101,20 @@ let
       inherit license;
       maintainers = [ lib.maintainers.edwtjo ];
       platforms = lib.platforms.linux;
+      mainProgram = exec;
     };
   };
-
-  d2u = lib.replaceStrings ["."] ["_"];
-
 in {
 
   application = mkSweetHome3D rec {
     pname = lib.toLower module + "-application";
-    version = "7.2";
+    version = "7.3";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
     license = lib.licenses.gpl2Plus;
-    src = fetchurl {
+    src = fetchzip {
       url = "mirror://sourceforge/sweethome3d/${module}-${version}-src.zip";
-      sha256 = "sha256-Io3HfussfSy6CLHE0JCAk0gjBAla/u+pS1Gan8BxozY=";
+      hash = "sha256-adMQzQE+xAZpMJyQFm01A+AfvcB5YHsJvk+533BUf1Q=";
     };
     desktopName = "Sweet Home 3D";
     icons = {

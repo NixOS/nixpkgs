@@ -1,11 +1,11 @@
-{ lib
-, makeSetupHook
-, diffutils
-, jq
-, writeShellApplication
-, moreutils
-, cacert
-, buildPackages
+{
+  lib,
+  makeSetupHook,
+  jq,
+  writeShellApplication,
+  moreutils,
+  cacert,
+  buildPackages,
 }:
 
 let
