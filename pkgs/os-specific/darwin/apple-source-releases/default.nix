@@ -227,7 +227,7 @@ let
       pname = builtins.head (lib.splitString "/" namePath);
       appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
       appleDerivation = appleDerivation' stdenv;
-      callPackage = self.newScope { inherit appleDerivation' appleDerivation; };
+      callPackage = self.newScope { inherit appleDerivation' appleDerivation; python3 = pkgs.buildPackages.python3Minimal; };
     in callPackage (./. + "/${namePath}");
 
   applePackage = namePath: sdkName: sha256: let
@@ -289,9 +289,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     ppp             = applePackage "ppp"               "osx-10.12.6"     "sha256-M1zoEjjeKIDUEP6ACbpUJk3OXjobw4g/qzUmxGdX1J0=" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "sha256-UpNk27kGXnZss1ZXWVJU9jLz/NW63ZAZEDLhyCYoi9M=" {};
     xnu             = if stdenv.isx86_64 then
-    applePackage "xnu"               "osx-10.12.6"     "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {
-      python3 = pkgs.buildPackages.buildPackages.python3; # TODO(@Ericson2314) this shouldn't be needed.
-    }
+      applePackage "xnu" "osx-10.12.6" "sha256-C8TPQlUT3RbzAy8YnZPNtr70hpaVG9Llv0h42s3NENI=" {}
     else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "sha256-eGi18HQFJrU5UHoBOE0LqO5gQ0xOf8+OJuAWQljfKE4=" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "sha256-YHbGws901xONzAbo6sB5zSea4Wp0sgYUJ8YgwVfWxnE=" {};
