@@ -9,7 +9,7 @@ makeScopeWithSplicing' {
   f = (self: lib.packagesFromDirectoryRecursive {
     callPackage = self.callPackage;
     directory = ./pkgs;
-  } // (let inherit (self) mkDerivation; in {
+  } // {
 
     fetchNetBSD = path: version: sha256: fetchcvs {
       cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
@@ -133,5 +133,5 @@ makeScopeWithSplicing' {
       inherit (self) mknod;
     };
 
-  }));
+  });
 }
