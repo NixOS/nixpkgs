@@ -282,6 +282,7 @@ sdk_packages () {
     # Packages that only apply to .NET 7 and up
     if ! version_older "$version" "7"; then
         pkgs+=(
+          "Microsoft.DotNet.ILCompiler"
           "runtime.linux-arm64.Microsoft.DotNet.ILCompiler"
           "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler"
           "runtime.linux-musl-x64.Microsoft.DotNet.ILCompiler"
