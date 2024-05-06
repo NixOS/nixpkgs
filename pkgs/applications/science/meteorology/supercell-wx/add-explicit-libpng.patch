@@ -1,0 +1,20 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index f444dd7..71faa0a 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -19,6 +19,7 @@ find_package(GLEW)
+ find_package(glm)
+ find_package(Python COMPONENTS Interpreter)
+ find_package(SQLite3)
++find_package(PNG)
+ 
+ find_package(QT NAMES Qt6
+              COMPONENTS Gui
+@@ -570,6 +571,7 @@ target_link_libraries(scwx-qt PUBLIC Qt${QT_VERSION_MAJOR}::Widgets
+                                      glm::glm
+                                      imgui
+                                      SQLite::SQLite3
++                                     PNG::PNG
+                                      wxdata)
+ 
+ target_link_libraries(supercell-wx PRIVATE scwx-qt

@@ -1,0 +1,24 @@
+diff --git a/wxdata/include/scwx/common/vcp.hpp b/wxdata/include/scwx/common/vcp.hpp
+index 9d95c7a..de6cb58 100644
+--- a/wxdata/include/scwx/common/vcp.hpp
++++ b/wxdata/include/scwx/common/vcp.hpp
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <string>
++#include <cstdint>
+ 
+ namespace scwx
+ {
+diff --git a/wxdata/include/scwx/util/strings.hpp b/wxdata/include/scwx/util/strings.hpp
+index ad0d1f9..225d901 100644
+--- a/wxdata/include/scwx/util/strings.hpp
++++ b/wxdata/include/scwx/util/strings.hpp
+@@ -3,6 +3,7 @@
+ #include <optional>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace scwx
+ {

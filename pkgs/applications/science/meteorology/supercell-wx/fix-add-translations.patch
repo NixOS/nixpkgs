@@ -1,0 +1,22 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index f444dd7..93669a8 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ find_package(Boost)
+ find_package(Fontconfig)
+-find_package(geographiclib)
++find_package(GeographicLib)
+ find_package(geos)
+ find_package(GLEW)
+ find_package(glm)
+@@ -465,7 +465,7 @@ qt_add_resources(scwx-qt "generated"
+                  FILES   ${COUNTIES_SQLITE_DB})
+ 
+ qt_add_translations(scwx-qt TS_FILES ${TS_FILES}
+-                    INCLUDE_DIRECTORIES true
++	            SOURCE_TARGETS scwx-qt
+                     LUPDATE_OPTIONS -locations none -no-ui-lines)
+ 
+ set_target_properties(release_translations PROPERTIES FOLDER qt)

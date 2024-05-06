@@ -1,6 +1,7 @@
-{ gcc10Stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
+, bzip2
 , cmake
 , conan
 , ninja
@@ -9,9 +10,11 @@
 , curl
 , glew
 , geos
-, boost
+, git
+, boost184
 , spdlog
 , libcpr
+, libpng
 , geographiclib
 , re2
 , gtest
@@ -21,38 +24,59 @@
 , qtmultimedia
 , qtpositioning
 , qtimageformats
-, tbb
+, tbb_2021_11
+, pkg-config
+, python3
 , wrapQtAppsHook
 } : let
   version = "0.4.3";
-in gcc10Stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "supercell-wx";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
-    rev = "refs/heads/feature/conan-2";
-    sha256 = "sha256-KEHIH84sKF3sFxsmLDzkaCP58tHCSNBFU2f7njTVyqw=";
+    rev = "refs/tags/v${version}-release";
+    sha256 = "sha256-HuOoE6uFs9UZpoBqwCnuSoSUi3Mw9T0UylMcjTgFluk=";
     fetchSubmodules = true;
     deepClone = true;
+    leaveDotGit = true;
   };
 
   nativeBuildInputs = [
     cmake
-    conan
     ninja
     wrapQtAppsHook
+    pkg-config
+    git
   ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CONFIGURATION_TYPES=Release"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DMLN_QT_WITH_INTERNAL_SQLITE=ON"
     "-G Ninja"
   ];
 
   preConfigure = ''
-    export HOME=$TMP
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=restrict"
+  '';
+
+  patches = [
+    ./remove-conan.patch
+    ./fix-cmake-find-packages.patch
+    ./add-cstdint.patch
+    ./fix-zoned-time.patch
+    ./fix-git-versioning.patch
+    ./add-cstdint2.patch
+    ./add-explicit-libpng.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace external/maplibre-native-qt/src/core/CMakeLists.txt \
+      --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
   '';
 
   buildInputs = [
@@ -64,15 +88,21 @@ in gcc10Stdenv.mkDerivation {
     qtmultimedia
     qtpositioning
     qtimageformats
-    boost
+    boost184
+    tbb_2021_11
     glew
     geos
     spdlog
     libcpr
+    libpng
     re2
     geographiclib
     gtest
     glm
-    tbb
+    bzip2
+    (python3.withPackages (ps: [
+      ps.geopandas
+      ps.gitpython
+    ]))
   ];
 }

@@ -1,0 +1,39 @@
+diff --git a/scwx-qt/scwx-qt.cmake b/scwx-qt/scwx-qt.cmake
+index f444dd7..8f9413d 100644
+--- a/scwx-qt/scwx-qt.cmake
++++ b/scwx-qt/scwx-qt.cmake
+@@ -11,9 +11,9 @@ set(CMAKE_AUTORCC ON)
+ set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+-find_package(Boost)
++find_package(Boost REQUIRED COMPONENTS json timer)
+ find_package(Fontconfig)
+-find_package(geographiclib)
++find_package(GeographicLib)
+ find_package(geos)
+ find_package(GLEW)
+ find_package(glm)
+@@ -465,7 +465,7 @@ qt_add_resources(scwx-qt "generated"
+                  FILES   ${COUNTIES_SQLITE_DB})
+ 
+ qt_add_translations(scwx-qt TS_FILES ${TS_FILES}
+-                    INCLUDE_DIRECTORIES true
++                    SOURCE_TARGETS scwx-qt
+                     LUPDATE_OPTIONS -locations none -no-ui-lines)
+ 
+ set_target_properties(release_translations PROPERTIES FOLDER qt)
+diff --git a/wxdata/wxdata.cmake b/wxdata/wxdata.cmake
+index 122786f..31c79bb 100644
+--- a/wxdata/wxdata.cmake
++++ b/wxdata/wxdata.cmake
+@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.20)
+ 
+ project(scwx-data)
+ 
+-find_package(Boost)
++find_package(Boost REQUIRED COMPONENTS iostreams)
++find_package(BZip2)
+ find_package(cpr)
+ find_package(LibXml2)
+ find_package(re2)
