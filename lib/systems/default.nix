@@ -181,7 +181,7 @@ let
          || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
          || isCygwin || isMinGW                                        # Windows
          || isWasm                                                     # WASM
-        ) && !isStatic;
+        ) && !isWasi && !isRedox;
 
       # The difference between `isStatic` and `hasSharedLibraries` is mainly the
       # addition of the `staticMarker` (see make-derivation.nix).  Some
