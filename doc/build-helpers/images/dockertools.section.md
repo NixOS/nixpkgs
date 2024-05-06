@@ -587,6 +587,19 @@ This allows the function to produce reproducible images.
 
   _Default value:_ `true`
 
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
+
 `passthru` (Attribute Set; _optional_)
 
 : Use this to pass any attributes as [passthru](#var-stdenv-passthru) for the resulting derivation.
