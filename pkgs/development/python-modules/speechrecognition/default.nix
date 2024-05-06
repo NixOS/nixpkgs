@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, torch
-, requests
-, setuptools
-, soundfile
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  torch,
+  requests,
+  setuptools,
+  soundfile,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-icXZUg2lVLo8Z5t9ptDj67BjQLnEgrG8geYZ/lZeJt4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     soundfile
   ];
 
-  pythonImportsCheck = [
-    "speech_recognition"
-  ];
+  pythonImportsCheck = [ "speech_recognition" ];
 
   disabledTests = [
     # Test files are missing in source
@@ -58,7 +55,10 @@ buildPythonPackage rec {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
     changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
-    license = with licenses; [ gpl2Only bsd3 ];
+    license = with licenses; [
+      gpl2Only
+      bsd3
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }
