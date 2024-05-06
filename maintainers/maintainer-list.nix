@@ -14857,6 +14857,15 @@
     github = "nyawox";
     githubId = 93813719;
   };
+  nydragon = {
+    email = "6582485n@pm.me";
+    github = "Nydragon";
+    githubId = 56591727;
+    name = "Nydragon";
+    keys = [{
+      fingerprint = "25FF 8464 F062 7EC0 0129 6A43 14AA 30A8 65EA 1209";
+    }];
+  };
   nzbr = {
     email = "nixos@nzbr.de";
     github = "nzbr";
