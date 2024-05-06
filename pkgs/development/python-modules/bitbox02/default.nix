@@ -1,27 +1,32 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
 , base58
+, buildPythonPackage
 , ecdsa
+, fetchPypi
 , hidapi
 , noiseprotocol
 , protobuf
+, pythonOlder
 , semver
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "bitbox02";
-  version = "6.2.0";
-  format = "setuptools";
+  version = "6.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zt4G45nJjtU2/tbYpCEgjaoA+Xtpe9g2OpQaxfMzCb8=";
+    hash = "sha256-0D+yIovlYw8dfDUeW+vcualbvmLs+IySkTpmHwk2meM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     base58
