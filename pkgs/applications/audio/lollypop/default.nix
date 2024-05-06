@@ -25,7 +25,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lollypop";
-  version = "1.4.37";
+  version = "1.4.39";
 
   format = "other";
 
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-3GPmGNbbSxvLq0t3F9q1x64BwNQCEvFQWLb0bSO9KUY=";
+    sha256 = "sha256-VPHQwy2+XR9R7toIN5sNFB91ddROlL7Scr8AKLgUzuo=";
   };
 
   nativeBuildInputs = [
