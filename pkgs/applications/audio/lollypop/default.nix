@@ -21,6 +21,7 @@
 , wrapGAppsHook
 , lastFMSupport ? true
 , youtubeSupport ? true
+, kid3Support ? true
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -69,7 +70,8 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs;
     [ beautifulsoup4 pillow pycairo pygobject3 ]
     ++ lib.optional lastFMSupport pylast
-    ++ lib.optional youtubeSupport youtube-dl;
+    ++ lib.optional youtubeSupport youtube-dl
+    ++ lib.optional kid3Support pkgs.kid3;
 
   postPatch = ''
     chmod +x meson_post_install.py
