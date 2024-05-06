@@ -1,0 +1,57 @@
+diff --git a/tlpui/file.py b/tlpui/file.py
+index f0f3ecb..a9ad7f8 100644
+--- a/tlpui/file.py
++++ b/tlpui/file.py
+@@ -26,7 +26,7 @@ def get_tlp_config_defaults(tlpversion: str):
+     tlpconfig_defaults = extract_default_tlp_configs(f"{settings.workdir}/defaults/tlp-{tlpversion}.conf")
+ 
+     # update default values with intrinsic ones
+-    intrinsic_defaults_path = f"{settings.FOLDER_PREFIX}/usr/share/tlp/defaults.conf"
++    intrinsic_defaults_path = f"@tlp@/share/tlp/defaults.conf"
+     tlpconfig_defaults.update(extract_default_tlp_configs(intrinsic_defaults_path))
+ 
+     return tlpconfig_defaults
+@@ -124,7 +124,10 @@ def create_tmp_tlp_config_file(changedproperties: dict) -> str:
+     filehandler, tmpfilename = mkstemp(dir=settings.TMP_FOLDER)
+     newfile = open(tmpfilename, mode='w', encoding='utf-8')
+ 
+-    oldfile = open(settings.tlpconfigfile, encoding='utf-8')
++    try:
++        oldfile = open(settings.tlpconfigfile, encoding='utf-8')
++    except FileNotFoundError:
++        oldfile = open("@tlp@/etc/tlp.conf", encoding='utf-8')
+     lines = oldfile.readlines()
+     oldfile.close()
+ 
+diff --git a/tlpui/mainui.py b/tlpui/mainui.py
+index 0242514..da59046 100644
+--- a/tlpui/mainui.py
++++ b/tlpui/mainui.py
+@@ -115,8 +115,12 @@ def changed_items_dialog(window, tmpfilename: str, dialogtitle: str, message: st
+     scrolledwindow.set_hexpand(True)
+     scrolledwindow.set_vexpand(True)
+ 
+-    with open(settings.tlpconfigfile, encoding='utf-8') as fromfile:
+-        fromfilecontent = fromfile.readlines()
++    try:
++        with open(settings.tlpconfigfile, encoding='utf-8') as fromfile:
++            fromfilecontent = fromfile.readlines()
++    except FileNotFoundError:
++        with open("@tlp@/etc/tlp.conf", encoding='utf-8') as fromfile:
++            fromfilecontent = fromfile.readlines()
+     with open(tmpfilename, encoding='utf-8') as tofile:
+         tofilecontent = tofile.readlines()
+     diff = settings.tlpbaseconfigfile + '\n\n'
+diff --git a/tlpui/settingshelper.py b/tlpui/settingshelper.py
+index 69481c0..d769029 100644
+--- a/tlpui/settingshelper.py
++++ b/tlpui/settingshelper.py
+@@ -20,7 +20,7 @@ def exec_command(commands: [str]):
+ 
+ def get_tlp_config_file(prefix: str) -> str:
+     """Select tlp config file by prefix."""
+-    return f"{prefix}/etc/tlp.conf"
++    return f"{prefix}/etc/tlp.d/30-tlpui.conf"
+ 
+ 
+ def check_binaries_exist(flatpak_folder_prefix: str) -> None:
