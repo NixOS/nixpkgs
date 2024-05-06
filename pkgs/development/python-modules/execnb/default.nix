@@ -1,29 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , fastcore
-, traitlets
+, fetchPypi
 , ipython
 , pythonOlder
+, setuptools
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "execnb";
   version = "0.1.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KJ2XEHqFY0SxbAiVPWBFO0cyC0EWgGDso8wt7lBLTgU=";
+    hash = "sha256-KJ2XEHqFY0SxbAiVPWBFO0cyC0EWgGDso8wt7lBLTgU=";
   };
 
-  propagatedBuildInputs = [ fastcore traitlets ipython ];
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    fastcore
+    ipython
+    traitlets
+  ];
 
   # no real tests
   doCheck = false;
-  pythonImportsCheck = [ "execnb" ];
+
+  pythonImportsCheck = [
+    "execnb"
+  ];
 
   meta = with lib; {
     description = "Execute a jupyter notebook, fast, without needing jupyter";
