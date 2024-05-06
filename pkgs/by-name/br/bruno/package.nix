@@ -27,13 +27,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-nhs44W7cOREdULdXFNZpFGeeZeVTGUffKOBhtL4zAaw=";
+    hash = "sha256-rP3PHS6kuJCgbCQy4h+bJksmJAJvHDBMSysLM5FxQjk=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json

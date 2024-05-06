@@ -1,4 +1,10 @@
-{ buildPecl, fetchFromGitHub, lib, pkg-config, dlib }:
+{
+  buildPecl,
+  fetchFromGitHub,
+  lib,
+  pkg-config,
+  dlib,
+}:
 let
   pname = "pdlib";
   version = "1.1.0";

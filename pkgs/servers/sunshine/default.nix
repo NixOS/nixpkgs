@@ -52,26 +52,21 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-K43LZ7zouTRUI4xhiHuRzu2tN7mUl1nTapuR34JR/Ac=";
+    sha256 = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # remove npm install as it needs internet access -- handled separately below
-    ./dont-build-webui.patch
-  ];
 
   # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-I7IrCR7eQ97a8cPB8F8+T0zX8iJcwh+YtZ9QRtEVZtI=";
+    npmDepsHash = "sha256-9FuMtxTwrU9UIhZXQn/tmGN0IHZBdunV0cY/EElj4bA=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -176,10 +171,21 @@ stdenv'.mkDerivation rec {
     cp -r ${ui}/build ../
   '';
 
+  buildFlags = [
+    "sunshine"
+  ];
+
   # allow Sunshine to find libvulkan
   postFixup = lib.optionalString cudaSupport ''
     wrapProgram $out/bin/sunshine \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+  '';
+
+  # redefine installPhase to avoid attempt to build webui
+  installPhase = ''
+    runHook preInstall
+    cmake --install .
+    runHook postInstall
   '';
 
   postInstall = ''

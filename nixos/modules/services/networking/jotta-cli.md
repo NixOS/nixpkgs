@@ -6,7 +6,7 @@ The [Jottacloud Command-line Tool](https://docs.jottacloud.com/en/articles/14368
 
 ```nix
 {
-  user.services.jotta-cli.enable = true;
+  services.jotta-cli.enable = true;
 }
 ```
 
@@ -15,7 +15,7 @@ This adds `jotta-cli` to `environment.systemPackages` and starts a user service 
 ## Example Configuration {#module-services-jotta-cli-example-configuration}
 
 ```nix
-user.services.jotta-cli = {
+services.jotta-cli = {
   enable = true;
   options = [ "slow" ];
   package = pkgs.jotta-cli;

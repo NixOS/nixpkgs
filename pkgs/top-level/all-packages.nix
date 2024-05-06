@@ -2759,20 +2759,38 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp-sdl = ppsspp.override {
-    enableQt = false;
-    enableVulkan = true;
-  };
+  ppsspp-sdl = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = false;
+      enableVulkan = true;
+      forceWayland = false;
+    };
+  in
+    ppsspp.override argset;
 
-  ppsspp-sdl-wayland = ppsspp.override {
-    forceWayland = true;
-    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
-  };
+  ppsspp-sdl-wayland = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = false;
+      enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
+      forceWayland = true;
+    };
+  in
+    ppsspp.override argset;
 
-  ppsspp-qt = ppsspp.override {
-    enableQt = true;
-    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
-  };
+  ppsspp-qt = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = true;
+      enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
+      forceWayland = false;
+    };
+  in
+    ppsspp.override argset;
 
   proton-caller = callPackage ../applications/emulators/proton-caller { };
 
@@ -2985,8 +3003,6 @@ with pkgs;
   };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
-
-  darklua = callPackage ../development/tools/darklua { };
 
   darktile = callPackage ../applications/terminal-emulators/darktile { };
 
@@ -7027,7 +7043,8 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
-  clamav = darwin.apple_sdk_11_0.callPackage ../tools/security/clamav {
+  clamav = callPackage ../tools/security/clamav {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
@@ -8924,8 +8941,6 @@ with pkgs;
   haste-client = callPackage ../tools/misc/haste-client { };
 
   haste-server = callPackage ../servers/haste-server { };
-
-  hatch = python3Packages.callPackage ../development/tools/hatch { };
 
   hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
@@ -18094,12 +18109,14 @@ with pkgs;
     electron_24-bin
     electron_27-bin
     electron_28-bin
-    electron_29-bin;
+    electron_29-bin
+    electron_30-bin;
 
   electron_24 = electron_24-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
   electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
+  electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
   electron = electron_29;
   electron-bin = electron_29-bin;
 
@@ -31879,8 +31896,6 @@ with pkgs;
 
   waylevel = callPackage ../tools/misc/waylevel { };
 
-  wbg = callPackage ../applications/misc/wbg { };
-
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
@@ -32200,6 +32215,7 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo121Module;
+    go = go_1_21;
   }) k3s_1_26 k3s_1_27 k3s_1_28 k3s_1_29;
   k3s = k3s_1_29;
 

@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "renode-dts2repl";
-  version = "unstable-2024-04-16";
+  version = "0-unstable-2024-04-16";
   pyproject = true;
 
   src = fetchFromGitHub {

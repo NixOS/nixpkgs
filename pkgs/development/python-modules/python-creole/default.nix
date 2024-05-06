@@ -86,6 +86,15 @@ buildPythonPackage rec {
     "creole/tests/test_rest2html.py"
   ];
 
+  pytestFlagsArray = [
+    # fixture mismatch after docutils update
+    "--deselect=creole/rest_tools/clean_writer.py::creole.rest_tools.clean_writer.rest2html"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_at_sign"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_with_unknown_protocol"
+    "--deselect=creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_without_title"
+  ];
+
   meta = with lib; {
     description = "Creole markup tools written in Python";
     homepage = "https://github.com/jedie/python-creole";

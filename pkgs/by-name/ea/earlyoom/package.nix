@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "earlyoom";
-  version = "1.8";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "earlyoom";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jgNoYOGor2i3ngDuU3It238n5ky+AppzlRKdkwXb2AI=";
+    hash = "sha256-7gVwR/D3HEMv2sRXYe/B2aluxncDkMGyiBklwAJkWjk=";
   };
 
   outputs = [ "out" ] ++ lib.optionals withManpage [ "man" ];
