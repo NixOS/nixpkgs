@@ -296,6 +296,17 @@ in
         '';
       };
 
+      authorizedKeysInHomedir = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enables the use of the `~/.ssh/authorized_keys` file.
+
+          Otherwise, the only files trusted by default are those in `/etc/ssh/authorized_keys.d`,
+          *i.e.* SSH keys from [](#opt-users.users._name_.openssh.authorizedKeys.keys).
+        '';
+      };
+
       authorizedKeysCommand = mkOption {
         type = types.str;
         default = "none";
@@ -635,7 +646,7 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ "%h/.ssh/authorized_keys" "/etc/ssh/authorized_keys.d/%u" ];
+      lib.optional cfg.authorizedKeysInHomedir "%h/.ssh/authorized_keys" ++ [ "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.settings.AuthorizedPrincipalsFile = mkIf (authPrincipalsFiles != {}) "/etc/ssh/authorized_principals.d/%u";
 
