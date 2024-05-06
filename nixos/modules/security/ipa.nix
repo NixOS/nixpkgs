@@ -257,9 +257,12 @@ in {
       allowed_uids = ${concatStringsSep ", " cfg.ifpAllowedUids}
     '';
 
-    services.ntp.servers = singleton cfg.server;
-    services.sssd.enable = true;
     services.ntp.enable = true;
+    services.ntp.servers = singleton cfg.server;
+
+    services.sssd.enable = true;
+    services.sssd.sshAuthorizedKeysIntegration = true;
+    services.sssd.sudoIntegration = true;
 
     security.pki.certificateFiles = singleton cfg.certificate;
   };
