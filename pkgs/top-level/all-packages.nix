@@ -30668,8 +30668,6 @@ with pkgs;
 
   expenses = callPackage ../applications/misc/expenses { };
 
-  flowtime = callPackage ../applications/misc/flowtime { };
-
   furnace = callPackage ../applications/audio/furnace {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
