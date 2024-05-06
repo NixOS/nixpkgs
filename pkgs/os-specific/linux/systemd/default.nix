@@ -927,6 +927,9 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     priority = 10;
     badPlatforms = [
+      # systemd uses dlopen for some features (see above).
+      { hasSharedLibraries = false; }
+      # Upstream is broken due to symbol conflicts when linking.
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
       lib.systems.inspect.platformPatterns.isStatic
     ];
