@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fastcore
-, fetchPypi
-, ipython
-, pythonOlder
-, setuptools
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fastcore,
+  fetchPypi,
+  ipython,
+  pythonOlder,
+  setuptools,
+  traitlets,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-KJ2XEHqFY0SxbAiVPWBFO0cyC0EWgGDso8wt7lBLTgU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     fastcore
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # no real tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "execnb"
-  ];
+  pythonImportsCheck = [ "execnb" ];
 
   meta = with lib; {
     description = "Execute a jupyter notebook, fast, without needing jupyter";
