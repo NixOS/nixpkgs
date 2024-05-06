@@ -7,13 +7,13 @@
 
 buildLua {
   pname = "evafast";
-  version = "0-unstable-2024-02-09";
+  version = "0-unstable-2022-09-11";
 
   src = fetchFromGitHub {
     owner = "po5";
     repo = "evafast";
-    rev = "92af3e2e1c756ce83f9d0129c780caeef1131a0b";
-    hash = "sha256-BGWD2XwVu8zOSiDJ+9oWi8aPN2Wkw0Y0gF58X4f+tdI=";
+    rev = "f9ee7e41dedf0f65186900e0ccdd6ca6a8ced7ed";
+    hash = "sha256-+hJffVI0eu861N9f0Jg4B+53It0x31qOYVB1agMjFIw=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
