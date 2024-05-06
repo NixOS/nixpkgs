@@ -1,7 +1,6 @@
 { lib
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
@@ -38,32 +37,12 @@ let
     };
   };
 
-  mealie_patch = { name, commit, hash }: fetchpatch {
-    inherit name hash;
-    url = "https://github.com/mealie-recipes/mealie/commit/${commit}.patch";
-  };
-
 in pythonpkgs.buildPythonPackage rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
 
-  patches = [
-    # See https://github.com/mealie-recipes/mealie/pull/3102
-    # Replace hardcoded paths in code with environment variables (meant for inside Docker only)
-    # So we can configure easily where the data is stored on the server
-    (mealie_patch {
-      name = "model-path.patch";
-      commit = "e445705c5d26b895d806b96b2f330d4e9aac3723";
-      hash = "sha256-cf0MwvT81lNBTjvag8UUEbXkBu8Jyi/LFwUcs4lBVcY=";
-    })
-    (mealie_patch {
-      name = "alembic-cfg-path.patch";
-      commit = "06c528bfac0708af66aa0629f2e2232ddf07768f";
-      hash = "sha256-IOgdZK7dmWeX2ox16J9v+bOS7nHgCMvCJy6RNJLj0p8=";
-    })
-    ./mealie-logs-to-stdout.patch
-  ];
+  patches = [ ./mealie-logs-to-stdout.patch ];
 
   nativeBuildInputs = [
     pythonpkgs.poetry-core
