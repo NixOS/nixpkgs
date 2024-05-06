@@ -368,7 +368,7 @@ in
         ExecReload = [ "" ''${cfg.package}/bin/caddy reload ${runOptions} --force'' ];
         User = cfg.user;
         Group = cfg.group;
-        ReadWriteDirectories = cfg.dataDir;
+        ReadWritePaths = [ cfg.dataDir ];
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
         LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
         Restart = "on-failure";
