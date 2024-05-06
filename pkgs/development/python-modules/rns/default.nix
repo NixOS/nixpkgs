@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, netifaces
-, pyserial
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  netifaces,
+  pyserial,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-M6iI554lv6PF5sIdOoaMIlQHP5YU8WM8YxfHMWhLSdE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cryptography
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "RNS"
-  ];
+  pythonImportsCheck = [ "RNS" ];
 
   meta = with lib; {
     description = "Cryptography-based networking stack for wide-area networks";
