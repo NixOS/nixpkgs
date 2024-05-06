@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "alembic";
   version = "1.13.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-STLIVYv2jy7pK5u8uCGGccYnBk1bCJOUN69td9wF5ZU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mako
     sqlalchemy
     typing-extensions
