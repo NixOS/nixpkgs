@@ -105,6 +105,7 @@ in {
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
+          ReadOnlyPaths = [ "+/" ];
           RuntimeDirectory = [ "confinement/${mkPathSafeName name}" ];
           RootDirectory = lib.mkDefault "/run/confinement/${mkPathSafeName name}";
           InaccessiblePaths = [

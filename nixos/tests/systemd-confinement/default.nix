@@ -87,11 +87,11 @@ import ../make-test-python.nix {
           assert os.getgid() == 0
 
           assert_permissions({
-            'bin': Accessibility.WRITABLE,
-            'nix': Accessibility.WRITABLE,
-            'run': Accessibility.WRITABLE,
+            'bin': Accessibility.READABLE,
+            'nix': Accessibility.READABLE,
+            'run': Accessibility.READABLE,
             ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
-            ${lib.optionalString privateTmp "'var': Accessibility.WRITABLE,"}
+            ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
             ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
           })
         '' else ''
@@ -120,8 +120,8 @@ import ../make-test-python.nix {
           assert os.getgid() == 0
 
           assert_permissions({
-            'bin': Accessibility.WRITABLE,
-            'nix': Accessibility.WRITABLE,
+            'bin': Accessibility.READABLE,
+            'nix': Accessibility.READABLE,
             ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
             'run': Accessibility.WRITABLE,
 
@@ -129,7 +129,7 @@ import ../make-test-python.nix {
             'sys': Accessibility.SPECIAL,
             'dev': Accessibility.WRITABLE,
 
-            ${lib.optionalString privateTmp "'var': Accessibility.WRITABLE,"}
+            ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
             ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
           })
         '' else ''
@@ -144,7 +144,6 @@ import ../make-test-python.nix {
 
             'proc': Accessibility.SPECIAL,
             'sys': Accessibility.SPECIAL,
-
             'dev': Accessibility.SPECIAL,
             'dev/shm': Accessibility.STICKY,
             'dev/mqueue': Accessibility.STICKY,
