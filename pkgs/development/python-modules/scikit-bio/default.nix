@@ -1,70 +1,64 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   cython,
-  lockfile,
-  cachecontrol,
+  oldest-supported-numpy,
+  requests,
   decorator,
-  h5py,
-  ipython,
-  matplotlib,
   natsort,
   numpy,
   pandas,
   scipy,
+  h5py,
   hdmedians,
-  scikit-learn,
-  coverage,
+  biom-format,
   python,
-  isPy3k,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
-  format = "setuptools";
   pname = "scikit-bio";
-  disabled = !isPy3k;
+  version = "0.6.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EBBafDwVrlkQJEkn8punqjUjSxnr5lE7hIRUc0OywQ8=";
+  src = fetchFromGitHub {
+    owner = "scikit-bio";
+    repo = "scikit-bio";
+    rev = "refs/tags/${version}";
+    hash = "sha256-v8/r52pJpMi34SekPQBf7CqRbs+ZEyPR3WO5RBB7uKg=";
   };
 
-  nativeBuildInputs = [ cython ];
-  nativeCheckInputs = [ coverage ];
-  propagatedBuildInputs = [
-    lockfile
-    cachecontrol
+  build-system = [
+    setuptools
+    cython
+    oldest-supported-numpy
+  ];
+
+  dependencies = [
+    requests
     decorator
-    ipython
-    matplotlib
     natsort
     numpy
     pandas
     scipy
     h5py
     hdmedians
-    scikit-learn
+    biom-format
   ];
 
-  # cython package not included for tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    ${python.interpreter} -m skbio.test
-  '';
+  # only the $out dir contains the built cython extensions, so we run the tests inside there
+  pytestFlagsArray = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
 
   pythonImportsCheck = [ "skbio" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
-    license = licenses.bsd3;
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
