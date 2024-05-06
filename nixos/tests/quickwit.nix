@@ -1,5 +1,8 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 let
+  # Define an example Quickwit index schema,
+  # and some `exampleDocs` below, to test if ingesting
+  # and querying works as expected.
   index_yaml = ''
     version: 0.7
     index_id: example_server_logs
@@ -37,10 +40,13 @@ let
     indexing_settings:
       commit_timeout_secs: 10
   '';
-  docs = ''
-  {"datetime":"2024-05-04T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-1","level":"Info","message":"Got exception processing request: HTTP 404","location":"path/to/server.c:6444:32","source":""}
-  {"datetime":"2024-05-05T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-1","level":"Info","message":"Got exception processing request: HTTP 404","location":"path/to/server.c:6444:32","source":""}
-  {"datetime":"2024-05-06T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-2","level":"Info","message":"Got exception processing request: HTTP 404","location":"path/to/server.c:6444:32","source":""}'';
+
+  exampleDocs = ''
+    {"datetime":"2024-05-03T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-1","level":"Info","message":"Processing request done","location":"path/to/server.c:6442:32","source":""}
+    {"datetime":"2024-05-04T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-1","level":"Info","message":"Got exception processing request: HTTP 404","location":"path/to/server.c:6444:32","source":""}
+    {"datetime":"2024-05-05T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-1","level":"Info","message":"Got exception processing request: HTTP 404","location":"path/to/server.c:6444:32","source":""}
+    {"datetime":"2024-05-06T02:36:41.017674444Z","git":"e6e1f087ce12065e44ed3b87b50784e6f9bcc2f9","hostname":"machine-2","level":"Info","message":"Got exception processing request: HTTP 404","location":"path/to/server.c:6444:32","source":""}
+  '';
 
 in {
   name = "quickwit";
@@ -48,19 +54,31 @@ in {
   nodes.machine = { config, pkgs, ... }: {
     services.quickwit = {
       enable = true;
-      settings = {
-      };
     };
   };
 
   testScript = ''
+    import json
+
     machine.wait_for_unit("quickwit.service")
     machine.wait_for_open_port(7280)
     machine.succeed('curl --fail http://localhost:7280/api/v1/version')
-    machine.succeed('${pkgs.quickwit}/bin/quickwit index create --index-config ${pkgs.writeText "index.yaml" index_yaml}')
-    machine.succeed('${pkgs.quickwit}/bin/quickwit index ingest --index example_server_logs --input-path ${pkgs.writeText "docs.json" docs}')
-    machine.succeed('${pkgs.quickwit}/bin/quickwit index search --index example_server_logs --query "404"')
-    machine.succeed('curl --fail http://127.0.0.1:7280/api/v1/example_server_logs/search?query=404')
 
+    # Test CLI ingestion
+    print(machine.succeed('${pkgs.quickwit}/bin/quickwit index create --index-config ${pkgs.writeText "index.yaml" index_yaml}'))
+    # Important to use `--wait`, otherwise the queries below race with index processing.
+    print(machine.succeed('${pkgs.quickwit}/bin/quickwit index ingest --index example_server_logs --input-path ${pkgs.writeText "exampleDocs.json" exampleDocs} --wait'))
+
+    # Test CLI query
+    cli_query_output = machine.succeed('${pkgs.quickwit}/bin/quickwit index search --index example_server_logs --query "exception"')
+    print(cli_query_output)
+
+    # Assert query result is as expected.
+    num_hits = len(json.loads(cli_query_output)["hits"])
+    assert num_hits == 3, f"cli_query_output contains unexpected number of results: {num_hits}"
+
+    # Test API query
+    api_query_output = machine.succeed('curl --fail http://127.0.0.1:7280/api/v1/example_server_logs/search?query=exception')
+    print(api_query_output)
   '';
 })
