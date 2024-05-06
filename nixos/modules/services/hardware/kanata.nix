@@ -24,22 +24,11 @@ let
         type = types.lines;
         example = ''
           (defsrc
-            grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-            tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-            caps a    s    d    f    g    h    j    k    l    ;    '    ret
-            lsft z    x    c    v    b    n    m    ,    .    /    rsft
-            lctl lmet lalt           spc            ralt rmet rctl)
+            caps)
 
-          (deflayer qwerty
-            grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-            tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-            @cap a    s    d    f    g    h    j    k    l    ;    '    ret
-            lsft z    x    c    v    b    n    m    ,    .    /    rsft
-            lctl lmet lalt           spc            ralt rmet rctl)
-
-          (defalias
-            ;; tap within 100ms for capslk, hold more than 100ms for lctl
-            cap (tap-hold 100 100 caps lctl))
+          (deflayermap (default-layer)
+            ;; tap caps lock as caps lock, hold caps lock as left control
+            caps (tap-hold 100 100 caps lctl))
         '';
         description = ''
           Configuration other than `defcfg`.
