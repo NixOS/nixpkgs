@@ -10312,6 +10312,8 @@ self: super: with self; {
 
   pretend = callPackage ../development/python-modules/pretend { };
 
+  pretty-errors = callPackage ../development/python-modules/pretty-errors { };
+
   prettytable = callPackage ../development/python-modules/prettytable { };
 
   primecountpy = callPackage ../development/python-modules/primecountpy { };
