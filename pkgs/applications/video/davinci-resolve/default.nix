@@ -165,11 +165,11 @@ let
 
       desktopItems = [
         (makeDesktopItem {
-          name = "davinci-resolve";
-          desktopName = "Davinci Resolve";
+          name = pname;
+          desktopName = "Davinci Resolve${lib.optionalString studioVariant " Studio"}";
           genericName = "Video Editor";
-          exec = "resolve";
-          # icon = "DV_Resolve";
+          exec = pname; # buildFHSEnv names the bin script according to pname
+          icon = "DV_Resolve${lib.optionalString studioVariant "_studio"}"; # we do this to avoid clashes with the non-studio version, in case someone installs both
           comment = "Professional video editing, color, effects and audio post-processing";
           categories = [
             "AudioVideo"
@@ -253,6 +253,12 @@ buildFHSEnv {
     ${davinci}/bin/resolve
     ''
   }";
+
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
+    ln -s ${davinci}/share/applications/davinci-resolve.desktop $out/share/applications/${davinci.pname}.desktop
+    ln -s ${davinci}/graphics/DV_Resolve.png $out/share/icons/hicolor/128x128/apps/DV_Resolve${lib.optionalString studioVariant "_studio"}.png
+  '';
 
   passthru = {
     inherit davinci;
