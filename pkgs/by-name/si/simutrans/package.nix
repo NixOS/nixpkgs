@@ -6,10 +6,13 @@
   fetchzip,
   pkg-config,
   zlib,
+  zstd,
   libpng,
   bzip2,
   SDL2,
   SDL2_mixer,
+  fontconfig,
+  miniupnpc,
   symlinkJoin,
   makeWrapper,
   runCommand,
@@ -24,13 +27,13 @@ let
 
   fetchzip' = defaults: args: fetchzip (defaults // args);
 
-  version = "123.0.1";
+  version = "124.0";
 
   src = fetchsvn {
     url = "svn://servers.simutrans.org/simutrans";
     # The rev can be found in the forum thread for the release: https://forum.simutrans.com/index.php/board,3.0.html
-    rev = "10421";
-    hash = "sha256-3Mj2uuPO2qUeb91Q/MMF0LQKASdkuvtajwrYxyJTPJ4=";
+    rev = "11164";
+    hash = "sha256-+9dPnuy894qHzj7jNTfWC6Hl/QGKVgBCdmIAP9BKD+Q=";
   };
 
   # There are several sources of paksets.
@@ -216,16 +219,67 @@ let
       inherit (binaries) name;
       paths = [ binaries ] ++ paks;
       nativeBuildInputs = [ makeWrapper ];
-      # Normally simutrans will look for paksets in the executable's directory ($out/bin),
-      # but we keep them in $out/share/simutrans so we chdir into there
-      # and pass -use_workdir to tell the game to look in the working directory instead.
-      # The Simutrans team told me that 124.0 will have a better solution for this.
-      postBuild = ''
-        wrapProgram $out/bin/simutrans \
-          --chdir $out/share/simutrans \
-          --add-flags '-use_workdir'
-      '';
+      # The game has three directories it reads data from:
+      #
+      # - The "base" directory, which is the directory containing resources included in the package.
+      #   This will be in the nix store, and is read-only. In our case, it's $out/share/simutrans.
+      #
+      # - The "user" directory, which is the directory containing user data.
+      #   This must be writable; it's in the user's home directory. It's where the game saves games, settings, etc.
+      #
+      # - The "install" directory, which also must be writable.
+      #   This is where the in-game pakset installer downloads to.
+      #
+      # The base directory is special, it is specified with '-set_basedir' or argv[0].
+      # The argv0 value will be $out/bin/simutrans, which contains no resources. We set it with '-set_basedir'.
+      #
+      # The user and install directories are more similar, and can be set with '-set_userdir' and '-set_installdir'.
+      # However, the user might reasonably want to set these directories manually.
+      # So, we set them with environment variables, and the game will use them if they are set.
+      # The game reads from $SIMUTRANS_USERDIR and $SIMUTRANS_INSTALLDIR.
+      # There is no equivalent environment variable for the base directory. (argv[0] i guess)
+      #
+      # By default, the game will respect $XDG_DATA_HOME and place its files in $XDG_DATA_HOME/simutrans.
+      # If $XDG_DATA_DIR is not set, it will break the XDG spec and place its files in ~/simutrans.
+      # The XDG spec says that the default should be ~/.local/share/simutrans in that case.
+      # (that is, the default value for the "user" directory is ${XDG_DATA_HOME:-$HOME}/simutrans)
+      #
+      # The value for the "user" directory is the first of these that is valid:
+      # - '-set_userdir' command line argument
+      # - $SIMUTRANS_USERDIR
+      # - $XDG_DATA_HOME/simutrans
+      # - ~/simutrans
+      #
+      # The default value for the "install" directory is the "user" directory with /paksets appended.
+      # Its user-settable parameters are analogous to the "user" directory.
+      #
+      # Prior to version 124.0, none of this was applicable. The game only ever used ~/simutrans and $PWD.
+      # The previous versions of this package in nixpkgs would patch the game to use ~/.simutrans instead.
+      #
+      # For backwards compatibility, it is desirable to default to ~/.simutrans still, but still use $XDG_DATA_HOME/simutrans.
+      # That is what ${default-home} is for.
+      # It will be set to $XDG_DATA_HOME/simutrans if $XDG_DATA_HOME is non-empty, otherwise it will be set to ~/.simutrans.
+      # That's, again, not following the XDG basedir spec. It should be "${XDG_DATA_HOME:-$HOME/.local/share}/simutrans".
+      #
+      # Then, we use it to set defaults for SIMUTRANS_USERDIR and SIMUTRANS_INSTALLDIR.
+      # These should be '--set-default's, but wrapProgram will only accept literal strings here.
+      # We're reading from the environment, so we use --run instead.
+      # A user can overwrite these values:
+      # - Setting SIMUTRANS_USERDIR and SIMUTRANS_INSTALLDIR in the environment will take priority over these defaults.
+      # - Setting SIMUTRANS_USERDIR and SIMUTRANS_INSTALLDIR to empty strings will disable them.
+      # - Passing '-set_userdir' and '-set_installdir' to the game will take priority over the environment variables.
+      postBuild =
+        let
+          default-home = ''$(if [ -n "$XDG_DATA_HOME" ]; then echo "$XDG_DATA_HOME/simutrans"; else echo "$HOME/.simutrans"; fi)'';
+        in
+        ''
+          wrapProgram $out/bin/simutrans \
+            --run 'export SIMUTRANS_USERDIR=''${SIMUTRANS_USERDIR-${default-home}}' \
+            --run 'export SIMUTRANS_INSTALLDIR=''${SIMUTRANS_INSTALLDIR-${default-home}/paksets}' \
+            --add-flags "-set_basedir $out/share/simutrans"
+        '';
 
+      strip = false;
       passthru.meta = binaries.meta // {
         hydraPlatforms = [ ];
       };
@@ -239,38 +293,26 @@ let
 
     sourceRoot = "simutrans-r${src.rev}/trunk";
 
-    # When you press the "Install" button in the pakset selection menu,
-    # normally the game will call `get_pak.sh`, which will download the pakset.
-    #
-    # It doesn't work on nix, because it wants to download the pakset into the working directory
-    # but that is read-only in nix. One solution is to implement a stub that tells the user
-    # to add the pakset to nixpkgs. But there's no easy way to display this in the gui.
-    # So, it would just fail silently, which is bad. Originally, my hope is that a typical NixOS user
-    # will be able to figure out what's going on. That user might be you! If you're reading this,
-    # and want your pakset in nixpkgs, please add it to pakSpec.
-    #
-    # But, in general, for a real implementation, `get_pak.sh` needs to download into a game-readable directory.
-    # This means that the game needs to read from both $out/share/simutrans and something under ~/.simutrans.
-    # Currently, the game can't do that. It can only read from one directory at a time.
-    # According to discussion in #developing on the Simutrans Discord, this is already part of the nightly builds.
-    # So, in the next release, we should implement `get_pak.sh` to download into ~/.simutrans.
-    #
-    # In the meanwhile, the "Install" button is useless. Given that the paksets are already in the pakSpec above,
-    # i figured it's fine to just disable it. After some back and forth with the Simutrans team, i was told, and i quote:
-    # "It should be possible to change the C++ code so that it would work the way you want it to be"
-    # So, i did that. I made a patch that hides the "Install" button.
-    # For the options menu, we also set the button to be "rigid" so that the rest of the menu doesn't shift around.
-    patches = [ ./disable_install_pakset.patch ];
+    patches = [
+      # The Makefile contains a typo. Already fixed upstream.
+      ./r11174.patch
+      # The implementation of check_and_set_dir() is broken. This patch has been submitted upstream.
+      ./fix-dirs.patch
+    ];
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       zlib
+      zstd
       libpng
       bzip2
       SDL2
       SDL2_mixer
+      fontconfig
+      miniupnpc
     ];
 
+    # https://simutrans-germany.com/wiki/wiki/en_CompilingSimutrans#Manual_configuration_with_make
     configuration =
       let
         platform =
@@ -281,13 +323,21 @@ let
           else
             throw "add your platform";
       in
-      #TODO: MULTI_THREAD = 1 is "highly recommended",
-      # but it's roughly doubling CPU usage for me
       ''
         BACKEND := sdl2
         OSTYPE := ${platform}
-        VERBOSE := 1
+
         OPTIMISE := 1
+        MSG_LEVEL := 3
+
+        MULTI_THREAD := 1
+
+        USE_UPNP := 1
+        USE_ZSTD := 1
+        USE_FREETYPE := 1
+        USE_FONTCONFIG := 1
+        USE_FLUIDSYNTH_MIDI := 1
+
         FLAGS := -DREVISION=${src.rev}
       '';
 
@@ -295,9 +345,6 @@ let
 
     configurePhase = ''
       cp $configurationPath config.default
-
-      # Use ~/.simutrans instead of ~/simutrans
-      substituteInPlace sys/simsys.cc --replace-fail '%s/simutrans' '%s/.simutrans'
     '';
 
     enableParallelBuilding = true;
@@ -307,6 +354,8 @@ let
       mv simutrans $out/share/simutrans
       mv build/default/sim $out/bin/simutrans
     '';
+
+    strip = false;
 
     meta = {
       description = "Simulation game in which the player strives to run a successful transport system";

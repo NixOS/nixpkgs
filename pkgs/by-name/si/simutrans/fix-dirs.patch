@@ -1,0 +1,55 @@
+diff -ur a/src/simutrans/simmain.cc b/src/simutrans/simmain.cc
+--- a/src/simutrans/simmain.cc
++++ b/src/simutrans/simmain.cc
+@@ -589,6 +589,11 @@
+ 			}
+ 		}
+ 	}
++	
++	// create directory and subdirectories
++	dr_mkdir(env_t::install_dir);
++	dr_mkdir(env_t::user_dir);
++    
+ 	// set portable, if base dir and user dir were same
+ 	not_portable &= strcmp( env_t::user_dir, env_t::base_dir )!=0;
+ 
+diff -ur a/src/simutrans/sys/simsys.cc b/src/simutrans/sys/simsys.cc
+--- a/src/simutrans/sys/simsys.cc
++++ b/src/simutrans/sys/simsys.cc
+@@ -379,13 +379,15 @@
+ {
+ 	if(  path  &&  *path  ) {
+ 		bool ok = !dr_chdir(path);
+-		FILE * testf = NULL;
+-		ok &=  ok  &&  testfile  &&  (testf = fopen(testfile,"r"));
++		if(testfile) {
++			FILE* testf = fopen(testfile,"r");
++			ok = ok && testf;
++			fclose(testf);
++		}
+ 		if(!ok) {
+ 			printf("WARNING: Objects not found in %s \"%s\"!\n",  info, path);
+ 		}
+ 		else {
+-			fclose(testf);
+ 			dr_getcwd( result, PATH_MAX-1 );
+ 			strcat( result, PATH_SEPARATOR );
+ 			return true;
+@@ -532,8 +534,6 @@
+ 	}
+ #endif
+ 
+-	// create directory and subdirectories
+-	dr_mkdir(buffer);
+ 	strcat(buffer, PATH_SEPARATOR);
+ 	return buffer;
+ }
+@@ -578,8 +578,6 @@
+ 	}
+ #endif
+ 
+-	// create directory and subdirectories
+-	dr_mkdir(buffer);
+ 	strcat(buffer, PATH_SEPARATOR);
+ 	return buffer;
+ }
