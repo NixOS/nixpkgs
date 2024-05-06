@@ -10733,6 +10733,17 @@ with pkgs;
       ;
   };
 
+  openwebrxplus = callPackage ../by-name/op/openwebrxplus/package.nix {
+    inherit (python3Packages)
+      buildPythonPackage
+      buildPythonApplication
+      setuptools
+      pycsdr-lu
+      pycsdreti
+      pydigiham
+      ;
+  };
+
   pcre = callPackage ../development/libraries/pcre { };
   pcre16 = res.pcre.override { variant = "pcre16"; };
   # pcre32 seems unused
