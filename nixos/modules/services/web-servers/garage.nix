@@ -52,13 +52,6 @@ in
             type = types.path;
             description = "The main data storage, put this on your large storage (e.g. high capacity HDD)";
           };
-
-          replication_mode = mkOption {
-            default = "none";
-            type = types.enum ([ "none" "1" "2" "3" "2-dangerous" "3-dangerous" "3-degraded" 1 2 3 ]);
-            apply = v: toString v;
-            description = "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode> for reference.";
-          };
         };
       };
       description = "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
