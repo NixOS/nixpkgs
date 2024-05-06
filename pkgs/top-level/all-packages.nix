@@ -9583,8 +9583,6 @@ with pkgs;
 
   kdoctor = callPackage ../development/tools/kdoctor { };
 
-  kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
-
   kdigger = callPackage ../tools/security/kdigger { };
 
   kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
