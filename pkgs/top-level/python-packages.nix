@@ -5943,6 +5943,8 @@ self: super: with self; {
 
   itemloaders = callPackage ../development/python-modules/itemloaders { };
 
+  iterable-io = callPackage ../development/python-modules/iterable-io { };
+
   iteration-utilities = callPackage ../development/python-modules/iteration-utilities { };
 
   iterative-telemetry = callPackage ../development/python-modules/iterative-telemetry { };

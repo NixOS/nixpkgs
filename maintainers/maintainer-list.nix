@@ -13404,6 +13404,12 @@
     matrix = "@mjm:beeper.com";
     name = "Matt Moriarity";
   };
+  mjoerg = {
+    name = "Martin Joerg";
+    email = "martin.joerg@gmail.com";
+    github = "mjoerg";
+    githubId = 147256;
+  };
   mjp = {
     email = "mike@mythik.co.uk";
     github = "MikePlayle";
