@@ -5,7 +5,7 @@
 , pkg-config
 , itstool
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , librsvg
 , libxml2
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     appstream-glib
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Aisleriot";
+    homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
     description = "A collection of patience games written in guile scheme";
     mainProgram = "sol";
     maintainers = teams.gnome.members;

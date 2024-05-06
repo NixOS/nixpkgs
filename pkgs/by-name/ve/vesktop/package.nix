@@ -8,15 +8,14 @@
 , copyDesktopItems
 , vencord
 , electron
-, pipewire
-, libpulseaudio
 , libicns
-, libnotify
 , jq
 , moreutils
 , cacert
 , nodePackages
-, speechd
+, pipewire
+, libpulseaudio
+, autoPatchelfHook
 , withTTS ? true
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
@@ -24,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OyAGzlwwdEKBbJJ7h3glwx/THy2VvUn/kA/Df3arWQU=";
+    hash = "sha256-cZOyydwpIW9Xq716KVi1RGtSlgVnOP3w8vXDwouS70E=";
   };
 
   # NOTE: This requires pnpm 8.10.0 or newer
@@ -77,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-JLjJZYFMH4YoIFuyXbGUp6lIy+VlYZtmwk2+oUwtTxQ=";
+      outputHash = "sha256-6ezEBeYmK5va3gCh00YnJzZ77V/Ql7A3l/+csohkz68=";
     };
 
   nativeBuildInputs = [
@@ -85,6 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
     nodePackages.pnpm
     nodePackages.nodejs
     makeWrapper
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    pipewire
+    libpulseaudio
+    stdenv.cc.cc.lib
   ];
 
   patches = [
@@ -110,26 +116,18 @@ stdenv.mkDerivation (finalAttrs: {
     # using `pnpm exec` here apparently makes it ignore ELECTRON_SKIP_BINARY_DOWNLOAD
     ./node_modules/.bin/electron-builder \
       --dir \
+      -c.asarUnpack="**/*.node" \
       -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
   '';
 
   # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
   installPhase =
-    let
-      # this is mainly required for venmic
-      libPath = lib.makeLibraryPath ([
-        libpulseaudio
-        libnotify
-        pipewire
-        stdenv.cc.cc.lib
-      ] ++ lib.optional withTTS speechd);
-    in
     ''
       runHook preInstall
 
-      mkdir -p $out/opt/Vesktop/resources
-      cp dist/linux-*unpacked/resources/app.asar $out/opt/Vesktop/resources
+      mkdir -p $out/opt/Vesktop
+      cp -r dist/linux-*unpacked/resources $out/opt/Vesktop/
 
       pushd build
       ${libicns}/bin/icns2png -x icon.icns
@@ -139,10 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
-        --prefix LD_LIBRARY_PATH : ${libPath} \
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
 
       runHook postInstall
     '';

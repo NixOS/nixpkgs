@@ -8,7 +8,7 @@
 , gtk3
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     gobject-introspection
     py
     sassc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

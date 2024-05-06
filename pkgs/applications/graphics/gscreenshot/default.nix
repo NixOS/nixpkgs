@@ -4,7 +4,7 @@
 , gettext
 , gobject-introspection
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , scrot
 , slop
@@ -27,12 +27,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-BA118PwMslqvnlRES2fEgTjzfNvKNVae7GzWSyuaqYM=";
   };
 
-  # needed for wrapGAppsHook to function
+  # needed for wrapGAppsHook3 to function
   strictDeps = false;
   # tests require a display and fail
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   propagatedBuildInputs = [
     gettext
     gobject-introspection

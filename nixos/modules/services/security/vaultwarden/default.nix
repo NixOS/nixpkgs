@@ -131,21 +131,13 @@ in {
         Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
-        may be passed to the service without adding them to the world-readable Nix store.
+        should be passed to the service without adding them to the world-readable Nix store.
 
-        Note that this file needs to be available on the host on which
-        `vaultwarden` is running.
+        Note that this file needs to be available on the host on which `vaultwarden` is running.
 
-        As a concrete example, to make the Admin UI available
-        (from which new users can be invited initially),
+        As a concrete example, to make the Admin UI available (from which new users can be invited initially),
         the secret {env}`ADMIN_TOKEN` needs to be defined as described
-        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page).
-        Setting `environmentFile` to `/var/lib/vaultwarden.env`
-        and ensuring permissions with e.g.
-        `chown vaultwarden:vaultwarden /var/lib/vaultwarden.env`
-        (the `vaultwarden` user will only exist after activating with
-        `enable = true;` before this), we can set the contents of the file to have
-        contents such as:
+        [here](https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page):
 
         ```
         # Admin secret token, see

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Interpreter for the AWK Programming Language";
     mainProgram = "mawk";
     homepage = "https://invisible-island.net/mawk/mawk.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; unix;
   };

@@ -5,7 +5,7 @@
 , ninja
 , vala
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , appstream
 , desktop-file-utils
 , python3
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     appstream
     desktop-file-utils
     python3

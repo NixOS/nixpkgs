@@ -1,9 +1,14 @@
-{ php, callPackage, stdenvNoCC, lib, fetchFromGitHub, makeBinaryWrapper }:
+{
+  php,
+  callPackage,
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+}:
 
 let
-  composer = callPackage ./composer-phar.nix {
-    inherit (php.packages.composer) version pharHash;
-  };
+  composer = callPackage ./composer-phar.nix { inherit (php.packages.composer) version pharHash; };
 
   composerKeys = stdenvNoCC.mkDerivation (finalComposerKeysAttrs: {
     pname = "composer-keys";
@@ -38,18 +43,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-edbn07r/Uc1g0qOuVBZBs6N1bMN5kIfA1b4FCufdw5M=";
   };
 
-  COMPOSER_CACHE_DIR = "/dev/null";
-  COMPOSER_MIRROR_PATH_REPOS = "1";
-  COMPOSER_HTACCESS_PROTECT = "0";
-  COMPOSER_DISABLE_NETWORK = "1";
+  env = {
+    COMPOSER_CACHE_DIR = "/dev/null";
+    COMPOSER_MIRROR_PATH_REPOS = "1";
+    COMPOSER_HTACCESS_PROTECT = "0";
+    COMPOSER_DISABLE_NETWORK = "1";
+  };
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  buildInputs = [
-    composer
-  ];
+  buildInputs = [ composer ];
 
   configurePhase = ''
     runHook preConfigure

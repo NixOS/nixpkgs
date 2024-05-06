@@ -3,7 +3,7 @@
 , python3Packages
 , gdk-pixbuf, glib, gobject-introspection, gtk3
 , libnotify
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mpdevil";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    glib.dev gobject-introspection gtk3 pkg-config meson ninja wrapGAppsHook
+    glib.dev gobject-introspection gtk3 pkg-config meson ninja wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-  # Otherwise wrapGAppsHook do not pick up the dependencies correctly.
+  # Otherwise wrapGAppsHook3 do not pick up the dependencies correctly.
   strictDeps = false;
   # There aren't any checks.
   doCheck = false;

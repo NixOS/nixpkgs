@@ -8,7 +8,7 @@
 , libdrm
 , gpu-screen-recorder
 , libglvnd
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -6,7 +6,6 @@
 , SystemConfiguration
 , nixosTests
 , nix-update-script
-, libclang
 }:
 
 let version = "1.7.6";
@@ -40,11 +39,13 @@ rustPlatform.buildRustPackage {
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
 
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     Security SystemConfiguration
   ];
-
-  env.LIBCLANG_PATH = "${libclang.lib}/lib";
 
   passthru = {
     updateScript = nix-update-script { };

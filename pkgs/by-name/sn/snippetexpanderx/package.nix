@@ -3,7 +3,7 @@
 , fetchFromSourcehut
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , installShellFiles
 , scdoc
 , at-spi2-atk
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     installShellFiles
     scdoc
   ];

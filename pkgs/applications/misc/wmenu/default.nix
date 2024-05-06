@@ -9,6 +9,7 @@
 , pango
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , scdoc
 }:
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [ cairo pango wayland libxkbcommon wayland-protocols scdoc ];
 
   meta = with lib; {

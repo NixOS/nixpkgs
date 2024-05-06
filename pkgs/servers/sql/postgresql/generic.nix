@@ -16,15 +16,14 @@ let
       , self, newScope, buildEnv
 
       # source specification
-      , version, hash, muslPatches
+      , version, hash, muslPatches ? {}
 
       # for tests
-      , testers, nixosTests, thisAttr
+      , testers, nixosTests
 
       # JIT
       , jitSupport
       , nukeReferences, patchelf, llvmPackages
-      , makeRustPlatform, buildPgxExtension, cargo, rustc
 
       # PL/Python
       , pythonSupport ? false
@@ -46,7 +45,8 @@ let
 
     stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
   in stdenv'.mkDerivation (finalAttrs: {
-    inherit pname version;
+    inherit version;
+    pname = pname + lib.optionalString jitSupport "-jit";
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
@@ -81,16 +81,15 @@ let
     ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
 
-    enableParallelBuilding = !stdenv'.isDarwin;
+    enableParallelBuilding = true;
 
     separateDebugInfo = true;
 
     buildFlags = [ "world" ];
 
-    env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
-
-    # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
-    preConfigure = "CC=${stdenv'.cc.targetPrefix}cc";
+    # Makes cross-compiling work when xml2-config can't be executed on the host.
+    # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
+    env.NIX_CFLAGS_COMPILE = lib.optionalString (olderThan "13") "-I${libxml2.dev}/include/libxml2";
 
     configureFlags = [
       "--with-openssl"
@@ -110,12 +109,11 @@ let
       ++ lib.optionals stdenv'.isLinux [ "--with-pam" ];
 
     patches = [
-      (if atLeast "16" then ./patches/disable-normalize_exec_path.patch
-       else ./patches/disable-resolve_symlinks.patch)
+      (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
       ./patches/less-is-more.patch
-      ./patches/hardcode-pgxs-path.patch
+      ./patches/paths-for-split-outputs.patch
       ./patches/specify_pkglibdir_at_runtime.patch
-      ./patches/findstring.patch
+      ./patches/paths-with-postgresql-suffix.patch
 
       (substituteAll {
         src = ./patches/locale-binary-path.patch;
@@ -126,16 +124,14 @@ let
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
     ) ++ lib.optionals stdenv'.isLinux  [
-      (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
+      (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
     ];
 
     installTargets = [ "install-world" ];
 
-    LC_ALL = "C";
-
     postPatch = ''
       # Hardcode the path to pgxs so pg_config returns the path in $out
-      substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
+      substituteInPlace "src/common/config_info.c" --subst-var out
     '' + lib.optionalString jitSupport ''
         # Force lookup of jit stuff in $out instead of $lib
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
@@ -202,6 +198,7 @@ let
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
 
+    # TODO: Remove after the next set of minor releases on May 9th 2024
     preCheck =
       # On musl, comment skip the following tests, because they break due to
       #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
@@ -235,13 +232,6 @@ let
           inherit (llvmPackages) llvm;
           postgresql = this;
           stdenv = stdenv';
-          buildPgxExtension = buildPgxExtension.override {
-            stdenv = stdenv';
-            rustPlatform = makeRustPlatform {
-              stdenv = stdenv';
-              inherit rustc cargo;
-            };
-          };
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };
@@ -254,10 +244,18 @@ let
                      this.pkgs;
 
       tests = {
-        postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
+        postgresql-wal-receiver = import ../../../../nixos/tests/postgresql-wal-receiver.nix {
+          inherit (stdenv) system;
+          pkgs = self;
+          package = this;
+        };
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
-        postgresql-jit = nixosTests.postgresql-jit.${thisAttr};
+        postgresql-jit = import ../../../../nixos/tests/postgresql-jit.nix {
+          inherit (stdenv) system;
+          pkgs = self;
+          package = this;
+        };
       };
     };
 
@@ -266,7 +264,7 @@ let
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
       changelog   = "https://www.postgresql.org/docs/release/${finalAttrs.version}/";
-      maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
+      maintainers = with maintainers; [ thoughtpolice danbst globin ivan ma27 ];
       pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 
@@ -280,7 +278,9 @@ let
       # resulting LLVM IR isn't platform-independent this doesn't give you much.
       # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
       # a query, postgres would coredump with `Illegal instruction`.
-      broken = jitSupport && (stdenv.hostPlatform != stdenv.buildPlatform);
+      broken = (jitSupport && stdenv.hostPlatform != stdenv.buildPlatform)
+        # Allmost all tests fail FATAL errors for v12 and v13
+        || (jitSupport && stdenv.hostPlatform.isMusl && olderThan "14");
     };
   });
 

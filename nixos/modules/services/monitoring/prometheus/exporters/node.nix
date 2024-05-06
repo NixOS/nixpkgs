@@ -1,9 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.node;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    concatMapStringsSep
+    any
+    optionals
+    ;
   collectorIsEnabled = final: any (collector: (final == collector)) cfg.enabledCollectors;
   collectorIsDisabled = final: any (collector: (final == collector)) cfg.disabledCollectors;
 in

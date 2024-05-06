@@ -7,7 +7,6 @@
 , gi-docgen
 , docbook-xsl-nons
 , gettext
-, libxml2
 , desktop-file-utils
 , wrapGAppsHook4
 , gtk4
@@ -19,6 +18,7 @@
 , shared-mime-info
 , libnotify
 , libexif
+, libjxl
 , libseccomp
 , librsvg
 , webp-pixbuf-loader
@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "45.2.1";
+  version = "46.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    sha256 = "ul1T3zmhVVYt+XHvXjHoJwdJBdDEjqseskIaEChLmQ0=";
+    hash = "sha256-zBpf3x3XL5Lp4/PHrSY3CaDeU5Golb6TRPamf0OIe9c=";
   };
 
   patches = [
@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     gettext
     gobject-introspection
-    libxml2
     meson
     ninja
     pkg-config
@@ -106,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${libjxl}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "The file manager for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/Files";
+    homepage = "https://apps.gnome.org/Nautilus/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

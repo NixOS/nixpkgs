@@ -1,14 +1,18 @@
-{ stdenv, fetchFromGitHub, makeBinaryWrapper, odin, lib }:
+{ stdenv, fetchFromGitHub, makeBinaryWrapper, unstableGitUpdater, odin, lib }:
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2024-04-15";
+  version = "0-unstable-2024-04-28";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "aa1aabda1cce68a6038c48429cc759f09ad2ebab";
-    hash = "sha256-yM+Syx8hWiSZatWfFFGz8lUJTOCozkZWPdPUhRW0/Ow=";
+    rev = "49a63471d91120a23ec86f1621e99155d1be55c2";
+    hash = "sha256-fHCSPqeN24QbCzwMCLtvK5YnR0ExveDvXRuWL2nHt8M=";
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
   };
 
   nativeBuildInputs = [

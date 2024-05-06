@@ -1,31 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, coreutils
-, pcsclite
-, PCSC
-, pkg-config
-, hsmSupport ? true
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  coreutils,
+  pcsclite,
+  PCSC,
+  pkg-config,
+  hsmSupport ? true,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.25.2";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cP3QypBNWGbr7R7lJLfaoBh6C37ubGuaxnxWlZ1Z000=";
+    hash = "sha256-yej7gzhaUPbcvqbse7Hh7Im38+DUfC9UZkpjpuG8ctk=";
   };
 
-  vendorHash = "sha256-AXMMpzXEhdKSGeVg/KK2NEgalxIXP6DUTcoxOQVqow4=";
+  vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
 
-  nativeBuildInputs = lib.optionals hsmSupport [
-    pkg-config
-  ];
+  nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
   buildInputs =
     lib.optionals (hsmSupport && stdenv.isLinux) [ pcsclite ]
@@ -62,6 +61,10 @@ buildGoModule rec {
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai mohe2015 techknowlogick ];
+    maintainers = with maintainers; [
+      cmcdragonkai
+      mohe2015
+      techknowlogick
+    ];
   };
 }

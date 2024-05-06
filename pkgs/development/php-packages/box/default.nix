@@ -1,4 +1,8 @@
-{ lib, php82, fetchFromGitHub }:
+{
+  lib,
+  php82,
+  fetchFromGitHub,
+}:
 
 php82.buildComposerProject (finalAttrs: {
   pname = "box";

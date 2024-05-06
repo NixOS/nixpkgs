@@ -6,23 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.69";
+  version = "3.2.79";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-q2hiIceWxQXwJWLXBuA3V3weqcr634yKbc6/VgQFkcQ=";
+    hash = "sha256-FQTRvi4HLfYavaLjfXrngnT/1nOGVXvedaUq7nG6ZAk=";
   };
 
   patches = [ ./flake8-compat-5.x.patch ];
 
   pythonRelaxDeps = [
-    "boto3"
-    "botocore"
     "bc-detect-secrets"
     "bc-python-hcl2"
+    "boto3"
+    "botocore"
     "dpath"
     "igraph"
     "license-expression"
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     "packageurl-python"
     "packaging"
     "pycep-parser"
+    "rustworkx"
     "termcolor"
   ];
 

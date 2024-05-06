@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.4";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "v${version}";
-    hash = "sha256-zMwyM4Y+nn/u/UXGlOxGB/JApgmYQW4qAek40uJO0Fc=";
+    hash = "sha256-7YG15kt+pIxAK22QYiTApu5lBV6Afe3Jss6L5dTGsGI=";
   };
 
   cargoLock = {

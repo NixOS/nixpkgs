@@ -18,7 +18,7 @@
 , systemd
 , enableSystemdResolved ? false
 , tinyxml-2
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.docutils
     python3.pkgs.jinja2
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.wrapPython
   ] ++ pythonPath;
 

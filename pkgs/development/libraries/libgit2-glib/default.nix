@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A glib wrapper library around the libgit2 git access library";
-    homepage = "https://wiki.gnome.org/Projects/Libgit2-glib";
+    homepage = "https://gitlab.gnome.org/GNOME/libgit2-glib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

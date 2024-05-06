@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-smy/t6wTCnG0kuRFKwyeLENKqOQDhL0fZTtj3BHo6kw=";
   };
 
+  patches = [
+    # fixes build failure https://github.com/dino/dino/issues/1576
+    # backport of https://github.com/dino/dino/commit/657502955567dd538e56f300e075c7db52e25d74
+    ./fix-compile-new-vala-c.diff
+  ];
+
   postPatch = ''
     # don't overwrite manually set version information
     substituteInPlace CMakeLists.txt \

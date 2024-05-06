@@ -6,6 +6,8 @@ mkKdeDerivation {
   nativeBuildInputs = [];
   buildInputs = [];
 
+  outputs = ["out"];
+
   installPhase = ''
     runHook preInstall
 

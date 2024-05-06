@@ -64,6 +64,6 @@ buildGoModule rec {
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
     mainProgram = "rclone";
-    maintainers = with maintainers; [ marsam SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 tomfitzhenry ];
   };
 }

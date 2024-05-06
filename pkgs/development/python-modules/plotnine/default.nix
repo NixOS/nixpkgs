@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.4";
+  version = "0.13.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ylsaV5yWVbxvD74spAI5tDwIjjue7MOMaGgp4Dc8Nhk=";
+    hash = "sha256-vGxsBcY4CRT4rBUq0AQ4oo0etKK+CtUD487VvnoK/rI=";
   };
 
   postPatch = ''

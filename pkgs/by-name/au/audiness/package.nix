@@ -6,17 +6,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "audiness";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audiness";
     rev = "refs/tags/${version}";
-    hash = "sha256-vc2k3oEMTgzm/C6z6BieRrT3cSP0IkY+D3RXkNGaZTE=";
+    hash = "sha256-UJe4ZawjAuUoSKEdIgjh8zZu/amYLZ8rpUDahSHokKA=";
   };
 
-  pythonRelaxDeps = [ "validators" ];
+  pythonRelaxDeps = [
+    "typer"
+    "validators"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 

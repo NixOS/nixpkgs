@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , pythonOlder
 
+, hatchling
+, pythonRelaxDepsHook
 , manim
 , ffmpeg
 
@@ -27,17 +29,13 @@
   # Optional dependencies
 , ipython
 
-  # Hooks
-, pdm-backend
-, pythonRelaxDepsHook
-
   # As Module or application?
 , withGui ? false
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  format = "pyproject";
-  version = "5.1.3";
+  version = "5.1.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -45,16 +43,19 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WZR95swapT2Fbu6mbuHLjMu3Okq/wKFabzN7xpZw0/g=";
+    hash = "sha256-YOveWGukizXvEUOhId7UDJema64ypbg7w06JzrTsKjw=";
   };
 
-  nativeBuildInputs = [ pdm-backend pythonRelaxDepsHook ];
+  build-system = [
+    hatchling
+    pythonRelaxDepsHook
+  ];
 
   pythonRemoveDeps = [ "opencv-python" ];
 
   pythonRelaxDeps = [ "rtoml" "qtpy" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     av
     click
     click-default-group

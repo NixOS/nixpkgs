@@ -497,40 +497,6 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
-### Development mode {#development-mode}
-
-Development or editable mode is supported. To develop Python packages
-[`buildPythonPackage`](#buildpythonpackage-function) has additional logic inside `shellPhase` to run `pip
-install -e . --prefix $TMPDIR/`for the package.
-
-Warning: `shellPhase` is executed only if `setup.py` exists.
-
-Given a `default.nix`:
-
-```nix
-with import <nixpkgs> {};
-
-python3Packages.buildPythonPackage {
-  name = "myproject";
-  buildInputs = with python3Packages; [ pyramid ];
-
-  src = ./.;
-}
-```
-
-Running `nix-shell` with no arguments should give you the environment in which
-the package would be built with `nix-build`.
-
-Shortcut to setup environments with C headers/libraries and Python packages:
-
-```shell
-nix-shell -p python3Packages.pyramid zlib libjpeg git
-```
-
-::: {.note}
-There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
-:::
-
 ## User Guide {#user-guide}
 
 ### Using Python {#using-python}
@@ -867,8 +833,7 @@ Above, we were mostly just focused on use cases and what to do to get started
 creating working Python environments in nix.
 
 Now that you know the basics to be up and running, it is time to take a step
-back and take a deeper look at how Python packages are packaged on Nix. Then,
-we will look at how you can use development mode with your code.
+back and take a deeper look at how Python packages are packaged on Nix.
 
 #### Python library packages in Nixpkgs {#python-library-packages-in-nixpkgs}
 
@@ -913,7 +878,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1048,7 +1012,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1169,7 +1132,6 @@ buildPythonPackage rec {
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with lib.licenses; [ bsd2 bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1481,45 +1443,6 @@ documentation source root.
 The hook is also available to packages outside the python ecosystem by
 referencing it using `sphinxHook` from top-level.
 
-### Develop local package {#develop-local-package}
-
-As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
-(`python setup.py develop`); instead of installing the package this command
-creates a special link to the project code. That way, you can run updated code
-without having to reinstall after each and every change you make. Development
-mode is also available. Let's see how you can use it.
-
-In the previous Nix expression the source was fetched from a url. We can also
-refer to a local source instead using `src = ./path/to/source/tree;`
-
-If we create a `shell.nix` file which calls [`buildPythonPackage`](#buildpythonpackage-function), and if `src`
-is a local source, and if the local source has a `setup.py`, then development
-mode is activated.
-
-In the following example, we create a simple environment that has a Python 3.11
-version of our package in it, as well as its dependencies and other packages we
-like to have in the environment, all specified with `dependencies`.
-
-```nix
-with import <nixpkgs> {};
-with python311Packages;
-
-buildPythonPackage rec {
-  name = "mypackage";
-  src = ./path/to/package/source;
-  dependencies = [
-    pytest
-    numpy
-  ];
-  propagatedBuildInputs = [
-    pkgs.libsndfile
-  ];
-}
-```
-
-It is important to note that due to how development mode is implemented on Nix
-it is not possible to have multiple packages simultaneously in development mode.
-
 ### Organising your packages {#organising-your-packages}
 
 So far we discussed how you can use Python on Nix, and how you can develop with
@@ -1568,7 +1491,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```

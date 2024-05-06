@@ -74,13 +74,13 @@ buildGoModule rec {
   };
 
   patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ] ++ lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./hardcode-paths.patch;
       inherit crun runc gvisor youki conmon;
     })
-
-    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
-    ./rm-podman-mac-helper-msg.patch
   ];
 
   vendorHash = null;
@@ -161,7 +161,7 @@ buildGoModule rec {
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     mainProgram = "podman";
   };
 }

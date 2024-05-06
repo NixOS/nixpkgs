@@ -2,7 +2,7 @@
 
 luarocks.overrideAttrs (old: {
   pname = "luarocks-nix";
-  version = "unstable-2023-10-19";
+  version = "0-unstable-2023-10-19";
 
   src = fetchFromGitHub {
     owner = "nix-community";
@@ -14,10 +14,15 @@ luarocks.overrideAttrs (old: {
   patches = [ ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      # tags incompletely inherited from regular luarocks
+      hardcodeZeroVersion = true;
+    };
   };
 
-  meta = old.meta // {
+  # old.meta // { /* ... */ } doesn't update meta.position, which breaks the updateScript
+  meta = {
+    inherit (old.meta) description license maintainers platforms;
     mainProgram = "luarocks";
   };
 })

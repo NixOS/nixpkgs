@@ -5,7 +5,7 @@
 buildDunePackage {
   pname = "irmin-mirage-graphql";
 
-  inherit (irmin-mirage) version src strictDeps;
+  inherit (irmin-mirage) version src;
 
   propagatedBuildInputs = [
     irmin-mirage

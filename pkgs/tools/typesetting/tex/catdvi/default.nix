@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "http://catdvi.sourceforge.net";
     description = "A DVI to plain text translator";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ ];
   };
 })

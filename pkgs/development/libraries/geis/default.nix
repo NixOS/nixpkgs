@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , pkg-config
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , atk
 , dbus
 , evemu
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   pythonPath = with python3Packages;
     [ pygobject3  ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook python3Packages.wrapPython gobject-introspection ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 python3Packages.wrapPython gobject-introspection ];
   buildInputs = [ atk dbus evemu frame gdk-pixbuf grail
     gtk3 xorg.libX11 xorg.libXext xorg.libXi xorg.libXtst pango python3Packages.python xorgserver
   ];

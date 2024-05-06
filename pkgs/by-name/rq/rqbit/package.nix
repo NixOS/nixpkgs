@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rqbit";
-  version = "5.6.0";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    hash = "sha256-KpwKSbj9B/O/RBO1PLkcYguZiuxrGcYyX3Wt4sQhe2o=";
+    hash = "sha256-SRom/rLyF7R+ESWsAKeLLujvuj5w7+Evlsm+8BKe2f0=";
   };
 
   cargoLock = {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ikatson/rqbit";
     changelog = "https://github.com/ikatson/rqbit/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "rqbit";
   };
 }

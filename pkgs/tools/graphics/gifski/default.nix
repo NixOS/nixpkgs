@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gif.ski/";
     changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ figsoda marsam ];
+    maintainers = with maintainers; [ figsoda ];
     mainProgram = "gifski";
   };
 }

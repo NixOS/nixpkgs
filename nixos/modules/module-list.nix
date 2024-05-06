@@ -45,6 +45,7 @@
   ./config/xdg/portals/lxqt.nix
   ./config/xdg/portals/wlr.nix
   ./config/xdg/sounds.nix
+  ./config/xdg/terminal-exec.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
@@ -325,6 +326,7 @@
   ./security/duosec.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
+  ./security/isolate.nix
   ./security/krb5
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
@@ -558,8 +560,9 @@
   ./services/hardware/joycond.nix
   ./services/hardware/kanata.nix
   ./services/hardware/lcd.nix
+  ./services/hardware/libinput.nix
   ./services/hardware/lirc.nix
-  ./services/hardware/nvidia-container-toolkit-cdi-generator
+  ./services/hardware/nvidia-container-toolkit
   ./services/hardware/monado.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/openrgb.nix
@@ -944,6 +947,7 @@
   ./services/networking/charybdis.nix
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
+  ./services/networking/clatd.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cloudflared.nix
   ./services/networking/cntlm.nix
@@ -1012,6 +1016,7 @@
   ./services/networking/icecream/daemon.nix
   ./services/networking/icecream/scheduler.nix
   ./services/networking/imaginary.nix
+  ./services/networking/inadyn.nix
   ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
@@ -1026,6 +1031,7 @@
   ./services/networking/jigasi.nix
   ./services/networking/jitsi-videobridge.nix
   ./services/networking/jool.nix
+  ./services/networking/jotta-cli.nix
   ./services/networking/kea.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
@@ -1070,6 +1076,7 @@
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
+  ./services/networking/netbird/server.nix
   ./services/networking/netclient.nix
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
@@ -1160,6 +1167,7 @@
   ./services/networking/strongswan.nix
   ./services/networking/stubby.nix
   ./services/networking/stunnel.nix
+  ./services/networking/sunshine.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/syncplay.nix
@@ -1223,6 +1231,7 @@
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
   ./services/search/hound.nix
+  ./services/search/manticore.nix
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
@@ -1250,8 +1259,8 @@
   ./services/security/kanidm.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
-  ./services/security/oauth2_proxy.nix
-  ./services/security/oauth2_proxy_nginx.nix
+  ./services/security/oauth2-proxy.nix
+  ./services/security/oauth2-proxy-nginx.nix
   ./services/security/opensnitch.nix
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix
@@ -1334,6 +1343,7 @@
   ./services/web-apps/dolibarr.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
+  ./services/web-apps/firefly-iii.nix
   ./services/web-apps/fluidd.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/galene.nix
@@ -1467,7 +1477,6 @@
   ./services/x11/gdk-pixbuf.nix
   ./services/x11/hardware/cmt.nix
   ./services/x11/hardware/digimend.nix
-  ./services/x11/hardware/libinput.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/imwheel.nix

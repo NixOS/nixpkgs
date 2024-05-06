@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-tools";
-  version = "unstable-2020-10-25";
+  version = "0-unstable-2020-10-24";
 
   src = fetchFromGitHub {
     owner = "khvzak";

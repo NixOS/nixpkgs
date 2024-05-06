@@ -2,8 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
-, pytest_7
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     # https://github.com/utapyngo/pytest-unordered/issues/15
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

@@ -34,10 +34,10 @@ buildPythonApplication rec {
   # remove legacy endpoints, we use --multi now
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"mremote' '#"mremote'
+      --replace-fail '"mremote' '#"mremote'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     pydantic
     toml

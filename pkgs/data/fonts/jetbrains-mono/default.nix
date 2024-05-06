@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://jetbrains.com/mono/";
     changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
     license = licenses.ofl;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ vinnymeller ];
     platforms = platforms.all;
   };
 }

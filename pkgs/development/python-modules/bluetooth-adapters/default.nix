@@ -13,12 +13,13 @@
 , pythonOlder
 , sphinx-rtd-theme
 , sphinxHook
+, uart-devices
 , usb-devices
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.18.0";
+  version = "0.19.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KPmCOPCK7muT0qptJMKQwWU/6tvepkdHwlNYcrvpRLg=";
+    hash = "sha256-r+Ll9ODFal+I2MwrwHakPFWD3GiE/n0f/dYs69jmmpU=";
   };
 
   postPatch = ''
@@ -40,20 +41,21 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     myst-parser
     poetry-core
     sphinx-rtd-theme
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiooui
     async-timeout
     bleak
     dbus-fast
     mac-vendor-lookup
+    uart-devices
     usb-devices
   ];
 

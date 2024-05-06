@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     description = "A grotesk variable font superfamily";
     homepage = "https://tribby.com/fonts/barlow/";
     license = licenses.ofl;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

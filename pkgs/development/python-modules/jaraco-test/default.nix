@@ -40,6 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # https://github.com/jaraco/jaraco.test/issues/6
+    "jaraco/test/cpython.py"
+  ];
+
   pythonImportsCheck = [
     "jaraco.test"
   ];

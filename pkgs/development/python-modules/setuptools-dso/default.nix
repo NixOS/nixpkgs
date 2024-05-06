@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "setuptools extension for building non-Python Dynamic Shared Objects";
     homepage = "https://github.com/mdavidsaver/setuptools_dso";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

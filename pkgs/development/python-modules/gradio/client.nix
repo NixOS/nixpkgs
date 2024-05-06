@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     setuptools # needed for 'pkg_resources'
     fsspec
     httpx

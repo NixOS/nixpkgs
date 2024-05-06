@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, buildPythonApplication
 , colorama, decorator, psutil, pyte, six
-, go, mock, pytestCheckHook, pytest-mock, pytest_7
+, go, mock, pytest7CheckHook, pytest-mock
 }:
 
 buildPythonApplication rec {
@@ -16,7 +16,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ colorama decorator psutil pyte six ];
 
-  nativeCheckInputs = [ go mock (pytestCheckHook.override { pytest = pytest_7; }) pytest-mock ];
+  nativeCheckInputs = [ go mock pytest7CheckHook pytest-mock ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_settings_defaults"

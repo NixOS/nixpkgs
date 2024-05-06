@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nanosaur";
-  version = "1.4.4-unstable-2023-05-21";
+  version = "1.4.4-unstable-2024-04-06";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
-    rev = "c9753648996b09a17c8bd526d8309b73fb14c435";
-    sha256 = "sha256-0xG/HSUF65eV+fSJ2geDv5VUxTeso9dulrLgE1KNDhc=";
+    rev = "4f2612f81697a0852f63fa2ea1ac80892f8a5a9c";
+    hash = "sha256-MQmlZbsQSREAIqKXyIIOF6Psa1rqY/iUsBHpeKGekBI=";
     fetchSubmodules = true;
   };
 

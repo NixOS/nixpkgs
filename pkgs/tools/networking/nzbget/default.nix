@@ -19,22 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "23.0";
+  version = "24.0";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JqC82zpsIqRYB7128gTSOQMWJFR/t63NJXlPgGqP0jE=";
+    hash = "sha256-vEtbf4y3Jc69FrEzGE34Xt/4oDmZlWTbwispvoypRI0=";
   };
-
-  patches = [
-    # add nzbget-ng patch not in nzbgetcom for buffer overflow issue -- see https://github.com/nzbget-ng/nzbget/pull/43
-    (fetchpatch {
-      url = "https://github.com/nzbget-ng/nzbget/commit/8fbbbfb40003c6f32379a562ce1d12515e61e93e.patch";
-      hash = "sha256-mgI/twEoMTFMFGfH1/Jm6mE9u9/CE6RwELCSGx5erUo=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 

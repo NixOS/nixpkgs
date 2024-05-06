@@ -1,8 +1,15 @@
-{ lib, buildLua, fetchFromGitea, unstableGitUpdater, curl, coreutils }:
+{
+  lib,
+  buildLua,
+  fetchFromGitea,
+  unstableGitUpdater,
+  curl,
+  coreutils,
+}:
 
 buildLua {
   pname = "mpv_sponsorblock_minimal";
-  version = "unstable-2023-08-20";
+  version = "0-unstable-2023-08-20";
   scriptPath = "sponsorblock_minimal.lua";
 
   src = fetchFromGitea {
@@ -21,8 +28,7 @@ buildLua {
   '';
 
   meta = with lib; {
-    description =
-      "A minimal script to skip sponsored segments of YouTube videos";
+    description = "A minimal script to skip sponsored segments of YouTube videos";
     homepage = "https://codeberg.org/jouni/mpv_sponsorblock_minimal";
     license = licenses.gpl3Only;
     platforms = platforms.all;

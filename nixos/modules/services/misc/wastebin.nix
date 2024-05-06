@@ -10,7 +10,7 @@ in
 
   options.services.wastebin = {
 
-    enable = mkEnableOption "Wastenbin pastebin service";
+    enable = mkEnableOption "Wastebin, a pastebin service";
 
     package = mkPackageOption pkgs "wastebin" { };
 

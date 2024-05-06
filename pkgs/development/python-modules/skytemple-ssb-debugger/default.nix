@@ -17,7 +17,7 @@
 , skytemple-files
 , skytemple-icons
 , skytemple-ssb-emulator
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ gtk3 gtksourceview4 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
   propagatedBuildInputs = [
     explorerscript
     ndspy
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Script Engine Debugger for Pokémon Mystery Dungeon Explorers of Sky";
     mainProgram = "skytemple-ssb-debugger";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

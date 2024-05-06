@@ -4,7 +4,7 @@
 , fetchPypi
 
 # build-system
-, cython_3
+, cython
 , gfortran
 , numpy
 , scipy
@@ -15,6 +15,7 @@
 , glibcLocales
 , llvmPackages
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pytest-xdist
 , pillow
 , joblib
@@ -24,15 +25,21 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.4.1.post1";
+  version = "1.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k9PUlv8ZZUcPmXfQXl7DN2+x5jsQ5P2l450jwtiWmjA=";
+    hash = "sha256-2qHEcdlbrQgMbkS0lGyTkKSEKtwwglcsIOT4iE456Vk=";
   };
+
+  # Avoid build-system requirements causing failure
+  prePatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy==2.0.0rc1" "numpy"
+  '';
 
   buildInputs = [
     pillow
@@ -43,10 +50,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
+    pythonRelaxDepsHook
   ];
 
   build-system = [
-    cython_3
+    cython
     numpy
     scipy
     setuptools

@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch2
 , pythonAtLeast
 , pythonOlder
 , substituteAll
@@ -62,6 +63,13 @@ buildPythonPackage rec {
     # make sure the tests don't remove packages from our pythonpath
     # and disable failing tests
     ./django_4_tests.patch
+
+    (fetchpatch2 {
+      # https://github.com/django/django/pull/17979
+      name = "django-mime-utf8-surrogates.patch";
+      url = "https://github.com/django/django/commit/0d3ddcaf2c74638a32781f361d467af572ced95f.patch";
+      hash = "sha256-AoIFvehBsXIrzIlCsqOZ++RqtDFl/H+zXqA25OMQr7g=";
+    })
 
   ] ++ lib.optionals withGdal [
     (substituteAll {

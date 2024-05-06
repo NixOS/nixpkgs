@@ -1,7 +1,13 @@
-{ callPackage, stdenvNoCC, lib, writeTextDir, php, makeBinaryWrapper, fetchFromGitHub, fetchurl }:
+{
+  callPackage,
+  stdenvNoCC,
+  lib,
+  php,
+}:
 
 let
-  buildComposerProjectOverride = finalAttrs: previousAttrs:
+  buildComposerProjectOverride =
+    finalAttrs: previousAttrs:
 
     let
       phpDrv = finalAttrs.php or php;
@@ -22,60 +28,72 @@ let
         phpDrv.composerHooks.composerInstallHook
       ];
 
-      buildInputs = (previousAttrs.buildInputs or [ ]) ++ [
-        phpDrv
-      ];
+      buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ phpDrv ];
 
       patches = previousAttrs.patches or [ ];
       strictDeps = previousAttrs.strictDeps or true;
 
       # Should we keep these empty phases?
-      configurePhase = previousAttrs.configurePhase or ''
-        runHook preConfigure
+      configurePhase =
+        previousAttrs.configurePhase or ''
+          runHook preConfigure
 
-        runHook postConfigure
-      '';
+          runHook postConfigure
+        '';
 
-      buildPhase = previousAttrs.buildPhase or ''
-        runHook preBuild
+      buildPhase =
+        previousAttrs.buildPhase or ''
+          runHook preBuild
 
-        runHook postBuild
-      '';
+          runHook postBuild
+        '';
 
       doCheck = previousAttrs.doCheck or true;
-      checkPhase = previousAttrs.checkPhase or ''
-        runHook preCheck
+      checkPhase =
+        previousAttrs.checkPhase or ''
+          runHook preCheck
 
-        runHook postCheck
-      '';
+          runHook postCheck
+        '';
 
-      installPhase = previousAttrs.installPhase or ''
-        runHook preInstall
+      installPhase =
+        previousAttrs.installPhase or ''
+          runHook preInstall
 
-        runHook postInstall
-      '';
+          runHook postInstall
+        '';
 
       doInstallCheck = previousAttrs.doInstallCheck or false;
-      installCheckPhase = previousAttrs.installCheckPhase or ''
-        runHook preInstallCheck
+      installCheckPhase =
+        previousAttrs.installCheckPhase or ''
+          runHook preInstallCheck
 
-        runHook postInstallCheck
-      '';
+          runHook postInstallCheck
+        '';
 
-      composerRepository = phpDrv.mkComposerRepository {
-        inherit composer composer-local-repo-plugin;
-        inherit (finalAttrs) patches pname src vendorHash version;
+      composerRepository =
+        previousAttrs.composerRepository or (phpDrv.mkComposerRepository {
+          inherit composer composer-local-repo-plugin;
+          inherit (finalAttrs)
+            patches
+            pname
+            src
+            vendorHash
+            version
+            ;
 
-        composerLock = previousAttrs.composerLock or null;
-        composerNoDev = previousAttrs.composerNoDev or true;
-        composerNoPlugins = previousAttrs.composerNoPlugins or true;
-        composerNoScripts = previousAttrs.composerNoScripts or true;
-        composerStrictValidation = previousAttrs.composerStrictValidation or true;
+          composerLock = previousAttrs.composerLock or null;
+          composerNoDev = previousAttrs.composerNoDev or true;
+          composerNoPlugins = previousAttrs.composerNoPlugins or true;
+          composerNoScripts = previousAttrs.composerNoScripts or true;
+          composerStrictValidation = previousAttrs.composerStrictValidation or true;
+        });
+
+      env = {
+        COMPOSER_CACHE_DIR = "/dev/null";
+        COMPOSER_DISABLE_NETWORK = "1";
+        COMPOSER_MIRROR_PATH_REPOS = "1";
       };
-
-      COMPOSER_CACHE_DIR="/dev/null";
-      COMPOSER_DISABLE_NETWORK="1";
-      COMPOSER_MIRROR_PATH_REPOS="1";
 
       meta = previousAttrs.meta or { } // {
         platforms = lib.platforms.all;

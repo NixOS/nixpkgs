@@ -663,7 +663,7 @@ in
             '' + ''
               export KEYCLOAK_ADMIN=admin
               export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
-              kc.sh start --optimized
+              kc.sh --verbose start --optimized
             '';
           };
 

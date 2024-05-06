@@ -26,7 +26,7 @@ in lib.makeOverridable ({
   extraMakeFlags ? [],
   # The name of the kernel module directory
   # Needs to be X.Y.Z[-extra], so pad with zeros if needed.
-  modDirVersion ? lib.versions.pad 3 version,
+  modDirVersion ? null /* derive from version */,
   # The kernel source (tarball, git checkout, etc.)
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
@@ -54,6 +54,13 @@ in lib.makeOverridable ({
 }:
 
 let
+  # Provide defaults. Note that we support `null` so that callers don't need to use optionalAttrs,
+  # which can lead to unnecessary strictness and infinite recursions.
+  modDirVersion_ = if modDirVersion == null then lib.versions.pad 3 version else modDirVersion;
+in
+let
+  # Shadow the un-defaulted parameter; don't want null.
+  modDirVersion = modDirVersion_;
   inherit (lib)
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 

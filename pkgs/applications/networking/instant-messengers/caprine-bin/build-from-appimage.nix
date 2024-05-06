@@ -30,8 +30,6 @@ in
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},caprine}
-
     mkdir -p $out/share
     "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
     ln -s ${extracted}/caprine.png $out/share/icons/caprine.png

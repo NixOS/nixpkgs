@@ -15,7 +15,7 @@
 , pycurl
 , pymongo
   #, pyro4
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , redis
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.5";
+  version = "5.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MORw8aa0nHDcb20Tw+TMTheKpsRpzra81VZFOF/IS5M=";
+    hash = "sha256-ARxM2aNVwUod6NNdJXMUodJFbVK3FAOIVhrKw88al78=";
   };
 
   propagatedBuildInputs = [
@@ -89,13 +89,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     case
     hypothesis
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    # pytest.PytestRemovedIn8Warning: Support for nose tests is deprecated and will be removed in a future release.
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
 
   pythonImportsCheck = [
     "kombu"

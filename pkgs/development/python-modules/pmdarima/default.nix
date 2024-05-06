@@ -12,7 +12,7 @@
 , urllib3
 , pythonOlder
 , python
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -49,11 +49,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     matplotlib
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   disabledTests= [

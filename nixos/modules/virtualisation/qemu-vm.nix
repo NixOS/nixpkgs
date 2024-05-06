@@ -249,7 +249,7 @@ let
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           ${concatStringsSep " \\\n    "
             (mapAttrsToList
-              (tag: share: "-virtfs local,path=${share.source},security_model=none,mount_tag=${tag}")
+              (tag: share: "-virtfs local,path=${share.source},security_model=${share.securityModel},mount_tag=${tag}")
               config.virtualisation.sharedDirectories)} \
           ${drivesCmdLine config.virtualisation.qemu.drives} \
           ${concatStringsSep " \\\n    " config.virtualisation.qemu.options} \
@@ -461,6 +461,18 @@ in
             options.target = mkOption {
               type = types.path;
               description = "The mount point of the directory inside the virtual machine";
+            };
+            options.securityModel = mkOption {
+              type = types.enum [ "passthrough" "mapped-xattr" "mapped-file" "none" ];
+              default = "mapped-xattr";
+              description = ''
+                The security model to use for this share:
+
+                - `passthrough`: files are stored using the same credentials as they are created on the guest (this requires QEMU to run as root)
+                - `mapped-xattr`: some of the file attributes like uid, gid, mode bits and link target are stored as file attributes
+                - `mapped-file`: the attributes are stored in the hidden .virtfs_metadata directory. Directories exported by this security model cannot interact with other unix tools
+                - `none`: same as "passthrough" except the sever won't report failures if it fails to set file attributes like ownership
+              '';
             };
           });
         default = { };
@@ -1091,18 +1103,22 @@ in
       nix-store = mkIf cfg.mountHostNixStore {
         source = builtins.storeDir;
         target = "/nix/store";
+        securityModel = "none";
       };
       xchg = {
         source = ''"$TMPDIR"/xchg'';
+        securityModel = "none";
         target = "/tmp/xchg";
       };
       shared = {
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
+        securityModel = "none";
       };
       certs = mkIf cfg.useHostCerts {
         source = ''"$TMPDIR"/certs'';
         target = "/etc/ssl/certs";
+        securityModel = "none";
       };
     };
 

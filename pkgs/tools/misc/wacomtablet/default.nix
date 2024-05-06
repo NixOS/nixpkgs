@@ -30,7 +30,7 @@ mkDerivation rec {
       with profile support to handle different button / pen layouts per profile.
     '';
     homepage = "https://invent.kde.org/system/wacomtablet";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.Thra11 ];
     platforms = lib.platforms.linux;
   };

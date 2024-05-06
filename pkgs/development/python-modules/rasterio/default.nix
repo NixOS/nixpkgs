@@ -13,7 +13,7 @@
 , click
 , click-plugins
 , cligj
-, cython_3
+, cython
 , gdal
 , hypothesis
 , ipython
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gdal
     numpy
     setuptools

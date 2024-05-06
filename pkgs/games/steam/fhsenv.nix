@@ -68,6 +68,10 @@ let
   envScript = ''
     # prevents various error messages
     unset GIO_EXTRA_MODULES
+
+    # This is needed for IME (e.g. iBus, fcitx5) to function correctly on non-CJK locales
+    # https://github.com/ValveSoftware/steam-for-linux/issues/781#issuecomment-2004757379
+    GTK_IM_MODULE='xim'
   '' + lib.toShellVars extraEnv;
 
 in buildFHSEnv rec {

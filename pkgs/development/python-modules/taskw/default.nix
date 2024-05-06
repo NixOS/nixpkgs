@@ -1,20 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, tox
-, six
-, python-dateutil
-, kitchen
-, pytestCheckHook
-, pytz
+
+# build-system
+, setuptools
+
+# native dependencies
 , pkgs
+
+# dependencies
+, kitchen
+, python-dateutil
+, pytz
+
+# tests
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "taskw";
   version = "2.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -31,11 +37,19 @@ buildPythonPackage rec {
       --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
   '';
 
+  build-system = [
+    setuptools
+  ];
+
   buildInputs = [ pkgs.taskwarrior ];
 
-  propagatedBuildInputs = [ six python-dateutil kitchen pytz ];
+  dependencies = [
+    kitchen
+    python-dateutil
+    pytz
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
     homepage =  "https://github.com/ralphbean/taskw";

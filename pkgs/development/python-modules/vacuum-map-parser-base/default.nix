@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "vacuum-map-parser-base";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "PiotrMachowski";
     repo = "Python-package-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-moCWUPzn9stxehVEnjqpx8ILYhxzuy8QG+uxR53rCew=";
+    hash = "sha256-wX7RsJKSNZmi6uIDqsKxWe8VaYJPg4I3pwHHckMUOw4=";
   };
 
   postPatch = ''

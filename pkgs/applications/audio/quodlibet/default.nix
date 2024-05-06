@@ -5,7 +5,7 @@
   # build time
 , gettext
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 
   # runtime
 , adwaita-icon-theme
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ (with python3.pkgs; [
     sphinx-rtd-theme
     sphinxHook
