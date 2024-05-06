@@ -22,7 +22,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/google/zx";
     changelog = "https://github.com/google/zx/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hlolli ];
+    maintainers = with lib.maintainers; [ jlbribeiro ];
     mainProgram = "zx";
   };
 }
