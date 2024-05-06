@@ -43,6 +43,15 @@ in {
         '';
       };
 
+      sudoIntegration = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to make sudo look for sudoers rules from SSS.
+          For this to work, the `sudo` service must be enabled in the sssd configuration.
+        '';
+      };
+
       kcm = mkOption {
         type = types.bool;
         default = false;
@@ -51,6 +60,7 @@ in {
           Kerberos will be configured to cache credentials in SSS.
         '';
       };
+
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -149,18 +159,24 @@ in {
     })
 
     (mkIf cfg.sshAuthorizedKeysIntegration {
-    # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
-    # So indirect by a symlink.
-    environment.etc."ssh/authorized_keys_command" = {
-      mode = "0755";
-      text = ''
+      # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
+      # So indirect by a symlink.
+      environment.etc."ssh/authorized_keys_command" = {
+        mode = "0755";
+        text = ''
         #!/bin/sh
         exec ${pkgs.sssd}/bin/sss_ssh_authorizedkeys "$@"
       '';
-    };
-    services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
-    services.openssh.authorizedKeysCommandUser = "nobody";
-  })];
+      };
+      services.openssh.authorizedKeysCommand = "/etc/ssh/authorized_keys_command";
+      services.openssh.authorizedKeysCommandUser = "nobody";
+    })
+
+    (mkIf cfg.sudoIntegration {
+      security.sudo.package = pkgs.sudoWithSssd;
+      system.nssDatabases.sudoers = [ "sss" ];
+    })
+  ];
 
   meta.maintainers = with maintainers; [ bbigras ];
 }
