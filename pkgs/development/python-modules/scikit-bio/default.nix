@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, lockfile
-, cachecontrol
-, decorator
-, h5py
-, ipython
-, matplotlib
-, natsort
-, numpy
-, pandas
-, scipy
-, hdmedians
-, scikit-learn
-, coverage
-, python
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  lockfile,
+  cachecontrol,
+  decorator,
+  h5py,
+  ipython,
+  matplotlib,
+  natsort,
+  numpy,
+  pandas,
+  scipy,
+  hdmedians,
+  scikit-learn,
+  coverage,
+  python,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cython ];
   nativeCheckInputs = [ coverage ];
-  propagatedBuildInputs = [ lockfile cachecontrol decorator ipython matplotlib natsort numpy pandas scipy h5py hdmedians scikit-learn ];
+  propagatedBuildInputs = [
+    lockfile
+    cachecontrol
+    decorator
+    ipython
+    matplotlib
+    natsort
+    numpy
+    pandas
+    scipy
+    h5py
+    hdmedians
+    scikit-learn
+  ];
 
   # cython package not included for tests
   doCheck = false;
@@ -47,7 +61,10 @@ buildPythonPackage rec {
     homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ ];
   };
 }
