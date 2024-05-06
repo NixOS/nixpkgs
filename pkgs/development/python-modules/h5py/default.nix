@@ -31,6 +31,12 @@ in buildPythonPackage rec {
     hash = "sha256-e36PeAcqLt7IfJg28l80ID/UkqRHVwmhi0F6M8+yH6k=";
   };
 
+  patches = [
+    # Unlock an overly strict locking of mpi4py version (seems not to be necessary).
+    # See also: https://github.com/h5py/h5py/pull/2418/files#r1589372479
+    ./mpi4py-requirement.patch
+  ];
+
   # avoid strict pinning of numpy
   postPatch = ''
     substituteInPlace pyproject.toml \
