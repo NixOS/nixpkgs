@@ -86,6 +86,7 @@ in
     ../build.nix
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
+    (mkRenamedOptionModule [ "system" "forbiddenDependenciesRegex" ] [ "system" "forbiddenDependenciesRegexes" ])
   ];
 
   options = {
@@ -160,12 +161,12 @@ in
       '';
     };
 
-    system.forbiddenDependenciesRegex = mkOption {
-      default = "";
-      example = "-dev$";
-      type = types.str;
+    system.forbiddenDependenciesRegexes = mkOption {
+      default = [];
+      example = ["-dev$"];
+      type = types.listOf types.str;
       description = ''
-        A POSIX Extended Regular Expression that matches store paths that
+        POSIX Extended Regular Expressions that match store paths that
         should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
       '';
     };
@@ -289,15 +290,14 @@ in
             "$out/configuration.nix"
         '' +
       optionalString
-        (config.system.forbiddenDependenciesRegex != "")
-        ''
-          if [[ $forbiddenDependenciesRegex != "" && -n $closureInfo ]]; then
-            if forbiddenPaths="$(grep -E -- "$forbiddenDependenciesRegex" $closureInfo/store-paths)"; then
+        (config.system.forbiddenDependenciesRegexes != []) (lib.concatStringsSep "\n" (map (regex: ''
+          if [[ ${regex} != "" && -n $closureInfo ]]; then
+            if forbiddenPaths="$(grep -E -- "${regex}" $closureInfo/store-paths)"; then
               echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
               exit 1
             fi
           fi
-        '';
+        '') config.system.forbiddenDependenciesRegexes));
 
     system.systemBuilderArgs = {
 
@@ -319,8 +319,7 @@ in
       # option, as opposed to `system.extraDependencies`.
       passedChecks = concatStringsSep " " config.system.checks;
     }
-    // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
-      inherit (config.system) forbiddenDependenciesRegex;
+    // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != []) {
       closureInfo = pkgs.closureInfo { rootPaths = [
         # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
         (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
