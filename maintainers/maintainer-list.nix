@@ -21001,6 +21001,12 @@
     github = "deviant";
     githubId = 68829907;
   };
+  V3ntus = {
+    name = "Joseph Packard";
+    email = "joe@gladiusso.com";
+    github = "V3ntus";
+    githubId = 29584664;
+  };
   vaci = {
     email = "vaci@vaci.org";
     github = "vaci";
