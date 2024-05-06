@@ -1,7 +1,10 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , makeWrapper
 , rustPlatform
+, marked-man
+, coreutils
 , vulkan-loader
 , wayland
 , pkg-config
@@ -20,6 +23,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-FaX87k8LdBhrBX4qvokSHkcNaQZ0+oSbkn9d0dK6FGo=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace \
+      'target/release/$(BIN)' \
+      'target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/$(BIN)'
+
+    # Needs chmod and chgrp
+    substituteInPlace 90-wluma-backlight.rules --replace \
+      'RUN+="/bin/' 'RUN+="${coreutils}/bin/'
+
+    substituteInPlace wluma.service --replace \
+      'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
+  '';
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -31,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     pkg-config
     rustPlatform.bindgenHook
+    marked-man
   ];
 
   buildInputs = [
@@ -39,6 +56,12 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
   ];
 
+  postBuild = ''
+    make docs
+  '';
+
+  dontCargoInstall = true;
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
   postInstall = ''
     wrapProgram $out/bin/wluma \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
