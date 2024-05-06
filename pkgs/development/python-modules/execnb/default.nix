@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "execnb";
-  version = "0.1.5";
+  version = "0.1.6";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nuAp4OMAfA3u3DJyORjFw7y7ZLsLCKEfxSFIXqNh+k0=";
+    sha256 = "sha256-KJ2XEHqFY0SxbAiVPWBFO0cyC0EWgGDso8wt7lBLTgU=";
   };
 
   propagatedBuildInputs = [ fastcore traitlets ipython ];
