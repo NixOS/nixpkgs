@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.5.1";
+  version = "5.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oOgGxpUduUkGKOTfgMrslmm2UUnHukD5vwM8AlpbVrw=";
+    hash = "sha256-a1+xEnSyl0Y3Bq+E3LvVySJzsfYZ5tJdCIdLCohRaYk=";
   };
 
   propagatedBuildInputs = [
