@@ -1048,6 +1048,8 @@
       mkdir $target/bin
       ln -s ${dbee-go}/bin/dbee $target/bin/dbee
       '';
+
+    meta.platforms = lib.platforms.linux;
   });
 
   nvim-navic = super.nvim-navic.overrideAttrs {
