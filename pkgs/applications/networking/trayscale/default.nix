@@ -50,7 +50,7 @@ buildGoModule rec {
     description = "An unofficial GUI wrapper around the Tailscale CLI client";
     homepage = "https://github.com/DeedleFake/trayscale";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ patka ];
     mainProgram = "trayscale";
   };
 }
