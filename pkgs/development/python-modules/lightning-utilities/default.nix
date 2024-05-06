@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 
 # build
 , setuptools
@@ -74,5 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Lightning-AI/utilities";
     license = licenses.asl20;
     maintainers = with maintainers; [ GaetanLepage ];
+    broken = pythonAtLeast "3.12";
   };
 }
