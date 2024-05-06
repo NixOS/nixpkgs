@@ -284,6 +284,6 @@ buildFHSEnv {
     maintainers = with maintainers; [ amarshall jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "davinci-resolve";
+    mainProgram = davinci.pname;
   };
 }
