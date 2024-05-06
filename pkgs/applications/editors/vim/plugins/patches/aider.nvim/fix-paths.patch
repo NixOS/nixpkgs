@@ -1,0 +1,26 @@
+diff --git a/lua/aider.lua b/lua/aider.lua
+index 38db0d1..d1ad6d5 100644
+--- a/lua/aider.lua
++++ b/lua/aider.lua
+@@ -26,7 +26,7 @@ function M.AiderOpen(args, window_type)
+   if M.aider_buf and vim.api.nvim_buf_is_valid(M.aider_buf) then
+     helpers.open_buffer_in_new_window(window_type, M.aider_buf)
+   else
+-    command = 'aider ' .. (args or '')
++    command = '@aider@ ' .. (args or '')
+     helpers.open_window(window_type)
+     command = helpers.add_buffers_to_command(command)
+     M.aider_job_id = vim.fn.termopen(command, {on_exit = OnExit})
+diff --git a/lua/helpers.lua b/lua/helpers.lua
+index 152182b..aa21584 100644
+--- a/lua/helpers.lua
++++ b/lua/helpers.lua
+@@ -63,7 +63,7 @@ end
+ 
+ local function build_background_command(args, prompt)
+   prompt = prompt or "Complete as many todo items as you can and remove the comment for any item you complete."
+-  local command = 'aider --msg "' .. prompt .. '" ' .. (args or '')
++  local command = '@aider@ --msg "' .. prompt .. '" ' .. (args or '')
+   command = add_buffers_to_command(command)
+   return command
+ end

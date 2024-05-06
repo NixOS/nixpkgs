@@ -1,0 +1,223 @@
+#!/usr/bin/env bash
+
+shopt -s extglob
+
+# Upstream wrapper requires UUID to be used for configuration.
+
+# However, when declaratively describing a host, we may not know its UUID, and
+# shouldn't need to persist something that will differ between hosts built from
+# the same configuration template.
+
+# Thus, for using bees from NixOS, we have our own wrapper, which supports not
+# just UUID but any specification permitted by findmnt
+
+[[ $bees_debug ]] && { PS4=':${BASH_SOURCE##*/}:$LINENO+'; set -x; }
+
+usage() {
+  cat >&2 <<EOF
+Usage: ${BASH_SOURCE##*/} run|cleanup config-name|fsSpec [idxSizeMB=...] [verbosity=...] [workDir=...] [-- daemon-options...]
+
+  fsSpec should be in a format recognized by findmnt. Alternately,
+  "config-name" may refer to a file that exists in ${bees_config_dir:-/etc/bees}
+  with a .conf extension; if that file does not specify UUID, findmnt will be
+  used in addition.
+
+  Note that while config files may presently use shell arithmetic, use of this
+  functionality is not encouraged going forward: Setting ''idxSizeMB=4096'' is
+  preferred over ''DB_SIZE=$((1024*1024*1024*4))'' or ''DB_SIZE=$(( AL16M * 256 ))'',
+  although both of these are presently supported.
+
+  If fsSpec contains a /, it assumed to be a mount point to be looked up by
+  findmnt, not a config file name.
+
+  daemon-options are passed directly through to the daemon on startup, as
+  documented at https://github.com/Zygo/bees/blob/master/docs/options.md.
+EOF
+  exit 1
+}
+
+die() { echo "$*" >&2; exit 1; }
+
+allConfigNames=( blockdev fsSpec home idxSize idxSizeMB mntDir runDir status verbosity workDir )
+
+# Alternate names for configuration values; "bees_" will always be prepended
+declare -A altConfigNames=(
+  # from original bees wrapper
+  [BEESHOME]=home
+  [BEESSTATUS]=status
+  [MNT_DIR]=mntDir
+  [UUID]=uuid
+  [WORK_DIR]=runDir
+  [DB_SIZE]=idxSize
+)
+
+# legacy bees config files can be arbitrary shell scripts, so we need to actually evaluate them
+sandboxedConfigFileEval() {
+  bash_exe=$(type -P bash) || exit
+  PATH=/var/empty ENV='' BASH_ENV='' AL128K="$((128*1024))" AL16M="$((16*1024*1024))" "$bash_exe" -r ${bees_debug+-x} \
+    -c 'eval "$(</dev/stdin)" >&2; for var; do [[ ${!var} ]] && printf "%q=%s\\0" "$var" "${!var}"; done' \
+    "${!altConfigNames[@]}" "${allConfigNames[@]}" \
+    <"$1"
+}
+
+readConfigFileIfExists() {
+  local line
+  [[ -s $1 ]] || return 1
+  while IFS= read -r -d '' line; do
+    line=${line%%+([[:space:]])"#"*}
+    [[ $line ]] || continue
+    [[ $line = *=* ]] || {
+      printf 'WARNING: Config file line not recognized: %q\n' "$line" >&2
+      continue
+    }
+    set_option "$line"
+  done < <(sandboxedConfigFileEval "$1")
+}
+
+set_option() {
+  local k v
+  k="${1%%=*}" v="${1#*=}"
+  [[ ${altConfigNames[$k]} ]] && k=${altConfigNames[$k]}
+  printf -v "bees_$k" %s "$v"
+}
+
+uuid_re='^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$'
+
+# Shared code for setting configuration used by other operations.
+#
+# Reads from global associative array "opts" containing options passed in as
+# key=value pairs on the command line, looks for config-file overrides, and
+# sets individual global variables.
+_setup() {
+  declare fstype
+  bees_fsSpec=$1; shift
+
+  # Look for file-based configuration, additional to honoring configuration on the command line
+  bees_config_dir="${bees_config_dir:-/etc/bees}"
+  if [[ $bees_fsSpec =~ $uuid_re ]]; then
+    bees_uuid=$bees_fsSpec
+    # If our spec looks like a bare UUID, and no config file exists in the new
+    # format, fall back to legacy config file search mechanism (grep; ewww).
+    if ! readConfigFileIfExists "$bees_config_dir/UUID=$bees_fsSpec.conf"; then
+      # Legacy approach to finding a config file: Grep for a *.conf file
+      # containing the UUID within its text. Permitting spaces around the "="
+      # appears to be a bug, but is retained for compatibility with the
+      # original upstream script.
+      allConfFiles=( "$bees_config_dir"/*.conf )
+      if (( ${#allConfFiles[@]} )); then
+        # in read or readarray with -d '', the NUL terminating the empty string is used as delimiter character.
+        readarray -d '' -t matchingConfFiles < <(grep -E -l -Z "^[^#]*UUID[[:space:]]*=[[:space:]]*" "${allConfFiles[@]}")
+      else
+        matchingConfFiles=( )
+      fi
+      if (( ${#matchingConfFiles[@]} == 1 )); then
+        # Exactly one configuration file exists in our target directory with a reference to the UUID given.
+        bees_config_file=${matchingConfFiles[0]}
+        readConfigFileIfExists "$bees_config_file"
+        echo "NOTE: Please consider renaming $bees_config_file to $bees_config_dir/UUID=$bees_fsSpec" >&2
+        echo "      ...and passing UUID=$bees_fsSpec on startup." >&2
+      elif (( ${#matchingConfFiles[@]} > 1 )); then
+        # The legacy wrapper would silently use the first file and ignore
+        # others, but... no.
+        echo "ERROR: Passed a bare UUID, but multiple configuration files match it:" >&2
+        printf ' - %q\n' "${matchingConfFiles[@]}" >&2
+        die "Unable to continue."
+      fi
+    fi
+  else
+    # For a non-UUID fsSpec that is not a path, look only for a config file
+    # exactly matching its text.
+    #
+    # (Passing a mount point as a fsSpec is only supported with the new
+    # wrapper; all key=value pairs can be passed on the command line in this
+    # mode, so config file support is not needed).
+    [[ $bees_fsSpec = */* ]] || readConfigFileIfExists "$bees_config_dir/$bees_fsSpec.conf"
+  fi
+
+  [[ $bees_uuid ]] || {
+    # if bees_uuid is not in our .conf file, look it up with findmnt
+    for findmnt_mode in --kernel --mtab --fstab; do
+      read -r bees_uuid fstype < <(findmnt "$findmnt_mode" -n -o uuid,fstype "$bees_fsSpec") ||:
+      [[ $bees_uuid && $fstype ]] && break
+    done
+    [[ $bees_uuid ]] || die "Unable to identify a device matching $bees_fsSpec with findmnt"
+    [[ $fstype = btrfs ]] || die "Device type is $fstype, not btrfs"
+  }
+
+  [[ $bees_uuid = */* ]] || readConfigFileIfExists "$bees_config_dir/UUID=$bees_uuid.conf"
+
+  # Honor any values read from config files above; otherwise, set defaults.
+  bees_workDir="${bees_workDir:-.beeshome}"
+  bees_runDir="${bees_runDir:-/run/bees}"
+  bees_mntDir="${bees_mntDir:-$bees_runDir/mnt/$bees_uuid}"
+  bees_home="${bees_home:-$bees_mntDir/$bees_workDir}"
+  bees_status="${bees_status:-${bees_runDir}/$bees_uuid.status}"
+  bees_verbosity="${bees_verbosity:-6}"
+  bees_idxSizeMB="${bees_idxSizeMB:-1024}"
+  bees_idxSize=${bees_idxSize:-"$(( bees_idxSizeMB * 1024 * 1024 ))"}
+  bees_blockdev=${bees_blockdev:-"/dev/disk/by-uuid/$bees_uuid"}
+
+  [[ -b $bees_blockdev ]] || die "Block device $bees_blockdev missing"
+  (( bees_idxSize % (16 * 1024 * 1024) == 0 )) || die "DB size must be divisible by 16MB"
+}
+
+do_run() {
+  local db old_db_size
+
+  _setup "$1"; shift
+  mkdir -p -- "$bees_mntDir" || exit
+
+  # subvol id 5 is reserved for the root subvolume of a btrfs filesystem.
+  mountpoint -q "$bees_mntDir" || mount -osubvolid=5 -- "$bees_blockdev" "$bees_mntDir" || exit
+  if [[ -d $bees_home ]]; then
+    btrfs subvolume show "$bees_home" >/dev/null 2>&1 || die "$bees_home exists but is not a subvolume"
+  else
+    btrfs subvolume create "$bees_home" || exit
+    sync # workaround for Zygo/bees#93
+  fi
+  db=$bees_home/beeshash.dat
+  touch -- "$db"
+
+  old_db_size=$(stat -c %s -- "$db")
+  new_db_size=$bees_idxSize
+
+  if (( old_db_size != new_db_size )); then
+    rm -f -- "$bees_home"/beescrawl."$bees_uuid".dat
+    truncate -s "$new_db_size" -- "$db" || exit
+  fi
+  chmod 700 -- "$bees_home"
+
+  # BEESSTATUS and BEESHOME are the only variables handled by the legacy
+  # wrapper for which getenv() is called in C code.
+  BEESSTATUS=$bees_status BEESHOME=$bees_home exec "${beesd_bin:-/lib/bees/bees}" \
+    --verbose "$bees_verbosity" \
+    "$@" "$bees_mntDir" || exit
+}
+
+do_cleanup() {
+  _setup "$1"; shift
+  mountpoint -q "$bees_mntDir" && umount -l -- "$bees_mntDir" || exit
+}
+
+(( $# >= 2 )) || usage
+declare -f "do_$1" >/dev/null 2>&1 || usage
+mode=$1; shift # must be a do_* function; currently "run" or "cleanup"
+
+declare -a args=( "$1" ); shift  # pass first argument (config-name|fsSpec) through literally
+
+# parse other arguments as key=value pairs, or pass them through literally if they do not match that form.
+# similarly, any option after "--" will be passed through literally.
+while (( $# )); do
+  if [[ $1 = *=* ]]; then
+    set_option "$1"
+  elif [[ $1 = -- ]]; then
+    shift
+    args+=( "$@" )
+    break
+  else
+    args+=( "$1" )
+  fi
+  shift
+done
+
+"do_$mode" "${args[@]}"

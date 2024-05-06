@@ -1,0 +1,87 @@
+diff --git a/common/flatpak-run.c b/common/flatpak-run.c
+index 94ad013..5c9f55e 100644
+--- a/common/flatpak-run.c
++++ b/common/flatpak-run.c
+@@ -871,6 +871,49 @@ out:
+   return res;
+ }
+ 
++static void
++get_nix_closure (GHashTable *closure, const gchar *source_path)
++{
++  if (g_file_test (source_path, G_FILE_TEST_IS_SYMLINK))
++    {
++      g_autofree gchar *path = g_malloc(PATH_MAX);
++      realpath(source_path, path);
++      if (g_str_has_prefix(path, "/nix/store/"))
++        {
++          *strchr(path + strlen("/nix/store/"), '/') = 0;
++          g_hash_table_add(closure, g_steal_pointer (&path));
++        }
++    }
++  else if (g_file_test (source_path, G_FILE_TEST_IS_DIR))
++    {
++      g_autoptr(GDir) dir = g_dir_open(source_path, 0, NULL);
++      const gchar *file_name;
++      while ((file_name = g_dir_read_name(dir)))
++        {
++          g_autofree gchar *path = g_build_filename (source_path, file_name, NULL);
++          get_nix_closure (closure, path);
++        }
++    }
++}
++
++static void
++add_nix_store_symlink_targets (FlatpakBwrap *bwrap, const gchar *source_path)
++{
++  GHashTable *closure = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
++
++  get_nix_closure(closure, source_path);
++
++  GHashTableIter iter;
++  gpointer path;
++  g_hash_table_iter_init(&iter, closure);
++  while (g_hash_table_iter_next(&iter, &path, NULL))
++    {
++      flatpak_bwrap_add_args (bwrap, "--ro-bind", path, path, NULL);
++    }
++
++  g_hash_table_destroy(closure);
++}
++
+ static void
+ add_font_path_args (FlatpakBwrap *bwrap)
+ {
+@@ -898,6 +946,18 @@ add_font_path_args (FlatpakBwrap *bwrap)
+                               "\t<remap-dir as-path=\"%s\">/run/host/fonts</remap-dir>\n",
+                               SYSTEM_FONTS_DIR);
+     }
++  else if (g_file_test ("/run/current-system/sw/share/X11/fonts", G_FILE_TEST_EXISTS))
++    {
++      add_nix_store_symlink_targets (bwrap, "/run/current-system/sw/share/X11/fonts");
++      flatpak_bwrap_add_args (bwrap,
++                              "--ro-bind",
++                              "/run/current-system/sw/share/X11/fonts",
++                              "/run/host/fonts",
++                              NULL);
++      g_string_append_printf (xml_snippet,
++                              "\t<remap-dir as-path=\"%s\">/run/host/fonts</remap-dir>\n",
++                              "/run/current-system/sw/share/X11/fonts");
++    }
+ 
+   if (g_file_test ("/usr/local/share/fonts", G_FILE_TEST_EXISTS))
+     {
+@@ -998,6 +1058,13 @@ add_icon_path_args (FlatpakBwrap *bwrap)
+                               "--ro-bind", "/usr/share/icons", "/run/host/share/icons",
+                               NULL);
+     }
++  else if (g_file_test ("/run/current-system/sw/share/icons", G_FILE_TEST_IS_DIR))
++    {
++      add_nix_store_symlink_targets (bwrap, "/run/current-system/sw/share/icons");
++      flatpak_bwrap_add_args (bwrap,
++                              "--ro-bind", "/run/current-system/sw/share/icons", "/run/host/share/icons",
++                              NULL);
++    }
+ 
+   user_icons_path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
+   user_icons = g_file_new_for_path (user_icons_path);

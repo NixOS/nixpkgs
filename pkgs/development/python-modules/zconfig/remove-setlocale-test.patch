@@ -1,0 +1,24 @@
+From 43fd87037be1c98b6afa20f179f2e2d8ef5491ba Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Fri, 20 Jul 2018 10:07:22 -0500
+Subject: [PATCH] remove test that fails w/musl (setlocale() always succeeds)
+
+---
+ ZConfig/tests/test_datatypes.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/ZConfig/tests/test_datatypes.py b/ZConfig/tests/test_datatypes.py
+index 7c8d80c..addecd2 100644
+--- a/ZConfig/tests/test_datatypes.py
++++ b/ZConfig/tests/test_datatypes.py
+@@ -229,7 +229,6 @@ class DatatypeTestCase(unittest.TestCase):
+         convert = self.types.get("locale")
+         # Python supports "C" even when the _locale module is not available
+         self.assertEqual(convert("C"), "C")
+-        self.assertRaises(ValueError, convert, "locale-does-not-exist")
+ 
+     def test_datatype_port(self):
+         convert = self.types.get("port-number")
+-- 
+2.18.0
+

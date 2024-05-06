@@ -1,0 +1,14 @@
+diff --git a/lua/lazy/help.lua b/lua/lazy/help.lua
+index 4a289eb..5ddc168 100644
+--- a/lua/lazy/help.lua
++++ b/lua/lazy/help.lua
+@@ -38,9 +38,6 @@ function M.index(plugin)
+ end
+ 
+ function M.update()
+-  if Config.plugins["lazy.nvim"] then
+-    vim.cmd.helptags(Config.plugins["lazy.nvim"].dir .. "/doc")
+-  end
+   if Config.options.readme.enabled == false then
+     return
+   end
