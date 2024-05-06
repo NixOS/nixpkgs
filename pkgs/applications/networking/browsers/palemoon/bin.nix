@@ -13,7 +13,7 @@
 , libXt
 , libpulseaudio
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeScript
 , testers
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

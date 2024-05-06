@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , glib-networking
 , gtk3
@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "56";
+  version = "57";
 
   outputs = [ "out" "installedTests" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-V2L65Fz1WcJE2ENE8uNgIuVSXLDHokcgM4Caz1sOdZM=";
+    hash = "sha256-0o5CEkdFPL7bZkHIA/zFWB8sY1OYROl4P3rl24+lze0=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection # for locating typelibs
-    wrapGAppsHook # for wrapping daemons
+    wrapGAppsHook3 # for wrapping daemons
     desktop-file-utils # update-desktop-database
   ];
 

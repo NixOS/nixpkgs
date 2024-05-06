@@ -6,7 +6,7 @@
 , pkg-config
 , qttools
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , qtbase
 , dtkwidget
 , qt5integration
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qttools
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 

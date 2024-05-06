@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , makePythonPath
@@ -17,6 +18,7 @@
 , pyro5
 , requests
 , rich
+, rubicon-objc
 , setuptools
 , survey
 , typing-extensions
@@ -59,6 +61,8 @@ buildPythonPackage rec {
     typing-extensions
     watchdog
     xattr
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rubicon-objc
   ];
 
   makeWrapperArgs = [
@@ -70,6 +74,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  # ModuleNotFoundError: No module named '_watchdog_fsevents'
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -90,6 +97,19 @@ buildPythonPackage rec {
     "test_locking_multiprocess"
     # OSError: [Errno 95] Operation not supported
     "test_move_preserves_xattrs"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # maetral daemon does not start but worked in real environment
+    "test_catching_non_ignored_events"
+    "test_connection"
+    "test_event_handler"
+    "test_fs_ignore_tree_creation"
+    "test_lifecycle"
+    "test_notify_level"
+    "test_notify_snooze"
+    "test_receiving_events"
+    "test_remote_exceptions"
+    "test_start_already_running"
+    "test_stop"
   ];
 
   pythonImportsCheck = [
@@ -104,7 +124,6 @@ buildPythonPackage rec {
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg sfrijters ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ natsukium peterhoeg sfrijters ];
   };
 }

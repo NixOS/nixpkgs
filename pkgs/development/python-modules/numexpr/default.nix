@@ -2,30 +2,38 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
-, packaging
-, python
-, pythonOlder
+, pytestCheckHook
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.9.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "2.10.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8h0S9sQyzjSQieuVNCur9mKa67P93xh6RJLTqtqtqvA=";
+    hash = "sha256-yJ6TB1JjnfBAU5FgMm2PmahBWbvqQZQ6uOlgWR7arvA=";
   };
 
-  nativeBuildInputs = [
+  # patch for compatibility with numpy < 2.0
+  # see more details, https://numpy.org/devdocs/numpy_2_0_migration_guide.html#c-api-changes
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+    sed -i "1i#define PyDataType_SET_ELSIZE(descr, elsize)" numexpr/interpreter.cpp
+    sed -i "1i#define PyDataType_ELSIZE(descr) ((descr)->elsize)" numexpr/interpreter.cpp
+  '';
+
+  build-system = [
+    setuptools
+    wheel
     numpy
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
-    packaging
   ];
 
   preBuild = ''
@@ -33,12 +41,24 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  checkPhase = ''
-    runtest="$(pwd)/numexpr/tests/test_numexpr.py"
-    pushd "$out"
-    ${python.interpreter} "$runtest"
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    pushd $out
+  '';
+
+  postCheck = ''
     popd
   '';
+
+  disabledTests = [
+    # fails on computers with more than 8 threads
+    # https://github.com/pydata/numexpr/issues/479
+    "test_numexpr_max_threads_empty_string"
+    "test_omp_num_threads_empty_string"
+  ];
 
   pythonImportsCheck = [
     "numexpr"

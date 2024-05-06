@@ -308,6 +308,7 @@ let
     FactoMineR = [ self.car ];
     pander = [ self.codetools ];
     rmsb = [ self.rstantools ];
+    gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
   };
 
@@ -412,6 +413,7 @@ let
     RcppZiggurat = [ pkgs.gsl ];
     reprex = [ pkgs.which ];
     rgdal = with pkgs; [ proj.dev gdal ];
+    Rhisat2 = [ pkgs.which pkgs.hostname ];
     gdalcubes = [ pkgs.pkg-config ];
     rgeos = [ pkgs.geos ];
     Rglpk = [ pkgs.glpk ];
@@ -532,6 +534,7 @@ let
     Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
+    Rsymphony = [ pkgs.pkg-config ];
     NanoMethViz = [ pkgs.zlib.dev ];
     RcppMeCab = [ pkgs.pkg-config ];
     HilbertVisGUI = with pkgs; [ pkg-config which ];
@@ -561,11 +564,13 @@ let
     deepSNV = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     epialleleR = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gdalraster = with pkgs; [ gdal proj.dev sqlite.dev ];
+    mitoClone2 = with pkgs; [ xz.dev bzip2.dev zlib.dev ];
     gpg = [ pkgs.gpgme ];
     webp = [ pkgs.libwebp ];
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     stpphawkes = [ pkgs.gsl ];
+    registr = with pkgs; [ icu.dev zlib.dev bzip2.dev xz.dev ];
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkg-config ];
     rDEA = [ pkgs.glpk ];
@@ -616,7 +621,7 @@ let
     mashr = [ pkgs.gsl ];
     hadron = [ pkgs.gsl ];
     AMOUNTAIN = [ pkgs.gsl ];
-    Rsymphony = with pkgs; [ pkg-config doxygen graphviz subversion ];
+    Rsymphony = with pkgs; [ symphony doxygen graphviz subversion cgl clp];
     tcltk2 = with pkgs; [ tcl tk ];
     rswipl = with pkgs; [ ncurses.dev libxcrypt zlib.dev ];
     tikzDevice = with pkgs; [ which texliveMedium ];
@@ -706,9 +711,11 @@ let
     RcppCWB = with pkgs; [ pcre.dev glib.dev ];
     redux = [ pkgs.hiredis ];
     RmecabKo = [ pkgs.mecab ];
+    markets = [ pkgs.gsl ];
     PoissonBinomial = [ pkgs.fftw.dev ];
     poisbinom = [ pkgs.fftw.dev ];
     PoissonMultinomial = [ pkgs.fftw.dev ];
+    psbcGroup = [ pkgs.gsl.dev ];
     rrd = [ pkgs.rrdtool ];
     flowWorkspace = [ pkgs.zlib.dev ];
     RITCH = [ pkgs.zlib.dev ];
@@ -933,6 +940,7 @@ let
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
+    "ceramic"
     "connections"
     "csodata"
     "DiceView"
@@ -966,6 +974,9 @@ let
     "Quartet"
     "ShinyQuickStarter"
     "TIN"
+    "cfdnakit"
+    "CaDrA"
+    "GNOSIS"
     "TotalCopheneticIndex"
     "TreeDist"
     "biocthis"
@@ -995,6 +1006,8 @@ let
     "PhIPData" # tries to download something from a DB
     "RBioFormats" # tries to download jar during load test
     "pbdMPI"   # tries to run MPI processes
+    "CTdata" # tries to connect to ExperimentHub
+    "rfaRm" # tries to connect to Ebi
     "data_table" # fails to rename shared library before check
     "coMethDMR" # tries to connect to ExperimentHub
     "multiMiR" # tries to connect to DB
@@ -1077,6 +1090,21 @@ let
         pkgs.rustPlatform.cargoSetupHook
         pkgs.cargo
         pkgs.rustc
+      ];
+    });
+
+    timeless = old.timeless.overrideAttrs (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = attrs.src;
+        sourceRoot = "timeless/src/rust";
+        hash = "sha256-n0/52CV3NzWe7T3N6VoaURMxWrnqeYaUMPKkUy+LRQs=";
+      };
+
+      cargoRoot = "src/rust";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
       ];
     });
 
@@ -1164,6 +1192,11 @@ let
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -fopenmp";
       };
       patchPhase = "patchShebangs configure";
+    });
+
+   rsgeo = old.rsgeo.overrideAttrs (attrs: {
+      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
     });
 
     exifr = old.exifr.overrideAttrs (attrs: {
@@ -1259,6 +1292,17 @@ let
         substituteInPlace "R/quarto.R" \
           --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
       '';
+    });
+
+    # backported patch from 1.9
+    Rhisat2= old.Rhisat2.overrideAttrs (attrs: {
+      patches = [ (pkgs.fetchpatch {
+        url = "https://github.com/fmicompbio/Rhisat2/commit/a0f27b018831b39f080f99e6db8a4b876fd56fc3.patch";
+        sha256 = "sha256-FbYkP/WFmbfQmxArkHgushgVgY0XSypbK8Z5ivQK8k4=";
+      }) ];
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -w";
+      };
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
@@ -1416,6 +1460,10 @@ let
     });
 
     OpenMx = old.OpenMx.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
       preConfigure = ''
         patchShebangs configure
         '';

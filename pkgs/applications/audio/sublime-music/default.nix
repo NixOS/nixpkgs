@@ -4,7 +4,7 @@
 , gobject-introspection
 , gtk3
 , pango
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 , chromecastSupport ? false
 , serverSupport ? false
@@ -57,7 +57,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     python.pkgs.flit-core
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postPatch = ''

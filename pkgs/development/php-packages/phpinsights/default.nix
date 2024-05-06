@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, php
+{
+  lib,
+  fetchFromGitHub,
+  php,
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -24,6 +25,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://phpinsights.com/";
     license = lib.licenses.mit;
     mainProgram = "phpinsights";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ patka ];
   };
 })

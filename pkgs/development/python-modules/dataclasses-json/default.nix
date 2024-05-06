@@ -12,29 +12,29 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.6.4";
-  format = "pyproject";
+  version = "0.6.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";
-    repo = pname;
+    repo = "dataclasses-json";
     rev = "refs/tags/v${version}";
-    hash = "sha256-izNDvljUWw60joi5WfCfoqL5SDM8Jz5Pz+lI/RP35n8=";
+    hash = "sha256-YkGxUQgnUB7WfpsZz74b3j/TIqJi2ihsk9Ib05S7uPM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-inspect
     marshmallow-enum
   ];

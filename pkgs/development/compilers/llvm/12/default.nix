@@ -58,7 +58,52 @@ let
 
   in {
 
-    libllvm = callPackage ./llvm {
+    libllvm = callPackage ../common/llvm {
+      src = fetch "llvm" "1pzx9zrmd7r3481sbhwvkms68fwhffpp4mmz45dgrkjpyl2q96kx";
+      polly_src = fetch "polly" "1yfm9ixda4a2sx7ak5vswijx4ydk5lv1c1xh39xmd2kh299y4m12";
+      patches = [
+        # When cross-compiling we configure llvm-config-native with an approximation
+        # of the flags used for the normal LLVM build. To avoid the need for building
+        # a native libLLVM.so (which would fail) we force llvm-config to be linked
+        # statically against the necessary LLVM components always.
+        ../common/llvm/llvm-config-link-static.patch
+        # Fix llvm being miscompiled by some gccs. See llvm/llvm-project#49955
+        # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
+        ./llvm/fix-llvm-issue-49955.patch
+
+        ./llvm/gnu-install-dirs.patch
+        # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
+        (fetchpatch {
+          name = "uops-CMOV16rm-noreg.diff";
+          url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
+          sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+          stripLen = 1;
+        })
+
+        # Fix musl build.
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+          relative = "llvm";
+          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+        })
+
+        # Backport gcc-13 fixes with missing includes.
+        (fetchpatch {
+          name = "signals-gcc-13.patch";
+          url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
+          hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
+          stripLen = 1;
+        })
+        (fetchpatch {
+          name = "base64-gcc-13.patch";
+          url = "https://github.com/llvm/llvm-project/commit/5e9be93566f39ee6cecd579401e453eccfbe81e5.patch";
+          hash = "sha256-PAwrVrvffPd7tphpwCkYiz+67szPRzRB2TXBvKfzQ7U=";
+          stripLen = 1;
+        })
+      ];
+      pollyPatches = [
+        ./llvm/gnu-install-dirs-polly.patch
+      ];
       inherit llvm_meta;
     };
 

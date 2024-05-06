@@ -210,7 +210,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/NetworkManager";
+    homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";

@@ -5,7 +5,7 @@
 , pkg-config
 , deepin-gettext-tools
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , gtk3
 , libcanberra
@@ -57,7 +57,7 @@ buildGoModule rec {
     pkg-config
     deepin-gettext-tools
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 

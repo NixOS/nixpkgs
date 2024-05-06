@@ -17,7 +17,7 @@
 , fetchFromGitHub
 , buildFHSEnv
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 }:
 let
@@ -71,7 +71,7 @@ buildDotnetModule {
     openssl
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs = [ gtk3 gsettings-desktop-schemas glib-networking ];
 

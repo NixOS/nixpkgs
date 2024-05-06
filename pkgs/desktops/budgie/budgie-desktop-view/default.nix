@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

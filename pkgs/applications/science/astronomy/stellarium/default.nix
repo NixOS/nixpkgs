@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , perl
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , qtbase
 , qtcharts
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     perl
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     qttools
   ];

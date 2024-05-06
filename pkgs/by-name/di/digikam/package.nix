@@ -1,4 +1,4 @@
-{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook3
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation rec {
   pname   = "digikam";
-  version = "8.2.0";
+  version = "8.3.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    hash = "sha256-L3/LVZsSPtnsrlpa729FYO7l9JIG2dF0beyatsj7OL8=";
+    url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}-1.tar.xz";
+    hash = "sha256-BbFF/38vIAX6IbxXnBUqsjyBkbZ4/ylEyPBAbWud5tg=";
   };
 
   strictDeps = true;
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     libsForQt5.kdoctools
     libsForQt5.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
   ]);

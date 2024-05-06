@@ -470,7 +470,7 @@ in
       -      [main]
       -      no-auto-default=*
       -    '''
-      +    extraConfig.main.no-auto-default = "*";
+      +    settings.main.no-auto-default = "*";
          };
       ```
     ''

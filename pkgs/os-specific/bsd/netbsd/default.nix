@@ -129,5 +129,9 @@ makeScopeWithSplicing' {
       inherit (buildPackages.buildPackages) rsync;
     };
 
+    mtree = self.callPackage ./pkgs/mtree.nix {
+      inherit (self) mknod;
+    };
+
   }));
 }

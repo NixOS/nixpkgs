@@ -20,15 +20,6 @@ let
     patches = (drv.patches or [ ]) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       ./patches/boehmgc-coroutine-sp-fallback.patch
-
-      # Required since 2.20, and has always been a valid change
-      # Awaiting 8.2 patch release of https://github.com/ivmai/bdwgc/commit/d1d4194c010bff2dc9237223319792cae834501c
-      # or master release of https://github.com/ivmai/bdwgc/commit/86b3bf0c95b66f718c3cb3d35fd7387736c2a4d7
-      (fetchpatch {
-        name = "boehmgc-traceable_allocator-public.diff";
-        url = "https://github.com/NixOS/nix/raw/2.20.0/dep-patches/boehmgc-traceable_allocator-public.diff";
-        hash = "sha256-FLsHY/JS46neiSyyQkVpbHZEFvWSCzWrFQu1CC71sh4=";
-      })
     ];
   });
 
@@ -179,6 +170,19 @@ in lib.makeExtensible (self: ({
     hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
   };
 
+  git = common rec {
+    version = "2.23.0";
+    suffix = "pre20240502_${lib.substring 0 8 src.rev}";
+    src = fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nix";
+      rev = "00ca2b05b8fbbef09be5d1e4820857605d4c31b6";
+      hash = "sha256-trTxWfGElp0rkjquqG5I5RYVoxo8foCflxJFUtHwnOQ=";
+    };
+  };
+
+  latest = self.nix_2_22;
+
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
   # making this package an inaccurate representation of what features are available
@@ -197,8 +201,6 @@ in lib.makeExtensible (self: ({
       nix;
 
   stable = addFallbackPathsCheck self.nix_2_18;
-
-  unstable = self.nix_2_22;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -207,4 +209,7 @@ in lib.makeExtensible (self: ({
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
   ) (lib.range 4 17))
+  // {
+    unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
+  }
 )))

@@ -9,7 +9,7 @@ let
   cfg = config.virtualisation.incus;
   preseedFormat = pkgs.formats.yaml { };
 
-  serverBinPath = ''${pkgs.qemu_kvm}/libexec:${
+  serverBinPath = ''/run/wrappers/bin:${pkgs.qemu_kvm}/libexec:${
     lib.makeBinPath (
       with pkgs;
       [
@@ -33,30 +33,41 @@ let
         gzip
         iproute2
         iptables
+        iw
         kmod
+        libnvidia-container
+        libxfs
         lvm2
         minio
+        minio-client
         nftables
-        qemu_kvm
         qemu-utils
+        qemu_kvm
         rsync
+        squashfs-tools-ng
         squashfsTools
+        sshfs
         swtpm
         systemd
         thin-provisioning-tools
         util-linux
         virtiofsd
+        xdelta
         xz
+      ]
+      ++ lib.optionals config.security.apparmor.enable [
+        apparmor-bin-utils
 
         (writeShellScriptBin "apparmor_parser" ''
           exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
         '')
       ]
+      ++ lib.optionals config.services.ceph.client.enable [ ceph-client ]
+      ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
       ++ lib.optionals config.boot.zfs.enabled [
         config.boot.zfs.package
         "${config.boot.zfs.package}/lib/udev"
       ]
-      ++ lib.optionals config.virtualisation.vswitch.enable [ config.virtualisation.vswitch.package ]
     )
   }'';
 

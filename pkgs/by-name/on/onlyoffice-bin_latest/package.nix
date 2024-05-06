@@ -31,7 +31,7 @@
 , nss
 , pulseaudio
 , qt5
-, wrapGAppsHook
+, wrapGAppsHook3
 , xkeyboard_config
 , xorg
 }:
@@ -76,7 +76,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     buildInputs = [

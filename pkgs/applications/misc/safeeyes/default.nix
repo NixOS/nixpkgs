@@ -11,7 +11,7 @@
 , testers
 , xprintidle
 , xprop
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with python3.pkgs;
@@ -30,7 +30,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

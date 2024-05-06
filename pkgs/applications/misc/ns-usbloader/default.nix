@@ -4,7 +4,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , gvfs
 , maven
 , jre
@@ -42,7 +42,7 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     gvfs
   ];
 

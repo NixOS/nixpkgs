@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.12";
+  version = "3.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Fatal1ty";
     repo = "mashumaro";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sSwj/8j+vPX7M8l2h4bPs8WnjzIN2WIpyd7/NcGaExg=";
+    hash = "sha256-ETK1rHKlByQkqibejiZmXF6c4eIiMazLa8XY2OH30q4=";
   };
 
   nativeBuildInputs = [

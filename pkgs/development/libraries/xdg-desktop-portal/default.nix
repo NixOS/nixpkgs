@@ -20,11 +20,12 @@
 , pipewire
 , gdk-pixbuf
 , librsvg
+, gobject-introspection
 , python3
 , pkg-config
 , stdenv
 , runCommand
-, wrapGAppsHook
+, wrapGAppsHook3
 , xmlto
 , enableGeoLocation ? true
 }:
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
   ];
 
@@ -97,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    gobject-introspection
     python3.pkgs.pytest
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3

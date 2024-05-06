@@ -4,7 +4,7 @@
 , gtk3
 , gtksourceview4
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3Packages
 }:
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3Packages; [

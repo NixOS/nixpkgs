@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://multitran.sourceforge.net/";
     description = "Multitran data english-russian";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
 }

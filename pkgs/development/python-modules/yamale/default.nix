@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "yamale";
-  version = "5.2.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = "yamale";
     rev = "refs/tags/${version}";
-    hash = "sha256-UTtase1b8Zjaixhp/g0tLtT6QZS4cyaSHcFz+h9Qoos=";
+    hash = "sha256-iiiQAZ050FintRSV3l2zfikTNmphhJgrn+4tUHORiSk=";
   };
 
   build-system = [ setuptools ];

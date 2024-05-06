@@ -36,6 +36,7 @@
 , withLinuxHeaders ? false
 , profilingLibraries ? false
 , withGd ? false
+, enableCET ? false
 , extraBuildInputs ? []
 , extraNativeBuildInputs ? []
 , ...
@@ -43,7 +44,7 @@
 
 let
   version = "2.39";
-  patchSuffix = "-5";
+  patchSuffix = "-31";
   sha256 = "sha256-93vUfPgXDFc2Wue/hmlsEYrbOxINMlnGTFAtPcHi2SY=";
 in
 
@@ -59,11 +60,15 @@ stdenv.mkDerivation ({
     [
       /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
           $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
-          glibc-2.39-5-ge0910f1d32
-          $ git show --minimal --reverse glibc-2.39.. > 2.39-master.patch
+          glibc-2.39-31-g31da30f23c
+          $ git show --minimal --reverse glibc-2.39.. ':!ADVISORIES' > 2.39-master.patch
 
          To compare the archive contents zdiff can be used.
           $ diff -u 2.39-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.39-master.patch
+
+         Please note that each commit has changes to the file ADVISORIES excluded since
+         that conflicts with the directory advisories/ making cross-builds from
+         hosts with case-insensitive file-systems impossible.
        */
       ./2.39-master.patch
 
@@ -154,9 +159,9 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
-    ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    ] ++ lib.optionals (enableCET != false) [
       # Enable Intel Control-flow Enforcement Technology (CET) support
-      "--enable-cet"
+      "--enable-cet${if builtins.isString enableCET then "=${enableCET}"  else ""}"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -208,7 +213,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "enableCET" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {

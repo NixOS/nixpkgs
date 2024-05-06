@@ -8,7 +8,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
 , icu
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
   ];
 

@@ -3681,7 +3681,7 @@ dependencies = [
 
 [[package]]
 name = "tests"
-version = "0.11.5"
+version = "0.11.6"
 dependencies = [
  "insta",
  "lsp-server",
@@ -3778,7 +3778,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist"
-version = "0.11.5"
+version = "0.11.6"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3829,7 +3829,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-query"
-version = "0.11.5"
+version = "0.11.6"
 dependencies = [
  "anyhow",
  "comemo 0.4.0",
@@ -3867,7 +3867,7 @@ dependencies = [
 
 [[package]]
 name = "tinymist-render"
-version = "0.11.5"
+version = "0.11.6"
 dependencies = [
  "base64 0.22.0",
  "log",

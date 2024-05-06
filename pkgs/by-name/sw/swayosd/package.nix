@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , brightnessctl
 , cargo
 , coreutils
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     meson
     rustc

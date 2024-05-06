@@ -328,7 +328,7 @@ rec {
   # BSDs
 
   x86_64-freebsd = {
-    config = "x86_64-unknown-freebsd13";
+    config = "x86_64-unknown-freebsd";
     useLLVM = true;
   };
 

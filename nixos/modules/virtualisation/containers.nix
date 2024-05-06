@@ -53,13 +53,6 @@ in
 
     storage.settings = mkOption {
       type = toml.type;
-      default = {
-        storage = {
-          driver = "overlay";
-          graphroot = "/var/lib/containers/storage";
-          runroot = "/run/containers/storage";
-        };
-      };
       description = "storage.conf configuration";
     };
 
@@ -122,6 +115,12 @@ in
       } // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
         hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
       };
+    };
+
+    virtualisation.containers.storage.settings.storage = {
+      driver = "overlay";
+      graphroot = "/var/lib/containers/storage";
+      runroot = "/run/containers/storage";
     };
 
     environment.etc = {

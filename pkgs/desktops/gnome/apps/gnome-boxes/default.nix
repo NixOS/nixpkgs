@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , gettext
 , itstool
@@ -14,7 +14,6 @@
 , gtk3
 , libvirt
 , spice-gtk
-, appstream-glib
 , spice-protocol
 , libhandy
 , libsoup_3
@@ -44,15 +43,16 @@
 , vte
 , glib-networking
 , qemu-utils
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "45.0";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "zGMIDu+hR6hHKrGl/wh7l6J6tyOk7gBe1B6Mndd5jkE=";
+    hash = "sha256-kAwXf2diZANwpmNM+efTzYIH5Jg2eopmemtzGwQRYDY=";
   };
 
   patches = [
@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
     gettext
     gobject-introspection
     itstool
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     # For post install script
     glib
     gtk3
@@ -114,6 +113,7 @@ stdenv.mkDerivation rec {
     vte
     webkitgtk_4_1
     yajl
+    libportal-gtk3
   ];
 
   preFixup = ''
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
     mainProgram = "gnome-boxes";
-    homepage = "https://wiki.gnome.org/Apps/Boxes";
+    homepage = "https://apps.gnome.org/Boxes/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

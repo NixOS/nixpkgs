@@ -41,7 +41,7 @@
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
 /pkgs/stdenv/generic                             @Ericson2314
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @piegamesde
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314
 /pkgs/stdenv/cross                               @Ericson2314
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
@@ -304,13 +304,6 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
-
-# Matrix
-/pkgs/servers/heisenbridge                                 @piegamesde
-/pkgs/servers/matrix-conduit                               @piegamesde
-/nixos/modules/services/misc/heisenbridge.nix              @piegamesde
-/nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
-/nixos/tests/matrix-conduit.nix                            @piegamesde
 
 # Forgejo
 nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange

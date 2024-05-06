@@ -3,7 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , nixosTests
 , gtk3
@@ -57,7 +57,8 @@
 let
   inherit (stdenv) targetPlatform;
   ARCH = if targetPlatform.isAarch64 then "arm64" else "x64";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version;
 
   # Please backport all updates to the stable channel.
@@ -75,7 +76,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -155,10 +156,9 @@ in stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
-    # Fix the desktop link and fix showing application icon in tray
+    # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
-      ${if pname == "signal-desktop" then "--replace \"bin/signal-desktop\" \"bin/signal-desktop --use-tray-icon\"" else ""}
+      --replace "/opt/${dir}/${pname}" $out/bin/${pname}
 
     # Note: The following path contains bundled libraries:
     # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/

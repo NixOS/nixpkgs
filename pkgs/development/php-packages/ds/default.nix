@@ -1,8 +1,15 @@
-{ buildPecl, lib, pcre2, php, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  pcre2,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   version = "1.5.0";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "ds";
 

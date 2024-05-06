@@ -30,7 +30,7 @@
 , python3
 , tracker
 , tracker-miners
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       pygobject3
       pyatspi
     ]))
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Access, organize and share your photos";
     mainProgram = "gnome-photos";
-    homepage = "https://wiki.gnome.org/Apps/Photos";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-photos";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

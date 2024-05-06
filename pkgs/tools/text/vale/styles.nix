@@ -48,12 +48,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.6.0";
+    version = "0.6.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-TQS/hgS6tEWPSuZpEbX65MdYSE/+HJVcnzIuQbhIG2M=";
+      hash = "sha256-jSmfUgzlIbDVh2zLtnTNpM/z6dHMp358F9adLZ5+qcw=";
     };
     meta = {
       description = "A Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -80,12 +80,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.14.0";
+    version = "0.14.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-22rGNLZOsWYQ+H3CcM2b1zOXV3kNPcgYqDpaCg1iv9o=";
+      hash = "sha256-4j05bIGAVEy6untUqtrUxdLKlhyOcJsbcsow8OxRp1A=";
     };
     meta = {
       description = "A Vale-compatible implementation of the Microsoft Writing Style Guide";

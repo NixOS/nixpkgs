@@ -460,6 +460,14 @@ with lib.maintainers; {
     shortName = "Home Assistant";
   };
 
+  infisical = {
+    members = [
+      akhilmhdh
+    ];
+    scope = "Maintain Infisical";
+    shortName = "Infisical";
+  };
+
   iog = {
     members = [
       cleverca22
@@ -854,8 +862,10 @@ with lib.maintainers; {
 
   r = {
     members = [
+      b-rodrigues
       bcdarwin
       jbedo
+      kupac
     ];
     scope = "Maintain the R programming language and related packages.";
     shortName = "R";

@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.38";
+  version = "1.5.39";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LR1evkn2m6FNBmJnUUJubesxIPeHG6RDgLFBHDuxe38=";
+    hash = "sha256-B4pDLP3+56toQZyvh6+6NimCKv0cpcO0ydcqV1tJZkg=";
   };
 
   patches = [

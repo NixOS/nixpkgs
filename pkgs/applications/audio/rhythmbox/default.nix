@@ -27,7 +27,7 @@
 , tdb
 , json-glib
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     vala
     glib
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
     gobject-introspection
   ];
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
+    homepage = "https://gitlab.gnome.org/GNOME/rhythmbox";
     description = "A music playing application for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

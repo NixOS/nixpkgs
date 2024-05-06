@@ -16,7 +16,7 @@
 , openssh
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gi-docgen
 , vala
 , gnome
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     sha256 = "utEPPFU6DhhUZJq1nFskNNoiyhpUrmE48fU5YVZ+Grc=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
     meson
@@ -43,10 +45,9 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gi-docgen
-    wrapGAppsHook
+    wrapGAppsHook3
     vala
     shared-mime-info
-    gnupg
     openssh
   ];
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
+    "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
   ] ++ lib.optionals (!systemdSupport) [
     "-Dsystemd=disabled"
   ];

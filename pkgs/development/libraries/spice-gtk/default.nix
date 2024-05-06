@@ -36,7 +36,7 @@
 , wayland-protocols
 , wayland-scanner
 , zlib
-, wrapGAppsHook
+, wrapGAppsHook3
 , withPolkit ? stdenv.isLinux
 }:
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
     python3.pkgs.six
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     mesonEmulatorHook
   ] ++ lib.optionals stdenv.isLinux [

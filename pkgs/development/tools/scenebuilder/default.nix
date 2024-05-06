@@ -6,7 +6,7 @@
 , copyDesktopItems
 , glib
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -53,7 +53,7 @@ maven'.buildMavenPackage rec {
     copyDesktopItems
     glib
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true; # prevent double wrapping

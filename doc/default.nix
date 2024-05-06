@@ -111,7 +111,7 @@ in pkgs.stdenv.mkDerivation {
       ${lib-docs}/index.md \
       > ./functions/library.md
     substitute ./manual.md.in ./manual.md \
-      --replace '@MANUAL_VERSION@' '${pkgs.lib.version}'
+      --replace-fail '@MANUAL_VERSION@' '${pkgs.lib.version}'
 
     mkdir -p out/media
 

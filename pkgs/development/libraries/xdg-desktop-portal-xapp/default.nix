@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , cinnamon
 , glib
 , gsettings-desktop-schemas
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

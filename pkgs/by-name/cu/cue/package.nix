@@ -24,7 +24,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X cuelang.org/go/cmd/cue/cmd.version=${version}" ];
+  ldflags = [ "-s" "-w" ];
 
   postInstall = ''
     installShellCompletion --cmd cue \
@@ -40,6 +40,7 @@ buildGoModule rec {
       version = testers.testVersion {
         package = cue;
         command = "cue version";
+        version = "v${version}";
       };
     };
   };

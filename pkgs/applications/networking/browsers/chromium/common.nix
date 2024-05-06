@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch
 , recompressTarball
 , buildPackages
+, buildPlatform
 , pkgsBuildBuild
 , pkgsBuildTarget
 # Channel data:
@@ -114,9 +115,6 @@ let
     # "opus"
   ];
 
-  opusWithCustomModes = libopus.override {
-    withCustomModes = true;
-  };
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -175,7 +173,6 @@ let
       buildPlatformLlvmStdenv.cc
       pkg-config
       libuuid
-      (libpng.override { apngSupport = false; }) # needed for "host/generate_colors_info"
     ]
     # When cross-compiling, chromium builds a huge proportion of its
     # components for both the `buildPlatform` (which it calls
@@ -183,12 +180,39 @@ let
     # half of the dependencies are needed here.  To avoid having to
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
-    ++ buildInputs
-    ;
+    # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
+    ++ [
+      (buildPackages.libpng.override { apngSupport = false; })  # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+      (buildPackages.libopus.override { withCustomModes = true; })
+      bzip2 flac speex
+      libevent expat libjpeg snappy
+      libcap
+      minizip libwebp
+      libusb1 re2
+      ffmpeg libxslt libxml2
+      nasm
+      nspr nss
+      util-linux alsa-lib
+      libkrb5
+      glib gtk3 dbus-glib
+      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
+      mesa # required for libgbm
+      pciutils protobuf speechd libXdamage at-spi2-core
+      pipewire
+      libva
+      libdrm wayland mesa.drivers libxkbcommon
+      curl
+      libepoxy
+      libffi
+      libevdev
+    ] ++ lib.optional systemdSupport systemd
+      ++ lib.optionals cupsSupport [ libgcrypt cups ]
+      ++ lib.optional pulseSupport libpulseaudio;
 
     buildInputs = [
-      (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
-      bzip2 flac speex opusWithCustomModes
+      (libpng.override { apngSupport = false; })  # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+      (libopus.override { withCustomModes = true; })
+      bzip2 flac speex
       libevent expat libjpeg snappy
       libcap
       minizip libwebp
@@ -248,15 +272,6 @@ let
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-121-rust.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "124" && !chromiumVersionAtLeast "125") [
-      # M124 shipped with broken --ozone-platform-hint flag handling, which we rely on
-      # for our NIXOS_OZONE_WL (wayland) environment variable.
-      # See <https://issues.chromium.org/issues/329678163>.
-      # This is the commit for the fix that landed in M125, which applies clean on M124.
-      (githubPatch {
-        commit = "c7f4c58f896a651eba80ad805ebdb49d19ebdbd4";
-        hash = "sha256-6nYWT2zN+j73xAIXLdGYT2eC71vGnGfiLCB0OwT0CAI=";
-      })
     ];
 
     postPatch = ''

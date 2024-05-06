@@ -2,7 +2,7 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
@@ -73,7 +73,7 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook iconConvTools copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 iconConvTools copyDesktopItems ];
 
   runtimeDeps = [
     # Required by the game.

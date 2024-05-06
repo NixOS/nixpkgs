@@ -24,6 +24,7 @@
 , libXext
 , libXi
 , libXv
+, libdrm
 , enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
@@ -45,7 +46,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.22.9";
+  version = "1.24.2";
 
   outputs = [ "out" "dev" ];
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-+sPg3S2Ok3A4izS/jCG4nV9jvDz8Es1/3I/GwcugMzQ=";
+    hash = "sha256-KC8cyAZcm2Lragog+56DKPjlKW3yRYtyNtqnKcQa52k=";
   };
 
   strictDeps = true;
@@ -88,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     tremor
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [
+    libdrm
     libGL
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
@@ -106,6 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gstreamer
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libdrm
   ];
 
   mesonFlags = [
@@ -122,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
   ++ lib.optionals stdenv.isDarwin [
+    "-Ddrm=disabled"
     "-Dlibvisual=disabled"
   ];
 

@@ -55,6 +55,11 @@ runCommand "julia-depot" {
   # git config --global --add safe.directory '/nix'
   export JULIA_PKG_USE_CLI_GIT="true"
 
+  # At time of writing, this appears to be the only way to turn precompiling's
+  # terminal output into standard logging, so opportunistically do that.
+  # (Note this is different from JULIA_CI).
+  export CI=true
+
   julia -e ' \
     import Pkg
     import Pkg.Types: PRESERVE_NONE

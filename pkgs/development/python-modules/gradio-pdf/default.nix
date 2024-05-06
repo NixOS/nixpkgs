@@ -25,7 +25,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gradio-client
   ];
 

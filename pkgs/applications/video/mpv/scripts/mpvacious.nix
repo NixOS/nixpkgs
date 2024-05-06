@@ -1,10 +1,11 @@
-{ lib
-, buildLua
-, fetchFromGitHub
-, gitUpdater
-, curl
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
 
 buildLua rec {
@@ -17,17 +18,15 @@ buildLua rec {
     rev = "v${version}";
     sha256 = "sha256-VHMXW2AzgX88EDnNshxo9Gh8mpXzRoTAq+58HKasUdo=";
   };
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \
-      --replace "'curl" "'${curl}/bin/curl"
+      --replace-fail "'curl" "'${lib.getExe curl}"
     substituteInPlace platform/nix.lua \
-      --replace "'curl" "'${curl}/bin/curl" \
-      --replace "'wl-copy" "'${wl-clipboard}/bin/wl-copy" \
-      --replace "'xclip" "'${xclip}/bin/xclip"
+      --replace-fail "'curl" "'${lib.getExe curl}" \
+      --replace-fail "'wl-copy" "'${lib.getExe' wl-clipboard "wl-copy"}" \
+      --replace-fail "'xclip" "'${lib.getExe xclip}"
   '';
 
   installPhase = ''

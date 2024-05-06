@@ -372,6 +372,51 @@ dependencies = [
 ]
 
 [[package]]
+name = "assistant2"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "assets",
+ "assistant_tooling",
+ "client",
+ "editor",
+ "env_logger",
+ "feature_flags",
+ "futures 0.3.28",
+ "gpui",
+ "language",
+ "languages",
+ "log",
+ "nanoid",
+ "node_runtime",
+ "open_ai",
+ "project",
+ "rand 0.8.5",
+ "release_channel",
+ "rich_text",
+ "schemars",
+ "semantic_index",
+ "serde",
+ "serde_json",
+ "settings",
+ "theme",
+ "ui",
+ "util",
+ "workspace",
+]
+
+[[package]]
+name = "assistant_tooling"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "gpui",
+ "schemars",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "async-broadcast"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2047,6 +2092,7 @@ dependencies = [
  "core-services",
  "ipc-channel",
  "plist",
+ "release_channel",
  "serde",
  "util",
 ]
@@ -2253,6 +2299,7 @@ dependencies = [
  "prost",
  "rand 0.8.5",
  "release_channel",
+ "remote_projects",
  "reqwest",
  "rpc",
  "rustc-demangle",
@@ -2298,7 +2345,6 @@ dependencies = [
  "editor",
  "emojis",
  "extensions_ui",
- "feature_flags",
  "futures 0.3.28",
  "fuzzy",
  "gpui",
@@ -3799,6 +3845,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "filedescriptor"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7199d965852c3bac31f779ef99cbb4537f80e952e2d6aa0ffeb30cce00f4f46e"
+dependencies = [
+ "libc",
+ "thiserror",
+ "winapi",
+]
+
+[[package]]
 name = "filetime"
 version = "0.2.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4002,15 +4059,12 @@ dependencies = [
  "gpui",
  "lazy_static",
  "libc",
- "log",
  "notify",
  "parking_lot",
  "rope",
  "serde",
- "serde_derive",
  "serde_json",
  "smol",
- "sum_tree",
  "tempfile",
  "text",
  "time",
@@ -4034,6 +4088,7 @@ name = "fsevent"
 version = "0.1.0"
 dependencies = [
  "bitflags 2.4.2",
+ "core-foundation",
  "fsevent-sys 3.1.0",
  "parking_lot",
  "tempfile",
@@ -4318,7 +4373,10 @@ dependencies = [
  "git2",
  "lazy_static",
  "log",
+ "parking_lot",
  "pretty_assertions",
+ "regex",
+ "rope",
  "serde",
  "serde_json",
  "smol",
@@ -4327,6 +4385,8 @@ dependencies = [
  "time",
  "unindent",
  "url",
+ "util",
+ "windows 0.53.0",
 ]
 
 [[package]]
@@ -4479,6 +4539,7 @@ dependencies = [
  "derive_more",
  "env_logger",
  "etagere",
+ "filedescriptor",
  "flume",
  "font-kit",
  "foreign-types 0.5.0",
@@ -5395,6 +5456,7 @@ dependencies = [
  "globset",
  "gpui",
  "indoc",
+ "itertools 0.11.0",
  "lazy_static",
  "log",
  "lsp",
@@ -6049,14 +6111,18 @@ dependencies = [
  "anyhow",
  "clock",
  "collections",
+ "ctor",
+ "env_logger",
  "futures 0.3.28",
  "git",
  "gpui",
+ "itertools 0.11.0",
  "language",
  "log",
  "parking_lot",
  "rand 0.8.5",
  "settings",
+ "smallvec",
  "sum_tree",
  "text",
  "theme",
@@ -7374,6 +7440,7 @@ dependencies = [
  "db",
  "editor",
  "file_icons",
+ "git",
  "gpui",
  "language",
  "menu",
@@ -7708,7 +7775,9 @@ dependencies = [
 name = "recent_projects"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "editor",
+ "feature_flags",
  "fuzzy",
  "gpui",
  "language",
@@ -7716,10 +7785,15 @@ dependencies = [
  "ordered-float 2.10.0",
  "picker",
  "project",
+ "remote_projects",
+ "rpc",
  "serde",
  "serde_json",
+ "settings",
  "smol",
+ "theme",
  "ui",
+ "ui_text_field",
  "util",
  "workspace",
 ]
@@ -7844,6 +7918,18 @@ version = "0.1.0"
 dependencies = [
  "gpui",
  "once_cell",
+]
+
+[[package]]
+name = "remote_projects"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "client",
+ "gpui",
+ "rpc",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -9411,6 +9497,7 @@ dependencies = [
  "log",
  "menu",
  "picker",
+ "project",
  "rust-embed",
  "settings",
  "simplelog",
@@ -9744,7 +9831,6 @@ dependencies = [
  "serde_json",
  "settings",
  "task",
- "terminal",
  "tree-sitter-rust",
  "tree-sitter-typescript",
  "ui",
@@ -9842,6 +9928,7 @@ dependencies = [
  "shellexpand",
  "smol",
  "task",
+ "tasks_ui",
  "terminal",
  "theme",
  "ui",
@@ -10986,8 +11073,8 @@ name = "vcs_menu"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "fs",
  "fuzzy",
+ "git",
  "gpui",
  "picker",
  "ui",
@@ -12282,6 +12369,7 @@ dependencies = [
  "parking_lot",
  "postage",
  "project",
+ "remote_projects",
  "schemars",
  "serde",
  "serde_json",
@@ -12520,12 +12608,13 @@ dependencies = [
 
 [[package]]
 name = "zed"
-version = "0.132.4"
+version = "0.133.7"
 dependencies = [
  "activity_indicator",
  "anyhow",
  "assets",
  "assistant",
+ "assistant2",
  "audio",
  "auto_update",
  "backtrace",
@@ -12580,6 +12669,7 @@ dependencies = [
  "quick_action_bar",
  "recent_projects",
  "release_channel",
+ "remote_projects",
  "rope",
  "search",
  "serde",
@@ -12635,6 +12725,13 @@ dependencies = [
 
 [[package]]
 name = "zed_dart"
+version = "0.0.1"
+dependencies = [
+ "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "zed_deno"
 version = "0.0.1"
 dependencies = [
  "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -12698,6 +12795,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "zed_glsl"
+version = "0.1.0"
+dependencies = [
+ "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "zed_haskell"
 version = "0.1.0"
 dependencies = [
@@ -12755,7 +12859,7 @@ dependencies = [
 
 [[package]]
 name = "zed_terraform"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

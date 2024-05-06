@@ -142,7 +142,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.26";
+  version = "0.3.27";
 
   outputs = [ "out" "dev" ];
 
@@ -150,8 +150,16 @@ stdenv.mkDerivation rec {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    hash = "sha256-AA3+x3SXkcg3g7bROZYLpWAbxnRedmQBZPe+rBJKxJ8=";
+    hash = "sha256-VKDFSPwHGZMa2DoOXbSKNQRsl07LatMLK1lHVcEep8U=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "no-gemm3m-tests-static.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/48e017de095018c60d83355804a3075658b4970c.patch";
+      hash = "sha256-Wa6EE0M1H0efVn26pOKpi0dFGLuPuzmvAzpBLrAYe5k=";
+    })
+  ];
 
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
@@ -255,7 +263,7 @@ EOF
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) numpy scipy;
+    inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit ceres-solver giac octave opencv;
   };
 

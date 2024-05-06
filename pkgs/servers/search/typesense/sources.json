@@ -12,6 +12,10 @@
     "x86_64-darwin": {
       "arch": "darwin-amd64",
       "hash": "sha256-FkWie6DgIhgojrn48rt9/GT0Lmu7jt74q2rzw1MI2Ws="
+    },
+    "aarch64-darwin": {
+      "arch": "darwin-arm64",
+      "hash": "sha256-ejw8B+DmCQs6cUSiLueY9tSdWnrFSFvLMS36U4+v8N4="
     }
   }
 }

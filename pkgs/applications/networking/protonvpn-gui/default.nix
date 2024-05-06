@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gobject-introspection
 , setuptools
-, wrapGAppsHook
+, wrapGAppsHook3
 , dbus-python
 , packaging
 , proton-core
@@ -41,7 +41,7 @@ buildPythonApplication rec {
     # Needed for the NM namespace
     gobject-introspection
     setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.optionals withIndicator [

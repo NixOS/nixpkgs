@@ -50,7 +50,7 @@ in
 , rustPlatform
 , unzip
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # runtime
 , bzip2
@@ -289,7 +289,7 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]

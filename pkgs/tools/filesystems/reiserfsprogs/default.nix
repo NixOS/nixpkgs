@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     inherit version;
     homepage = "http://www.namesys.com/";
     description = "ReiserFS utilities";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

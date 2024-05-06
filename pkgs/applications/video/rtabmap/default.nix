@@ -20,7 +20,7 @@
 , libGL
 , libGLU
 , vtkWithQt5
-, wrapGAppsHook
+, wrapGAppsHook3
 , liblapack
 , xorg
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HrIATYRuhFfTlO4oTRZo7CM30LFVyatZJON31Fe4HTQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     ## Required
     opencv

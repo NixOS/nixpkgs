@@ -2,6 +2,7 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
+, nix-update-script
 , runCommand
 , which
 , rustPlatform
@@ -26,8 +27,8 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.22.2";
-  hash = "sha256-RhM3SgsCb8eLs56cm8/Yo1ptNnFrR21FriHAlMdvdrU=";
+  version = "0.22.5";
+  hash = "sha256-f8bdpiPNo5M8aefTmrQ2MQVg7lS0Yq7j312K1slortA=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -62,6 +63,7 @@ let
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
+        { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
@@ -110,7 +112,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-QWqg84naOIPhkHj2yLchZVb2gvjL9+AEK2rRK7K8uQY=";
+  cargoHash = "sha256-Fk6V/kPKc/GL/q6QsaCUrq+ZG0R+N5FLOpIm77Y+n2A=";
 
   buildInputs =
     lib.optionals stdenv.isDarwin [ Security CoreServices ];
@@ -157,6 +159,8 @@ rustPlatform.buildRustPackage {
       inherit update-all-grammars;
     };
     inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+
+    updateScript = nix-update-script { };
 
     tests = {
       # make sure all grammars build

@@ -10,7 +10,7 @@
 , catch2_3
 , spdlog
 , exiv2
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

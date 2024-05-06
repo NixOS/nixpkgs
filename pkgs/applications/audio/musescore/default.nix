@@ -84,11 +84,6 @@ in stdenv'.mkDerivation (finalAttrs: {
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the
-  # sandbox profile from `qtbase`, see:
-  # https://github.com/NixOS/nixpkgs/issues/237458
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
-
   nativeBuildInputs = [
     wrapQtAppsHook
     cmake

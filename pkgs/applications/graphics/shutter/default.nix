@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , perlPackages
-, wrapGAppsHook
+, wrapGAppsHook3
 , imagemagick
 , gdk-pixbuf
 , librsvg
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-o95skSr6rszh0wsHQTpu1GjqCDmde7aygIP+i4XQW9A=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs = [
     perlPackages.perl
     procps

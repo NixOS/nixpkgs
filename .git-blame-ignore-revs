@@ -105,3 +105,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # {pkgs/development/cuda-modules,pkgs/test/cuda,pkgs/top-level/cuda-packages.nix}: reformat all CUDA files with nixfmt-rfc-style 2023-03-01
 802a1b4d3338f24cbc4efd704616654456d75a94
+
+# postgresql: move packages.nix to ext/default.nix
+719034f6f6749d624faa28dff259309fc0e3e730

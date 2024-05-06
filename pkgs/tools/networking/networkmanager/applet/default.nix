@@ -14,7 +14,7 @@
 , gsettings-desktop-schemas
 , libgudev
 , jansson
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , gtk3
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     python3
   ];

@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.04.14";
+  version = "2024.04.19";
 
   src = fetchurl {
     urls = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-mR5rKGKtTwMq3p+xAAGdo0DNNnIe4KHladLPlnhVhNY=";
+    hash = "sha256-5sLr/sZ3LB83CEJx5OUjarx/Dh/ESJ+YaXY0QCAN3MI=";
   };
 
   patches = [
@@ -54,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       config.linux
   ''
   # condition from icu/base.nix
-  + lib.optionalString (stdenv.hostPlatform.libc == "glibc"
-                        || stdenv.hostPlatform.libc == "musl") ''
+  + lib.optionalString (lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ]) ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
   '';
@@ -78,7 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
   ];
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   enableParallelBuilding = true;
 

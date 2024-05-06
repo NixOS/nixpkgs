@@ -1,4 +1,5 @@
 { lib, stdenv, mkDerivation
+, patchesRoot
 
 , bsdSetupHook, freebsdSetupHook
 , makeMinimal
@@ -48,13 +49,13 @@ mkDerivation rec {
 
   patches = [
     # Hack around broken propogating MAKEFLAGS to submake, just inline logic
-    ./libc-msun-arch-subdir.patch
+    /${patchesRoot}/libc-msun-arch-subdir.patch
 
     # Don't force -lcompiler-rt, we don't actually call it that
-    ./libc-no-force--lcompiler-rt.patch
+    /${patchesRoot}/libc-no-force--lcompiler-rt.patch
 
     # Fix extra include dir to get rpcsvc headers.
-    ./librpcsvc-include-subdir.patch
+    /${patchesRoot}/librpcsvc-include-subdir.patch
   ];
 
   postPatch = ''

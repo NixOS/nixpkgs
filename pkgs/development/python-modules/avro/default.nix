@@ -12,6 +12,7 @@ buildPythonPackage rec {
   version = "1.11.3";
   pyproject = true;
 
+  # distutils usage: https://github.com/search?q=repo%3Aapache%2Favro%20distutils&type=code
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {

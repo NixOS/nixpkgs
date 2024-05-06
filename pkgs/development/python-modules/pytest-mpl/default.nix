@@ -5,7 +5,7 @@
 , pytest
 , jinja2
 , matplotlib
-, nose
+, pynose
 , pillow
 , pytestCheckHook
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2
     matplotlib
-    nose
+    pynose
     pillow
   ];
 

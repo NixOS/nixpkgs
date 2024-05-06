@@ -27,7 +27,7 @@
 , systemd
 , trash-cli
 , vulkan-loader
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec  {
 
   passthru.updateScript = ./update.sh;
 
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook rpmextract mesa ];
+  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract mesa ];
 
   buildInputs = [
     alsa-lib
