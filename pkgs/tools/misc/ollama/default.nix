@@ -30,22 +30,23 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.31";
+  version = "0.1.33";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-Ip1zrhgGpeYo2zsN206/x+tcG/bmPJAq4zGatqsucaw=";
+    hash = "sha256-+iZIuHr90d5OijrXl6kzPycsHmx5XnKAKKOtppycjsk=";
     fetchSubmodules = true;
   };
-  vendorHash = "sha256-Lj7CBvS51RqF63c01cOCgY7BCQeCKGu794qzb/S80C0=";
+  vendorHash = "sha256-7x/n60WiKmwHFFuN0GfzkibUREvxAXNHcD3fHmihZvs=";
   # ollama's patches of llama.cpp's example server
   # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
   # each update, these patches should be synchronized with the contents of `ollama/llm/patches/`
   llamacppPatches = [
+    (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
     (preparePatch "03-load_exception.diff" "sha256-1DfNahFYYxqlx4E4pwMKQpL+XR0bibYnDFGt6dCL4TM=")
-    (preparePatch "04-locale.diff" "sha256-r5nHiP6yN/rQObRu2FZIPBKpKP9yByyZ6sSI2SKj6Do=")
+    (preparePatch "04-metal.diff" "sha256-Ne8J9R8NndUosSK0qoMvFfKNwqV5xhhce1nSoYrZo7Y=")
   ];
 
   preparePatch = patch: hash: fetchpatch {
@@ -163,8 +164,6 @@ goBuild ((lib.optionalAttrs enableRocm {
     ./disable-git.patch
   ] ++ llamacppPatches;
   postPatch = ''
-    # replace a hardcoded use of `g++` with `$CXX` so clang can be used on darwin
-    substituteInPlace llm/generate/gen_common.sh --replace-fail 'g++' '$CXX'
     # replace inaccurate version number with actual release version
     substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
   '';
