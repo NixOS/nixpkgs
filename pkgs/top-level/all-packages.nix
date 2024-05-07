@@ -35536,7 +35536,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_29; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
