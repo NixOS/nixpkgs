@@ -45,15 +45,22 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [makeBinaryWrapper pkg-config perl];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+    perl
+  ];
 
   buildInputs =
-    [
-      curl
-    ]
-    ++ lib.optionals stdenv.isDarwin [CoreServices Security libiconv xz];
+    [ curl ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+      libiconv
+      xz
+    ];
 
-  checkFeatures = [];
+  checkFeatures = [ ];
 
   patches = [
     (substituteAll {
@@ -75,12 +82,13 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.edgedb.com/docs/cli/index";
     license = with licenses; [
       asl20
-      /*
-      or
-      */
+      # or
       mit
     ];
-    maintainers = with maintainers; [ahirner kirillrdy];
+    maintainers = with maintainers; [
+      ahirner
+      kirillrdy
+    ];
     mainProgram = "edgedb";
   };
 }
