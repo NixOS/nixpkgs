@@ -16266,6 +16266,12 @@
     githubId = 3153638;
     name = "Profpatsch";
   };
+  proggerx = {
+    email = "x@proggers.ru";
+    github = "ProggerX";
+    githubId = 88623613;
+    name = "ProggerX";
+  };
   proglodyte = {
     email = "proglodyte23@gmail.com";
     github = "proglodyte";
