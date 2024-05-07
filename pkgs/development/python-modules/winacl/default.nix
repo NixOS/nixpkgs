@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,20 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-r3DC7DAXi/njyKHEjCXoeBI1/iwbMhrbRuLyrh+NSqs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    cryptography
-  ];
+  dependencies = [ cryptography ];
 
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "winacl"
-  ];
+  pythonImportsCheck = [ "winacl" ];
 
   meta = with lib; {
     description = "Python module for ACL/ACE/Security descriptor manipulation";
