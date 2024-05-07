@@ -15223,6 +15223,8 @@ self: super: with self; {
     openai-triton = self.openai-triton-bin;
   };
 
+  torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
+
   torchWithCuda = self.torch.override {
     openai-triton = self.openai-triton-cuda;
     cudaSupport = true;
