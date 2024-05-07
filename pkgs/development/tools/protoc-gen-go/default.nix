@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "protocolbuffers";
     repo = "protobuf-go";
     rev = "v${version}";
-    sha256 = "sha256-xbfqN/t6q5dFpg1CkxwxAQkUs8obfckMDqytYzuDwF4=";
+    hash = "sha256-xbfqN/t6q5dFpg1CkxwxAQkUs8obfckMDqytYzuDwF4=";
   };
 
   vendorHash = "sha256-nGI/Bd6eMEoY0sBwWEtyhFowHVvwLKjbT4yfzFz6Z3E=";
