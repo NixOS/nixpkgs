@@ -2332,6 +2332,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+luarocks-build-treesitter-parser = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, lua, luaOlder, luafilesystem }:
+buildLuarocksPackage {
+  pname = "luarocks-build-treesitter-parser";
+  version = "2.0.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luarocks-build-treesitter-parser-2.0.0-1.rockspec";
+    sha256 = "0ylax1r0yl5k742p8n0fq5irs2r632npigqp1qckfx7kwi89gxhb";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser/archive/v2.0.0.zip";
+    sha256 = "0gqiwk7dk1xn5n2m0iq5c7xkrgyaxwyd1spb573l289gprvlrbn5";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua luafilesystem ];
+
+  meta = {
+    homepage = "https://github.com/nvim-neorocks/luarocks-build-treesitter-parser";
+    description = "A luarocks build backend for tree-sitter parsers.";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 luasec = callPackage({ buildLuarocksPackage, fetchgit, fetchurl, lua, luaOlder, luasocket }:
 buildLuarocksPackage {
   pname = "luasec";
@@ -3665,6 +3689,27 @@ buildLuarocksPackage {
     homepage = "https://github.com/vhyrro/toml-edit.lua";
     description = "TOML Parser + Formatting and Comment-Preserving Editor";
     maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
+tree-sitter-norg = callPackage({ buildLuarocksPackage, fetchurl, fetchzip }:
+buildLuarocksPackage {
+  pname = "tree-sitter-norg";
+  version = "0.2.4-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/tree-sitter-norg-0.2.4-1.rockspec";
+    sha256 = "00mgn1kmhhrink64s1yjnz78lc7qbv0f021dsvr6z3b44srhcxb9";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorg/tree-sitter-norg/archive/v0.2.4.zip";
+    sha256 = "08bsk3v61r0xhracanjv25jccqv80ahipx0mv5a1slzhcyymv8kd";
+  };
+
+
+  meta = {
+    homepage = "https://github.com/nvim-neorg/tree-sitter-norg";
+    description = "The official tree-sitter parser for Norg documents.";
     license.fullName = "MIT";
   };
 }) {};
