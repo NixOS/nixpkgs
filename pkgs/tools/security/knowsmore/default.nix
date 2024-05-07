@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knowsmore";
-  version = "0.1.37";
+  version = "0.1.38";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "knowsmore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UxBoWK3L4u9xSQaGGHpzvs/mRlmhF3EqiS/4BYyTKos=";
+    hash = "sha256-A68JuzlWvq3OAtgq6uAFcTTYKmL7xjKWZ0HQfVXKt4k=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
