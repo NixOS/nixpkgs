@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drbd";
-  version = "9.27.0";
+  version = "9.28.0";
 
   src = fetchurl {
     url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    sha256 = "1qwdrjrgas8z8vc6c85xcrqaczjwyqd61yig01n44wa5z0j3v4aq";
+    hash = "sha256-YJEaFK+aogOa3GUg8CWAR+Ujw/37heRLkckKAUq15oM=";
   };
 
   nativeBuildInputs = [
