@@ -1,11 +1,12 @@
-{ lib
-, aiomisc
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pytest
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  aiomisc,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pytest,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -21,29 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-4mWP77R3CoX+XhoT6BbxQtxpINpdmeozjYUsegNfMyU=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "pytest"
-  ];
+  pythonRelaxDeps = [ "pytest" ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  dependencies = [
-    aiomisc
-  ];
+  dependencies = [ aiomisc ];
 
-  pythonImportsCheck = [
-    "aiomisc_pytest"
-  ];
+  pythonImportsCheck = [ "aiomisc_pytest" ];
 
   # Module has no tests
   doCheck = false;
