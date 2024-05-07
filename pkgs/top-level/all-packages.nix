@@ -11701,24 +11701,25 @@ with pkgs;
 
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
-  percona-server_8_0 = callPackage ../servers/sql/percona-server/8.0.x.nix {
+  percona-server = percona-server_lts;
+  percona-server_lts = callPackage ../servers/sql/percona-server/lts.nix {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost177; # Configure checks for specific version.
     icu = icu69;
     protobuf = protobuf_21;
   };
-  percona-server_8_3 = callPackage ../servers/sql/percona-server/8.3.nix {
+  percona-server_innovation = callPackage ../servers/sql/percona-server/innovation.nix {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # newer versions cause linking failures against `libabsl_spinlock_wait`
     protobuf = protobuf_21;
   };
-  percona-xtrabackup = percona-xtrabackup_8_0;
-  percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
+  percona-xtrabackup = percona-xtrabackup_lts;
+  percona-xtrabackup_lts = callPackage ../tools/backup/percona-xtrabackup/lts.nix {
     boost = boost177;
   };
-  percona-xtrabackup_8_3 = callPackage ../tools/backup/percona-xtrabackup/8_3.nix { };
+  percona-xtrabackup_innovation = callPackage ../tools/backup/percona-xtrabackup/innovation.nix { };
 
   pick = callPackage ../tools/misc/pick { };
 

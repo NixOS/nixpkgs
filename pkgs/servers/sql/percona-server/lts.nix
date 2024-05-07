@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "percona-server";
+  pname = "percona-server_lts";
   version = "8.0.36-28";
 
   src = fetchurl {
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests = nixosTests.mysql.percona-server_8_0;
+    tests = nixosTests.mysql.percona-server_lts;
   };
 
   meta = with lib; {

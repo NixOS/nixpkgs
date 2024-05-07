@@ -146,7 +146,6 @@ in
   }) mariadbPackages)
   // (lib.mapAttrs (_: package: makeMySQLTest {
     inherit package;
-    # FIXME: packages are renamed soon anyways
-    #name = package.pname;
+    name = builtins.replaceStrings ["-"] ["_"] package.pname;
     hasMroonga = false; useSocketAuth = false;
   }) perconaPackages)

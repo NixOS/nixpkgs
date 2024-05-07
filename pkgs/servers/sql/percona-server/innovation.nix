@@ -12,7 +12,7 @@ assert !(withJemalloc && withTcmalloc);
 
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "percona-server";
+  pname = "percona-server_innovation";
   version = "8.3.0-1";
 
   src = fetchurl {
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests = nixosTests.mysql.percona-server_8_3;
+    tests = nixosTests.mysql.percona-server_innovation;
   };
 
 
