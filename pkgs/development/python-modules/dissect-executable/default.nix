@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  pythonImportsCheck = [
-    "dissect.executable"
-  ];
+  pythonImportsCheck = [ "dissect.executable" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for various executable formats such as PE, ELF and Macho-O";
