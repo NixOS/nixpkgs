@@ -3,12 +3,13 @@
 , cryptography
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "winacl";
   version = "0.1.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,14 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-r3DC7DAXi/njyKHEjCXoeBI1/iwbMhrbRuLyrh+NSqs=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
+  build-system = [
+    setuptools
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cryptography>=38.0.1" "cryptography"
-  '';
+  dependencies = [
+    cryptography
+  ];
 
   # Project doesn't have tests
   doCheck = false;
