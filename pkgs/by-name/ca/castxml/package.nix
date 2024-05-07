@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libffi
-, libxml2
-, zlib
-, withManual ? true
-, withHTML ? true
-, llvmPackages
-, python3
+{
+  cmake,
+  fetchFromGitHub,
+  lib,
+  libffi,
+  libxml2,
+  llvmPackages,
+  python3,
+  stdenv,
+  zlib,
+  # Boolean flags
+  withHTML ? true,
+  withManual ? true,
 }:
 
 let
@@ -28,8 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvm.dev
-  ] ++ lib.optionals (withManual || withHTML) [
+    (lib.getDev llvm)
+  ]
+  ++ lib.optionals (withManual || withHTML) [
     sphinx
   ];
 
@@ -45,14 +48,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
-    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
-    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
+    (lib.cmakeOptionType "path" "CLANG_RESOURCE_DIR" "${lib.getDev libclang}")
+    (lib.cmakeBool "SPHINX_HTML" withHTML)
+    (lib.cmakeBool "SPHINX_MAN" withManual)
   ];
 
   # 97% tests passed, 97 tests failed out of 2881
   # mostly because it checks command line and nix append -isystem and all
   doCheck = false;
+
+  strictDeps = true;
+
   # -E exclude 4 tests based on names
   # see https://github.com/CastXML/CastXML/issues/90
   checkPhase = ''
@@ -61,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/CastXML/CastXML";
     description = "C-family Abstract Syntax Tree XML Output";
+    license = lib.licenses.asl20;
     mainProgram = "castxml";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 })
