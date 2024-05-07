@@ -46,15 +46,18 @@
 , fetchpatch
 }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: let
+  inherit (self) buildPecl callPackage mkExtension php;
+
+  builders = import ../build-support/php/builders {
+    inherit callPackages callPackage buildPecl;
+  };
+in {
   buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
   };
 
-  composerHooks = callPackages ../build-support/php/hooks { };
-
-  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
-  buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
+  inherit (builders.v1) buildComposerProject composerHooks mkComposerRepository;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
