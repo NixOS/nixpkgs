@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, lz4
-, python-lzo
-, pythonOlder
-, setuptools
-, setuptools-scm
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  lz4,
+  python-lzo,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "dissect.squashfs"
-  ];
+  pythonImportsCheck = [ "dissect.squashfs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the SquashFS file system";
