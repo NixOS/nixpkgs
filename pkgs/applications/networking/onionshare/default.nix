@@ -3,6 +3,7 @@
 , buildPythonApplication
 , colorama
 , fetchFromGitHub
+, fetchpatch
 , flask
 , flask-compress
 , flask-socketio
@@ -138,6 +139,13 @@ rec {
         src = ./fix-paths-gui.patch;
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
+      })
+
+      # https://github.com/onionshare/onionshare/pull/1903
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/pull/1903/commits/f20db8fcbd18e51b58814ae8f98f3a7502b4f456.patch";
+        stripLen = 1;
+        hash = "sha256-wfIjdPhdUYAvbK5XyE1o2OtFOlJRj0X5mh7QQRjdyP0=";
       })
     ];
 
