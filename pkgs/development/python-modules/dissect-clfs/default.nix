@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    dissect-cstruct
-  ];
+  dependencies = [ dissect-cstruct ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.clfs"
-  ];
+  pythonImportsCheck = [ "dissect.clfs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the CLFS (Common Log File System) file system";
