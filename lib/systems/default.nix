@@ -184,7 +184,7 @@ let
       # don't support dynamic linking, but don't get the `staticMarker`.
       # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
       # has the `staticMarker`.
-      isStatic = final.isWasm || final.isRedox || final.isUClibc;
+      isStatic = final.isWasm || final.isRedox;# || final.isUClibc; rv32nommu uclibc is static, but also needs an ld.so
 
       # Just a guess, based on `system`
       inherit
