@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, poetry-core
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  poetry-core,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "kasa_crypt"
-  ];
+  pythonImportsCheck = [ "kasa_crypt" ];
 
   meta = with lib; {
     description = "Fast kasa crypt";
