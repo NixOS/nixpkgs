@@ -5527,6 +5527,8 @@ self: super: with self; {
 
   httpx-sse = callPackage ../development/python-modules/httpx-sse { };
 
+  httpx-ws = callPackage ../development/python-modules/httpx-ws { };
+
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
   huey = callPackage ../development/python-modules/huey { };
