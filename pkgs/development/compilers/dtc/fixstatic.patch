@@ -1,0 +1,30 @@
+diff -ur dtc-before/libfdt/meson.build dtc-after/libfdt/meson.build
+--- dtc-before/libfdt/meson.build	2024-05-07 15:58:14.070792700 -0300
++++ dtc-after/libfdt/meson.build	2024-05-07 15:58:46.543032425 -0300
+@@ -27,7 +27,7 @@
+ 
+ link_args += version_script
+ libfdt = library(
+-  'fdt', sources,
++  'fdt-so', sources,
+   version: '1.6.0',
+   link_args: link_args,
+   link_depends: 'version.lds',
+@@ -63,7 +63,7 @@
+ pkgconfig = import('pkgconfig')
+ 
+ pkgconfig.generate(
+-  libraries: libfdt,
++  libraries: link_with,
+   version: meson.project_version(),
+   filebase: 'libfdt',
+   name: 'libfdt',
+--- dtc-before/tests/run_tests.sh
++++ dtc-after/tests/run_tests.sh
+@@ -185,7 +185,7 @@ run_dtc_test () {
+ }
+ 
+ asm_to_so () {
+-    $CC -shared -o $1.test.so "$SRCDIR/data.S" $1.test.s
++    :
+ }
