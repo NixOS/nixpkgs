@@ -14411,6 +14411,8 @@ self: super: with self; {
 
   sqlglot = callPackage ../development/python-modules/sqlglot { };
 
+  sqlite-anyio = callPackage ../development/python-modules/sqlite-anyio { };
+
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
   sqlite-migrate = callPackage ../development/python-modules/sqlite-migrate { };
