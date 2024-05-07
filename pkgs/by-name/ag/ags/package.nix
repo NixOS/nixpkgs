@@ -16,17 +16,18 @@
 , typescript
 , wrapGAppsHook3
 , linux-pam
+, nix-update-script
 }:
 
 buildNpmPackage rec {
   pname = "ags";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Aylur";
     repo = "ags";
     rev = "v${version}";
-    hash = "sha256-+0us1/lawDXp6RXn4ev95a99VgpsVPi2A4jwNS2O1Uo=";
+    hash = "sha256-ebnkUaee/pnfmw1KmOZj+MP1g5wA+8BT/TPKmn4Dkwc=";
     fetchSubmodules = true;
   };
 
@@ -62,6 +63,8 @@ buildNpmPackage rec {
   postPatch = ''
     chmod u+x ./post_install.sh && patchShebangs ./post_install.sh
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     homepage = "https://github.com/Aylur/ags";
