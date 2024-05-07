@@ -1,20 +1,17 @@
 { lib
 , stdenv
 , buildPythonApplication
-, cepa
 , colorama
 , fetchFromGitHub
 , flask
 , flask-compress
-, flask-httpauth
 , flask-socketio
-, gevent-socketio
 , gevent-websocket
 , obfs4
 , psutil
+, packaging
 , pycrypto
 , pynacl
-, pyqt5
 , pyside6
 , pysocks
 , pytestCheckHook
@@ -22,10 +19,12 @@
 , qt5
 , requests
 , snowflake
+, stem
 , substituteAll
 , tor
 , unidecode
 , waitress
+, werkzeug
 }:
 
 let
@@ -79,23 +78,25 @@ rec {
       })
     ];
     propagatedBuildInputs = [
-      cepa
       colorama
       flask
       flask-compress
-      flask-httpauth
       flask-socketio
-      gevent-socketio
       gevent-websocket
+      packaging
       psutil
       pycrypto
       pynacl
       pyside6
+      pysocks
+      qrcode
       qrcode
       requests
+      stem
       unidecode
       waitress
-    ];
+      werkzeug
+    ] ++ requests.optional-dependencies.socks;
 
     buildInputs = [
       obfs4
@@ -142,10 +143,7 @@ rec {
 
     propagatedBuildInputs = [
       onionshare
-      psutil
-      pyqt5
       pyside6
-      pysocks
       qrcode
     ];
 
