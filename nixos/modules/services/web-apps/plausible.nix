@@ -278,7 +278,7 @@ in {
 
             ${lib.optionalString cfg.database.postgres.setup ''
               # setup
-              ${cfg.package}/createdb.sh"
+              ${cfg.package}/createdb.sh
             ''}
 
             ${cfg.package}/migrate.sh
