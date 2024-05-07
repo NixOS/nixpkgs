@@ -9,7 +9,6 @@
 , pythonOlder
 , setuptools
 , setuptools-scm
-, wheel
 , zstandard
 }:
 
@@ -27,13 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-j5N66p7feB9Ae+Fu5RhVzh8XCHiq55jJMg0Fe+C6Jvg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
   ];
 
