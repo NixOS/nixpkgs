@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "kasa-crypt";
   version = "0.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=kasa_crypt --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=kasa_crypt --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
