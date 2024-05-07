@@ -709,7 +709,7 @@ in
         default = let
           consoles = [ "${qemu-common.qemuSerialDevice},115200n8" "tty0" ];
         in if cfg.graphics then consoles else reverseList consoles;
-        example = [ "console=tty1" ];
+        example = [ "tty1" ];
         description = lib.mdDoc ''
           The output console devices to pass to the kernel command line via the
           `console` parameter, the primary console is the last
