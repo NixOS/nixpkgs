@@ -70,7 +70,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/Aylur/ags";
     description = "A EWW-inspired widget system as a GJS library";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with maintainers; [ foo-dogsquared johnrtitor ];
     mainProgram = "ags";
     platforms = platforms.linux;
   };
