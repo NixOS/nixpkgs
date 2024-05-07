@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "file-read-backwards";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "file_read_backwards";
     inherit version;
-    sha256 = "sha256-USw+U0BDUnqPrioLcVGqJV8towPnf9QPfc9CoeCRzCY=";
+    sha256 = "sha256-vQRZO8GTigAyJL5FHV1zXx9EkOHnClaM6NMwu3ZSpoQ=";
   };
 
   nativeCheckInputs = [ mock ];
