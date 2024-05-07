@@ -4,7 +4,6 @@
 , fetchpatch
 , glib
 , libgudev
-, polkit
 , ppp
 , gettext
 , pkg-config
@@ -12,7 +11,6 @@
 , python3
 , libmbim
 , libqmi
-, systemd
 , bash-completion
 , meson
 , ninja
@@ -22,6 +20,10 @@
 , gobject-introspection
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, polkit
+, withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -66,14 +68,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     libgudev
-    polkit
     ppp
     libmbim
     libqmi
-    systemd
     bash-completion
     dbus
     bash # shebangs in share/ModemManager/fcc-unlock.available.d/
+  ] ++ lib.optionals withPolkit [
+    polkit
+  ] ++ lib.optionals withSystemd [
+    systemd
   ];
 
   nativeInstallCheckInputs = [
@@ -85,11 +89,15 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
     "-Ddbus_policy_dir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "qrtr" withIntrospection)
     (lib.mesonBool "vapi" withIntrospection)
+    (lib.mesonBool "systemd_suspend_resume" withSystemd)
+    (lib.mesonBool "systemd_journal" withSystemd)
+    (lib.mesonOption "polkit" (if withPolkit then "strict" else "no"))
   ];
 
   postPatch = ''
