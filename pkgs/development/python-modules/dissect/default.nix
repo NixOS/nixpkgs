@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dissect-archive
 , dissect-btrfs
 , dissect-cim
 , dissect-clfs
@@ -56,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    dissect-archive
     dissect-btrfs
     dissect-cim
     dissect-clfs
