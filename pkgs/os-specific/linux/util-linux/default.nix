@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng
 , libxcrypt
@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
     ./bcachefs-patch-set.patch
+
+    (fetchpatch {
+      name = "CVE-2024-28085.patch";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=f4f0782f66692112311659086fd552d40d7a6f59";
+      hash = "sha256-1OQ/FG/gCeGKF+FpeNABMuv+dLhMhFclTfk/vB3Y1N0=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This
