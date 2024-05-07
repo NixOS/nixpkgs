@@ -78,6 +78,7 @@ luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
 luarocks-build-rust-mlua,,,,,,mrcjkb
+luarocks-build-treesitter-parser,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasnip,,,,,,
 luasocket,,,,,,
@@ -131,6 +132,7 @@ tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
+tree-sitter-norg,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
 xml2lua,,,,,,teto
