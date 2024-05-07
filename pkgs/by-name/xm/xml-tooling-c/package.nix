@@ -10,6 +10,7 @@
   log4shib,
   xercesc,
   xml-security-c,
+  darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,11 @@ stdenv.mkDerivation rec {
     log4shib
     xercesc
     xml-security-c
-  ];
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+     CoreFoundation
+     CoreServices
+     SystemConfiguration
+  ]);
 
   nativeBuildInputs = [
     autoreconfHook
