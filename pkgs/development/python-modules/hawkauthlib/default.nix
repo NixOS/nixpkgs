@@ -17,6 +17,11 @@ buildPythonPackage rec {
     sha256 = "0mr1mpx4j9q7sch9arwfvpysnpf2p7ijy7072wilxm8pnj0bwvsi";
   };
 
+  postPatch = ''
+    substituteInPlace hawkauthlib/tests/test_* \
+      --replace-quiet "assertEquals" "assertEqual"
+  '';
+
   propagatedBuildInputs = [ requests webob ];
 
   meta = with lib; {
