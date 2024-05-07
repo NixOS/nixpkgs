@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "dissect-cim";
   version = "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-UZ4mlshaKqZKoysvnGfcaoMOrMwfsN/qOJ8hrpMcQL0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
