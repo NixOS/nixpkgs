@@ -47,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper '${lib.getExe electron}' $out/bin/tetrio \
       --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
-      --add-flags $out/share/TETR.IO/app.asar
+      --add-flags $out/share/TETR.IO/app.asar \
+      --add-flags '--in-process-gpu' # workaround for webGL crashes on some setups https://github.com/tetrio/issues/issues/1268#issuecomment-2097226212
   '';
 
   meta = {
