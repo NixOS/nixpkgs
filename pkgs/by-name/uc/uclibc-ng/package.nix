@@ -76,12 +76,9 @@ let
     HAS_NO_THREADS n
     UCLIBC_HAS_THREADS y
     UCLIBC_HAS_UTMPX y
-    HAVE_SHARED y
     ARCH_HAS_NO_SHARED n
     HAVE_LDSO y
-    STATIC_PIE y
     DOPIC y
-    UCLIBC_FORMAT_ELF y
   '';
   # UCLIBC_HAS_UTMPX is needed by busybox
 in

@@ -139,11 +139,11 @@ rec {
     libc = "uclibc";
     gcc.arch = "rv32ima";
     gcc.abi = "ilp32";
-  };
-
-  riscv32-nommu-musl = {
-    config = "riscv32-unknown-linux-musl";
-    libc = "musl";
+    uclibc.extraConfig = ''
+      UCLIBC_FORMAT_ELF y
+      STATIC_PIE y
+      HAVE_SHARED y
+    '';
   };
 
   mips64-embedded = {
