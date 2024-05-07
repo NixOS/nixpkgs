@@ -4,14 +4,14 @@
 
 buildDunePackage rec {
   pname = "xenstore";
-  version = "2.2.0";
+  version = "2.3.0";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-xenstore/releases/download/v${version}/xenstore-${version}.tbz";
-    hash = "sha256-1Mnqtt5zHeRdYJHvhdQNjN8d4yxUEKD2cpwtoc7DGC0=";
+    hash = "sha256-1jxrvLLTwpd2fYPAoPbdRs7P1OaR8c9cW2VURF7Bs/Q=";
   };
 
   buildInputs = [ ppx_cstruct ];
