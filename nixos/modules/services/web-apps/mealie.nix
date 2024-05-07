@@ -28,8 +28,6 @@ in
         Configuration of the Mealie service.
 
         See [the mealie documentation](https://nightly.mealie.io/documentation/getting-started/installation/backend-config/) for available options and default values.
-
-        In addition to the official documentation, you can set {env}`MEALIE_LOG_FILE`.
       '';
       example = {
         ALLOW_SIGNUP = "false";
