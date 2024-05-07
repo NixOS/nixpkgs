@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # dissect.fat.exceptions.InvalidBPB: Invalid BS_jmpBoot
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dissect.fat"
-  ];
+  pythonImportsCheck = [ "dissect.fat" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the FAT file system";
