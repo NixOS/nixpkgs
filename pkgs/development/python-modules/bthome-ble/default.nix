@@ -25,11 +25,16 @@ buildPythonPackage rec {
     hash = "sha256-umRPB0eUdFL4kIvqSfbw/Jzh7NZMY6WR4dK+1cyK3EI=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
+  '';
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     cryptography
@@ -40,11 +45,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
-  '';
 
   pythonImportsCheck = [
     "bthome_ble"
