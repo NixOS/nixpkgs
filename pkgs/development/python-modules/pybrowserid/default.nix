@@ -11,6 +11,11 @@ buildPythonPackage rec {
     sha256 = "1qvi79kfb8x9kxkm5lw2mp42hm82cpps1xknmsb5ghkwx1lpc8kc";
   };
 
+  postPatch = ''
+    substituteInPlace browserid/tests/test_* \
+      --replace-quiet "assertEquals" "assertEqual"
+  '';
+
   propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [ mock ];
