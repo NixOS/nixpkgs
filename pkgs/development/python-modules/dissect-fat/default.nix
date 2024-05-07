@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-fat";
-  version = "3.8";
+  version = "3.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.fat";
     rev = "refs/tags/${version}";
-    hash = "sha256-xFfB7QOZ3KjsOPQ1cPTRkqb0hgD4waOq8kkSTJStQ+E=";
+    hash = "sha256-U7SSLvEK6IYZjjUIGT9n1w7oLdB8Q2/msQ/EBJfatJY=";
   };
 
   nativeBuildInputs = [
