@@ -11708,6 +11708,12 @@ with pkgs;
     icu = icu69;
     protobuf = protobuf_21;
   };
+  percona-server_8_3 = callPackage ../servers/sql/percona-server/8.3.nix {
+    inherit (darwin) cctools developer_cmds DarwinTools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    # newer versions cause linking failures against `libabsl_spinlock_wait`
+    protobuf = protobuf_21;
+  };
   percona-xtrabackup = percona-xtrabackup_8_0;
   percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
     boost = boost177;

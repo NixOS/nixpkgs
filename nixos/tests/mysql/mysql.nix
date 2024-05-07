@@ -146,6 +146,7 @@ in
   }) mariadbPackages)
   // (lib.mapAttrs (_: package: makeMySQLTest {
     inherit package;
-    name = "percona_8_0";
+    # FIXME: packages are renamed soon anyways
+    #name = package.pname;
     hasMroonga = false; useSocketAuth = false;
   }) perconaPackages)
