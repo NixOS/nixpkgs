@@ -75,14 +75,20 @@ let
     in
     optionalString ((length devices) > 0) "linux-dev (${devicesString})";
 
-  mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
-    (defcfg
-      ${keyboard.extraDefCfg}
-      ${mkDevices keyboard.devices}
-      linux-continue-if-no-devs-found yes)
+  mkConfig = name: keyboard: pkgs.writeTextFile {
+    name = "${mkName name}-config.kdb";
+    text = ''
+      (defcfg
+        ${keyboard.extraDefCfg}
+        ${mkDevices keyboard.devices}
+        linux-continue-if-no-devs-found yes)
 
-    ${keyboard.config}
-  '';
+      ${keyboard.config}
+    '';
+    checkPhase = ''
+      ${getExe cfg.package} --cfg "$target" --check --debug
+    '';
+  };
 
   mkService = name: keyboard: nameValuePair (mkName name) {
     wantedBy = [ "multi-user.target" ];
