@@ -13841,6 +13841,8 @@ self: super: with self; {
     inherit (pkgs) cmake llvmPackages;
   });
 
+  shimmy = callPackage ../development/python-modules/shimmy { };
+
   shippai = callPackage ../development/python-modules/shippai { };
 
   shiv = callPackage ../development/python-modules/shiv { };
