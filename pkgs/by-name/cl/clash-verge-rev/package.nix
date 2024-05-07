@@ -1,6 +1,7 @@
-{ lib
-, clash-verge
-, fetchurl
+{
+  lib,
+  clash-verge,
+  fetchurl,
 }:
 
 clash-verge.overrideAttrs (old: rec {
@@ -12,8 +13,10 @@ clash-verge.overrideAttrs (old: rec {
     hash = "sha256-V6W7IJFa8UrbPWPS2tReecZ41oYvAqV4q0NBkkhUHbQ=";
   };
 
-  meta = old.meta // (with lib; {
-    homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
-    maintainers = with maintainers; [ Guanran928 ];
-  });
+  meta =
+    old.meta
+    // (with lib; {
+      homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
+      maintainers = with maintainers; [ Guanran928 ];
+    });
 })
