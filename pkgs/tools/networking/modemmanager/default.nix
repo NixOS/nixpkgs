@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , glib
-, udev
 , libgudev
 , polkit
 , ppp
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    udev
     libgudev
     polkit
     ppp
