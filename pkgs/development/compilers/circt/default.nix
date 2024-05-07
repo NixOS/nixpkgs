@@ -9,6 +9,7 @@
 , lit
 , gitUpdater
 , callPackage
+, fixDarwinDylibNames
 }:
 
 let
@@ -28,7 +29,9 @@ stdenv.mkDerivation rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  nativeBuildInputs = [ cmake ninja git pythonEnv ];
+  nativeBuildInputs = [ cmake ninja git pythonEnv ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
   buildInputs = [ circt-llvm ];
 
   cmakeFlags = [
@@ -68,7 +71,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput lib "$lib"
-  '';
+  '' + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    find "$out/bin/" -type f -exec install_name_tool -add_rpath "$lib/lib" {} \;
+  '');
 
   passthru = {
     updateScript = gitUpdater {
