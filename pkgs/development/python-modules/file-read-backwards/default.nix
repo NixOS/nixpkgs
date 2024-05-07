@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pythonOlder
-, setuptools
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pythonOlder,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-vQRZO8GTigAyJL5FHV1zXx9EkOHnClaM6NMwu3ZSpoQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
     unittestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "file_read_backwards"
-  ];
+  pythonImportsCheck = [ "file_read_backwards" ];
 
   meta = with lib; {
     description = "Memory efficient way of reading files line-by-line from the end of file";
