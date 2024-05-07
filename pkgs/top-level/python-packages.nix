@@ -8630,6 +8630,8 @@ self: super: with self; {
 
   nbformat = callPackage ../development/python-modules/nbformat { };
 
+  nbmake = callPackage ../development/python-modules/nbmake { };
+
   nbmerge = callPackage ../development/python-modules/nbmerge { };
 
   nbsmoke = callPackage ../development/python-modules/nbsmoke { };
