@@ -74,7 +74,6 @@ in python3Packages.buildPythonPackage rec {
     pyjwt
     pytesseract
     python-dotenv
-    python-jose
     python-ldap
     python-multipart
     python-slugify
