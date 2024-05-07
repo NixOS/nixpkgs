@@ -1,42 +1,34 @@
-{ common-updater-scripts, curl, fetchFromGitHub, jq, lib, php, writeShellScript }:
+{ stdenvNoCC, lib, fetchurl }:
 
-php.buildComposerProject (finalAttrs: {
+stdenvNoCC.mkDerivation rec {
   pname = "platformsh";
-  version = "4.17.0";
+  version = "5.0.12";
 
-  src = fetchFromGitHub {
-    owner = "platformsh";
-    repo = "legacy-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8x7Fl1bYZIND4PuxVmPFNO2QOjeLMiIXh409DXG/WMU=";
-  };
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/platformsh/cli/releases/download/${version}/platformsh-cli_${version}_linux_amd64.tar.gz";
+      hash = "sha256-svEPMVY7r7pAoXwFIMYqCEduqR3Nkocaguf2nIGt+G8=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/platformsh/cli/releases/download/${version}/platformsh-cli_${version}_linux_arm64.tar.gz";
+      hash = "sha256-ZraS/PqSPL/kcj5o6hzDdL70IV2IWXOma6OHCiXIDQc=";
+    };
+  }.${stdenvNoCC.system} or (throw "${pname}-${version}: ${stdenvNoCC.system} is unsupported.");
 
-  vendorHash = "sha256-nXPfFlKYi2qP1bTeurRsopncKWg4zIZnZsSX/i0SF/s=";
+  dontConfigure = true;
+  dontBuild = true;
 
-  prePatch = ''
-    substituteInPlace config-defaults.yaml \
-      --replace "@version-placeholder@" "${finalAttrs.version}"
-  '';
-
-  passthru.updateScript = writeShellScript "update-${finalAttrs.pname}" ''
-    set -o errexit
-    export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
-    NEW_VERSION=$(curl -s https://api.github.com/repos/platformsh/legacy-cli/releases/latest | jq .tag_name --raw-output)
-
-    if [[ "v${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-      echo "The new version same as the old version."
-      exit 0
-    fi
-
-    update-source-version "platformsh" "$NEW_VERSION"
+  sourceRoot = ".";
+  installPhase = ''
+    install -Dm755 platformsh-cli $out/bin/platformsh
   '';
 
   meta = {
-    description = "The unified tool for managing your Platform.sh services from the command line.";
-    homepage = "https://github.com/platformsh/legacy-cli";
+    homepage = "https://github.com/platformsh/cli";
+    description = "The unified tool for managing your Platform.sh services from the command line";
+    maintainers = with lib.maintainers; [ spk ];
     license = lib.licenses.mit;
-    mainProgram = "platform";
-    maintainers = with lib.maintainers; [ shyim spk ];
-    platforms = lib.platforms.all;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-})
+}
