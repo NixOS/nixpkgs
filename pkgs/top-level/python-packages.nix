@@ -11134,6 +11134,8 @@ self: super: with self; {
 
   pyjnius = callPackage ../development/python-modules/pyjnius { };
 
+  pyjson5 = callPackage ../development/python-modules/pyjson5 { };
+
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
@@ -13278,6 +13280,8 @@ self: super: with self; {
   rkm-codes = callPackage ../development/python-modules/rkm-codes { };
 
   rlax = callPackage ../development/python-modules/rlax { };
+
+  rlcard = callPackage ../development/python-modules/rlcard { };
 
   rlp = callPackage ../development/python-modules/rlp { };
 
