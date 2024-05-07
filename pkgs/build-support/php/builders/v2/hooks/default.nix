@@ -16,8 +16,8 @@ let
   };
 in
 {
-  composerRepositoryHook = makeSetupHook {
-    name = "composer-repository-hook.sh";
+  composerVendorHook = makeSetupHook {
+    name = "composer-vendor-hook.sh";
     propagatedBuildInputs = [
       jq
       moreutils
@@ -26,7 +26,7 @@ in
     substitutions = {
       phpScriptUtils = lib.getExe php-script-utils;
     };
-  } ./composer-repository-hook.sh;
+  } ./composer-vendor-hook.sh;
 
   composerInstallHook = makeSetupHook {
     name = "composer-install-hook.sh";

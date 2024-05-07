@@ -1,27 +1,26 @@
-declare composerVendor
+declare composerLock
 declare version
 declare composerNoDev
 declare composerNoPlugins
 declare composerNoScripts
+declare composerStrictValidation
 
-preConfigureHooks+=(composerInstallConfigureHook)
-preBuildHooks+=(composerInstallBuildHook)
-preCheckHooks+=(composerInstallCheckHook)
-preInstallHooks+=(composerInstallInstallHook)
+preConfigureHooks+=(composerVendorConfigureHook)
+preBuildHooks+=(composerVendorBuildHook)
+preCheckHooks+=(composerVendorCheckHook)
+preInstallHooks+=(composerVendorInstallHook)
 
 source @phpScriptUtils@
 
-composerInstallConfigureHook() {
-    echo "Executing composerInstallConfigureHook"
+composerVendorConfigureHook() {
+    echo "Executing composerVendorConfigureHook"
 
     setComposeRootVersion
 
-    if [[ ! -e "${composerVendor}" ]]; then
-        echo "No local composer vendor found."
-        exit 1
+    if [[ -e "$composerLock" ]]; then
+        echo -e "\e[32mUsing user provided \`composer.lock\` file from \`$composerLock\`\e[0m"
+        install -Dm644 $composerLock ./composer.lock
     fi
-
-    install -Dm644 ${composerVendor}/composer.{json,lock} .
 
     if [[ ! -f "composer.lock" ]]; then
         composer \
@@ -54,38 +53,39 @@ composerInstallConfigureHook() {
 
     chmod +w composer.{json,lock}
 
-    echo "Finished composerInstallConfigureHook"
+    echo "Finished composerVendorConfigureHook"
 }
 
-composerInstallBuildHook() {
-    echo "Executing composerInstallBuildHook"
+composerVendorBuildHook() {
+    echo "Executing composerVendorBuildHook"
 
-    echo "Finished composerInstallBuildHook"
+    composer \
+        --apcu-autoloader \
+        --apcu-autoloader-prefix="$(jq -r -c 'try ."content-hash"' < composer.lock)" \
+        --no-interaction \
+        --no-progress \
+        --optimize-autoloader \
+        ${composerNoDev:+--no-dev} \
+        ${composerNoPlugins:+--no-plugins} \
+        ${composerNoScripts:+--no-scripts} \
+        install
+
+    echo "Finished composerVendorBuildHook"
 }
 
-composerInstallCheckHook() {
-    echo "Executing composerInstallCheckHook"
+composerVendorCheckHook() {
+    echo "Executing composerVendorCheckHook"
 
     checkComposerValidate
 
-    echo "Finished composerInstallCheckHook"
+    echo "Finished composerVendorCheckHook"
 }
 
-composerInstallInstallHook() {
-    echo "Executing composerInstallInstallHook"
+composerVendorInstallHook() {
+    echo "Executing composerVendorInstallHook"
 
-    cp -ar ${composerVendor}/* .
+    mkdir -p $out
+    cp -ar composer.{json,lock} $(composer config vendor-dir) $out/
 
-    # Copy the relevant files only in the store.
-    mkdir -p "$out"/share/php/"${pname}"
-    cp -r . "$out"/share/php/"${pname}"/
-
-    # Create symlinks for the binaries.
-    jq -r -c 'try (.bin[] | select(test(".bat$")? | not) )' composer.json | while read -r bin; do
-        echo -e "\e[32mCreating symlink ${bin}...\e[0m"
-        mkdir -p "$out"/bin
-        ln -s "$out"/share/php/"${pname}"/"$bin" "$out"/bin/"$(basename "$bin")"
-    done
-
-    echo "Finished composerInstallInstallHook"
+    echo "Finished composerVendorInstallHook"
 }
