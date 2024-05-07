@@ -931,6 +931,8 @@ self: super: with self; {
 
   atsim-potentials = callPackage ../development/python-modules/atsim-potentials { };
 
+  attacut = callPackage ../development/python-modules/attacut { };
+
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
@@ -5941,6 +5943,8 @@ self: super: with self; {
 
   itemloaders = callPackage ../development/python-modules/itemloaders { };
 
+  iterable-io = callPackage ../development/python-modules/iterable-io { };
+
   iteration-utilities = callPackage ../development/python-modules/iteration-utilities { };
 
   iterative-telemetry = callPackage ../development/python-modules/iterative-telemetry { };
@@ -9729,6 +9733,8 @@ self: super: with self; {
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
+
+  phunspell = callPackage ../development/python-modules/phunspell { };
 
   phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
 

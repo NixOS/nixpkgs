@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "libvgm";
-  version = "unstable-2024-04-24";
+  version = "0-unstable-2024-04-24";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
