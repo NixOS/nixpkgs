@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 
-  CXXFLAGS = lib.optionalString stdenv.isDarwin "-Wno-register";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-register";
 
   preConfigure = ''
     sed -i 's, -std=gnu99,,g' configure
