@@ -7,7 +7,7 @@
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, numpy, pytestCheckHook, setuptools
 # for passthru.tests
-, imageio, matplotlib, pilkit, pydicom, reportlab
+, imageio, matplotlib, pilkit, pydicom, reportlab, sage
 }@args:
 
 import ./generic.nix (rec {
@@ -24,7 +24,7 @@ import ./generic.nix (rec {
   };
 
   passthru.tests = {
-    inherit imageio matplotlib pilkit pydicom reportlab;
+    inherit imageio matplotlib pilkit pydicom reportlab sage;
   };
 
   meta = with lib; {
