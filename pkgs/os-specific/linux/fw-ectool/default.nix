@@ -1,40 +1,48 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, hostname
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  hostname,
+  libusb1,
+  libftdi1,
 }:
 
 stdenv.mkDerivation {
   pname = "fw-ectool";
-  version = "unstable-2022-12-03";
+  version = "0-unstable-2024-04-24";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "DHowett";
-    repo = "fw-ectool";
-    rev = "54c140399bbc3e6a3dce6c9f842727c4128367be";
-    hash = "sha256-2teJFz4zcA+USpbVPXMEIHLdmMLem8ik7YrmrSxr/n0=";
+    repo = "ectool";
+    rev = "39d64fb0e79e874cfe9877af69158fc2520b1a80";
+    hash = "sha256-SHRnyqicFlviBDu3aH+uKVUstVxpIhZV6JSuZOgOwXU=";
+    domain = "gitlab.howett.net";
   };
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     hostname
   ];
-
-  buildPhase = ''
-    patchShebangs util
-    make out=out utils
-  '';
+  buildInputs = [
+    libusb1
+    libftdi1
+  ];
 
   installPhase = ''
-    install -D out/util/ectool $out/bin/ectool
+    install -D src/ectool $out/bin/ectool
   '';
 
   meta = with lib; {
     description = "EC-Tool adjusted for usage with framework embedded controller";
-    homepage = "https://github.com/DHowett/framework-ec";
+    homepage = "https://gitlab.howett.net/DHowett/ectool";
     license = licenses.bsd3;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = [
+      maintainers.mkg20001
+      maintainers.ericthemagician
+    ];
     platforms = platforms.linux;
     mainProgram = "ectool";
   };
