@@ -6,6 +6,7 @@
     package = lib.mkPackageOption pkgs "clash-verge" {};
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
     tunMode = lib.mkEnableOption "Clash Verge TUN mode";
+    serviceMode = lib.mkEnableOption "Clash Verge service mode, exclusive to `clash-verge-rev`";
   };
 
   config =
@@ -28,6 +29,8 @@
         capabilities = "cap_net_bind_service,cap_net_admin=+ep";
         source = "${lib.getExe cfg.package}";
       };
+
+      systemd.packages = lib.mkIf cfg.serviceMode [cfg.package];
     };
 
   meta.maintainers = with lib.maintainers; [ zendo ];
