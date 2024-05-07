@@ -129,6 +129,7 @@ let
         buildPackages
         cloog
         withoutTargetLibc
+        darwin
         disableBootstrap
         disableGdbPlugin
         enableLTO

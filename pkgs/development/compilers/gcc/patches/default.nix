@@ -139,6 +139,11 @@ in
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
 ++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+  "14" = [ (fetchpatch {
+    name = "gcc-14-darwin-aarch64-support.patch";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/82b5c1cd38826ab67ac7fc498a8fe74376a40f4a/gcc/gcc-14.1.0.diff";
+    sha256 = "sha256-jCY65l1DGdESNyzEmD8FFC/xMmqeqBIQF+BhT4uTBBU=";
+  }) ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";
     url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
