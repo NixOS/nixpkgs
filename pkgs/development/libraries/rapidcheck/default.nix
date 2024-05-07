@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidcheck";
-  version = "unstable-2023-12-14";
+  version = "0-unstable-2023-12-14";
 
   src = fetchFromGitHub {
     owner = "emil-e";

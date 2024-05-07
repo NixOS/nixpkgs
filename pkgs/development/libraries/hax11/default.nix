@@ -9,7 +9,7 @@
 
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "hax11";
-  version = "unstable-2023-09-25";
+  version = "0-unstable-2023-09-25";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
