@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "dissect-sql";
   version = "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-aq/p6oa+6C2BS2TV8YYXwGP580tIHYZqO455bYm0yeo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
