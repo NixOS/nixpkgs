@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -30,12 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-CS50c3r7sdxp3CRS6XJ4QUmUFtmhFg6rSdKfYzJSOV4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
     lark
