@@ -151,7 +151,7 @@ buildPythonPackage rec {
   lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
 
   disabledTestPaths = [
-    # Tests are using Windows paths, missing test files 
+    # Tests are using Windows paths, missing test files
     "tests/plugins/apps/"
     # ValueError: Invalid Locate file magic. Expected /x00LOCATE02/x00
     "tests/plugins/os/unix/locate/"
