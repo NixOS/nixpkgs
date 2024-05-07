@@ -11718,6 +11718,7 @@ with pkgs;
   percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
     boost = boost177;
   };
+  percona-xtrabackup_8_3 = callPackage ../tools/backup/percona-xtrabackup/8_3.nix { };
 
   pick = callPackage ../tools/misc/pick { };
 
