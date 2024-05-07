@@ -178,6 +178,10 @@ stdenv.mkDerivation rec {
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
+    badPlatforms = [
+      # mandatory libpolkit-gobject shared library
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
   };
 }
