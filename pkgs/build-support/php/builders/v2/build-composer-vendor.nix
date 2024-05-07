@@ -5,7 +5,7 @@
 }:
 
 let
-  mkComposerRepositoryOverride =
+  mkComposerVendorOverride =
     /*
       We cannot destruct finalAttrs since the attrset below is used to construct it
       and Nix currently does not support lazy attribute names.
@@ -22,27 +22,12 @@ let
 
     let
       phpDrv = finalAttrs.php or php;
-      composer = finalAttrs.composer or phpDrv.packages.composer-local-repo-plugin;
+      composer = finalAttrs.composer or phpDrv.packages.composer;
     in
-    assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
-    assert (
-      lib.assertMsg (previousAttrs ? vendorHash) "mkComposerRepository expects vendorHash argument."
-    );
-    assert (lib.assertMsg (previousAttrs ? version) "mkComposerRepository expects version argument.");
-    assert (lib.assertMsg (previousAttrs ? pname) "mkComposerRepository expects pname argument.");
-    assert (
-      lib.assertMsg (previousAttrs ? composerNoDev) "mkComposerRepository expects composerNoDev argument."
-    );
-    assert (
-      lib.assertMsg (
-        previousAttrs ? composerNoPlugins
-      ) "mkComposerRepository expects composerNoPlugins argument."
-    );
-    assert (
-      lib.assertMsg (
-        previousAttrs ? composerNoScripts
-      ) "mkComposerRepository expects composerNoScripts argument."
-    );
+    assert (lib.assertMsg (previousAttrs ? src) "mkComposerVendor expects src argument.");
+    assert (lib.assertMsg (previousAttrs ? vendorHash) "mkComposerVendor expects vendorHash argument.");
+    assert (lib.assertMsg (previousAttrs ? version) "mkComposerVendor expects version argument.");
+    assert (lib.assertMsg (previousAttrs ? pname) "mkComposerVendor expects pname argument.");
     {
       composerNoDev = previousAttrs.composerNoDev or true;
       composerNoPlugins = previousAttrs.composerNoPlugins or true;
@@ -57,7 +42,7 @@ let
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
         phpDrv
-        phpDrv.composerHooks.composerRepositoryHook
+        phpDrv.composerHooks2.composerVendorHook
       ];
 
       buildInputs = previousAttrs.buildInputs or [ ];
@@ -115,4 +100,4 @@ let
       outputHash = finalAttrs.vendorHash or "";
     };
 in
-args: (stdenvNoCC.mkDerivation args).overrideAttrs mkComposerRepositoryOverride
+args: (stdenvNoCC.mkDerivation args).overrideAttrs mkComposerVendorOverride

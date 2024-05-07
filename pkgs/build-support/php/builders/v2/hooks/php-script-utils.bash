@@ -14,8 +14,6 @@ setComposeRootVersion() {
 }
 
 checkComposerValidate() {
-    setComposeRootVersion
-
     if [ "1" == "${composerGlobal-}" ]; then
       global="global";
     else

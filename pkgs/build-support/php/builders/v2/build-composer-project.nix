@@ -11,7 +11,7 @@ let
 
     let
       phpDrv = finalAttrs.php or php;
-      composer = finalAttrs.composer or phpDrv.packages.composer-local-repo-plugin;
+      composer = finalAttrs.composer or phpDrv.packages.composer;
     in
     {
       composerLock = previousAttrs.composerLock or null;
@@ -23,7 +23,7 @@ let
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
         phpDrv
-        phpDrv.composerHooks.composerInstallHook
+        phpDrv.composerHooks2.composerInstallHook
       ];
 
       buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ phpDrv ];
@@ -69,8 +69,8 @@ let
           runHook postInstallCheck
         '';
 
-      composerRepository =
-        previousAttrs.composerRepository or (phpDrv.mkComposerRepository {
+      composerVendor =
+        previousAttrs.composerVendor or (phpDrv.mkComposerVendor {
           inherit composer;
           inherit (finalAttrs)
             patches
@@ -91,7 +91,7 @@ let
       passthru = previousAttrs.passthru or { } // {
         updateScript =
           previousAttrs.passthru.updateScript
-            or (if finalAttrs.composerRepository.composerLock == null then nix-update-script { } else null);
+            or (if finalAttrs.composerVendor.composerLock == null then nix-update-script { } else null);
       };
 
       env = {
