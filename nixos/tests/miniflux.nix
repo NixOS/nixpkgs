@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
-  port = 3142;
+  port = 80;
   username = "alice";
   password = "correcthorsebatterystaple";
   defaultPort = 8080;

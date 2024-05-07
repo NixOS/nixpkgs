@@ -103,12 +103,13 @@ in
         RuntimeDirectoryMode = "0750";
         EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
-        CapabilityBoundingSet = [ "" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DeviceAllow = [ "" ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         PrivateDevices = true;
-        PrivateUsers = true;
+        PrivateUsers = false; # true is incompatible with CAP_NET_BIND_SERVICE
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
