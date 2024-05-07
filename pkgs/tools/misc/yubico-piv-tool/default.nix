@@ -10,9 +10,9 @@
 , help2man
 , cmake
 , zlib
-, withApplePCSC ? stdenv.isDarwin
 , nix-update-script
 , testers
+, withApplePCSC ? stdenv.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,14 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   cmakeFlags = [
-    "-DGENERATE_MAN_PAGES=ON"
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_MANDIR=share/man"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeBool "GENERATE_MAN_PAGES" true)
+    (lib.cmakeFeature "BACKEND" (if withApplePCSC then "macscard" else "pcsc"))
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
   ];
-
-  configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
 
   doCheck = true;
 
