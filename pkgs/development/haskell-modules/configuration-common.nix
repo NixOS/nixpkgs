@@ -2170,11 +2170,6 @@ self: super: {
             compiler: ${self.ghc.haskellCompilerName}
 
             core-packages:
-              # Hack: The following package is a core package of GHCJS. If we don't declare
-              # it, then hackage2nix will generate a Hackage database where all dependants
-              # of this library are marked as "broken".
-              - ghcjs-base-0
-
             EOF
 
             ghc-pkg list \
