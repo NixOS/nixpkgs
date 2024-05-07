@@ -33,5 +33,5 @@
       systemd.packages = lib.mkIf cfg.serviceMode [cfg.package];
     };
 
-  meta.maintainers = with lib.maintainers; [ zendo ];
+  meta.maintainers = with lib.maintainers; [ zendo Guanran928 ];
 }
