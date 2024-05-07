@@ -9583,8 +9583,6 @@ with pkgs;
 
   kdoctor = callPackage ../development/tools/kdoctor { };
 
-  kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
-
   kdigger = callPackage ../tools/security/kdigger { };
 
   kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
@@ -23803,10 +23801,6 @@ with pkgs;
 
   opensupaplex = callPackage ../games/opensupaplex { };
 
-  openturns = callPackage ../development/libraries/openturns {
-      inherit (darwin.apple_sdk.frameworks) Accelerate;
-  };
-
   open-wbo = callPackage ../applications/science/logic/open-wbo { };
 
   openwsman = callPackage ../development/libraries/openwsman { };
@@ -30673,8 +30667,6 @@ with pkgs;
   exercism = callPackage ../applications/misc/exercism { };
 
   expenses = callPackage ../applications/misc/expenses { };
-
-  flowtime = callPackage ../applications/misc/flowtime { };
 
   furnace = callPackage ../applications/audio/furnace {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
