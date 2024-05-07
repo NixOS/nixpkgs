@@ -1,0 +1,26 @@
+From dd7462e3b3bf9f8a7dc7fdb839906a15defc05e9 Mon Sep 17 00:00:00 2001
+From: Clement Skau <clementskau+github@gmail.com>
+Date: Fri, 6 Oct 2023 16:50:26 +0200
+Subject: [PATCH] fix: Makes fields a keyword arg for urllib3 v1 and v2
+ compatibility.
+
+---
+ map_machine/osm/osm_getter.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/map_machine/osm/osm_getter.py b/map_machine/osm/osm_getter.py
+index 86e5192..4dcc6b5 100644
+--- a/map_machine/osm/osm_getter.py
++++ b/map_machine/osm/osm_getter.py
+@@ -71,7 +71,7 @@ def get_data(address: str, parameters: dict[str, str]) -> bytes:
+     urllib3.disable_warnings()
+ 
+     try:
+-        result = pool_manager.request("GET", address, parameters)
++        result = pool_manager.request("GET", address, fields=parameters)
+     except urllib3.exceptions.MaxRetryError:
+         raise NetworkError("Cannot download data: too many attempts.")
+ 
+-- 
+2.42.0
+

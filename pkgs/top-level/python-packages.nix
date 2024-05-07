@@ -7609,6 +7609,8 @@ self: super: with self; {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  moire = callPackage ../development/python-modules/moire { };
+
   molecule = callPackage ../development/python-modules/molecule { };
 
   molecule-plugins = callPackage ../development/python-modules/molecule/plugins.nix { };
@@ -10245,6 +10247,8 @@ self: super: with self; {
   portalocker = callPackage ../development/python-modules/portalocker { };
 
   portend = callPackage ../development/python-modules/portend { };
+
+  portolan = callPackage ../development/python-modules/portolan { };
 
   port-for = callPackage ../development/python-modules/port-for { };
 
