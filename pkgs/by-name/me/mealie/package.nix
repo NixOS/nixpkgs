@@ -134,7 +134,7 @@ in pythonpkgs.buildPythonPackage rec {
     homepage = "https://mealie.io";
     changelog = "https://github.com/mealie-recipes/mealie/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ litchipi ];
+    maintainers = with maintainers; [ litchipi anoa ];
     mainProgram = "mealie";
   };
 }
