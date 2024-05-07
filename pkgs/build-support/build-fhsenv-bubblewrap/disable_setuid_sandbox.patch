@@ -1,0 +1,93 @@
+diff --git a/bubblewrap.c b/bubblewrap.c
+index c414bb0..56db2cb 100644
+--- a/bubblewrap.c
++++ b/bubblewrap.c
+@@ -812,8 +812,6 @@ drop_cap_bounding_set (bool drop_all)
+ static void
+ set_ambient_capabilities (void)
+ {
+-  if (is_privileged)
+-    return;
+   prctl_caps (requested_caps, FALSE, TRUE);
+ }
+ 
+@@ -870,14 +868,7 @@ acquire_privs (void)
+       /* Keep only the required capabilities for setup */
+       set_required_caps ();
+     }
+-  else if (real_uid != 0 && has_caps ())
+-    {
+-      /* We have some capabilities in the non-setuid case, which should not happen.
+-         Probably caused by the binary being setcap instead of setuid which we
+-         don't support anymore */
+-      die ("Unexpected capabilities but not setuid, old file caps config?");
+-    }
+-  else if (real_uid == 0)
++  else if (real_uid == 0 || has_caps ())
+     {
+       /* If our uid is 0, default to inheriting all caps; the caller
+        * can drop them via --cap-drop.  This is used by at least rpm-ostree.
+@@ -2466,9 +2457,6 @@ parse_args_recurse (int          *argcp,
+           unsigned long long size;
+           char *endptr = NULL;
+ 
+-          if (is_privileged)
+-            die ("The --size option is not permitted in setuid mode");
+-
+           if (argc < 2)
+             die ("--size takes an argument");
+ 
+@@ -2707,9 +2695,6 @@ main (int    argc,
+   args_data = opt_args_data;
+   opt_args_data = NULL;
+ 
+-  if ((requested_caps[0] || requested_caps[1]) && is_privileged)
+-    die ("--cap-add in setuid mode can be used only by root");
+-
+   if (opt_userns_block_fd != -1 && !opt_unshare_user)
+     die ("--userns-block-fd requires --unshare-user");
+ 
+@@ -2728,24 +2713,6 @@ main (int    argc,
+   if (opt_disable_userns && opt_userns_block_fd != -1)
+     die ("--disable-userns is not compatible with  --userns-block-fd");
+ 
+-  /* Technically using setns() is probably safe even in the privileged
+-   * case, because we got passed in a file descriptor to the
+-   * namespace, and that can only be gotten if you have ptrace
+-   * permissions against the target, and then you could do whatever to
+-   * the namespace anyway.
+-   *
+-   * However, for practical reasons this isn't possible to use,
+-   * because (as described in acquire_privs()) setuid bwrap causes
+-   * root to own the namespaces that it creates, so you will not be
+-   * able to access these namespaces anyway. So, best just not support
+-   * it anyway.
+-   */
+-  if (opt_userns_fd != -1 && is_privileged)
+-    die ("--userns doesn't work in setuid mode");
+-
+-  if (opt_userns2_fd != -1 && is_privileged)
+-    die ("--userns2 doesn't work in setuid mode");
+-
+   /* We have to do this if we weren't installed setuid (and we're not
+    * root), so let's just DWIM */
+   if (!is_privileged && getuid () != 0 && opt_userns_fd == -1)
+@@ -3256,7 +3223,7 @@ main (int    argc,
+     }
+ 
+   /* All privileged ops are done now, so drop caps we don't need */
+-  drop_privs (!is_privileged, TRUE);
++  drop_privs (TRUE, TRUE);
+ 
+   if (opt_block_fd != -1)
+     {
+@@ -3361,8 +3328,7 @@ main (int    argc,
+   /* Optionally bind our lifecycle */
+   handle_die_with_parent ();
+ 
+-  if (!is_privileged)
+-    set_ambient_capabilities ();
++  set_ambient_capabilities ();
+ 
+   /* Should be the last thing before execve() so that filters don't
+    * need to handle anything above */

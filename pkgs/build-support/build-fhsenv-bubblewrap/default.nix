@@ -123,6 +123,12 @@ let
     exec ${run} "$@"
   '';
 
+  bwrap-patched = if lib.isDerivation bubblewrap then bubblewrap.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [
+      ./disable_setuid_sandbox.patch
+    ];
+  }) else bubblewrap;
+
   indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
     ${extraPreBwrapCmds}
@@ -225,7 +231,7 @@ let
     ''}
 
     cmd=(
-      ${bubblewrap}/bin/bwrap
+      ${bwrap-patched}/bin/bwrap
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
