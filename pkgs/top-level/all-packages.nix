@@ -10141,7 +10141,9 @@ with pkgs;
 
   mdbook-d2 = callPackage ../tools/text/mdbook-d2 { };
 
-  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
+  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
