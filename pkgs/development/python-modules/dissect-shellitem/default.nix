@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
     rev = "refs/tags/${version}";
-    hash = "sha256-E5v7WuAd47X/1LSeaje4EUv+GuFq5Ksg4ndOScFreYE=";
+    hash = "sha256-zoq42Au2dNJTryj3GNXJrEGvE0az8psPuMXoJNc74QM=";
   };
 
   nativeBuildInputs = [
