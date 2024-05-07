@@ -8860,6 +8860,8 @@ self: super: with self; {
 
   nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
 
+  nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
+
   nosexcover = callPackage ../development/python-modules/nosexcover { };
 
   notebook = callPackage ../development/python-modules/notebook { };
