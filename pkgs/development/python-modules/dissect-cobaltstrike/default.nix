@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, flow-record
-, httpx
-, lark
-, pycryptodome
-, pyshark
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-, rich
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  flow-record,
+  httpx,
+  lark,
+  pycryptodome,
+  pyshark,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -69,9 +70,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "dissect.cobaltstrike"
-  ];
+  pythonImportsCheck = [ "dissect.cobaltstrike" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for Cobalt Strike related data";
