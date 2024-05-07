@@ -329,6 +329,6 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = with maintainers; [ xanderio ];
   meta.doc = ./plausible.md;
 }
