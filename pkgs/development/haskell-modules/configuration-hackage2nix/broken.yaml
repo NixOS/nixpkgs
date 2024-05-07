@@ -381,7 +381,6 @@ broken-packages:
   - bdo # failure in job https://hydra.nixos.org/build/233216486 at 2023-09-02
   - beamable # failure in job https://hydra.nixos.org/build/233211619 at 2023-09-02
   - beam # failure in job https://hydra.nixos.org/build/233213313 at 2023-09-02
-  - beam-migrate # failure in job https://hydra.nixos.org/build/252730758 at 2024-03-16
   - beam-mysql # failure in job https://hydra.nixos.org/build/233253237 at 2023-09-02
   - beam-newtype-field # failure in job https://hydra.nixos.org/build/233206317 at 2023-09-02
   - bech32 # failure in job https://hydra.nixos.org/build/233194823 at 2023-09-02

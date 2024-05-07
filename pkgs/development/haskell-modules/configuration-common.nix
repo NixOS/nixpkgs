@@ -1345,6 +1345,10 @@ self: super: {
     (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
+  # Requires pqueue <1.5 but it works fine with pqueue-1.5.0.0
+  # https://github.com/haskell-beam/beam/pull/705
+  beam-migrate = doJailbreak super.beam-migrate;
+
   users-postgresql-simple = addTestToolDepends [
     pkgs.postgresql
     pkgs.postgresqlTestHook
