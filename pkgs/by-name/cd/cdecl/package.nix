@@ -1,29 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   bison,
   flex,
   readline,
   ncurses,
-  gnused,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cdecl";
   version = "2.5";
-  src = fetchurl {
-    url = "https://www.cdecl.org/files/${pname}-blocks-${version}.tar.gz";
-    sha256 = "1b7k0ra30hh8mg8fqv0f0yzkaac6lfg6n376drgbpxg4wwml1rly";
-  };
 
-  patches = [ ./cdecl-2.5-lex.patch ];
-  preBuild = ''
-    ${gnused}/bin/sed 's/getline/cdecl_getline/g' -i cdecl.c;
-    makeFlagsArray=(CFLAGS="-DBSD -DUSE_READLINE -std=gnu89" LIBS=-lreadline);
-    makeFlags="$makeFlags PREFIX=$out BINDIR=$out/bin MANDIR=$out/man1 CATDIR=$out/cat1 CC=$CC";
-    mkdir -p $out/bin;
-  '';
+  src = fetchFromGitHub {
+    owner = "ridiculousfish";
+    repo = "cdecl-blocks";
+    # github repo has no tag, but the 2.5 version match this commit
+    rev = "cb130ea7e61df5b6fa1e84f996e3f04e21a0181c";
+    hash = "sha256-lErAxTpPIT49QdOpdjM9e3Qyaajzc+iwv27B3XUFUuE=";
+  };
 
   buildInputs = [
     bison
@@ -32,10 +27,32 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+  NIX_CFLAGS_COMPILE = "-DBSD -DUSE_READLINE -std=gnu89";
+  NIX_LDFLAGS = "-lreadline";
+
+  makeFlags = [
+    "CC=${stdenv.cc}/bin/cc" # otherwise fails on x86_64-darwin
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/man1"
+    "CATDIR=${placeholder "out"}/cat1"
+  ];
+
+  patches = [ ./cdecl-2.5-lex.patch ];
+  prePatch = ''
+    substituteInPlace cdecl.c --replace 'getline' 'cdecl_getline'
+  '';
+
+  preInstall = ''
+    mkdir -p $out/bin;
+  '';
+
   meta = {
     description = "Translator English -- C/C++ declarations";
+    homepage = "https://cdecl.org";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.unix;
+    mainProgram = "cdecl";
   };
 }
