@@ -31399,6 +31399,8 @@ with pkgs;
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
+  minari = python3Packages.toPythonApplication python3Packages.minari;
+
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
   mi2ly = callPackage ../applications/audio/mi2ly { };
@@ -35536,7 +35538,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_29; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
