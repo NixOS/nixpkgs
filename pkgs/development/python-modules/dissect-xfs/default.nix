@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.8";
+  version = "3.9";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.xfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-U/VDFeCyOPlefFL/QVRVknpCBDLuVYvVHI49QSe+QFM=";
+    hash = "sha256-jUNstyHVPJazf4idXNe9xICpi0MKkz8q0rWUEHjk2ZA=";
   };
 
   nativeBuildInputs = [
