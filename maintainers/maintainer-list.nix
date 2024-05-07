@@ -15825,6 +15825,12 @@
     githubId = 1179566;
     name = "Nicolas B. Pierron";
   };
+  pigeonf = {
+    email = "fnoegip+nixpkgs@gmail.com";
+    github = "PigeonF";
+    githubId = 7536431;
+    name = "Jonas Fierlings";
+  };
   pimeys = {
     email = "julius@nauk.io";
     github = "pimeys";
