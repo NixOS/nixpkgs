@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
     bash-completion
     bash
   ];
