@@ -2,16 +2,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, python-jose
 , pythonOlder
 , requests
 , requests-toolbelt
-, urllib3
+, deprecation
+, jwcrypto
 }:
 
 buildPythonPackage rec {
   pname = "python-keycloak";
-  version = "2.6.0";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,22 +20,16 @@ buildPythonPackage rec {
     owner = "marcospereirampj";
     repo = "python-keycloak";
     rev = "v${version}";
-    hash = "sha256-cuj0gJlZDkbJ2HRSMcQvO4nxpjw65CKGEpWCL5sucvg=";
+    hash = "sha256-ZXS29bND4GsJNhTGiUsLo+4FYd8Tubvg/+PJ33tqovY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace 'requests-toolbelt = "^0.9.1"' 'requests-toolbelt = "*"'
-  '';
 
   buildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
-    python-jose
-    urllib3
+    deprecation
+    jwcrypto
     requests
     requests-toolbelt
   ];
