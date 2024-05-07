@@ -10248,6 +10248,8 @@ self: super: with self; {
 
   portend = callPackage ../development/python-modules/portend { };
 
+  portion = callPackage ../development/python-modules/portion { };
+
   port-for = callPackage ../development/python-modules/port-for { };
 
   portpicker = callPackage ../development/python-modules/portpicker { };
