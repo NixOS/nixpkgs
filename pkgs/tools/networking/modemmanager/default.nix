@@ -17,9 +17,11 @@
 , meson
 , ninja
 , vala
-, gobject-introspection
 , dbus
 , bash
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -51,12 +53,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
-    gobject-introspection
     gettext
+    glib
     pkg-config
     libxslt
     python3
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
   ];
 
   buildInputs = [
@@ -83,7 +87,9 @@ stdenv.mkDerivation rec {
     "-Ddbus_policy_dir=${placeholder "out"}/share/dbus-1/system.d"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "-Dvapi=true"
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonBool "qrtr" withIntrospection)
+    (lib.mesonBool "vapi" withIntrospection)
   ];
 
   postPatch = ''
@@ -96,7 +102,7 @@ stdenv.mkDerivation rec {
   # load libraries from the install path, which doesn't usually exist
   # when `meson test' is run.  So to work around that, we run it as an
   # install check instead, when those paths will have been created.
-  doInstallCheck = true;
+  doInstallCheck = withIntrospection;
   installCheckPhase = ''
     runHook preInstallCheck
     export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
