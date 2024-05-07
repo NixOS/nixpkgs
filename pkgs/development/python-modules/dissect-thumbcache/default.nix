@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-LcuuRVSnZVFtht03MD8qVNNPljVUzGa8vXu9GQPOgjs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
