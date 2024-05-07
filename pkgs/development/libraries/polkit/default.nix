@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchFromGitHub
 , pkg-config
 , glib
 , expat
@@ -43,9 +43,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   # Tarballs do not contain subprojects.
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "polkit";
+  src = fetchFromGitHub {
+    owner = "polkit-org";
     repo = "polkit";
     rev = version;
     hash = "sha256-/kjWkh6w2FYgtYWzw3g3GlWJKKpkJ3cqwfE0iDqJctw=";
@@ -175,7 +174,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://gitlab.freedesktop.org/polkit/polkit/";
+    homepage = "https://github.com/polkit-org/polkit";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
