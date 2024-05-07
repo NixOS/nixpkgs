@@ -1,33 +1,39 @@
 { lib
 , buildPythonPackage
+, deprecation
 , fetchFromGitHub
+, jwcrypto
 , poetry-core
 , pythonOlder
 , requests
 , requests-toolbelt
-, deprecation
-, jwcrypto
 }:
 
 buildPythonPackage rec {
   pname = "python-keycloak";
   version = "4.0.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "marcospereirampj";
     repo = "python-keycloak";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-ZXS29bND4GsJNhTGiUsLo+4FYd8Tubvg/+PJ33tqovY=";
   };
 
-  buildInputs = [
+  postPatch = ''
+    # Upstream doesn't set version
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecation
     jwcrypto
     requests
@@ -44,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
+    changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
