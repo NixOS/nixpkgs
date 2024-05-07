@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, deprecation
-, fetchFromGitHub
-, jwcrypto
-, poetry-core
-, pythonOlder
-, requests
-, requests-toolbelt
+{
+  lib,
+  buildPythonPackage,
+  deprecation,
+  fetchFromGitHub,
+  jwcrypto,
+  poetry-core,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     deprecation
@@ -43,9 +42,7 @@ buildPythonPackage rec {
   # Test fixtures require a running keycloak instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "keycloak"
-  ];
+  pythonImportsCheck = [ "keycloak" ];
 
   meta = with lib; {
     description = "Provides access to the Keycloak API";
