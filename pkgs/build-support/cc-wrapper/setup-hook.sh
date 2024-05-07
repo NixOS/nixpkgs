@@ -107,8 +107,11 @@ fi
 
 export NIX_CC${role_post}=@out@
 
-export CC${role_post}=@named_cc@
-export CXX${role_post}=@named_cxx@
+export NIX_CC_BASENAME${role_post}=@named_cc@
+export NIX_CXX_BASENAME${role_post}=@named_cxx@
+
+export CC${role_post}=@out@/bin/@named_cc@
+export CXX${role_post}=@out@/bin/@named_cxx@
 
 # If unset, assume the default hardening flags.
 : ${NIX_HARDENING_ENABLE="@default_hardening_flags_str@"}
