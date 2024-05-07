@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-ole";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ole";
     rev = "refs/tags/${version}";
-    hash = "sha256-Df6OU1vVsQl7d119W8+8YmUiy2+m6Dw3LpKnMVSRRR4=";
+    hash = "sha256-VWbgQhKV1vJBRQROrJXbJ7qDIVOfZwvjsRwUbm7q7OQ=";
   };
 
   nativeBuildInputs = [
