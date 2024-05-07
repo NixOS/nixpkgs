@@ -420,8 +420,6 @@ with pkgs;
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml { };
-
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
