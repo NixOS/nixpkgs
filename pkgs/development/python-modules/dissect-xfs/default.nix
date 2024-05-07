@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "dissect-xfs";
   version = "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -23,12 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-jUNstyHVPJazf4idXNe9xICpi0MKkz8q0rWUEHjk2ZA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
