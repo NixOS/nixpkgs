@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPerlPackage
-, exiftool
-, fetchurl
-, gitUpdater
-, shortenPerlShebang
-, testers
+{
+  buildPerlPackage,
+  exiftool,
+  fetchurl,
+  gitUpdater,
+  lib,
+  shortenPerlShebang,
+  stdenv,
+  testers,
 }:
 
 buildPerlPackage rec {
@@ -18,6 +19,7 @@ buildPerlPackage rec {
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+
   postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
@@ -28,9 +30,7 @@ buildPerlPackage rec {
       command = "${lib.getExe exiftool} -ver";
       package = exiftool;
     };
-    updateScript = gitUpdater {
-      url = "https://github.com/exiftool/exiftool.git";
-    };
+    updateScript = gitUpdater { url = "https://github.com/exiftool/exiftool.git"; };
   };
 
   meta = {
