@@ -47,13 +47,13 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YCeO/ijxA+tZxNviqmlIBkAdjPTrKoOoo1QyMIOqhWU=";
+    sha256 = "sha256-X3zvrIf5DOC5PWcnuw0aClm++IWUED1ZzAyjnp7Mo+g=";
   };
 
   cmakeFlags = [
