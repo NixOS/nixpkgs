@@ -46,7 +46,9 @@
 , fetchpatch
 }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: let
+  inherit (self) buildPecl callPackage mkExtension php;
+in {
   buildPecl = callPackage ../build-support/php/build-pecl.nix {
     php = php.unwrapped;
   };
