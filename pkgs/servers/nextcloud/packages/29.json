@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "0xyrkr5p7xa8cn33kgx1hyblpbsdzaakpfm5bk6w9sm71a42688w",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.3/contacts-v5.5.3.tar.gz",
-    "version": "5.5.3",
+    "sha256": "0yxp3477fx4mrds8wchhzavrxwm88dvz7s58zp59q1v7qr9i7whr",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v6.0.0/contacts-v6.0.0.tar.gz",
+    "version": "6.0.0",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -50,9 +50,9 @@
     ]
   },
   "deck": {
-    "sha256": "0s8zhmqj3h4ajiwvki5bdxrbzckq9l8pr04hz6vs7jx3hpanj22g",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.12.2/deck-v1.12.2.tar.gz",
-    "version": "1.12.2",
+    "sha256": "00cip1c0h7jhqrmj2vrbac5cajk8dql6pky2iw77g0dkjssqlgza",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.13.0/deck-v1.13.0.tar.gz",
+    "version": "1.13.0",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -60,9 +60,9 @@
     ]
   },
   "end_to_end_encryption": {
-    "sha256": "04b2hj96gpb4sf1w5r1sxa4fmxrk36vr3pia8i5w2pfi6fbhd9mc",
-    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.14.5/end_to_end_encryption-v1.14.5.tar.gz",
-    "version": "1.14.5",
+    "sha256": "0hjq7qmp9psvq1vbak473wwfjdymay0l2d2h3vnssjqqw2kqf5dw",
+    "url": "https://github.com/nextcloud-releases/end_to_end_encryption/releases/download/v1.15.2/end_to_end_encryption-v1.15.2.tar.gz",
+    "version": "1.15.2",
     "description": "Provides the necessary endpoint to enable end-to-end encryption.\n\n**Notice:** E2EE is currently not compatible to be used together with server-side encryption",
     "homepage": "https://github.com/nextcloud/end_to_end_encryption",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "gpoddersync": {
-    "sha256": "1b74l6j9w3xnjbb57viz4bfridkpyvq7rq29kfr8cm03jm2nzq3r",
-    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.8.2/gpoddersync.tar.gz",
-    "version": "3.8.2",
+    "sha256": "1lm8lqvs1mvb3i2a8b5j9g7b26f747jfp696b9ima0hgpw8ycbfs",
+    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.8.3/gpoddersync.tar.gz",
+    "version": "3.8.3",
     "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
     "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "06lbv04byc08zqfws2hbxqdg05d25sfps80y21xahzcrv74z4ngl",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.6/groupfolders-v16.0.6.tar.gz",
-    "version": "16.0.6",
+    "sha256": "0cg81d75dg96zp09jy4yzg65v14wf99c2snnj304v4dia410c8a3",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.5/groupfolders-v16.0.5.tar.gz",
+    "version": "16.0.5",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -100,9 +100,9 @@
     ]
   },
   "impersonate": {
-    "sha256": "0l1wmsiycwnn5py1mdc87paqlciclndrk72yf0ff7k11vidgb7mp",
-    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v1.15.0/impersonate-v1.15.0.tar.gz",
-    "version": "1.15.0",
+    "sha256": "01cm643l5d3mrv6f3g1psl94974hichy9vj0hmj3zl0za2zf7mmb",
+    "url": "https://github.com/nextcloud-releases/impersonate/releases/download/v1.16.0/impersonate-v1.16.0.tar.gz",
+    "version": "1.16.0",
     "description": "By installing the impersonate app of your Nextcloud you enable administrators to impersonate other users on the Nextcloud server. This is especially useful for debugging issues reported by users.\n\nTo impersonate a user an administrator has to simply follow the following four steps:\n\n1. Login as administrator to Nextcloud.\n2. Open users administration interface.\n3. Select the impersonate button on the affected user.\n4. Confirm the impersonation.\n\nThe administrator is then logged-in as the user, to switch back to the regular user account they simply have to press the logout button.\n\n**Note:**\n\n- This app is not compatible with instances that have encryption enabled.\n- While impersonate actions are logged note that actions performed impersonated will be logged as the impersonated user.\n- Impersonating a user is only possible after their first login.\n- You can limit which users/groups can use impersonation in Administration settings > Additional settings.",
     "homepage": "https://github.com/nextcloud/impersonate",
     "licenses": [
@@ -130,8 +130,8 @@
     ]
   },
   "maps": {
-    "sha256": "1gqms3rrdpjmpb1h5d72b4lwbvsl8p10zwnkhgnsmvfcf93h3r1c",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
+    "sha256": "18gln06hgljgnr90ki95nl7b8986ivf3cymr6hajilszlr77hk22",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -240,9 +240,9 @@
     ]
   },
   "spreed": {
-    "sha256": "1d6y473xnlc2n3k9hqb2n2zk780pran77k4frbgfyikinbadd1ci",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.7/spreed-v18.0.7.tar.gz",
-    "version": "18.0.7",
+    "sha256": "07zjf8ci2jysrv0bagcrdfz2afzafha7fs3045p5kzb9zr6yvpy5",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.0/spreed-v19.0.0.tar.gz",
+    "version": "19.0.0",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [

@@ -228,7 +228,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" ];
+      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" "nextcloud29" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -761,7 +761,8 @@ in {
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "26" then pkgs.php81
-        else pkgs.php82;
+        else if versionOlder cfg.package.version "29" then pkgs.php82
+        else pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
@@ -1124,10 +1125,10 @@ in {
             extraConfig = ''
               absolute_redirect off;
               location = /.well-known/carddav {
-                return 301 /remote.php/dav;
+                return 301 /remote.php/dav/;
               }
               location = /.well-known/caldav {
-                return 301 /remote.php/dav;
+                return 301 /remote.php/dav/;
               }
               location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
                 return 301 /index.php$request_uri;
