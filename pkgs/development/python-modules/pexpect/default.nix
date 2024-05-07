@@ -3,6 +3,9 @@
 , fetchPypi
 , setuptools
 , ptyprocess
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage (rec {
@@ -23,6 +26,8 @@ buildPythonPackage (rec {
   doCheck = false;
 
   propagatedBuildInputs = [ ptyprocess ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     homepage = "http://www.noah.org/wiki/Pexpect";
