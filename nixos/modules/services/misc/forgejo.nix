@@ -725,5 +725,5 @@ in
   };
 
   meta.doc = ./forgejo.md;
-  meta.maintainers = with lib.maintainers; [ bendlas emilylange ];
+  meta.maintainers = with lib.maintainers; [ bendlas emilylange pyrox0 ];
 }
