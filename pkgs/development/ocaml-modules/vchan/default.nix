@@ -6,14 +6,14 @@
 
 buildDunePackage rec {
   pname = "vchan";
-  version = "6.0.1";
+  version = "6.0.2";
 
   minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-vchan/releases/download/v${version}/vchan-${version}.tbz";
-    hash = "sha256-5E7dITMVirYoxUkp8ZamRAolyhA6avXGJNAioxeBuV0=";
+    hash = "sha256-fki12lrWuIweGX/vSD2gbMX9qaM4KthiDZLeJYWcX+U=";
   };
 
   propagatedBuildInputs = [
