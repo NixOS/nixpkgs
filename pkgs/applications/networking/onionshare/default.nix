@@ -149,6 +149,8 @@ rec {
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
+    buildInputs = [ qt5.qtwayland ];
+
     postInstall = ''
       mkdir -p $out/share/{appdata,applications,icons}
       cp $src/org.onionshare.OnionShare.desktop $out/share/applications
