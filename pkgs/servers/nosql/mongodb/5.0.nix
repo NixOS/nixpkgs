@@ -7,7 +7,7 @@ let
   variants = if stdenv.isLinux then
     {
       version = "5.0.24";
-      sha256 = "sha256-6CVQOHN3yFTq6OyVkZMYEjIKfFbQZ6M5KAa3k7qv4Gc=";
+      sha256 = "sha256-SZ62OJD6L3aP6LsTswpuXaayqYbOaSQTgEmV89Si7Xc=";
       patches = [ ./fix-build-with-boost-1.79-5_0-linux.patch ];
     }
   else lib.optionalAttrs stdenv.isDarwin
