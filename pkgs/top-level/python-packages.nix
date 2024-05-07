@@ -7427,6 +7427,8 @@ self: super: with self; {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  minari = callPackage ../development/python-modules/minari { };
+
   mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
 
   minexr = callPackage ../development/python-modules/minexr { };
@@ -8629,6 +8631,8 @@ self: super: with self; {
   nbexec = callPackage ../development/python-modules/nbexec { };
 
   nbformat = callPackage ../development/python-modules/nbformat { };
+
+  nbmake = callPackage ../development/python-modules/nbmake { };
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
 
@@ -10245,6 +10249,8 @@ self: super: with self; {
   portalocker = callPackage ../development/python-modules/portalocker { };
 
   portend = callPackage ../development/python-modules/portend { };
+
+  portion = callPackage ../development/python-modules/portion { };
 
   port-for = callPackage ../development/python-modules/port-for { };
 
