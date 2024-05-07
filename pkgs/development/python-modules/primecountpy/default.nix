@@ -4,6 +4,9 @@
 , primecount
 , cython
 , cysignals
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -24,6 +27,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "primecountpy" ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Cython interface for C++ primecount library";

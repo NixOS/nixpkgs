@@ -8,6 +8,9 @@
 , gdb
 , numpy
 , ncurses
+
+# Reverse dependency
+, sage
 }:
 
 let
@@ -56,6 +59,8 @@ in buildPythonPackage rec {
   # Temporary solution
   doCheck = false;
   # doCheck = !stdenv.isDarwin;
+
+  passthru.tests = { inherit sage; };
 
   # force regeneration of generated code in source distributions
   # https://github.com/cython/cython/issues/5089
