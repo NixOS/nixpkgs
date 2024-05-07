@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.16";
+  version = "3.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-2c8OFwbgSc7zwbjQm2g8y1ZyiYM0KPFjTEUrk06c174=";
+    hash = "sha256-UIgHjSTHaxo8jCqe+R6rRxQXX8RUFKAI5+zscInAtgg=";
   };
 
   postPatch = ''
