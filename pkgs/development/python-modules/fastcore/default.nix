@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,20 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-Zf6bNHMiYEJrLPU1w7OvEavdKIageG+sJ9W8OE/ET0M=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    packaging
-  ];
+  dependencies = [ packaging ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "fastcore"
-  ];
+  pythonImportsCheck = [ "fastcore" ];
 
   meta = with lib; {
     description = "Python module for Fast AI";
