@@ -1,6 +1,12 @@
-{ stdenv, lib, stdenvNoCC
-, fetchzip
-, sourceData, versionData, buildFreebsd, patchesRoot
+{
+  stdenv,
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  sourceData,
+  versionData,
+  buildFreebsd,
+  patchesRoot,
 }:
 
 self:
@@ -8,7 +14,8 @@ self:
 lib.packagesFromDirectoryRecursive {
   callPackage = self.callPackage;
   directory = ./pkgs;
-} // {
+}
+// {
   inherit sourceData patchesRoot versionData;
 
   # Keep the crawled portion of Nixpkgs finite.
@@ -21,11 +28,15 @@ lib.packagesFromDirectoryRecursive {
 
   compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isFreeBSD) self.compat;
   freebsd-lib = import ./lib {
-    version = lib.concatStringsSep "." (map toString (lib.filter (x: x != null) [
-      self.versionData.major
-      self.versionData.minor
-      self.versionData.patch or null
-    ]));
+    version = lib.concatStringsSep "." (
+      map toString (
+        lib.filter (x: x != null) [
+          self.versionData.major
+          self.versionData.minor
+          self.versionData.patch or null
+        ]
+      )
+    );
   };
 
   # The manual callPackages below should in principle be unnecessary, but are
@@ -51,21 +62,21 @@ lib.packagesFromDirectoryRecursive {
   };
 
   libc = self.callPackage ./pkgs/libc/package.nix {
-    inherit (buildFreebsd) makeMinimal install gencat rpcgen;
+    inherit (buildFreebsd)
+      makeMinimal
+      install
+      gencat
+      rpcgen
+      ;
     inherit (self) csu include;
   };
 
-  libnetbsd = self.callPackage ./pkgs/libnetbsd/package.nix {
-    inherit (buildFreebsd) makeMinimal;
-  };
+  libnetbsd = self.callPackage ./pkgs/libnetbsd/package.nix { inherit (buildFreebsd) makeMinimal; };
 
   mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
     inherit stdenv;
     inherit (buildFreebsd) makeMinimal install tsort;
   };
 
-  makeMinimal = self.callPackage ./pkgs/makeMinimal.nix {
-    inherit (self) make;
-  };
-
+  makeMinimal = self.callPackage ./pkgs/makeMinimal.nix { inherit (self) make; };
 }

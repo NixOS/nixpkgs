@@ -1,8 +1,16 @@
-{ lib, stdenv, mkDerivation
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal, install, mandoc, groff
-, m4
-, compatIfNeeded, libelf
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  bsdSetupHook,
+  freebsdSetupHook,
+  makeMinimal,
+  install,
+  mandoc,
+  groff,
+  m4,
+  compatIfNeeded,
+  libelf,
 }:
 
 mkDerivation {
@@ -15,13 +23,15 @@ mkDerivation {
     "sys/sys/elf_common.h"
   ];
   nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
-    makeMinimal install mandoc groff
+    bsdSetupHook
+    freebsdSetupHook
+    makeMinimal
+    install
+    mandoc
+    groff
 
     m4
   ];
-  buildInputs = compatIfNeeded ++ [
-    libelf
-  ];
+  buildInputs = compatIfNeeded ++ [ libelf ];
   MK_TESTS = "no";
 }

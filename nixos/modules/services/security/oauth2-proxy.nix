@@ -17,7 +17,7 @@ let
       inherit (cfg.github) org team;
     }; };
 
-    google = cfg: { google = with cfg.google; optionalAttrs (groups != []) {
+    google = cfg: { google = with cfg.google; lib.optionalAttrs (groups != []) {
       admin-email = adminEmail;
       service-account = serviceAccountJSON;
       group = groups;

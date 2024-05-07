@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flowtime";
-  version = "6.1";
+  version = "6.5";
 
   src = fetchFromGitHub {
     owner = "Diego-Ivan";
     repo = "Flowtime";
     rev = "v${version}";
-    hash = "sha256-wTqHTkt1O3Da2fzxf6DiQjrqOt65ZEhLOkGK5C6HzIk=";
+    hash = "sha256-J0Pscv0ZOpA/LV2mPTLOmDPQpfZhizTghatGnrJHToE=";
   };
 
   nativeBuildInputs = [
