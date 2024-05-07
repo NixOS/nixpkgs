@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp libc/sysdeps/linux/riscv64/crt1.S libc/sysdeps/linux/riscv32/crt1.S
     #rm libc/sysdeps/linux/common/adjtimex.c
     #rm libc/sysdeps/linux/common/clock_adjtime.c
-    make defconfig
+    make defconfig ARCH=x86_64 # TODO, FIXME
     ${configParser}
     cat << EOF | parseconfig
     ${nixConfig}
