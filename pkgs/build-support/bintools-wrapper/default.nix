@@ -56,7 +56,7 @@
     #    - static armv7l, where compilation fails.
     && !(targetPlatform.isAarch && targetPlatform.isStatic)
   ) "pie"
-  ++ lib.optional (targetPlatform.libc != "uclibc") "stackprotector"
+  ++ lib.optional (stdenvNoCC.targetPlatform.libc != "uclibc") "stackprotector"
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
