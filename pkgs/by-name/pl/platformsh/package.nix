@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
   installPhase = ''
-    install -Dm755 platformsh-cli $out/bin/platformsh
+    install -Dm755 platformsh $out/bin/platformsh
   '';
 
   meta = {
