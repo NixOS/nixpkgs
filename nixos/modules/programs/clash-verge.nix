@@ -1,37 +1,43 @@
-{ config, lib, pkgs, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.programs.clash-verge;
+in
 {
   options.programs.clash-verge = {
     enable = lib.mkEnableOption "Clash Verge";
-    package = lib.mkPackageOption pkgs "clash-verge" {};
+    package = lib.mkPackageOption pkgs "clash-verge" { };
     autoStart = lib.mkEnableOption "Clash Verge auto launch";
     tunMode = lib.mkEnableOption "Clash Verge TUN mode";
     serviceMode = lib.mkEnableOption "Clash Verge service mode, exclusive to `clash-verge-rev`";
   };
 
-  config =
-    let
-      cfg = config.programs.clash-verge;
-    in
-    lib.mkIf cfg.enable {
-
-      environment.systemPackages = [
-        cfg.package
-        (lib.mkIf cfg.autoStart (pkgs.makeAutostartItem {
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages =
+      [ cfg.package ]
+      ++ lib.optional cfg.autoStart (
+        pkgs.makeAutostartItem {
           name = "clash-verge";
           package = cfg.package;
-        }))
-      ];
+        }
+      );
 
-      security.wrappers.clash-verge = lib.mkIf cfg.tunMode {
-        owner = "root";
-        group = "root";
-        capabilities = "cap_net_bind_service,cap_net_admin=+ep";
-        source = "${lib.getExe cfg.package}";
-      };
-
-      systemd.packages = lib.mkIf cfg.serviceMode [cfg.package];
+    security.wrappers.clash-verge = lib.mkIf cfg.tunMode {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_bind_service,cap_net_admin=+ep";
+      source = "${lib.getExe cfg.package}";
     };
 
-  meta.maintainers = with lib.maintainers; [ zendo Guanran928 ];
+    systemd.packages = lib.mkIf cfg.serviceMode [ cfg.package ];
+  };
+
+  meta.maintainers = with lib.maintainers; [
+    zendo
+    Guanran928
+  ];
 }
