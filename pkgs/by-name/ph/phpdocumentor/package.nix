@@ -1,6 +1,7 @@
 { lib
 , php
 , fetchFromGitHub
+, makeBinaryWrapper
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -15,6 +16,8 @@ php.buildComposerProject (finalAttrs: {
   };
 
   vendorHash = "sha256-rsBg2EHbvYLVr6haN1brHZFVjLDaxqdkNWf0HL3Eoy0=";
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall
