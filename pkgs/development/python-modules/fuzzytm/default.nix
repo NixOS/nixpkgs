@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gensim
-, numpy
-, pandas
-, pyfume
-, setuptools
-, scipy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gensim,
+  numpy,
+  pandas,
+  pyfume,
+  setuptools,
+  scipy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-z0ESYtB7BqssxIHlrd0F+/qapOM1nrDi3Zih5SvgDGY=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     gensim
@@ -38,9 +37,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "FuzzyTM"
-  ];
+  pythonImportsCheck = [ "FuzzyTM" ];
 
   meta = with lib; {
     description = "Library for Fuzzy Topic Models";
