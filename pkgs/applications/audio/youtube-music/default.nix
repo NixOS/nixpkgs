@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = {
-      x86_64-linux = "sha256-eY4n8XN+ItCqECUe/L96qQ412fiwekGqTuLW4GphBnw=";
+      x86_64-linux = "sha256-GlbuAiotBISegpmbTlz9uXc84hwiD5Ei6WCdIVpu2UQ=";
       aarch64-linux = "sha256-MZzuqGhmxbDOCMzBP9jHOPrHk6ENusvyX7iDyaq+lD4=";
       x86_64-darwin = lib.fakeHash;
       aarch64-darwin = lib.fakeHash;
