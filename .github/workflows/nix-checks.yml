@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build Nix targets
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Git checkout
         uses: actions/checkout@v3
