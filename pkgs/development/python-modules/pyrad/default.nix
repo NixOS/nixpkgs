@@ -70,10 +70,10 @@ buildPythonPackage rec {
     "pyrad"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python RADIUS Implementation";
     homepage = "https://github.com/pyradius/pyrad";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }
