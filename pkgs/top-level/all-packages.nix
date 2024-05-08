@@ -30662,10 +30662,6 @@ with pkgs;
 
   expenses = callPackage ../applications/misc/expenses { };
 
-  furnace = callPackage ../applications/audio/furnace {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   furtherance = callPackage ../applications/misc/furtherance { };
 
   gigalixir = callPackage ../tools/misc/gigalixir { };

@@ -8,6 +8,7 @@
 , makeWrapper
 , fftw
 , fmt_8
+, freetype
 , libsndfile
 , libX11
 , rtmidi
@@ -16,7 +17,7 @@
 , withJACK ? stdenv.hostPlatform.isUnix
 , libjack2
 , withGUI ? true
-, Cocoa
+, darwin
 , portaudio
 , alsa-lib
 # Enable GL/GLES rendering
@@ -25,23 +26,23 @@
 , preferGLES ? stdenv.hostPlatform.isAarch
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "furnace";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Pv9Sx+bdoy8uV5o9i1rUSuokwQVA8EPYFkZXM8Fynmk=";
+    hash = "sha256-z0WvJvkry/9T4Fgp2fX83CxPpDBoOPNVtyX2OUk26FI=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
     # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
     substituteInPlace src/gui/scaling.cpp \
-      --replace 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
+      --replace-fail 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
   '';
 
   nativeBuildInputs = [
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fftw
     fmt_8
+    freetype
     libsndfile
     rtmidi
     SDL2
@@ -64,26 +66,30 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
     alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
-  ];
+  ]);
 
   cmakeFlags = [
-    "-DBUILD_GUI=${if withGUI then "ON" else "OFF"}"
-    "-DSYSTEM_FFTW=ON"
-    "-DSYSTEM_FMT=ON"
-    "-DSYSTEM_LIBSNDFILE=ON"
-    "-DSYSTEM_RTMIDI=ON"
-    "-DSYSTEM_SDL2=ON"
-    "-DSYSTEM_ZLIB=ON"
-    "-DSYSTEM_PORTAUDIO=ON"
-    "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
-    "-DWITH_PORTAUDIO=ON"
-    "-DWITH_RENDER_SDL=ON"
-    "-DWITH_RENDER_OPENGL=${lib.boolToString withGL}"
-    "-DWARNINGS_ARE_ERRORS=ON"
-  ] ++ lib.optionals withGL [
-    "-DUSE_GLES=${lib.boolToString preferGLES}"
+    (lib.cmakeBool "BUILD_GUI" withGUI)
+    (lib.cmakeBool "SYSTEM_FFTW" true)
+    (lib.cmakeBool "SYSTEM_FMT" true)
+    (lib.cmakeBool "SYSTEM_LIBSNDFILE" true)
+    (lib.cmakeBool "SYSTEM_RTMIDI" true)
+    (lib.cmakeBool "SYSTEM_SDL2" true)
+    (lib.cmakeBool "SYSTEM_ZLIB" true)
+    (lib.cmakeBool "USE_FREETYPE" true)
+    (lib.cmakeBool "SYSTEM_FREETYPE" true)
+    (lib.cmakeBool "WITH_JACK" withJACK)
+    (lib.cmakeBool "WITH_PORTAUDIO" true)
+    (lib.cmakeBool "SYSTEM_PORTAUDIO" true)
+    (lib.cmakeBool "WITH_RENDER_SDL" true)
+    (lib.cmakeBool "WITH_RENDER_OPENGL" withGL)
+    (lib.cmakeBool "USE_GLES" (withGL && preferGLES))
+    (lib.cmakeBool "WITH_RENDER_METAL" false) # fails to build
+    (lib.cmakeBool "WITH_RENDER_OPENGL1" (withGL && !preferGLES))
+    (lib.cmakeBool "WARNINGS_ARE_ERRORS" true)
+    (lib.cmakeBool "FORCE_APPLE_BIN" true)
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -109,13 +115,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
-    changelog = "https://github.com/tildearrow/furnace/releases/tag/v${version}";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    changelog = "https://github.com/tildearrow/furnace/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
     mainProgram = "furnace";
   };
-}
+})
