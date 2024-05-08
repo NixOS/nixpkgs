@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xl9+k6xJp5/t1QPOYfnBLyYprhhrzjzByDKkT3dtVVQ=";
   };
 
+  cargoPatches = [ ./rustc-serialize-fix.patch ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
