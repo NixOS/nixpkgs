@@ -93,7 +93,6 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    echo "DEBUG: ${pnpm-deps}"
     export HOME=$(mktemp -d)
     pnpm config set package-manager-strict false
     pnpm config set store-dir ${pnpm-deps}
