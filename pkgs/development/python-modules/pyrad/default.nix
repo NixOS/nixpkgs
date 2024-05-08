@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, lib
-, poetry-core
-, netaddr
-, six
-, unittestCheckHook
-, fetchPypi
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  poetry-core,
+  netaddr,
+  six,
+  unittestCheckHook,
+  fetchPypi,
 }:
 let
   netaddr_0_8_0 = netaddr.overridePythonAttrs (oldAttrs: rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     netaddr_0_8_0
@@ -62,13 +61,9 @@ buildPythonPackage rec {
       --replace-quiet "self.assertEquals" "self.assertEqual"
   '';
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyrad"
-  ];
+  pythonImportsCheck = [ "pyrad" ];
 
   meta = {
     description = "Python RADIUS Implementation";
