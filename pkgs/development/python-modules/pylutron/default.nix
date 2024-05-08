@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 }:
 
@@ -9,12 +10,14 @@ buildPythonPackage rec {
   version = "0.2.13";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-s5qprIVPlq495XWKjgIuohDzPV0EfU43zkfQ2DvH04Y=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -26,9 +29,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/thecynic/pylutron/releases/tag/${version}";
     description = "Python library for controlling a Lutron RadioRA 2 system";
     homepage = "https://github.com/thecynic/pylutron";
+    changelog = "https://github.com/thecynic/pylutron/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
