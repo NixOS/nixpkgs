@@ -55,7 +55,6 @@ buildGoModule rec {
     description = "Music streaming server / subsonic server API implementation";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ autrimpo ];
-    platforms = lib.platforms.linux;
     mainProgram = "gonic";
   };
 }

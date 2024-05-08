@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook3, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     hash = "sha512-o4iLcbNqbsxo9YJMy0SXO7Udv4CMhhBcsf53UuqWKFFWY/jKVN+Lb+dB7Jf9+UowpmbrP44w97Oi+dnbfFXYjQ==";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook makeShellWrapper squashfsTools ];
+  nativeBuildInputs = [ wrapGAppsHook3 makeShellWrapper squashfsTools ];
 
   dontStrip = true;
   dontPatchELF = true;

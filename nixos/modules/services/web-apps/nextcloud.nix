@@ -819,7 +819,8 @@ in {
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"));
+        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
+        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -832,10 +833,12 @@ in {
           else if versionOlder stateVersion "23.05" then nextcloud25
           else if versionOlder stateVersion "23.11" then nextcloud26
           else if versionOlder stateVersion "24.05" then nextcloud27
-          else nextcloud28
+          else nextcloud29
         );
 
-      services.nextcloud.phpPackage = pkgs.php82;
+      services.nextcloud.phpPackage =
+        if versionOlder cfg.package.version "29" then pkgs.php82
+        else pkgs.php83;
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
@@ -936,6 +939,7 @@ in {
 
         in {
           wantedBy = [ "multi-user.target" ];
+          wants = [ "nextcloud-update-db.service" ];
           before = [ "phpfpm-nextcloud.service" ];
           after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
           requires = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
@@ -994,7 +998,7 @@ in {
           after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig = {
-            Type = "oneshot";
+            Type = "exec";
             User = "nextcloud";
             ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
             ExecStart = "${lib.getExe phpPackage} -f ${webroot}/cron.php";
@@ -1009,6 +1013,20 @@ in {
             User = "nextcloud";
           };
           startAt = cfg.autoUpdateApps.startAt;
+        };
+        nextcloud-update-db = {
+          after = [ "nextcloud-setup.service" ];
+          environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
+          script = ''
+            ${occ}/bin/nextcloud-occ db:add-missing-columns
+            ${occ}/bin/nextcloud-occ db:add-missing-indices
+            ${occ}/bin/nextcloud-occ db:add-missing-primary-keys
+          '';
+          serviceConfig = {
+            Type = "exec";
+            User = "nextcloud";
+            ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
+          };
         };
       };
 
@@ -1102,10 +1120,10 @@ in {
             extraConfig = ''
               absolute_redirect off;
               location = /.well-known/carddav {
-                return 301 /remote.php/dav;
+                return 301 /remote.php/dav/;
               }
               location = /.well-known/caldav {
-                return 301 /remote.php/dav;
+                return 301 /remote.php/dav/;
               }
               location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
                 return 301 /index.php$request_uri;

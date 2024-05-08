@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-k4bTuTRZMWx8mMi/hdAr4YPCWqe39fG8nkmHH2D80ew=";
+    sha256 = "sha256-utJYgbmCLi7rWKsRDZqJDCtEbVijAjnMqpYoALKO+Ho=";
   };
 
-  cargoHash = "sha256-wi1Y1eU+v9Q/4nkLNCUluPlDGfz6ld8nuVWR9orkDV4=";
+  cargoHash = "sha256-9rgdpoXNKaw850EnK6jDwT+jba/B/66PqQackx2knuk=";
 
   nativeBuildInputs = [ pkg-config ];
 

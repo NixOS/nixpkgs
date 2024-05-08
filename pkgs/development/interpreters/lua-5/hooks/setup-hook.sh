@@ -25,7 +25,8 @@ addToLuaSearchPathWithCustomDelimiter() {
   # export only if the folder contains lua files
   shopt -s globstar
 
-  for _file in ${absPattern/\?/\*\*}; do
+  local adjustedPattern="${absPattern/\?/\*\*\/\*}"
+  for _file in $adjustedPattern; do
     export "${varName}=${!varName:+${!varName};}${absPattern}"
     shopt -u globstar
     return;

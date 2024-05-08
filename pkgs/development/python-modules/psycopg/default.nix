@@ -15,7 +15,7 @@
 , typing-extensions
 
 # psycopg-c
-, cython_3
+, cython
 , tomli
 
 # docs
@@ -72,7 +72,7 @@ let
     '';
 
     nativeBuildInputs = [
-      cython_3
+      cython
       postgresql
       setuptools
       tomli

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , testers
-, wrapGAppsHook
+, wrapGAppsHook3
 , bash-completion
 , dbus
 , dbus-glib
@@ -12,9 +12,11 @@
 , gobject-introspection
 , gtk-layer-shell
 , gtk3
+, gvfs
 , json-glib
 , libgee
 , libhandy
+, libnotify
 , libpulseaudio
 , librsvg
 , meson
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     sassc
     scdoc
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -65,9 +67,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     glib
     gtk-layer-shell
     gtk3
+    gvfs
     json-glib
     libgee
     libhandy
+    libnotify
     libpulseaudio
     librsvg
     pantheon.granite

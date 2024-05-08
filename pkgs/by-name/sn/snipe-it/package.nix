@@ -53,7 +53,7 @@ php.buildComposerProject (finalAttrs: {
       Details for snipe-it can be found on the official website at https://snipeitapp.com/.
     '';
     homepage = "https://snipeitapp.com/";
-    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${version}";
+    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${finalAttrs.version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ yayayayaka ];
     platforms = platforms.linux;

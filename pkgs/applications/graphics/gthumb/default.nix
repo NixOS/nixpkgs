@@ -26,7 +26,7 @@
 , bison
 , flex
 , clutter-gtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , python3
 , desktop-file-utils
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gthumb";
+    homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
     mainProgram = "gthumb";
     platforms = platforms.linux;

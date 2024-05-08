@@ -51,7 +51,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withWallet [ sqlite ]
+    # building with db48 (for legacy descriptor wallet support) is broken on Darwin
+    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   postInstall = ''

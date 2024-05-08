@@ -6,7 +6,7 @@
 , udev
 , stdenv
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , nss
 , nspr
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     dpkg
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

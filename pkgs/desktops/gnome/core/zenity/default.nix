@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     mainProgram = "zenity";
     description = "Tool to display dialogs from the commandline and shell scripts";
-    homepage = "https://wiki.gnome.org/Projects/Zenity";
+    homepage = "https://gitlab.gnome.org/GNOME/zenity";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

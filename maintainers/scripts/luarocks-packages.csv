@@ -5,11 +5,11 @@ argparse,,,,,,
 basexx,,,,,,
 binaryheap,,,,,,vcunat
 busted,,,,,,
-cassowary,,,,,,marsam alerque
+cassowary,,,,,,alerque
 cldr,,,,,,alerque
 compat53,,,,,,vcunat
 commons.nvim,,,,,,mrcjkb
-cosmo,,,,,,marsam
+cosmo,,,,,,
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
 cyan,,,,,,

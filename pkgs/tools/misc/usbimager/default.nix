@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook3
 , withLibui ? true, gtk3
 , withUdisks ? stdenv.isLinux, udisks, glib
 , libX11 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
       -e 's|install -m 2755 -g disk|install |g' \
       -e 's|-I/usr/include/gio-unix-2.0|-I${glib.dev}/include/gio-unix-2.0|g' \
       -e 's|install -m 2755 -g $(GRP)|install |g' Makefile
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/applications/usbimager.desktop \
+      --replace-fail "Exec=/usr/bin/usbimager" "Exec=usbimager"
   '';
 
   dontConfigure = true;

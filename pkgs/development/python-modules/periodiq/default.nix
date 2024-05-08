@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'pendulum = "^2.0"' 'pendulum = "*"' \
       --replace 'poetry>=0.12' 'poetry-core' \
       --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
   '';

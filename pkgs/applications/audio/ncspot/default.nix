@@ -6,12 +6,13 @@
 , ncurses
 , openssl
 , Cocoa
-, withALSA ? true, alsa-lib
+, withALSA ? false, alsa-lib
 , withClipboard ? true, libxcb, python3
 , withCover ? false, ueberzug
-, withPulseAudio ? false, libpulseaudio
+, withPulseAudio ? true, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
+, withCrossterm ? true
 , nix-update-script
 , testers
 , ncspot
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMPRIS "mpris"
+    ++ lib.optional withCrossterm "crossterm_backend"
     ++ lib.optional withNotify "notify";
 
   postInstall = ''
@@ -71,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hrkfdn/ncspot";
     changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ marsam liff ];
+    maintainers = with maintainers; [ liff ];
     mainProgram = "ncspot";
   };
 }

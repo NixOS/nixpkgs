@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A Linux network throughput multiple-thread benchmark tool";
     homepage = "https://github.com/microsoft/ntttcp-for-linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "ntttcp";
   };

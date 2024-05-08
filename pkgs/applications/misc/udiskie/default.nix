@@ -9,7 +9,7 @@
 , librsvg
 , python3
 , udisks2
-, wrapGAppsHook
+, wrapGAppsHook3
 , testers
 , udiskie
 }:
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     installShellFiles
     python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

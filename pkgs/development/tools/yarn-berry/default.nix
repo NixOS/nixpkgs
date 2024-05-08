@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-berry";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "berry";
     rev = "@yarnpkg/cli/${finalAttrs.version}";
-    hash = "sha256-75bERA1uZeywMjYznFDyk4+AtVDLo7eIajVtWdAD/RA=";
+    hash = "sha256-id/Z7oqwoIIWaOU5mQ7vuPRQw6WQAKcDAopYB2tEl0s=";
   };
 
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryota-ka thehedgeh0g DimitarNestorov ];
+    maintainers = with maintainers; [ ryota-ka pyrox0 DimitarNestorov ];
     platforms = platforms.unix;
     mainProgram = "yarn";
   };

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
 , openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
-, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68
+, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, fetchurl, runCommand
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -15,6 +15,16 @@ let
     java = openjdk17_headless;
   });
 
+  icuVersionWithSep = s: "71${s}1";
+  icuPath = "download/release-${icuVersionWithSep "-"}/icu4c-${icuVersionWithSep "_"}-data-bin-l.zip";
+  icuData = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/${icuPath}";
+    hash = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";
+  };
+  icuFakeRepository = runCommand "icu-data-repository" {} ''
+    install -Dm644 ${icuData} $out/${icuPath}
+  '';
+
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";
 
@@ -25,10 +35,17 @@ let
       hash = "sha256-QPPJyl6+XU+m5xqYOFtQKJNNrovqy7ngNE/e7kiEJVU=";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
+
+    postPatch = ''
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+    '';
 
     config = writeText "gradle.properties" (''
       CONF = Release
@@ -42,7 +59,7 @@ let
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+      gradle --no-daemon --console=plain $gradleFlags sdk
 
       runHook postBuild
     '';
@@ -76,6 +93,7 @@ in makePackage {
   gradleProperties = ''
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${icuFakeRepository}"}
   '';
 
   preBuild = ''

@@ -3,7 +3,7 @@
 , fetchzip
 , libX11
 , libXfixes
-, zig_0_11
+, zig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,14 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2//IwthAjGyVSZaXjgpM1pUJGYWZVkrJ6JyrVbzOtr8=";
   };
 
-  nativeBuildInputs = [ zig_0_11.hook ];
+  nativeBuildInputs = [ zig.hook ];
 
   buildInputs = [
     libX11
     libXfixes
   ];
 
-  meta =  {
+  meta = {
     description = "Buzz on new X11 clipboard events";
     homepage = "https://trong.loang.net/~cnx/clipbuzz";
     license = lib.licenses.unlicense;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A set of cross-platform tools to compute hashes";
     homepage = "https://github.com/jessek/hashdeep";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.karantan ];
     platforms = platforms.all;
   };

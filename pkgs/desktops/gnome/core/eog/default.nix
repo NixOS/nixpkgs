@@ -20,7 +20,8 @@
 , gdk-pixbuf
 , exempi
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook3
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , libheif
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     libxml2 # for xmllint for xml-stripblanks
     gobject-introspection
     gi-docgen
@@ -81,10 +82,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
         libheif.out
@@ -96,6 +98,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${libjxl}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
@@ -115,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME image viewer";
-    homepage = "https://wiki.gnome.org/Apps/EyeOfGnome";
+    homepage = "https://gitlab.gnome.org/GNOME/eog";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

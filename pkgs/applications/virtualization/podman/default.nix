@@ -64,23 +64,23 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-XgLrPLswLmaB9FYXKEMLP+7KT/OY50z3JKz8DvMLrEE=";
+    hash = "sha256-8Swqwyzu/WI9mG21bLF81Kk4kS2Ltg0GV9G3EcG/FnU=";
   };
 
   patches = [
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
+  ] ++ lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./hardcode-paths.patch;
       inherit crun runc gvisor youki conmon;
     })
-
-    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
-    ./rm-podman-mac-helper-msg.patch
   ];
 
   vendorHash = null;
@@ -161,7 +161,7 @@ buildGoModule rec {
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     mainProgram = "podman";
   };
 }

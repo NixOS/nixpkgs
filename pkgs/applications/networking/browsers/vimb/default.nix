@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libsoup, webkitgtk, gtk3, glib-networking
-, gsettings-desktop-schemas, wrapGAppsHook
+, gsettings-desktop-schemas, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Eq4riJSznKpkW9JJDnTCLxZ9oMJTmWkIoGphOiCcSAg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
+  nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
   buildInputs = [ gtk3 libsoup webkitgtk glib-networking gsettings-desktop-schemas ];
 
   passthru = {

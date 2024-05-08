@@ -75,6 +75,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/blob/v${version}/CHANGES.txt";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

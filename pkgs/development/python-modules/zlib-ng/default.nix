@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "zlib-ng";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-zlib-ng";
     rev = "v${version}";
-    hash = "sha256-uK6Md8ZOVUNwXCjzM4zTVr3WBwzLdnvT9n8yBvf968k=";
+    hash = "sha256-M0R39vUX3JMDEDJfsRzg1ipxbWJ/kl0FzW6ZUMXvGDs=";
   };
 
   nativeBuildInputs = [

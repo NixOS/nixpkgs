@@ -1,0 +1,13 @@
+diff --git a/pubspec.yaml b/pubspec.yaml
+index e9dfa1f..ec9f2f2 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -10,7 +10,7 @@ dependencies:
+   collection: ^1.17.2
+   dbus: ^0.7.8
+   dio: ^5.3.3
+-  file: ^6.1.4
++  file: ^7.0.0
+   flutter:
+     sdk: flutter
+   flutter_html: ^3.0.0-beta.2

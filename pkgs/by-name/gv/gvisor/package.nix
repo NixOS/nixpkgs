@@ -46,7 +46,7 @@ buildGoModule {
     description = "Application Kernel for Containers";
     homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andrew-d gpl ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ gpl ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

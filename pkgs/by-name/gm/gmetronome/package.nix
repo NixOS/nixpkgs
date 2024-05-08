@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , pkg-config
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtkmm3
 , libpulseaudio
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

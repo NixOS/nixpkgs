@@ -6,7 +6,7 @@
 , vala
 , intltool
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , cinnamon
 , lightdm
 , gtk3
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     vala
     intltool
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     python3.pkgs.wrapPython
   ];

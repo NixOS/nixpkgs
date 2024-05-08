@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A GTK Gnutella client, optimized for speed and scalability";
     mainProgram = "gtk-gnutella";
     homepage = "https://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
-    changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";
+    changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${finalAttrs.version}/ChangeLog";
     maintainers = [ maintainers.doronbehar ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

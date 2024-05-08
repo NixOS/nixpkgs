@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , setuptools
 
 # dependencies
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "23.2.0";
+  version = "24.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,12 +34,12 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GFQ87Ic0xHXs8ZgmzH7kOFbDSNmtj0hx+YHKnrz/sG0=";
+    hash = "sha256-wQR3dwN5O++TdtQh+Wcj7c7TNMaRj2lMlOuXOAPVU0Q=";
   };
 
   build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
   dependencies = [

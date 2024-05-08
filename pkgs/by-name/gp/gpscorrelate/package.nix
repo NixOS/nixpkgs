@@ -9,7 +9,7 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktopToDarwinBundle
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [

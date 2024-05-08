@@ -4,11 +4,11 @@
   lib,
 }: let
   pname = "upscayl";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchurl {
     url = "https://github.com/upscayl/upscayl/releases/download/v${version}/upscayl-${version}-linux.AppImage";
-    hash = "sha256-nRYNYNHIkbvvQZd1zRDCCsCadgRgV/yn9WfaKjt44O8=";
+    hash = "sha256-XhvOzARP8Ytlf23vNMYZ5x1UKvKOlM/69yhysasW3dA=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -25,8 +25,6 @@ in
 
       cp ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
       cp ${appimageContents}/${pname}.png $out/share/pixmaps/${pname}.png
-
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
 
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'

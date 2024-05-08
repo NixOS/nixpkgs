@@ -11,7 +11,7 @@
 , fetchurl
 , dbus
 , xvfb-run
-, wrapGAppsHook
+, wrapGAppsHook3
 # , fetchPypi
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage {
     ./nix-support.patch
   ];
 
-  nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook ]; # for setup hooks
+  nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook3 ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
 
   checkPhase = ''

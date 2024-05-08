@@ -2,7 +2,7 @@
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, makeDesktopItem, openssl, wrapGAppsHook, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
+, makeDesktopItem, openssl, wrapGAppsHook3, makeShellWrapper, at-spi2-atk, at-spi2-core, libuuid
 , e2fsprogs, krb5, libdrm, mesa, unzip, copyDesktopItems, libxshmfence, libxkbcommon, git
 , libGL, zlib, cacert
 }:
@@ -106,7 +106,7 @@ let
       comment = "Graphical Git client from Axosoft";
     }) ];
 
-    nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook.override { makeWrapper = makeShellWrapper; }) ];
+    nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];
     buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
 
     # avoid double-wrapping

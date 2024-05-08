@@ -8,7 +8,7 @@
 , pygobject3
 , gobject-introspection
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , buildApplication ? false
 }:
 
@@ -28,7 +28,7 @@ python3Packages.buildPythonPackage rec {
     setuptools
   ] ++ lib.optionals buildApplication [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [

@@ -8,14 +8,15 @@
 { name ? ""
 , lib
 , stdenvNoCC
-, cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, runtimeShell
+, cc ? null, libc ? null, bintools, coreutils ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
 , isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
-, buildPackages ? {}
+, expand-response-params
 , libcxx ? null
 
 # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
@@ -82,9 +83,7 @@ let
     versionAtLeast
     ;
 
-  inherit (stdenv) hostPlatform targetPlatform;
-
-  stdenv = stdenvNoCC;
+  inherit (stdenvNoCC) hostPlatform targetPlatform;
 
   includeFortifyHeaders' = if includeFortifyHeaders != null
     then includeFortifyHeaders
@@ -114,15 +113,12 @@ let
   # unstable implementation detail, however.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
-  expand-response-params =
-    optionalString ((buildPackages.stdenv.hasCC or false) && buildPackages.stdenv.cc != "/dev/null") (import ../expand-response-params { inherit (buildPackages) stdenv; });
-
   useGccForLibs = useCcForLibs
     && libcxx == null
-    && !stdenv.targetPlatform.isDarwin
-    && !(stdenv.targetPlatform.useLLVM or false)
-    && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
-    && !(stdenv.targetPlatform.isiOS or false)
+    && !targetPlatform.isDarwin
+    && !(targetPlatform.useLLVM or false)
+    && !(targetPlatform.useAndroidPrebuilt or false)
+    && !(targetPlatform.isiOS or false)
     && gccForLibs != null;
   gccForLibs_solib = getLib gccForLibs
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
@@ -249,17 +245,17 @@ let
     then cc.hardeningUnsupportedFlagsByTargetPlatform targetPlatform
     else (cc.hardeningUnsupportedFlags or []);
 
-  darwinPlatformForCC = optionalString stdenv.targetPlatform.isDarwin (
+  darwinPlatformForCC = optionalString targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
   );
 
-  darwinMinVersion = optionalString stdenv.targetPlatform.isDarwin (
-    stdenv.targetPlatform.darwinMinVersion
+  darwinMinVersion = optionalString targetPlatform.isDarwin (
+    targetPlatform.darwinMinVersion
   );
 
-  darwinMinVersionVariable = optionalString stdenv.targetPlatform.isDarwin
-    stdenv.targetPlatform.darwinMinVersionVariable;
+  darwinMinVersionVariable = optionalString targetPlatform.isDarwin
+    targetPlatform.darwinMinVersionVariable;
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -272,7 +268,7 @@ assert nativeTools == bintools.nativeTools;
 assert nativeLibc == bintools.nativeLibc;
 assert nativePrefix == bintools.nativePrefix;
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper");
   version = optionalString (cc != null) ccVersion;
@@ -299,6 +295,9 @@ stdenv.mkDerivation {
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
 
+    # Expose expand-response-params we are /actually/ using. In stdenv
+    # bootstrapping, expand-response-params usually comes from an earlier stage,
+    # so it is important to expose this for reference checking.
     inherit expand-response-params;
 
     inherit nixSupport;
@@ -426,7 +425,7 @@ stdenv.mkDerivation {
     ../setup-hooks/role.bash
   ] ++ optional (cc.langC or true) ./setup-hook.sh
     ++ optional (cc.langFortran or false) ./fortran-hook.sh
-    ++ optional (targetPlatform.isWindows) (stdenv.mkDerivation {
+    ++ optional (targetPlatform.isWindows) (stdenvNoCC.mkDerivation {
       name = "win-dll-hook.sh";
       dontUnpack = true;
       installPhase = ''
@@ -479,8 +478,8 @@ stdenv.mkDerivation {
     # break `useLLVM` into.)
     + optionalString (isClang
                       && targetPlatform.isLinux
-                      && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
-                      && !(stdenv.targetPlatform.useLLVM or false)
+                      && !(targetPlatform.useAndroidPrebuilt or false)
+                      && !(targetPlatform.useLLVM or false)
                       && gccForLibs != null) (''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 
@@ -689,7 +688,7 @@ stdenv.mkDerivation {
       done
     ''
 
-    + optionalString stdenv.targetPlatform.isDarwin ''
+    + optionalString targetPlatform.isDarwin ''
         echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/cc-cflags
     ''
 
@@ -740,8 +739,10 @@ stdenv.mkDerivation {
     inherit isClang;
 
     # for substitution in utils.bash
+    # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-    shell = getBin shell + shell.shellPath or "";
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.

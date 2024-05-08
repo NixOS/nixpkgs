@@ -25,13 +25,13 @@ buildPythonPackage rec {
   postPatch = ''
     # move cache location from nix store to home
     substituteInPlace pymongo_inmemory/context.py \
-      --replace \
+      --replace-fail \
         'CACHE_FOLDER = path.join(path.dirname(__file__), "..", ".cache")' \
         'CACHE_FOLDER = os.environ.get("XDG_CACHE_HOME", os.environ["HOME"] + "/.cache") + "/pymongo-inmemory"'
 
     # fix a broken assumption arising from the above fix
     substituteInPlace pymongo_inmemory/_utils.py \
-      --replace \
+      --replace-fail \
         'os.mkdir(current_path)' \
         'os.makedirs(current_path)'
   '';
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pymongo
   ];
 

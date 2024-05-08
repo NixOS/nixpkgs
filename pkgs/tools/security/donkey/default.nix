@@ -47,7 +47,7 @@ the host.
 The name "Donkey" is an acronym of "Don't Key".
     '';
     homepage = "https://devel.ringlet.net/security/donkey";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ raboof ];
     platforms = platforms.all;
   };

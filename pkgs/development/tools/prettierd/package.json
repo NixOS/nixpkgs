@@ -1,6 +1,6 @@
 {
   "name": "@fsouza/prettierd",
-  "version": "0.25.1",
+  "version": "0.25.3",
   "description": "prettier, as a daemon",
   "bin": {
     "prettierd": "./bin/prettierd"
@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/fsouza/prettierd",
   "devDependencies": {
-    "@types/node": "^20.6.3",
+    "@types/node": "^20.12.7",
     "@types/prettier": "^3.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
-    "core_d": "^6.0.0",
-    "prettier": "^3.0.3"
+    "core_d": "^6.1.0",
+    "prettier": "^3.2.5"
   },
   "files": [
     "bin",
@@ -39,7 +39,7 @@
     "README.md"
   ],
   "optionalDependencies": {
-    "@babel/parser": "^7.22.16",
-    "@typescript-eslint/typescript-estree": "^6.7.2"
+    "@babel/parser": "^7.24.4",
+    "@typescript-eslint/typescript-estree": "^7.6.0"
   }
 }

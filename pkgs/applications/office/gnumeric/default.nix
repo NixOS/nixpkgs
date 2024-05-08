@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
-, goffice, gnome, wrapGAppsHook, gtk3, bison, python3Packages
+, goffice, gnome, wrapGAppsHook3, gtk3, bison, python3Packages
 , itstool
 }:
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-component" ];
 
-  nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook3 ];
 
   # ToDo: optional libgda, introspection?
   buildInputs = [

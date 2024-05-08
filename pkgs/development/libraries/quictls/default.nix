@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quictls";
-  version = "3.1.4-quic1";
+  version = "3.1.5-quic1";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "openssl-${finalAttrs.version}";
-    hash = "sha256-WOWoY6rmAAUvuWWXPTWsllUkew5ZIULjL1CEg/RRPsE=";
+    rev = "cb6841b741544bfd8868c1641ce96a934985509e";
+    hash = "sha256-oR46jefarUGmBYjjpEvtKFzIOgSXSy58cLdX+P5ocA8=";
   };
 
   patches = [

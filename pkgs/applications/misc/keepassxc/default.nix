@@ -20,7 +20,7 @@
 , qtsvg
 , qtx11extras
 , readline
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , zlib
 
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
   ]
-  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook;
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
   preFixup = ''

@@ -7,7 +7,7 @@
 , itstool
 , libtool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , yelp-tools
 , clutter-gtk
 , gst_all_1
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     itstool
     libtool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 

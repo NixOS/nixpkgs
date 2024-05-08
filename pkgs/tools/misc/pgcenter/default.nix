@@ -28,7 +28,7 @@ buildGoModule rec {
     changelog = "https://github.com/lesovsky/pgcenter/raw/v${version}/doc/Changelog";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "pgcenter";
   };
 }

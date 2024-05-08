@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -43,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "45.0";
+  version = "46.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JC2gJZMpPUVuokEIpFk0cwoeMW2NxbGNnfDoZNt7pZY=";
+    hash = "sha256-lhaWbVIqLIUCizPAm605cudp6fkK91VNXnGDfb3HiHE=";
   };
 
   patches = [
@@ -64,12 +63,6 @@ stdenv.mkDerivation rec {
     #
     #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
     ./fix-finding-test-typelibs.patch
-
-    (fetchpatch {
-      name = "redefinition-of-glib_autoptr_clear_GtkStackPage.patch";
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/7aaaecefc2ea8a37eaeae8b4d726d119d4eb8fa3.patch";
-      hash = "sha256-sYLqhwCd9GOkUMUZAO2trAGKC3013jgivHrNC4atdn0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -176,7 +169,7 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = "https://wiki.gnome.org/Apps/Builder";
+    homepage = "https://apps.gnome.org/Builder/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

@@ -7,8 +7,7 @@
 , jsonschema
 , pytest-asyncio
 , pytest-httpbin
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , pythonOlder
 , requests
 , xmltodict
@@ -43,7 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-httpbin
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

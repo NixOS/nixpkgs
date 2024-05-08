@@ -1,9 +1,8 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , unittestCheckHook
-, cython
+, cython_0
 , setuptools
 , wheel
 , numpy
@@ -32,7 +31,7 @@ buildPythonPackage rec {
   unittestFlagsArray = [ "-s" "test" "-p" "'*.py'" "-v" ];
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
     wheel
   ];

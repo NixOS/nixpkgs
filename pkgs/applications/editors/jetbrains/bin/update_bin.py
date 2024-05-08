@@ -68,7 +68,11 @@ def update_product(name, product):
         try:
             build = latest_build(channel)
             new_version = build["@version"]
-            new_build_number = build["@fullNumber"]
+            new_build_number = ""
+            if "@fullNumber" not in build:
+                new_build_number = build["@number"]
+            else:
+                new_build_number = build["@fullNumber"]
             if "EAP" not in channel["@name"]:
                 version_or_build_number = new_version
             else:

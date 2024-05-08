@@ -1,11 +1,12 @@
 { lib, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
-  pname = "backports.shutil_which";
+  pname = "backports-shutil-which";
   version = "3.5.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "backports.shutil_which";
+    inherit version;
     sha256 = "fe39f567cbe4fad89e8ac4dbeb23f87ef80f7fe8e829669d0221ecdb0437c133";
   };
 

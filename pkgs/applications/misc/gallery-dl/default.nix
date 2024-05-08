@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, requests, yt-dlp, pytestCheckHook }:
+{ lib, buildPythonApplication, fetchPypi, fetchpatch, requests, yt-dlp, pytestCheckHook }:
 
 buildPythonApplication rec {
   pname = "gallery-dl";
@@ -10,6 +10,14 @@ buildPythonApplication rec {
     pname = "gallery_dl";
     sha256 = "sha256-PgbfppyJCpgFupBQng8MUPihbDmit4C+xWnSzCJyu5k=";
   };
+
+  patches = [
+    # catch general Exceptions. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/mikf/gallery-dl/commit/5227bb6b1d62ecef5b281592b0d001e7f9c101e3.patch";
+      hash = "sha256-rVsd764siP/07XBPVDnpxMm/4kLiH3fp9+NtpHHH23U=";
+    })
+  ];
 
   propagatedBuildInputs = [
     requests
@@ -39,6 +47,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/mikf/gallery-dl/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl2Only;
     mainProgram = "gallery-dl";
-    maintainers = with maintainers; [ dawidsowa marsam ];
+    maintainers = with maintainers; [ dawidsowa ];
   };
 }

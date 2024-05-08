@@ -62,7 +62,7 @@ buildPythonPackage rec {
     packaging
     passlib
     pyyaml
-    resolvelib # This library is a PITA, since ansible requires a very old version of it
+    resolvelib
     # optional dependencies
     junit-xml
     lxml

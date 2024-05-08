@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , ibus
 }:
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

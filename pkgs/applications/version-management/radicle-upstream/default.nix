@@ -1,9 +1,8 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, zlib, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, autoPatchelfHook, zlib, fetchurl, undmg, libgcc }:
 
 let
   pname = "radicle-upstream";
   version = "0.3.0";
-  name = "${pname}-${version}";
 
   srcs = {
     x86_64-linux = fetchurl {
@@ -17,7 +16,7 @@ let
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
-  contents = appimageTools.extract { inherit name src; };
+  contents = appimageTools.extract { inherit pname version src; };
 
   git-remote-rad = stdenv.mkDerivation rec {
     pname = "git-remote-rad";
@@ -25,11 +24,11 @@ let
     src = contents;
 
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ zlib ];
+    buildInputs = [ libgcc zlib ];
 
     installPhase = ''
       mkdir -p $out/bin/
-      cp ${contents}/resources/git-remote-rad $out/bin/git-remote-rad
+      install -Dm755 ${contents}/resources/git-remote-rad $out/bin/git-remote-rad
     '';
   };
 
@@ -37,11 +36,9 @@ let
   # v0.1.0) uses unstable rust features, making a from source build impossible at
   # this time. See this PR for discussion: https://github.com/NixOS/nixpkgs/pull/105674
   linux = appimageTools.wrapType2 {
-    inherit name src meta;
+    inherit pname version src meta;
 
     extraInstallCommands = ''
-      mv $out/bin/${name} $out/bin/${pname}
-
       # this automatically adds the git-remote-rad binary to the users `PATH` so
       # they don't need to mess around with shell profiles...
       ln -s ${git-remote-rad}/bin/git-remote-rad $out/bin/git-remote-rad

@@ -5,7 +5,7 @@
 , src
 , meta
 , makeShellWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -49,7 +49,7 @@ let
 in stdenv.mkDerivation {
   inherit pname version src meta;
 
-  nativeBuildInputs = [ makeShellWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeShellWrapper wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   dontConfigure = true;

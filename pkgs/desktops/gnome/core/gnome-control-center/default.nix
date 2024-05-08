@@ -7,13 +7,14 @@
 , colord
 , colord-gtk4
 , cups
+, dbus
 , docbook-xsl-nons
 , fontconfig
 , gdk-pixbuf
 , gettext
 , glib
 , glib-networking
-, gcr
+, gcr_4
 , glibc
 , gnome-bluetooth
 , gnome-color-manager
@@ -31,12 +32,15 @@
 , libgudev
 , libadwaita
 , libkrb5
+, libjxl
 , libpulseaudio
 , libpwquality
 , librsvg
 , webp-pixbuf-loader
 , libsecret
+, libsoup_3
 , libwacom
+, libXi
 , libxml2
 , libxslt
 , meson
@@ -68,11 +72,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "45.3";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-selJxOhsBiTsam7Q3wnJ+uKyKYPB3KYO2GrsjvCyQAQ=";
+    hash = "sha256-gXkkIwGd7aHSoHTB7Pan5u8xcsCcvm9NeZWktd6igxI=";
   };
 
   patches = [
@@ -101,12 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     colord
     colord-gtk4
-    libepoxy
+    cups
     fontconfig
     gdk-pixbuf
     glib
     glib-networking
-    gcr
+    gcr_4
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
@@ -118,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsound
     gtk4
     ibus
+    libepoxy
     libgtop
     libgudev
     libadwaita
@@ -127,7 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     libpwquality
     librsvg
     libsecret
+    libsoup_3
     libwacom
+    libXi
     libxml2
     modemmanager
     mutter # schemas for the keybindings
@@ -145,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   nativeCheckInputs = [
+    dbus
     python3.pkgs.python-dbusmock
     setxkbmap
     xvfb-run
@@ -173,10 +181,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];

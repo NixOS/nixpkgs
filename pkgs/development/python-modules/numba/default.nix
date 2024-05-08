@@ -20,7 +20,7 @@
 
 # CUDA-only dependencies:
 , addDriverRunpath
-, autoAddDriverRunpath ? cudaPackages.autoAddDriverRunpathHook or cudaPackages.autoAddOpenGLRunpathHook
+, autoAddDriverRunpath
 , cudaPackages
 
 # CUDA flags:
@@ -139,6 +139,5 @@ in buildPythonPackage rec {
     homepage = "https://numba.pydata.org/";
     license = licenses.bsd2;
     mainProgram = "numba";
-    maintainers = with maintainers; [ fridh ];
   };
 }

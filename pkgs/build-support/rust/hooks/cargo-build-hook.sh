@@ -25,7 +25,14 @@ cargoBuildHook() {
     fi
 
     if [ -n "${cargoBuildFeatures-}" ]; then
-        cargoBuildFeaturesFlag="--features=${cargoBuildFeatures// /,}"
+        if [ -n "$__structuredAttrs" ]; then
+            OLDIFS="$IFS"
+            IFS=','; cargoBuildFeaturesFlag="--features=${cargoBuildFeatures[*]}"
+            IFS="$OLDIFS"
+            unset OLDIFS
+        else
+            cargoBuildFeaturesFlag="--features=${cargoBuildFeatures// /,}"
+        fi
     fi
 
     (

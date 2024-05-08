@@ -52,6 +52,5 @@ buildPythonPackage rec {
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fridh ];
   };
 }

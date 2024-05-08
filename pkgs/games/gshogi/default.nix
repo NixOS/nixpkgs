@@ -3,7 +3,7 @@
 , gobject-introspection
 , gtk3
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3

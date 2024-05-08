@@ -2,6 +2,7 @@
 , meson
 , ninja
 , fetchurl
+, desktop-file-utils
 , gdk-pixbuf
 , gettext
 , glib
@@ -9,26 +10,29 @@
 , gnome-desktop
 , gobject-introspection
 , gsettings-desktop-schemas
-, gtk3
+, gtk4
 , itstool
-, libhandy
+, libadwaita
+, libgudev
 , libnotify
 , libxml2
 , pkg-config
 , python3Packages
-, wrapGAppsHook }:
+, wrapGAppsHook4
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
-  version = "45.1";
+  version = "46.1";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lf+n842bHf1eTOvvt1JBn+ohzUBwITla3J8RKFRBbU8=";
+    hash = "sha256-LxkqcIX71oQ+z4JXFtnaIeyScgKRSeo18+FZ4Kwwm4A=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     gettext
     gobject-introspection
     itstool
@@ -36,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -49,8 +53,9 @@ python3Packages.buildPythonApplication rec {
     gnome.gnome-shell-extensions
     gnome.mutter
     gsettings-desktop-schemas
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    libgudev
     libnotify
   ];
 
@@ -80,7 +85,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tweaks";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-tweaks";
     description = "A tool to customize advanced GNOME 3 options";
     mainProgram = "gnome-tweaks";
     maintainers = teams.gnome.members;

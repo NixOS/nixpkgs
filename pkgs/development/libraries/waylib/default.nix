@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wayland-scanner
@@ -26,6 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-3IdrChuXQyQGhJ/7kTqmkV0PyuSNP53Y0Po01Fc9Qi0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-on-qt-6_7.patch";
+      url = "https://github.com/vioken/waylib/commit/09875ebedb074089ec57e71cbc8d8011f555be70.patch";
+      hash = "sha256-ulXlLxn7TOlXSl4N5mjXCy3PJhxVeyDwbwKeV9J/FSI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace examples/tinywl/OutputDelegate.qml \

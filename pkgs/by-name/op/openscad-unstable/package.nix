@@ -34,7 +34,7 @@
 , tbb_2021_11
 , wayland
 , wayland-protocols
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 let
@@ -97,7 +97,7 @@ clangStdenv.mkDerivation rec {
     flex
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
-    wrapGAppsHook
+    wrapGAppsHook3
     ninja
     pkg-config
   ];

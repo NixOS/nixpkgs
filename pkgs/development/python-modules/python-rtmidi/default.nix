@@ -7,7 +7,7 @@
 , CoreMIDI
 , CoreServices
 , Foundation
-, cython_3
+, cython
 , fetchPypi
 , flake8
 , libjack2
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     meson-python
     ninja
     pkg-config

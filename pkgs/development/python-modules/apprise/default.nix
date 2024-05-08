@@ -15,12 +15,13 @@
 , pyyaml
 , requests
 , requests-oauthlib
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
   version = "1.7.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -33,6 +34,11 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
+  build-system = [
+    babel
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     click
     cryptography
@@ -43,7 +49,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    babel
     gntp
     paho-mqtt
     pytest-mock
@@ -74,7 +79,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     mainProgram = "apprise";
   };
 }

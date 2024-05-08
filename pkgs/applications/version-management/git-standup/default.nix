@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "git-standup";
   };

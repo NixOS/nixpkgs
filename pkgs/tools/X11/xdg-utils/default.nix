@@ -175,11 +175,14 @@ let
         "xscreensaver-command"      # Xscreensaver
         "xset"                      # generic-ish X
       ];
-      fix."$lockfile_command" = [ "lockfile" ];
       keep = {
         "$MV" = true;
         "$XPROP" = true;
+        "$lockfile_command" = true;
       };
+      execer = [
+        "cannot:${perl}/bin/perl"
+      ];
       prologue = "${writeText "xdg-screensaver-prologue" ''
         export PERL5LIB=${with perlPackages; makePerlPath [ NetDBus XMLTwig XMLParser X11Protocol ]}
         export PATH=$PATH:${coreutils}/bin
@@ -269,7 +272,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2 else licenses.mit;
+    license = if mimiSupport then licenses.gpl2Only else licenses.mit;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };

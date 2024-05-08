@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, cython_3
+, cython
 , setuptools
 , setuptools-scm
 , pytestCheckHook
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
     setuptools-scm
   ];

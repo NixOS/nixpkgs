@@ -117,6 +117,7 @@ let
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
+      ssprove = callPackage ../development/coq-modules/ssprove {};
       stdpp = callPackage ../development/coq-modules/stdpp { };
       StructTact = callPackage ../development/coq-modules/StructTact {};
       tlc = callPackage ../development/coq-modules/tlc {};
@@ -135,7 +136,7 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version = with lib.versions; lib.switch self.coq.version [
-              { case = range "8.15" "8.17"; out = "3.13.1"; }
+              { case = range "8.15" "8.19"; out = "3.13.1"; }
               { case = isEq "8.14"; out = "3.11"; }
             ] null;
           };
@@ -214,7 +215,7 @@ in rec {
   coqPackages_8_18 = mkCoqPackages coq_8_18 // { __attrsFailEvaluation = true; };
   coqPackages_8_19 = mkCoqPackages coq_8_19 // { __attrsFailEvaluation = true; };
   coqPackages =
-    let cp = recurseIntoAttrs coqPackages_8_18;
+    let cp = recurseIntoAttrs coqPackages_8_19;
     in cp // { coqPackages = cp.coqPackages // { __attrsFailEvaluation = true; }; } // { __recurseIntoDerivationForReleaseJobs = true; };
   coq = coqPackages.coq;
 

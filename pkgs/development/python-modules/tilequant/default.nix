@@ -51,7 +51,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/tilequant";
     changelog = "https://github.com/SkyTemple/tilequant/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
     mainProgram = "tilequant";
   };
 }

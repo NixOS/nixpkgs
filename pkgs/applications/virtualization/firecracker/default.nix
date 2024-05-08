@@ -54,6 +54,6 @@ stdenv.mkDerivation {
     mainProgram = "firecracker";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice endocrimes qjoly ];
+    maintainers = with maintainers; [ thoughtpolice qjoly ];
   };
 }

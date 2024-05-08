@@ -92,7 +92,7 @@ let
 
   test-firmware =
     let
-      version = "unstable-2022-04-02";
+      version = "0-unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
@@ -120,7 +120,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.16";
+  version = "1.9.19";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-mM8HSSQD5znjpl9q/f+u0RzZEkFA1tnh+BPB2qdcWvI=";
+    hash = "sha256-PQwUBOsKejXpS3G3VSJgatCltGy+wejPXCdEsDw87jo=";
   };
 
   patches = [
@@ -228,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_msr=disabled"
   ];
 
-  # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
+  # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
 
   doCheck = true;

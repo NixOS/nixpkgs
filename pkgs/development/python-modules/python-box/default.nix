@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, cython_3
+, cython
 , fetchFromGitHub
 , msgpack
 , poetry-core
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
   ];
 

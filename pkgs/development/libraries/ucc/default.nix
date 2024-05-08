@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ucc";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     rev = "v${version}";
-    sha256 = "sha256-7Mo9zU0sogGyDdWIfTgUPoR5Z8D722asC2y7sHnKbzs=";
+    sha256 = "sha256-xcJLYktkxNK2ewWRgm8zH/dMaIoI+9JexuswXi7MpAU=";
   };
 
   outputs = [ "out" "dev" ];

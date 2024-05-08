@@ -4,7 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeBinaryWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeBinaryWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeBinaryWrapper wrapGAppsHook3 ];
 
   dontWrapGApps = true;
 

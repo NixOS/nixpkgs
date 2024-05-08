@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.3.5";
+  version = "3.3.6";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JOmcfe7xrKRaxJwj2No3e99HBYbX+ROTjHl5Frc2P9Q=";
+    hash = "sha256-nxpctEG4XoxW6jOAxGdgTEYr6YnhFRR8+5HUQLxRJB0=";
   };
 
   pnpmDeps = stdenvNoCC.mkDerivation {
@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     outputHash = {
       x86_64-linux = "sha256-GlbuAiotBISegpmbTlz9uXc84hwiD5Ei6WCdIVpu2UQ=";
       aarch64-linux = "sha256-MZzuqGhmxbDOCMzBP9jHOPrHk6ENusvyX7iDyaq+lD4=";
-      x86_64-darwin = lib.fakeHash;
-      aarch64-darwin = lib.fakeHash;
+      x86_64-darwin = "sha256-3O/YDZNQ7mTvDF6hRKPekQifOjUBLc4pYYn1WJdtPP4=";
+      aarch64-darwin = "sha256-NwTIUxTmB637Ibr6Zuwu3ah3fFtZqfc9usf0I+CAORU=";
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 

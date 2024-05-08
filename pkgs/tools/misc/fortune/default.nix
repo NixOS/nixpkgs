@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '') ];
 
   postFixup = lib.optionalString (!withOffensive) ''
-    rm -f $out/share/fortunes/men-women*
+    rm $out/share/games/fortunes/men-women*
   '';
 
   meta = with lib; {

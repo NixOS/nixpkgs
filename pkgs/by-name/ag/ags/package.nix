@@ -14,7 +14,7 @@
 , networkmanager
 , upower
 , typescript
-, wrapGAppsHook
+, wrapGAppsHook3
 , linux-pam
 }:
 
@@ -43,7 +43,7 @@ buildNpmPackage rec {
     gjs
     gobject-introspection
     typescript
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   # Most of the build inputs here are basically needed for their typelibs.
