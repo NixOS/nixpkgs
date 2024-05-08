@@ -47,7 +47,7 @@ let
 
         pnpm config set package-manager-strict false
         pnpm config set store-dir $out
-        pnpm install --frozen-lockfile --ignore-script
+        pnpm install --frozen-lockfile --ignore-script --force
 
         rm -rf $out/v3/tmp
         for f in $(find $out -name "*.json"); do
@@ -59,10 +59,7 @@ let
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = {
-        x86_64-linux = "sha256-YL+ZAY3K6ESI2mApWdTQDSY8YTmKotBTV6Xe2Cm2lW8=";
-        aarch64-linux = lib.fakeHash;
-      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      outputHash = "sha256-YL+ZAY3K6ESI2mApWdTQDSY8YTmKotBTV6Xe2Cm2lW8=";
     };
 
     nativeBuildInputs = [

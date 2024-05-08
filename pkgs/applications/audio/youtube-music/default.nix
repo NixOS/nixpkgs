@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       pnpm config set package-manager-strict false
       pnpm config set store-dir $out
-      pnpm install --frozen-lockfile --ignore-script
+      pnpm install --frozen-lockfile --ignore-script --force
 
       rm -rf $out/v3/tmp
       for f in $(find $out -name "*.json"); do
@@ -47,12 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = {
-      x86_64-linux = "sha256-GlbuAiotBISegpmbTlz9uXc84hwiD5Ei6WCdIVpu2UQ=";
-      aarch64-linux = "sha256-MZzuqGhmxbDOCMzBP9jHOPrHk6ENusvyX7iDyaq+lD4=";
-      x86_64-darwin = "sha256-3O/YDZNQ7mTvDF6hRKPekQifOjUBLc4pYYn1WJdtPP4=";
-      aarch64-darwin = "sha256-NwTIUxTmB637Ibr6Zuwu3ah3fFtZqfc9usf0I+CAORU=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    outputHash = "sha256-GlbuAiotBISegpmbTlz9uXc84hwiD5Ei6WCdIVpu2UQ=";
   };
 
   nativeBuildInputs = [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       # This version of the package has different versions of esbuild as a dependency.
       # You can use the command below to get esbuild binaries for a specific platform and calculate hashes for that platforms. (linux, darwin for os, and x86, arm64, ia32 for cpu)
       # cat package.json | jq '.pnpm.supportedArchitectures += { "os": ["linux"], "cpu": ["arm64"] }' | sponge package.json
-      pnpm install --frozen-lockfile --ignore-script
+      pnpm install --frozen-lockfile --ignore-script --force
 
       # Remove timestamp and sort the json files.
       rm -rf $out/v3/tmp
@@ -65,13 +65,7 @@ stdenv.mkDerivation rec {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = {
-      x86_64-linux = "sha256-wXpia1oXiXzGk+zpJzQq1Zee/LgZbGUaB70TGTfpZbQ=";
-      aarch64-linux = "sha256-wmn0AiVpP6WwQcodlzCdj8O16536Sve/nzEGtLqlzlI=";
-      i686-linux = lib.fakeHash;
-      x86_64-darwin = "sha256-bXtfd41doSi9EV+7swlwqUl1N/aAL2fM4CBHStCP+lI=";
-      aarch64-darwin = "sha256-VQg/2daHKSJpdN0KmtxcqExua6yfHaeK+srIJ12eXjA=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    outputHash = "sha256-wXpia1oXiXzGk+zpJzQq1Zee/LgZbGUaB70TGTfpZbQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
