@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pylutron";
-  version = "0.2.12";
+  version = "0.2.13";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UTn4HfyiyQAekIZD4I5lacYb7ySRhW8OUgiOg33JZtQ=";
+    hash = "sha256-s5qprIVPlq495XWKjgIuohDzPV0EfU43zkfQ2DvH04Y=";
   };
 
   nativeBuildInputs = [
