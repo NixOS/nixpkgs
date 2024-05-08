@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
       x86_64-linux = "sha256-wXpia1oXiXzGk+zpJzQq1Zee/LgZbGUaB70TGTfpZbQ=";
       aarch64-linux = "sha256-wmn0AiVpP6WwQcodlzCdj8O16536Sve/nzEGtLqlzlI=";
       i686-linux = lib.fakeHash;
-      x86_64-darwin = lib.fakeHash;
-      aarch64-darwin = lib.fakeHash;
+      x86_64-darwin = "sha256-bXtfd41doSi9EV+7swlwqUl1N/aAL2fM4CBHStCP+lI=";
+      aarch64-darwin = "sha256-VQg/2daHKSJpdN0KmtxcqExua6yfHaeK+srIJ12eXjA=";
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
