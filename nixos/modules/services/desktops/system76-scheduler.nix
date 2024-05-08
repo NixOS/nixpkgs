@@ -95,8 +95,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = config.boot.kernelPackages.system76-scheduler;
-        defaultText = literalExpression "config.boot.kernelPackages.system76-scheduler";
+        default = pkgs.system76-scheduler;
+        defaultText = literalExpression "pkgs.system76-scheduler";
         description = "Which System76-Scheduler package to use.";
       };
 
