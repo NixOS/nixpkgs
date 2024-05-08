@@ -1,13 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, scdoc, util-linux, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  scdoc,
+  util-linux,
+  xorg,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ydotool";
   version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ReimuNotMoe";
     repo = "ydotool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MtanR+cxz6FsbNBngqLE+ITKPZFHmWGsD1mBDk0OVng=";
   };
 
@@ -19,13 +27,20 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ cmake scdoc ];
+  nativeBuildInputs = [
+    cmake
+    scdoc
+  ];
 
-  meta = with lib; {
-    homepage = "https://github.com/ReimuNotMoe/ydotool";
+  meta = {
     description = "Generic Linux command-line automation tool";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ willibutz kraem ];
-    platforms = with platforms; linux;
+    homepage = "https://github.com/ReimuNotMoe/ydotool";
+    license = lib.licenses.agpl3Plus;
+    mainProgram = "ydotool";
+    maintainers = with lib.maintainers; [
+      willibutz
+      kraem
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})
