@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       # This version of the package has different versions of esbuild as a dependency.
       # You can use the command below to get esbuild binaries for a specific platform and calculate hashes for that platforms. (linux, darwin for os, and x86, arm64, ia32 for cpu)
       # cat package.json | jq '.pnpm.supportedArchitectures += { "os": ["linux"], "cpu": ["arm64"] }' | sponge package.json
-      pnpm install --frozen-lockfile --ignore-script
+      pnpm install --frozen-lockfile --ignore-script --config.package-manager-strict=false
 
       # Remove timestamp and sort the json files.
       rm -rf $out/v3/tmp

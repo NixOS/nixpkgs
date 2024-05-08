@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       pnpm config set store-dir $out
       # use --ignore-script and --no-optional to avoid downloading binaries
       # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script
+      pnpm install --frozen-lockfile --no-optional --ignore-script --config.package-manager-strict=false
 
       # Remove timestamp and sort the json files
       rm -rf $out/v3/tmp

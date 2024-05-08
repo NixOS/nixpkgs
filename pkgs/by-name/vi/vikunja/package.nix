@@ -46,7 +46,7 @@ let
         export HOME=$(mktemp -d)
 
         pnpm config set store-dir $out
-        pnpm install --frozen-lockfile --ignore-script
+        pnpm install --frozen-lockfile --ignore-script --config.package-manager-strict=false
 
         rm -rf $out/v3/tmp
         for f in $(find $out -name "*.json"); do

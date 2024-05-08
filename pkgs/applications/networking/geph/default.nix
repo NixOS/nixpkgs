@@ -76,7 +76,7 @@ in
       installPhase = ''
         export HOME=$(mktemp -d)
         pnpm config set store-dir $out
-        pnpm install --ignore-scripts
+        pnpm install --ignore-scripts --config.package-manager-strict=false
 
         # Remove timestamp and sort the json files
         rm -rf $out/v3/tmp
