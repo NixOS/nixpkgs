@@ -6642,6 +6642,8 @@ self: super: with self; {
     inherit (pkgs.config) cudaSupport;
   };
 
+  libgravatar = callPackage ../development/python-modules/libgravatar { };
+
   libiio = (toPythonModule (pkgs.libiio.override {
     pythonSupport = true;
     inherit python;
