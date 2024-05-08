@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, jsonpath-ng
-, lupa
-, poetry-core
-, pybloom-live
-, pyprobables
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  jsonpath-ng,
+  lupa,
+  poetry-core,
+  pybloom-live,
+  pyprobables,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-qiqJO8uZ3vy9TpTHmExlUoQ78avPVqlKn0jgvDsKdP0=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     redis
@@ -46,26 +45,14 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    lua = [
-      lupa
-    ];
-    json = [
-      jsonpath-ng
-    ];
-    bf = [
-      pyprobables
-    ];
-    cf = [
-      pyprobables
-    ];
-    probabilistic = [
-      pyprobables
-    ];
+    lua = [ lupa ];
+    json = [ jsonpath-ng ];
+    bf = [ pyprobables ];
+    cf = [ pyprobables ];
+    probabilistic = [ pyprobables ];
   };
 
-  pythonImportsCheck = [
-    "fakeredis"
-  ];
+  pythonImportsCheck = [ "fakeredis" ];
 
   disabledTests = [
     # AssertionError
