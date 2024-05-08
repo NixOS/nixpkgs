@@ -17,6 +17,12 @@ buildGoModule rec {
 
   tags = [ "sqlite" ];
 
+  # Pass versioning information via ldflags
+  ldflags = [
+    "-X github.com/ory/kratos/driver/config.Version=${version}"
+    "-X github.com/ory/kratos/driver/config.Commit=f47675b82012e0ff74b05b9b7e713b3aa2fdda54"
+  ];
+
   doCheck = false;
 
   preBuild = ''
