@@ -3034,6 +3034,8 @@ self: super: with self; {
 
   dissect = callPackage ../development/python-modules/dissect { };
 
+  dissect-archive = callPackage ../development/python-modules/dissect-archive { };
+
   dissect-btrfs = callPackage ../development/python-modules/dissect-btrfs { };
 
   dissect-cim = callPackage ../development/python-modules/dissect-cim { };
@@ -5526,6 +5528,8 @@ self: super: with self; {
   httpx-socks = callPackage ../development/python-modules/httpx-socks { };
 
   httpx-sse = callPackage ../development/python-modules/httpx-sse { };
+
+  httpx-ws = callPackage ../development/python-modules/httpx-ws { };
 
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
@@ -10312,6 +10316,8 @@ self: super: with self; {
 
   pretend = callPackage ../development/python-modules/pretend { };
 
+  pretty-errors = callPackage ../development/python-modules/pretty-errors { };
+
   prettytable = callPackage ../development/python-modules/prettytable { };
 
   primecountpy = callPackage ../development/python-modules/primecountpy { };
@@ -14422,6 +14428,8 @@ self: super: with self; {
   sqlbag = callPackage ../development/python-modules/sqlbag { };
 
   sqlglot = callPackage ../development/python-modules/sqlglot { };
+
+  sqlite-anyio = callPackage ../development/python-modules/sqlite-anyio { };
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 

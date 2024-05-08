@@ -25311,36 +25311,6 @@ with pkgs;
     texLive = null;
   };
 
-  ## DEPRECATED, will be removed in a future release
-
-  clwrapperFunction = callPackage ../development/lisp-modules-obsolete/clwrapper;
-
-  wrapLisp_old = lisp: clwrapperFunction { inherit lisp; };
-
-  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/lisp-packages.nix {
-    inherit clwrapper;
-  };
-
-  lispPackages = quicklispPackages //
-    (lispPackagesFor (wrapLisp_old sbcl)) // { __attrsFailEvaluation = true; };
-
-  quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/quicklisp-to-nix.nix {
-    inherit clwrapper;
-  } // { __attrsFailEvaluation = true; };
-  quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old clisp));
-  quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old sbcl));
-  quicklispPackagesECL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ecl));
-  quicklispPackagesCCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ccl));
-  quicklispPackagesABCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old abcl));
-  quicklispPackagesGCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old gcl));
-  quicklispPackages = quicklispPackagesSBCL;
-
-  # Alternative lisp-modules implementation
-  lispPackages_new = callPackage ../development/lisp-modules-new-obsolete/lisp-packages.nix {}
-  // { __attrsFailEvaluation = true; };
-
-  ## End of DEPRECATED
-
   wrapLisp = callPackage ../development/lisp-modules/nix-cl.nix {};
 
   # Armed Bear Common Lisp
@@ -30661,10 +30631,6 @@ with pkgs;
   exercism = callPackage ../applications/misc/exercism { };
 
   expenses = callPackage ../applications/misc/expenses { };
-
-  furnace = callPackage ../applications/audio/furnace {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   furtherance = callPackage ../applications/misc/furtherance { };
 
@@ -37473,8 +37439,8 @@ with pkgs;
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
-  the-powder-toy = callPackage ../games/the-powder-toy {
-    lua = lua5_1;
+  the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
+    lua = lua5_2;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
