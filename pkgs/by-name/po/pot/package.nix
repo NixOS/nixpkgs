@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     pnpm config set store-dir ${pnpm-deps}
     chmod +w ..
-    pnpm install --offline --frozen-lockfile --no-optional --ignore-script
+    pnpm install --offline --frozen-lockfile --no-optional --ignore-script --config.package-manager-strict=false
     chmod -R +w ../node_modules
     pnpm rebuild
     # Use cargo-tauri from nixpkgs instead of pnpm tauri from npm

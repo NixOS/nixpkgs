@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
+    pnpm install --offline --frozen-lockfile --ignore-script --config.package-manager-strict=false
     patchShebangs node_modules/{*,.*}
   '';
 

@@ -75,7 +75,7 @@ let
       export HOME=$(mktemp -d)
 
       pnpm config set store-dir ${finalAttrs.pnpmDeps}
-      pnpm install --offline --frozen-lockfile --ignore-script
+      pnpm install --offline --frozen-lockfile --ignore-script --config.package-manager-strict=false
       patchShebangs node_modules/{*,.*}
     '';
 

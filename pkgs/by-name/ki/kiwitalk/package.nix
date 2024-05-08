@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export HOME=$(mktemp -d)
     pnpm config set store-dir ${pnpm-deps}
-    pnpm install --offline --frozen-lockfile --ignore-script
+    pnpm install --offline --frozen-lockfile --ignore-script --config.package-manager-strict=false
     pnpm rebuild
     cargo tauri build -b deb
   '';

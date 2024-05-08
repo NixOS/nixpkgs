@@ -136,7 +136,7 @@ in
         cd gephgui
         export HOME=$(mktemp -d)
         pnpm config set store-dir ${pnpm-deps}
-        pnpm install --ignore-scripts --offline
+        pnpm install --ignore-scripts --offline --config.package-manager-strict=false
         chmod -R +w node_modules
         pnpm rebuild
         pnpm build
