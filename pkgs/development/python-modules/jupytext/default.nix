@@ -14,33 +14,34 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
-, toml
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.16.1";
+  version = "1.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aMe2hoXocOgOYP2oKG+9Ymnpx03B30MW32/kbqvJTJk=";
+    hash = "sha256-hifdm+y769ecxKTtRyfYnXjmBrS0ZOq3I1ezsCkCOhQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     markdown-it-py
     mdit-py-plugins
     nbformat
     packaging
     pyyaml
-    toml
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   nativeCheckInputs = [
