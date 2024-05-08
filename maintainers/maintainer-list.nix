@@ -1635,6 +1635,12 @@
     githubId = 62168569;
     name = "arjix";
   };
+  ArkieSoft = {
+    email = "wyatt@arkannon.com";
+    github = "ArkieSoft";
+    githubId = 140302424;
+    name = "Arkannon";
+  };
   arkivm = {
     email = "vikram186@gmail.com";
     github = "arkivm";
