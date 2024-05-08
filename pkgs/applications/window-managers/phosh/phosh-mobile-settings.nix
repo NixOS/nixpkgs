@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, nixosTests
 , directoryListingUpdater
 , meson
 , ninja
@@ -59,7 +60,10 @@ stdenv.mkDerivation rec {
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
   '';
 
-  passthru.updateScript = directoryListingUpdater { };
+  passthru = {
+    tests.phosh = nixosTests.phosh;
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "A settings app for mobile specific things";

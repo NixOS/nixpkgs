@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gnome, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gnome, gtk3, wrapGAppsHook3
 , librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja vala pkg-config gettext itstool python3
-    libxml2 wrapGAppsHook desktop-file-utils
+    libxml2 wrapGAppsHook3 desktop-file-utils
   ];
   buildInputs = [ gtk3 librsvg gnome.adwaita-icon-theme libgnome-games-support libgee ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Mines";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-mines";
     description = "Clear hidden mines from a minefield";
     mainProgram = "gnome-mines";
     maintainers = teams.gnome.members;

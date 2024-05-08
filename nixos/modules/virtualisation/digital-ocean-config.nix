@@ -41,7 +41,7 @@ with lib;
         kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
         initrd.kernelModules = [ "virtio_scsi" ];
         kernelModules = [ "virtio_pci" "virtio_net" ];
-        loader.grub.devices = lib.mkDefault ["/dev/vda"];
+        loader.grub.devices = ["/dev/vda"];
       };
       services.openssh = {
         enable = mkDefault true;

@@ -52,7 +52,7 @@
 , unittestCheckHook
 }:
 let
-  version = "7.0.0";
+  version = "7.1.0";
   api = [ aiohttp fastapi uvicorn ];
   # cloud = [ apache-libcloud ];
   console = [ rich ];
@@ -105,7 +105,7 @@ buildPythonPackage {
     owner = "neuml";
     repo = "txtai";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dYAzbdGEu9gAUzptuSfej6T5LPyTneRWigdAMlGgeqM=";
+    hash = "sha256-L+L2jRkCQKOgd1k3N4mft0Kt6kvCN81lgSQUjoon5rk=";
   };
 
   nativeBuildInputs = [

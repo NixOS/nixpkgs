@@ -8,7 +8,7 @@
 , gtk3
 , gdk-pixbuf
 , xapp
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
 , polkit
 , glib
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     polkit # for its gettext
   ];

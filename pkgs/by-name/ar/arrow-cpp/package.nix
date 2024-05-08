@@ -64,26 +64,26 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "ad82a736c170e97b7c8c035ebd8a801c17eec170";
-    hash = "sha256-wN0dam0ZXOAJ+D8bGDMhsdaV3llI9LsiCXwqW9mR3gQ=";
+    rev = "25d16511e8d42c2744a1d94d90169e3a36e92631";
+    hash = "sha256-fXeWM/8jBfJY7KL6PVfRbzB8i4sp6PHsnMSHCX5kzfI=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "d69d979223e883faef9dc6fe3cf573087243c28a";
-    hash = "sha256-CUckfNjfDW05crWigzMP5b9UynviXKGZUlIr754OoGU=";
+    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
+    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "15.0.0";
+  version = "16.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${finalAttrs.version}/apache-arrow-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Ad0/cOhdm1uTPsksDbik71BKUQX3jS2GIuhCeftFwl0=";
+    hash = "sha256-n0BRrpRzyXmR2a+AHi+UrjRVBncZyn+QuBN/nppwC40=";
   };
 
   sourceRoot = "apache-arrow-${finalAttrs.version}/cpp";
@@ -116,8 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "v0.27.0";
-    hash = "sha256-wptEAXembah04pzqAz6UHeUxp+jMf6Lh/IdyuIhy/a8=";
+    rev = "v0.44.0";
+    hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
   };
 
   nativeBuildInputs = [

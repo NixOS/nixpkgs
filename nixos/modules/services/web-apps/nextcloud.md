@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud28` which is also the latest
+The current default by NixOS is `nextcloud29` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -183,6 +183,27 @@ This can be configured with the [](#opt-services.nextcloud.phpExtraExtensions) s
 Alternatively, extra apps can also be declared with the [](#opt-services.nextcloud.extraApps) setting.
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
 that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
+
+## Known warnings {#module-services-nextcloud-known-warnings}
+
+### Failed to get an iterator for log entries: Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+
+This is because
+
+* our module writes logs into the journal (`journalctl -t Nextcloud`)
+* the Logreader application that allows reading logs in the admin panel is enabled
+  by default and requires logs written to a file.
+
+The logreader application doesn't work, as it was the case before. The only change is that
+it complains loudly now. So nothing actionable here by default. Alternatively you can
+
+* disable the logreader application to shut up the "error".
+
+  We can't really do that by default since whether apps are enabled/disabled is part
+  of the application's state and tracked inside the database.
+
+* set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
+  from the admin panel.
 
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 

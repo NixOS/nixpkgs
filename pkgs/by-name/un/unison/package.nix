@@ -4,7 +4,7 @@
 , ocamlPackages
 , copyDesktopItems
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , enableX11 ? !stdenv.isDarwin
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook ];
+    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook3 ];
   buildInputs = lib.optionals enableX11 [ gsettings-desktop-schemas ocamlPackages.lablgtk3 ];
 
   makeFlags = [ "PREFIX=$(out)" ]

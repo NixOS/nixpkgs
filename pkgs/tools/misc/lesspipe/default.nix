@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/wofr06/lesspipe";
     platforms = platforms.all;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.martijnvermaat ];
   };
 }

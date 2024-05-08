@@ -16,10 +16,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # https://github.com/pytoolz/toolz/issues/577
+    "test_inspect_wrapped_property"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

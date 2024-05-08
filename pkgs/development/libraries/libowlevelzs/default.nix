@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Zscheile Lowlevel (utility) library";
     homepage = "https://github.com/fogti/libowlevelzs";
     license = licenses.mit;
-    maintainers = [ maintainers.fogti ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

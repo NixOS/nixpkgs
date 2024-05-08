@@ -4,7 +4,7 @@
 , pythonOlder
 , pytestCheckHook
   # build_requires
-, cython_3
+, cython
   # install_requires
 , certifi
 , importlib-metadata
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-tdf9aYKAFpRyaqGGNxXs4bzmY6mdhKZ5toFBJRmD2VY=";
   };
 
-  nativeBuildInputs = [ cython_3 ];
+  nativeBuildInputs = [ cython ];
   setupPyBuildFlags = [ "--inplace" ];
   enableParallelBuilding = true;
 

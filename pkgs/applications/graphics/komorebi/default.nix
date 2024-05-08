@@ -11,7 +11,7 @@
 , clutter-gtk
 , clutter-gst
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , testers
 , komorebi
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

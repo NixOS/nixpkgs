@@ -85,10 +85,16 @@ python.pkgs.buildPythonApplication rec {
   ]);
 
   pythonRelaxDeps = [
+    "celery"
+    "css-inline"
     "cssutils"
     "django-csp"
     "django-filter"
+    "django-hierarkey"
+    "markdown"
+    "pillow"
     "python-dateutil"
+    "reportlab"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

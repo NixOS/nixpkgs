@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    hash = "sha256-KoeehD0HNG6Uafv6ICf8d4gjggJ7+/8RBJCpttf7AGk=";
+    hash = "sha256-EwhpsfRmBLJnPiH6hXQXgG9jSNoC2oqq5lZ6t038VpI=";
   };
 
   postPatch = ''

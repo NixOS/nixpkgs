@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
 
 # build-system
 , hatchling
@@ -18,7 +17,6 @@
 , httpx
 
 # tests
-, pytest
 , pytestCheckHook
 , pythonOlder
 , trio
@@ -29,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.37.1";
+  version = "0.37.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +36,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "starlette";
     rev = "refs/tags/${version}";
-    hash = "sha256-SJdBss1WKC30oulVTYUwUAJ8WM0KF5xbn/gvV97WM2g=";
+    hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
 
   nativeBuildInputs = [
@@ -60,18 +58,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    (pytestCheckHook.override {
-      # pytest 8 changes warning message
-      # see https://github.com/encode/starlette/commit/8da52c2243b8855426c40c16ae24b27734824078
-      pytest = pytest.overridePythonAttrs (old: rec {
-        version = "8.1.0";
-        src = fetchPypi {
-          pname = "pytest";
-          inherit version;
-          hash = "sha256-+PoEq4+Y0YUROuYOptecIvgUOxS8HK7O1EoKuESSgyM=";
-        };
-      });
-    })
+    pytestCheckHook
     trio
     typing-extensions
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);

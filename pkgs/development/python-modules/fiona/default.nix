@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, cython_3
+, cython
 , gdal
 , oldest-supported-numpy
 , setuptools
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gdal # for gdal-config
     oldest-supported-numpy
     setuptools

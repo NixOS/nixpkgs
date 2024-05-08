@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , python3
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glibcLocales
 , gobject-introspection
 , gettext
@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     pango
     gdk-pixbuf

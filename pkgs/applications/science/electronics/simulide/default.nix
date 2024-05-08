@@ -1,36 +1,33 @@
-{ lib
-, fetchbzr
-, mkDerivation
-, qmake
-, qtserialport
-, qtmultimedia
-, qttools
-, qtscript
+{
+  lib,
+  fetchbzr,
+  mkDerivation,
+  qmake,
+  qtserialport,
+  qtmultimedia,
+  qttools,
+  qtscript,
 }:
 
 let
   generic =
-    { version
-    , release
-    , branch
-    , rev
-    , sha256
-    , extraPostPatch ? ""
-    , extraBuildInputs ? [ ]
-    , iconPath ? "resources/icons/simulide.png"
-    , installFiles ? ''
+    {
+      version,
+      release,
+      rev,
+      src,
+      extraPostPatch ? "",
+      extraBuildInputs ? [ ],
+      iconPath ? "resources/icons/simulide.png",
+      installFiles ? ''
         cp -r data examples $out/share/simulide
         cp simulide $out/bin/simulide
-      ''
+      '',
     }:
     mkDerivation {
       pname = "simulide";
       version = "${version}-${release}";
-
-      src = fetchbzr {
-        url = "https://code.launchpad.net/~arcachofo/simulide/${branch}";
-        inherit rev sha256;
-      };
+      inherit src;
 
       postPatch = ''
         sed -i resources/simulide.desktop \
@@ -51,9 +48,7 @@ let
         cd build_XX
       '';
 
-      nativeBuildInputs = [
-        qmake
-      ];
+      nativeBuildInputs = [ qmake ];
 
       buildInputs = [
         qtserialport
@@ -85,18 +80,25 @@ let
         homepage = "https://simulide.com/";
         license = lib.licenses.gpl3Only;
         mainProgram = "simulide";
-        maintainers = with lib.maintainers; [ carloscraveiro tomasajt ];
+        maintainers = with lib.maintainers; [
+          carloscraveiro
+          tomasajt
+        ];
         platforms = [ "x86_64-linux" ];
       };
     };
 in
 {
-  simulide_0_4_15 = generic {
+  simulide_0_4_15 = generic rec {
     version = "0.4.15";
     release = "SR10";
-    branch = "simulide_0.4.14"; # the branch name does not mach the version for some reason
     rev = "291";
-    sha256 = "sha256-BBoZr/S2pif0Jft5wrem8y00dXl08jq3kFiIUtOr3LM=";
+    src = fetchbzr {
+      # the branch name does not mach the version for some reason
+      url = "https://code.launchpad.net/~arcachofo/simulide/simulide_0.4.14";
+      sha256 = "sha256-BBoZr/S2pif0Jft5wrem8y00dXl08jq3kFiIUtOr3LM=";
+      inherit rev;
+    };
     extraPostPatch = ''
       # GCC 13 needs the <cstdint> header explicitly included
       sed -i src/gpsim/value.h -e '1i #include <cstdint>'
@@ -110,20 +112,26 @@ in
     '';
   };
 
-  simulide_1_0_0 = generic {
+  simulide_1_0_0 = generic rec {
     version = "1.0.0";
     release = "SR2";
-    branch = "1.0.0";
     rev = "1449";
-    sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
+    src = fetchbzr {
+      url = "https://code.launchpad.net/~arcachofo/simulide/1.0.0";
+      sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
+      inherit rev;
+    };
     extraBuildInputs = [ qtscript ];
   };
 
-  simulide_1_1_0 = generic {
+  simulide_1_1_0 = generic rec {
     version = "1.1.0";
     release = "SR0";
-    branch = "1.1.0";
     rev = "1917";
-    sha256 = "sha256-qNBaGWl89Le9uC1VFK+xYhrLzIvOIWjkQbutnrAmZ2M=";
+    src = fetchbzr {
+      url = "https://code.launchpad.net/~arcachofo/simulide/1.1.0";
+      sha256 = "sha256-qNBaGWl89Le9uC1VFK+xYhrLzIvOIWjkQbutnrAmZ2M=";
+      inherit rev;
+    };
   };
 }

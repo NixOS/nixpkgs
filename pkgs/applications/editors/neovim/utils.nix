@@ -218,7 +218,7 @@ let
       ];
     in
 
-    toVimPlugin (runCommand "vimplugin-treesitter-grammar-${name}"
+    toVimPlugin (runCommand "treesitter-grammar-${name}"
       {
         meta = {
           platforms = lib.platforms.all;

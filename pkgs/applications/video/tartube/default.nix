@@ -6,7 +6,7 @@
 , libnotify
 , pango
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , youtube-dl
 , glib
 , ffmpeg
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   strictDeps = false;

@@ -54,7 +54,7 @@
 , libgpg-error
 , libxkbcommon
 , osm-gps-map
-, wrapGAppsHook
+, wrapGAppsHook3
 , rav1e
 , dav1d
 , libgcrypt
@@ -77,7 +77,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "unstable-2024-02-23";
+  version = "0-unstable-2024-02-23";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
@@ -98,7 +98,7 @@ stdenv.mkDerivation {
     pkg-config
     perlPackages.perl
     python3Packages.jsonschema
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -160,7 +160,10 @@ stdenv.mkDerivation {
     )
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    # Tags inherited from Darktable, + a "nightly" 0.0.0 tag that new artefacts get attached to
+    hardcodeZeroVersion = true;
+  };
 
   meta = {
     description = "A darktable fork minus the bloat plus some design vision";

@@ -68,9 +68,6 @@ if stdenv.isDarwin then stdenv.mkDerivation {
       inherit pname version src;
     };
   in ''
-    # Replace version from binary name
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     # Install XDG Desktop file and its icon
     install -Dm444 ${appimageContents}/nosql-workbench.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/nosql-workbench.png -t $out/share/pixmaps

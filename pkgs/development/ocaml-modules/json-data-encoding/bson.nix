@@ -5,8 +5,6 @@ buildDunePackage {
 
   inherit (json-data-encoding) version src doCheck;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     json-data-encoding
     ocplib-endian

@@ -20,7 +20,7 @@
 , libhandy
 , sassc
 , udisks2
-, wrapGAppsHook
+, wrapGAppsHook3
 , libX11
 , libXext
 , libXNVCtrl
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

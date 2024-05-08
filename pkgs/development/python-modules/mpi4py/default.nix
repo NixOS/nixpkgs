@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.1.5";
+  version = "3.1.6";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pwbnbbklUTXC+10e9Uy097DkrZ4zy62n3idiYgXyoVM=";
+    hash = "sha256-yPpiXg+SsILvlVv7UvGfpmkdKSc9fXETXSlaoUPe5ss=";
   };
 
   passthru = {

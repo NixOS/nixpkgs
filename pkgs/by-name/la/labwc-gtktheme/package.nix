@@ -3,13 +3,13 @@
 , gobject-introspection
 , gtk3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "labwc-gtktheme";
-  version = "unstable-2022-07-17";
+  version = "0-unstable-2022-07-17";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

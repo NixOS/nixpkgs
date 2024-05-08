@@ -88,6 +88,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.irde.st/we/irdest";
     platforms = platforms.unix;
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ spacekookie yuka ];
+    maintainers = with maintainers; [ spacekookie ];
   };
 }

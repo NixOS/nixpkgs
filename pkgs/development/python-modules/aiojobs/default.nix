@@ -3,6 +3,7 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -22,6 +23,13 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-LwFXb/SHP6bbqPg1tqYwE03FKHf4Mv1PPOxnPdESH0I=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/aio-libs/aiojobs/commit/1b88049841397b01f88aee7d92174ac5a15217c1.patch";
+      hash = "sha256-b38Ipa29T6bEVsPe04ZO3WCcs6+0fOQDCJM+w8K1bVY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \

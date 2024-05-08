@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , glib
 , gnome
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     gst-plugins-good
     gst-plugins-ugly
     gst-libav
-    wrapGAppsHook
+    wrapGAppsHook3
   ]);
 
   meta = with lib; {

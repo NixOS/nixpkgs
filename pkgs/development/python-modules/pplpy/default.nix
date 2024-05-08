@@ -5,10 +5,13 @@
 , mpfr
 , libmpc
 , ppl
-, cython_3
+, cython
 , cysignals
 , gmpy2
 , sphinx
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -33,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cython_3
+    cython
     cysignals
     gmpy2
   ];
@@ -53,6 +56,8 @@ buildPythonPackage rec {
     mkdir -p "$doc/share/doc"
     mv docs/build/html "$doc/share/doc/pplpy"
   '';
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "A Python wrapper for ppl";

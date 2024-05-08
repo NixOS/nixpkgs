@@ -2,9 +2,9 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , setuptools
 , numpy
 , packaging
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.27.0";
+  version = "0.29.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7rnI8UXyAql8fLMKoSRrWzVw5CnyYVE2o6dJOzSgWxw=";
+    hash = "sha256-oQGb/hlMN8JfwEyWufBvMk2Z1FMSl1lsdIbgZ3ZMdF8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     evaluate
     parameterized
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     transformers
   ];
   preCheck = ''
@@ -74,6 +74,10 @@ buildPythonPackage rec {
 
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # RuntimeError: Dynamo is not supported on Python 3.12+
+    "test_convert_to_fp32"
+    "test_send_to_device_compiles"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"

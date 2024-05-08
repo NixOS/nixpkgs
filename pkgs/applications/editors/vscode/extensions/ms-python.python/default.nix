@@ -1,19 +1,20 @@
-{ lib
-, vscode-utils
-, icu
-, python3
+{
+  lib,
+  vscode-utils,
+  icu,
+  python3,
   # When `true`, the python default setting will be fixed to specified.
   # Use version from `PATH` for default setting otherwise.
   # Defaults to `false` as we expect it to be project specific most of the time.
-, pythonUseFixed ? false
+  pythonUseFixed ? false,
   # For updateScript
-, writeScript
-, bash
-, curl
-, coreutils
-, gnused
-, jq
-, nix
+  writeScript,
+  bash,
+  curl,
+  coreutils,
+  gnused,
+  jq,
+  nix,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension rec {
@@ -33,33 +34,37 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     jedi-language-server
   ];
 
-  postPatch = ''
-    # remove bundled python deps and use libs from nixpkgs
-    rm -r pythonFiles/lib
-    mkdir -p pythonFiles/lib/python/
-    ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy pythonFiles/lib/python/
-    buildPythonPath "$propagatedBuildInputs"
-    for i in pythonFiles/*.py; do
-      patchPythonScript "$i"
-    done
-  '' + lib.optionalString pythonUseFixed ''
-    # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
-    substituteInPlace "./package.json" \
-      --replace "\"default\": \"python\"" "\"default\": \"${python3.interpreter}\""
-  '';
+  postPatch =
+    ''
+      # remove bundled python deps and use libs from nixpkgs
+      rm -r pythonFiles/lib
+      mkdir -p pythonFiles/lib/python/
+      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy pythonFiles/lib/python/
+      buildPythonPath "$propagatedBuildInputs"
+      for i in pythonFiles/*.py; do
+        patchPythonScript "$i"
+      done
+    ''
+    + lib.optionalString pythonUseFixed ''
+      # Patch `packages.json` so that nix's *python* is used as default value for `python.pythonPath`.
+      substituteInPlace "./package.json" \
+        --replace "\"default\": \"python\"" "\"default\": \"${python3.interpreter}\""
+    '';
 
   passthru.updateScript = writeScript "update" ''
     #! ${bash}/bin/bash
 
     set -eu -o pipefail
 
-    export PATH=${lib.makeBinPath [
-      curl
-      coreutils
-      gnused
-      jq
-      nix
-    ]}
+    export PATH=${
+      lib.makeBinPath [
+        curl
+        coreutils
+        gnused
+        jq
+        nix
+      ]
+    }
 
     api=$(curl -s 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery' \
       -H 'accept: application/json;api-version=3.0-preview.1' \
@@ -82,7 +87,14 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     homepage = "https://github.com/Microsoft/vscode-python";
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = [ lib.maintainers.jraygauthier lib.maintainers.jfchevrette ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    maintainers = [
+      lib.maintainers.jraygauthier
+      lib.maintainers.jfchevrette
+    ];
   };
 }

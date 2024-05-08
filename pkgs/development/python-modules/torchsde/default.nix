@@ -13,7 +13,7 @@
 , trampoline
 
 # tests
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -49,11 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "torchsde" ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
+    pytest7CheckHook
   ];
 
   disabledTests = [

@@ -2,7 +2,7 @@
 , python3
 , fetchFromGitHub
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , killall
 }:
 
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [

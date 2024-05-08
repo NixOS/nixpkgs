@@ -126,7 +126,7 @@ buildPythonPackage rec {
     homepage = "https://www.breezy-vcs.org/";
     changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "brz";
   };
 }

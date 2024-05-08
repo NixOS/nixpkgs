@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "1.4.4";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,24 +19,27 @@ buildPythonPackage rec {
     owner = "Galorhallen";
     repo = "govee-local-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J4SG4n6LIZ/G6pEXAzliV7uTWzqsH7rtFe3Y7BJ2dWE=";
+    hash = "sha256-kmIuo/e3eLJTgmI+2Oq9Y0jov/133jXwgoBayGv33r4=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    (fetchpatch2 {
+      # configure pep517 build-backend
+      url = "https://github.com/Galorhallen/govee-local-api/commit/897a21ae723ff94343bbf4ba1541e3a1d3e03c94.patch";
+      hash = "sha256-/d5jGKGME768Ar+WWWQUByHJPGB31OHShI4oLjcMUIU=";
+    })
+  ];
+
+  build-system = [
     poetry-core
-    poetry-dynamic-versioning
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "govee_local_api"
-  ];
+  pythonImportsCheck = [ "govee_local_api" ];
 
   meta = with lib; {
-    description = "";
+    description = "Library to communicate with Govee local API";
     homepage = "https://github.com/Galorhallen/govee-local-api";
     changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/v${version}";
     license = licenses.asl20;

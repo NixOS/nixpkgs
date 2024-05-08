@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     description = "A web content scanner";
     homepage = "https://dirb.sourceforge.net/";
     maintainers = with lib.maintainers; [ bennofs ];
-    license = with lib.licenses; [ gpl2 ];
+    license = with lib.licenses; [ gpl2Only ];
     platforms = lib.platforms.unix;
   };
 }

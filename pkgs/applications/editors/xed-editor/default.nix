@@ -12,7 +12,7 @@
 , python3
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , intltool
 , itstool
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     itstool
     ninja
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

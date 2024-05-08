@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    hash = "sha256-QVpihKInZK0i/w9mcQ2FO+d5DdRRzXFDbj0lx02ZapU=";
+    hash = "sha256-3e4kna63jPkrq3lMzQacyLV1mSJl6iDiOeiHFW6IAmU=";
   };
 
   outputs = [ "out" "doc" ];
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
     description = "An implementation of the standard Unix documentation system accessed using the man command";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";
   };

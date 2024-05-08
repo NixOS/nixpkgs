@@ -1,6 +1,5 @@
 { lib
 , python3
-, fetchFromGitHub
 , fetchPypi
 , nix-update-script
 , runtimeShell
@@ -8,39 +7,18 @@
 , testers
 , pdm
 }:
-let
-  python = python3.override {
-    # override resolvelib due to
-    # 1. pdm requiring a later version of resolvelib
-    # 2. Ansible being packaged as a library
-    # 3. Ansible being unable to upgrade to a later version of resolvelib
-    # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
-    packageOverrides = self: super: {
-      resolvelib = super.resolvelib.overridePythonAttrs rec {
-        version = "1.0.1";
-        src = fetchFromGitHub {
-          owner = "sarugaku";
-          repo = "resolvelib";
-          rev = "/refs/tags/${version}";
-          hash = "sha256-oxyPn3aFPOyx/2aP7Eg2ThtPbyzrFT1JzWqy6GqNbzM=";
-        };
-      };
-    };
-    self = python;
-  };
-in
 
-with python.pkgs;
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.13.2";
+  version = "2.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4oK/HK8KCD/A+16JrW9518V5/1LHu1juhYfqPVu54Uo=";
+    hash = "sha256-HJzQScEBZjOiPvkuwfx4LaiuB0MULvM/r31Ihy+HSzk=";
   };
 
   nativeBuildInputs = [
@@ -94,10 +72,12 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    installShellCompletion --cmd pdm \
-      --bash <($out/bin/pdm completion bash) \
-      --fish <($out/bin/pdm completion fish) \
-      --zsh <($out/bin/pdm completion zsh)
+    export PDM_LOG_DIR=/tmp/pdm/log
+    $out/bin/pdm completion bash >pdm.bash
+    $out/bin/pdm completion fish >pdm.fish
+    $out/bin/pdm completion zsh >pdm.zsh
+    installShellCompletion pdm.{bash,fish,zsh}
+    unset PDM_LOG_DIR
   '';
 
   nativeCheckInputs = [
@@ -125,6 +105,8 @@ buildPythonApplication rec {
 
     # touches the network
     "test_find_candidates_from_find_links"
+    "test_lock_all_with_excluded_groups"
+    "test_find_interpreters_with_PDM_IGNORE_ACTIVE_VENV"
   ];
 
   __darwinAllowLocalNetworking = true;

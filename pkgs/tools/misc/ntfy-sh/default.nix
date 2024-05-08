@@ -43,7 +43,6 @@ buildGoModule rec {
     python3
     python3Packages.mkdocs-material
     python3Packages.mkdocs-minify-plugin
-    python3Packages.mkdocs-simple-hooks
   ];
 
   postPatch = ''

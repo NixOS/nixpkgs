@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "llama-parse";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_parse";
     inherit version;
-    hash = "sha256-1yOvhNah/JnrQxkV0hhl0gt22KJG26oSTR+WyVamRPc=";
+    hash = "sha256-+gTAlzCxAhVfZQXenPkZmMhtM0WB8PEll8XrR8pduFk=";
   };
 
   build-system = [

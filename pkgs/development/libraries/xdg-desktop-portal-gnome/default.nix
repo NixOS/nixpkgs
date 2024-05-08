@@ -14,17 +14,18 @@
 , xdg-desktop-portal
 , wayland
 , gnome
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gnome";
-  version = "45.1";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "PpyoIQRABfs3vWjr5K0Zb8PQcoNVgUZ6IqSHnax7X90=";
+    hash = "sha256-fo2WI+nZaonAiXYWgnzUQdzygykn048TXHIlUrEXKqE=";
   };
 
   nativeBuildInputs = [
@@ -50,10 +51,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];

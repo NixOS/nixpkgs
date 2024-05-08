@@ -12,7 +12,6 @@
 , pybind11
 , setuptools
 , setuptools-scm
-, wheel
 
 # native libraries
 , ffmpeg-headless
@@ -70,6 +69,9 @@
 # required for headless detection
 , libX11
 , wayland
+
+# Reverse dependency
+, sage
 }:
 
 let
@@ -77,15 +79,15 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.8.3";
+  version = "3.8.4";
   pname = "matplotlib";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e0FiOemuOL5UsCirv5BIr/UFSpq6VBa+8L0X+RYs4WE=";
+    hash = "sha256-iqw5fV6ewViWDjHDgcX/xS3dUr2aR3F+KmlAOBZ9/+o=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -100,7 +102,10 @@ buildPythonPackage rec {
     let
       tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    lib.optionalString enableTk ''
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+    '' + lib.optionalString enableTk ''
       sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
     '' + lib.optionalString (stdenv.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
@@ -110,13 +115,7 @@ buildPythonPackage rec {
     '';
 
   nativeBuildInputs = [
-    certifi
-    numpy
     pkg-config
-    pybind11
-    setuptools
-    setuptools-scm
-    wheel
   ] ++ lib.optionals enableGtk3 [
     gobject-introspection
   ];
@@ -143,7 +142,15 @@ buildPythonPackage rec {
     "strictoverflow"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    certifi
+    numpy
+    pybind11
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     # explicit
     contourpy
     cycler
@@ -178,6 +185,8 @@ buildPythonPackage rec {
       enable_lto = !stdenv.isDarwin;
     };
   };
+
+  passthru.tests = { inherit sage; };
 
   env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 

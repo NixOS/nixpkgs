@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "https://www.chiark.greenend.org.uk/~ian/adns/ftp/adns-${version}.tar.gz"
-      "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz"
       "mirror://gnu/adns/adns-${version}.tar.gz"
     ];
     sha256 = "1pi0xl07pav4zm2jrbrfpv43s1r1q1y12awgak8k7q41m5jp4hpv";

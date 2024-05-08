@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, setuptools
 , buildPythonPackage
 , eth-utils
 , hypothesis
@@ -8,20 +9,17 @@
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "3.0.0";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "pyrlp";
     rev = "v${version}";
-    hash = "sha256-GRCq4FU38e08fREg5fweig5Y60jLT2k3Yj1Jk8OA6XY=";
+    hash = "sha256-cRp+ZOPYs9kcqMKGaiYMOFBY+aPCyFqu+1/5wloLwqU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'setuptools-markdown'" ""
-  '';
+  build-system = [ setuptools];
 
   propagatedBuildInputs = [
     eth-utils

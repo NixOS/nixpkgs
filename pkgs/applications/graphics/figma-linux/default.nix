@@ -4,7 +4,7 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
-, wrapGAppsHook
+, wrapGAppsHook3
 , ...
 }:
 with lib;
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9UfyCqgsg9XAFyZ7V7TogkQou4x+ixFUfjXZ1/qlDmA=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook3 ];
 
   buildInputs = with pkgs;[
     alsa-lib

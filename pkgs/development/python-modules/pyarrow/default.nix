@@ -8,7 +8,7 @@
 , cffi
 , cloudpickle
 , cmake
-, cython
+, cython_0
 , fsspec
 , hypothesis
 , numpy
@@ -34,18 +34,9 @@ buildPythonPackage rec {
 
   sourceRoot = "apache-arrow-${version}/python";
 
-  postPatch = ''
-    substituteInPlace pyproject.toml setup.py \
-      --replace "setuptools_scm < 8.0.0" "setuptools_scm"
-  '' + lib.optionalString (pythonAtLeast "3.12") ''
-    substituteInPlace ./cmake_modules/FindPython3Alt.cmake --replace-fail \
-      "from distutils import sysconfig" \
-      "import sysconfig"
-  '';
-
   nativeBuildInputs = [
     cmake
-    cython
+    cython_0
     pkg-config
     setuptools
     setuptools-scm
@@ -78,8 +69,6 @@ buildPythonPackage rec {
   PYARROW_WITH_HDFS = zero_or_one true;
   PYARROW_WITH_PARQUET = zero_or_one true;
   PYARROW_WITH_PARQUET_ENCRYPTION = zero_or_one true;
-  # Plasma is deprecated since arrow 10.0.0
-  PYARROW_WITH_PLASMA = zero_or_one false;
   PYARROW_WITH_S3 = zero_or_one arrow-cpp.enableS3;
   PYARROW_WITH_GCS = zero_or_one arrow-cpp.enableGcs;
   PYARROW_BUNDLE_ARROW_CPP_HEADERS = zero_or_one false;
@@ -172,7 +161,6 @@ buildPythonPackage rec {
     "feather"
     "flight"
     "fs"
-    "hdfs"
     "json"
     "parquet"
   ];

@@ -1,9 +1,14 @@
 {
   lib,
+  stdenv,
+  anthropic,
   attr,
   buildPythonPackage,
+  fastapi,
   fetchFromGitHub,
   freezegun,
+  httpx,
+  instructor,
   orjson,
   poetry-core,
   pydantic,
@@ -12,11 +17,12 @@
   pythonOlder,
   pythonRelaxDepsHook,
   requests,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.45";
+  version = "0.1.54";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +31,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8A9wqhM8U5Q8o0uMyu+LQKhV+1Nsyg4opJjwylc6kkI=";
+    hash = "sha256-hg1xfqptjeJHxbiGfuGeka7lpClrb9nxP/RSUYr2/0k=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -44,10 +50,16 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    attr
+    anthropic
+    fastapi
     freezegun
+    httpx
+    instructor
     pytest-asyncio
     pytestCheckHook
+    uvicorn
+  ] ++ lib.optionals stdenv.isLinux [
+    attr
   ];
 
   disabledTests = [
@@ -71,6 +83,9 @@ buildPythonPackage rec {
     # due to circular import
     "tests/integration_tests/test_client.py"
     "tests/unit_tests/test_client.py"
+    # Tests require a Langsmith API key
+    "tests/evaluation/test_evaluation.py"
+    "tests/external/test_instructor_evals.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];

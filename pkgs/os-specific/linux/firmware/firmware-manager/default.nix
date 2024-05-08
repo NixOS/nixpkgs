@@ -8,7 +8,7 @@
 , openssl
 , udev
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rustc
     pkg-config
     rustPlatform.cargoSetupHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

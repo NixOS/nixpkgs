@@ -4,7 +4,7 @@
 , fetchpatch
 , pkg-config
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , libgpg-error
 , libassuan
 , libsForQt5
@@ -29,7 +29,7 @@ let
     gnome3 = {
       flag = "gnome3";
       buildInputs = [ gcr ];
-      nativeBuildInputs = [ wrapGAppsHook ];
+      nativeBuildInputs = [ wrapGAppsHook3 ];
     };
     qt = {
       flag = "qt";

@@ -1,122 +1,178 @@
-{
-  cudaVersion,
-  lib,
-  addDriverRunpath,
-}:
 let
-  inherit (lib) attrsets lists strings;
-  # cudaVersionOlder : Version -> Boolean
-  cudaVersionOlder = strings.versionOlder cudaVersion;
-  # cudaVersionAtLeast : Version -> Boolean
-  cudaVersionAtLeast = strings.versionAtLeast cudaVersion;
+  filterAndCreateOverrides =
+    createOverrideAttrs: final: prev:
+    let
+      # It is imperative that we use `final.callPackage` to perform overrides,
+      # so the final package set is available to the override functions.
+      inherit (final) callPackage;
 
-  addBuildInputs =
-    drv: buildInputs:
-    drv.overrideAttrs (prevAttrs: {
-      buildInputs = prevAttrs.buildInputs ++ buildInputs;
-    });
-in
-# NOTE: Filter out attributes that are not present in the previous version of
-# the package set. This is necessary to prevent the appearance of attributes
-# like `cuda_nvcc` in `cudaPackages_10_0, which predates redistributables.
-final: prev:
-attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
-  libcufile = prev.libcufile.overrideAttrs (prevAttrs: {
-    buildInputs = prevAttrs.buildInputs ++ [
-      final.libcublas.lib
-      final.pkgs.numactl
-      final.pkgs.rdma-core
+      # NOTE(@connorbaker): We MUST use `lib` from `prev` because the attribute
+      # names CAN NOT depend on `final`.
+      inherit (prev.lib.attrsets) filterAttrs mapAttrs;
+      inherit (prev.lib.trivial) pipe;
+
+      # NOTE: Filter out attributes that are not present in the previous version of
+      # the package set. This is necessary to prevent the appearance of attributes
+      # like `cuda_nvcc` in `cudaPackages_10_0, which predates redistributables.
+      filterOutNewAttrs = filterAttrs (name: _: prev ? ${name});
+
+      # Apply callPackage to each attribute value, yielding a value to be passed
+      # to overrideAttrs.
+      callPackageThenOverrideAttrs = mapAttrs (
+        name: value: prev.${name}.overrideAttrs (callPackage value { })
+      );
+    in
+    pipe createOverrideAttrs [
+      filterOutNewAttrs
+      callPackageThenOverrideAttrs
     ];
-    # Before 11.7 libcufile depends on itself for some reason.
-    autoPatchelfIgnoreMissingDeps =
-      prevAttrs.autoPatchelfIgnoreMissingDeps
-      ++ lists.optionals (cudaVersionOlder "11.7") [ "libcufile.so.0" ];
-  });
+in
+# Each attribute name is the name of an existing package in the previous version
+# of the package set.
+# The value is a function (to be provided to callPackage), which yields a value
+# to be provided to overrideAttrs. This allows us to override the attributes of
+# a package without losing access to the fixed point of the package set --
+# especially useful given that some packages may depend on each other!
+filterAndCreateOverrides {
+  libcufile =
+    {
+      cudaOlder,
+      lib,
+      libcublas,
+      numactl,
+      rdma-core,
+    }:
+    prevAttrs: {
+      buildInputs = prevAttrs.buildInputs ++ [
+        libcublas.lib
+        numactl
+        rdma-core
+      ];
+      # Before 11.7 libcufile depends on itself for some reason.
+      autoPatchelfIgnoreMissingDeps =
+        prevAttrs.autoPatchelfIgnoreMissingDeps
+        ++ lib.lists.optionals (cudaOlder "11.7") [ "libcufile.so.0" ];
+    };
 
-  libcusolver = addBuildInputs prev.libcusolver (
-    # Always depends on this
-    [ final.libcublas.lib ]
-    # Dependency from 12.0 and on
-    ++ lists.optionals (cudaVersionAtLeast "12.0") [ final.libnvjitlink.lib ]
-    # Dependency from 12.1 and on
-    ++ lists.optionals (cudaVersionAtLeast "12.1") [ final.libcusparse.lib ]
-  );
+  libcusolver =
+    {
+      cudaAtLeast,
+      lib,
+      libcublas,
+      libcusparse ? null,
+      libnvjitlink ? null,
+    }:
+    prevAttrs: {
+      buildInputs =
+        prevAttrs.buildInputs
+        # Always depends on this
+        ++ [ libcublas.lib ]
+        # Dependency from 12.0 and on
+        ++ lib.lists.optionals (cudaAtLeast "12.0") [ libnvjitlink.lib ]
+        # Dependency from 12.1 and on
+        ++ lib.lists.optionals (cudaAtLeast "12.1") [ libcusparse.lib ];
 
-  libcusparse = addBuildInputs prev.libcusparse (
-    lists.optionals (cudaVersionAtLeast "12.0") [ final.libnvjitlink.lib ]
-  );
+      brokenConditions = prevAttrs.brokenConditions // {
+        "libnvjitlink missing (CUDA >= 12.0)" =
+          !(cudaAtLeast "12.0" -> (libnvjitlink != null && libnvjitlink.lib != null));
+        "libcusparse missing (CUDA >= 12.1)" =
+          !(cudaAtLeast "12.1" -> (libcusparse != null && libcusparse.lib != null));
+      };
+    };
 
-  cuda_cudart = prev.cuda_cudart.overrideAttrs (prevAttrs: {
-    # Remove once cuda-find-redist-features has a special case for libcuda
-    outputs =
-      prevAttrs.outputs
-      ++ lists.optionals (!(builtins.elem "stubs" prevAttrs.outputs)) [ "stubs" ];
+  libcusparse =
+    {
+      cudaAtLeast,
+      lib,
+      libnvjitlink ? null,
+    }:
+    prevAttrs: {
+      buildInputs =
+        prevAttrs.buildInputs
+        # Dependency from 12.0 and on
+        ++ lib.lists.optionals (cudaAtLeast "12.0") [ libnvjitlink.lib ];
 
-    allowFHSReferences = false;
+      brokenConditions = prevAttrs.brokenConditions // {
+        "libnvjitlink missing (CUDA >= 12.0)" =
+          !(cudaAtLeast "12.0" -> (libnvjitlink != null && libnvjitlink.lib != null));
+      };
+    };
 
-    # The libcuda stub's pkg-config doesn't follow the general pattern:
-    postPatch =
-      prevAttrs.postPatch or ""
-      + ''
-        while IFS= read -r -d $'\0' path ; do
-          sed -i \
-            -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
-            -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
-            "$path"
-        done < <(find -iname 'cuda-*.pc' -print0)
-      ''
-      + ''
+  # TODO(@connorbaker): cuda_cudart.dev depends on crt/host_config.h, which is from
+  # cuda_nvcc.dev. It would be nice to be able to encode that.
+  cuda_cudart =
+    { addDriverRunpath, lib }:
+    prevAttrs: {
+      # Remove once cuda-find-redist-features has a special case for libcuda
+      outputs =
+        prevAttrs.outputs
+        ++ lib.lists.optionals (!(builtins.elem "stubs" prevAttrs.outputs)) [ "stubs" ];
+
+      allowFHSReferences = false;
+
+      # The libcuda stub's pkg-config doesn't follow the general pattern:
+      postPatch =
+        prevAttrs.postPatch or ""
+        + ''
+          while IFS= read -r -d $'\0' path; do
+            sed -i \
+              -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputLib}/lib/stubs|" \
+              -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${addDriverRunpath.driverLink}/lib|" \
+              "$path"
+          done < <(find -iname 'cuda-*.pc' -print0)
+        ''
         # Namelink may not be enough, add a soname.
         # Cf. https://gitlab.kitware.com/cmake/cmake/-/issues/25536
-        if [[ -f lib/stubs/libcuda.so && ! -f lib/stubs/libcuda.so.1 ]] ; then
-          ln -s libcuda.so lib/stubs/libcuda.so.1
-        fi
-      '';
+        + ''
+          if [[ -f lib/stubs/libcuda.so && ! -f lib/stubs/libcuda.so.1 ]]; then
+            ln -s libcuda.so lib/stubs/libcuda.so.1
+          fi
+        '';
 
-    postFixup =
-      prevAttrs.postFixup or ""
-      + ''
-        moveToOutput lib/stubs "$stubs"
-        ln -s "$stubs"/lib/stubs/* "$stubs"/lib/
-        ln -s "$stubs"/lib/stubs "''${!outputLib}/lib/stubs"
-      '';
-  });
-
-  cuda_compat = prev.cuda_compat.overrideAttrs (prevAttrs: {
-    autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
-      "libnvrm_gpu.so"
-      "libnvrm_mem.so"
-      "libnvdla_runtime.so"
-    ];
-    # `cuda_compat` only works on aarch64-linux, and only when building for Jetson devices.
-    badPlatformsConditions = prevAttrs.badPlatformsConditions // {
-      "Trying to use cuda_compat on aarch64-linux targeting non-Jetson devices" =
-        !final.flags.isJetsonBuild;
+      postFixup =
+        prevAttrs.postFixup or ""
+        + ''
+          moveToOutput lib/stubs "$stubs"
+          ln -s "$stubs"/lib/stubs/* "$stubs"/lib/
+          ln -s "$stubs"/lib/stubs "''${!outputLib}/lib/stubs"
+        '';
     };
-  });
 
-  cuda_gdb = addBuildInputs prev.cuda_gdb (
-    # x86_64 only needs gmp from 12.0 and on
-    lists.optionals (cudaVersionAtLeast "12.0") [ final.pkgs.gmp ]
-  );
-
-  cuda_nvcc = prev.cuda_nvcc.overrideAttrs (
-    oldAttrs:
-    let
-      # This replicates the logic in stdenvAdapters.useLibsFrom, except we use
-      # gcc from pkgsHostTarget and not from buildPackages.
-      ccForLibs-wrapper = final.pkgs.stdenv.cc;
-      gccMajorVersion = final.nvccCompatibilities.${cudaVersion}.gccMaxMajorVersion;
-      cc = final.pkgs.wrapCCWith {
-        cc = final.pkgs."gcc${gccMajorVersion}".cc;
-        useCcForLibs = true;
-        gccForLibs = ccForLibs-wrapper.cc;
+  cuda_compat =
+    { flags, lib }:
+    prevAttrs: {
+      autoPatchelfIgnoreMissingDeps = prevAttrs.autoPatchelfIgnoreMissingDeps ++ [
+        "libnvrm_gpu.so"
+        "libnvrm_mem.so"
+        "libnvdla_runtime.so"
+      ];
+      # `cuda_compat` only works on aarch64-linux, and only when building for Jetson devices.
+      badPlatformsConditions = prevAttrs.badPlatformsConditions // {
+        "Trying to use cuda_compat on aarch64-linux targeting non-Jetson devices" = !flags.isJetsonBuild;
       };
-    in
+    };
+
+  cuda_gdb =
     {
+      cudaAtLeast,
+      gmp,
+      lib,
+    }:
+    prevAttrs: {
+      buildInputs =
+        prevAttrs.buildInputs
+        # x86_64 only needs gmp from 12.0 and on
+        ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ];
+    };
 
-      outputs = oldAttrs.outputs ++ lists.optionals (!(builtins.elem "lib" oldAttrs.outputs)) [ "lib" ];
-
+  cuda_nvcc =
+    {
+      backendStdenv,
+      cuda_cudart,
+      lib,
+      setupCudaHook,
+    }:
+    prevAttrs: {
       # Patch the nvcc.profile.
       # Syntax:
       # - `=` for assignment,
@@ -131,38 +187,37 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
       # backend-stdenv.nix
 
       postPatch =
-        (oldAttrs.postPatch or "")
+        (prevAttrs.postPatch or "")
         + ''
           substituteInPlace bin/nvcc.profile \
-            --replace \
-              '$(TOP)/lib' \
-              "''${!outputLib}/lib" \
-            --replace \
+            --replace-fail \
               '$(TOP)/$(_NVVM_BRANCH_)' \
               "''${!outputBin}/nvvm" \
-            --replace \
+            --replace-fail \
               '$(TOP)/$(_TARGET_DIR_)/include' \
               "''${!outputDev}/include"
 
           cat << EOF >> bin/nvcc.profile
 
           # Fix a compatible backend compiler
-          PATH += ${lib.getBin cc}/bin:
+          PATH += "${backendStdenv.cc}/bin":
 
           # Expose the split-out nvvm
-          LIBRARIES =+ -L''${!outputBin}/nvvm/lib
-          INCLUDES =+ -I''${!outputBin}/nvvm/include
-
-          # Expose cudart and the libcuda stubs
-          LIBRARIES =+ -L$static/lib" "-L${final.cuda_cudart.lib}/lib -L${final.cuda_cudart.lib}/lib/stubs
-          INCLUDES =+ -I${final.cuda_cudart.dev}/include
+          LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"
+          INCLUDES =+ "-I''${!outputBin}/nvvm/include"
           EOF
         '';
 
-      propagatedBuildInputs = [ final.setupCudaHook ];
+      # NOTE(@connorbaker):
+      # Though it might seem odd or counter-intuitive to add the setup hook to `propagatedBuildInputs` instead of
+      # `propagatedNativeBuildInputs`, it is necessary! If you move the setup hook from `propagatedBuildInputs` to
+      # `propagatedNativeBuildInputs`, it stops being propagated to downstream packages during their build because
+      # setup hooks in `propagatedNativeBuildInputs` are not designed to affect the runtime or build environment of
+      # dependencies; they are only meant to affect the build environment of the package that directly includes them.
+      propagatedBuildInputs = (prevAttrs.propagatedBuildInputs or [ ]) ++ [ setupCudaHook ];
 
       postInstall =
-        (oldAttrs.postInstall or "")
+        (prevAttrs.postInstall or "")
         + ''
           moveToOutput "nvvm" "''${!outputBin}"
         '';
@@ -170,48 +225,77 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
       # The nvcc and cicc binaries contain hard-coded references to /usr
       allowFHSReferences = true;
 
-      meta = (oldAttrs.meta or { }) // {
+      meta = (prevAttrs.meta or { }) // {
         mainProgram = "nvcc";
       };
-    }
-  );
+    };
 
-  cuda_nvprof = prev.cuda_nvprof.overrideAttrs (prevAttrs: {
-    buildInputs = prevAttrs.buildInputs ++ [ final.cuda_cupti.lib ];
-  });
+  cuda_nvprof =
+    { cuda_cupti }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ cuda_cupti.lib ]; };
 
-  cuda_demo_suite = addBuildInputs prev.cuda_demo_suite [
-    final.pkgs.freeglut
-    final.pkgs.libGLU
-    final.pkgs.libglvnd
-    final.pkgs.mesa
-    final.libcufft.lib
-    final.libcurand.lib
-  ];
+  cuda_demo_suite =
+    {
+      freeglut,
+      libcufft,
+      libcurand,
+      libGLU,
+      libglvnd,
+      mesa,
+    }:
+    prevAttrs: {
+      buildInputs = prevAttrs.buildInputs ++ [
+        freeglut
+        libcufft.lib
+        libcurand.lib
+        libGLU
+        libglvnd
+        mesa
+      ];
+    };
 
-  nsight_compute = prev.nsight_compute.overrideAttrs (prevAttrs: {
-    nativeBuildInputs =
-      prevAttrs.nativeBuildInputs
-      ++ (
-        if (strings.versionOlder prev.nsight_compute.version "2022.2.0") then
-          [ final.pkgs.qt5.wrapQtAppsHook ]
-        else
-          [ final.pkgs.qt6.wrapQtAppsHook ]
-      );
-    buildInputs =
-      prevAttrs.buildInputs
-      ++ (
-        if (strings.versionOlder prev.nsight_compute.version "2022.2.0") then
-          [ final.pkgs.qt5.qtwebview ]
-        else
-          [ final.pkgs.qt6.qtwebview ]
-      );
-  });
-
-  nsight_systems = prev.nsight_systems.overrideAttrs (
+  nsight_compute =
+    {
+      lib,
+      qt5 ? null,
+      qt6 ? null,
+    }:
     prevAttrs:
     let
-      qt = if lib.versionOlder prevAttrs.version "2022.4.2.1" then final.pkgs.qt5 else final.pkgs.qt6;
+      inherit (lib.strings) versionOlder versionAtLeast;
+      inherit (prevAttrs) version;
+      qt = if versionOlder version "2022.2.0" then qt5 else qt6;
+      inherit (qt) wrapQtAppsHook qtwebview;
+    in
+    {
+      nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ wrapQtAppsHook ];
+      buildInputs = prevAttrs.buildInputs ++ [ qtwebview ];
+      brokenConditions = prevAttrs.brokenConditions // {
+        "Qt 5 missing (<2022.2.0)" = !(versionOlder version "2022.2.0" -> qt5 != null);
+        "Qt 6 missing (>=2022.2.0)" = !(versionAtLeast version "2022.2.0" -> qt6 != null);
+      };
+    };
+
+  nsight_systems =
+    {
+      cuda_cudart,
+      cudaOlder,
+      gst_all_1,
+      lib,
+      nss,
+      numactl,
+      pulseaudio,
+      qt5 ? null,
+      qt6 ? null,
+      rdma-core,
+      ucx,
+      wayland,
+      xorg,
+    }:
+    prevAttrs:
+    let
+      inherit (lib.strings) versionOlder versionAtLeast;
+      inherit (prevAttrs) version;
+      qt = if lib.strings.versionOlder prevAttrs.version "2022.4.2.1" then qt5 else qt6;
       qtwayland =
         if lib.versions.major qt.qtbase.version == "5" then
           lib.getBin qt.qtwayland
@@ -223,55 +307,57 @@ attrsets.filterAttrs (attr: _: (builtins.hasAttr attr prev)) {
       # An ad hoc replacement for
       # https://github.com/ConnorBaker/cuda-redist-find-features/issues/11
       env.rmPatterns = toString [
+        "nsight-systems/*/*/lib{arrow,jpeg}*"
+        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
+        "nsight-systems/*/*/libboost*"
+        "nsight-systems/*/*/libexec"
         "nsight-systems/*/*/libQt*"
         "nsight-systems/*/*/libstdc*"
-        "nsight-systems/*/*/libboost*"
-        "nsight-systems/*/*/lib{ssl,ssh,crypto}*"
-        "nsight-systems/*/*/lib{arrow,jpeg}*"
         "nsight-systems/*/*/Mesa"
-        "nsight-systems/*/*/python/bin/python"
-        "nsight-systems/*/*/libexec"
         "nsight-systems/*/*/Plugins"
+        "nsight-systems/*/*/python/bin/python"
       ];
       postPatch =
         prevAttrs.postPatch or ""
         + ''
-          for path in $rmPatterns ; do
+          for path in $rmPatterns; do
             rm -r "$path"
           done
         '';
       nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ qt.wrapQtAppsHook ];
       buildInputs = prevAttrs.buildInputs ++ [
-        final.cuda_cudart.stubs
-        final.pkgs.alsa-lib
-        final.pkgs.boost178
-        final.pkgs.e2fsprogs
-        final.pkgs.gst_all_1.gst-plugins-base
-        final.pkgs.gst_all_1.gstreamer
-        final.pkgs.nss
-        final.pkgs.numactl
-        final.pkgs.pulseaudio
-        final.pkgs.rdma-core
-        final.pkgs.ucx
-        final.pkgs.wayland
-        final.pkgs.xorg.libXcursor
-        final.pkgs.xorg.libXdamage
-        final.pkgs.xorg.libXrandr
-        final.pkgs.xorg.libXtst
-        qt.qtbase
         (qt.qtdeclarative or qt.full)
         (qt.qtsvg or qt.full)
+        cuda_cudart.stubs
+        gst_all_1.gst-plugins-base
+        gst_all_1.gstreamer
+        nss
+        numactl
+        pulseaudio
+        qt.qtbase
         qtWaylandPlugins
+        rdma-core
+        ucx
+        wayland
+        xorg.libXcursor
+        xorg.libXdamage
+        xorg.libXrandr
+        xorg.libXtst
       ];
 
-      # Older releases require boost 1.70 deprecated in Nixpkgs
-      meta.broken = prevAttrs.meta.broken or false || lib.versionOlder final.cudaVersion "11.8";
-    }
-  );
+      brokenConditions = prevAttrs.brokenConditions // {
+        # Older releases require boost 1.70, which is deprecated in Nixpkgs
+        "CUDA too old (<11.8)" = cudaOlder "11.8";
+        "Qt 5 missing (<2022.4.2.1)" = !(versionOlder version "2022.4.2.1" -> qt5 != null);
+        "Qt 6 missing (>=2022.4.2.1)" = !(versionAtLeast version "2022.4.2.1" -> qt6 != null);
+      };
+    };
 
-  nvidia_driver = prev.nvidia_driver.overrideAttrs {
-    # No need to support this package as we have drivers already
-    # in linuxPackages.
-    meta.broken = true;
-  };
+  nvidia_driver =
+    { }:
+    prevAttrs: {
+      brokenConditions = prevAttrs.brokenConditions // {
+        "Package is not supported; use drivers from linuxPackages" = true;
+      };
+    };
 }

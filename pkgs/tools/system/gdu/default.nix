@@ -1,28 +1,27 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, gdu
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  gdu,
 }:
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.27.0";
+  version = "5.28.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hQyvYLegGimYTRz0J/2tmaC6N4LfjB1ivWgN29DwNhA=";
+    hash = "sha256-HfWJVO62UeKE513fq1PaXyaldmrnQ/Fh5bXWSa0xGls=";
   };
 
-  vendorHash = "sha256-weNcJjofI7Aoy0Eya0KprXHAn7aTA0rQJYrJ4+t65hI=";
+  vendorHash = "sha256-SlVJDb24txy7DPsL0cG7LeGUjngXaUQ1SusgBfgf4PE=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
@@ -41,9 +40,7 @@ buildGoModule rec {
 
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests.version = testers.testVersion {
-    package = gdu;
-  };
+  passthru.tests.version = testers.testVersion { package = gdu; };
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";
@@ -55,7 +52,10 @@ buildGoModule rec {
     homepage = "https://github.com/dundee/gdu";
     changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab zowoq ];
+    maintainers = with maintainers; [
+      fab
+      zowoq
+    ];
     mainProgram = "gdu";
   };
 }

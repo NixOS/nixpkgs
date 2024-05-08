@@ -53,12 +53,11 @@
 , Cocoa
 , CoreSymbolication
 , OpenGL
-, noSplash ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.30.04";
+  version = "6.30.06";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -66,7 +65,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-K0GAtpjznMZdkQhNgzqIRRWzJbxfZzyOOavoGLAl2Mw=";
+    hash = "sha256-MA237RtnjtL7ljXKZ1khoZRcfCED2oQAM7STCR9VcAw=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -143,8 +142,6 @@ stdenv.mkDerivation rec {
       -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
-  '' + lib.optionalString noSplash ''
-    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/macosx/CMakeLists.txt \
@@ -163,10 +160,6 @@ stdenv.mkDerivation rec {
     "-Dbuiltin_gtest=OFF"
     "-Dbuiltin_nlohmannjson=OFF"
     "-Dbuiltin_openui5=ON"
-    "-Dalien=OFF"
-    "-Dbonjour=OFF"
-    "-Dcastor=OFF"
-    "-Dchirp=OFF"
     "-Dclad=OFF"
     "-Ddavix=ON"
     "-Ddcache=OFF"
@@ -176,21 +169,13 @@ stdenv.mkDerivation rec {
     "-Dfortran=OFF"
     "-Dgnuinstall=ON"
     "-Dimt=ON"
-    "-Dgfal=OFF"
     "-Dgviz=OFF"
-    "-Dhdfs=OFF"
     "-Dhttp=ON"
-    "-Dkrb5=OFF"
-    "-Dldap=OFF"
-    "-Dmonalisa=OFF"
     "-Dmysql=OFF"
     "-Dodbc=OFF"
     "-Dopengl=ON"
-    "-Doracle=OFF"
     "-Dpgsql=OFF"
-    "-Dpythia6=OFF"
     "-Dpythia8=OFF"
-    "-Drfio=OFF"
     "-Droot7=ON"
     "-Dsqlite=OFF"
     "-Dssl=ON"
@@ -204,15 +189,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
 
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
-
-  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
@@ -273,7 +254,7 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
-    maintainers = [ maintainers.veprbl ];
+    maintainers = [ maintainers.guitargeek maintainers.veprbl ];
     license = licenses.lgpl21;
   };
 }

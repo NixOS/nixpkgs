@@ -27,7 +27,7 @@
 , stdenv
 , swig
 , vtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xercesc
 , zlib
 }:
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     pyside2-tools
     gfortran
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

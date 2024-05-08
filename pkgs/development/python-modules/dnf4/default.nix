@@ -8,6 +8,7 @@
 , python
 , rpm
 , sphinx
+, nix-update-script
 }:
 
 let
@@ -16,7 +17,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf4";
-  version = "4.19.2";
+  version = "4.20.0";
   format = "other";
 
   outputs = [ "out" "man" "py" ];
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "rpm-software-management";
     repo = "dnf";
     rev = version;
-    hash = "sha256-2voBauWXPoHWBt58vZfgpO1oWBDDZ+DvWN6jb5qOzFg=";
+    hash = "sha256-0BwnUb0ZORjJmB70Jca/CnyysIOGB7azVzUUIGplmso=";
   };
 
   patches = [
@@ -87,6 +88,8 @@ buildPythonPackage rec {
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Package manager based on libdnf and libsolv. Replaces YUM";

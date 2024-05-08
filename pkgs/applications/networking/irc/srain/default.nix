@@ -16,7 +16,7 @@
 , python3Packages
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     appstream-glib
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.sphinx
   ];
 

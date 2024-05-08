@@ -60,11 +60,7 @@
       └── uos
           └── .license.key
   */
-  uosLicense ? requireFile {
-    name = "license.tar.gz";
-    url = "https://www.uniontech.com";
-    sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
-  }
+  uosLicense ? null
 }:
 let
   wechat-uos-env = stdenvNoCC.mkDerivation {
@@ -85,6 +81,30 @@ let
       ln -s ${wechat}/usr/lib/wechat-uos/license/libuosdevicea.so $out/lib/license/
     '';
     preferLocalBuild = true;
+  };
+
+  uosLicenseUnzipped = stdenvNoCC.mkDerivation {
+    name = "uos-license-unzipped";
+    src =
+      if uosLicense == null then
+        requireFile
+          {
+            name = "license.tar.gz";
+            url = "https://www.uniontech.com";
+            sha256 = "53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69";
+          } else uosLicense;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r * $out/
+
+      runHook postInstall
+    '';
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-pNftwtUZqBsKBSPQsEWlYLlb6h2Xd9j56ZRMi8I82ME=";
   };
 
   wechat-uos-runtime = with xorg; [
@@ -195,11 +215,10 @@ let
         dpkg -x $src ./wechat-uos
         dpkg -x $uosSrc ./wechat-uos-old-source
 
-        tar -xvf $uosLicense
-
         runHook postUnpack
       '';
 
+      # Use ln for license to prevent being garbage collection
       installPhase = ''
         runHook preInstall
         mkdir -p $out
@@ -207,7 +226,7 @@ let
         cp -r wechat-uos/* $out
 
         mkdir -pv $out/usr/lib/wechat-uos/license
-        cp -r license/* $out/usr/lib/wechat-uos/license
+        ln -s ${uosLicenseUnzipped}/* $out/usr/lib/wechat-uos/license/
         cp -r wechat-uos-old-source/usr/lib/license/libuosdevicea.so $out/usr/lib/wechat-uos/license/
 
         runHook postInstall
@@ -229,6 +248,16 @@ buildFHSEnv {
   runScript = writeShellScript "wechat-uos-launcher" ''
     export QT_QPA_PLATFORM=xcb
     export LD_LIBRARY_PATH=${lib.makeLibraryPath wechat-uos-runtime}
+
+    if [[ ''${XMODIFIERS} =~ fcitx ]]; then
+      export QT_IM_MODULE=fcitx
+      export GTK_IM_MODULE=fcitx
+    elif [[ ''${XMODIFIERS} =~ ibus ]]; then
+      export QT_IM_MODULE=ibus
+      export GTK_IM_MODULE=ibus
+      export IBUS_USE_PORTAL=1
+    fi
+
     ${wechat.outPath}/opt/apps/com.tencent.wechat/files/wechat
   '';
   extraInstallCommands = ''

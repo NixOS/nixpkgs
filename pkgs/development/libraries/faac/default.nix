@@ -1,9 +1,7 @@
 { lib, stdenv, fetchurl, autoreconfHook
-, mp4v2Support ? true, mp4v2 ? null
+, mp4v2Support ? true, mp4v2
 , drmSupport ? false # Digital Radio Mondiale
 }:
-
-assert mp4v2Support -> (mp4v2 != null);
 
 stdenv.mkDerivation rec {
   pname = "faac";
@@ -14,21 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "1lmj0dib3mjp84jhxc5ddvydkzzhb0gfrdh3ikcidjlcb378ghxd";
   };
 
-  configureFlags = [ ]
-    ++ lib.optional mp4v2Support "--with-external-mp4v2"
+  configureFlags = lib.optional mp4v2Support "--with-external-mp4v2"
     ++ lib.optional drmSupport "--enable-drm";
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ ]
-    ++ lib.optional mp4v2Support mp4v2;
+  buildInputs = lib.optional mp4v2Support mp4v2;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
+    homepage = "https://github.com/knik0/faac";
     license     = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

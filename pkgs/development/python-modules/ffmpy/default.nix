@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   postPatch = ''
     # default to store ffmpeg
     substituteInPlace ffmpy.py \
-      --replace 'executable="ffmpeg",' 'executable="${ffmpeg-headless}/bin/ffmpeg",'
+      --replace-fail 'executable="ffmpeg",' 'executable="${ffmpeg-headless}/bin/ffmpeg",'
 
     #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
     for fname in tests/*.py; do
@@ -42,6 +43,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     go
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # expects a FFExecutableNotFoundError, gets a NotADirectoryError raised by os
+    "test_invalid_executable_path"
   ];
 
   # the vendored ffmpeg mock binary assumes FHS

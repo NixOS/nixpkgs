@@ -3,7 +3,7 @@
 , fetchurl
 , makeBinaryWrapper
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , copyDesktopItems
 , imagemagick
 , jre
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     imagemagick
   ];

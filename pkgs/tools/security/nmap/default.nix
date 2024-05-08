@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A free and open source utility for network discovery and security auditing";
     homepage    = "http://www.nmap.org";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Only;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice fpletz ];
   };

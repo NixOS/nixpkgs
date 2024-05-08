@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, xorg, pkg-config
 , cmake, libevdev
-, gtkSupport ? true, gtk3, pcre, glib, wrapGAppsHook
+, gtkSupport ? true, gtk3, pcre, glib, wrapGAppsHook3
 , fltkSupport ? true, fltk
 , qtSupport ? true, qt5
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libevdev xorg.libXtst ]
-    ++ lib.optionals gtkSupport [ gtk3 pcre glib wrapGAppsHook ]
+    ++ lib.optionals gtkSupport [ gtk3 pcre glib wrapGAppsHook3 ]
     ++ lib.optionals fltkSupport [ fltk ]
     ++ lib.optionals qtSupport [ qt5.qtbase qt5.wrapQtAppsHook ];
 

@@ -1,7 +1,7 @@
 { lib
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gnome
 , mkCoqDerivation
@@ -26,7 +26,7 @@ mkCoqDerivation rec {
 
   buildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     coq.ocamlPackages.lablgtk3-sourceview3
     glib
     gnome.adwaita-icon-theme

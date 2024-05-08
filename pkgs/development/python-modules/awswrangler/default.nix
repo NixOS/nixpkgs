@@ -1,31 +1,33 @@
-{ backoff
-, sparqlwrapper
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, gremlinpython
-, jsonpath-ng
-, lib
-, moto
-, openpyxl
-, opensearch-py
-, pandas
-, pg8000
-, poetry-core
-, progressbar2
-, pyarrow
-, pymysql
-, pyodbc
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, redshift-connector
-, requests-aws4auth
+{
+  backoff,
+  sparqlwrapper,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gremlinpython,
+  jsonpath-ng,
+  lib,
+  moto,
+  openpyxl,
+  opensearch-py,
+  pandas,
+  pg8000,
+  poetry-core,
+  progressbar2,
+  pyarrow,
+  pymysql,
+  pyodbc,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  redshift-connector,
+  requests-aws4auth,
 }:
 
 buildPythonPackage rec {
   pname = "awswrangler";
-  version = "3.7.2";
+  version = "3.7.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,11 +36,17 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-sdk-pandas";
     rev = "refs/tags/${version}";
-    hash = "sha256-1eb2oTiRNxA2XTpkScA5WJutN5P6FX96jC4Ra9VdonI=";
+    hash = "sha256-gm6ieteW+NcY+AOLcMZLUPcSi2Z/Mo27rzd1i9imp5I=";
   };
+
+  pythonRelaxDeps = [ "packaging" ];
 
   build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -56,10 +64,19 @@ buildPythonPackage rec {
     requests-aws4auth
   ];
 
+  passthru.optional-dependencies = {
+    sqlserver = [ pyodbc ];
+    sparql = [ sparqlwrapper ];
+  };
+
   nativeCheckInputs = [
     moto
     pyparsing
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "awswrangler"
   ];
 
   pytestFlagsArray = [
@@ -70,15 +87,6 @@ buildPythonPackage rec {
     "tests/unit/test_utils.py"
     "tests/unit/test_moto.py"
   ];
-
-  passthru.optional-dependencies = {
-    sqlserver = [
-      pyodbc
-    ];
-    sparql = [
-      sparqlwrapper
-    ];
-  };
 
   meta = with lib; {
     description = "Pandas on AWS";

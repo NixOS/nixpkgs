@@ -907,7 +907,7 @@ let
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/db/openldap";
+                olcDbDirectory = "/var/lib/openldap/db";
                 olcSuffix = "dc=example";
                 olcRootDN = {
                   # cn=root,dc=example

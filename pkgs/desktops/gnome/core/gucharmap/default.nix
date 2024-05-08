@@ -12,7 +12,7 @@
 , glib
 , desktop-file-utils
 , gtk-doc
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , yelp-tools
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
     intltool
     itstool
@@ -106,7 +106,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
     mainProgram = "gucharmap";
-    homepage = "https://wiki.gnome.org/Apps/Gucharmap";
+    homepage = "https://gitlab.gnome.org/GNOME/gucharmap";
     license = licenses.gpl3;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

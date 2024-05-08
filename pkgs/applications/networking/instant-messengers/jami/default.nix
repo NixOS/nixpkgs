@@ -35,6 +35,7 @@
 
   # for client
 , cmake
+, git
 , networkmanager # for libnm
 , python3
 , qttools # for translations
@@ -50,7 +51,7 @@
 , qtsvg
 , qtwebengine
 , qtwebchannel
-, wrapGAppsHook
+, wrapGAppsHook3
 , withWebengine ? true
 
   # for pjsip
@@ -61,57 +62,80 @@
 , opendht
 }:
 
-let
-  readLinesToList = with builtins; file: filter (s: isString s && stringLength s > 0) (split "\n" (readFile file));
-in
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20231201.0";
+  version = "20240430.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-A38JwjqdQVy03d738p2tpTFA6EWRSPNiesS5wZfti7Y=";
+    hash = "sha256-v7558m2h3RqvLLhf3BdYO9LKCFKuMTtPIXgH6OXiiY4=";
     fetchSubmodules = true;
   };
 
-  pjsip-jami = pjsip.overrideAttrs (old:
-    let
-      patch-src = src + "/daemon/contrib/src/pjproject/";
-    in
-    rec {
-      version = "311bd018fc07aaf62d4c2d2494e08b5ee97e6846";
+  pjsip-jami = pjsip.overrideAttrs (old: rec {
+    version = "797f1a38cc1066acc4adc9561aa1288afabe72d5";
 
-      src = fetchFromGitHub {
-        owner = "savoirfairelinux";
-        repo = "pjproject";
-        rev = version;
-        hash = "sha256-pZiOSOUxAXzMY4c1/AyKcwa7nyIJC/ZVOqDg9/QO/Nk=";
-      };
+    src = fetchFromGitHub {
+      owner = "savoirfairelinux";
+      repo = "pjproject";
+      rev = version;
+      hash = "sha256-lTDbJF09R2G+EIkMj1YyKa4XokH9LlcIG+RhRJhzUes=";
+    };
 
-      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+    configureFlags = [
+      "--disable-sound"
+      "--enable-video"
+      "--enable-ext-sound"
+      "--disable-speex-aec"
+      "--disable-g711-codec"
+      "--disable-l16-codec"
+      "--disable-gsm-codec"
+      "--disable-g722-codec"
+      "--disable-g7221-codec"
+      "--disable-speex-codec"
+      "--disable-ilbc-codec"
+      "--disable-opencore-amr"
+      "--disable-silk"
+      "--disable-sdl"
+      "--disable-ffmpeg"
+      "--disable-v4l2"
+      "--disable-openh264"
+      "--disable-resample"
+      "--disable-libwebrtc"
+      "--with-gnutls=yes"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "--enable-epoll"
+    ];
 
-      configureFlags = (readLinesToList ./config/pjsip_args_common)
-        ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
-    });
+    buildInputs = old.buildInputs ++ [ gnutls ];
+  });
 
-  opendht-jami = opendht.override {
+  opendht-jami = (opendht.overrideAttrs {
+    src = fetchFromGitHub {
+      owner = "savoirfairelinux";
+      repo = "opendht";
+      rev = "f2cee8e9ce24746caa7dee1847829c526d340284";
+      hash = "sha256-ZnIrlybF3MCiXxxv80tRzCJ5CJ54S42prGUjq1suJNA=";
+    };
+  }).override {
     enableProxyServerAndClient = true;
     enablePushNotifications = true;
   };
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2023-11-23";
+    version = "unstable-2022-04-26";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "b1bcdecbac2a41de3941ef5a34faa6fbe4472535";
-      hash = "sha256-EucSsUuHXbVqr7drrTLK0f+WZT2k9Tx/LV+IBldTQO8=";
+      rev = "d7976982d24867c6faaf8103504ec8a10d932fa0";
+      hash = "sha256-vazFDMIu/3AWeOz0LZhZD9NFO8cd5AK41zBpqpQrqnc=";
     };
 
     nativeBuildInputs = [
@@ -130,6 +154,7 @@ stdenv.mkDerivation rec {
       opendht-jami
       openssl
       pjsip-jami
+      python3
       restinio
     ];
 
@@ -193,6 +218,20 @@ stdenv.mkDerivation rec {
     enableParallelBuilding = true;
   };
 
+  qwindowkit = fetchFromGitHub {
+    owner = "stdware";
+    repo = "qwindowkit";
+    rev = "79b1f3110754f9c21af2d7dacbd07b1a9dbaf6ef";
+    hash = "sha256-iZfmv3ADVjHf47HPK/FdrfeAzrXbxbjH3H5MFVg/ZWE=";
+    fetchSubmodules = true;
+  };
+
+  postPatch = ''
+    sed -i -e '/GIT_REPOSITORY/,+1c SOURCE_DIR ''${CMAKE_CURRENT_SOURCE_DIR}/qwindowkit' extras/build/cmake/contrib_tools.cmake
+    sed -i -e 's/if(DISTRO_NEEDS_QMSETUP_PATCH)/if(TRUE)/' CMakeLists.txt
+    cp -R --no-preserve=mode,ownership ${qwindowkit} qwindowkit
+  '';
+
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
     # Currently the daemon is still built seperately but jami expects it in CMAKE_INSTALL_PREFIX
@@ -204,10 +243,11 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
     pkg-config
     cmake
+    git
     python3
     qttools
   ];

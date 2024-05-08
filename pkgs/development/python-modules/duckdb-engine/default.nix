@@ -6,7 +6,9 @@
 , duckdb
 , hypothesis
 , ipython-sql
+, pandas
 , poetry-core
+, pytest-remotedata
 , snapshottest
 , sqlalchemy
 , typing-extensions
@@ -14,19 +16,17 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yW1gaZ0B6JNX98KzAxf146goniNmWnkMUmJRrScot1w=";
+    hash = "sha256-cm0vbz0VZ2Ws6FDWJO16q4KZW2obs0CBNrfY9jmR+6A=";
   };
-
-  patches = [ ./remote_data.patch ];
 
   nativeBuildInputs = [
     poetry-core
@@ -42,22 +42,25 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # this test tries to download the httpfs extension
-    "test_preload_extension"
-    "test_motherduck"
     # test should be skipped based on sqlalchemy version but isn't and fails
     "test_commit"
-    # rowcount no longer generates an attribute error.
-    "test_rowcount"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
     hypothesis
     ipython-sql
-    # TODO(cpcloud): include pandas here when it supports sqlalchemy 2.0
+    pandas
+    pytest-remotedata
     snapshottest
     typing-extensions
+  ];
+
+  pytestFlagsArray = [
+    "-m" "'not remote_data'"
   ];
 
   pythonImportsCheck = [

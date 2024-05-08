@@ -1,5 +1,5 @@
 { lib, meson, ninja, pkg-config, gettext, fetchFromGitHub, python3
-, wrapGAppsHook, gtk3, glib, desktop-file-utils, appstream-glib, gnome
+, wrapGAppsHook3, gtk3, glib, desktop-file-utils, appstream-glib, gnome
 , gobject-introspection, librsvg }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0jsvfy0ihdcgnqljfgs41lys1nlz18qvsa0a8ndx3pyr41f8w8wf";
   };
 
-  nativeBuildInputs = [ meson ninja gettext pkg-config wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
+  nativeBuildInputs = [ meson ninja gettext pkg-config wrapGAppsHook3 desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = [
     gtk3 glib gnome.adwaita-icon-theme python3 librsvg
   ];

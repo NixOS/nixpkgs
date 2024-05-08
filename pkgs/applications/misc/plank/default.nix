@@ -21,7 +21,7 @@
 , file
 , gnome-menus
 , libgee
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoreconfHook
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libxml2 # xmllint
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

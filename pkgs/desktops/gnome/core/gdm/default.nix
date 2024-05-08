@@ -7,6 +7,7 @@
 , ninja
 , pkg-config
 , glib
+, json-glib
 , itstool
 , xorg
 , accountsservice
@@ -42,13 +43,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "45.0.1";
+  version = "46.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "ZXJXjAXjxladbtJp994qrzoDVldlRYbYJDkHu3pv+oU=";
+    hash = "sha256-jWy1IXbspItrvxz+L9rgjZZ3taDyvKYA3uRgTeDdHvw=";
   };
 
   mesonFlags = [
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     accountsservice
     audit
     glib
+    json-glib
     gtk3
     keyutils
     libX11
@@ -94,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gdm/-/merge_requests/92
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gdm/-/commit/ccecd9c975d04da80db4cd547b67a1a94fa83292.patch";
-      sha256 = "5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
+      hash = "sha256-5hKS9wjjhuSAYwXct5vS0dPbmPRIINJoLC0Zm1naz6Q=";
       revert = true;
     })
 
@@ -187,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A program that manages graphical display servers and handles graphical user logins";
-    homepage = "https://wiki.gnome.org/Projects/GDM";
+    homepage = "https://gitlab.gnome.org/GNOME/gdm";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

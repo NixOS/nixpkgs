@@ -28,27 +28,27 @@ stdenvNoCC.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace pokemonsay.sh \
-      --replace \
+      --replace-fail \
         'INSTALL_PATH=''${HOME}/.bin/pokemonsay' \
         "" \
-      --replace \
+      --replace-fail \
         'POKEMON_PATH=''${INSTALL_PATH}/pokemons' \
         'POKEMON_PATH=${placeholder "out"}/share/pokemonsay' \
-      --replace \
+      --replace-fail \
         '$(find ' \
         '$(${findutils}/bin/find ' \
-      --replace \
+      --replace-fail \
         '$(basename ' \
         '$(${coreutils}/bin/basename ' \
-      --replace \
+      --replace-fail \
         'cowsay -f ' \
         '${cowsay}/bin/cowsay -f ' \
-      --replace \
+      --replace-fail \
         'cowthink -f ' \
         '${cowsay}/bin/cowthink -f '
 
     substituteInPlace pokemonthink.sh \
-      --replace \
+      --replace-fail \
         './pokemonsay.sh' \
         "${placeholder "out"}/bin/pokemonsay"
   '';

@@ -1,48 +1,46 @@
-{ ant
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk
+, jre
 , docbook-xsl-ns
 , docbook_xml_dtd_42
-, fetchFromGitHub
 , imagemagick
-, lib
 , libxslt
+, stripJavaArchivesHook
 , makeWrapper
-, openjdk
-, stdenv
 }:
 
-let
-  version = "1.5.4a";
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gogui";
-  inherit version;
+  version = "1.5.4a";
 
   src = fetchFromGitHub {
     owner = "Remi-Coulom";
     repo = "gogui";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UFhOk2mAnTtxfwEOHquN64YDCRq7nNUqZAPQf77MEEw=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
     ant
-  ];
-
-  buildInputs = [
+    jdk
     docbook-xsl-ns
     imagemagick
     libxslt
-    openjdk
+    stripJavaArchivesHook
+    makeWrapper
   ];
 
   buildPhase = ''
     runHook preBuild
 
     substituteInPlace doc/manual/xml/book.xml \
-      --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd \
+      --replace-fail http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd \
       ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     substituteInPlace doc/manual/xml/manpages.xml \
-      --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd \
+      --replace-fail http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd \
       ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
 
     # generate required gui images from svg
@@ -75,21 +73,24 @@ in stdenv.mkDerivation {
     ln -s $out/share/doc/gogui/manual/man $out/share/man/man1
 
     # copy programs
-    mv -vi {bin,lib} $out/
+    mv -vi bin lib $out/
 
     # wrap programs
     for x in $out/bin/*; do
-      wrapProgram $x --prefix PATH ":" ${openjdk}/bin --set GOGUI_JAVA_HOME ${openjdk}
+        wrapProgram $x \
+            --prefix PATH : ${jre}/bin \
+            --set GOGUI_JAVA_HOME ${jre}
     done
 
     runHook postInstall
   '';
 
   meta = {
-    maintainers = [ lib.maintainers.cleverca22 lib.maintainers.omnipotententity];
     description = "A graphical user interface to programs that play the board game Go and support the Go Text Protocol such as GNU Go";
     homepage = "https://github.com/Remi-Coulom/gogui";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "gogui";
+    maintainers = with lib.maintainers; [ cleverca22 omnipotententity ];
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
   };
-}
+})

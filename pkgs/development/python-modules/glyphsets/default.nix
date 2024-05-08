@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "glyphsets";
-  version = "0.6.14";
+  version = "0.6.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lMRgchadgKyfFLw6ZF1sJAKBAK75zmw77L34MW9p7TI=";
+    hash = "sha256-vO9gzMCXPlkkM9MtRhlulAnQi6uZMtJU1NqcP8w6tCo=";
   };
 
   dependencies = [

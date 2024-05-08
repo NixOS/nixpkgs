@@ -1,7 +1,13 @@
 { config, lib, pkgs, options, ... }:
-with lib;
 let
   cfg = config.services.prometheus.exporters.sql;
+  inherit (lib)
+    mkOption
+    types
+    mapAttrs
+    mapAttrsToList
+    concatStringsSep
+    ;
   cfgOptions = {
     options = with types; {
       jobs = mkOption {

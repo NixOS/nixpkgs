@@ -1,8 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
 let
   cfg = config.services.prometheus.exporters.idrac;
+  inherit (lib) mkOption types;
 
   configFile = if cfg.configurationPath != null
                then cfg.configurationPath

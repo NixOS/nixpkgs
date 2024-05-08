@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "risor";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "risor-io";
     repo = "risor";
     rev = "v${version}";
-    hash = "sha256-tvEiboH5cGRpyBmmpu8A1UlDR1Y9XPe1pUNS0/Jvooc=";
+    hash = "sha256-IUmkb23Fx+bjzXrXWfKPOo0HFt7HjtjQoCRtH77HGBg=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-eW6eSZp5Msg/u50i1+S2KSzDws0Rq8JBY1Yxzq7/hVo=";
+  vendorHash = "sha256-+XYwFYbvZvk0TWoRtCKQIzbQeznQkolB+NFqUiZMkpA=";
 
   subPackages = [
     "cmd/risor"

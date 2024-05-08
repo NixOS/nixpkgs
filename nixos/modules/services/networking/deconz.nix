@@ -95,7 +95,7 @@ in
       '';
       postStart = ''
         # Delay signalling service readiness until it's actually up.
-        while ! "${lib.getExe pkgs.curl}" -sSfl -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
+        while ! "${lib.getExe pkgs.curl}" -sSfL -o /dev/null "http://${cfg.listenAddress}:${toString cfg.httpPort}"; do
             echo "Waiting for TCP port ${toString cfg.httpPort} to be open..."
             sleep 1
         done

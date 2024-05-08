@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.0.32";
+  version = "0.0.37";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_community";
     inherit version;
-    hash = "sha256-FRAhfWRsg4D1TphQNR9tKgsN1zxQG2Zsb0tAuqgWCyk=";
+    hash = "sha256-2ytYKbsgvFsEwSa2kUPbwxqIDpSelBEMI2ssF2kGiJ8=";
   };
 
   build-system = [ poetry-core ];

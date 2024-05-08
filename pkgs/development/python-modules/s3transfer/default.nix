@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "s3transfer";
     rev = "refs/tags/${version}";
-    hash = "sha256-21xycx1+84uY4gFr7N+ra98dpsEwxy9zeSl4QA66nUc=";
+    hash = "sha256-EHNkYviafnuU8AADp9oyaDuAnoPOdOVNSLCcoONnHPY=";
   };
 
   nativeBuildInputs = [

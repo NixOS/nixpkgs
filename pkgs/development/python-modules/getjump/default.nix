@@ -40,7 +40,7 @@ buildPythonPackage rec {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "jget";
   };
 }

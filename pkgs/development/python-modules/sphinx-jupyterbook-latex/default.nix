@@ -12,6 +12,7 @@
 , sphinx-external-toc
 , sphinxcontrib-bibtex
 , texsoup
+, defusedxml
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     sphinx-external-toc
     sphinxcontrib-bibtex
     texsoup
+    defusedxml
   ];
 
   meta = with lib; {
@@ -54,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-jupyterbook-latex";
     changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }
