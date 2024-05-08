@@ -534,8 +534,6 @@ in {
 
     system76-io = callPackage ../os-specific/linux/system76-io { };
 
-    system76-scheduler = callPackage ../os-specific/linux/system76-scheduler { };
-
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
