@@ -516,8 +516,6 @@ in {
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
 
-    system76-power = callPackage ../os-specific/linux/system76-power { };
-
     system76-io = callPackage ../os-specific/linux/system76-io { };
 
     system76-scheduler = callPackage ../os-specific/linux/system76-scheduler { };
@@ -610,6 +608,7 @@ in {
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
+    system76-power = lib.warn "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
