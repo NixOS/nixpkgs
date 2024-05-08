@@ -5,6 +5,7 @@
 , numpy
 , pandas
 , pyfume
+, setuptools
 , scipy
 , pythonOlder
 }:
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "fuzzytm";
   version = "2.0.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-z0ESYtB7BqssxIHlrd0F+/qapOM1nrDi3Zih5SvgDGY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     gensim
     numpy
     pandas
