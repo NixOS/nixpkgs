@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "desktop-notifier";
   version = "4.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-6FtxfY0vjCbCueeXdAXOy6XSjne4I7brQ5OvJ+Q1KsQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
