@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0khm9gh5pczfcihr0pbicaicc4v9kjm5ip2alvkhmbb3ga6njkcm";
   };
 
+  # pcre-config isn't on PATH when cross-building
+  PCRE_CONFIG = "${pcre.dev}/bin/pcre-config";
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ pcre ];
 
