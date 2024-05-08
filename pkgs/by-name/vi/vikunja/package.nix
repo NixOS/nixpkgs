@@ -45,8 +45,9 @@ let
       installPhase = ''
         export HOME=$(mktemp -d)
 
+        pnpm config set package-manager-strict false
         pnpm config set store-dir $out
-        pnpm install --frozen-lockfile --ignore-script --config.package-manager-strict=false
+        pnpm install --frozen-lockfile --ignore-script
 
         rm -rf $out/v3/tmp
         for f in $(find $out -name "*.json"); do
@@ -74,8 +75,9 @@ let
     preBuild = ''
       export HOME=$(mktemp -d)
 
+      pnpm config set package-manager-strict false
       pnpm config set store-dir ${finalAttrs.pnpmDeps}
-      pnpm install --offline --frozen-lockfile --ignore-script --config.package-manager-strict=false
+      pnpm install --offline --frozen-lockfile --ignore-script
       patchShebangs node_modules/{*,.*}
     '';
 

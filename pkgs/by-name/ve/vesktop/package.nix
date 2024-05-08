@@ -64,8 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
       installPhase = ''
         export HOME=$(mktemp -d)
 
+        pnpm config set package-manager-strict false
         pnpm config set store-dir $out
-        pnpm install --frozen-lockfile --ignore-script --config.package-manager-strict=false
+        pnpm install --frozen-lockfile --ignore-script
 
         rm -rf $out/v3/tmp
         for f in $(find $out -name "*.json"); do
@@ -100,8 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -Tr "$pnpmDeps" "$STORE_PATH"
     chmod -R +w "$STORE_PATH"
 
+    pnpm config set package-manager-strict false
     pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script --config.package-manager-strict=false
+    pnpm install --offline --frozen-lockfile --ignore-script
     patchShebangs node_modules/{*,.*}
   '';
 

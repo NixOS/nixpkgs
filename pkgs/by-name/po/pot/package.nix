@@ -53,10 +53,11 @@ stdenv.mkDerivation rec {
 
     installPhase = ''
       export HOME=$(mktemp -d)
+      pnpm config set package-manager-strict false
       pnpm config set store-dir $out
       # use --ignore-script and --no-optional to avoid downloading binaries
       # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script --config.package-manager-strict=false
+      pnpm install --frozen-lockfile --no-optional --ignore-script
 
       # Remove timestamp and sort the json files
       rm -rf $out/v3/tmp
@@ -113,9 +114,10 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    pnpm config set package-manager-strict false
     pnpm config set store-dir ${pnpm-deps}
     chmod +w ..
-    pnpm install --offline --frozen-lockfile --no-optional --ignore-script --config.package-manager-strict=false
+    pnpm install --offline --frozen-lockfile --no-optional --ignore-script
     chmod -R +w ../node_modules
     pnpm rebuild
     # Use cargo-tauri from nixpkgs instead of pnpm tauri from npm

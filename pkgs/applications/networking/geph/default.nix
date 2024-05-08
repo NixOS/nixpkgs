@@ -75,8 +75,9 @@ in
 
       installPhase = ''
         export HOME=$(mktemp -d)
+        pnpm config set package-manager-strict false
         pnpm config set store-dir $out
-        pnpm install --ignore-scripts --config.package-manager-strict=false
+        pnpm install --ignore-scripts
 
         # Remove timestamp and sort the json files
         rm -rf $out/v3/tmp
@@ -135,8 +136,9 @@ in
       preBuild = ''
         cd gephgui
         export HOME=$(mktemp -d)
+        pnpm config set package-manager-strict false
         pnpm config set store-dir ${pnpm-deps}
-        pnpm install --ignore-scripts --offline --config.package-manager-strict=false
+        pnpm install --ignore-scripts --offline
         chmod -R +w node_modules
         pnpm rebuild
         pnpm build
