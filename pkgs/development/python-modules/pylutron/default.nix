@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-s5qprIVPlq495XWKjgIuohDzPV0EfU43zkfQ2DvH04Y=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylutron"
-  ];
+  pythonImportsCheck = [ "pylutron" ];
 
   meta = with lib; {
     description = "Python library for controlling a Lutron RadioRA 2 system";
