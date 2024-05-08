@@ -10,8 +10,7 @@
 buildPythonPackage rec {
   pname = "ziafont";
   version = "0.8";
-
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-C+dC+mNquDuj6RfJpiEbeuGZOIXcgSrTB4XM21reBPs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
