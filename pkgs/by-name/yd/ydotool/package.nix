@@ -6,6 +6,7 @@
   scdoc,
   util-linux,
   xorg,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     scdoc
   ];
+
+  passthru.tests.basic = nixosTests.ydotool;
 
   meta = {
     description = "Generic Linux command-line automation tool";
