@@ -3,7 +3,7 @@
 rootdb="/etc/pki/nssdb"
 userdb="$HOME/.pki/nssdb"
 dbentry="Belgium eID"
-libfile="/run/current-system/sw/lib/libbeidpkcs11.so"
+libfile="/run/current-system/sw/lib/opensc-pkcs11.so"
 
 dbdir="$userdb"
 

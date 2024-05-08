@@ -13,6 +13,7 @@
 , libproxy
 , libxml2
 , nssTools
+, opensc
 , openssl
 , p11-kit
 , pcsclite
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ wrapGAppsHook3 autoreconfHook autoconf-archive pkg-config makeWrapper ];
-  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 opensc openssl p11-kit pcsclite ];
 
   preConfigure = ''
     mkdir openssl
