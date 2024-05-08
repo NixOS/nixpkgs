@@ -36960,8 +36960,6 @@ with pkgs;
 
   oilrush = callPackage ../games/oilrush { };
 
-  onscripter-en = callPackage ../games/onscripter-en { };
-
   openarena = callPackage ../games/openarena { };
 
   opendungeons = callPackage ../games/opendungeons { };
