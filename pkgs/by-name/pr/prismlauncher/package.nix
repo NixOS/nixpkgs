@@ -6,8 +6,7 @@
   addDriverRunpath,
   flite,
   gamemode,
-  glfw,
-  glfw-wayland-minecraft,
+  glfw3-minecraft,
   glxinfo,
   jdk8,
   jdk17,
@@ -16,7 +15,6 @@
   libGL,
   libpulseaudio,
   libusb1,
-  makeWrapper,
   openal,
   pciutils,
   udev,
@@ -34,15 +32,6 @@
   ],
   msaClientID ? null,
   textToSpeechSupport ? stdenv.isLinux,
-
-  # Adds `glfw-wayland-minecraft` to `LD_LIBRARY_PATH`
-  # when launched on wayland, allowing for the game to be run natively.
-  # Make sure to enable "Use system installation of GLFW" in instance settings
-  # for this to take effect
-  #
-  # Warning: This build of glfw may be unstable, and the launcher
-  # itself can take slightly longer to start
-  withWaylandGLFW ? false,
 }:
 
 assert lib.assertMsg (
@@ -53,10 +42,6 @@ assert lib.assertMsg (
   textToSpeechSupport -> stdenv.isLinux
 ) "textToSpeechSupport only has an effect on Linux.";
 
-assert lib.assertMsg (
-  withWaylandGLFW -> stdenv.isLinux
-) "withWaylandGLFW is only available on Linux.";
-
 let
   prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
 in
@@ -66,11 +51,7 @@ symlinkJoin {
 
   paths = [ prismlauncher' ];
 
-  nativeBuildInputs =
-    [ kdePackages.wrapQtAppsHook ]
-    # purposefully using a shell wrapper here for variable expansion
-    # see https://github.com/NixOS/nixpkgs/issues/172583
-    ++ lib.optional withWaylandGLFW makeWrapper;
+  nativeBuildInputs = [ kdePackages.wrapQtAppsHook ];
 
   buildInputs =
     [
@@ -81,28 +62,16 @@ symlinkJoin {
       lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.isLinux
     ) kdePackages.qtwayland;
 
-  env = {
-    waylandPreExec = lib.optionalString withWaylandGLFW ''
-      if [ -n "$WAYLAND_DISPLAY" ]; then
-        export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
-      fi
-    '';
-  };
-
-  postBuild =
-    lib.optionalString withWaylandGLFW ''
-      qtWrapperArgs+=(--run "$waylandPreExec")
-    ''
-    + ''
-      wrapQtAppsHook
-    '';
+  postBuild = ''
+    wrapQtAppsHook
+  '';
 
   qtWrapperArgs =
     let
       runtimeLibs =
         [
           # lwjgl
-          glfw
+          glfw3-minecraft
           libpulseaudio
           libGL
           openal
