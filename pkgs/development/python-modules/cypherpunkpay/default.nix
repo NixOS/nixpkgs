@@ -44,6 +44,7 @@ buildPythonPackage rec {
     "pypng"
     "tzlocal"
     "yoyo-migrations"
+    "waitress"
   ];
 
   nativeBuildInputs = [
