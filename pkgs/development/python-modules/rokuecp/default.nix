@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "rokuecp";
   version = "0.19.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -29,11 +29,17 @@ buildPythonPackage rec {
     hash = "sha256-XMJ2V59E4SEVlEhgc1hstLmtzl1gxwCsq+4vmkL3CPM=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
+  '';
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     backoff
     cachetools
@@ -48,12 +54,6 @@ buildPythonPackage rec {
     pytest-freezegun
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"' \
-      --replace "--cov" ""
-  '';
 
   disabledTests = [
     # Network related tests are having troube in the sandbox
