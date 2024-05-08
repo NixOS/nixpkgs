@@ -10,6 +10,7 @@
 , "disable-xml-rpc": "gpl2Plus"
 , "embed-extended": "gpl2Plus"
 , "gutenberg": "gpl2Plus"
+, "hcaptcha-for-forms-and-more": "gpl2Only"
 , "hello-dolly": "gpl2Plus"
 , "hkdev-maintenance-mode": "gpl2Plus"
 , "jetpack": "gpl2Plus"
