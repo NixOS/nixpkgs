@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, xalanc, xercesc, openssl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xalanc,
+  xercesc,
+  openssl,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xml-security-c";
@@ -16,7 +24,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xalanc xercesc openssl ];
+
+  buildInputs = [
+    xalanc
+    xercesc
+    openssl
+  ];
 
   meta = {
     homepage = "https://santuario.apache.org/";
