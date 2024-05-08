@@ -3418,6 +3418,8 @@ self: super: with self; {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dm-control = callPackage ../development/python-modules/dm-control { };
+
   dm-env = callPackage ../development/python-modules/dm-env { };
 
   dm-haiku = callPackage ../development/python-modules/dm-haiku { };
@@ -5913,7 +5915,9 @@ self: super: with self; {
 
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
-  islpy = callPackage ../development/python-modules/islpy { };
+  islpy = callPackage ../development/python-modules/islpy {
+    isl = pkgs.isl_0_24;
+  };
 
   iso3166 = callPackage ../development/python-modules/iso3166 { };
 
@@ -8857,6 +8861,8 @@ self: super: with self; {
   nose-randomly = callPackage ../development/python-modules/nose-randomly { };
 
   nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
+
+  nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
 
   nosexcover = callPackage ../development/python-modules/nosexcover { };
 
@@ -13137,6 +13143,8 @@ self: super: with self; {
 
   reportlab = callPackage ../development/python-modules/reportlab { };
 
+  reportlab-qrcode = callPackage ../development/python-modules/reportlab-qrcode { };
+
   repoze-lru = callPackage ../development/python-modules/repoze-lru { };
 
   repoze-sphinx-autointerface = callPackage ../development/python-modules/repoze-sphinx-autointerface { };
@@ -13832,6 +13840,8 @@ self: super: with self; {
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
     inherit (pkgs) cmake llvmPackages;
   });
+
+  shimmy = callPackage ../development/python-modules/shimmy { };
 
   shippai = callPackage ../development/python-modules/shippai { };
 

@@ -1302,7 +1302,9 @@ with pkgs;
 
   makeBinaryWrapper = callPackage ../build-support/setup-hooks/make-binary-wrapper { };
 
-  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
+  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware.nix { type = "xz"; };
+
+  compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
@@ -30136,6 +30138,8 @@ with pkgs;
   cligh = python3Packages.callPackage ../development/tools/github/cligh { };
 
   clight = callPackage ../applications/misc/clight { };
+
+  clight-gui = libsForQt5.callPackage ../applications/misc/clight/clight-gui.nix { };
 
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
