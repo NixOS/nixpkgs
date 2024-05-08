@@ -89,7 +89,7 @@ in
 
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-OKPx5xRI7DWd6m31nYx1biP0k6pcZ7fq7dfVlHda4O0=";
+      outputHash = "sha256-x+1ePGt9DV8Z2HhjMyApOFwrEvd6apwanvlCx4c5Xuk=";
     };
 
     gephgui-wry = rustPlatform.buildRustPackage {

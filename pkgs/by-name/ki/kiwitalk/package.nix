@@ -66,11 +66,11 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = {
-      x86_64-linux = "sha256-LJPjWNpVfdUu8F5BMhAzpTo/h6ax7lxY2EESHj5P390=";
-      aarch64-linux = "sha256-N1K4pV5rbWmO/KonvYegzBoWa6TYQIqhQyxH/sWjOJQ=";
-      i686-linux = "sha256-/Q7VZahYhLdKVFB25CanROYxD2etQOcRg+4bXZUMqTc=";
-      x86_64-darwin = "sha256-9biFAbFD7Bva7KPKztgCvcaoX8E6AlJBKkjlDQdP6Zw=";
-      aarch64-darwin = "sha256-to5Y0R9tm9b7jUQAK3eBylLhpu+w5oDd63FbBCBAvd8=";
+      x86_64-linux = "sha256-wXpia1oXiXzGk+zpJzQq1Zee/LgZbGUaB70TGTfpZbQ=";
+      aarch64-linux = "sha256-wmn0AiVpP6WwQcodlzCdj8O16536Sve/nzEGtLqlzlI=";
+      i686-linux = lib.fakeHash;
+      x86_64-darwin = lib.fakeHash;
+      aarch64-darwin = lib.fakeHash;
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
+    echo "DEBUG: ${pnpm-deps}"
     export HOME=$(mktemp -d)
     pnpm config set package-manager-strict false
     pnpm config set store-dir ${pnpm-deps}

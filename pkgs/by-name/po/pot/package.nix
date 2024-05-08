@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-LuY5vh642DgSa91eUcA/AT+ovDcP9tZFE2dKyicCOeQ=";
+    outputHash = "sha256-KiBWyFX2UUzn/6xrkB1WywSlYxJM8CO/qS6NDv/t6q4=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

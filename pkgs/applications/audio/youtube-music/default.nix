@@ -48,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = {
-      x86_64-linux = "sha256-K2yJdoi+bJpz0Xf2MHlFzQXbP+H3uVE2hYfkzoB7vBE=";
-      aarch64-linux = "sha256-ZiA6XKPnkoAl9m2vEJth2wyDxj61Efye4cUk+76znnM=";
-      x86_64-darwin = "sha256-wh5Y47c5qD2PctROP9AWqLDs7H5S2/8X0zxkSMkr1xQ=";
-      aarch64-darwin = "sha256-e2h4bLVnSEtZcHERsfkNmawgxQHQXxgXrNlFKB+IRTw=";
+      x86_64-linux = "sha256-eY4n8XN+ItCqECUe/L96qQ412fiwekGqTuLW4GphBnw=";
+      aarch64-linux = "sha256-MZzuqGhmxbDOCMzBP9jHOPrHk6ENusvyX7iDyaq+lD4=";
+      x86_64-darwin = lib.fakeHash;
+      aarch64-darwin = lib.fakeHash;
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 

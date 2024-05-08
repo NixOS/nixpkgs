@@ -60,8 +60,8 @@ let
       dontFixup = true;
       outputHashMode = "recursive";
       outputHash = {
-        x86_64-linux = "sha256-ybAkXe2/VhGZhr59ZQOcQ+SI2a204e8uPjyE40xUVwU=";
-        aarch64-linux = "sha256-2iURs6JtI/b2+CnLwhog1X5hSFFO6OmmgFRuTbMjH+k=";
+        x86_64-linux = "sha256-YL+ZAY3K6ESI2mApWdTQDSY8YTmKotBTV6Xe2Cm2lW8=";
+        aarch64-linux = lib.fakeHash;
       }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
     };
 
