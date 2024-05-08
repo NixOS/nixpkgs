@@ -89931,10 +89931,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "9.0.2";
+    version = "9.1.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-9.0.2.tgz";
-      sha512 = "i+3zHeQnBbl/+JMwu+F3lUrVcDqS+olL4PtNRbXfq1miH2WoQZrRyugt0W+sLUGow0N3XoDv59q22AsECNsv1g==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-9.1.0.tgz";
+      sha512 = "Z/WHmRapKT5c8FnCOFPVcb6vT3U8cH9AyyK+1fsVeMaq07bEEHzLO6CzW+AD62IaFkcayDbIe+tT+dVLtGEnJA==";
     };
     buildInputs = globalBuildInputs;
     meta = {
