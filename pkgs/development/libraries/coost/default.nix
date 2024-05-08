@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "coost";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "idealvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qpJh1yl0lYYszNHGo5Jkbzal2hnVzg7UUxiyg/Grva8=";
+    sha256 = "sha256-HbMenAL/UWsqQ1o7cMeWfwXkLh4GxIKV7iuZQD3hDA8=";
   };
 
   postPatch = ''
