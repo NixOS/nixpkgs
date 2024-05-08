@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     outputHash = {
       x86_64-linux = "sha256-eY4n8XN+ItCqECUe/L96qQ412fiwekGqTuLW4GphBnw=";
       aarch64-linux = "sha256-MZzuqGhmxbDOCMzBP9jHOPrHk6ENusvyX7iDyaq+lD4=";
-      x86_64-darwin = lib.fakeHash;
-      aarch64-darwin = lib.fakeHash;
+      x86_64-darwin = "sha256-3O/YDZNQ7mTvDF6hRKPekQifOjUBLc4pYYn1WJdtPP4=";
+      aarch64-darwin = "sha256-NwTIUxTmB637Ibr6Zuwu3ah3fFtZqfc9usf0I+CAORU=";
     }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
