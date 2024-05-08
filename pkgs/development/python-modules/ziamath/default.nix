@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "ziamath";
   version = "0.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-Drssi+YySh4OhVYAOvgIwzeeu5dQbUUXuhwTedhUUt8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ziafont
   ];
 
