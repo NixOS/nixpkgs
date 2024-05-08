@@ -52,6 +52,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    dbus # build systems checks for `dbus-run-session` in PATH
     meson
     meson-python
     pkg-config
