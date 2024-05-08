@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "schemdraw";
   version = "0.19";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -26,15 +26,15 @@ buildPythonPackage rec {
     hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyparsing
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     matplotlib = [
       matplotlib
     ];
