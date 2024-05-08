@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     ocamlPackages.duppy
     ocamlPackages.mm
     ocamlPackages.ocurl
+    ocamlPackages.ocaml_pcre
     ocamlPackages.cry
     ocamlPackages.camomile
     ocamlPackages.uri
