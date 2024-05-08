@@ -13145,6 +13145,8 @@ self: super: with self; {
 
   reportlab = callPackage ../development/python-modules/reportlab { };
 
+  reportlab-qrcode = callPackage ../development/python-modules/reportlab-qrcode { };
+
   repoze-lru = callPackage ../development/python-modules/repoze-lru { };
 
   repoze-sphinx-autointerface = callPackage ../development/python-modules/repoze-sphinx-autointerface { };
