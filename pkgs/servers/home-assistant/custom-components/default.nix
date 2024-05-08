@@ -32,7 +32,7 @@
 
   moonraker = callPackage ./moonraker {};
 
-  ntfy = callPackage ./nfty {};
+  ntfy = callPackage ./ntfy {};
 
   omnik_inverter = callPackage ./omnik_inverter {};
 
