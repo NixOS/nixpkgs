@@ -3420,6 +3420,8 @@ self: super: with self; {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dm-control = callPackage ../development/python-modules/dm-control { };
+
   dm-env = callPackage ../development/python-modules/dm-env { };
 
   dm-haiku = callPackage ../development/python-modules/dm-haiku { };
@@ -8860,6 +8862,8 @@ self: super: with self; {
 
   nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
 
+  nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
+
   nosexcover = callPackage ../development/python-modules/nosexcover { };
 
   notebook = callPackage ../development/python-modules/notebook { };
@@ -13836,6 +13840,8 @@ self: super: with self; {
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
     inherit (pkgs) cmake llvmPackages;
   });
+
+  shimmy = callPackage ../development/python-modules/shimmy { };
 
   shippai = callPackage ../development/python-modules/shippai { };
 
