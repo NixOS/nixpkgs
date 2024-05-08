@@ -4,24 +4,23 @@
   dissect-cstruct,
   dissect-util,
   fetchFromGitHub,
+  pythonOlder,
   setuptools,
   setuptools-scm,
-  pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
-  pname = "dissect-etl";
-  version = "3.9";
+  pname = "dissect-archive";
+  version = "1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
-    repo = "dissect.etl";
+    repo = "dissect.archive";
     rev = "refs/tags/${version}";
-    hash = "sha256-gLxBVHhtQS4Ep64H4jvndGyjUW1cQ68f346utVI9eC4=";
+    hash = "sha256-DUAJUbG3k6sbO7mqvNzQQns+4l8XHDUh0xZ/RA5LWEY=";
   };
 
   build-system = [
@@ -34,14 +33,12 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "dissect.etl" ];
+  pythonImportsCheck = [ "dissect.archive" ];
 
   meta = with lib; {
-    description = "Dissect module implementing a parser for Event Trace Log (ETL) files";
-    homepage = "https://github.com/fox-it/dissect.etl";
-    changelog = "https://github.com/fox-it/dissect.etl/releases/tag/${version}";
+    description = "Dissect module implementing parsers for various archive and backup formats";
+    homepage = "https://github.com/fox-it/dissect.archive";
+    changelog = "https://github.com/fox-it/dissect.archive/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };
