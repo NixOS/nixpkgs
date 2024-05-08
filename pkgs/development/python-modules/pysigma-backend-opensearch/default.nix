@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g3kGaNq07yMu3mnRDeZB3Ck8wwzK3HcOIzkl36cNOs8=";
+    hash = "sha256-VEMt9CKbhPRj1182WcLOqF9JOEzorrz9Yyqp0+FAA88=";
   };
 
   postPatch = ''
