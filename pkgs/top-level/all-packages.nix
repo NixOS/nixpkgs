@@ -10141,7 +10141,9 @@ with pkgs;
 
   mdbook-d2 = callPackage ../tools/text/mdbook-d2 { };
 
-  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
+  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -11213,7 +11215,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud25 nextcloud26 nextcloud27 nextcloud28;
+    nextcloud25 nextcloud26 nextcloud27 nextcloud28 nextcloud29;
 
   nextcloud25Packages = throw "Nextcloud25 is EOL!";
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
@@ -11225,6 +11227,10 @@ with pkgs;
   nextcloud28Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/28.json;
   };
+  nextcloud29Packages = callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/29.json;
+  };
+
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -17039,7 +17045,9 @@ with pkgs;
   cargo-deb = callPackage ../development/tools/rust/cargo-deb { };
   cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
   cargo-docset = callPackage ../development/tools/rust/cargo-docset { };
-  cargo-duplicates = callPackage ../development/tools/rust/cargo-duplicates { };
+  cargo-duplicates = callPackage ../development/tools/rust/cargo-duplicates {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };

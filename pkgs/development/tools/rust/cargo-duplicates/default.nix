@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-duplicates";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "cargo-duplicates";
     rev = "v${version}";
-    hash = "sha256-e0cegK4obUVIJyx5XKF+xicvkRvQwuObwB8tprrJnrw=";
+    hash = "sha256-OwytBecRGizkDC2S92FKAy3/mc4Jg/NwaYIPahfiG6k=";
   };
 
-  cargoHash = "sha256-i1IyHCa/w4DOGlPWjDE4IbVm3s/40DIwjwUGIMTYH4Y=";
+  cargoHash = "sha256-LsdzHCQ4uG6+dwiUoC36VPuqUf8oPlcMHxNgdkvYzu8=";
 
   nativeBuildInputs = [
     curl
