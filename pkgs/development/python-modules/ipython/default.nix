@@ -29,6 +29,9 @@
 , notebook
 , qtconsole
 
+# Reverse dependency
+, sage
+
 # Test dependencies
 , pickleshare
 , pytest-asyncio
@@ -105,6 +108,8 @@ buildPythonPackage rec {
     # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
     "test_clipboard_get"
   ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";

@@ -1,6 +1,7 @@
 { lib
 , php
 , fetchFromGitHub
+, makeBinaryWrapper
 }:
 
 php.buildComposerProject (finalAttrs: {
@@ -18,6 +19,8 @@ php.buildComposerProject (finalAttrs: {
 
   # Needed because of the unbound version constraint on phpdocumentor/json-path
   composerStrictValidation = false;
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
     runHook preInstall

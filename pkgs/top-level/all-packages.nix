@@ -420,8 +420,6 @@ with pkgs;
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
-  castxml = callPackage ../development/tools/castxml { };
-
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
@@ -29712,10 +29710,6 @@ with pkgs;
 
   appgate-sdp = callPackage ../applications/networking/appgate-sdp { };
 
-  apostrophe = callPackage ../applications/editors/apostrophe {
-    pythonPackages = python3Packages;
-  };
-
   ardour = callPackage ../applications/audio/ardour { };
   ardour_7 = callPackage ../applications/audio/ardour/7.nix { };
 
@@ -31404,6 +31398,8 @@ with pkgs;
   );
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
+
+  minari = python3Packages.toPythonApplication python3Packages.minari;
 
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
@@ -35542,7 +35538,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_29; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 

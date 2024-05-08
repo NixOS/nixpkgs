@@ -56,6 +56,14 @@ lib:
 , nixosTests
 , pkgsBuildBuild
 , go
+, runCommand
+, bash
+, procps
+, coreutils
+, gnugrep
+, findutils
+, gnused
+, systemd
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -157,6 +165,42 @@ let
     rev = "v${k3sVersion}";
     sha256 = k3sRepoSha256;
   };
+
+  # Modify the k3s installer script so that we can let it install only
+  # killall.sh
+  k3sKillallSh = runCommand "k3s-killall.sh" { } ''
+    # Copy the upstream k3s install script except for the last lines that
+    # actually run the install process
+    sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
+
+    # Let killall expect "containerd-shim" in the Nix store
+    to_replace="k3s/data/\[\^/\]\*/bin/containerd-shim"
+    replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
+    changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
+    if [ -z "$changes" ]; then
+      echo "failed to replace \"$to_replace\" in k3s installer script (install.sh)"
+      exit 1
+    fi
+
+    remove_matching_line() {
+      line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
+      if [ -z $line_to_delete ]; then
+        echo "failed to find expression \"$1\" in k3s installer script (install.sh)"
+        exit 1
+      fi
+      sed -i "''${line_to_delete}d" install.sh
+    }
+
+    # Don't change mode and owner of killall
+    remove_matching_line "chmod.*KILLALL_K3S_SH"
+    remove_matching_line "chown.*KILLALL_K3S_SH"
+
+    # Execute only the "create_killall" function of the installer script
+    sed -i '$acreate_killall' install.sh
+
+    KILLALL_K3S_SH=$out bash install.sh
+  '';
+
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
   # One of the ideas of k3s is that there's the single "k3s" binary which can
@@ -278,6 +322,16 @@ buildGoModule rec {
     runc
   ];
 
+  k3sKillallDeps = [
+    bash
+    systemd
+    procps
+    coreutils
+    gnugrep
+    findutils
+    gnused
+  ];
+
   buildInputs = k3sRuntimeDeps;
 
   nativeBuildInputs = [
@@ -334,6 +388,9 @@ buildGoModule rec {
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
+    install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
+    wrapProgram $out/bin/k3s-killall.sh \
+      --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
   '';
 
   doInstallCheck = true;

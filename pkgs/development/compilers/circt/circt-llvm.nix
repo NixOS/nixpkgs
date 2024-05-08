@@ -23,7 +23,7 @@
     "-DLLVM_BUILD_EXAMPLES=OFF"
     "-DLLVM_OPTIMIZED_TABLEGEN=ON"
     "-DLLVM_ENABLE_PROJECTS=mlir"
-    "-DLLVM_TARGETS_TO_BUILD="
+    "-DLLVM_TARGETS_TO_BUILD=Native"
 
     # This option is needed to install llvm-config
     "-DLLVM_INSTALL_UTILS=ON"
