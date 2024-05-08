@@ -70,6 +70,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace src/ydata_profiling/utils/paths.py \
       --replace "    return get_project_root()" "    return Path.home() / '.cache/ydata-profiling'"
+    substituteInPlace src/ydata_profiling/utils/cache.py \
+      --replace "    data_path.mkdir(exist_ok=True)" "    data_path.mkdir(parents=True, exist_ok=True)"
   '';
 
   disabledTestPaths = [
