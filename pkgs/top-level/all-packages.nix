@@ -25052,8 +25052,6 @@ with pkgs;
 
   xml-security-c = callPackage ../development/libraries/xml-security-c { };
 
-  xml-tooling-c = callPackage ../development/libraries/xml-tooling-c { };
-
   xlslib = callPackage ../development/libraries/xlslib { };
 
   xsimd = callPackage ../development/libraries/xsimd { };
