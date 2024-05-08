@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "fuzzytm";
-  version = "2.0.5";
+  version = "2.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "FuzzyTM";
     inherit version;
-    hash = "sha256-IELkjd3/yc2lBYsLP6mms9LEcXOfVtNNooEKCMf9BtU=";
+    hash = "sha256-z0ESYtB7BqssxIHlrd0F+/qapOM1nrDi3Zih5SvgDGY=";
   };
 
   propagatedBuildInputs = [
