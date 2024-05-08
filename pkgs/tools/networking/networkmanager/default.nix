@@ -216,5 +216,9 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
     maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz ]);
     platforms = platforms.linux;
+    badPlatforms = [
+      # Mandatory shared libraries.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }
