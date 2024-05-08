@@ -99,7 +99,7 @@ stdenv.mkDerivation {
     ocamlPackages.fdkaac
     ocamlPackages.flac
     ocamlPackages.frei0r
-    ocamlPackages.gd4o
+    ocamlPackages.gd
     ocamlPackages.graphics
     ocamlPackages.imagelib
     ocamlPackages.inotify
