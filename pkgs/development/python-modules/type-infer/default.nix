@@ -10,6 +10,7 @@
 , numpy
 , pandas
 , psutil
+, py3langid
 , python-dateutil
 , scipy
 , toml
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     numpy
     pandas
     psutil
+    py3langid
     python-dateutil
     scipy
     toml
