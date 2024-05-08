@@ -33,13 +33,24 @@ let
     }
     trap on_exit EXIT
 
+    borgWrapper () {
+      local result
+      borg "$@" && result=$? || result=$?
+      if [[ -z "${toString cfg.failOnWarnings}" ]] && [[ "$result" == 1 ]]; then
+        echo "ignoring warning return value 1"
+        return 0
+      else
+        return "$result"
+      fi
+    }
+
     archiveName="${optionalString (cfg.archiveBaseName != null) (cfg.archiveBaseName + "-")}$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
     ${cfg.preHook}
   '' + optionalString cfg.doInit ''
     # Run borg init if the repo doesn't exist yet
-    if ! borg list $extraArgs > /dev/null; then
-      borg init $extraArgs \
+    if ! borgWrapper list $extraArgs > /dev/null; then
+      borgWrapper init $extraArgs \
         --encryption ${cfg.encryption.mode} \
         $extraInitArgs
       ${cfg.postInit}
@@ -48,7 +59,7 @@ let
     (
       set -o pipefail
       ${optionalString (cfg.dumpCommand != null) ''${escapeShellArg cfg.dumpCommand} | \''}
-      borg create $extraArgs \
+      borgWrapper create $extraArgs \
         --compression ${cfg.compression} \
         --exclude-from ${mkExcludeFile cfg} \
         --patterns-from ${mkPatternsFile cfg} \
@@ -57,16 +68,16 @@ let
         ${if cfg.paths == null then "-" else escapeShellArgs cfg.paths}
     )
   '' + optionalString cfg.appendFailedSuffix ''
-    borg rename $extraArgs \
+    borgWrapper rename $extraArgs \
       "::$archiveName$archiveSuffix" "$archiveName"
   '' + ''
     ${cfg.postCreate}
   '' + optionalString (cfg.prune.keep != { }) ''
-    borg prune $extraArgs \
+    borgWrapper prune $extraArgs \
       ${mkKeepArgs cfg} \
       ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
       $extraPruneArgs
-    borg compact $extraArgs $extraCompactArgs
+    borgWrapper compact $extraArgs $extraCompactArgs
     ${cfg.postPrune}
   '');
 
@@ -484,6 +495,15 @@ in {
               Set the `PrivateTmp` option for
               the systemd-service. Set to false if you need sockets
               or other files from global /tmp.
+            '';
+            default = true;
+          };
+
+          failOnWarnings = mkOption {
+            type = types.bool;
+            description = ''
+              Fail the whole backup job if any borg command returns a warning
+              (exit code 1), for example because a file changed during backup.
             '';
             default = true;
           };
