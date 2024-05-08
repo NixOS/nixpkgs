@@ -2021,8 +2021,6 @@ with pkgs;
 
   ronin = callPackage ../tools/security/ronin { };
 
-  s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
-
   scarab = callPackage ../tools/games/scarab { };
 
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
