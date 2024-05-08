@@ -59,7 +59,7 @@ let
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-YL+ZAY3K6ESI2mApWdTQDSY8YTmKotBTV6Xe2Cm2lW8=";
+      outputHash = "sha256-Je+tBFEztdgtB/Az3XA601CskDgg04hvCYQba4ml/vs=";
     };
 
     nativeBuildInputs = [

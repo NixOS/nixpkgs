@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
 
     installPhase = ''
       export HOME=$(mktemp -d)
+
+      # Some packages produce platform dependent outputs. We do not want to cache those in the global store
+      pnpm config set side-effects-cache false
+
       pnpm config set package-manager-strict false
       pnpm config set store-dir $out
       # This version of the package has different versions of esbuild as a dependency.
@@ -65,7 +69,7 @@ stdenv.mkDerivation rec {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-wXpia1oXiXzGk+zpJzQq1Zee/LgZbGUaB70TGTfpZbQ=";
+    outputHash = "sha256-UOMIioLAtxuVLf0Loua+uvtCMKgsrf1BEGgygH3m1K8=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     installPhase = ''
       export HOME=$(mktemp -d)
 
+      # Some packages produce platform dependent outputs. We do not want to cache those in the global store
+      pnpm config set side-effects-cache false
+
       pnpm config set package-manager-strict false
       pnpm config set store-dir $out
       pnpm install --frozen-lockfile --ignore-script --force
@@ -47,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-GlbuAiotBISegpmbTlz9uXc84hwiD5Ei6WCdIVpu2UQ=";
+    outputHash = "sha256-hl0wuPCf7Z1ORGVunq4JOLWno4pF0Sf7ZXpUZMgpGRE=";
   };
 
   nativeBuildInputs = [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]
