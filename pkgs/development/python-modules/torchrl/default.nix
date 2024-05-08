@@ -36,6 +36,7 @@
 , pytestCheckHook
 , pyyaml
 , scipy
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -161,5 +162,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
+    # ~3k tests fail with: RuntimeError: internal error
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
