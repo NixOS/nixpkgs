@@ -3,23 +3,28 @@
 , fetchFromGitHub
 , pamqp
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aioamqp";
   version = "0.15.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Polyconseil";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "aioamqp";
+    rev = "aioamqp-${version}";
     hash = "sha256-fssPknJn1tLtzb+2SFyZjfdhUdD8jqkwlInoi5uaplk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pamqp
   ];
 

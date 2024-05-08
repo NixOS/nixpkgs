@@ -18,13 +18,14 @@
 , pythonOlder
 , python-daemon
 , pyyaml
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
   version = "2.3.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -42,11 +43,12 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     pbr
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     psutil
     pexpect

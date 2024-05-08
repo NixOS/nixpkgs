@@ -12,13 +12,13 @@
 buildPythonPackage rec {
   pname = "aiorun";
   version = "2023.7.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cjrh";
-    repo = pname;
+    repo = "aiorun";
     rev = "refs/tags/v${version}";
     hash = "sha256-3AGsT8IUNi5SZHBsBfd7akj8eQ+xb0mrR7ydIr3T8gs=";
   };
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pygments
   ];
 
