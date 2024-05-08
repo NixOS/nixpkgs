@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "scc";
-  version = "3.3.0";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
     rev = "v${version}";
-    hash = "sha256-WZWFgbC/Yz+KNYK+bjm+rlf3MJVPMbL+7hyFOSaSewA=";
+    hash = "sha256-YbTPRUxkSKYZwOSK7XFr6wHqACp0rkFyzQCMcAFlZ7Y=";
   };
 
   vendorHash = null;
