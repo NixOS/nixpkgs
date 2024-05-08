@@ -10,6 +10,7 @@
 , pygments
 , pyqt5
 , pythonOlder
+, pythonAtLeast
 , traitsui
 , vtk
 , wrapQtAppsHook
@@ -17,6 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mayavi";
+  # TODO: Remove meta.broken on next release.
   version = "4.8.1";
   format = "setuptools";
 
@@ -85,5 +87,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ knedlsepp ];
+    # Should be fixed in a version from after March 26, see:
+    # https://github.com/enthought/mayavi/issues/1284#issuecomment-2020631244
+    broken = pythonAtLeast "3.12";
   };
 }
