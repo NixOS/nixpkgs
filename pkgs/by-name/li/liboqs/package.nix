@@ -3,21 +3,20 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  ninja,
   openssl,
   fetchpatch,
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboqs";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-BFDa5NUr02lFPcT4Hnb2rjGAi+2cXvh1SHLfqX/zLlI=";
+    repo = "liboqs";
+    rev = finalAttrs.version;
+    hash = "sha256-BFDa5NUr02lFPcT4Hnb2rjGAi+2cXvh1SHLfqX/zLlI=";
   };
 
   patches = [
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];
 
   cmakeFlags = [
@@ -42,6 +41,8 @@ stdenv.mkDerivation rec {
 
   dontFixCmake = true; # fix CMake file will give an error
 
+  outputs = [ "out" "dev" ];
+
   meta = with lib; {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";
     homepage = "https://openquantumsafe.org";
@@ -49,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.sigmanificient ];
   };
-}
+})

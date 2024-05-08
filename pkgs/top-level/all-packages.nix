@@ -22768,8 +22768,6 @@ with pkgs;
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
 
-  liboqs = callPackage ../development/libraries/liboqs { };
-
   libosinfo = callPackage ../development/libraries/libosinfo { };
 
   libosip = callPackage ../development/libraries/osip { };
