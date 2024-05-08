@@ -8109,8 +8109,6 @@ with pkgs;
 
   fim = callPackage ../tools/graphics/fim { };
 
-  flac123 = callPackage ../applications/audio/flac123 { };
-
   flamegraph = callPackage ../development/tools/flamegraph { };
 
   flawfinder = callPackage ../development/tools/flawfinder { };
