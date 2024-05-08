@@ -7,7 +7,6 @@
 , glib
 , python3
 , help2man
-, systemd
 , bash-completion
 , bash
 , buildPackages
