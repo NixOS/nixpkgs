@@ -137,9 +137,8 @@ let
   } ''
     addToSearchPathWithCustomDelimiter : PYTHONPATH "${mercurial}/${python.sitePackages}"
 
-    unpackPhase
-    cd "$sourceRoot"
-    patchPhase
+    # Run unpackPhase and patchPhase
+    phases="''${prePhases[*]-} unpackPhase patchPhase" genericBuild
 
     cat << EOF > tests/blacklists/nix
     # tests enforcing "/usr/bin/env" shebangs, which are patched for nix

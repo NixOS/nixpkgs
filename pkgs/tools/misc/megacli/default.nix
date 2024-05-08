@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       $out/opt/MegaRAID/MegaCli/MegaCli64
 
     ln -s $out/opt/MegaRAID/MegaCli/MegaCli64 $out/bin/MegaCli64
-    eval fixupPhase
+    runPhase fixupPhase
   '';
 
   meta = {

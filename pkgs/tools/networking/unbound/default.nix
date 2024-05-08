@@ -141,12 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
     # This avoids gnutls.out -> unbound.lib -> lib.getLib openssl.
     ''
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
-      configurePhase
-      buildPhase
-      if [ -n "$doCheck" ]; then
-          checkPhase
-      fi
-      installPhase
+      # Run from preConfigurephases to installPhase
+      phases="''${preConfigurePhases[*]-} configurePhase \
+        ''${preBuildPhases[*]-} buildPhase checkPhase \
+        ''${preInstallPhases[*]-} installPhase" \
+        genericBuild
     ''
   # get rid of runtime dependencies on $dev outputs
   + ''substituteInPlace "$lib/lib/libunbound.la" ''

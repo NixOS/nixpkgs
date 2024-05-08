@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     cp -r "$src" "$out/toolbox"
     chmod -R +w "$out/toolbox"
 
-    fixupPhase
+    runPhase fixupPhase
     gappsWrapperArgsHook
 
     patchelf \

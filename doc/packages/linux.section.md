@@ -87,8 +87,7 @@ To edit the `.config` file for Linux X.Y from within Nix, proceed as follows:
 
 ```ShellSession
 $ nix-shell '<nixpkgs>' -A linuxKernel.kernels.linux_X_Y.configEnv
-$ unpackPhase
-$ cd linux-*
+$ runPhase unpackPhase # Unpack and cd $sourceRoot
 $ make nconfig
 ```
 
@@ -104,8 +103,7 @@ See the snippet below as an example.
 ```ShellSession
 $ nix-build '<nixpkgs>' -A linuxPackages.kernel.dev
 $ nix-shell '<nixpkgs>' -A linuxPackages.kernel
-$ unpackPhase
-$ cd linux-*
+$ runPhase unpackPhase
 $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
 # insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
 ```

@@ -576,9 +576,8 @@ in package-set { inherit pkgs lib callPackage; } self // {
           ];
           dontUnpack = false;
         } ''
-        unpackPhase
-        cd "''${sourceRoot:-.}"
-        patchPhase
+        # Unpack and patch
+        phases="''${prePhases[*]-} unpackPhase patchPhase" genericBuild
         mkdir out
         HOME=$PWD cabal sdist --output-directory out
         mv out/*.tar.gz $out

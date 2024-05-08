@@ -36,7 +36,7 @@ let
   # Create a patch against src based on changes applied in patchCommands
   mkPatch = { name, src, patchCommands }: runCommand "${name}-k2pdfopt.patch" { inherit src; } ''
     source $stdenv/setup
-    unpackPhase
+    eval "''${unpackPhase:-unpackPhase}"
 
     orig=$sourceRoot
     new=$sourceRoot-modded

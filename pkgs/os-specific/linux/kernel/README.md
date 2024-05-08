@@ -16,7 +16,7 @@
 
        ```console
        [nix-shell]$ pushd $(mktemp -d)
-       [nix-shell]$ unpackPhase
+       [nix-shell]$ eval "${unpackPhase:-unpackPhase}"
        ```
 
     3. For each supported platform (`i686`, `x86_64`, `uml`) do the following:

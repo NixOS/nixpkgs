@@ -1,4 +1,4 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, substituteAll, moltenvk,
+{ stdenv_32bit, lib, pkgs, buildPackages, pkgsi686Linux, pkgsCross, callPackage, substituteAll, moltenvk,
   wineRelease ? "stable",
   supportFlags
 }:
@@ -38,6 +38,9 @@ in with src; {
         src = ./builder-wow.sh;
         # pkgconfig has trouble picking the right architecture
         pkgconfig64remove = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [ pkgs.glib pkgs.gst_all_1.gstreamer ];
+        postInstall = ''
+          ${lib.getExe buildPackages.shellcheck-minimal} "$target"
+        '';
       };
     platforms = [ "x86_64-linux" ];
     mainProgram = "wine64";

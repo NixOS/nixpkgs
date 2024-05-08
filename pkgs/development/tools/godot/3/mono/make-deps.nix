@@ -37,10 +37,10 @@ godot3-mono.overrideAttrs (self: base: {
     wrkdir="$(mktemp -d)"
     trap 'rm -rf -- "$wrkdir"' EXIT
     pushd "$wrkdir" > /dev/null
-      unpackPhase
-      cd source
-      patchPhase
-      configurePhase
+      # Unpack, patch, and configure
+      phases="''${prePhases[*]-} unpackPhase patchPhase \
+        ''${preConfigurePhases[*]-} configurePhase" \
+        genericBuild
 
       # Without RestorePackagesPath set, it restores packages to a temp directory. Specifying
       # a path ensures we have a place to run nuget-to-nix.
