@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kiike ];
     mainProgram = "flac123";
+    platforms = lib.platforms.unix;
   };
 })
