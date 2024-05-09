@@ -27,6 +27,7 @@ let
     dtk6gui = callPackage ./library/dtk6gui { };
     dtk6widget = callPackage ./library/dtk6widget { };
     dtk6declarative = callPackage ./library/dtk6declarative { };
+    dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
