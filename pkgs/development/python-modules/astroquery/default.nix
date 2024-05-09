@@ -10,6 +10,8 @@
 , pillow
 , pytest
 , pytest-astropy
+, pytest-dependency
+, pytest-rerunfailures
 , pytestCheckHook
 , pyvo
 , astropy-helpers
@@ -46,11 +48,16 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
     matplotlib
     pillow
     pytest
     pytest-astropy
-    pytestCheckHook
+    pytest-dependency
+    pytest-rerunfailures
   ];
 
   pytestFlagsArray = [
