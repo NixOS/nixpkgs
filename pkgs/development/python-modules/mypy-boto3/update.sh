@@ -371,7 +371,7 @@ for package in "${packages[@]}"; do
   version=$(curl -s https://pypi.org/pypi/${package}/json | jq -r '.info.version')
 
   if [ "${version}" != "${old_version}" ]; then
-    url="https://pypi.io/packages/source/m/${package}/${package}-${version}.tar.gz"
+    url="https://pypi.io/packages/source/m/${package//-/_}/${package//-/_}-${version}.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
     sri_hash="$(nix hash to-sri --type sha256 $hash)"
 
