@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, dateparser
-, defusedxml
-, fetchFromGitHub
-, geomet
-, geopandas
-, kml2geojson
-, pyshp
-, pythonOlder
-, pyyaml
-, requests
-, setuptools-scm
-, shapely
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  defusedxml,
+  fetchFromGitHub,
+  geomet,
+  geopandas,
+  kml2geojson,
+  pyshp,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools-scm,
+  shapely,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace-fail '"twine",' ""
   '';
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     dateparser
@@ -59,9 +58,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "WKTUtils"
-  ];
+  pythonImportsCheck = [ "WKTUtils" ];
 
   meta = with lib; {
     description = "Collection of tools for handling WKTs";
