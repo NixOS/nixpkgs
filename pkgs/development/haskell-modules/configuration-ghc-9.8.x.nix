@@ -132,4 +132,14 @@ self: super: {
       })
     super.libmpd;
 
+  # Loosen bounds
+  patch = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/reflex-frp/patch/commit/91fed138483a7bf2b098d45b9e5cc36191776320.patch";
+    sha256 = "sha256-/KLfIshia88lU5G/hA7ild7+a2mqc7qgSa9AEBqEqkQ=";
+  }) super.patch;
+  reflex = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/reflex-frp/reflex/commit/0ac53ca3eab2649dd3f3edc585e10af8d13b28cd.patch";
+    sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
+  }) super.reflex;
+
 }
