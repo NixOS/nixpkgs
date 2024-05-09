@@ -1,14 +1,15 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [
-    async-timeout
-  ];
+  dependencies = [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
