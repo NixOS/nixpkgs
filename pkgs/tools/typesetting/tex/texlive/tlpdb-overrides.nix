@@ -20,7 +20,7 @@ let
            in if binNotFormats != [] then attrs // { binfiles = binNotFormats; } else removeAttrs attrs [ "binfiles" ]
       else attrs);
 
-    orig = removeFormatLinks (removeAttrs oldTlpdb [ "00texlive.config" ]);
+    orig = removeFormatLinks oldTlpdb;
 
 in lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb

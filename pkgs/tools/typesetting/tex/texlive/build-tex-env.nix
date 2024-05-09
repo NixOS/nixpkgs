@@ -124,8 +124,10 @@ let
   # and ignoring luatex, perl, and shell scripts (those must be patched using postFixup)
   needsGhostscript = lib.any (p: lib.elem p.pname [ "context" "dvipdfmx" "latex-papersize" "lyluatex" ]) pkgList.bin;
 
-  name = if __combine then "texlive-${__extraName}-${bin.texliveYear}${__extraVersion}" # texlive.combine: old name name
-    else "texlive-${bin.texliveYear}-env";
+  version = if __combine then "${bin.texliveYear}${__extraVersion}" # texlive.combine: old version
+    else bin.texliveYear + "-r" + toString tl."00texlive.config".revision + lib.optionalString tl."00texlive.config".frozen "-final";
+  name = if __combine then "texlive-${__extraName}-${bin.texliveYear}${__extraVersion}" # texlive.combine: old name
+    else "texlive-${version}-env";
 
   texmfdist = buildEnv' {
     name = "${name}-texmfdist";
@@ -204,6 +206,8 @@ let
         (lib.concatMap (n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ]))) pkgList.nonEnvOutputs);
     # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
     fonts = "${texmfroot}/texmf-dist/fonts";
+    # keep version available
+    inherit version;
     # support variants attrs, (prev: attrs)
     __overrideTeXConfig = newArgs:
       let appliedArgs = if builtins.isFunction newArgs then newArgs args else newArgs; in
