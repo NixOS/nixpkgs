@@ -12,26 +12,17 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.1.3";
+  version = "2.1.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Doist";
-    repo = pname;
+    repo = "todoist-api-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xi3B/Nl5bMbW0lYwrkEbBgFTEl07YkFyN18kN0WyGyw=";
+    hash = "sha256-CyIruMXz5zpDYUHknyFc4feD2rGQ3V4gifwrEqzFTFU=";
   };
-
-  patches = [
-    # Switch to poetry-core, https://github.com/Doist/todoist-api-python/pull/81
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/Doist/todoist-api-python/commit/42288e066d2f0c69611ab50cb57ca98b8c6bd1ca.patch";
-      hash = "sha256-yq+VVvjPYywvUn+ydyWVQPkiYPYWe9U6w38G54L2lkE=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
