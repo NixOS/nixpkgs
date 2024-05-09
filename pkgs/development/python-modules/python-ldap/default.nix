@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 
 # build-system
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   version = "3.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.12"; # requires distutils
 
   src = fetchFromGitHub {
     owner = "python-ldap";
