@@ -12182,6 +12182,8 @@ with pkgs;
 
   pylint = with python3Packages; toPythonApplication pylint;
 
+  pytype = with python3Packages; toPythonApplication pytype;
+
   pympress = callPackage ../applications/office/pympress { };
 
   pyocd = with python3Packages; toPythonApplication pyocd;
