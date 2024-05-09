@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.16.15";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J+XIqaV1ThD0RqqcyIkzvTWCkIztjkHzGzUbj0qojJs=";
+    hash = "sha256-wI7moyxuU84TLPmle8tzt/4ZY48DG+EWuyL1WjtJREM=";
   };
 
   patches = [
