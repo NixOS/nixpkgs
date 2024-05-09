@@ -3582,6 +3582,12 @@
     githubId = 1118859;
     name = "Scott Worley";
   };
+  ChocolateLoverRaj = {
+    github = "ChocolateLoverRaj";
+    githubId = 52586855;
+    matrix = "@chocolateloverraj:matrix.org";
+    name = "Rajas Paranjpe";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
