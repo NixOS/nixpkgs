@@ -553,6 +553,8 @@ self: super: with self; {
 
   amqtt = callPackage ../development/python-modules/amqtt { };
 
+  anonymizeip = callPackage ../development/python-modules/anonymizeip { };
+
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
 
   ancp-bids = callPackage ../development/python-modules/ancp-bids { };
@@ -1964,6 +1966,8 @@ self: super: with self; {
 
   celery = callPackage ../development/python-modules/celery { };
 
+  celery-batches = callPackage ../development/python-modules/celery-batches { };
+
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
 
   celery-singleton = callPackage ../development/python-modules/celery-singleton { };
@@ -3276,6 +3280,8 @@ self: super: with self; {
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
+  django-organizations = callPackage ../development/python-modules/django-organizations { };
+
   django-otp = callPackage ../development/python-modules/django-otp { };
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
@@ -3320,6 +3326,8 @@ self: super: with self; {
 
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
+  django-rest-mfa = callPackage ../development/python-modules/django-rest-mfa { };
+
   django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
@@ -3357,6 +3365,8 @@ self: super: with self; {
   django-simple-history = callPackage ../development/python-modules/django-simple-history { };
 
   django-sites = callPackage ../development/python-modules/django-sites { };
+
+  django-sql-utils = callPackage ../development/python-modules/django-sql-utils { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
 
@@ -3405,6 +3415,8 @@ self: super: with self; {
   dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
   dj-static = callPackage ../development/python-modules/dj-static { };
+
+  dj-stripe = callPackage ../development/python-modules/dj-stripe { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
@@ -14718,6 +14730,8 @@ self: super: with self; {
 
   sybil = callPackage ../development/python-modules/sybil { };
 
+  symbolic = callPackage ../development/python-modules/symbolic { };
+
   symengine = callPackage ../development/python-modules/symengine {
     inherit (pkgs) symengine;
   };
@@ -16571,6 +16585,8 @@ self: super: with self; {
   uvloop = callPackage ../development/python-modules/uvloop {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
+
+  uwsgi-chunked = callPackage ../development/python-modules/uwsgi-chunked { };
 
   vaa = callPackage ../development/python-modules/vaa { };
 
