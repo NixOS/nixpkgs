@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,11 @@ buildPythonPackage rec {
     ./close_parser_on_time.patch
   ];
 
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  dependencies = [ numpy ];
 
-  propagatedBuildInputs = [ numpy ];
-
-  pythonImportsCheck = [
-    "Bio"
-  ];
+  pythonImportsCheck = [ "Bio" ];
 
   checkPhase = ''
     runHook preCheck
