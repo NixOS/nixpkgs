@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "rc-9front";
-  version = "unstable-2022-11-01";
+  version = "0-unstable-2022-11-01";
 
   src = fetchFrom9Front {
     domain = "shithub.us";
