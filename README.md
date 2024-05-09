@@ -3,12 +3,14 @@
   <img src="./media/images/botnix_simple_narrow_bw_1000w.png" width="50%" alt="Botnix logo" />
 </p>
 
+<!---
 <p align="center" width="100%">  
   <a alt="Botnix Build"
     href="https://github.com/nervosys/Botnix/actions/workflows/test_build.yml">
     <img src="https://github.com/nervosys/Botnix/actions/workflows/test_build.yml/badge.svg">
   </a>
 </p>
+--->
 
 <h1 align="center">The operating system for autonomous systems</h1>
 
