@@ -569,11 +569,9 @@ in
     };
 
     users = {
-      groups."${cfg.group}" = {};
-      users."${cfg.user}" = {
+      groups.${cfg.group} = {};
+      users.${cfg.user} = {
         isSystemUser = true;
-        createHome = true;
-        home = cfg.settings.pretix.datadir;
         inherit (cfg) group;
       };
     };
