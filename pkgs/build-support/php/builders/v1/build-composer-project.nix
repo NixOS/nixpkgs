@@ -1,21 +1,14 @@
-{
-  callPackage,
-  nix-update-script,
-  stdenvNoCC,
-  lib,
-  php,
-}:
+{ callPackage, nix-update-script, stdenvNoCC, lib, php, }:
 
 let
-  buildComposerProjectOverride =
-    finalAttrs: previousAttrs:
+  buildComposerProjectOverride = finalAttrs: previousAttrs:
 
     let
       phpDrv = finalAttrs.php or php;
       composer = finalAttrs.composer or phpDrv.packages.composer;
-      composer-local-repo-plugin = callPackage ../../pkgs/composer-local-repo-plugin.nix { };
-    in
-    {
+      composer-local-repo-plugin =
+        callPackage ../../pkgs/composer-local-repo-plugin.nix { };
+    in {
       composerLock = previousAttrs.composerLock or null;
       composerNoDev = previousAttrs.composerNoDev or true;
       composerNoPlugins = previousAttrs.composerNoPlugins or true;
@@ -35,59 +28,49 @@ let
       strictDeps = previousAttrs.strictDeps or true;
 
       # Should we keep these empty phases?
-      configurePhase =
-        previousAttrs.configurePhase or ''
-          runHook preConfigure
+      configurePhase = previousAttrs.configurePhase or ''
+        runHook preConfigure
 
-          runHook postConfigure
-        '';
+        runHook postConfigure
+      '';
 
-      buildPhase =
-        previousAttrs.buildPhase or ''
-          runHook preBuild
+      buildPhase = previousAttrs.buildPhase or ''
+        runHook preBuild
 
-          runHook postBuild
-        '';
+        runHook postBuild
+      '';
 
       doCheck = previousAttrs.doCheck or true;
-      checkPhase =
-        previousAttrs.checkPhase or ''
-          runHook preCheck
+      checkPhase = previousAttrs.checkPhase or ''
+        runHook preCheck
 
-          runHook postCheck
-        '';
+        runHook postCheck
+      '';
 
-      installPhase =
-        previousAttrs.installPhase or ''
-          runHook preInstall
+      installPhase = previousAttrs.installPhase or ''
+        runHook preInstall
 
-          runHook postInstall
-        '';
+        runHook postInstall
+      '';
 
       doInstallCheck = previousAttrs.doInstallCheck or false;
-      installCheckPhase =
-        previousAttrs.installCheckPhase or ''
-          runHook preInstallCheck
+      installCheckPhase = previousAttrs.installCheckPhase or ''
+        runHook preInstallCheck
 
-          runHook postInstallCheck
-        '';
+        runHook postInstallCheck
+      '';
 
       composerRepository =
         previousAttrs.composerRepository or (phpDrv.mkComposerRepository {
           inherit composer composer-local-repo-plugin;
-          inherit (finalAttrs)
-            patches
-            pname
-            src
-            vendorHash
-            version
-            ;
+          inherit (finalAttrs) patches pname src vendorHash version;
 
           composerLock = previousAttrs.composerLock or null;
           composerNoDev = previousAttrs.composerNoDev or true;
           composerNoPlugins = previousAttrs.composerNoPlugins or true;
           composerNoScripts = previousAttrs.composerNoScripts or true;
-          composerStrictValidation = previousAttrs.composerStrictValidation or true;
+          composerStrictValidation =
+            previousAttrs.composerStrictValidation or true;
         });
 
       # Projects providing a lockfile from upstream can be automatically updated.
@@ -106,9 +89,7 @@ let
         COMPOSER_MIRROR_PATH_REPOS = "1";
       };
 
-      meta = previousAttrs.meta or { } // {
-        platforms = lib.platforms.all;
-      };
+      meta = previousAttrs.meta or { } // { platforms = lib.platforms.all; };
     };
-in
-args: (stdenvNoCC.mkDerivation args).overrideAttrs buildComposerProjectOverride
+in args:
+(stdenvNoCC.mkDerivation args).overrideAttrs buildComposerProjectOverride
