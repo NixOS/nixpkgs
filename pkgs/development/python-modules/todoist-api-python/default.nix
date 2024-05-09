@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "todoist-api-python";
   version = "2.1.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -24,11 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-CyIruMXz5zpDYUHknyFc4feD2rGQ3V4gifwrEqzFTFU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
   ];
 
