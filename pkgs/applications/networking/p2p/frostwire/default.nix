@@ -39,7 +39,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-r6YSrbSJbM3063JrX4tCVKFrJxTaLN4Trc+33jzpwcE=";
+    outputHash = "sha256-T3XYnTboPzq2KoR6H4yZj0ZrTZImptz7XhzfyIOlP/E=";
   };
 
 in stdenv.mkDerivation {
@@ -94,6 +94,5 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
-    broken = true; # at 2022-09-30, errors with changing hash.
   };
 }
