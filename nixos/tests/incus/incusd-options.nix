@@ -1,7 +1,12 @@
 # this is a set of tests for non-default options. typically the default options
 # will be handled by the other tests
 import ../make-test-python.nix (
-  { pkgs, lib, ... }:
+  {
+    pkgs,
+    lib,
+    incus ? pkgs.incus-lts,
+    ...
+  }:
 
   let
     releases = import ../../release.nix {
@@ -29,6 +34,7 @@ import ../make-test-python.nix (
 
         incus = {
           enable = true;
+          package = incus;
           softDaemonRestart = false;
 
           preseed = {
