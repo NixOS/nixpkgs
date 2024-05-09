@@ -4097,8 +4097,6 @@ dont-distribute-packages:
  - unitym-servant
  - unitym-yesod
  - universal
- - universe
- - universe-dependent-sum
  - universe-th
  - unix-fcntl
  - unpacked-these

@@ -107,6 +107,7 @@ self: super: {
   stripe-signature = doJailbreak super.stripe-signature; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
   string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
+  universe-some = doJailbreak super.universe-some; # th-abstraction < 0.7
 
   #
   # Test suite issues
