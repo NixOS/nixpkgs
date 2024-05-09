@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, pciutils }:
+{ lib, stdenv, fetchFromGitHub, gobject-introspection, python3Packages, pciutils, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
   };
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+  nativeBuildInputs = [
+    gobject-introspection
+    python3Packages.wrapPython
+    wrapGAppsHook3
+  ];
 
   pythonPath = with python3Packages; [
     configparser
@@ -33,6 +37,12 @@ stdenv.mkDerivation rec {
     install -D -m644 -t $out/etc etc/*
     install -D -m644 -t $out/lib/systemd/system systemd/*
     runHook postInstall
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   postFixup = "wrapPythonPrograms";

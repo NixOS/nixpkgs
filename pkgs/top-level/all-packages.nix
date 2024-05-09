@@ -1302,7 +1302,9 @@ with pkgs;
 
   makeBinaryWrapper = callPackage ../build-support/setup-hooks/make-binary-wrapper { };
 
-  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
+  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware.nix { type = "xz"; };
+
+  compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
@@ -2018,8 +2020,6 @@ with pkgs;
   redfang = callPackage ../tools/networking/redfang { };
 
   ronin = callPackage ../tools/security/ronin { };
-
-  s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
 
   scarab = callPackage ../tools/games/scarab { };
 
@@ -25311,36 +25311,6 @@ with pkgs;
     texLive = null;
   };
 
-  ## DEPRECATED, will be removed in a future release
-
-  clwrapperFunction = callPackage ../development/lisp-modules-obsolete/clwrapper;
-
-  wrapLisp_old = lisp: clwrapperFunction { inherit lisp; };
-
-  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/lisp-packages.nix {
-    inherit clwrapper;
-  };
-
-  lispPackages = quicklispPackages //
-    (lispPackagesFor (wrapLisp_old sbcl)) // { __attrsFailEvaluation = true; };
-
-  quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/quicklisp-to-nix.nix {
-    inherit clwrapper;
-  } // { __attrsFailEvaluation = true; };
-  quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old clisp));
-  quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old sbcl));
-  quicklispPackagesECL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ecl));
-  quicklispPackagesCCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ccl));
-  quicklispPackagesABCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old abcl));
-  quicklispPackagesGCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old gcl));
-  quicklispPackages = quicklispPackagesSBCL;
-
-  # Alternative lisp-modules implementation
-  lispPackages_new = callPackage ../development/lisp-modules-new-obsolete/lisp-packages.nix {}
-  // { __attrsFailEvaluation = true; };
-
-  ## End of DEPRECATED
-
   wrapLisp = callPackage ../development/lisp-modules/nix-cl.nix {};
 
   # Armed Bear Common Lisp
@@ -30167,6 +30137,8 @@ with pkgs;
 
   clight = callPackage ../applications/misc/clight { };
 
+  clight-gui = libsForQt5.callPackage ../applications/misc/clight/clight-gui.nix { };
+
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
@@ -30661,10 +30633,6 @@ with pkgs;
   exercism = callPackage ../applications/misc/exercism { };
 
   expenses = callPackage ../applications/misc/expenses { };
-
-  furnace = callPackage ../applications/audio/furnace {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   furtherance = callPackage ../applications/misc/furtherance { };
 
@@ -31279,6 +31247,7 @@ with pkgs;
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
       };
       freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {
+        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
         inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
       };
     })
@@ -37473,8 +37442,8 @@ with pkgs;
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
-  the-powder-toy = callPackage ../games/the-powder-toy {
-    lua = lua5_1;
+  the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
+    lua = lua5_2;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
