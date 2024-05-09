@@ -7,12 +7,12 @@
   dotnetCorePackages,
 }:
 let
-  version = "4.0.5455";
+  version = "4.0.5700";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-functions-core-tools";
     rev = version;
-    sha256 = "sha256-Ip1m0/l0YWFosYfp8UeREg9DP5pnvRnXyAaAuch7Op4=";
+    sha256 = "sha256-5BOJRrNMNVaxtacS+OzxiuPZ4yh3Ce1IW0CYiP2Skmk=";
   };
   gozip = buildGoModule {
     pname = "gozip";
