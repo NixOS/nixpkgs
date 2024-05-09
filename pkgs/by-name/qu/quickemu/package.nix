@@ -23,24 +23,26 @@
 , OVMF
 , OVMFFull
 , quickemu
+, curl
 , testers
 , installShellFiles
 }:
 let
   runtimePaths = [
-    qemu
+    cdrtools
+    curl
     gnugrep
     gnused
     jq
     lsb-release
     procps
     python3
-    cdrtools
-    usbutils
-    util-linux
-    unzip
+    qemu
     socat
     swtpm
+    unzip
+    usbutils
+    util-linux
     wget
     xdg-user-dirs
     xrandr
@@ -48,15 +50,15 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs : {
   pname = "quickemu";
-  version = "4.9.2";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = version;
-    hash = "sha256-StYgnFBnEJUkJDyFluMm01xhgejXc99AEldGGxIvZU0=";
+    rev = finalAttrs.version;
+    hash = "sha256-/rByXtk107hq18VVPWf/4nX+hdYHsVrNVrTuC8yoCmw=";
   };
 
   postPatch = ''
@@ -74,11 +76,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     installManPage docs/quickget.1 docs/quickemu.1 docs/quickemu_conf.1
-    install -Dm755 -t "$out/bin" macrecovery quickemu quickget windowskey
+    install -Dm755 -t "$out/bin" chunkcheck quickemu quickget windowskey
 
     # spice-gtk needs to be put in suffix so that when virtualisation.spiceUSBRedirection
     # is enabled, the wrapped spice-client-glib-usb-acl-helper is used
-    for f in macrecovery quickget quickemu windowskey; do
+    for f in chunkcheck quickget quickemu windowskey; do
       wrapProgram $out/bin/$f \
         --prefix PATH : "${lib.makeBinPath runtimePaths}" \
         --suffix PATH : "${lib.makeBinPath [ spice-gtk ]}"
@@ -89,10 +91,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = testers.testVersion { package = quickemu; };
 
-  meta = with lib; {
+  meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";
     homepage = "https://github.com/quickemu-project/quickemu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fedx-sudo ];
+    mainProgram = "quickemu";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fedx-sudo ];
   };
-}
+})
