@@ -1898,7 +1898,6 @@ broken-packages:
   - gang-of-threads # failure in job https://hydra.nixos.org/build/252716251 at 2024-03-16
   - Ganymede # failure in job https://hydra.nixos.org/build/233248892 at 2023-09-02
   - garepinoh # failure in job https://hydra.nixos.org/build/233238111 at 2023-09-02
-  - gargoyle # failure in job https://hydra.nixos.org/build/233196445 at 2023-09-02
   - gas # failure in job https://hydra.nixos.org/build/233233966 at 2023-09-02
   - gasp # failure in job https://hydra.nixos.org/build/252731457 at 2024-03-16
   - gather # failure in job https://hydra.nixos.org/build/233208848 at 2023-09-02
