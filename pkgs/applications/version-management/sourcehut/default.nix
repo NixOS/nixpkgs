@@ -69,7 +69,7 @@ let
         patches = (oldAttrs.patches or []) ++ [
           (fetchpatch {
             url = "https://github.com/pallets/werkzeug/commit/4e5bdca7f8227d10cae828f8064fb98190ace4aa.patch";
-            hash = "sha256-H45/YF9zaOUg6UqEEus4uBeGA/TjynuJZcRyc6BHQ30=";
+            hash = "sha256-83doVvfdpymlAB0EbfrHmuoKE5B2LJbFq+AY2xGpnl4=";
           })
         ];
       });
