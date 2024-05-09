@@ -2408,7 +2408,6 @@ broken-packages:
   - hat # failure in job https://hydra.nixos.org/build/233243655 at 2023-09-02
   - hats # failure in job https://hydra.nixos.org/build/233256724 at 2023-09-02
   - hatt # failure in job https://hydra.nixos.org/build/233195039 at 2023-09-02
-  - haveibeenpwned # failure in job https://hydra.nixos.org/build/233253058 at 2023-09-02
   - haven # failure in job https://hydra.nixos.org/build/233216806 at 2023-09-02
   - haverer # failure in job https://hydra.nixos.org/build/233210491 at 2023-09-02
   - hax # failure in job https://hydra.nixos.org/build/233212147 at 2023-09-02
