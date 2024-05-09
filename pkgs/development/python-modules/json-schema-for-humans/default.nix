@@ -35,12 +35,15 @@ buildPythonPackage rec {
     "dataclasses-json"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     dataclasses-json
     htmlmin
@@ -70,10 +73,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
-    mainProgram = "generate-schema-doc";
     homepage = "https://github.com/coveooss/json-schema-for-humans";
     changelog = "https://github.com/coveooss/json-schema-for-humans/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ astro ];
+    mainProgram = "generate-schema-doc";
   };
 }
