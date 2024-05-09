@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   lib,
   poetry-core,
   netaddr,
@@ -23,23 +22,15 @@ in
 
 buildPythonPackage rec {
   pname = "pyrad";
-  version = "2.4";
+  version = "2.4-unstable-2023-06-13";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyradius";
     repo = pname;
-    rev = version;
-    hash = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
+    rev = "dd34c5a29b46d83b0bea841e85fd72b79f315b87";
+    hash = "sha256-U4VVGkDDyN4J/tRDaDGSr2TSA4JmqIoQj5qn9qBAvQU=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Migrate to poetry-core
-      url = "https://github.com/pyradius/pyrad/commit/a4b70067dd6269e14a2f9530d820390a8a454231.patch";
-      hash = "sha256-1We9wrVY3Or3GLIKK6hZvEjVYv6JOaahgP9zOMvgErE=";
-    })
-  ];
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -47,18 +38,11 @@ buildPythonPackage rec {
     netaddr_0_8_0
     six
   ];
+
   preCheck = ''
     substituteInPlace tests/testServer.py \
       --replace-warn "def testBind(self):" "def dontTestBind(self):" \
       --replace-warn "def testBindv6(self):" "def dontTestBindv6(self):" \
-
-    # A lot of test methods have been deprecated since Python 3.1
-    # and have been removed in Python 3.12.
-    # https://docs.python.org/3/whatsnew/3.11.html#pending-removal-in-python-3-12
-    substituteInPlace tests/*.py \
-      --replace-quiet "self.failUnless"   "self.assertTrue" \
-      --replace-quiet "self.failIf"       "self.assertFalse" \
-      --replace-quiet "self.assertEquals" "self.assertEqual"
   '';
 
   nativeCheckInputs = [ unittestCheckHook ];
