@@ -3484,6 +3484,8 @@ self: super: with self; {
 
   doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
 
+  doctr = callPackage ../development/python-modules/doctr { };
+
   docutils = callPackage ../development/python-modules/docutils { };
 
   docx2python = callPackage ../development/python-modules/docx2python { };
@@ -7693,6 +7695,8 @@ self: super: with self; {
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
+  mplcursors = callPackage ../development/python-modules/mplcursors { };
+
   mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
 
   mplfinance = callPackage ../development/python-modules/mplfinance { };
@@ -11541,6 +11545,8 @@ self: super: with self; {
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
   pypdf3 = callPackage ../development/python-modules/pypdf3 { };
+
+  pypdfium2-bin = callPackage ../development/python-modules/pypdfium2/bin.nix { };
 
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
