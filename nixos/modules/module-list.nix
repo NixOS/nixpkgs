@@ -649,6 +649,7 @@
   ./services/hardware/tuxedo-rs.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
+  ./services/hardware/ultraleap.nix
   ./services/hardware/undervolt.nix
   ./services/hardware/upower.nix
   ./services/hardware/usbmuxd.nix
