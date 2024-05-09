@@ -126,7 +126,7 @@ rec {
     # Function to apply
     f:
     # Value to trace
-    v: traceValFn f (builtins.deepSeq v v);
+    v: traceValSeqNFn f 30 v;
 
   /* A combination of `traceVal` and `traceSeq`. */
   traceValSeq = traceValSeqFn id;
