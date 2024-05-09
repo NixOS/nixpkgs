@@ -1,0 +1,30 @@
+From fba2f3c9786264eb24d3dd72c3dafffdf3450404 Mon Sep 17 00:00:00 2001
+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Date: Tue, 30 Apr 2024 10:46:36 +0300
+Subject: [PATCH] Define __USE_TIME_BITS64 when it is necessary.
+
+Glibc and musl both defines this macro.
+Glibc defines it for 64-bit time_t on 32-bit arch
+and for 64-bit architectures.
+
+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+---
+ include/features.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/features.h b/include/features.h
+index 11b34205f..4322df7c1 100644
+--- a/include/features.h
++++ b/include/features.h
+@@ -437,4 +437,8 @@
+ # include <libc-internal.h>
+ #endif
+ 
++#if defined(__UCLIBC_USE_TIME64__) || __TARGET_ARCH_BITS__ == 64
++#define __USE_TIME_BITS64 1
++#endif
++
+ #endif	/* features.h  */
+-- 
+2.44.0
+

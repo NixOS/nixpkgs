@@ -43,18 +43,20 @@
     "fortify3"
     "pic"
     "relro"
-    "stackprotector"
     "strictoverflow"
   ] ++ lib.optional (with stdenvNoCC;
     # Musl-based platforms will keep "pie", other platforms will not.
     # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
     # in the nixpkgs manual to inform users about the defaults.
-    targetPlatform.libc == "musl"
+
+    # static elf riscv32 nommu uclibc requires a ld.so file and pie for the static binary to work
+    ((targetPlatform.libc == "musl") || (targetPlatform.libc == "uclibc"))
     # Except when:
     #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
     #    - static armv7l, where compilation fails.
     && !(targetPlatform.isAarch && targetPlatform.isStatic)
   ) "pie"
+  ++ lib.optional (stdenvNoCC.targetPlatform.libc != "uclibc") "stackprotector"
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
@@ -158,7 +160,7 @@ stdenvNoCC.mkDerivation {
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
 
-    inherit defaultHardeningFlags;
+    defaultHardeningFlags = lib.sort (a: b: a < b) defaultHardeningFlags;
   };
 
   dontBuild = true;
@@ -423,7 +425,7 @@ stdenvNoCC.mkDerivation {
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
-    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    default_hardening_flags_str = builtins.toString (lib.sort (a: b: a < b) defaultHardeningFlags);
   };
 
   meta =

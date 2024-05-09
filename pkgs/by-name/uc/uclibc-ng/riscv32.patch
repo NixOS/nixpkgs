@@ -1,0 +1,27 @@
+diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
+index 122a7eb71..b814449b4 100644
+--- a/extra/Configs/Config.in
++++ b/extra/Configs/Config.in
+@@ -336,7 +336,8 @@ config STATIC_PIE
+ 	depends on DOPIC && !UCLIBC_FORMAT_FDPIC_ELF && \
+ 		(TARGET_aarch64 || TARGET_arm || TARGET_i386 || \
+ 		 TARGET_m68k || TARGET_mips || TARGET_powerpc || \
+-		 TARGET_riscv64 || TARGET_x86_64 || TARGET_xtensa)
++		 TARGET_riscv32 || TARGET_riscv64 || TARGET_x86_64 \
++		|| TARGET_xtensa)
+ 
+ config ARCH_HAS_NO_SHARED
+ 	bool
+diff --git a/extra/Configs/Config.in.arch b/extra/Configs/Config.in.arch
+index 4bcf3ff3f..895663d1d 100644
+--- a/extra/Configs/Config.in.arch
++++ b/extra/Configs/Config.in.arch
+@@ -13,7 +13,7 @@ choice
+ config UCLIBC_FORMAT_ELF
+ 	bool "ELF (using ELF_FDPIC loader)"
+ 	depends on !ARCH_USE_MMU && (TARGET_arm || TARGET_m68k || \
+-				     TARGET_riscv64)
++				     TARGET_riscv32 || TARGET_riscv64)
+ 	select DOPIC
+ 	select STATIC_PIE
+ 	select ARCH_HAS_NO_SHARED
