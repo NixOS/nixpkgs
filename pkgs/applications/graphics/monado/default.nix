@@ -56,6 +56,8 @@
 # instead of via the monado-service program. For more information see:
 # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
 , serviceSupport ? true
+, withUltraleap ? false
+, ultraleap-hand-tracking-service
 }:
 
 stdenv.mkDerivation {
@@ -130,13 +132,14 @@ stdenv.mkDerivation {
     wayland-scanner
     zlib
     zstd
+  ] ++ lib.optionals withUltraleap [
+    ultraleap-hand-tracking-service
   ];
 
   # known disabled drivers/features:
   #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core (See https://github.com/NixOS/nixpkgs/issues/292618)
   #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR (See https://github.com/NixOS/nixpkgs/issues/292661)
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
-  #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
   # Help openxr-loader find this runtime
   setupHook = writeText "setup-hook" ''
