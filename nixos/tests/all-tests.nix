@@ -130,6 +130,7 @@ in {
   apparmor = handleTest ./apparmor.nix {};
   archi = handleTest ./archi.nix {};
   armagetronad = handleTest ./armagetronad.nix {};
+  artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   atuin = handleTest ./atuin.nix {};
