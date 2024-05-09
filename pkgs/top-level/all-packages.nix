@@ -14899,11 +14899,6 @@ with pkgs;
 
   ytfzf = callPackage ../tools/misc/ytfzf { };
 
-  # To expose more packages for Yi, override the extraPackages arg.
-  yi = callPackage ../applications/editors/yi/wrapper.nix {
-    haskellPackages = haskell.packages.ghc810;
-  };
-
   yaydl = callPackage ../tools/video/yaydl {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
