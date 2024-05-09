@@ -3,6 +3,9 @@
 , fetchFromGitHub
 }:
 
+let
+  rev = "ab1298fa7f2650de711e86e870a693dcce0e1935";
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "ec2stepshell";
   version = "unstable-2023-04-07";
@@ -11,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "saw-your-packet";
     repo = "EC2StepShell";
-    rev = "ab1298fa7f2650de711e86e870a693dcce0e1935";
+    inherit rev;
     hash = "sha256-zy33CgGwa2pBYouqaJ1LM6uRIh3Q1uxi2zNXpDNPsuQ=";
   };
 
@@ -40,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "AWS post-exploitation tool";
     mainProgram = "ec2stepshell";
     homepage = "https://github.com/saw-your-packet/EC2StepShell";
-    changelog = "https://github.com/saw-your-packet/EC2StepShell/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/saw-your-packet/EC2StepShell/blob/${rev}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
