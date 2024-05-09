@@ -38,6 +38,7 @@ let
       Group = if cfg'.group == null then "vdirsyncer" else cfg'.group;
     }  // (optionalAttrs (cfg'.user == null) {
       DynamicUser = true;
+      ProtectHome = true;
     }) // (optionalAttrs (cfg'.additionalGroups != []) {
       SupplementaryGroups = cfg'.additionalGroups;
     }) // (optionalAttrs (cfg'.config.statusPath == null) {
@@ -54,7 +55,6 @@ let
       PrivateTmp = true;
       NoNewPrivileges = true;
       ProtectSystem = "strict";
-      ProtectHome = true;
       ProtectKernelTunables = true;
       ProtectKernelModules = true;
       ProtectControlGroups = true;
