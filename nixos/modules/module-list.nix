@@ -1312,6 +1312,7 @@
   ./services/video/epgstation/default.nix
   ./services/video/go2rtc/default.nix
   ./services/video/frigate.nix
+  ./services/video/iSponsorBlockTV.nix
   ./services/video/mirakurun.nix
   ./services/video/photonvision.nix
   ./services/video/replay-sorcery.nix
