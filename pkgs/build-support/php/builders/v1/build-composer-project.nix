@@ -1,5 +1,6 @@
 {
   callPackage,
+  nix-update-script,
   stdenvNoCC,
   lib,
   php,
@@ -88,6 +89,13 @@ let
           composerNoScripts = previousAttrs.composerNoScripts or true;
           composerStrictValidation = previousAttrs.composerStrictValidation or true;
         });
+
+      # Projects providing a lockfile from upstream can be automatically updated.
+      passthru = previousAttrs.passthru or { } // {
+        updateScript =
+          previousAttrs.passthru.updateScript
+            or (if finalAttrs.composerRepository.composerLock == null then nix-update-script { } else null);
+      };
 
       env = {
         COMPOSER_CACHE_DIR = "/dev/null";
