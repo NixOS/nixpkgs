@@ -4,6 +4,9 @@
 , buildPythonPackage
 , cython
 , pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
+
+# Reverse dependency
+, sage
 }:
 
 assert pariSupport -> pari != null;
@@ -45,6 +48,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Interrupt and signal handling for Cython";

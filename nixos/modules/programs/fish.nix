@@ -55,6 +55,8 @@ in
         type = types.bool;
       };
 
+      package = mkPackageOption pkgs "fish" { };
+
       useBabelfish = mkOption {
         type = types.bool;
         default = false;
@@ -244,8 +246,8 @@ in
           patchedGenerator = pkgs.stdenv.mkDerivation {
             name = "fish_patched-completion-generator";
             srcs = [
-              "${pkgs.fish}/share/fish/tools/create_manpage_completions.py"
-              "${pkgs.fish}/share/fish/tools/deroff.py"
+              "${cfg.package}/share/fish/tools/create_manpage_completions.py"
+              "${cfg.package}/share/fish/tools/deroff.py"
             ];
             unpackCmd = "cp $curSrc $(basename $curSrc)";
             sourceRoot = ".";
@@ -287,12 +289,12 @@ in
         ++ optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";
       }
 
-      { systemPackages = [ pkgs.fish ]; }
+      { systemPackages = [ cfg.package ]; }
 
       {
         shells = [
           "/run/current-system/sw/bin/fish"
-          "${pkgs.fish}/bin/fish"
+          (lib.getExe cfg.package)
         ];
       }
     ];

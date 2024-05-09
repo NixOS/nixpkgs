@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , callPackage
 , patchelf
+, unzip
 , poco
 , openssl
 , SDL2
@@ -40,7 +41,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-ozebHgUgwdqYtWAyL+EdwpjEvZC+PkWcLYCPWz2FjSw=";
   };
 
-  buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
+  nativeBuildInputs = [ patchelf unzip ];
+  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
+  strictDeps = true;
 
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
@@ -63,6 +66,17 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed craftos2-lua/src/liblua.so liblua.so $out/bin/craftos
     cp -R api $out/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
+
+    mkdir -p resources/linux-icons
+    unzip resources/linux-icons.zip -d resources/linux-icons
+    for dim in 16 24 32 48 64 96 128 256 1024; do
+      dir="$out/share/icons/hicolor/$dimx$dim/apps"
+      mkdir -p "$dir"
+      cp "resources/linux-icons/$dim.png" "$dir/craftos.png"
+    done
+
+    mkdir -p $out/share/applications
+    cp resources/linux-icons/CraftOS-PC.desktop $out/share/applications/CraftOS-PC.desktop
   '';
 
   passthru.tests = {

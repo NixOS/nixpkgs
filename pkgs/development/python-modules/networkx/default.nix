@@ -19,6 +19,9 @@
 # tests
 , pytest-xdist
 , pytestCheckHook
+
+# reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -52,6 +55,8 @@ buildPythonPackage rec {
       sympy
     ];
   };
+
+  passthru.tests = { inherit sage; };
 
   nativeCheckInputs = [
     pytest-xdist

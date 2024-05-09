@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
+  env.CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-return-type -Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   doCheck = true;
 

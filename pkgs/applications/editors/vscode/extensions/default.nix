@@ -1477,8 +1477,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.20.0";
-          hash = "sha256-p+YNBRzzA/EezBMxI5Rmdb8SdJgFV7QwuLVi1mcJV+E=";
+          version = "0.21.1";
+          hash = "sha256-z/GhynjkoEcaRp59tYr1lnM5vfV0OaDCcCpC02OdVLE=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -2231,6 +2231,27 @@ let
           homepage = "https://github.com/IronGeek/vscode-env.git";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      jackmacwindows.vscode-computercraft = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-computercraft";
+          publisher = "jackmacwindows";
+          version = "1.1.1";
+          hash = "sha256-ec1I3oQ06iMdSUcqf8yA3GjE7Aqa0PiLzRQLwFcL0KU=";
+        };
+        postInstall = ''
+          # Remove superflouous images to reduce closure size
+          rm $out/$installPrefix/images/*.gif
+        '';
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.vscode-computercraft/changelog";
+          description = "A Visual Studio Code extension for ComputerCraft and CC: Tweaked auto-completion";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.vscode-computercraft";
+          homepage = "https://github.com/MCJack123/vscode-computercraft";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ tomodachi94 ];
         };
       };
 

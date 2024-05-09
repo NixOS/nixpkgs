@@ -1,71 +1,71 @@
-{ lib
-, stdenv
-, bash
-, fetchFromGitHub
-, fetchFromGitLab
-, SDL2
-, alsa-lib
-, catch2_3
-, fftw
-, glib
-, gobject-introspection
-, gtk-layer-shell
-, gtkmm3
-, howard-hinnant-date
-, hyprland
-, iniparser
-, jsoncpp
-, libdbusmenu-gtk3
-, libevdev
-, libinotify-kqueue
-, libinput
-, libjack2
-, libmpdclient
-, libnl
-, libpulseaudio
-, libsigcxx
-, libxkbcommon
-, meson
-, ncurses
-, ninja
-, pipewire
-, pkg-config
-, playerctl
-, portaudio
-, python3
-, scdoc
-, sndio
-, spdlog
-, sway
-, udev
-, upower
-, wayland
-, wayland-scanner
-, wireplumber
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  bash,
+  fetchFromGitHub,
+  SDL2,
+  alsa-lib,
+  catch2_3,
+  fftw,
+  glib,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtkmm3,
+  howard-hinnant-date,
+  hyprland,
+  iniparser,
+  jsoncpp,
+  libdbusmenu-gtk3,
+  libevdev,
+  libinotify-kqueue,
+  libinput,
+  libjack2,
+  libmpdclient,
+  libnl,
+  libpulseaudio,
+  libsigcxx,
+  libxkbcommon,
+  meson,
+  ncurses,
+  ninja,
+  pipewire,
+  pkg-config,
+  playerctl,
+  portaudio,
+  python3,
+  scdoc,
+  sndio,
+  spdlog,
+  sway,
+  udev,
+  upower,
+  wayland,
+  wayland-scanner,
+  wireplumber,
+  wrapGAppsHook3,
 
-, cavaSupport ? true
-, enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
-, evdevSupport ? true
-, experimentalPatches ? true
-, hyprlandSupport ? true
-, inputSupport ? true
-, jackSupport ? true
-, mpdSupport ? true
-, mprisSupport ? stdenv.isLinux
-, nlSupport ? true
-, pipewireSupport ? true
-, pulseSupport ? true
-, rfkillSupport ? true
-, runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
-, sndioSupport ? true
-, swaySupport ? true
-, traySupport ? true
-, udevSupport ? true
-, upowerSupport ? true
-, wireplumberSupport ? true
-, withMediaPlayer ? mprisSupport && false
-, nix-update-script
+  cavaSupport ? true,
+  enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  evdevSupport ? true,
+  experimentalPatches ? true,
+  hyprlandSupport ? true,
+  inputSupport ? true,
+  jackSupport ? true,
+  mpdSupport ? true,
+  mprisSupport ? stdenv.isLinux,
+  nlSupport ? true,
+  pipewireSupport ? true,
+  pulseSupport ? true,
+  rfkillSupport ? true,
+  runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+  sndioSupport ? true,
+  swaySupport ? true,
+  traySupport ? true,
+  udevSupport ? true,
+  upowerSupport ? true,
+  wireplumberSupport ? true,
+  withMediaPlayer ? mprisSupport && false,
+  nix-update-script,
 }:
 
 let
@@ -79,13 +79,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = finalAttrs.version;
-    hash = "sha256-xinTLjZJhL4048jpAbN3i6nSxKAqnbesbK/GBX+1CkE=";
+    hash = "sha256-LUageV0xC42MldMmYY1njkm95icBsqID1tEGy3wwrRM=";
   };
 
   postUnpack = lib.optional cavaSupport ''
@@ -101,8 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland-scanner
     wrapGAppsHook3
-  ] ++ lib.optional withMediaPlayer gobject-introspection
-    ++ lib.optional enableManpages scdoc;
+  ] ++ lib.optional withMediaPlayer gobject-introspection ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib
@@ -110,63 +109,66 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3
   ];
 
-  buildInputs = [
-    gtk-layer-shell
-    gtkmm3
-    howard-hinnant-date
-    jsoncpp
-    libsigcxx
-    libxkbcommon
-    spdlog
-    wayland
-  ]
-  ++ lib.optionals cavaSupport [
-    SDL2
-    alsa-lib
-    fftw
-    iniparser
-    ncurses
-    portaudio
-  ]
-  ++ lib.optional evdevSupport libevdev
-  ++ lib.optional hyprlandSupport hyprland
-  ++ lib.optional inputSupport libinput
-  ++ lib.optional jackSupport libjack2
-  ++ lib.optional mpdSupport libmpdclient
-  ++ lib.optional mprisSupport playerctl
-  ++ lib.optional nlSupport libnl
-  ++ lib.optional pulseSupport libpulseaudio
-  ++ lib.optional sndioSupport sndio
-  ++ lib.optional swaySupport sway
-  ++ lib.optional traySupport libdbusmenu-gtk3
-  ++ lib.optional udevSupport udev
-  ++ lib.optional upowerSupport upower
-  ++ lib.optional wireplumberSupport wireplumber
-  ++ lib.optional (cavaSupport || pipewireSupport) pipewire
-  ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
+  buildInputs =
+    [
+      gtk-layer-shell
+      gtkmm3
+      howard-hinnant-date
+      jsoncpp
+      libsigcxx
+      libxkbcommon
+      spdlog
+      wayland
+    ]
+    ++ lib.optionals cavaSupport [
+      SDL2
+      alsa-lib
+      fftw
+      iniparser
+      ncurses
+      portaudio
+    ]
+    ++ lib.optional evdevSupport libevdev
+    ++ lib.optional hyprlandSupport hyprland
+    ++ lib.optional inputSupport libinput
+    ++ lib.optional jackSupport libjack2
+    ++ lib.optional mpdSupport libmpdclient
+    ++ lib.optional mprisSupport playerctl
+    ++ lib.optional nlSupport libnl
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional sndioSupport sndio
+    ++ lib.optional swaySupport sway
+    ++ lib.optional traySupport libdbusmenu-gtk3
+    ++ lib.optional udevSupport udev
+    ++ lib.optional upowerSupport upower
+    ++ lib.optional wireplumberSupport wireplumber
+    ++ lib.optional (cavaSupport || pipewireSupport) pipewire
+    ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;
 
-  mesonFlags = (lib.mapAttrsToList lib.mesonEnable {
-    "cava" = cavaSupport;
-    "dbusmenu-gtk" = traySupport;
-    "jack" = jackSupport;
-    "libinput" = inputSupport;
-    "libnl" = nlSupport;
-    "libudev" = udevSupport;
-    "man-pages" = enableManpages;
-    "mpd" = mpdSupport;
-    "mpris" = mprisSupport;
-    "pipewire" = pipewireSupport;
-    "pulseaudio" = pulseSupport;
-    "rfkill" = rfkillSupport;
-    "sndio" = sndioSupport;
-    "systemd" = false;
-    "tests" = runTests;
-    "upower_glib" = upowerSupport;
-    "wireplumber" = wireplumberSupport;
-  }) ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
+  mesonFlags =
+    (lib.mapAttrsToList lib.mesonEnable {
+      "cava" = cavaSupport;
+      "dbusmenu-gtk" = traySupport;
+      "jack" = jackSupport;
+      "libinput" = inputSupport;
+      "libnl" = nlSupport;
+      "libudev" = udevSupport;
+      "man-pages" = enableManpages;
+      "mpd" = mpdSupport;
+      "mpris" = mprisSupport;
+      "pipewire" = pipewireSupport;
+      "pulseaudio" = pulseSupport;
+      "rfkill" = rfkillSupport;
+      "sndio" = sndioSupport;
+      "systemd" = false;
+      "tests" = runTests;
+      "upower_glib" = upowerSupport;
+      "wireplumber" = wireplumberSupport;
+    })
+    ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
 
   postPatch = ''
     substituteInPlace include/util/command.hpp \

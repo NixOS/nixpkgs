@@ -3,12 +3,13 @@
 , fetchPypi
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonApplication rec {
   pname = "apc-temp-fetch";
   version = "0.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +19,11 @@ buildPythonApplication rec {
     hash = "sha256-lXGj/xrOkdMMYvuyVVSCojjQlzISFUT14VTn//iOARo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     requests
   ];
 

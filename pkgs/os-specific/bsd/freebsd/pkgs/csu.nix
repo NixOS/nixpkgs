@@ -1,9 +1,14 @@
-{ lib, mkDerivation
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal
-, install
-, flex, byacc, gencat
-, include
+{
+  lib,
+  mkDerivation,
+  bsdSetupHook,
+  freebsdSetupHook,
+  makeMinimal,
+  install,
+  flex,
+  byacc,
+  gencat,
+  include,
 }:
 
 mkDerivation {
@@ -13,11 +18,14 @@ mkDerivation {
     "lib/libc/include/libc_private.h"
   ];
   nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
+    bsdSetupHook
+    freebsdSetupHook
     makeMinimal
     install
 
-    flex byacc gencat
+    flex
+    byacc
+    gencat
   ];
   buildInputs = [ include ];
   MK_TESTS = "no";

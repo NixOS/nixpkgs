@@ -78,6 +78,18 @@ import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
       # regression test for #176445
       machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
 
+      with subtest("Run k3s-killall"):
+          # Call the killall script with a clean path to assert that
+          # all required commands are wrapped
+          output = machine.succeed("PATH= ${k3s}/bin/k3s-killall.sh 2>&1 | tee /dev/stderr")
+          assert "command not found" not in output, "killall script contains unknown command"
+
+          # Check that killall cleaned up properly
+          machine.fail("systemctl is-active k3s.service")
+          machine.fail("systemctl list-units | grep containerd")
+          machine.fail("ip link show | awk -F': ' '{print $2}' | grep -e flannel -e cni0")
+          machine.fail("ip netns show | grep cni-")
+
       machine.shutdown()
     '';
   })

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "aiomcache";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiomcache";
     rev = "v${version}";
-    hash = "sha256-oRMN1seEjFSsq4wjkIXHM7Osq8y/5WFExGCEr6eM9vc=";
+    hash = "sha256-+rlKHDop0kNxJ0HoXROs/oyI4zE3MDyxXXhWZtVDMj4=";
   };
 
   build-system = [

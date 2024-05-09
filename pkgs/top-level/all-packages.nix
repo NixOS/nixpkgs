@@ -311,8 +311,6 @@ with pkgs;
 
   asn1c = callPackage ../development/compilers/asn1c { };
 
-  assemblyscript = callPackage ../development/compilers/assemblyscript { };
-
   authz0 = callPackage ../tools/security/authz0 { };
 
   auth0-cli = callPackage ../tools/admin/auth0-cli { };
@@ -421,8 +419,6 @@ with pkgs;
   cartridges = callPackage ../applications/misc/cartridges { };
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
-
-  castxml = callPackage ../development/tools/castxml { };
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
@@ -768,8 +764,6 @@ with pkgs;
   protoc-gen-prost-crate = callPackage ../development/tools/protoc-gen-prost-crate { };
 
   protoc-gen-prost-serde = callPackage ../development/tools/protoc-gen-prost-serde { };
-
-  protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
 
   protoc-gen-tonic = callPackage ../development/tools/protoc-gen-tonic { };
 
@@ -1308,7 +1302,9 @@ with pkgs;
 
   makeBinaryWrapper = callPackage ../build-support/setup-hooks/make-binary-wrapper { };
 
-  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
+  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware.nix { type = "xz"; };
+
+  compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
@@ -2024,8 +2020,6 @@ with pkgs;
   redfang = callPackage ../tools/networking/redfang { };
 
   ronin = callPackage ../tools/security/ronin { };
-
-  s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
 
   scarab = callPackage ../tools/games/scarab { };
 
@@ -2759,20 +2753,38 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp-sdl = ppsspp.override {
-    enableQt = false;
-    enableVulkan = true;
-  };
+  ppsspp-sdl = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = false;
+      enableVulkan = true;
+      forceWayland = false;
+    };
+  in
+    ppsspp.override argset;
 
-  ppsspp-sdl-wayland = ppsspp.override {
-    forceWayland = true;
-    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
-  };
+  ppsspp-sdl-wayland = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = false;
+      enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
+      forceWayland = true;
+    };
+  in
+    ppsspp.override argset;
 
-  ppsspp-qt = ppsspp.override {
-    enableQt = true;
-    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
-  };
+  ppsspp-qt = let
+    argset = {
+      ffmpeg = ffmpeg_4;
+      glew = glew.override { enableEGL = argset.forceWayland; };
+      enableQt = true;
+      enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
+      forceWayland = false;
+    };
+  in
+    ppsspp.override argset;
 
   proton-caller = callPackage ../applications/emulators/proton-caller { };
 
@@ -4877,8 +4889,6 @@ with pkgs;
 
   dante = callPackage ../servers/dante { };
 
-  dapr-cli = callPackage ../development/tools/dapr/cli { };
-
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
@@ -4953,8 +4963,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  refinery-cli = callPackage ../development/tools/refinery-cli { };
-
   digitemp = callPackage ../tools/misc/digitemp { };
 
   dijo = callPackage ../tools/misc/dijo {
@@ -5020,8 +5028,6 @@ with pkgs;
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
 
   dolibarr = callPackage ../servers/web-apps/dolibarr { };
-
-  doppler = callPackage ../tools/security/doppler { };
 
   dosage = callPackage ../applications/graphics/dosage { };
 
@@ -5545,8 +5551,6 @@ with pkgs;
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
 
   hr = callPackage ../applications/misc/hr { };
-
-  humioctl = callPackage ../applications/logging/humioctl { };
 
   huniq = callPackage ../tools/text/huniq { };
 
@@ -7025,7 +7029,8 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
-  clamav = darwin.apple_sdk_11_0.callPackage ../tools/security/clamav {
+  clamav = callPackage ../tools/security/clamav {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
@@ -9576,8 +9581,6 @@ with pkgs;
 
   kdoctor = callPackage ../development/tools/kdoctor { };
 
-  kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
-
   kdigger = callPackage ../tools/security/kdigger { };
 
   kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
@@ -11317,8 +11320,6 @@ with pkgs;
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
 
   ogdf = callPackage ../development/libraries/ogdf { };
-
-  oh-my-posh = callPackage ../development/tools/oh-my-posh { };
 
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
@@ -14068,8 +14069,6 @@ with pkgs;
 
   up = callPackage ../tools/misc/up { };
 
-  upbound = callPackage ../development/tools/upbound { };
-
   upterm = callPackage ../tools/misc/upterm { };
 
   upx = callPackage ../tools/compression/upx { };
@@ -16773,7 +16772,6 @@ with pkgs;
 
   cargo-nextest = callPackage ../development/tools/rust/cargo-nextest { };
   cargo-play = callPackage ../development/tools/rust/cargo-play { };
-  cargo-profiler = callPackage ../development/tools/rust/cargo-profiler { };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -16809,9 +16807,6 @@ with pkgs;
 
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-vet = callPackage ../development/tools/rust/cargo-vet {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-  cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
@@ -17748,10 +17743,6 @@ with pkgs;
 
   waagent = callPackage ../applications/networking/cluster/waagent { };
 
-  wapm-cli = callPackage ../tools/package-management/wapm/cli {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
-
   wasm = ocamlPackages.wasm;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
@@ -18673,8 +18664,6 @@ with pkgs;
   eask = callPackage ../development/tools/eask { };
 
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
-
-  eclint = callPackage ../development/tools/eclint { };
 
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
@@ -23810,10 +23799,6 @@ with pkgs;
 
   opensupaplex = callPackage ../games/opensupaplex { };
 
-  openturns = callPackage ../development/libraries/openturns {
-      inherit (darwin.apple_sdk.frameworks) Accelerate;
-  };
-
   open-wbo = callPackage ../applications/science/logic/open-wbo { };
 
   openwsman = callPackage ../development/libraries/openwsman { };
@@ -25325,36 +25310,6 @@ with pkgs;
   asdf_3_3 = callPackage ../development/lisp-modules/asdf/3.3.nix {
     texLive = null;
   };
-
-  ## DEPRECATED, will be removed in a future release
-
-  clwrapperFunction = callPackage ../development/lisp-modules-obsolete/clwrapper;
-
-  wrapLisp_old = lisp: clwrapperFunction { inherit lisp; };
-
-  lispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/lisp-packages.nix {
-    inherit clwrapper;
-  };
-
-  lispPackages = quicklispPackages //
-    (lispPackagesFor (wrapLisp_old sbcl)) // { __attrsFailEvaluation = true; };
-
-  quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules-obsolete/quicklisp-to-nix.nix {
-    inherit clwrapper;
-  } // { __attrsFailEvaluation = true; };
-  quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old clisp));
-  quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old sbcl));
-  quicklispPackagesECL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ecl));
-  quicklispPackagesCCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old ccl));
-  quicklispPackagesABCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old abcl));
-  quicklispPackagesGCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp_old gcl));
-  quicklispPackages = quicklispPackagesSBCL;
-
-  # Alternative lisp-modules implementation
-  lispPackages_new = callPackage ../development/lisp-modules-new-obsolete/lisp-packages.nix {}
-  // { __attrsFailEvaluation = true; };
-
-  ## End of DEPRECATED
 
   wrapLisp = callPackage ../development/lisp-modules/nix-cl.nix {};
 
@@ -29725,10 +29680,6 @@ with pkgs;
 
   appgate-sdp = callPackage ../applications/networking/appgate-sdp { };
 
-  apostrophe = callPackage ../applications/editors/apostrophe {
-    pythonPackages = python3Packages;
-  };
-
   ardour = callPackage ../applications/audio/ardour { };
   ardour_7 = callPackage ../applications/audio/ardour/7.nix { };
 
@@ -30185,6 +30136,8 @@ with pkgs;
   cligh = python3Packages.callPackage ../development/tools/github/cligh { };
 
   clight = callPackage ../applications/misc/clight { };
+
+  clight-gui = libsForQt5.callPackage ../applications/misc/clight/clight-gui.nix { };
 
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
@@ -30680,12 +30633,6 @@ with pkgs;
   exercism = callPackage ../applications/misc/exercism { };
 
   expenses = callPackage ../applications/misc/expenses { };
-
-  flowtime = callPackage ../applications/misc/flowtime { };
-
-  furnace = callPackage ../applications/audio/furnace {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   furtherance = callPackage ../applications/misc/furtherance { };
 
@@ -31300,6 +31247,7 @@ with pkgs;
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
       };
       freerdp3 = callPackage ../applications/networking/remote/freerdp/3.nix {
+        stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
         inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Carbon Cocoa CoreMedia;
       };
     })
@@ -31419,6 +31367,8 @@ with pkgs;
   );
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
+
+  minari = python3Packages.toPythonApplication python3Packages.minari;
 
   mindforger = libsForQt5.callPackage ../applications/editors/mindforger { };
 
@@ -35557,9 +35507,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../applications/networking/instant-messengers/webcord { };
-
-  webcord-vencord = callPackage ../applications/networking/instant-messengers/webcord/webcord-vencord { };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
@@ -37494,8 +37442,8 @@ with pkgs;
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
-  the-powder-toy = callPackage ../games/the-powder-toy {
-    lua = lua5_1;
+  the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
+    lua = lua5_2;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -40356,8 +40304,6 @@ with pkgs;
 
   twitch-cli = callPackage ../development/tools/twitch-cli { };
 
-  twiggy = callPackage ../development/tools/twiggy { };
-
   uacme = callPackage ../tools/admin/uacme { };
 
   ufiformat = callPackage ../tools/system/ufiformat { };
@@ -40525,8 +40471,6 @@ with pkgs;
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
 
   with-shell = callPackage ../applications/misc/with-shell { };
-
-  wizer = darwin.apple_sdk_11_0.callPackage ../development/tools/wizer { };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 

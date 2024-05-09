@@ -13,7 +13,7 @@
 
 let
   pname = "ockam";
-  version = "0.122.0";
+  version = "0.124.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage {
     owner = "build-trust";
     repo = pname;
     rev = "ockam_v${version}";
-    hash = "sha256-0iFY9T+44V3hT21OLGeao2dyEbyNWrQdLAFhMe8QD5o=";
+    hash = "sha256-ovcZD9D/iVF3iIti+vQ29YIJE+UI64BeuA2huJsAx5s=";
   };
 
-  cargoHash = "sha256-yctLLRX6ZHIA19cfQhnbvcveMq2HVyTBrG8aRbr5HXw=";
+  cargoHash = "sha256-z+GIFN5Q3LWnT5PrZ291G2lHgd5mzDFkKwdcxUXvUnU=";
   nativeBuildInputs = [ git pkg-config ];
   buildInputs = [ openssl dbus ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
