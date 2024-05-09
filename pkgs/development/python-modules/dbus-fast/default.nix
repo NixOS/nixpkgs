@@ -14,13 +14,13 @@
 buildPythonPackage rec {
   pname = "dbus-fast";
   version = "2.21.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "dbus-fast";
     rev = "refs/tags/v${version}";
     hash = "sha256-CLv8pNs6P2XRNK5wjo2SbRUuasJVXvd9LFABOwjDA9k=";
   };
@@ -29,14 +29,14 @@ buildPythonPackage rec {
   # python version. This ensures we fail if we build the wrong one.
   env.REQUIRE_CYTHON = 1;
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
   ];
 
