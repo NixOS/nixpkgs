@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   buildFishPlugin,
   fetchFromGitHub,
 }:
@@ -13,6 +14,19 @@ buildFishPlugin rec {
     rev = "v${version}";
     hash = "sha256-p5E4Mx6j8hcM1bDbeftikyhfHxQ+qPDanuM1wNqGm6E=";
   };
+
+  propagatedUserEnvPkgs = with pkgs; [
+    coreutils
+    file
+    findutils
+    fzf
+    gawk
+    gnused
+    less
+    man
+    pcre
+    procps
+  ];
 
   meta = with lib; {
     description = "Fzf powers on top of fish completion engine and allows customizable completion rules";
