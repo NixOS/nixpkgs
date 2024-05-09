@@ -12956,6 +12956,8 @@ with pkgs;
 
   shout = nodePackages.shout;
 
+  showdown = callPackage ../tools/text/showdown { };
+
   showmethekey = callPackage ../applications/video/showmethekey { };
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
