@@ -26,12 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-ISMSt7c8CoxffMhg7XC/ebKkgXFTBihDr1fGkqMCBoc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     psygnal
     pydantic
     pydantic-compat
