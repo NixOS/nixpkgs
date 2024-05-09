@@ -1232,7 +1232,6 @@ broken-packages:
   - dense-int-set # failure in job https://hydra.nixos.org/build/233214797 at 2023-09-02
   - dependency # failure in job https://hydra.nixos.org/build/252727325 at 2024-03-16
   - dependent-hashmap # failure in job https://hydra.nixos.org/build/233202881 at 2023-09-02
-  - dependent-monoidal-map # failure in job https://hydra.nixos.org/build/233212829 at 2023-09-02
   - dep-t # failure in job https://hydra.nixos.org/build/233217847 at 2023-09-02
   - deptrack-core # failure in job https://hydra.nixos.org/build/233239143 at 2023-09-02
   - derangement # failure in job https://hydra.nixos.org/build/233209660 at 2023-09-02
