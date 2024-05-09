@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   env.NIX_LDFLAGS = lib.optionalString withAACS "-L${libaacs}/lib -laacs"
     + lib.optionalString withBDplus " -L${libbdplus}/lib -lbdplus";
 
+  preConfigure = lib.optionalString withJava ''
+    export JDK_HOME="${jdk17.home}"
+  '';
+
   configureFlags = lib.optional (!withJava) "--disable-bdjava-jar"
     ++ lib.optional (!withMetadata) "--without-libxml2"
     ++ lib.optional (!withFonts) "--without-freetype";
