@@ -6640,6 +6640,8 @@ self: super: with self; {
     inherit (pkgs.config) cudaSupport;
   };
 
+  libgravatar = callPackage ../development/python-modules/libgravatar { };
+
   libiio = (toPythonModule (pkgs.libiio.override {
     pythonSupport = true;
     inherit python;
@@ -7253,7 +7255,8 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit (self) buildPythonPackage pythonOlder pythonAtLeast pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
+    inherit buildPythonPackage pythonOlder pythonAtLeast;
+    inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
   };
 
   mayim = callPackage ../development/python-modules/mayim { };

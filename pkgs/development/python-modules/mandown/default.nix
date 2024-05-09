@@ -34,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "lxml"
     "pillow"
     "typer"
   ];

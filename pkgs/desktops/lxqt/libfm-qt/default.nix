@@ -15,7 +15,7 @@
 , qttools
 , wrapQtAppsHook
 , gitUpdater
-, version ? "2.0.1"
+, version ? "2.0.2"
 , qtx11extras ? null
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = {
       "1.4.0" = "sha256-QxPYSA7537K+/dRTxIYyg+Q/kj75rZOdzlUsmSdQcn4=";
-      "2.0.1" = "sha256-iU55tUjN01+hTHTM6784OxoAiK6SbsSnUXHTL56iIF0=";
+      "2.0.2" = "sha256-Ntj+yixGGGgL8ylRv2IJsWtapxE71JNl9cC9K0JToNU=";
     }."${version}";
   };
 
