@@ -123,6 +123,22 @@ in
         '';
       };
 
+      enableCompass = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Compass source.
+        '';
+      };
+
+      enableStaticSource = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable Static source.
+        '';
+      };
+
       geoProviderUrl = mkOption {
         type = types.str;
         default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
@@ -264,6 +280,12 @@ in
           submit-data = boolToString cfg.submitData;
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
+        };
+        compass = {
+          enable = cfg.enableCompass;
+        };
+        static-source = {
+          enable = cfg.enableStaticSource;
         };
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
