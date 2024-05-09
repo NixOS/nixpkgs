@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "fontmake";
   version = "3.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
