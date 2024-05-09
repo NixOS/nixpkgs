@@ -25,6 +25,7 @@ let
     util-dfm = callPackage ./library/util-dfm { };
     dtk6core = callPackage ./library/dtk6core { };
     dtk6gui = callPackage ./library/dtk6gui { };
+    dtk6widget = callPackage ./library/dtk6widget { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
