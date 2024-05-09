@@ -2,21 +2,23 @@
 , fetchFromGitHub
 , stdenv
 , makeWrapper
-, qemu
+, cdrtools
+, curl
+, gawk
 , gnugrep
 , gnused
-, lsb-release
 , jq
+, ncurses
+, pciutils
 , procps
 , python3
-, cdrtools
-, usbutils
-, util-linux
+, qemu
 , socat
 , spice-gtk
 , swtpm
+, usbutils
+, util-linux
 , unzip
-, wget
 , xdg-user-dirs
 , xrandr
 , zsync
@@ -28,35 +30,37 @@
 }:
 let
   runtimePaths = [
-    qemu
+    cdrtools
+    curl
+    gawk
     gnugrep
     gnused
     jq
-    lsb-release
+    ncurses
+    pciutils
     procps
     python3
-    cdrtools
+    qemu
+    socat
+    swtpm
     usbutils
     util-linux
     unzip
-    socat
-    swtpm
-    wget
     xdg-user-dirs
     xrandr
     zsync
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs : {
   pname = "quickemu";
-  version = "4.9.2";
+  version = "4.9.4";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = version;
-    hash = "sha256-StYgnFBnEJUkJDyFluMm01xhgejXc99AEldGGxIvZU0=";
+    rev = finalAttrs.version;
+    hash = "sha256-fjbXgze6klvbRgkJtPIUh9kEkP/As7dAj+cazpzelBY=";
   };
 
   postPatch = ''
@@ -74,11 +78,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     installManPage docs/quickget.1 docs/quickemu.1 docs/quickemu_conf.1
-    install -Dm755 -t "$out/bin" macrecovery quickemu quickget windowskey
+    install -Dm755 -t "$out/bin" chunkcheck quickemu quickget quickreport windowskey
 
     # spice-gtk needs to be put in suffix so that when virtualisation.spiceUSBRedirection
     # is enabled, the wrapped spice-client-glib-usb-acl-helper is used
-    for f in macrecovery quickget quickemu windowskey; do
+    for f in chunkcheck quickget quickemu quickreport windowskey; do
       wrapProgram $out/bin/$f \
         --prefix PATH : "${lib.makeBinPath runtimePaths}" \
         --suffix PATH : "${lib.makeBinPath [ spice-gtk ]}"
@@ -89,10 +93,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = testers.testVersion { package = quickemu; };
 
-  meta = with lib; {
-    description = "Quickly create and run optimised Windows, macOS and Linux desktop virtual machines";
+  meta = {
+    description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";
     homepage = "https://github.com/quickemu-project/quickemu";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fedx-sudo ];
+    mainProgram = "quickemu";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fedx-sudo flexiondotorg ];
   };
-}
+})
