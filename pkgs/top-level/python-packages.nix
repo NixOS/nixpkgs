@@ -7653,6 +7653,8 @@ self: super: with self; {
 
   monotonic = callPackage ../development/python-modules/monotonic { };
 
+  mons = callPackage ../tools/games/celeste/mons {};
+
   monty = callPackage ../development/python-modules/monty { };
 
   moonraker-api = callPackage ../development/python-modules/moonraker-api { };
