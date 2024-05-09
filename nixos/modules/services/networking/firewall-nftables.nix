@@ -82,6 +82,11 @@ in
       }
     ];
 
+    networking.nftables.preCheckRuleset = ''
+      # can't validate IPsec rules
+      sed '/meta ipsec/d' -i ruleset.conf
+    '';
+
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
         ${optionalString (cfg.checkReversePath != false) ''
@@ -89,6 +94,7 @@ in
             type filter hook prerouting priority mangle + 10; policy drop;
 
             meta nfproto ipv4 udp sport . udp dport { 67 . 68, 68 . 67 } accept comment "DHCPv4 client/server"
+            meta ipsec exists accept comment "decrypted packets from an IPsec VPN"
             fib saddr . mark ${optionalString (cfg.checkReversePath != "loose") ". iif"} oif exists accept
 
             jump rpfilter-allow
