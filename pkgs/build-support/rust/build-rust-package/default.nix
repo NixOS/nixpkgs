@@ -44,6 +44,7 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
+, cargoToml ? null
 # Enable except on aarch64 pkgsStatic, where we use lld for reasons
 , auditable ? !cargo-auditable.meta.broken && !(stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin)
 
@@ -88,6 +89,20 @@ let
     RUSTFLAGS = args.RUSTFLAGS or "";
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
   };
+  manifestPath =
+    if cargoToml != null then cargoToml else
+    stdenv.mkDerivation {
+      name = "${name}-Cargo.toml";
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack;
+      patches = cargoPatches;
+      dontConfigure = true;
+      dontBuild = true;
+      installPhase = ''
+        cp Cargo.toml "$out"
+      '';
+    }
+  ;
+  manifest = lib.importTOML manifestPath;
 
 in
 
@@ -95,7 +110,7 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
+stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" "cargoToml" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
   inherit buildAndTestSubdir cargoDeps;
@@ -166,5 +181,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       # Rust is currently unable to target the n32 ABI
       lib.systems.inspect.patterns.isMips64n32
     ];
+  } // lib.optionalAttrs (manifest ? package.default-run) {
+    mainProgram = manifest.package.default-run;
   } // meta;
 })
