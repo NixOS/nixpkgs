@@ -7,17 +7,18 @@
 , lib
 , libGL
 , stdenv
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "2.2.3";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Dpl88Te+EoVasoCtwERGrYt3xK8o03h15r8IVxxPPCw=";
+    hash = "sha256-bIKjZ7DvJVmDK386WgXaAFQrS0E1TNEUMhfQp7FNnvk=";
   };
 
   patches = [
@@ -55,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [ "-DUSE_SYSTEM_JSONCPP=ON" "-DBUILD_SHARED=1" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     broken = stdenv.isDarwin;
