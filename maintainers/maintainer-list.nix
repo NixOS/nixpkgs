@@ -13413,6 +13413,11 @@
     githubId = 1001112;
     name = "Marcin Janczyk";
   };
+  mjarosie = {
+    github = "mjarosie";
+    githubId = 64707304;
+    name = "Maciej J";
+  };
   mjm = {
     email = "matt@mattmoriarity.com";
     github = "mjm";
