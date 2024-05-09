@@ -3668,8 +3668,6 @@ with pkgs;
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
-  dgsh = callPackage ../shells/dgsh { };
-
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
   dl-librescore = callPackage ../tools/audio/dl-librescore { };
