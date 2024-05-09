@@ -329,7 +329,11 @@ in
         serviceConfig = {
           User = "pretalx";
           Group = "pretalx";
-          StateDirectory = [ "pretalx" "pretalx/media" ];
+          StateDirectory = [
+            "pretalx"
+            "pretalx/media"
+          ];
+          StateDirectoryMode = "0750";
           LogsDirectory = "pretalx";
           WorkingDirectory = cfg.settings.filesystem.data;
           SupplementaryGroups = [ "redis-pretalx" ];
@@ -403,11 +407,9 @@ in
     };
 
     users = {
-      groups."${cfg.group}" = {};
-      users."${cfg.user}" = {
+      groups.${cfg.group} = {};
+      users.${cfg.user} = {
         isSystemUser = true;
-        createHome = true;
-        home = cfg.settings.filesystem.data;
         inherit (cfg) group;
       };
     };
