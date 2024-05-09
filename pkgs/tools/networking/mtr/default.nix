@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitwizard.nl/mtr/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ koral orivej raskin globin ];
+    mainProgram = "mtr";
     platforms = platforms.unix;
   };
 }
