@@ -1,20 +1,21 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, dataclasses-json
-, fetchFromGitHub
-, htmlmin
-, jinja2
-, markdown2
-, poetry-core
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, pyyaml
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  dataclasses-json,
+  fetchFromGitHub,
+  htmlmin,
+  jinja2,
+  markdown2,
+  poetry-core,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -31,17 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-ZlGIttfFOL4uLgzXIFvmyFDGrm8/Vr94QaFSn4/5ITI=";
   };
 
-  pythonRelaxDeps = [
-    "dataclasses-json"
-  ];
+  pythonRelaxDeps = [ "dataclasses-json" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     click
@@ -67,9 +62,7 @@ buildPythonPackage rec {
     "TestMdGenerate"
   ];
 
-  pythonImportsCheck = [
-    "json_schema_for_humans"
-  ];
+  pythonImportsCheck = [ "json_schema_for_humans" ];
 
   meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
