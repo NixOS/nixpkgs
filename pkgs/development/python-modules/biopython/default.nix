@@ -18,6 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-eOa/t43mMDQDev01/nfLbgqeW2Jwa+z3in2SKxbtg/c=";
   };
 
+  patches = [
+    # cherry-picked from https://github.com/biopython/biopython/commit/3f9bda7ef44f533dadbaa0de29ac21929bc0b2f1
+    # fixes SeqXMLIO parser to process all data. remove on next update
+    ./close_parser_on_time.patch
+  ];
+
+
   nativeBuildInputs = [
     setuptools
   ];
