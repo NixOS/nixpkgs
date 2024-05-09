@@ -36,7 +36,7 @@ let wrapper = { pythonPackages ? (_: [ ]), plugins ? (_: [ ]), baseConfig ? null
           # XXX: would patching maubot be better? See:
           # https://github.com/maubot/maubot/blob/75879cfb9370aade6fa0e84e1dde47222625139a/maubot/server.py#L106
           server.override_resource_path =
-            if builtins.isNull (baseConfig.server.override_resource_path or null)
+            if (baseConfig.server.override_resource_path or null) == null
             then "${unwrapped}/${python3.sitePackages}/maubot/management/frontend/build"
             else baseConfig.server.override_resource_path;
         })} $out/${python3.sitePackages}/maubot/example-config.yaml

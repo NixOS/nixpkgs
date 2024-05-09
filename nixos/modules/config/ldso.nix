@@ -32,20 +32,20 @@ in {
 
   config = {
     assertions = [
-      { assertion = isNull config.environment.ldso32 || pkgs.stdenv.isx86_64;
+      { assertion = config.environment.ldso32 == null || pkgs.stdenv.isx86_64;
         message = "Option environment.ldso32 currently only works on x86_64.";
       }
     ];
 
     systemd.tmpfiles.rules = (
-      if isNull config.environment.ldso then [
+      if config.environment.ldso == null then [
         "r /${libDir}/${ldsoBasename} - - - - -"
       ] else [
         "d /${libDir} 0755 root root - -"
         "L+ /${libDir}/${ldsoBasename} - - - - ${config.environment.ldso}"
       ]
     ) ++ optionals pkgs.stdenv.isx86_64 (
-      if isNull config.environment.ldso32 then [
+      if config.environment.ldso32 == null then [
         "r /${libDir32}/${ldsoBasename32} - - - - -"
       ] else [
         "d /${libDir32} 0755 root root - -"
