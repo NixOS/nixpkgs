@@ -1,0 +1,120 @@
+From 0e0994c9716700c9484b3dccb25f98a9a59d1744 Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Fri, 23 Aug 2019 18:42:51 +0200
+Subject: [PATCH] Search connectors in OFONO_PLUGIN_PATH
+
+Previously, the connectors would only be looked for in a single
+directory, specified during compilation. This patch allows to
+traverse a list of directories provided by an environment variable.
+---
+ src/plugin.c | 77 ++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 50 insertions(+), 27 deletions(-)
+
+diff --git a/src/plugin.c b/src/plugin.c
+index 924a45ec..f05055c3 100644
+--- a/src/plugin.c
++++ b/src/plugin.c
+@@ -99,35 +99,12 @@ static gboolean check_plugin(struct ofono_plugin_desc *desc,
+ 	return TRUE;
+ }
+ 
+-#include "builtin.h"
+-
+-int __ofono_plugin_init(const char *pattern, const char *exclude)
+-{
+-	gchar **patterns = NULL;
+-	gchar **excludes = NULL;
+-	GSList *list;
+-	GDir *dir;
++static handle_dir(const gchar *plugin_path, const gchar **patterns, const gchar **excludes) {
+ 	const gchar *file;
+ 	gchar *filename;
+-	unsigned int i;
+-
+-	DBG("");
+-
+-	if (pattern)
+-		patterns = g_strsplit_set(pattern, ":, ", -1);
+-
+-	if (exclude)
+-		excludes = g_strsplit_set(exclude, ":, ", -1);
+-
+-	for (i = 0; __ofono_builtin[i]; i++) {
+-		if (check_plugin(__ofono_builtin[i],
+-					patterns, excludes) == FALSE)
+-			continue;
+-
+-		add_plugin(NULL, __ofono_builtin[i]);
+-	}
++	GDir *dir;
+ 
+-	dir = g_dir_open(PLUGINDIR, 0, NULL);
++	dir = g_dir_open(plugin_path, 0, NULL);
+ 	if (dir != NULL) {
+ 		while ((file = g_dir_read_name(dir)) != NULL) {
+ 			void *handle;
+@@ -137,7 +114,7 @@ int __ofono_plugin_init(const char *pattern, const char *exclude)
+ 					g_str_has_suffix(file, ".so") == FALSE)
+ 				continue;
+ 
+-			filename = g_build_filename(PLUGINDIR, file, NULL);
++			filename = g_build_filename(plugin_path, file, NULL);
+ 
+ 			handle = dlopen(filename, RTLD_NOW);
+ 			if (handle == NULL) {
+@@ -168,6 +145,52 @@ int __ofono_plugin_init(const char *pattern, const char *exclude)
+ 
+ 		g_dir_close(dir);
+ 	}
++}
++
++#include "builtin.h"
++
++int __ofono_plugin_init(const char *pattern, const char *exclude)
++{
++	gchar **patterns = NULL;
++	gchar **excludes = NULL;
++	GSList *list;
++	unsigned int i;
++
++	DBG("");
++
++	if (pattern)
++		patterns = g_strsplit_set(pattern, ":, ", -1);
++
++	if (exclude)
++		excludes = g_strsplit_set(exclude, ":, ", -1);
++
++	for (i = 0; __ofono_builtin[i]; i++) {
++		if (check_plugin(__ofono_builtin[i],
++					patterns, excludes) == FALSE)
++			continue;
++
++		add_plugin(NULL, __ofono_builtin[i]);
++	}
++
++
++	const gchar *plugin_path;
++
++	plugin_path = g_getenv ("OFONO_PLUGIN_PATH");
++
++	if (plugin_path) {
++		gchar **plugin_path_list;
++		gsize i;
++
++		plugin_path_list = g_strsplit (plugin_path, G_SEARCHPATH_SEPARATOR_S, 0);
++
++		for (i = 0; plugin_path_list[i]; i++) {
++			handle_dir(plugin_path_list, patterns, excludes);
++		}
++
++		g_strfreev(plugin_path_list);
++	}
++
++	handle_dir(PLUGINDIR, patterns, excludes);
+ 
+ 	for (list = plugins; list; list = list->next) {
+ 		struct ofono_plugin *plugin = list->data;
+-- 
+2.22.0
+

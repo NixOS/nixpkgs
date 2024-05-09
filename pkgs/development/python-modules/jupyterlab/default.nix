@@ -1,0 +1,75 @@
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatch-jupyter-builder
+, hatchling
+, async-lru
+, httpx
+, packaging
+, tornado
+, ipykernel
+, jupyter-core
+, jupyter-lsp
+, jupyterlab-server
+, jupyter-server
+, notebook-shim
+, jinja2
+, tomli
+, pythonOlder
+}:
+
+buildPythonPackage rec {
+  pname = "jupyterlab";
+  version = "4.1.8";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-M4St7YaA585QT9Y7i7iaOd8hycdpTZ59xKaHQs2zD5s=";
+  };
+
+  nativeBuildInputs = [
+    hatch-jupyter-builder
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    async-lru
+    httpx
+    packaging
+    tornado
+    ipykernel
+    jupyter-core
+    jupyter-lsp
+    jupyterlab-server
+    jupyter-server
+    notebook-shim
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  makeWrapperArgs = [
+    "--set"
+    "JUPYTERLAB_DIR"
+    "$out/share/jupyter/lab"
+  ];
+
+  # Depends on npm
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "jupyterlab"
+  ];
+
+  meta = with lib; {
+    changelog = "https://github.com/jupyterlab/jupyterlab/blob/v${version}/CHANGELOG.md";
+    description = "Jupyter lab environment notebook server extension";
+    license = licenses.bsd3;
+    homepage = "https://jupyter.org/";
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-lab";
+  };
+}

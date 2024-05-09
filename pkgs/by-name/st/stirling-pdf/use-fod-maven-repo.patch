@@ -1,0 +1,25 @@
+diff --git a/build.gradle b/build.gradle
+index c206e2f..cdaddf7 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -16,7 +16,7 @@ version = '0.22.3'
+ sourceCompatibility = '17'
+ 
+ repositories {
+-    mavenCentral()
++    maven { url '@deps@' }
+ }
+ 
+ 
+diff --git a/settings.gradle b/settings.gradle
+index f813993..2c87f3c 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1 +1,7 @@
++pluginManagement {
++    repositories {
++        maven { url '@deps@' }
++    }
++}
++
+ rootProject.name = 'Stirling-PDF'

@@ -1,0 +1,11 @@
+--- a/src/nrnpython/setup.py.in
++++ b/src/nrnpython/setup.py.in
+@@ -124,7 +124,7 @@ libdirs = [destdir + get_escaped_path("@NRN_LIBDIR@"),
+ rpath_prefix_flag='-Wl,-R'
+ extra_link_args = [@NRN_LINK_FLAGS_COMMA_SEPARATED_STRINGS@]
+ @MAC_DARWIN_FALSE@extra_link_args += [rpath_prefix_flag+lib_path for lib_path in libdirs]
+-@MAC_DARWIN_TRUE@extra_link_args.append("-Wl,-rpath,@loader_path/../../")
++@MAC_DARWIN_TRUE@extra_link_args.append("-Wl,-rpath,@loader_path/../../../")
+ @MAC_DARWIN_TRUE@extra_link_args.append("-Wl,-rpath,%s" % ivlibdir)
+
+ # as neuron module will be built during make, add build/lib

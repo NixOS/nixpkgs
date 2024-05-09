@@ -1,0 +1,12 @@
+diff --git a/nyxt.asd b/nyxt.asd
+index ea2630ce..fdf837e4 100644
+--- a/nyxt.asd
++++ b/nyxt.asd
+@@ -480,7 +480,6 @@ The renderer is configured from NYXT_RENDERER or `*nyxt-renderer*'."))
+   :defsystem-depends-on ("nasdf")
+   :class :nasdf-system
+   :depends-on (nyxt/gi-gtk)
+-  :build-operation "program-op"
+   :build-pathname "nyxt"
+   :entry-point "nyxt:entry-point")
+ 

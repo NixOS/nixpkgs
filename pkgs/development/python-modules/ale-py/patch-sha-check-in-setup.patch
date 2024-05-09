@@ -1,0 +1,17 @@
+diff --git a/setup.py b/setup.py
+index ff1b1c5..ce40df0 100644
+--- a/setup.py
++++ b/setup.py
+@@ -141,11 +141,7 @@ def parse_version(version_file):
+ 
+         version = ci_version
+     else:
+-        sha = (
+-            subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=here)
+-            .decode("ascii")
+-            .strip()
+-        )
++        sha = @sha@
+         version += f"+{sha}"
+ 
+     return version

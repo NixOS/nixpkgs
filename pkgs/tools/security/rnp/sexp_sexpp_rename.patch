@@ -1,0 +1,50 @@
+diff --git i/src/lib/CMakeLists.txt w/src/lib/CMakeLists.txt
+index 086ac57d..2ce59ca1 100755
+--- i/src/lib/CMakeLists.txt
++++ w/src/lib/CMakeLists.txt
+@@ -328,7 +328,7 @@ elseif (CRYPTO_BACKEND_OPENSSL)
+   target_link_libraries(librnp-obj PRIVATE OpenSSL::Crypto)
+ endif()
+
+-target_link_libraries(librnp-obj PRIVATE sexp)
++target_link_libraries(librnp-obj PRIVATE sexpp)
+
+ set_target_properties(librnp-obj PROPERTIES CXX_VISIBILITY_PRESET hidden)
+ if (TARGET BZip2::BZip2)
+@@ -384,7 +384,7 @@ foreach (prop LINK_LIBRARIES INTERFACE_LINK_LIBRARIES INCLUDE_DIRECTORIES INTERF
+   get_target_property(val librnp-obj ${prop})
+   if (BUILD_SHARED_LIBS)
+     set_property(TARGET librnp-static PROPERTY ${prop} ${val})
+-    list(REMOVE_ITEM val "$<LINK_ONLY:sexp>")
++    list(REMOVE_ITEM val "$<LINK_ONLY:sexpp>")
+     set_property(TARGET librnp PROPERTY ${prop} ${val})
+   else()
+     set_property(TARGET librnp PROPERTY ${prop} ${val})
+diff --git i/src/librekey/g23_sexp.hpp w/src/librekey/g23_sexp.hpp
+index b888680f..b062c52f 100644
+--- i/src/librekey/g23_sexp.hpp
++++ w/src/librekey/g23_sexp.hpp
+@@ -27,8 +27,8 @@
+ #ifndef RNP_G23_SEXP_HPP
+ #define RNP_G23_SEXP_HPP
+
+-#include "sexp/sexp.h"
+-#include "sexp/ext-key-format.h"
++#include "sexpp/sexp.h"
++#include "sexpp/ext-key-format.h"
+
+ #define SXP_MAX_DEPTH 30
+
+diff --git i/src/tests/CMakeLists.txt w/src/tests/CMakeLists.txt
+index 7d2a6b0c..88aeaf9f 100644
+--- i/src/tests/CMakeLists.txt
++++ w/src/tests/CMakeLists.txt
+@@ -176,7 +176,7 @@ target_link_libraries(rnp_tests
+   PRIVATE
+     librnp-static
+     JSON-C::JSON-C
+-    sexp
++    sexpp
+     ${GTestMain}
+ )
+ if (CRYPTO_BACKEND_LOWERCASE STREQUAL "openssl")
