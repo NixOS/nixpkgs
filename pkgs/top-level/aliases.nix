@@ -1394,6 +1394,7 @@ mapAliases ({
   yacc = bison; # moved from top-level 2021-03-14
   yafaray-core = libyafaray; # Added 2022-09-23
   yarn2nix-moretea-openssl_1_1 = throw "'yarn2nix-moretea-openssl_1_1' has been removed."; # Added 2023-02-04
+  yi = throw "'yi' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   ytmdesktop = throw "ytmdesktop was removed because upstream vanished"; # added 2024-03-24
   yubikey-manager4 = throw "yubikey-manager4 has been removed, since it is no longer required by yubikey-manager-qt. Please update to yubikey-manager."; # Added 2024-01-14
   yuzu-ea = throw "yuzu-ea has been removed from nixpkgs, as it has been taken down upstream"; # Added 2024-03-04
