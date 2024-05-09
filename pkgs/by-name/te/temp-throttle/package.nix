@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub }:
 
-let version = "3.01";
+let version = "3.02";
 in stdenv.mkDerivation {
   pname = "temp-throttle";
   inherit version;
@@ -8,7 +8,7 @@ in stdenv.mkDerivation {
     owner = "Sepero";
     repo = "temp-throttle";
     rev = "v${version}";
-    sha256 = "sha256-dprVBzjLbytCb6eo656XWjF0klMy3zej7FCI9fUYAmg=";
+    sha256 = "sha256-xy1Wh09FkiZAoYU1KwDeBR5q+rCUQIULejlWdmhi+2o=";
   };
   installPhase = ''
     runHook preInstall
