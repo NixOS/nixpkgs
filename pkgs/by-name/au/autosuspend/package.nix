@@ -7,15 +7,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "6.1.1";
+  version = "7.0.0";
 
-  disabled = python3.pythonOlder "3.8";
+  disabled = python3.pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LGU/yhwuc6BuctCibm0AaRheQkuSIgEVXzcWQHCJ/8Y=";
+    hash = "sha256-AJ0ZWRxqhBJEics6XnIVWyf7pJI8MphQU4LRqSYYNSQ=";
   };
 
   postPatch = ''
