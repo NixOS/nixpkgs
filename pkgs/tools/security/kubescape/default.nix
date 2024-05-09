@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, git
-, installShellFiles
-, kubescape
-, testers
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  installShellFiles,
+  kubescape,
+  testers,
 }:
 
 buildGoModule rec {
@@ -22,17 +23,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-WPa6IKPjdBtoHYKA2yYtaI1LCbkyv374fcThxbSEKxo=";
 
-  subPackages = [
-    "."
-  ];
+  subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   ldflags = [
     "-s"
@@ -89,7 +84,10 @@ buildGoModule rec {
       Jenkins, CircleCI and Github workflows.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
     mainProgram = "kubescape";
     broken = stdenv.isDarwin;
   };
