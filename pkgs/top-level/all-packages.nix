@@ -36524,8 +36524,6 @@ with pkgs;
 
   abuse = callPackage ../games/abuse { };
 
-  adom = callPackage ../games/adom { };
-
   airshipper = callPackage ../games/airshipper { };
 
   airstrike = callPackage ../games/airstrike { };
