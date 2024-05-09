@@ -425,4 +425,56 @@ in runBuildTests {
       \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
     '';
   };
+
+  testEnvvars = {
+    drv = evalFormat formats.envvars {} {
+      A = 1;
+      B = "two";
+      C = 3.14;
+      D = [ "a" "b" "c" ];
+      E = null;
+      F = true;
+      G = false;
+      H = (formats.envvars {}).lib.mkUnescaped "$(\"ls\")";
+      I = [ "a" 2 ((formats.envvars {}).lib.mkUnescaped "$(\"ls\")") ];
+    };
+    expected = ''
+      A='1'
+      B='two'
+      C='3.140000'
+      D='a,b,c'
+      F='true'
+      G='false'
+      H="$("ls")"
+      I="a,2,$("ls")"
+    '';
+  };
+
+  testEnvvarsAlternative = {
+    drv = evalFormat formats.envvars {
+      export = true;
+      listToStringSep = ":";
+      boolToStringFn = b: if b then "1" else "0";
+    } {
+      A = 1;
+      B = "two";
+      C = 3.14;
+      D = [ "a" "b" "c" ];
+      E = null;
+      F = true;
+      G = false;
+      H = (formats.envvars {}).lib.mkUnescaped "$(\"ls\")";
+      I = [ "a" 2 ((formats.envvars {}).lib.mkUnescaped "$(\"ls\")") ];
+    };
+    expected = ''
+      export A='1'
+      export B='two'
+      export C='3.140000'
+      export D='a:b:c'
+      export F='1'
+      export G='0'
+      export H="$("ls")"
+      export I="a:2:$("ls")"
+    '';
+  };
 }
