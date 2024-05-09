@@ -1,9 +1,10 @@
-{ lib
-, aliyun-python-sdk-core
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  aliyun-python-sdk-core,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,20 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-wxt9JOFTJxowQ+gB57a2s/DbR+lag8jRDNq4wRZi/Dk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    aliyun-python-sdk-core
-  ];
+  dependencies = [ aliyun-python-sdk-core ];
 
   # All components are stored in a mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aliyunsdkkms"
-  ];
+  pythonImportsCheck = [ "aliyunsdkkms" ];
 
   meta = with lib; {
     description = "KMS module of Aliyun Python SDK";
