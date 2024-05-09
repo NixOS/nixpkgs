@@ -31,6 +31,8 @@ let
     pname = "curl-impersonate-${name}";
     version = "0.6.1";
 
+    outputs = [ "out" "dev" ];
+
     src = fetchFromGitHub {
       owner = "lwthiker";
       repo = "curl-impersonate";
@@ -130,6 +132,9 @@ let
 
       # Install zsh and fish completions
       installShellCompletion $TMPDIR/curl-impersonate-${name}.{zsh,fish}
+
+      # Install headers
+      make -C curl-*/include install
     '';
 
     preFixup = let

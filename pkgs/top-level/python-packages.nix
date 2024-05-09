@@ -2636,6 +2636,8 @@ self: super: with self; {
 
   curlify = callPackage ../development/python-modules/curlify { };
 
+  curl-cffi = callPackage ../development/python-modules/curl-cffi { };
+
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
