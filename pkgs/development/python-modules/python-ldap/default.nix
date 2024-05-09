@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, openldap
-, cyrus_sasl
+  # native dependencies
+  openldap,
+  cyrus_sasl,
 
-# dependencies
-, pyasn1
-, pyasn1-modules
+  # dependencies
+  pyasn1,
+  pyasn1-modules,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,23 +35,19 @@ buildPythonPackage rec {
     hash = "sha256-v1cWoRGxbvvFnHqnwoIfmiQQcxfaA8Bf3+M5bE5PtuU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     openldap
     cyrus_sasl
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyasn1
     pyasn1-modules
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # Needed by tests to setup a mockup ldap server.
