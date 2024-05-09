@@ -7,6 +7,7 @@ let
     #### LIBRARIES
     dtkcommon = callPackage ./library/dtkcommon { };
     dtkcore = callPackage ./library/dtkcore { };
+    dtk6core = callPackage ./library/dtk6core { };
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
     dtkdeclarative = callPackage ./library/dtkdeclarative { };
