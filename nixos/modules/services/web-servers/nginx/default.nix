@@ -142,7 +142,11 @@ let
       default_type application/octet-stream;
   '';
 
-  configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
+  configFile = (
+      if cfg.validateConfigFile
+      then pkgs.writers.writeNginxConfig
+      else pkgs.writeText
+    ) "nginx.conf" ''
     pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
@@ -1082,6 +1086,9 @@ in
         '';
         description = "Declarative vhost config";
       };
+      validateConfigFile = lib.mkEnableOption ''
+        Validate configuration with pkgs.writeNginxConfig.
+      '' // { default = true; };
     };
   };
 
