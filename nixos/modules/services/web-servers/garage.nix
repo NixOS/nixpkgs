@@ -10,7 +10,7 @@ in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+    maintainers = with pkgs.lib.maintainers; [ raitobezarius tcheronneau ];
   };
 
   options.services.garage = {
@@ -36,6 +36,12 @@ in
       description = "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";
     };
 
+    systemdLoadCredential = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = "Optional load credential for systemd. Useful if you want to use sops or agenix to manage your secrets.";
+    };
+
     settings = mkOption {
       type = types.submodule {
         freeformType = toml.type;
@@ -53,24 +59,21 @@ in
             description = "The main data storage, put this on your large storage (e.g. high capacity HDD)";
           };
 
-          replication_mode = mkOption {
-            default = "none";
-            type = types.enum ([ "none" "1" "2" "3" "2-dangerous" "3-dangerous" "3-degraded" 1 2 3 ]);
-            apply = v: toString v;
-            description = "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode> for reference.";
+          rpc_bind_addr = mkOption {
+            default = "[::]:3901";
+            type = types.str;
+            description = "The address and port on which to bind for inter-cluster communications.";
           };
         };
       };
       description = "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
     };
 
-    package = mkOption {
-      type = types.package;
-      description = "Garage package to use, needs to be set explicitly. If you are upgrading from a major version, please read NixOS and Garage release notes for upgrade instructions.";
-    };
+    package = mkPackageOptionMD pkgs "garage" { };
   };
 
   config = mkIf cfg.enable {
+
     environment.etc."garage.toml" = {
       source = configFile;
     };
@@ -103,6 +106,7 @@ in
         ProtectHome = true;
         NoNewPrivileges = true;
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        LoadCredential = [] ++ cfg.systemdLoadCredential;
       };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";
