@@ -35804,7 +35804,7 @@ with pkgs;
 
   xlife = callPackage ../applications/graphics/xlife { };
 
-  xmobar = haskellPackages.xmobar;
+  xmobar = haskellPackages.xmobar.bin;
 
   xmonad-log = callPackage ../tools/misc/xmonad-log { };
 
