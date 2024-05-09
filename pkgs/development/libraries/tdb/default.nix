@@ -2,6 +2,7 @@
 , fetchurl
 , pkg-config
 , wafHook
+, buildPackages
 , python3
 , readline
 , libxslt
@@ -46,6 +47,9 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   postFixup = if stdenv.isDarwin
