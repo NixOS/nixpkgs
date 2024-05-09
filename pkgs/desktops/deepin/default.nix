@@ -7,7 +7,6 @@ let
     #### LIBRARIES
     dtkcommon = callPackage ./library/dtkcommon { };
     dtkcore = callPackage ./library/dtkcore { };
-    dtk6core = callPackage ./library/dtk6core { };
     dtkgui = callPackage ./library/dtkgui { };
     dtkwidget = callPackage ./library/dtkwidget { };
     dtkdeclarative = callPackage ./library/dtkdeclarative { };
@@ -24,6 +23,8 @@ let
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
     util-dfm = callPackage ./library/util-dfm { };
+    dtk6core = callPackage ./library/dtk6core { };
+    dtk6gui = callPackage ./library/dtk6gui { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
