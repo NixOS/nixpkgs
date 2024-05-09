@@ -175,13 +175,14 @@ let
       license = with licenses; [ curl mit ];
       maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];
       platforms = platforms.unix;
+      mainProgram = "curl-impersonate-${name}";
     };
   };
 in
 
 symlinkJoin rec {
   pname = "curl-impersonate";
-  inherit (passthru.curl-impersonate-ff) version meta;
+  inherit (passthru.curl-impersonate-chrome) version meta;
 
   name = "${pname}-${version}";
 
@@ -196,7 +197,7 @@ symlinkJoin rec {
 
     updateScript = ./update.sh;
 
-    inherit (passthru.curl-impersonate-ff) src;
+    inherit (passthru.curl-impersonate-chrome) src;
 
     tests = { inherit (nixosTests) curl-impersonate; };
   };
