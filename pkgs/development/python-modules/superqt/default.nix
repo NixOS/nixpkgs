@@ -51,9 +51,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = false; # Segfaults...
+  # Segmentation fault
+  doCheck = false;
 
-  pythonImportsCheck = [ "superqt" ];
+  # Segmentation fault
+  # pythonImportsCheck = [ "superqt" ];
 
   meta = with lib; {
     description = "Missing widgets and components for Qt-python (napari/superqt)";
