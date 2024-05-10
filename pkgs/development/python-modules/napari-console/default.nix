@@ -8,6 +8,7 @@
   napari-plugin-engine,
   pythonOlder,
   qtconsole,
+  qtpy,
   setuptools-scm,
 }:
 
@@ -28,11 +29,10 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    imageio
     ipykernel
     ipython
-    napari-plugin-engine
     qtconsole
+    qtpy
   ];
 
   # Circular dependency: napari
