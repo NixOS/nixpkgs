@@ -32381,8 +32381,6 @@ with pkgs;
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
-  google-chrome = callPackage ../applications/networking/browsers/google-chrome { };
-
   go-graft = callPackage ../applications/networking/go-graft { };
 
   gostatic = callPackage ../applications/misc/gostatic { };
