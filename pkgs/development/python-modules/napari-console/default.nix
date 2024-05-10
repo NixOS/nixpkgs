@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, ipykernel
-, ipython
-, napari-plugin-engine
-, pythonOlder
-, qtconsole
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  imageio,
+  ipykernel,
+  ipython,
+  napari-plugin-engine,
+  pythonOlder,
+  qtconsole,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-3gOfiPx06G5c4eaLQ5kP45hUr6yw91esznJFacpO66Q=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     imageio
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # Circular dependency: napari
   doCheck = false;
 
-  pythonImportsCheck = [
-    "napari_console"
-  ];
+  pythonImportsCheck = [ "napari_console" ];
 
   meta = with lib; {
     description = "A plugin that adds a console to napari";
