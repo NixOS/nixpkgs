@@ -1,53 +1,61 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, binutils-unwrapped
-, harec
-, makeWrapper
-, qbe
-, gitUpdater
-, scdoc
-, tzdata
-, substituteAll
-, fetchpatch
-, callPackage
-, enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit)
-, pkgsCross
-, x86_64PkgsCrossToolchain ? pkgsCross.gnu64
-, aarch64PkgsCrossToolchain ? pkgsCross.aarch64-multiplatform
-, riscv64PkgsCrossToolchain ? pkgsCross.riscv64
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  binutils-unwrapped,
+  harec,
+  makeWrapper,
+  qbe,
+  gitUpdater,
+  scdoc,
+  tzdata,
+  substituteAll,
+  fetchpatch,
+  callPackage,
+  enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
+  pkgsCross,
+  x86_64PkgsCrossToolchain ? pkgsCross.gnu64,
+  aarch64PkgsCrossToolchain ? pkgsCross.aarch64-multiplatform,
+  riscv64PkgsCrossToolchain ? pkgsCross.riscv64,
 }:
 
 # There's no support for `aarch64` or `riscv64` for freebsd nor for openbsd on nix.
 # See `lib.systems.doubles.aarch64` and `lib.systems.doubles.riscv64`.
-assert let
-  inherit (stdenv.hostPlatform) isLinux is64bit;
-  inherit (lib) intersectLists platforms concatStringsSep;
-  workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
-in
-(enableCrossCompilation -> !(isLinux && is64bit))
+assert
+  let
+    inherit (stdenv.hostPlatform) isLinux is64bit;
+    inherit (lib) intersectLists platforms concatStringsSep;
+    workingPlatforms = intersectLists platforms.linux (with platforms; x86_64 ++ aarch64 ++ riscv64);
+  in
+  (enableCrossCompilation -> !(isLinux && is64bit))
   -> builtins.throw ''
-  The cross-compilation toolchains may only be enabled on the following platforms:
-  ${concatStringsSep "\n" workingPlatforms}
-'';
+    The cross-compilation toolchains may only be enabled on the following platforms:
+    ${concatStringsSep "\n" workingPlatforms}
+  '';
 
 let
   arch = stdenv.hostPlatform.uname.processor;
-  qbePlatform = {
-    x86_64 = "amd64_sysv";
-    aarch64 = "arm64";
-    riscv64 = "rv64";
-  }.${arch};
+  qbePlatform =
+    {
+      x86_64 = "amd64_sysv";
+      aarch64 = "arm64";
+      riscv64 = "rv64";
+    }
+    .${arch};
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   embeddedOnBinaryTools =
     let
-      genToolsFromToolchain = toolchain:
+      genToolsFromToolchain =
+        toolchain:
         let
           crossTargetPrefix = toolchain.stdenv.cc.targetPrefix;
           toolchainArch = toolchain.stdenv.hostPlatform.uname.processor;
-          absOrRelPath = toolDrv: toolBasename:
-            if arch == toolchainArch then toolBasename
-            else lib.getExe' toolDrv "${crossTargetPrefix}${toolBasename}";
+          absOrRelPath =
+            toolDrv: toolBasename:
+            if arch == toolchainArch then
+              toolBasename
+            else
+              lib.getExe' toolDrv "${crossTargetPrefix}${toolBasename}";
         in
         {
           "ld" = absOrRelPath toolchain.buildPackages.binutils "ld";
@@ -65,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
   version = "0.24.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -104,29 +115,31 @@ stdenv.mkDerivation (finalAttrs: {
     tzdata
   ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-    "ARCH=${arch}"
-    "VERSION=${finalAttrs.version}-nixpkgs"
-    "QBEFLAGS=-t${qbePlatform}"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "AS=${stdenv.cc.targetPrefix}as"
-    "LD=${stdenv.cc.targetPrefix}ld"
-    # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
-    # not follow the FHS.
-    "HAREPATH=$(SRCDIR)/hare/stdlib"
-  ] ++ lib.optionals enableCrossCompilation [
-    "RISCV64_AS=${embeddedOnBinaryTools.riscv64.as}"
-    "RISCV64_CC=${embeddedOnBinaryTools.riscv64.cc}"
-    "RISCV64_LD=${embeddedOnBinaryTools.riscv64.ld}"
-    "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
-    "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
-    "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
-    "x86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
-    "x86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
-    "x86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
-  ];
+  makeFlags =
+    [
+      "HARECACHE=.harecache"
+      "PREFIX=${builtins.placeholder "out"}"
+      "ARCH=${arch}"
+      "VERSION=${finalAttrs.version}-nixpkgs"
+      "QBEFLAGS=-t${qbePlatform}"
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "AS=${stdenv.cc.targetPrefix}as"
+      "LD=${stdenv.cc.targetPrefix}ld"
+      # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
+      # not follow the FHS.
+      "HAREPATH=$(SRCDIR)/hare/stdlib"
+    ]
+    ++ lib.optionals enableCrossCompilation [
+      "RISCV64_AS=${embeddedOnBinaryTools.riscv64.as}"
+      "RISCV64_CC=${embeddedOnBinaryTools.riscv64.cc}"
+      "RISCV64_LD=${embeddedOnBinaryTools.riscv64.ld}"
+      "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
+      "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
+      "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
+      "x86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
+      "x86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
+      "x86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
+    ];
 
   enableParallelBuilding = true;
 
@@ -143,7 +156,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/hare \
-      --prefix PATH : ${lib.makeBinPath [binutils-unwrapped harec qbe]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          binutils-unwrapped
+          harec
+          qbe
+        ]
+      }
   '';
 
   setupHook = ./setup-hook.sh;
@@ -151,9 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gitUpdater { };
     tests = lib.optionalAttrs enableCrossCompilation {
-      crossCompilation = callPackage ./cross-compilation-tests.nix {
-        hare = finalAttrs.finalPackage;
-      };
+      crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
     };
   };
 
