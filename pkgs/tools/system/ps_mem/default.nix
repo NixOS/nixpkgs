@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ps_mem";
-  version = "3.13";
+  version = "3.14";
 
   src = fetchFromGitHub {
     owner = "pixelb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pgi9hvwfbkzvwicqlkwx4rwal1ikza018yxbwpnf7c80zw0zaw9";
+    hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };
 
   meta = with lib; {
