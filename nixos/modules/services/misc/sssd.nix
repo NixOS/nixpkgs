@@ -132,6 +132,7 @@ in {
         passwd = [ "sss" ];
         services = [ "sss" ];
         shadow = [ "sss" ];
+        netgroup = [ "sss" ];
       };
       services.dbus.packages = [ pkgs.sssd ];
     })
