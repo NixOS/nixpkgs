@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pyqt5
-, qtpy
-, typing-extensions
-, pytestCheckHook
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  pyqt5,
+  qtpy,
+  typing-extensions,
+  pytestCheckHook,
+  pygments,
 }:
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.3.8";
+  version = "0.6.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
