@@ -27,7 +27,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Fast trigram based code search";
-    homepage = "https://github.com/google/zoekt";
+    homepage = "https://github.com/sourcegraph/zoekt";
     license = licenses.asl20;
     maintainers = [ ];
   };
