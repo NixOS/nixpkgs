@@ -951,8 +951,7 @@ let
       ZEROPLUS_FF        = yes;
 
       MODULE_COMPRESS      = whenOlder "5.13" yes;
-      MODULE_COMPRESS_XZ   = whenOlder "5.13" yes;
-      MODULE_COMPRESS_ZSTD = whenAtLeast "5.13" yes;
+      MODULE_COMPRESS_XZ   = yes;
 
       SYSVIPC            = yes;  # System-V IPC
 

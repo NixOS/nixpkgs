@@ -2,7 +2,7 @@
 
 ## Building Go modules with `buildGoModule` {#ssec-language-go}
 
-The function `buildGoModule` builds Go programs managed with Go modules. It builds [Go Modules](https://github.com/golang/go/wiki/Modules) through a two phase build:
+The function `buildGoModule` builds Go programs managed with Go modules. It builds [Go Modules](https://go.dev/wiki/Modules) through a two phase build:
 
 - An intermediate fetcher derivation called `goModules`. This derivation will be used to fetch all the dependencies of the Go module.
 - A final derivation will use the output of the intermediate derivation to build the binaries and produce the final output.

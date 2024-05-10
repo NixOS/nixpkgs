@@ -3310,8 +3310,6 @@ with pkgs;
 
   async = callPackage ../development/tools/async { };
 
-  async-profiler = callPackage ../development/tools/async-profiler { };
-
   atheme = callPackage ../servers/irc/atheme { };
 
   atinout = callPackage ../tools/networking/atinout { };
@@ -6610,8 +6608,6 @@ with pkgs;
 
   ccze = callPackage ../tools/misc/ccze { };
 
-  cdecl = callPackage ../development/tools/cdecl { };
-
   cdi2iso = callPackage ../tools/cd-dvd/cdi2iso { };
 
   cdist = python3Packages.callPackage ../tools/admin/cdist { };
@@ -8106,8 +8102,6 @@ with pkgs;
   fbvnc = callPackage ../tools/admin/fbvnc { };
 
   fim = callPackage ../tools/graphics/fim { };
-
-  flac123 = callPackage ../applications/audio/flac123 { };
 
   flamegraph = callPackage ../development/tools/flamegraph { };
 
@@ -23765,7 +23759,7 @@ with pkgs;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
-  openvr = callPackage ../development/libraries/openvr {
+  openvr = callPackage ../by-name/op/openvr/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
   };
 
@@ -25049,8 +25043,6 @@ with pkgs;
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
   xml-security-c = callPackage ../development/libraries/xml-security-c { };
-
-  xml-tooling-c = callPackage ../development/libraries/xml-tooling-c { };
 
   xlslib = callPackage ../development/libraries/xlslib { };
 

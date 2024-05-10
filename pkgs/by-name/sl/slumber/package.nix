@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
   version = "1.1.0";
@@ -14,12 +20,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AK/+1tCdvNucIbxwyqOt/TbOaJPVDOKFEx5NqW2Yd4U=";
 
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+
   meta = with lib; {
     description = "Terminal-based HTTP/REST client";
     homepage = "https://slumber.lucaspickering.me";
     license = licenses.mit;
     mainProgram = "slumber";
     maintainers = with maintainers; [ javaes ];
-    broken = stdenv.isDarwin || stdenv.isAarch64;
   };
 }

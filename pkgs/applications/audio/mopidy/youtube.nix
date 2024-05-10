@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , python3
 , mopidy
+, extraPkgs ? pkgs: []
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     ytmusicapi
   ] ++ [
     mopidy
-  ];
+  ] ++ extraPkgs pkgs;
 
   nativeCheckInputs = with python3.pkgs; [
     vcrpy
