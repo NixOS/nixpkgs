@@ -7,6 +7,7 @@
   gitUpdater,
   scdoc,
   tzdata,
+  mailcap,
   substituteAll,
   fetchpatch,
   callPackage,
@@ -113,6 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://git.sr.ht/~sircmpwn/hare/commit/e35f2284774436f422e06f0e8d290b173ced1677.patch";
       hash = "sha256-A59bGO/9tOghV8/MomTxd8xRExkHVdoMom2d+HTfQGg=";
+    })
+    # Use mailcap `/etc/mime.types` for Hare's mime module
+    (substituteAll {
+      src = ./004-use-mailcap-for-mimetypes.patch;
+      inherit mailcap;
     })
   ];
 
