@@ -5,13 +5,12 @@
 # https://github.com/flutter/flutter/issues/60118
 { lib
 , runCommand
-, xorg
 , cacert
-, unzip
+, flutter
 
 , flutterPlatform
 , systemPlatform
-, flutter
+, buildPackages
 , hash
 }:
 
@@ -42,7 +41,7 @@ let
 in
 runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
 {
-  nativeBuildInputs = [ xorg.lndir flutter' unzip ];
+  nativeBuildInputs = with buildPackages; [ xorg.lndir flutter' unzip git ];
 
   NIX_FLUTTER_TOOLS_VM_OPTIONS = "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt";
   NIX_FLUTTER_OPERATING_SYSTEM = {

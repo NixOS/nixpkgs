@@ -1,8 +1,10 @@
 { lib
 , stdenv
-, darwin
 , callPackage
 , flutter
+, buildPackages
+, targetPlatform
+, buildPlatform
 , supportedTargetFlutterPlatforms ? [
     "universal"
     "web"
@@ -17,10 +19,8 @@
 , extraCxxFlags ? [ ]
 , extraCFlags ? [ ]
 , extraLinkerFlags ? [ ]
-, makeWrapper
 , runCommandLocal
 , writeShellScript
-, wrapGAppsHook3
 , git
 , which
 , pkg-config
@@ -51,7 +51,7 @@ let
       src = callPackage ./artifacts/fetch-artifacts.nix {
         inherit flutterPlatform;
         systemPlatform = stdenv.hostPlatform.system;
-        flutter = callPackage ./wrapper.nix { inherit flutter; };
+        flutter = callPackage ./wrapper.nix { flutter = if buildPlatform.system == targetPlatform.system then flutter else buildPackages.flutter.unwrapped; };
         hash = artifactHashes.${flutterPlatform}.${stdenv.hostPlatform.system} or "";
       };
     }));
@@ -121,9 +121,9 @@ in
   pname = "flutter-wrapped";
   inherit (flutter) version;
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ]
-    ++ lib.optionals supportsLinuxDesktopTarget [ glib wrapGAppsHook3 ];
+  nativeBuildInputs = with buildPackages; ([ makeWrapper ]
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]
+    ++ lib.optionals supportsLinuxDesktopTarget [ buildPackages.glib wrapGAppsHook3 ]);
 
   passthru = flutter.passthru // {
     inherit (flutter) version;

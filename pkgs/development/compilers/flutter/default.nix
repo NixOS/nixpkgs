@@ -65,7 +65,7 @@ let
         versionDir = ./versions + "/${version}";
         data = lib.importJSON (versionDir + "/data.json");
       in
-      lib.nameValuePair "v${version}" (wrapFlutter (mkFlutter ({
+      lib.nameValuePair "v${version}" (wrapFlutter( mkFlutter ({
         patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
       } // data))))
     (builtins.readDir ./versions);
