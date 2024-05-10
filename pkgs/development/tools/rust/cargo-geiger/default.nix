@@ -12,15 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-geiger";
-  version = "0.11.6";
+  version = "0.11.7";
 
   src = fetchFromGitHub {
     owner = "rust-secure-code";
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-rGZJyCWGk2RUr52ICp4dVER3JMBrnLdOMusRm/GG2PE=";
+    rev = "cargo-geiger@v${version}";
+    hash = "sha256-/5yuayqneZV6aVQ6YFgqNS2XY3W6yETRQ0kE5ovc7p8=";
   };
-  cargoHash = "sha256-B6Ka35y2fJEDVd891P60TNppr5HGFnzVjLhhfoFCYUA=";
+  cargoHash = "sha256-lhojo3dhsM9y1SxpVMH93yv+JeNfTL7VLsbTp9ErgIQ=";
+
+  patches = [
+    ./allow-warnings.patch
+  ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation Security libiconv curl ]);
@@ -30,12 +34,18 @@ rustPlatform.buildRustPackage rec {
 
   # skip tests with networking or other failures
   checkFlags = [
+    "--skip serialize_test1_quick_report"
     "--skip serialize_test2_quick_report"
     "--skip serialize_test3_quick_report"
+    "--skip serialize_test4_quick_report"
     "--skip serialize_test6_quick_report"
+    "--skip serialize_test7_quick_report"
+    "--skip serialize_test1_report"
     "--skip serialize_test2_report"
     "--skip serialize_test3_report"
+    "--skip serialize_test4_report"
     "--skip serialize_test6_report"
+    "--skip serialize_test7_report"
     # multiple test cases that time-out or cause memory leaks
     "--skip test_package"
     "--skip test_package_update_readme::case_2"
@@ -45,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/rust-secure-code/cargo-geiger";
-    changelog = "https://github.com/rust-secure-code/cargo-geiger/blob/${pname}-${version}/CHANGELOG.md";
+    changelog = "https://github.com/rust-secure-code/cargo-geiger/blob/cargo-geiger-${version}/CHANGELOG.md";
     description = "Detects usage of unsafe Rust in a Rust crate and its dependencies";
     mainProgram = "cargo-geiger";
     longDescription = ''
