@@ -192,6 +192,7 @@
 , "prebuild-install"
 , "prettier"
 , "prettier-plugin-toml"
+, "prettier-plugin-go-template"
 , "prisma"
 , "@prisma/language-server"
 , "pscid"
