@@ -13,22 +13,22 @@
 buildPythonPackage rec {
   pname = "napari-console";
   version = "0.0.7";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
+    repo = "napari-console";
     rev = "refs/tags/v${version}";
     hash = "sha256-vHLCVMgrcs54pGb48wQpc0h7QBIfE6r7hCSoDNI3QvA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     imageio
     ipykernel
     ipython
