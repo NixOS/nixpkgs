@@ -1,22 +1,48 @@
-{ stdenv, lib, fetchurl, SDL, libvorbis, flac, libmikmod }:
+{
+  lib,
+  SDL,
+  fetchurl,
+  flac,
+  libmikmod,
+  libvorbis,
+  stdenv,
+  # Boolean flags
+  enableSdltest ? (!stdenv.isDarwin)
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_sound";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "https://icculus.org/SDL_sound/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1pz6g56gcy7pmmz3hhych3iq9jvinml2yjz15fjqjlj8pc5zv69r";
+    url = "https://icculus.org/SDL_sound/downloads/SDL_sound-${finalAttrs.version}.tar.gz";
+    hash = "sha256-OZn9C7tIUomlK+FLL2i1ccuE44DMQzh+rfd49kx55t8=";
   };
 
-  buildInputs = [ SDL libvorbis flac libmikmod ];
+  nativeBuildInputs = [
+    SDL
+  ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  buildInputs = [
+    SDL
+    flac
+    libmikmod
+    libvorbis
+  ];
 
-  meta = with lib; {
-    description = "SDL sound library";
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
+  configureFlags = [
+    (lib.enableFeature enableSdltest "--disable-sdltest")
+  ];
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://www.icculus.org/SDL_sound/";
+    description = "SDL sound library";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ ]);
+    mainProgram = "playsound";
+    inherit (SDL.meta) platforms;
   };
-}
+})
