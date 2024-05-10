@@ -1,38 +1,67 @@
-{ lib, stdenv, fetchurl
-, libpng, libjpeg, libogg, libvorbis, freetype, smpeg
-, SDL, SDL_image, SDL_mixer, SDL_ttf }:
+{
+  lib,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_ttf,
+  fetchFromGitHub,
+  freetype,
+  libjpeg,
+  libogg,
+  libpng,
+  libvorbis,
+  pkg-config,
+  smpeg,
+  stdenv,
+}:
 
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "onscripter-en";
-  version = "20111009";
+  version = "20110930";
 
-  src = fetchurl {
-    # The website is not available now.
-    url = "https://www.dropbox.com/s/ag21owy9poyr2oy/onscripter-en-20111009-src.tar.bz2";
-    sha256 = "sha256-pir3ExhehJ9zNygDN83S4GOs5ugDNMjngxEwklAz9c8=";
+  # The website is not available now. Let's use a Museoa backup
+  src = fetchFromGitHub {
+    owner = "museoa";
+    repo = "onscripter-en";
+    rev = finalAttrs.version;
+    hash = "sha256-Lc5ZlH2C4ER02NmQ6icfiqpzVQdVUnOmdywGjjjSYSg=";
   };
 
-  buildInputs = [ libpng libjpeg libogg libvorbis freetype smpeg
-                  SDL SDL_image SDL_mixer SDL_ttf
-                ];
+  nativeBuildInputs = [
+    SDL
+    pkg-config
+    smpeg
+  ];
+
+  buildInputs = [
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+    freetype
+    libjpeg
+    libogg
+    libpng
+    libvorbis
+    smpeg
+  ];
 
   configureFlags = [ "--no-werror" ];
 
-  # Without this libvorbisfile.so is not getting linked properly for some reason.
-  NIX_CFLAGS_LINK = "-lvorbisfile";
+  strictDeps = true;
 
   preBuild = ''
     sed -i 's/.dll//g' Makefile
   '';
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
+    homepage = "http://github.com/museoa/onscripter-en";
     description = "Japanese visual novel scripting engine";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "onscripter-en";
-    homepage = "http://unclemion.com/onscripter/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ AndersonTorres abbradar ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})
