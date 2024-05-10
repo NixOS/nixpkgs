@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  binutils-unwrapped,
   harec,
-  makeWrapper,
   qbe,
   gitUpdater,
   scdoc,
@@ -34,15 +32,14 @@ assert
   '';
 
 let
-  arch = stdenv.hostPlatform.uname.processor;
+  inherit (stdenv.targetPlatform.uname) system processor;
   qbePlatform =
     {
       x86_64 = "amd64_sysv";
       aarch64 = "arm64";
       riscv64 = "rv64";
     }
-    .${arch};
-  platform = lib.toLower stdenv.hostPlatform.uname.system;
+    .${processor};
   embeddedOnBinaryTools =
     let
       genPaths =
@@ -64,6 +61,17 @@ let
       aarch64PkgsCrossToolchain
       riscv64PkgsCrossToolchain
     ];
+  crossCompMakeFlags = builtins.filter (x: !(lib.hasPrefix (lib.toUpper processor) x)) [
+    "RISCV64_AS=${embeddedOnBinaryTools.riscv64.as}"
+    "RISCV64_CC=${embeddedOnBinaryTools.riscv64.cc}"
+    "RISCV64_LD=${embeddedOnBinaryTools.riscv64.ld}"
+    "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
+    "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
+    "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
+    "X86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
+    "X86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
+    "X86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
@@ -95,6 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
+    # Hardcode harec and qbe
+    (substituteAll {
+      src = ./003-hardcode-qbe-and-harec.patch;
+      harec = lib.getExe harec;
+      qbe = lib.getExe qbe;
+    })
     # Display toolchains when using `hare version -v`.
     (fetchpatch {
       url = "https://git.sr.ht/~sircmpwn/hare/commit/e35f2284774436f422e06f0e8d290b173ced1677.patch";
@@ -104,42 +118,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     harec
-    makeWrapper
     qbe
     scdoc
   ];
 
   buildInputs = [
-    binutils-unwrapped
     harec
     qbe
     tzdata
   ];
 
-  makeFlags =
-    [
-      "HARECACHE=.harecache"
-      "PREFIX=${builtins.placeholder "out"}"
-      "ARCH=${arch}"
-      "VERSION=${finalAttrs.version}-nixpkgs"
-      "QBEFLAGS=-t${qbePlatform}"
-      "AS=${stdenv.cc.targetPrefix}as"
-      "LD=${stdenv.cc.targetPrefix}ld"
-      # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
-      # not follow the FHS.
-      "HAREPATH=$(SRCDIR)/hare/stdlib"
-    ]
-    ++ lib.optionals enableCrossCompilation [
-      "RISCV64_AS=${embeddedOnBinaryTools.riscv64.as}"
-      "RISCV64_CC=${embeddedOnBinaryTools.riscv64.cc}"
-      "RISCV64_LD=${embeddedOnBinaryTools.riscv64.ld}"
-      "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
-      "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
-      "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
-      "X86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
-      "X86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
-      "X86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
-    ];
+  makeFlags = [
+    "HARECACHE=.harecache"
+    "PREFIX=${builtins.placeholder "out"}"
+    "ARCH=${processor}"
+    "VERSION=${finalAttrs.version}-nixpkgs"
+    "QBEFLAGS=-t${qbePlatform}"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
+    "${lib.toUpper processor}_AS=${embeddedOnBinaryTools.${processor}.as}"
+    "${lib.toUpper processor}_CC=${embeddedOnBinaryTools.${processor}.cc}"
+    "${lib.toUpper processor}_LD=${embeddedOnBinaryTools.${processor}.ld}"
+    # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
+    # not follow the FHS.
+    "HAREPATH=$(SRCDIR)/hare/stdlib"
+  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 
@@ -151,18 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   postConfigure = ''
-    ln -s configs/${platform}.mk config.mk
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/hare \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          binutils-unwrapped
-          harec
-          qbe
-        ]
-      }
+    ln -s configs/${lib.toLower system}.mk config.mk
   '';
 
   setupHook = ./setup-hook.sh;
