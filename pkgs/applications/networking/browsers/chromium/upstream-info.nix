@@ -1,11 +1,11 @@
 {
   stable = {
     chromedriver = {
-      hash_darwin = "sha256-4MZwD2jgjOrBTtkjxW0XH+lZfP8wj7Z6eg7LwFziCPU=";
+      hash_darwin = "sha256-jnWmH6MzqZzzIAblvJFv5jKFJ2LILyGy+eOqb6sWmWc=";
       hash_darwin_aarch64 =
-        "sha256-P9qi8rR8DW+WOT+ev2EgA93StnGrBiIHu2UbkEhS+0M=";
-      hash_linux = "sha256-eudgRu3OMuTBTeX8zrm6ShgmjcsNhzaBYEAP/4n1SJk=";
-      version = "124.0.6367.155";
+        "sha256-FO0kncAPj/cBwlGN2RdFGR7Bn5pKzTRlf2IQ422mm5c=";
+      hash_linux = "sha256-3khPV+WPcYHrlGNFXhmRrja2+wWsr77BVgHLbSe0IF8=";
+      version = "124.0.6367.201";
     };
     deps = {
       gn = {
