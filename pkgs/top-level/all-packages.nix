@@ -12940,8 +12940,6 @@ with pkgs;
 
   shout = nodePackages.shout;
 
-  showmethekey = callPackage ../applications/video/showmethekey { };
-
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
