@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ustr";
   version = "1.0.4";
 
-  src = fetchurl {
-    url = "http://www.and.org/ustr/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1i623ygdj7rkizj7985q9d6vj5amwg686aqb5j3ixpkqkyp6xbrx";
+  src = fetchgit {
+    url = "http://www.and.org/ustr/ustr.git";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pQrQy+S9fVFl8Mop4QmwEAXGiBSheQE4HgAZ4srFz64=";
   };
 
   # Fixes bogus warnings that failed libsemanage
@@ -40,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = platforms.linux;
   };
-}
+})
