@@ -15,6 +15,12 @@ lib.recurseIntoAttrs {
     versionCheck = true;
   });
 
+  miniz-version-check-disabled = testers.hasPkgConfigModules {
+    package = miniz.overrideAttrs (o: { passthru = o.passthru // { version = throw "do not use package.version"; }; });
+    version = throw "do not use version when versionCheck == false";
+    # default: versionCheck = false;
+  };
+
   zlib-has-zlib = testers.hasPkgConfigModules {
     package = zlib;
     moduleNames = [ "zlib" ];

@@ -12,7 +12,8 @@
 runCommand testName {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ package ];
-    inherit moduleNames version versionCheck;
+    inherit moduleNames versionCheck;
+    version = if versionCheck then version else null;
     meta = {
       description = "Test whether ${package.name} exposes pkg-config modules ${lib.concatStringsSep ", " moduleNames}.";
     }
@@ -42,7 +43,7 @@ runCommand testName {
       r=$?
       set -e
       if [[ $r = 0 ]]; then
-        if [[ "$moduleVersion" == "$version" ]]; then
+        if [[ -z "$versionCheck" || "$moduleVersion" == "$version" ]]; then
           echo "✅ pkg-config module $moduleName exists and has version $moduleVersion"
         else
           echo "❌ pkg-config module $moduleName exists and has version $moduleVersion when $version was expected"
