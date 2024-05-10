@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
     substituteInPlace setup.py \
       --replace "setuptools-scm==8.0.4" "setuptools-scm" \
-      --replace "wheel==0.41.2" "wheel"
+      --replace-fail "wheel==0.42.0" "wheel"
 
     substituteInPlace pyproject.toml \
       --replace 'requires = ["setuptools==68.2.2", "setuptools-scm==8.0.4", "wheel==0.42.0", "auditwheel==5.4.0"]' \
