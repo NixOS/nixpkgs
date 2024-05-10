@@ -5,11 +5,12 @@
 , pythonOlder
 , pytestCheckHook
 , requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "resend";
-  version = "0.8.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "resend";
     repo = "resend-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6cQtI3it2AS8UdT83fp3y3IcbjSyPmBlQuymN74fBNo=";
+    hash = "sha256-TuumT77SGVIi/zaWd7FJwTZFiwZcyb1RioMcG7QXxgE=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
+    typing-extensions
   ];
 
   nativeCheckInputs = [
