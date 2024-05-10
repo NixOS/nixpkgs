@@ -169,9 +169,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
-    tests = lib.optionalAttrs enableCrossCompilation {
-      crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
-    };
+    tests =
+      lib.optionalAttrs (enableCrossCompilation && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+        {
+          crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
+        };
   };
 
   meta = {
