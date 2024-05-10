@@ -85,6 +85,15 @@ in stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz ];
+    knownVulnerabilities = [
+      "CVE-2023-0657"
+      "CVE-2023-6544"
+      "CVE-2023-6717"
+      "CVE-2023-6787"
+      "CVE-2024-1132"
+      "CVE-2024-1249"
+      "CVE-2024-2419"
+    ];
   };
 
 }
