@@ -7,7 +7,12 @@
   setuptools,
   orjson,
   curl-cffi,
+
+  # To build orjson
   rustPlatform,
+
+  # Optional dependencies
+  lxml,
 }:
 let
   curl-cffi_0_7_0 = curl-cffi.overrideAttrs (
@@ -60,6 +65,10 @@ buildPythonPackage rec {
     orjson_3_10_3
     curl-cffi_0_7_0
   ];
+
+  passthru.optional-dependencies = {
+    lxml = [ lxml ];
+  };
 
   doCheck = false; # tests require network access
 
