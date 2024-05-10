@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "thriftpy2";
-  version = "0.4.20";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Thriftpy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IEYoSLaJUeQdwHaXR0UUlCZg5zBEh5Y2/IwB4RVEAcg=";
+    hash = "sha256-Pjy9OPwFfKaw+XVl7IbbAKPz050TlqI4+yLqSITOkSY=";
   };
 
   nativeBuildInputs = [
