@@ -38,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ esau79p ];
     mainProgram = "aw-watcher-window-wayland";
+    platforms = platforms.linux;
   };
 }
