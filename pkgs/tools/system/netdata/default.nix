@@ -20,7 +20,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.45.3";
+  version = "1.45.4";
   pname = "netdata";
 
   src = fetchFromGitHub {
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     repo = "netdata";
     rev = "v${version}";
     hash = if withCloudUi
-      then "sha256-QJqfKo5UFMoACHbVr1Dd9jMo0xkjrW3gUnF25tUvzk8="
+      then "sha256-g/wxKtpNsDw/ZaUokdip39enQHMysJE6pYGsApuL4po="
       # we delete the v2 GUI after fetching
-      else "sha256-JzCepVfuf6uu/GuGkwnTYeeW1TxmMuPkgS0203pG8YE=";
+      else "sha256-Mkrmvdr19sWzFOkdpt46mcsbA3CNpXy4w8um95xaWlo=";
     fetchSubmodules = true;
 
     # Remove v2 dashboard distributed under NCUL1. Make sure an empty
