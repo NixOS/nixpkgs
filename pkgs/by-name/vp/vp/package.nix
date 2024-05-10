@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL based picture viewer/slideshow";
     license  = lib.licenses.gpl3Plus;
     mainProgram = "vp";
-    maintainers = with lib.maintainers; [ AndersonTorres vrthra ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
   };
 })
