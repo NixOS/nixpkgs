@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, stdenvNoCC
-, fetchFromGitHub
-, substituteAll
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, vencord
-, electron
-, libicns
-, jq
-, moreutils
-, cacert
-, nodePackages
-, pipewire
-, libpulseaudio
-, autoPatchelfHook
-, withTTS ? true
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  fetchFromGitHub,
+  substituteAll,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  vencord,
+  electron,
+  libicns,
+  jq,
+  moreutils,
+  cacert,
+  nodePackages,
+  pipewire,
+  libpulseaudio,
+  autoPatchelfHook,
+  withTTS ? true,
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
-, withSystemVencord ? false
+  withSystemVencord ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
@@ -38,7 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     assert lib.versionAtLeast nodePackages.pnpm.version "8.10.0";
     stdenvNoCC.mkDerivation {
       pname = "${finalAttrs.pname}-pnpm-deps";
-      inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
+      inherit (finalAttrs)
+        src
+        version
+        patches
+        ELECTRON_SKIP_BINARY_DOWNLOAD
+        ;
 
       nativeBuildInputs = [
         cacert
@@ -95,9 +101,12 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.cc.lib
   ];
 
-  patches = [
-    ./disable_update_checking.patch
-  ] ++ lib.optional withSystemVencord (substituteAll { inherit vencord; src = ./use_system_vencord.patch; });
+  patches =
+    [ ./disable_update_checking.patch ]
+    ++ lib.optional withSystemVencord (substituteAll {
+      inherit vencord;
+      src = ./use_system_vencord.patch;
+    });
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -132,27 +141,26 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/opt/Vesktop
-      cp -r dist/linux-*unpacked/resources $out/opt/Vesktop/
+    mkdir -p $out/opt/Vesktop
+    cp -r dist/linux-*unpacked/resources $out/opt/Vesktop/
 
-      pushd build
-      ${libicns}/bin/icns2png -x icon.icns
-      for file in icon_*x32.png; do
-        file_suffix=''${file//icon_}
-        install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
-      done
+    pushd build
+    ${libicns}/bin/icns2png -x icon.icns
+    for file in icon_*x32.png; do
+      file_suffix=''${file//icon_}
+      install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
+    done
 
-      makeWrapper ${electron}/bin/electron $out/bin/vesktop \
-        --add-flags $out/opt/Vesktop/resources/app.asar \
-        ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+    makeWrapper ${electron}/bin/electron $out/bin/vesktop \
+      --add-flags $out/opt/Vesktop/resources/app.asar \
+      ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -162,8 +170,17 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "vesktop";
       startupWMClass = "Vesktop";
       genericName = "Internet Messenger";
-      keywords = [ "discord" "vencord" "electron" "chat" ];
-      categories = [ "Network" "InstantMessaging" "Chat" ];
+      keywords = [
+        "discord"
+        "vencord"
+        "electron"
+        "chat"
+      ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+      ];
     })
   ];
 
@@ -176,8 +193,16 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vencord/Vesktop";
     changelog = "https://github.com/Vencord/Vesktop/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ getchoo Scrumplex vgskye pluiedev ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      Scrumplex
+      vgskye
+      pluiedev
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "vesktop";
   };
 })
