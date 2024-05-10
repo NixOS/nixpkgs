@@ -41,20 +41,20 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.1.2";
+        version = "4.1.3";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           rev = "refs/tags/v${version}";
-          hash = "sha256-/KTDdkCMkZ5hO+VYHzw9vB8FDWxg7PS1yb2waRJQngY=";
+          hash = "sha256-pR8zyMr23wcbDCXAysVEgGUDHkrfhLoVF3fjMLgZFYs=";
         };
 
         # Update by running
         # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
         # at the root directory of the Nixpkgs repository
-        vendorHash = "sha256-4Nxj2PzZmFdvouWKyXLFDk8iuRhFuvyPW/+VRTw75Zw=";
+        vendorHash = "sha256-332GFL04aE6B6vxgtJJH4TeI6YJCDBpCClJ3sc5gN3A=";
 
         # Do not build conmon and squashfuse from the Git submodule sources,
         # Use Nixpkgs provided version
