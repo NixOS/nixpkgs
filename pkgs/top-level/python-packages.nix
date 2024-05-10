@@ -2625,6 +2625,8 @@ self: super: with self; {
 
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
+  customtkinter = callPackage ../development/python-modules/customtkinter { };
+
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
