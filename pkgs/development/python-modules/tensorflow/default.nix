@@ -22,6 +22,7 @@
   packaging,
   setuptools,
   wheel,
+  keras,
   keras-preprocessing,
   google-pasta,
   opt-einsum,
@@ -180,6 +181,7 @@ let
     google-pasta
     grpcio
     h5py
+    keras
     keras-preprocessing
     numpy
     opt-einsum
@@ -635,6 +637,7 @@ buildPythonPackage {
     google-pasta
     grpcio
     h5py
+    keras
     keras-preprocessing
     numpy
     opt-einsum
