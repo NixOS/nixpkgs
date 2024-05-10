@@ -120,6 +120,7 @@ stdenv.mkDerivation (self: rec {
     # but for Nix envvars are sufficiently useful that it’s worth maintaining
     # this functionality downstream.
     ./dynamic-space-size-envvar-feature.patch
+    ./dynamic-space-size-envvar-tests.patch
   ];
   postPatch = lib.optionalString (self.disabledTestFiles != [ ]) ''
     (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})
