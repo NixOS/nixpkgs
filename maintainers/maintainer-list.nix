@@ -2847,6 +2847,12 @@
     githubId = 3465841;
     name = "Boris Sukholitko";
   };
+  bot-wxt1221 = {
+    email = "3264117476@qq.com";
+    github = "Bot-wxt1221";
+    githuId = 74451279;
+    name = "Bot-wxt1221";
+  };
   bouk = {
     name = "Bouke van der Bijl";
     email = "i@bou.ke";
