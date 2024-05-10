@@ -204,5 +204,6 @@ buildPythonPackage {
     changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada natsukium ];
+    knownVulnerabilities = [ "CVE-2024-2912" ];
   };
 }
