@@ -4,28 +4,28 @@
 , pkg-config
 , libxkbcommon
 , pipewire
-, stdenv
 , libGL
 , wayland
 , xorg
+, vulkan-loader
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "coppwr";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "coppwr";
     rev = version;
-    hash = "sha256-azho/SVGEdHXt/t6VSA0NVVfhxK9bxy4Ud68faFh5zo=";
+    hash = "sha256-7z1b++itHoqVX5KB9gv6dMAzq1j7VDGYzuJArUDPlD4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "egui_node_graph-0.4.0" = "sha256-VJvALtPP/vPZQ4KLWu8diFar9vuVkbeD65Em6rod8ww=";
-      "libspa-0.7.2" = "sha256-0TGhxHL1mkktE263ln3jnPZRkXS6+C3aPUBg86J25oM=";
+      "egui_node_graph-0.4.0" = "sha256-VtHgKWh+bHSFltNgYaFmYhZW9tqwiWJjiCCspeKgSXQ=";
+      "libspa-0.8.0" = "sha256-X8mwLtuPuMxZY71GNPAgiJGJ9JNMj7AbCliXiBxJ4vQ=";
     };
   };
 
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libXrandr
     xorg.libX11
+    vulkan-loader
   ];
 
   preBuild = ''
