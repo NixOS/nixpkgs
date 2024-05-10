@@ -26,7 +26,6 @@ in stdenv.mkDerivation {
     mainProgram = "temp-throttle";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ Sepero ];
+    maintainers = [ lib.maintainers.Sepero ];
   };
 }
-
