@@ -184,6 +184,10 @@ stdenv.mkDerivation rec {
 
     # g-o-a-gtk already provides its own desktop item.
     rm -f $out/share/applications/cinnamon-settings-online-accounts.desktop
+
+    # Actually removes Adwaita and HighContrast from Cinnamon styles with mint-artwork 1.8.2.
+    # https://github.com/linuxmint/cinnamon/commit/13b1ad104e88197f6c4e2d02ab2674c07254b8e8
+    rm -r $out/share/cinnamon/styles.d
   '';
 
   preFixup = ''

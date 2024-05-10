@@ -1,4 +1,8 @@
-{ lib, mkDerivation, sys }:
+{
+  lib,
+  mkDerivation,
+  sys,
+}:
 
 mkDerivation {
   pname = "libpci";

@@ -7,6 +7,9 @@
 , gmp
 , cython
 , cysignals
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -52,6 +55,8 @@ buildPythonPackage rec {
     test -f "$out/${python.sitePackages}/cypari2/auto_paridecl.pxd"
     make check
   '';
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Cython bindings for PARI";

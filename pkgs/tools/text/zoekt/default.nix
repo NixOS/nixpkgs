@@ -25,10 +25,11 @@ buildGoModule {
     git config --global --replace-all protocol.file.allow always
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast trigram based code search";
-    homepage = "https://github.com/google/zoekt";
-    license = licenses.asl20;
-    maintainers = [ ];
+    homepage = "https://github.com/sourcegraph/zoekt";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "zoekt";
   };
 }

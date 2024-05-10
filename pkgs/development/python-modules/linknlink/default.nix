@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "linknlink";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "xuanxuan000";
     repo = "python-linknlink";
     rev = "refs/tags/${version}";
-    hash = "sha256-G0URNUHIh/td+A8MhIC0mePx2SmhEXhIzOpbVft33+w=";
+    hash = "sha256-kV9NCe0u3Z0J9bg1kko5D9fQvyqWTN7v3cVcNQvO0g0=";
   };
 
   build-system = [ setuptools ];

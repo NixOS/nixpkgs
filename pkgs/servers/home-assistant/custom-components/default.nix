@@ -32,6 +32,8 @@
 
   moonraker = callPackage ./moonraker {};
 
+  ntfy = callPackage ./ntfy {};
+
   omnik_inverter = callPackage ./omnik_inverter {};
 
   prometheus_sensor = callPackage ./prometheus_sensor {};

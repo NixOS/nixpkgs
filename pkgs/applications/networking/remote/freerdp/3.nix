@@ -13,7 +13,6 @@
 , glib
 , openh264
 , openssl
-, p11-kit
 , pcre2
 , pkcs11helper
 , uriparser
@@ -69,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-ZOYHhldTdV8DrOHoXS42NXB6JHBJMGRswgTczn1S6BE=";
+    hash = "sha256-8yWMnwJbvyUiEuX+2bEim1IeqPx20u9yvNIVe7MC/ZQ=";
   };
 
   postPatch = ''

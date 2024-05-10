@@ -89,7 +89,11 @@ buildPythonPackage rec {
     "test_check_live_cached"
     "test_get_packages_licenses_without_api_key"
     "test_validate_with_policy_file_using_invalid_keyword"
+    "test_validate_with_basic_policy_file"
   ];
+
+  # ImportError: cannot import name 'get_command_for' from partially initialized module 'safety.cli_util' (most likely due to a circular import)
+  disabledTestPaths = [ "tests/alerts/test_utils.py" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

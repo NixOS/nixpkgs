@@ -1,8 +1,18 @@
-{ mkDerivation
-, bsdSetupHook, netbsdSetupHook
-, makeMinimal, install, tsort, lorder, mandoc, statHook, nbperf, tic, rsync
-, compatIfNeeded
-, fetchNetBSD
+{
+  mkDerivation,
+  bsdSetupHook,
+  netbsdSetupHook,
+  makeMinimal,
+  install,
+  tsort,
+  lorder,
+  mandoc,
+  statHook,
+  nbperf,
+  tic,
+  rsync,
+  compatIfNeeded,
+  fetchNetBSD,
 }:
 
 mkDerivation {
@@ -10,8 +20,17 @@ mkDerivation {
   version = "9.2";
   sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
   nativeBuildInputs = [
-    bsdSetupHook netbsdSetupHook
-    makeMinimal install tsort lorder mandoc statHook nbperf tic rsync
+    bsdSetupHook
+    netbsdSetupHook
+    makeMinimal
+    install
+    tsort
+    lorder
+    mandoc
+    statHook
+    nbperf
+    tic
+    rsync
   ];
   buildInputs = compatIfNeeded;
   SHLIBINSTALLDIR = "$(out)/lib";

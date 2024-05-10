@@ -387,6 +387,46 @@ let
         };
       });
 
+      # newer sigstore version transitivevly require pydantic>=2
+      sigstore = super.sigstore.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.2";
+        src = fetchFromGitHub {
+          owner = "sigstore";
+          repo = "sigstore-python";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-QqY5GOBS75OkbSaF5Ua5jnJAhsYfVRuWLUoWDxX8Ino=";
+        };
+        dependencies = with self; [
+          appdirs
+          cryptography
+          id
+          pydantic
+          pyjwt
+          pyopenssl
+          requests
+          securesystemslib
+          sigstore-protobuf-specs
+          tuf
+        ];
+        doCheck = false; # pytest too new
+      });
+
+      sigstore-protobuf-specs = super.sigstore-protobuf-specs.overridePythonAttrs {
+        version = "0.1.0";
+        src = fetchPypi {
+          pname = "sigstore-protobuf-specs";
+          version = "0.1.0";
+          hash = "sha256-YistIxYToo7T5mYKzYeBhnW06DSG9JoPDBmKxUdfy4E=";
+        };
+        nativeBuildInputs = with self; [
+          flit-core
+          pythonRelaxDepsHook
+        ];
+        pythonRelaxDeps = [
+          "betterproto"
+        ];
+      };
+
       tesla-powerwall = super.tesla-powerwall.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.1";
         src = fetchFromGitHub {
@@ -396,6 +436,19 @@ let
           hash = "sha256-if/FCfxAB48WGXZOMvCtdSOW2FWO43OrlcHZbXIPmGE=";
         };
       });
+
+      tuf = super.tuf.overridePythonAttrs rec {
+        version = "2.1.0";
+        src = fetchFromGitHub {
+          owner = "theupdateframework";
+          repo = "python-tuf";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-MdPctAZuKn/YAwpMJ5gWU7PXJD3iK7bYprLXV52wNQQ=";
+        };
+        disabledTests = [
+          "test_sign_failures"
+        ];
+      };
 
       versioningit = super.versioningit.overridePythonAttrs {
         doCheck = false;
@@ -476,7 +529,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.5.1";
+  hassVersion = "2024.5.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -494,13 +547,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-/JuKN0V2wMZW56l2nt4T3cpDnQiHeC27+QVBi3j3aDI=";
+    hash = "sha256-OdtkkZ8Yl6H2dUBILrT/02ML3MnptdBydVzKhxoKjAY=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-3Tqs+69e1ESOcEMCx3LTt1c04pG5pK/RGX30x8WRegQ=";
+    hash = "sha256-5ASuTREkAUCS94Ur5yNHU8ISrASGl90scyYWBHiKlKI=";
   };
 
   build-system = with python.pkgs; [

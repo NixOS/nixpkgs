@@ -6,6 +6,7 @@
 # plenary utilities
 , which
 , findutils
+, clang
 , coreutils
 , curl
 , cyrus_sasl
@@ -47,6 +48,7 @@
 , sol2
 , sqlite
 , tomlplusplus
+, tree-sitter
 , unbound
 , vimPlugins
 , vimUtils
@@ -225,6 +227,10 @@ in
     preConfigure = ''
       make rock
     '';
+
+    # Lua 5.4 support is experimental at the moment, see
+    # https://github.com/lgi-devs/lgi/pull/249
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
   lmathx = prev.luaLib.overrideLuarocks prev.lmathx (drv:
@@ -375,14 +381,6 @@ in
     externalDeps = [
       { name = "LDAP"; dep = openldap; }
     ];
-  });
-
-  luasnip = prev.luasnip.overrideAttrs (_: {
-    # Until https://github.com/L3MON4D3/LuaSnip/issues/1139 is solved
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace "'jsregexp >= 0.0.5, <= 0.0.6'" "'jsregexp >= 0.0.5'"
-    '';
   });
 
   luaossl = prev.luaossl.overrideAttrs (_: {
@@ -723,6 +721,20 @@ in
       lua.pkgs.luarocks-build-rust-mlua
     ];
 
+  });
+
+  tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
+    nativeBuildInputs = let
+      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
+      # so we have to pass the correct package in here.
+      lua = lib.head oa.propagatedBuildInputs;
+    in oa.nativeBuildInputs ++ [
+      lua.pkgs.luarocks-build-treesitter-parser
+    ] ++ (lib.optionals stdenv.isDarwin [
+      clang
+      tree-sitter
+    ]);
+    meta.broken = (luaOlder "5.1" || stdenv.isDarwin);
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
