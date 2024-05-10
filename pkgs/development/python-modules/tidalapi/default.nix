@@ -39,7 +39,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/tamland/python-tidal/releases/tag/v${version}";
     description = "Unofficial Python API for TIDAL music streaming service";
     homepage = "https://github.com/tamland/python-tidal";
-    maintainers = [ ];
     license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }
