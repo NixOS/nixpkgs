@@ -10,6 +10,8 @@ let
   toStr = value:
     if true == value then "yes"
     else if false == value then "no"
+    # escape according to https://www.php.net/manual/en/function.parse-ini-file.php
+    else if isString value then ''"${escape [ "\"" "\\" "$" ] value}"''
     else toString value;
 
   fpmCfgFile = pool: poolOpts: pkgs.writeText "phpfpm-${pool}.conf" ''
