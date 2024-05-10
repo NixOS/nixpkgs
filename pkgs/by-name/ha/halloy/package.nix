@@ -15,20 +15,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.6";
+  version = "2024.7";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-UfeGRLZ0k2hHiA6o5kTysszU1WS4JUF5AXhKmE86bDM=";
+    hash = "sha256-CXuodMndUvltwjIiEdJuIazCYKqD/azROgSBTM6g87A=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "iced-0.13.0-dev" = "sha256-acGN7yxf33fDoh8J8uKvwiID+Xz1oVJ7KiiWgNWDXfo=";
       "glyphon-0.5.0" = "sha256-e1jTuaWh9eFdk2pDE4Ov/l3b/Q7GA3hqx6dPoOde1hM=";
+      "iced-0.13.0-dev" = "sha256-K1B9rVkShxQC97kwebHPsqJsJmxjEsFCKpg+p2lt09U=";
       "winit-0.29.15" = "sha256-9i2i4KcEv7vIImJtcw2NALQ3uDb4EAZXjShG6tfmhkc=";
     };
   };
