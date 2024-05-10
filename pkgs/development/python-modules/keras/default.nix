@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest, pytest-cov, pytest-xdist
-, six, numpy, scipy, pyyaml, h5py
+, six, numpy, scipy, pyyaml, h5py, optree
 , keras-applications, keras-preprocessing
 }:
 
