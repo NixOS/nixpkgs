@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ cpages ]);
+                  ++ (with lib.maintainers; [ ]);
     pkgConfigModules = [ "SDL2_gfx" ];
     inherit (SDL2.meta) platforms;
   };
