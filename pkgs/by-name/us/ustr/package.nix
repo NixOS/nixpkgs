@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ustr";
@@ -18,15 +22,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fix detection of stdint.h
   postPatch = ''
-    sed -i 's,\(have_stdint_h\)=0,\1=1,g' Makefile
-    sed -i 's,\(USTR_CONF_HAVE_STDINT_H\) 0,\1 1,g' ustr-import.in
+    substituteInPlace Makefile \
+      --replace-fail "have_stdint_h=0" "have_stdint_h=1"
+
+    cat ustr-import.in | grep USTR_CONF
+    substituteInPlace ustr-import.in \
+      --replace-fail "USTR_CONF_HAVE_STDINT_H 0" "USTR_CONF_HAVE_STDINT_H 1"
   '';
 
-  preBuild = ''
-    makeFlagsArray+=("prefix=$out")
-    makeFlagsArray+=("LDCONFIG=echo")
-    makeFlagsArray+=("HIDE=")
-  '';
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "LDCONFIG=echo"
+    "HIDE="
+  ];
 
   # Remove debug libraries
   postInstall = ''
