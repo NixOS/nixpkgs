@@ -14,12 +14,13 @@ stdenv.mkDerivation {
     hash = "sha256-fcW2fEsCFliRnMFnboR0jchzVIlCYbr2AE6AS06cb6o=";
   };
 
-  ## Remove binaries committed into upstream repo
+  # Upstream repo contains pre-compiled binaries and object files
+  # that are out of date.
+  # These need to be removed before build stage.
   preBuild = ''
     rm src/ryzen_monitor
+    make clean
   '';
-
-  makeTargets = [ "clean" "install" ];
 
   installPhase = ''
     runHook preInstall
