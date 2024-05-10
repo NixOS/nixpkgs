@@ -40,8 +40,10 @@ buildGoModule {
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
 
-    substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
-    substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy.service \
+      --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy-api.service \
+      --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
 
     $out/bin/caddy manpage --directory manpages
     installManPage manpages/*
