@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pytrydan";
-  version = "0.4.0";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = "pytrydan";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9PyRICtZ+0Ezinu28oFgFOSnOyCmD7zZbdc/chN+sCo=";
+    hash = "sha256-+hFwBFYtRseVwesZtSrL3J/ZnsMAjD2ZAhTlk41hfqU=";
   };
 
   postPatch = ''
