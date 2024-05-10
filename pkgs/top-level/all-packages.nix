@@ -18555,8 +18555,6 @@ with pkgs;
 
   sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
-  cli11 = callPackage ../development/tools/misc/cli11 { };
-
   datree = callPackage ../development/tools/datree { };
 
   detekt = callPackage ../development/tools/detekt { };
