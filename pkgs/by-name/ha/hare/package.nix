@@ -147,7 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   # Append the distribution name to the version
-  env.LOCALVER = "nixpkgs";
+  # It doesn't work right, now, hence, setting `VERSION` in `makeFlags`, but it seems it will be
+  # fixed on 0.24.1. See here:
+  # https://lists.sr.ht/~sircmpwn/hare-users/%3Cb7cd9c94d2132c62940818089ae5afa2@onemoresuza.mailer.me%3E
+  # env.LOCALVER = "nixpkgs";
 
   strictDeps = true;
 
