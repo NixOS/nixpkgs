@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.owasp.org/index.php/ZAP";
+    homepage = "https://www.zaproxy.org/";
     description = "Java application for web penetration testing";
     maintainers = with maintainers; [ mog rafael ];
     platforms = platforms.linux;
