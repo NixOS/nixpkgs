@@ -2,7 +2,7 @@
 , libX11, libXext, libXcursor, libXmu
 , glib, libXrandr, dbus, xz
 , pkg-config, which, zlib, xorg
-, yasm, patchelf, makeself, nasm
+, yasm, patchelf, makeself
 , linuxHeaders, openssl}:
 
 let
@@ -19,7 +19,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  nativeBuildInputs = [ patchelf pkg-config which yasm makeself nasm xorg.xorgserver openssl linuxHeaders xz ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ patchelf pkg-config which yasm makeself xorg.xorgserver openssl linuxHeaders xz ] ++ kernel.moduleBuildDependencies;
   buildInputs = [ dbus libxslt libXext libXcursor pam libXmu libXrandr ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
