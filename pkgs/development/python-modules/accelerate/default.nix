@@ -21,21 +21,21 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.29.3";
+  version = "0.30.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oQGb/hlMN8JfwEyWufBvMk2Z1FMSl1lsdIbgZ3ZMdF8=";
+    hash = "sha256-E20pI5BrcTrMYrhriuOUl5/liSaQQy6eqRyCoauwb9Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     psutil
