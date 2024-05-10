@@ -45,9 +45,18 @@ rustPlatform.buildRustPackage {
     glib
     gtk4
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+    AppKit # NSPasteboardTypeURL needs SDK version 11.0 (macOS 10.13+)
+    ApplicationServices
+    #Carbon # TODO: uncomment
+    CoreData
+    CoreFoundation
+    CoreGraphics
+    CoreText
+    CoreVideo
     Foundation
-    AppKit
+    QuartzCore
+    OpenGL
   ]);
 
   nativeCheckInputs = [
