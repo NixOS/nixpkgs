@@ -50,6 +50,18 @@ with lib;
         default = [];
       };
 
+      netgroup = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of netgroup entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [];
+      };
+
       shadow = mkOption {
         type = types.listOf types.str;
         description = ''
@@ -134,6 +146,7 @@ with lib;
       rpc:       files
 
       sudoers:   ${concatStringsSep " " config.system.nssDatabases.sudoers}
+      netgroup:  ${concatStringsSep " " config.system.nssDatabases.netgroup}
     '';
 
     system.nssDatabases = {
@@ -146,6 +159,7 @@ with lib;
       ];
       services = mkBefore [ "files" ];
       sudoers = mkBefore [ "files" ];
+      netgroup = mkBefore [ "files" ];
     };
   };
 }
