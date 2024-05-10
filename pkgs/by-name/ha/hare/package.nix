@@ -45,29 +45,25 @@ let
   platform = lib.toLower stdenv.hostPlatform.uname.system;
   embeddedOnBinaryTools =
     let
-      genToolsFromToolchain =
+      genPaths =
         toolchain:
         let
-          crossTargetPrefix = toolchain.stdenv.cc.targetPrefix;
-          toolchainArch = toolchain.stdenv.hostPlatform.uname.processor;
-          absOrRelPath =
-            toolDrv: toolBasename:
-            if arch == toolchainArch then
-              toolBasename
-            else
-              lib.getExe' toolDrv "${crossTargetPrefix}${toolBasename}";
+          inherit (toolchain.stdenv.cc) targetPrefix;
+          inherit (toolchain.stdenv.targetPlatform.uname) processor;
         in
         {
-          "ld" = absOrRelPath toolchain.buildPackages.binutils "ld";
-          "as" = absOrRelPath toolchain.buildPackages.binutils "as";
-          "cc" = absOrRelPath toolchain.stdenv.cc "cc";
+          "${processor}" = {
+            "ld" = lib.getExe' toolchain.buildPackages.binutils "${targetPrefix}ld";
+            "as" = lib.getExe' toolchain.buildPackages.binutils "${targetPrefix}as";
+            "cc" = lib.getExe' toolchain.stdenv.cc "${targetPrefix}cc";
+          };
         };
     in
-    {
-      x86_64 = genToolsFromToolchain x86_64PkgsCrossToolchain;
-      aarch64 = genToolsFromToolchain aarch64PkgsCrossToolchain;
-      riscv64 = genToolsFromToolchain riscv64PkgsCrossToolchain;
-    };
+    builtins.foldl' (acc: elem: acc // (genPaths elem)) { } [
+      x86_64PkgsCrossToolchain
+      aarch64PkgsCrossToolchain
+      riscv64PkgsCrossToolchain
+    ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
