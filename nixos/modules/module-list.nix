@@ -660,6 +660,7 @@
   ./services/logging/ulogd.nix
   ./services/mail/automx2.nix
   ./services/mail/clamsmtp.nix
+  ./services/mail/cyrus-imap.nix
   ./services/mail/davmail.nix
   ./services/mail/dkimproxy-out.nix
   ./services/mail/dovecot.nix
