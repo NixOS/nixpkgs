@@ -126,6 +126,7 @@ let
     "Unsupported CUDA version" = cudaSupport && !(builtins.elem cudaPackages.cudaMajorVersion [ "11" "12" ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
     "Magma cudaPackages does not match cudaPackages" = cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
+    "x86_64-darwin is not supported anymore" = stdenv.isDarwin && stdenv.isx86_64;
   };
 in buildPythonPackage rec {
   pname = "torch";
