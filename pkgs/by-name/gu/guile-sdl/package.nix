@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Guile bindings for SDL";
     license = lib.licenses.gpl3Plus;
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ vyp ]);
+                  ++ (with lib.maintainers; [ ]);
     inherit (guile.meta) platforms;
   };
 })
