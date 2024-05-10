@@ -9,6 +9,11 @@
 , hspell
 , nuspell
 , unittest-cpp
+
+, withHspell ? true
+, withAspell ? true
+, withHunspell ? true
+, withNuspell ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +36,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+  ] ++ lib.optionals withHunspell [
     hunspell
+  ] ++ lib.optionals withNuspell [
     nuspell
   ];
 
@@ -40,8 +47,9 @@ stdenv.mkDerivation rec {
   ];
 
   # libtool puts these to .la files
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals withHspell [
     hspell
+  ] ++ lib.optionals withAspell [
     aspell
   ];
 
@@ -51,10 +59,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-relocatable" # needed for tests
-    "--with-aspell"
-    "--with-hspell"
-    "--with-hunspell"
-    "--with-nuspell"
+    (lib.withFeature withAspell "aspell")
+    (lib.withFeature withHspell "hspell")
+    (lib.withFeature withHunspell "hunspell")
+    (lib.withFeature withNuspell "nuspell")
   ];
 
   meta = with lib; {
