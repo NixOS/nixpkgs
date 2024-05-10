@@ -6,6 +6,7 @@
 , addOpenGLRunpath
 , setuptools
 , pytestCheckHook
+, versioneer
 }:
 
 buildPythonPackage rec {
@@ -28,8 +29,14 @@ buildPythonPackage rec {
     })
   ];
 
+  # unvendor versioneer
+  postPatch = ''
+    rm versioneer.py
+  '';
+
   nativeBuildInputs = [
     setuptools
+    versioneer
   ];
 
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];
