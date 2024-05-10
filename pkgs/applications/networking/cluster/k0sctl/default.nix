@@ -2,6 +2,8 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, testers
+, k0sctl
 }:
 
 buildGoModule rec {
@@ -33,6 +35,13 @@ buildGoModule rec {
         --$shell <($out/bin/${pname} completion --shell $shell)
     done
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = k0sctl;
+    command = "k0sctl version";
+    # See https://github.com/carlmjohnson/versioninfo/discussions/12
+    version = "version: (devel)\ncommit: v${version}\n";
+  };
 
   meta = with lib; {
     description = "A bootstrapping and management tool for k0s clusters.";
