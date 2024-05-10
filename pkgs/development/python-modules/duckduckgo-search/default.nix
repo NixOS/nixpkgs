@@ -67,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/deedy5/duckduckgo_search";
     changelog = "https://github.com/deedy5/duckduckgo_search/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }
