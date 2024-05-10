@@ -11,7 +11,7 @@ maturinBuildHook() {
     set -x
     @setEnv@ maturin build \
         --jobs=$NIX_BUILD_CORES \
-        --frozen \
+        --offline \
         --target @rustTargetPlatformSpec@ \
         --manylinux off \
         --strip \
