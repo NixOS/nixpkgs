@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
-, rich
-, syrupy
-, tenacity
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  rich,
+  syrupy,
+  tenacity,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=pytrydan --cov-report=term-missing:skip-covered" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     httpx
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "pytrydan"
-  ];
+  pythonImportsCheck = [ "pytrydan" ];
 
   meta = with lib; {
     description = "Library to interface with V2C EVSE Trydan";
