@@ -115,7 +115,7 @@ buildGoModule rec {
         ;
     };
 
-    tests = nixosTests.incus;
+    tests = if lts then nixosTests.incus-lts else nixosTests.incus;
 
     ui = callPackage ./ui.nix { };
 

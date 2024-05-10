@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }:
+import ../make-test-python.nix ({ pkgs, lib, incus ? pkgs.incus-lts, ... }:
 
 let
   releases = import ../../release.nix {
@@ -33,7 +33,10 @@ in
       # Provide a TPM to test vTPM support for guests
       tpm.enable = true;
 
-      incus.enable = true;
+      incus = {
+        enable = true;
+        package = incus;
+      };
     };
     networking.nftables.enable = true;
   };
