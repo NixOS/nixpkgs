@@ -20537,7 +20537,9 @@ with pkgs;
   # TODO: Fix references and add justStaticExecutables https://github.com/NixOS/nixpkgs/issues/318013
   emanote = haskellPackages.emanote;
 
-  enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
+  enchant2 = callPackage ../development/libraries/enchant/2.x.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   enchant = enchant2;
 
   enet = callPackage ../development/libraries/enet { };

@@ -14,7 +14,12 @@
 , withAspell ? true
 , withHunspell ? true
 , withNuspell ? true
+, withAppleSpell ? stdenv.isDarwin
+
+, Cocoa
 }:
+
+assert withAppleSpell -> stdenv.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "enchant";
@@ -40,6 +45,8 @@ stdenv.mkDerivation rec {
     hunspell
   ] ++ lib.optionals withNuspell [
     nuspell
+  ] ++ lib.optionals withAppleSpell [
+    Cocoa
   ];
 
   checkInputs = [
@@ -63,6 +70,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature withHspell "hspell")
     (lib.withFeature withHunspell "hunspell")
     (lib.withFeature withNuspell "nuspell")
+    (lib.withFeature withAppleSpell "applespell")
   ];
 
   meta = with lib; {
