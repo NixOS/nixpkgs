@@ -4,7 +4,7 @@
 , runCommand
 , writeText
 , pub2nix
-, dartHooks
+, buildPackages
 , makeWrapper
 , dart
 , nodejs
@@ -80,7 +80,7 @@ let
     extraSetupCommands = extraPackageConfigSetup;
   };
 
-  inherit (dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
+  inherit (buildPackages.dartHooks.override { inherit dart; }) dartConfigHook dartBuildHook dartInstallHook dartFixupHook;
 
   baseDerivation = stdenv.mkDerivation (finalAttrs: (builtins.removeAttrs args [ "gitHashes" "sdkSourceBuilders" "pubspecLock" "customSourceBuilders" ]) // {
     inherit pubspecLockFile packageConfig sdkSetupScript
