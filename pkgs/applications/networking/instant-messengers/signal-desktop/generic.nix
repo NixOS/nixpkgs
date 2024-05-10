@@ -166,7 +166,8 @@ stdenv.mkDerivation rec {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "/opt/${dir}/${pname}" $out/bin/${pname}
+      --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
+      --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
     autoPatchelf --no-recurse -- "$out/lib/${dir}/"
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-${ARCH}.node"
