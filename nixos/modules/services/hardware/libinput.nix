@@ -18,18 +18,19 @@ let cfg = config.services.libinput;
       };
 
       accelProfile = mkOption {
-        type = types.enum [ "flat" "adaptive" ];
+        type = types.enum [ "flat" "adaptive" "custom" ];
         default = "adaptive";
         example = "flat";
         description = ''
             Sets the pointer acceleration profile to the given profile.
-            Permitted values are `adaptive`, `flat`.
+            Permitted values are `adaptive`, `flat`, `custom`.
             Not all devices support this option or all profiles.
             If a profile is unsupported, the default profile for this is used.
             `flat`: Pointer motion is accelerated by a constant
             (device-specific) factor, depending on the current speed.
             `adaptive`: Pointer acceleration depends on the input speed.
             This is the default profile for most devices.
+            `custom`: Allows the user to define a custom acceleration function.
           '';
       };
 
