@@ -6,14 +6,14 @@
   purpose,
   qqc2-desktop-style,
   pkg-config,
-  mpv,
+  mpv-unwrapped,
   yt-dlp,
 }:
 mkKdeDerivation {
   pname = "plasmatube";
 
   extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtquick3d qtsvg mpv qqc2-desktop-style];
+  extraBuildInputs = [qtquick3d qtsvg mpv-unwrapped qqc2-desktop-style];
   extraPropagatedBuildInputs = [purpose];
 
   qtWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ yt-dlp ])];
