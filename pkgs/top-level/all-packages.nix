@@ -18322,7 +18322,7 @@ with pkgs;
     llvmPackages = llvmPackages_16;
   };
 
-  bpftrace = callPackage ../os-specific/linux/bpftrace {
+  bpftrace = callPackage ../by-name/bp/bpftrace/package.nix {
     llvmPackages = llvmPackages_16;
   };
 
