@@ -19282,8 +19282,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pahole = callPackage ../development/tools/misc/pahole { };
-
   panopticon = callPackage ../development/tools/analysis/panopticon { };
 
   parinfer-rust = callPackage ../development/tools/parinfer-rust { };
