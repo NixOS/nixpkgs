@@ -52,8 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.gnu.org/software/guile-sdl/";
     description = "Guile bindings for SDL";
-    # configure: error: *** SDL version  not found!
-    broken = stdenv.isDarwin;
     license = lib.licenses.gpl3Plus;
     maintainers = lib.teams.sdl.members
                   ++ (with lib.maintainers; [ vyp ]);
