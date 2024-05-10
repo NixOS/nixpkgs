@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.62.0";
+  version = "3.63.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Adafruit-PlatformDetect";
+    pname = "adafruit_platformdetect";
     inherit version;
-    hash = "sha256-L2CbqWqyOo4mq+KsO8FYAyHClRKFXMLWWtfYEg0SD34=";
+    hash = "sha256-bntcP/P0eoQsjIQQcJLtsXsPcSylKVNUp+f/RC/U5m4=";
   };
 
   nativeBuildInputs = [
