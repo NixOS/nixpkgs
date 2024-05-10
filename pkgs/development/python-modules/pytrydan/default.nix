@@ -30,14 +30,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=pytrydan --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=pytrydan --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     orjson
     rich
@@ -58,10 +58,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to interface with V2C EVSE Trydan";
-    mainProgram = "pytrydan";
     homepage = "https://github.com/dgomes/pytrydan";
     changelog = "https://github.com/dgomes/pytrydan/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pytrydan";
   };
 }
