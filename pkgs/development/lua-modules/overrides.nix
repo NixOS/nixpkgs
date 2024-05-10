@@ -383,14 +383,6 @@ in
     ];
   });
 
-  luasnip = prev.luasnip.overrideAttrs (_: {
-    # Until https://github.com/L3MON4D3/LuaSnip/issues/1139 is solved
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace "'jsregexp >= 0.0.5, <= 0.0.6'" "'jsregexp >= 0.0.5'"
-    '';
-  });
-
   luaossl = prev.luaossl.overrideAttrs (_: {
     externalDeps = [
       { name = "CRYPTO"; dep = openssl; }
