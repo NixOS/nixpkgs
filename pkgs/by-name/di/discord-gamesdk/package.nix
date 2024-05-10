@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [ (stdenv.cc.cc.libgcc or null) ];
 
@@ -41,6 +45,11 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ tomodachi94 ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "x86_64-windows" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "x86_64-windows"
+    ];
   };
 }
