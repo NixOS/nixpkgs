@@ -1962,7 +1962,7 @@
   };
   atry = {
     name = "Bo Yang";
-    email = "atry@fb.com";
+    email = "yang-bo@yang-bo.com";
     github = "Atry";
     githubId = 601530;
   };
