@@ -19,7 +19,7 @@
 , withTTS ? true
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
-, withSystemVencord ? true
+, withSystemVencord ? false
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
