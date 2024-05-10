@@ -1206,6 +1206,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+   instantiate = old.instantiate.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     exifr = old.exifr.overrideAttrs (attrs: {
       postPatch = ''
         for f in .onLoad .onAttach ; do
