@@ -15,7 +15,7 @@
 , dbus-glib
 }:
 
-buildPythonPackage rec {
+lib.fix (finalPackage: buildPythonPackage rec {
   pname = "dbus-python";
   version = "1.3.2";
   pyproject = true;
@@ -67,6 +67,10 @@ buildPythonPackage rec {
     "-Cbuild-dir=_meson-build"
   ];
 
+  mesonFlags = [
+    (lib.mesonBool "tests" finalPackage.doInstallCheck)
+  ];
+
   # workaround bug in meson-python
   # https://github.com/mesonbuild/meson-python/issues/240
   postInstall = ''
@@ -98,4 +102,4 @@ buildPythonPackage rec {
     platforms = dbus.meta.platforms;
     maintainers = with maintainers; [ ];
   };
-}
+})
