@@ -99,6 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
+    # Display toolchains when using `hare version -v`.
+    (fetchpatch {
+      url = "https://git.sr.ht/~sircmpwn/hare/commit/e35f2284774436f422e06f0e8d290b173ced1677.patch";
+      hash = "sha256-A59bGO/9tOghV8/MomTxd8xRExkHVdoMom2d+HTfQGg=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -122,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       "ARCH=${arch}"
       "VERSION=${finalAttrs.version}-nixpkgs"
       "QBEFLAGS=-t${qbePlatform}"
-      "CC=${stdenv.cc.targetPrefix}cc"
       "AS=${stdenv.cc.targetPrefix}as"
       "LD=${stdenv.cc.targetPrefix}ld"
       # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
@@ -136,9 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
       "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
       "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
       "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
-      "x86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
-      "x86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
-      "x86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
+      "X86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
+      "X86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
+      "X86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
     ];
 
   enableParallelBuilding = true;
