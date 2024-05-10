@@ -30,6 +30,10 @@ let
               url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
               sha256 = dartHash.aarch64-linux;
             };
+            "${dartVersion}-riscv64-linux" = fetchzip {
+              url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-riscv64-release.zip";
+              sha256 = dartHash.riscv64-linux;
+            };
             "${dartVersion}-x86_64-darwin" = fetchzip {
               url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
               sha256 = dartHash.x86_64-darwin;
