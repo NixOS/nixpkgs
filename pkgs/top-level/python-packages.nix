@@ -1463,6 +1463,8 @@ self: super: with self; {
 
   beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
+  beanhub-cli = callPackage ../development/python-modules/beanhub-cli { };
+
   beanhub-extract = callPackage ../development/python-modules/beanhub-extract { };
 
   beanhub-forms = callPackage ../development/python-modules/beanhub-forms { };
