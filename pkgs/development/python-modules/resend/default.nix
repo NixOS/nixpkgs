@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, pytestCheckHook
-, requests
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  pytestCheckHook,
+  requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-TuumT77SGVIi/zaWd7FJwTZFiwZcyb1RioMcG7QXxgE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "resend"
-  ];
+  pythonImportsCheck = [ "resend" ];
 
   meta = with lib; {
     description = "SDK for Resend";
