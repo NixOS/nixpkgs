@@ -1,40 +1,41 @@
-{ lib
-, app-model
-, appdirs
-, buildPythonPackage
-, cachey
-, certifi
-, dask
-, docstring-parser
-, fetchFromGitHub
-, imageio
-, jsonschema
-, magicgui
-, mkDerivationWith
-, napari-console
-, napari-npe2
-, napari-svg
-, numpydoc
-, pandas
-, pillow
-, pint
-, psutil
-, pydantic
-, pyopengl
-, pythonOlder
-, pyyaml
-, scikit-image
-, scipy
-, setuptools
-, setuptools-scm
-, superqt
-, tifffile
-, toolz
-, tqdm
-, typing-extensions
-, vispy
-, wrapQtAppsHook
-, wrapt
+{
+  lib,
+  app-model,
+  appdirs,
+  buildPythonPackage,
+  cachey,
+  certifi,
+  dask,
+  docstring-parser,
+  fetchFromGitHub,
+  imageio,
+  jsonschema,
+  magicgui,
+  mkDerivationWith,
+  napari-console,
+  napari-npe2,
+  napari-svg,
+  numpydoc,
+  pandas,
+  pillow,
+  pint,
+  psutil,
+  pydantic,
+  pyopengl,
+  pythonOlder,
+  pyyaml,
+  scikit-image,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  superqt,
+  tifffile,
+  toolz,
+  tqdm,
+  typing-extensions,
+  vispy,
+  wrapQtAppsHook,
+  wrapt,
 }:
 
 mkDerivationWith buildPythonPackage rec {
@@ -61,9 +62,7 @@ mkDerivationWith buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     app-model
