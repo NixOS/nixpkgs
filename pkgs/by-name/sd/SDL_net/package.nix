@@ -1,23 +1,43 @@
-{ lib, stdenv, fetchurl, SDL, pkg-config }:
+{
+  lib,
+  SDL,
+  fetchurl,
+  pkg-config,
+  stdenv,
+  # Boolean flags
+  enableSdltest ? (!stdenv.isDarwin)
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_net";
   version = "1.2.8";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_net/release/${pname}-${version}.tar.gz";
-    sha256 = "1d5c9xqlf4s1c01gzv6cxmg0r621pq9kfgxcg3197xw4p25pljjz";
+    url = "http://www.libsdl.org/projects/SDL_net/release/SDL_net-${finalAttrs.version}.tar.gz";
+    hash = "sha256-X0p6i7iE95PCeKw/NxO+QZgMXu3M7P8CYEETR3FPrLQ=";
   };
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  nativeBuildInputs = [
+    SDL
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ SDL ];
+  propagatedBuildInputs = [
+    SDL
+  ];
 
-  meta = with lib; {
+  configureFlags = [
+    (lib.enableFeature enableSdltest "sdltest")
+  ];
+
+  strictDeps = true;
+
+  meta = {
+    homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL networking library";
-    platforms = platforms.unix;
-    license = licenses.zlib;
-    homepage = "https://www.libsdl.org/projects/SDL_net/release-1.2.html";
+    license = lib.licenses.zlib;
+    maintainers =  lib.teams.sdl.members
+                   ++ (with lib.maintainers; [ ]);
+    inherit (SDL.meta) platforms;
   };
-}
+})
