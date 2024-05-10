@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-bntcP/P0eoQsjIQQcJLtsXsPcSylKVNUp+f/RC/U5m4=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   # Project has not published tests yet
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adafruit_platformdetect"
-  ];
+  pythonImportsCheck = [ "adafruit_platformdetect" ];
 
   meta = with lib; {
     description = "Platform detection for use by Adafruit libraries";
