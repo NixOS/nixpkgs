@@ -396,7 +396,12 @@ in let
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
     libcxx = callPackage ../common/libcxx {
-      patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+      patches = [
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/1118c2e05e67a36ed8ca250524525cdb66a55256.patch";
+          sha256 = "sha256-2lDO9UsglvYAxDG3/iTXqGVHn1Hq3O7wtkCUb9I/Buc=";
+        })
+      ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
         # https://github.com/llvm/llvm-project/issues/64226
         ./libcxx/0001-darwin-10.12-mbstate_t-fix.patch
       ];
