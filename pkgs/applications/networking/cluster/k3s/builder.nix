@@ -91,7 +91,7 @@ let
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank mic92 superherointj yajo wrmilling ];
+    maintainers = with maintainers; [ euank mic92 superherointj wrmilling yajo ];
     platforms = platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
