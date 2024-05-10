@@ -7693,6 +7693,8 @@ self: super: with self; {
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
 
+  mpegdash = callPackage ../development/python-modules/mpegdash { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
   mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
