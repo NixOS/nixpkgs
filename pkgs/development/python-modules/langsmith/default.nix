@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.54";
+  version = "0.1.56";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hg1xfqptjeJHxbiGfuGeka7lpClrb9nxP/RSUYr2/0k=";
+    hash = "sha256-S+l+KA+7kZZX4OeJICeYmK7l7SxSXWiZiV9JgM+JTl8=";
   };
 
   sourceRoot = "${src.name}/python";
