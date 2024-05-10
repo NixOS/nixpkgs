@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ax";
-  version = "0.3.7";
+  version = "0.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UOX8Q7F5c9J1KSfQUy8aoL5CNb9YmEI4X7Fd5B16UqQ=";
+    hash = "sha256-dj6Gig8N4oLtcZLwPl4QDHG/FwA2nFBtYxSARnWiJJU=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_get_standard_plots_moo"
     # AssertionError: Expected 'warning' to be called once. Called 3 times
     "test_validate_kwarg_typing"
+    # uses torch.equal
+    "test_convert_observations"
   ];
   pythonImportsCheck = [ "ax" ];
 
