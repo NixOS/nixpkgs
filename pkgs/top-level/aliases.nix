@@ -1387,6 +1387,7 @@ mapAliases ({
   zinc = zincsearch; # Added 2023-05-28
   zkg = throw "'zkg' has been replaced by 'zeek'";
   zq = zed.overrideAttrs (old: { meta = old.meta // { mainProgram = "zq"; }; }); # Added 2023-02-06
+  zz = throw "'zz' has been removed because it was archived in 2022 and had no maintainer"; # added 2024-05-10
 
   ### UNSORTED ###
 
