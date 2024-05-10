@@ -5,6 +5,7 @@ let
   cfg = config.services.k3s;
   removeOption = config: instruction:
     lib.mkRemovedOptionModule ([ "services" "k3s" ] ++ config) instruction;
+  yaml = pkgs.formats.yaml {};
 in
 {
   imports = [
@@ -114,6 +115,26 @@ in
       default = null;
       description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
     };
+
+    registries = mkOption {
+      type = types.nullOr yaml.type;
+      default = null;
+      example = {
+        mirrors."docker.io".endpoint = ["https://registry.example.com:5000"];
+        configs."registry.example.com:5000" = {
+          auth = {
+            username = "";
+            password = "";
+          };
+          tls = {
+            cert_file = ./path;
+            key_file = ./path;
+            ca_file = ./path;
+          };
+        };
+      };
+      description = "[Private registry configuration](https://docs.k3s.io/installation/private-registry).";
+    };
   };
 
   # implementation
@@ -139,6 +160,9 @@ in
     ];
 
     environment.systemPackages = [ config.services.k3s.package ];
+
+    environment.etc."rancher/k3s/registries.yaml".source =
+      mkIf (cfg.registries != null) (yaml.generate "registries.yaml" cfg.registries);
 
     systemd.services.k3s = {
       description = "k3s service";
