@@ -10,30 +10,34 @@
   rustPlatform,
 }:
 let
-  curl-cffi_0_7_0 = curl-cffi.overrideAttrs (final: old: {
-    version = "0.7.0b4";
-    src = fetchFromGitHub {
-      owner = "yifeikong";
-      repo = "curl_cffi";
-      rev = "v${final.version}";
-      hash = "sha256-txrJNUzswAPeH4Iazn0iKJI0Rqk0HHRoDrtTfDHKMoo=";
-    };
-  });
+  curl-cffi_0_7_0 = curl-cffi.overrideAttrs (
+    final: old: {
+      version = "0.7.0b4";
+      src = fetchFromGitHub {
+        owner = "yifeikong";
+        repo = "curl_cffi";
+        rev = "v${final.version}";
+        hash = "sha256-txrJNUzswAPeH4Iazn0iKJI0Rqk0HHRoDrtTfDHKMoo=";
+      };
+    }
+  );
 
-  orjson_3_10_3 = orjson.overrideAttrs (final: old: {
-    version = "3.10.3";
-    src = fetchFromGitHub {
-      owner = "ijl";
-      repo = old.pname;
-      rev = "refs/tags/${final.version}";
-      hash = "sha256-bK6wA8P/IXEbiuJAx7psd0nUUKjR1jX4scFfJr1MBAk=";
-    };
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit (final) src;
-      name = "${old.pname}-${final.version}";
-      hash = "sha256-ilGq+/gPSuNwURUWy2ZxInzmUv+PxYMxd8esxrMpr2o=";
-    };
-  });
+  orjson_3_10_3 = orjson.overrideAttrs (
+    final: old: {
+      version = "3.10.3";
+      src = fetchFromGitHub {
+        owner = "ijl";
+        repo = "orjson";
+        rev = "refs/tags/${final.version}";
+        hash = "sha256-bK6wA8P/IXEbiuJAx7psd0nUUKjR1jX4scFfJr1MBAk=";
+      };
+      cargoDeps = rustPlatform.fetchCargoTarball {
+        inherit (final) src;
+        name = "${old.pname}-${final.version}";
+        hash = "sha256-ilGq+/gPSuNwURUWy2ZxInzmUv+PxYMxd8esxrMpr2o=";
+      };
+    }
+  );
 in
 buildPythonPackage rec {
   pname = "duckduckgo-search";
