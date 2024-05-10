@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , marshmallow
-, marshmallow-enum
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    marshmallow-enum
     pytestCheckHook
     typeguard
   ];
