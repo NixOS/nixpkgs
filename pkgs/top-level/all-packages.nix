@@ -39998,8 +39998,6 @@ with pkgs;
 
   roadrunner = callPackage ../servers/roadrunner { };
 
-  rmfakecloud = callPackage ../servers/rmfakecloud { };
-
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
 
   rmount = callPackage ../tools/filesystems/rmount { };
