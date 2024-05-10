@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, pyannote-core
-, pyyaml
-, pandas
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  pyannote-core,
+  pyyaml,
+  pandas,
+  typer,
 }:
 
 buildPythonPackage rec {
