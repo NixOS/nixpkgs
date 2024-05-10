@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL image library";
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ lovek323 ]);
+                  ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })
