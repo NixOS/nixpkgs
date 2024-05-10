@@ -552,7 +552,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "zlib" withCompression)
 
     # NSS
-    (lib.mesonEnable "nss-mymachines" withNss)
+    (lib.mesonEnable "nss-mymachines" (withNss && withMachined))
     (lib.mesonEnable "nss-resolve" withNss)
     (lib.mesonBool "nss-myhostname" withNss)
     (lib.mesonBool "nss-systemd" withNss)
@@ -564,7 +564,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # FIDO2
     (lib.mesonEnable "libfido2" withFido2)
-    (lib.mesonEnable "openssl" withFido2)
+    (lib.mesonEnable "openssl" (withHomed || withFido2 || withSysupdate))
 
     # Password Quality
     (lib.mesonEnable "pwquality" withPasswordQuality)
