@@ -4,12 +4,16 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
+  pint,
+  pygments,
   pyqt5,
+  pyqt6,
+  pyside2,
+  pyside6,
+  pytestCheckHook,
+  pythonOlder,
   qtpy,
   typing-extensions,
-  pytestCheckHook,
-  pygments,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,6 +41,13 @@ buildPythonPackage rec {
     qtpy
     typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    quantity = [ pint ];
+    pyside2 = [ pyside2 ];
+    pyside6 = [ pyside6 ];
+    pyqt6 = [ pyqt6 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
