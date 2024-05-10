@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "peco";
-  version = "0.0.29";
+  version = "0.0.30";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zL0tBTwm+l5eyxlWr2xoE+nLpMfUKri1/yD+WgTUqHQ=";
+    hash = "sha256-a3MPqtbDftbLGtpJ66CFVC5wJFa9L3dqOKPfBZCaHpM=";
   };
 
   nativeBuildInputs = [
