@@ -14119,12 +14119,6 @@ with pkgs;
 
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
-  vp = callPackage ../by-name/vp/vp/package.nix {
-    # Enable next line for console graphics. Note that it requires `sixel`
-    # enabled terminals such as mlterm or xterm -ti 340
-    SDL = SDL_sixel;
-  };
-
   vtm = callPackage ../tools/misc/vtm { };
 
   witness = callPackage ../tools/security/witness { };
