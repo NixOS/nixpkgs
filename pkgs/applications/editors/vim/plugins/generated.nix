@@ -15376,6 +15376,18 @@ final: prev:
     meta.homepage = "https://github.com/mhinz/vim-signify/";
   };
 
+  vim-sile = buildVimPlugin {
+    pname = "vim-sile";
+    version = "2022-09-03";
+    src = fetchFromGitHub {
+      owner = "sile-typesetter";
+      repo = "vim-sile";
+      rev = "7856f66d5e552eb18596f0162b81d8d14a4cbc16";
+      sha256 = "0xik91854jqmv3sa8af988w8xirm1vqql1ifjqxi61v00z0z00j7";
+    };
+    meta.homepage = "https://github.com/sile-typesetter/vim-sile/";
+  };
+
   vim-simpledb = buildVimPlugin {
     pname = "vim-simpledb";
     version = "2020-10-02";
