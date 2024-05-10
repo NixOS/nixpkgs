@@ -1,7 +1,7 @@
 { lib
 , installShellFiles
 , rustPlatform
-, fetchgit
+, fetchFromGitLab
 }:
 
 let
@@ -11,9 +11,10 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
-  # fetchFromGitLab doesn't work on GitLab's end for unknown reasons
-  src = fetchgit {
-    url = "https://or.computer.surgery/charles/${pname}";
+  src = fetchFromGitLab {
+    domain = "or.computer.surgery";
+    owner = "charles";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
   };
