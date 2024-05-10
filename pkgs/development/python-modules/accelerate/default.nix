@@ -81,6 +81,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
+    # TypeError: unsupported operand type(s) for /: 'NoneType' and 'int' (it seems cpuinfo doesn't work here)
+    "test_mpi_multicpu_config_cmd"
   ] ++ lib.optionals (!config.cudaSupport) [
     # requires ptxas from cudatoolkit, which is unfree
     "test_dynamo_extract_model"
