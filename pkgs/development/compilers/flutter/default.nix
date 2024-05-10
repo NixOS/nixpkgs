@@ -43,7 +43,7 @@ let
               sha256 = dartHash.aarch64-darwin;
             };
           };
-        }; in dart.override dartOverride // { __spliced = lib.mapAttrs (_: dart: dart.override dartOverride) dart.__spliced; };
+        }; in dart.override dartOverride // (lib.optionalAttrs (dart ? __spliced) { __spliced = lib.mapAttrs (_: dart: dart.override dartOverride) dart.__spliced; });
         src = fetchFromGitHub {
           owner = "flutter";
           repo = "flutter";
