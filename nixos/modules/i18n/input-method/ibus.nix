@@ -3,7 +3,8 @@
 with lib;
 
 let
-  cfg = config.i18n.inputMethod.ibus;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
   ibusEngine = types.package // {
     name  = "ibus-engine";
@@ -52,7 +53,7 @@ in
     };
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
+  config = mkIf (imcfg.enable && imcfg.type == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
     environment.systemPackages = [
