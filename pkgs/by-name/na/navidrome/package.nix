@@ -10,7 +10,6 @@
 , ffmpeg-headless
 , taglib
 , zlib
-, makeWrapper
 , nixosTests
 , nix-update-script
 , ffmpegSupport ? true
