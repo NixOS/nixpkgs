@@ -1,16 +1,28 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, SDL, libogg, libvorbis, smpeg, libmikmod
-, fluidsynth, pkg-config
-, enableNativeMidi ? false
+{
+  lib,
+  SDL,
+  fetchpatch,
+  fetchurl,
+  fluidsynth,
+  libmikmod,
+  libogg,
+  libvorbis,
+  pkg-config,
+  smpeg,
+  stdenv,
+  # Boolean flags
+  enableNativeMidi ? false,
+  enableSdltest ? (!stdenv.isDarwin),
+  enableSmpegtest ? (!stdenv.isDarwin),
 }:
 
-stdenv.mkDerivation rec {
-  pname   = "SDL_mixer";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "SDL_mixer";
   version = "1.2.12";
 
   src = fetchurl {
-    url    = "http://www.libsdl.org/projects/${pname}/release/${pname}-${version}.tar.gz";
-    sha256 = "0alrhqgm40p4c92s26mimg9cm1y7rzr6m0p49687jxd9g6130i0n";
+    url = "http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-${finalAttrs.version}.tar.gz";
+    hash = "sha256-FkQwgnmpdXmQSeSCavLPx4fK0quxGqFFYuQCUh+GmSo=";
   };
 
   patches = [
@@ -31,7 +43,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "mikmod-fixes.patch";
       url = "https://github.com/libsdl-org/SDL_mixer/commit/a3e5ff8142cf3530cddcb27b58f871f387796ab6.patch";
-      hash = "sha256-dqD8hxx6U2HaelUx0WsGPiWuso++LjwasaAeTTGqdbk";
+      hash = "sha256-dqD8hxx6U2HaelUx0WsGPiWuso++LjwasaAeTTGqdbk=";
     })
     # More incompatible function pointer conversion fixes (this time in Vorbis-decoding code).
     (fetchpatch {
@@ -51,18 +63,39 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL libogg libvorbis fluidsynth smpeg libmikmod ];
+  nativeBuildInputs = [
+    SDL
+    pkg-config
+    smpeg
+  ];
 
-  configureFlags = [ "--disable-music-ogg-shared" "--disable-music-mod-shared" ]
-    ++ lib.optional enableNativeMidi " --enable-music-native-midi-gpl"
-    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
+  buildInputs = [
+    SDL
+    fluidsynth
+    libmikmod
+    libogg
+    libvorbis
+    smpeg
+  ];
 
-  meta = with lib; {
+  configureFlags = [
+    (lib.enableFeature false "music-ogg-shared")
+    (lib.enableFeature false "music-mod-shared")
+    (lib.enableFeature enableNativeMidi "music-native-midi-gpl")
+    (lib.enableFeature enableSdltest "sdltest")
+    (lib.enableFeature enableSmpegtest "smpegtest")
+  ];
+
+  outputs = [ "out" "dev" ];
+
+  strictDeps = true;
+
+  meta = {
     description = "SDL multi-channel audio mixer library";
-    homepage    = "http://www.libsdl.org/projects/SDL_mixer/";
-    maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
-    license     = licenses.zlib;
+    homepage = "http://www.libsdl.org/projects/SDL_mixer/";
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ lovek323 ]);
+    license = lib.licenses.zlib;
+    inherit (SDL.meta) platforms;
   };
-}
+})
