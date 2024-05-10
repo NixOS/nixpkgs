@@ -21,4 +21,8 @@ let version = "3.3.4"; in
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-linux-ia32-release.zip";
     sha256 = "0j5j582lvlwdaqznb8bi96x3sck13l82l0p627bqpn6nm5qv21sj";
   };
+  "${version}-riscv64-linux" = fetchurl {
+    url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-linux-riscv64-release.zip";
+    sha256 = "sha256-oFqtEuocZRs+Cj/IwKQXNT9UzbB/+jGnJLD3aKsK8fc=";
+  };
 }

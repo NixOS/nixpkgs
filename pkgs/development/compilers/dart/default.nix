@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       with C-style syntax. It offers compilation to JavaScript, interfaces,
       mixins, abstract classes, reified generics, and optional typing.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "riscv64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
   };
