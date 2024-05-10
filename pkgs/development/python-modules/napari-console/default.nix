@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "napari-console";
-  version = "0.0.7";
+  version = "0.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "napari";
     repo = "napari-console";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vHLCVMgrcs54pGb48wQpc0h7QBIfE6r7hCSoDNI3QvA=";
+    hash = "sha256-3gOfiPx06G5c4eaLQ5kP45hUr6yw91esznJFacpO66Q=";
   };
 
   build-system = [
