@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     # Fix the desktop link
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
-      --replace "StartupWMClass=Signal" "StartupWMClass=signal"
+      --replace-fail "StartupWMClass=Signal" "StartupWMClass=signal"
 
     # Note: The following path contains bundled libraries:
     # $out/lib/${dir}/resources/app.asar.unpacked/node_modules/
