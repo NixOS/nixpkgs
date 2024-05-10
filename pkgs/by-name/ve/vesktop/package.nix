@@ -41,55 +41,57 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) src version patches ELECTRON_SKIP_BINARY_DOWNLOAD;
 
       nativeBuildInputs = [
+        cacert
         jq
         moreutils
         nodePackages.pnpm
-        cacert
       ];
 
-      pnpmPatch = builtins.toJSON {
-        pnpm.supportedArchitectures = {
-          os = [ "linux" ];
-          cpu = [ "x64" "arm64" ];
-        };
-      };
+      # inspired by https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
+      # and based on https://github.com/NixOS/nixpkgs/pull/290715
+      installPhase = ''
+        runHook preInstall
 
-      postPatch = ''
-        mv package.json package.json.orig
-        jq --raw-output ". * $pnpmPatch" package.json.orig > package.json
+        export HOME=$(mktemp -d)
+        pnpm config set store-dir $out
+        # Some packages produce platform dependent outputs. We do not want to cache those in the global store
+        pnpm config set side-effects-cache false
+        # pnpm is going to warn us about using --force
+        # --force allows us to fetch all dependencies including ones that aren't meant for our host platform
+        pnpm install --force --frozen-lockfile --ignore-script
+
       '';
 
-      # https://github.com/NixOS/nixpkgs/blob/763e59ffedb5c25774387bf99bc725df5df82d10/pkgs/applications/misc/pot/default.nix#L56
-      installPhase = ''
-        export HOME=$(mktemp -d)
+      fixupPhase = ''
+        runHook preFixup
 
-        pnpm config set store-dir $out
-        pnpm install --frozen-lockfile --ignore-script
-
+        # Remove timestamp and sort the json files
         rm -rf $out/v3/tmp
         for f in $(find $out -name "*.json"); do
           sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
           jq --sort-keys . $f | sponge $f
         done
+
+        runHook postFixup
       '';
 
+      dontConfigure = true;
       dontBuild = true;
-      dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = "sha256-6ezEBeYmK5va3gCh00YnJzZ77V/Ql7A3l/+csohkz68=";
+      outputHash = "sha256-PogE8uf3W5cKSCqFHMz7FOvT7ONUP4FiFWGBgtk3UC8=";
     };
 
   nativeBuildInputs = [
+    autoPatchelfHook
     copyDesktopItems
+    makeWrapper
     nodePackages.pnpm
     nodePackages.nodejs
-    makeWrapper
-    autoPatchelfHook
   ];
 
   buildInputs = [
-    pipewire
     libpulseaudio
+    pipewire
     stdenv.cc.cc.lib
   ];
 
@@ -99,7 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
-  preBuild = ''
+  configurePhase = ''
+    runHook preConfigure
+
     export HOME=$(mktemp -d)
     export STORE_PATH=$(mktemp -d)
 
@@ -107,11 +111,15 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R +w "$STORE_PATH"
 
     pnpm config set store-dir "$STORE_PATH"
-    pnpm install --offline --frozen-lockfile --ignore-script
+    pnpm install --frozen-lockfile --ignore-script --offline
     patchShebangs node_modules/{*,.*}
+
+    runHook postConfigure
   '';
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
+
     pnpm build
     # using `pnpm exec` here apparently makes it ignore ELECTRON_SKIP_BINARY_DOWNLOAD
     ./node_modules/.bin/electron-builder \
@@ -119,6 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
       -c.asarUnpack="**/*.node" \
       -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
+
+    runHook postBuild
   '';
 
   # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
@@ -161,11 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pnpmDeps;
   };
 
-  meta = with lib; {
+  meta = {
     description = "An alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ getchoo Scrumplex vgskye pluiedev ];
+    changelog = "https://github.com/Vencord/Vesktop/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ getchoo Scrumplex vgskye pluiedev ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "vesktop";
   };
