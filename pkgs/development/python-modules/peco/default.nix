@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "peco";
   version = "0.0.30";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,11 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-a3MPqtbDftbLGtpJ66CFVC5wJFa9L3dqOKPfBZCaHpM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pydantic
   ];
