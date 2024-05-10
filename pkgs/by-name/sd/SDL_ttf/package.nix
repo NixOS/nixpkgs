@@ -1,33 +1,55 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, freetype }:
+{
+  lib,
+  SDL,
+  fetchpatch,
+  fetchurl,
+  freetype,
+  stdenv,
+  # Boolean flags
+  enableSdltest ? (!stdenv.isDarwin),
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_ttf";
   version = "2.0.11";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_ttf/release/${pname}-${version}.tar.gz";
-    sha256 = "1dydxd4f5kb1288i5n5568kdk2q7f8mqjr7i7sd33nplxjaxhk3j";
+    url = "https://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ckzYlez02jGaPvFkiStyB4vZJjKl2BIREmHN4kjrzbc=";
   };
 
   patches = [
     # Bug #830: TTF_RenderGlyph_Shaded is broken
     (fetchpatch {
-      url = "https://bugzilla-attachments.libsdl.org/attachment.cgi?id=830";
-      sha256 = "0cfznfzg1hs10wl349z9n8chw80i5adl3iwhq4y102g0xrjyb72d";
+      url = "https://bugzilla-attachments.libsdl.org/attachments/830/renderglyph_shaded.patch.txt";
+      hash = "sha256-TZzlZe7gCRA8wZDHQZsqESAOGbLpJzIoB0HD8L6z3zE=";
     })
   ];
 
   patchFlags = [ "-p0" ];
 
-  buildInputs = [ SDL freetype ];
+  buildInputs = [
+    SDL
+    freetype
+  ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  nativeBuildInputs = [
+    SDL
+    freetype
+  ];
 
-  meta = with lib; {
+  configureFlags = [
+    (lib.enableFeature enableSdltest "-sdltest")
+  ];
+
+  strictDeps = true;
+
+  meta = {
+    homepage = "https://github.com/libsdl-org/SDL_ttf";
     description = "SDL TrueType library";
-    license = licenses.zlib;
-    platforms = platforms.all;
-    homepage = "https://www.libsdl.org/projects/SDL_ttf/release-1.2.html";
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.zlib;
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ abbradar ]);
+    inherit (SDL.meta) platforms;
   };
-}
+})
