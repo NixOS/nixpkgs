@@ -11,7 +11,7 @@ lib.recurseIntoAttrs {
 
   miniz-versions-mismatch = testers.testBuildFailure (testers.hasPkgConfigModules {
     package = miniz;
-    version = "1.2.3";
+    version = "1.2.3"; # intentionally wrong version to trigger failure
     versionCheck = true;
   });
 
