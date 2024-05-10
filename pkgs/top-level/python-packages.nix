@@ -17119,6 +17119,8 @@ self: super: with self; {
 
   xnd = callPackage ../development/python-modules/xnd { };
 
+  xonsh = toPythonModule (pkgs.xonsh.override { });
+
   xpath-expressions = callPackage ../development/python-modules/xpath-expressions { };
 
   xpybutil = callPackage ../development/python-modules/xpybutil { };
