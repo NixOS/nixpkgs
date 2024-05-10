@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , graphviz
 , graphvizPkgs
 , isPyPy
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "objgraph";
   version = "3.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7" || isPyPy;
 
@@ -26,6 +27,10 @@ buildPythonPackage rec {
       src = ./hardcode-graphviz-path.patch;
       graphviz = graphvizPkgs;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   passthru.optional-dependencies = {
