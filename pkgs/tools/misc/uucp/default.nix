@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uucp";
   version = "1.07";
 
   src = fetchurl {
-    url = "mirror://gnu/uucp/uucp-${version}.tar.gz";
+    url = "mirror://gnu/uucp/uucp-${finalAttrs.version}.tar.gz";
     sha256 = "0b5nhl9vvif1w3wdipjsk8ckw49jj1w85xw1mmqi3zbcpazia306";
   };
 
@@ -28,8 +28,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "AR:=$(AR)" ];
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "Unix-unix cp over serial line, also includes cu program";
+    mainProgram = "uucp";
 
     longDescription =
       '' Taylor UUCP is a free implementation of UUCP and is the standard
@@ -45,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})
