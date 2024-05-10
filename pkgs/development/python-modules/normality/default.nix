@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Micro-library to normalize text strings";
     homepage = "https://github.com/pudo/normality";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }
