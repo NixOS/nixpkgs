@@ -35,6 +35,7 @@
 , sentencepiece
 , torchsde
 , transformers
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -152,5 +153,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
+    # No python 3.12 support. This should be fixed in the next release.
+    # See https://github.com/huggingface/diffusers/issues/7809
+    broken = pythonAtLeast "3.12";
   };
 }
