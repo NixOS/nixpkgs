@@ -231,8 +231,6 @@ with pkgs;
   # Post 24.11 branch-off, this should throw an error in aliases.nix.
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
-  quickemu = callPackage ../development/quickemu { };
-
   quickgui = callPackage ../applications/virtualization/quickgui { };
 
   adcli = callPackage ../os-specific/linux/adcli { };
