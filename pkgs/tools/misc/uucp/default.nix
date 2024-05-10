@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "uucp";
@@ -13,10 +13,18 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # do not set sticky bit in nix store
-    substituteInPlace Makefile.in \
-      --replace 4555 0555
-    sed -i '/chown $(OWNER)/d' Makefile.in
+    substituteInPlace Makefile.am \
+      --replace-fail 4555 0555
+    sed -i '/chown $(OWNER)/d' Makefile.am
+
+    # don't reply on implicitly defined `exit` function in `HAVE_VOID` test:
+    substituteInPlace configure.in \
+      --replace-fail '(void) exit (0)' '(void) (0)'
   '';
+
+  # Regenerate `configure`; the checked in version was generated in 2002 and
+  # contains snippets like `main(){return(0);}` that modern compilers dislike.
+  nativeBuildInputs = [ autoreconfHook ];
 
   makeFlags = [ "AR:=$(AR)" ];
 
