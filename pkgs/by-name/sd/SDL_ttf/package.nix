@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL TrueType library";
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ abbradar ]);
+                  ++ (with lib.maintainers; [ ]);
     inherit (SDL.meta) platforms;
   };
 })
