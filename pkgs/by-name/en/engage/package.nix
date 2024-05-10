@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitLab {
-    domain = "or.computer.surgery";
+    domain = "gitlab.computer.surgery";
     owner = "charles";
     repo = pname;
     rev = "v${version}";
@@ -40,8 +40,8 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "A task runner with DAG-based parallelism";
     mainProgram = "engage";
-    homepage = "https://or.computer.surgery/charles/engage";
-    changelog = "https://or.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
+    homepage = "https://gitlab.computer.surgery/charles/engage";
+    changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 mit ];
     maintainers = with lib.maintainers; [ CobaltCause ];
   };
