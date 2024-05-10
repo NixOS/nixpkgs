@@ -6127,8 +6127,6 @@ with pkgs;
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
-  ps_mem = callPackage ../tools/system/ps_mem { };
-
   pscale = callPackage ../development/tools/pscale { };
 
   pulsarctl = callPackage ../tools/admin/pulsarctl { };

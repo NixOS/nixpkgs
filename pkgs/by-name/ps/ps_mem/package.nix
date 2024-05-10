@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "ps_mem";
@@ -11,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "A utility to accurately report the in core memory usage for a program";
     homepage = "https://github.com/pixelb/ps_mem";
     license = lib.licenses.lgpl21;
