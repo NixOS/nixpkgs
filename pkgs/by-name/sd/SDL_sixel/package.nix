@@ -1,27 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsixel }:
+{
+  lib,
+  fetchFromGitHub,
+  libsixel,
+  pkg-config,
+  stdenv,
+}:
 
 stdenv.mkDerivation {
   pname = "SDL_sixel";
-  version = "1.2-nightly";
+  version = "0-unstable-2016-02-06";
 
   src = fetchFromGitHub {
     owner = "saitoha";
     repo = "SDL1.2-SIXEL";
     rev = "ab3fccac6e34260a617be511bd8c2b2beae41952";
-    sha256 = "0gm2vngdac17lzw9azkhzazmfq3byjddms14gqjk18vnynfqp5wp";
+    hash = "sha256-l5eLnfV2ozAlfiTo2pr0a2BXv/pwfpX4pycw1Z7doj4=";
   };
 
-  configureFlags = [ "--enable-video-sixel" ];
-
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ libsixel ];
 
-  meta = with lib; {
-    description = "A cross-platform multimedia library, that supports sixel graphics on consoles";
+  configureFlags = [
+    (lib.enableFeature true "video-sixel")
+  ];
+
+  strictDeps = true;
+
+  meta = {
+    homepage = "https://github.com/saitoha/SDL1.2-SIXEL";
+    description = "A SDL 1.2 patched with libsixel support";
+    license = lib.licenses.lgpl21;
     mainProgram = "sdl-config";
-    homepage    = "https://github.com/saitoha/SDL1.2-SIXEL";
-    maintainers = with maintainers; [ vrthra ];
-    platforms   = platforms.linux;
-    license     = licenses.lgpl21;
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ vrthra ]);
+    platforms = lib.platforms.linux;
   };
 }
