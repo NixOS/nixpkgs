@@ -1,0 +1,54 @@
+From 26b700af5ba3e64bf96186d95949ad4116243b9c Mon Sep 17 00:00:00 2001
+From: "torvic9@mailbox.org" <torvic9@mailbox.org>
+Date: Fri, 9 Apr 2021 15:28:23 +0200
+Subject: [PATCH v2] kbuild: allow setting zstd compression level for modules
+
+Zstd offers a very fine-grained control of compression ratios.
+Add a Kconfig option that allows setting the desired compression
+level for module compression.
+
+Based on Masahiro's linux-kbuild.
+
+Signed-off-by: Tor Vic <torvic9@mailbox.org>
+Tested-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Tested-by: Maximilian Bosch <maximilian@mbosch.me>
+---
+ kernel/module/Kconfig    | 8 ++++++++
+ scripts/Makefile.modinst | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 33a2e991f608..076b18dd3941 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -317,6 +317,14 @@ config MODULE_COMPRESS_ZSTD
+ 
+ endchoice
+ 
++config MODULE_COMPRESS_ZSTD_LEVEL
++	int "Compression level (1-19)"
++	depends on MODULE_COMPRESS_ZSTD
++	range 1 19
++	default 3
++	help
++	  Compression level used by zstd for compressing modules.
++
+ config MODULE_DECOMPRESS
+ 	bool "Support in-kernel module decompression"
+ 	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ || MODULE_COMPRESS_ZSTD
+diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+index ab0c5bd1a60f..480d47eca36a 100644
+--- a/scripts/Makefile.modinst
++++ b/scripts/Makefile.modinst
+@@ -101,7 +101,7 @@ quiet_cmd_gzip = GZIP    $@
+ quiet_cmd_xz = XZ      $@
+       cmd_xz = $(XZ) --lzma2=dict=2MiB -f $<
+ quiet_cmd_zstd = ZSTD    $@
+-      cmd_zstd = $(ZSTD) -T0 --rm -f -q $<
++      cmd_zstd = $(ZSTD) -$(CONFIG_MODULE_COMPRESS_ZSTD_LEVEL) -T0 --rm -f -q $<
+ 
+ $(dst)/%.ko.gz: $(dst)/%.ko FORCE
+ 	$(call cmd,gzip)
+-- 
+2.42.0
+
