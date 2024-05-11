@@ -1,16 +1,16 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
 , certifi
 , charset-normalizer
 , courlan
+, fetchPypi
 , htmldate
 , justext
 , lxml
-, urllib3
+, pytestCheckHook
+, pythonOlder
 , setuptools
+, urllib3
 }:
 
 buildPythonPackage rec {
@@ -25,11 +25,20 @@ buildPythonPackage rec {
     hash = "sha256-5oM9KauKE+2FOTfXyR5oaLxi774QIUrCsQZDbdI9FBI=";
   };
 
-  nativeBuildInputs = [
+  # Patch out gui cli because it is not supported in this packaging and
+  # nixify path to the trafilatura binary in the test suite
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail '"trafilatura_gui=trafilatura.gui:main",' ""
+    substituteInPlace tests/cli_tests.py \
+      --replace-fail "trafilatura_bin = 'trafilatura'" "trafilatura_bin = '$out/bin/trafilatura'"
+  '';
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     charset-normalizer
     courlan
@@ -55,15 +64,6 @@ buildPythonPackage rec {
     "test_redirection"
     "test_whole"
   ];
-
-  # patch out gui cli because it is not supported in this packaging
-  # nixify path to the trafilatura binary in the test suite
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail '"trafilatura_gui=trafilatura.gui:main",' ""
-    substituteInPlace tests/cli_tests.py \
-      --replace-fail "trafilatura_bin = 'trafilatura'" "trafilatura_bin = '$out/bin/trafilatura'"
-  '';
 
   pythonImportsCheck = [
     "trafilatura"
