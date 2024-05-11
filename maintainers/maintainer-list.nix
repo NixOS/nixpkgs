@@ -21903,6 +21903,12 @@
     github = "wr0belj";
     githubId = 40501814;
   };
+  wr7 = {
+    name = "wr7";
+    email = "d-wr7@outlook.com";
+    github = "wr7";
+    githubId = 53203261;
+  };
   wraithm = {
     name = "Matthew Wraith";
     email = "wraithm@gmail.com";
