@@ -1,10 +1,10 @@
 { lib, fetchFromGitHub, substituteAll, buildPythonPackage, isPy3k, gnutls
-, twisted, pyopenssl, service-identity }:
+, twisted, pyopenssl, service-identity, setuptools }:
 
 buildPythonPackage rec {
   pname = "python3-gnutls";
   version = "3.1.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = !isPy3k;
 
@@ -14,6 +14,8 @@ buildPythonPackage rec {
     rev = "324b78f7cd3d9fe58c89c7f0b2bf94199bd6a6e5"; # version not tagged
     hash = "sha256-18T8bAHlNERHobsspUFvSC6ulN55nrFFb5aqNwU8T00=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ twisted pyopenssl service-identity ];
 
