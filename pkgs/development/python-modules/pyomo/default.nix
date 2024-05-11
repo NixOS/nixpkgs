@@ -5,12 +5,13 @@
 , ply
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
   version = "6.7.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-v3KVb9KZPbUlpRySzJV8dmApScKT06aJc8SULCHcnPI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ply
   ];
 
@@ -53,10 +58,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Optimization Modeling Objects";
-    mainProgram = "pyomo";
-    homepage = "http://pyomo.org";
+    homepage = "http://www.pyomo.org/";
     changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    mainProgram = "pyomo";
   };
 }
