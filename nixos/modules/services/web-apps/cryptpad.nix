@@ -74,6 +74,19 @@ in {
             default = 3000;
             description = mdDoc "Port on which the Node.js server should listen";
           };
+          httpSafePort = mkOption {
+            type = types.int;
+            default = 0;
+            description = mdDoc "Port for 'safe origin', need to set to 0 to disable";
+          };
+          websocketPort = mkOption {
+            type = types.int;
+            default = 3003;
+            description = mdDoc ''
+              Port for the websocket (/cryptpad_websocket).
+              This is needed even if it's not proxied and cannot be disabled.
+            '';
+          };
           maxWorkers = mkOption {
             type = types.nullOr types.int;
             default = null;
@@ -173,30 +186,13 @@ in {
         enable = true;
         recommendedTlsSettings = true;
 
-        # FIXME: Check / compare this with [Nginx module configuration in nixpkgs](https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/services/web-servers/nginx/default.nix).
-        # Find out why Cryptpad has this in their documetation. Does this decrease the security of a Cryptpad install
-        # if not used?
-        # diffie-hellman parameters are used to negotiate keys for your session
-        # generate strong parameters using the following command
-        # ssl_dhparam /etc/nginx/dhparam.pem; # openssl dhparam -out /etc/nginx/dhparam.pem 4096
-        #
-        # sslDhparam = null;
-
-        # FIXME: Check / compare this with [Nginx module configuration in nixpkgs](https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/services/web-servers/nginx/default.nix).
-        # Find out why Cryptpad has this in their documentation. Does this decrease the security of a Cryptpad install
-        # if not used?
-        # replace with the IP address of your resolver
-        # resolver 8.8.8.8 8.8.4.4 1.1.1.1 1.0.0.1 9.9.9.9 149.112.112.112 208.67.222.222 208.67.220.220;
-        #
-        # resolver = {};
-
         virtualHosts = mkMerge [
           {
             "${mainDomain}" = {
               serverAliases = lib.optionals (cfg.settings.httpSafeOrigin != null) [ sandboxDomain ];
               # NOTE: I see no reason not to enable ACME and forcing SSL if you enable Nginx for
               # Cryptpad, IMHO. Given the security context of Cryptpad, it should only ever be used with SSL.
-              enableACME = true;
+              enableACME = lib.mkDefault true;
               forceSSL = true;
               locations."/" = {
                 proxyPass = "http://${cfg.settings.httpAddress}:${builtins.toString cfg.settings.httpPort}";
