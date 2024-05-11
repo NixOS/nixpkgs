@@ -52,6 +52,10 @@ in stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./0.18.2-CVE-2024-31040.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "DESTINATION /etc" "DESTINATION $out/etc"
