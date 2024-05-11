@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "minidb";
-  version = "2.0.7";
+  version = "2.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "thp";
     repo = "minidb";
     rev = "refs/tags/${version}";
-    hash = "sha256-0f2usKoHs4NO/Ir8MhyiAVZFYnUkVH5avdh3QdHzY6s=";
+    hash = "sha256-e7wVR+xr+5phNoRnGIxnmrjB1QU9JmyfQiu88PYapA8=";
   };
 
   nativeCheckInputs = [
