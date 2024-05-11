@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, capstone
-, click
-, cryptography
-, dnfile
-, fetchFromGitHub
-, pefile
-, pycryptodomex
-, pyelftools
-, pythonOlder
-, pytestCheckHook
-, typing-extensions
-, yara-python
+{
+  lib,
+  buildPythonPackage,
+  capstone,
+  click,
+  cryptography,
+  dnfile,
+  fetchFromGitHub,
+  pefile,
+  pycryptodomex,
+  pyelftools,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  typing-extensions,
+  yara-python,
 }:
 
 buildPythonPackage rec {
   pname = "malduck";
-  version = "4.4.0";
-  format = "setuptools";
+  version = "4.4.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "malduck";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CXHbU1AudvOJrG9MKYDQXeEtwrJODRPQtK43dQzZASE=";
+    hash = "sha256-Btx0HxiZWrb0TDpBokQGtBE2EDK0htONe/DwqlPgAd4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     capstone
     click
     cryptography
@@ -40,26 +44,16 @@ buildPythonPackage rec {
     yara-python
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "pefile==2019.4.18" "pefile" \
-      --replace "dnfile==0.11.0" "dnfile"
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "malduck"
-  ];
+  pythonImportsCheck = [ "malduck" ];
 
   meta = with lib; {
     description = "Helper for malware analysis";
-    mainProgram = "malduck";
     homepage = "https://github.com/CERT-Polska/malduck";
     changelog = "https://github.com/CERT-Polska/malduck/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "malduck";
   };
 }
