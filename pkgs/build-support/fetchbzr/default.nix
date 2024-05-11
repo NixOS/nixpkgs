@@ -12,4 +12,6 @@ stdenvNoCC.mkDerivation {
   outputHash = sha256;
 
   inherit url rev;
+
+  meta.repository = [ url ];
 }
