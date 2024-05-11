@@ -1,4 +1,11 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, nix-update-script
+
+# Runtime dependencies
+, procps, coreutils, util-linux, ethtool, socat, iptables, bridge-utils, iproute2, kmod, lvm2
+
+# Testing dependencies
+, nixosTests, testers, rke2
+}:
 
 buildGoModule rec {
   pname = "rke2";
@@ -21,13 +28,35 @@ buildGoModule rec {
     sed -e 's/STATIC_FLAGS=.*/STATIC_FLAGS=/g' -i scripts/build-binary
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  # Important utilities used by the kubelet.
+  # See: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-237202494
+  # Notice the list in that issue is stale, but as a redundancy reservation.
+  buildInputs = [
+    procps # pidof pkill
+    coreutils # uname touch env nice du
+    util-linux # lsblk fsck mkfs nsenter mount umount
+    ethtool # ethtool
+    socat # socat
+    iptables # iptables iptables-restore iptables-save
+    bridge-utils # brctl
+    iproute2 # ip tc
+    kmod # modprobe
+    lvm2 # dmsetup
+  ];
+
   buildPhase = ''
     DRONE_TAG="v${version}" ./scripts/build-binary
   '';
 
   installPhase = ''
     install -D ./bin/rke2 $out/bin/rke2
+    wrapProgram $out/bin/rke2 \
+      --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";
@@ -36,6 +65,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm zygot ];
     mainProgram = "rke2";
-    broken = stdenv.isDarwin;
+    platforms = platforms.linux;
   };
 }
