@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, installShellFiles, myks, stdenv
+{ lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  installShellFiles,
+  myks,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -8,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-PaA8j4BWijhPR3DTZ0nnO54v0Uj/DpFdJpofseTA1+A=";
   };
 
@@ -19,9 +25,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=nixpkg-${src.rev}"
-    "-X main.date=1970-01-01"
+    "-X=main.version=${version}"
+    "-X=main.commit=nixpkg-${version}"
+    "-X=main.date=1970-01-01"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
