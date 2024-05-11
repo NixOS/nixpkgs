@@ -1,17 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
-  version = "unstable-2023-10-23";
+  version = "0-unstable-2024-06-23";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "durden";
-    rev = "347dba6da011bbaa70c6edaf82a2d915f4057db3";
-    hash = "sha256-iNf7fOzz7mf1CXG5leCenkSTrdCc9/KL8VLw8gUIyKE=";
+    rev = "dffb94b69355ffa9cda074c1d0a48af74b78c220";
+    hash = "sha256-sBhlBk4vAYwedw4VerUfY80SXbVoEDid54si6qwDeXs=";
   };
 
   dontConfigure = true;
