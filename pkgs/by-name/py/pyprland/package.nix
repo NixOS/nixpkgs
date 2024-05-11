@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -56,6 +57,8 @@ python3Packages.buildPythonApplication rec {
     "pyprland.plugins.toggle_special"
     "pyprland.plugins.workspaces_follow_focus"
   ];
+
+  passthru.updateScript = nix-update-script {};
 
   meta = {
     mainProgram = "pypr";
