@@ -9996,6 +9996,8 @@ self: super: with self; {
 
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
 
+  pwinput = callPackage ../development/python-modules/pwinput { };
+
   pybars3 = callPackage ../development/python-modules/pybars3 { };
 
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
