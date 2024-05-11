@@ -2,14 +2,18 @@
 , buildPythonPackage
 , fetchFromGitHub
 , lxml
-, six
+, lxml-html-clean
 , pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "html-text";
   version = "0.6.2";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zytedata";
@@ -18,13 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-e9gkibQv8mn1Jbt77UmpauOeTqhJQhY9R5Sge/iYi+U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     lxml
+    lxml-html-clean
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    six
   ];
 
   pythonImportsCheck = [ "html_text" ];
