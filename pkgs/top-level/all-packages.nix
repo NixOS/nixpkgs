@@ -6176,7 +6176,7 @@ with pkgs;
     zig = zig_0_11;
   };
 
-  rivercarro = callPackage ../applications/misc/rivercarro {
+  rivercarro = callPackage ../by-name/ri/rivercarro/package.nix {
     zig = zig_0_11;
   };
 
