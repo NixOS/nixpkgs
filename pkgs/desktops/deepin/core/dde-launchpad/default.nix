@@ -2,55 +2,45 @@
 , lib
 , fetchFromGitHub
 , cmake
-, qttools
 , pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, dtkdeclarative
-, qtbase
+, qt6Packages
+, dtk6declarative
 , appstream-qt
 , kitemmodels
-, qt5integration
+, dde-shell
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-launchpad";
-  version = "0.4.4";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-az8BC3n44NGpATNu3Exjn3H7Rumx/YqDXztEGqCpAbY=";
+    hash = "sha256-MVSWcUqbZDloKKfly+E7HLObpJlj0Oq8G8pP5Lkpriw=";
   };
-
-  postPatch = ''
-    substituteInPlace desktopintegration.cpp \
-      --replace "AppStreamQt/pool.h" "AppStreamQt5/pool.h"
-  '';
 
   nativeBuildInputs = [
     cmake
-    qttools
     pkg-config
-    wrapQtAppsHook
+    qt6Packages.qttools
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    dtkwidget
-    dtkdeclarative
+    dtk6declarative
+    dde-shell
+    #kitemmodels
+  ] ++ (with qt6Packages ; [
     qtbase
+    qtsvg
+    qtwayland
     appstream-qt
-    kitemmodels
-  ];
+  ]);
 
   cmakeFlags = [
     "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
-  ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
   ];
 
   meta = with lib; {
