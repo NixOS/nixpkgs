@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hypothesis
-, marshmallow-enum
+, marshmallow
 , poetry-core
 , poetry-dynamic-versioning
 , pytestCheckHook
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     typing-inspect
-    marshmallow-enum
+    marshmallow
   ];
 
   nativeCheckInputs = [
