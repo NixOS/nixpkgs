@@ -5,28 +5,33 @@
 , ply
 , pythonOlder
 , six
+, setuptools
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "thriftpy2";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Thriftpy";
-    repo = pname;
+    repo = "thriftpy2";
     rev = "refs/tags/v${version}";
     hash = "sha256-Pjy9OPwFfKaw+XVl7IbbAKPz050TlqI4+yLqSITOkSY=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeBuildInputs = [
     cython
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ply
     six
     tornado
