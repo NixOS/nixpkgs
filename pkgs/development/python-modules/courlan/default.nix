@@ -1,13 +1,14 @@
-{ lib
-, babel
-, buildPythonPackage
-, fetchPypi
-, langcodes
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tld
-, urllib3
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchPypi,
+  langcodes,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tld,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace-fail "/tmp" "$TMPDIR"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     babel
@@ -41,14 +40,10 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # disable tests that require an internet connection
-  disabledTests = [
-    "test_urlcheck"
-  ];
+  disabledTests = [ "test_urlcheck" ];
 
   pythonImportsCheck = [ "courlan" ];
 
