@@ -7,9 +7,13 @@
 , makeWrapper
 , mimalloc
 , orc
-, nix-update-script
+, yq
+, runCommand
+, gitUpdater
 , mpv-unwrapped
 , libplacebo
+, _experimental-update-script-combinators
+, flet-client-flutter
 }:
 
 flutter.buildFlutterApplication rec {
@@ -51,7 +55,19 @@ flutter.buildFlutterApplication rec {
     ++ libplacebo.buildInputs
   ;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    pubspecSource = runCommand "pubspec.lock.json" {
+        buildInputs = [ yq ];
+        inherit (flet-client-flutter) src;
+      } ''
+      cat $src/client/pubspec.lock | yq > $out
+    '';
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "flet-client-flutter.pubspecSource" ./pubspec.lock.json)
+    ];
+  };
 
   meta = {
     description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python. The frontend part";
