@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,13 +25,9 @@ python3Packages.buildPythonApplication rec {
     "typer"
   ];
 
-  build-system = with python3Packages; [
-    poetry-core
-  ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     aiohttp
@@ -47,9 +44,7 @@ python3Packages.buildPythonApplication rec {
     typer
   ];
 
-  pythonImportsCheck = [
-    "oterm"
-  ];
+  pythonImportsCheck = [ "oterm" ];
 
   # Tests require a HTTP connection to ollama
   doCheck = false;
