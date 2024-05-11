@@ -19993,7 +19993,7 @@ with pkgs;
     zig = zig_0_11;
   };
 
-  ztags = callPackage ../development/tools/misc/ztags {
+  ztags = callPackage ../by-name/zt/ztags/package.nix {
     zig = zig_0_11;
   };
 
