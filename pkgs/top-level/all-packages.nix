@@ -41090,7 +41090,7 @@ with pkgs;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
-  zf = callPackage ../tools/misc/zf {
+  zf = callPackage ../by-name/zf/zf/package.nix {
     zig = zig_0_11;
   };
 
