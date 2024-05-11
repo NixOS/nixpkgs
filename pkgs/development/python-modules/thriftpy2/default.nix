@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, ply
-, pythonOlder
-, six
-, setuptools
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  ply,
+  pythonOlder,
+  six,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-Pjy9OPwFfKaw+XVl7IbbAKPz050TlqI4+yLqSITOkSY=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   dependencies = [
     ply
@@ -40,9 +37,7 @@ buildPythonPackage rec {
   # Not all needed files seems to be present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "thriftpy2"
-  ];
+  pythonImportsCheck = [ "thriftpy2" ];
 
   meta = with lib; {
     description = "Python module for Apache Thrift";
