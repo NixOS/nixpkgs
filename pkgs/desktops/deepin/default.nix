@@ -49,6 +49,7 @@ let
     dpa-ext-gnomekeyring = callPackage ./core/dpa-ext-gnomekeyring { };
     dde-gsettings-schemas = callPackage ./core/dde-gsettings-schemas { };
     dde-widgets = callPackage ./core/dde-widgets { };
+    dde-shell = callPackage ./core/dde-shell { };
 
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
