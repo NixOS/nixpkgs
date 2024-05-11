@@ -5,6 +5,7 @@
 , caddy
 , testers
 , installShellFiles
+, stdenv
 }:
 let
   version = "2.7.6";
@@ -40,8 +41,13 @@ buildGoModule {
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
 
-    substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
-    substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy.service \
+      --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy-api.service \
+      --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # Generating man pages and completions fail on cross-compilation
+    # https://github.com/NixOS/nixpkgs/issues/308283
 
     $out/bin/caddy manpage --directory manpages
     installManPage manpages/*
