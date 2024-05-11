@@ -602,7 +602,7 @@ with pkgs;
 
   dsq = callPackage ../tools/misc/dsq { };
 
-  dt = callPackage ../tools/text/dt {
+  dt = callPackage ../by-name/dt/dt/package.nix {
     zig = zig_0_11;
   };
 
