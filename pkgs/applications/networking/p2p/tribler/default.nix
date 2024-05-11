@@ -6,6 +6,7 @@
 , makeWrapper
 , libtorrent-rasterbar-1_2_x
 , qt5
+, nix-update-script
 }:
 
 let
@@ -13,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tribler";
-  version = "7.13.0";
+  version = "7.14.0";
 
   src = fetchurl {
     url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-${version}.tar.xz";
-    hash = "sha256-j9+Kq6dOqiJCTY3vuRWGnciuwACU7L0pl73l6nkDLN4=";
+    hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     yappi
     yarl
     bitarray
+    filelock
     (pyipv8.overrideAttrs (p: rec {
       version = "2.10.0";
       src = fetchPypi {
@@ -68,7 +70,6 @@ stdenv.mkDerivation rec {
         hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
       };
     }))
-    libtorrent
     file-read-backwards
     brotli
     human-readable
@@ -105,6 +106,8 @@ stdenv.mkDerivation rec {
     export PYTHONPATH=./tribler-core:./tribler-common:./tribler-gui:$program_PYTHONPATH
     export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
