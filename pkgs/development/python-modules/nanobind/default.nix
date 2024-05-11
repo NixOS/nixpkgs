@@ -51,8 +51,10 @@ buildPythonPackage rec {
     scipy
     torch
     tensorflow
-    jax
-    jaxlib
+    # Uncomment at next release (1.9.3)
+    # See https://github.com/wjakob/nanobind/issues/578
+    # jax
+    # jaxlib
   ];
 
   meta = with lib; {
