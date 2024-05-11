@@ -55,5 +55,7 @@ else
     inherit url change state channel;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
+    meta.repository = [ url ];
   }
 )
