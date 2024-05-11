@@ -9994,7 +9994,7 @@ with pkgs;
 
   ministat = callPackage ../tools/misc/ministat { };
 
-  minizign = callPackage ../tools/security/minizign {
+  minizign = callPackage ../by-name/mi/minizign/package.nix {
     zig = zig_0_11;
   };
 
