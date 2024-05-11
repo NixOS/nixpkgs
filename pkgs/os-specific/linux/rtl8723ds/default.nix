@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8723ds";
-  version = "${kernel.version}-unstable-2022-12-01";
+  version = "${kernel.version}-unstable-2023-11-14";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtl8723ds";
-    rev = "a638cc8639015b8b9390af3350fab0366b6c87e7";
-    sha256 = "sha256-qfVE7k71NPzw3FwoOaUxH66PnDjbpMAF6CyOyUVdSMA=";
+    rev = "52e593e8c889b68ba58bd51cbdbcad7fe71362e4";
+    sha256 = "sha256-SszvDuWN9opkXyVQAOLjnNtPp93qrKgnGvzK0y7Y9b0=";
   };
 
   hardeningDisable = [ "pic" ];

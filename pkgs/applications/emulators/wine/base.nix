@@ -12,10 +12,9 @@
 with import ./util.nix { inherit lib; };
 
 let
-  patches' = patches;
   prevName = pname;
-  prevPlatforms = platforms;
   prevConfigFlags = configureFlags;
+
   setupHookDarwin = makeSetupHook {
     name = "darwin-mingw-hook";
     substitutions = {
@@ -23,30 +22,37 @@ let
       mingwGccsSuffixSalts = map (gcc: gcc.suffixSalt) mingwGccs;
     };
   } ./setup-hook-darwin.sh;
-  darwinUnsupportedFlags = [ "alsaSupport" "cairoSupport" "dbusSupport" "fontconfigSupport" "gtkSupport" "netapiSupport" "pulseaudioSupport" "udevSupport" "v4lSupport" "vaSupport" "waylandSupport" "x11Support" "xineramaSupport" ];
-  darwinUnsupported = builtins.any (name: builtins.getAttr name supportFlags) darwinUnsupportedFlags;
+
+  darwinFrameworks = lib.optionals stdenv.isDarwin (
+    toBuildInputs pkgArches (pkgs: with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
+      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
+      ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
+    ])
+  );
+  # Building Wine with these flags isn’t supported on Darwin. Using any of them will result in an evaluation failures
+  # because they will put Darwin in `meta.badPlatforms`.
+  darwinUnsupportedFlags = [
+    "alsaSupport" "cairoSupport" "dbusSupport" "fontconfigSupport" "gtkSupport" "netapiSupport" "pulseaudioSupport"
+    "udevSupport" "v4lSupport" "vaSupport" "waylandSupport" "x11Support" "xineramaSupport"
+  ];
+
+  badPlatforms = lib.optional (!supportFlags.mingwSupport || lib.any (flag: supportFlags.${flag}) darwinUnsupportedFlags) "x86_64-darwin";
 in
-stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
-  builder = buildScript;
-}) // (lib.optionalAttrs stdenv.isDarwin {
-  postConfigure = ''
-    # dynamic fallback, so this shouldn’t cause problems for older versions of macOS and will
-    # provide additional functionality on newer ones. This can be removed once the x86_64-darwin
-    # SDK is updated.
-    sed 's|/\* #undef HAVE_MTLDEVICE_REGISTRYID \*/|#define HAVE_MTLDEVICE_REGISTRYID 1|' \
-      -i include/config.h
-  '';
-  postBuild = ''
-    # The Wine preloader must _not_ be linked to any system libraries, but `NIX_LDFLAGS` will link
-    # to libintl, libiconv, and CoreFoundation no matter what. Delete the one that was built and
-    # rebuild it with empty NIX_LDFLAGS.
-    for preloader in wine-preloader wine64-preloader; do
-      rm loader/$preloader &> /dev/null \
-      && ( echo "Relinking loader/$preloader"; make loader/$preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}="" ) \
-      || echo "loader/$preloader not built, skipping relink."
-    done
-  '';
-}) // rec {
+stdenv.mkDerivation (finalAttrs:
+lib.optionalAttrs (buildScript != null) { builder = buildScript; }
+// lib.optionalAttrs stdenv.isDarwin {
+    postBuild = ''
+      # The Wine preloader must _not_ be linked to any system libraries, but `NIX_LDFLAGS` will link
+      # to libintl, libiconv, and CoreFoundation no matter what. Delete the one that was built and
+      # rebuild it with empty NIX_LDFLAGS.
+      for preloader in wine-preloader wine64-preloader; do
+        rm loader/$preloader &> /dev/null \
+        && ( echo "Relinking loader/$preloader"; make loader/$preloader NIX_LDFLAGS="" NIX_LDFLAGS_${stdenv.cc.suffixSalt}="" ) \
+        || echo "loader/$preloader not built, skipping relink."
+      done
+    '';
+}
+// {
   inherit version src;
 
   pname = prevName + lib.optionalString (wineRelease != "stable" && wineRelease != "unstable") "-${wineRelease}";
@@ -95,10 +101,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
-  ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-     CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
-     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
-  ])
+  ++ lib.optionals stdenv.isDarwin darwinFrameworks
   ++ lib.optionals (x11Support) (with pkgs.xorg; [
     libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm
   ])
@@ -107,29 +110,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
      mesa # for libgbm
   ])));
 
-  patches = [ ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Wine uses `MTLDevice.registryID` in `winemac.drv`, but that property is not available in
-      # the 10.12 SDK (current SDK on x86_64-darwin). That can be worked around by using selector
-      # syntax. As of Wine 8.12, the logic has changed and uses selector syntax, but it still
-      # uses property syntax in one place. The first patch is necessary only with older
-      # versions of Wine. The second is needed on all versions of Wine.
-      (lib.optional (lib.versionOlder version "8.12") ./darwin-metal-compat-pre8.12.patch)
-      (lib.optional (lib.versionOlder version "8.18") ./darwin-metal-compat-pre8.18.patch)
-      (lib.optional (lib.versionAtLeast version "8.18") ./darwin-metal-compat.patch)
-      # Wine requires `qos.h`, which is not included by default on the 10.12 SDK in nixpkgs.
-      ./darwin-qos.patch
-    ]
-    ++ patches';
-
-  # Because the 10.12 SDK doesn’t define `registryID`, clang assumes the undefined selector returns
-  # `id`, which is a pointer. This causes implicit pointer to integer errors in clang 15+.
-  # The following post-processing step adds a cast to `uint64_t` before the selector invocation to
-  # silence these errors.
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -e 's|\(\[[A-Za-z_][][A-Za-z_0-9]* registryID\]\)|(uint64_t)\1|' \
-      -i dlls/winemac.drv/cocoa_display.m
-  '';
+  inherit patches;
 
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
@@ -140,7 +121,9 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = toString (map (path: "-rpath " + path) (
-      map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ buildInputs)
+      map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ]
+        # Avoid adding rpath references to non-existent framework `lib` paths.
+        ++ lib.subtractLists darwinFrameworks finalAttrs.buildInputs)
       # libpulsecommon.so is linked but not found otherwise
       ++ lib.optionals supportFlags.pulseaudioSupport (map (x: "${lib.getLib x}/lib/pulseaudio")
           (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
@@ -210,9 +193,8 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
       fromSource
       binaryNativeCode  # mono, gecko
     ];
-    broken = stdenv.isDarwin && !supportFlags.mingwSupport;
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    platforms = if darwinUnsupported then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
+    inherit badPlatforms platforms;
     maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira reckenrode ];
     inherit mainProgram;
   };
