@@ -1,4 +1,5 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, installShellFiles, myks, }:
+{ lib, buildGoModule, fetchFromGitHub, testers, installShellFiles, myks, stdenv
+}:
 
 buildGoModule rec {
   pname = "myks";
@@ -29,15 +30,16 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = myks; };
 
-  postInstall = ''
-    installShellCompletion --cmd myks \
-      --bash <($out/bin/myks completion bash) \
-      --zsh <($out/bin/myks completion zsh) \
-      --fish <($out/bin/myks completion fish)
-  '';
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd myks \
+        --bash <($out/bin/myks completion bash) \
+        --zsh <($out/bin/myks completion zsh) \
+        --fish <($out/bin/myks completion fish)
+    '';
 
   meta = with lib; {
-    changelog = "https://github.com/mykso/myks/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/mykso/myks/blob/v${version}/CHANGELOG.md";
     description = "A configuration framework for Kubernetes applications";
     license = licenses.mit;
     homepage = "https://github.com/mykso/myks";
