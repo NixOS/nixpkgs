@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "malduck";
-  version = "4.4.0";
+  version = "4.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-CXHbU1AudvOJrG9MKYDQXeEtwrJODRPQtK43dQzZASE=";
+    hash = "sha256-Btx0HxiZWrb0TDpBokQGtBE2EDK0htONe/DwqlPgAd4=";
   };
 
   propagatedBuildInputs = [
