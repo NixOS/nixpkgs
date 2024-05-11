@@ -15441,6 +15441,12 @@
     githubId = 72527881;
     name = "PassiveLemon";
   };
+  pathob = {
+    email = "patrick@hobusch.net";
+    github = "pathob";
+    githubId = 4580157;
+    name = "Patrick Hobusch";
+  };
   patka = {
     email = "patka@patka.dev";
     github = "patka-123";
