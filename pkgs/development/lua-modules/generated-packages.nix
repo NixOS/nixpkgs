@@ -2392,14 +2392,14 @@ buildLuarocksPackage {
 luasnip = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, jsregexp, lua, luaOlder }:
 buildLuarocksPackage {
   pname = "luasnip";
-  version = "2.2.0-1";
+  version = "2.3.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luasnip-2.2.0-1.rockspec";
-    sha256 = "08q98dficqzrq0jd8iqbpij9ywv2q4bm2k8l3s3spfvwqhm93zrp";
+    url    = "mirror://luarocks/luasnip-2.3.0-1.rockspec";
+    sha256 = "022srpvwwbms8i97mdhkwq0yg0pfjm7a6673iyf7cr1xj15pq23v";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/L3MON4D3/LuaSnip/archive/v2.2.0.zip";
-    sha256 = "05d5ks3g6a9dl3bmap8m60hnx3hc4acvcp2jzkw85r4anaawl45b";
+    url    = "https://github.com/L3MON4D3/LuaSnip/archive/v2.3.0.zip";
+    sha256 = "0bbackpym8k11gm32iwwzqjnqanpralanfjkl4lrs33xl7lsylqk";
   };
 
   disabled = (luaOlder "5.1");

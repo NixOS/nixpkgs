@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.12.1";
+  version = "2.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qpKuuyN5qcVITL6QHN93nVQIrJamQeSx+KLR/5dNt8k=";
+    hash = "sha256-1xLxr51E8eueG67oymT3MR4YW3Vy/DweCoOkyM7/aq0=";
   };
 
   # Remove currently broken dependency `shap`, a model explainability package.

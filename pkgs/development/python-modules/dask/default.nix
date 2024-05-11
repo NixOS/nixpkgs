@@ -39,7 +39,7 @@
 
 let self = buildPythonPackage rec {
   pname = "dask";
-  version = "2024.4.2";
+  version = "2024.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -48,7 +48,7 @@ let self = buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-iD+diwctXaQlOpL0fjOiFoWVONtlMq7AonbC0vCmXc0=";
+    hash = "sha256-2tkY02Inhpo8upTjhen//EvsZwd93roPCID215NOxwQ=";
   };
 
   nativeBuildInputs = [
@@ -191,5 +191,6 @@ let self = buildPythonPackage rec {
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }; in self

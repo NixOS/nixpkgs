@@ -2625,6 +2625,8 @@ self: super: with self; {
 
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
+  customtkinter = callPackage ../development/python-modules/customtkinter { };
+
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
@@ -6962,6 +6964,8 @@ self: super: with self; {
 
   lnkparse3 = callPackage ../development/python-modules/lnkparse3 { };
 
+  loadcredential = callPackage ../development/python-modules/loadcredential { };
+
   loca = callPackage ../development/python-modules/loca { };
 
   localimport = callPackage ../development/python-modules/localimport { };
@@ -7690,6 +7694,8 @@ self: super: with self; {
   mox3 = callPackage ../development/python-modules/mox3 { };
 
   mpd2 = callPackage ../development/python-modules/mpd2 { };
+
+  mpegdash = callPackage ../development/python-modules/mpegdash { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py { };
 
@@ -9911,6 +9917,8 @@ self: super: with self; {
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
+  pycomm3 = callPackage ../development/python-modules/pycomm3 { };
+
   pycomposefile = callPackage ../development/python-modules/pycomposefile { };
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
@@ -11154,8 +11162,6 @@ self: super: with self; {
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
 
   pyisbn = callPackage ../development/python-modules/pyisbn { };
-
-  pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
 

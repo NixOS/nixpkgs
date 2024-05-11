@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, pkg-config
+, openssl
 , rustPlatform
 , darwin
 , testers
@@ -8,12 +10,12 @@
 }:
 
 let
-  version = "2.1.0";
+  version = "2.2.1";
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
     rev = "v${version}";
-    hash = "sha256-L8UYpNqjRyqf4hPQwD9LaXWu6jYaP34yTwTxcqg+e2U=";
+    hash = "sha256-dPX8/JUQ+vugd+M/jIjBf4/sNbac0FVQ0obhyAAGI84=";
   };
 in
 rustPlatform.buildRustPackage {
@@ -21,9 +23,13 @@ rustPlatform.buildRustPackage {
 
   pname = "komac";
 
-  cargoHash = "sha256-J4QZzbyDr4SDt6LlAy9ZdpqgIufZCZHmOC9eu70wMsM=";
+  cargoHash = "sha256-CDPN90X3m/9FRLolAVCIcAuajZbB5OAgLcFXq2ICS8g=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

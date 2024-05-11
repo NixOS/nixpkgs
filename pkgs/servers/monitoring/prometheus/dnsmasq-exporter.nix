@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dnsmasq_exporter";
-  version = "0.2.0";
+  version = "unstable-2024-05-06";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "dnsmasq_exporter";
-    rev = "v${version}";
-    hash = "sha256-8r5q5imI+MxnU7+TFqdIc+JRX0zZY4pmUoAGlFqs8cQ=";
+    rev = "03f84edc208fa88e31cf00533db42e7e0c9717ca";
+    hash = "sha256-YFQ4XO3vnj2Ka3D/LS5aG6WX+qOCVTlq5khDxLoQllo=";
   };
 
-  vendorHash = "sha256-dEM0mn3JJl0M6ImWmkuvwBSfGWkhpVvZE7GtC1BQF7c=";
+  vendorHash = "sha256-oD68TCNJKwjY3iwE/pUosMIMGOhsWj9cHC/+hq3xxI4=";
 
   doCheck = false;
 

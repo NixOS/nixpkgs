@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, lib, extra ? {}, name ? "incus-container", ... } :
+import ../make-test-python.nix ({ pkgs, lib, extra ? {}, name ? "incus-container", incus ? pkgs.incus-lts, ... } :
 
 let
   releases = import ../../release.nix {
@@ -28,7 +28,10 @@ in
       memorySize = 1024;
       diskSize = 4096;
 
-      incus.enable = true;
+      incus = {
+        enable = true;
+        package = incus;
+      };
     };
     networking.nftables.enable = true;
   };

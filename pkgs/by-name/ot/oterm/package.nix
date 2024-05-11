@@ -20,6 +20,7 @@ python3Packages.buildPythonApplication rec {
     "pillow"
     "httpx"
     "packaging"
+    "typer"
   ];
 
   propagatedBuildInputs = with python3Packages; [
