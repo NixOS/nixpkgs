@@ -9764,7 +9764,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  linuxwave = callPackage ../tools/audio/linuxwave {
+  linuxwave = callPackage ../by-name/li/linuxwave/package.nix {
     zig = zig_0_10;
   };
 
