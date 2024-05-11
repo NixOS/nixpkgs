@@ -6171,7 +6171,7 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river {
+  river = callPackage ../by-name/ri/river/package.nix {
     wlroots = wlroots_0_17;
     zig = zig_0_11;
   };
