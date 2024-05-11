@@ -5,23 +5,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "forbidden";
-  version = "10.8";
+  version = "10.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivan-sincek";
     repo = "forbidden";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jitmgN+We6m5CTgRc1NYwZkg5GYvD6ZlJ8FKtTa+rAY=";
+    hash = "sha256-LggF9giKKKO2F65zS0lPCshaDauy+s6YyRGr3BL0tJU=";
   };
 
-  pythonRemoveDeps = [
-    # https://github.com/ivan-sincek/forbidden/pull/3
-    "argparse"
-  ];
-
   build-system = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
