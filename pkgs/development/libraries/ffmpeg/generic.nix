@@ -437,6 +437,11 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
         hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
       }
+      {
+        name = "CVE-2024-31578.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
+        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
+      }
     ])
     ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       { # this can be removed post 6.1
@@ -453,6 +458,11 @@ stdenv.mkDerivation (finalAttrs: {
         name = "CVE-2024-31582.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
         hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
+      }
+      {
+        name = "CVE-2024-31578.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
+        hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
       }
     ])
     ++ (lib.optionals (lib.versionAtLeast version "7.0") [
