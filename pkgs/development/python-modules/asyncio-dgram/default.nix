@@ -5,14 +5,15 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jsbronder";
@@ -21,12 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-Eb/9JtgPT2yOlfnn5Ox8M0kcQhSlRCuX8+Rq6amki8Q=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  build-system = [
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
+    pytestCheckHook
   ];
 
   # OSError: AF_UNIX path too long
