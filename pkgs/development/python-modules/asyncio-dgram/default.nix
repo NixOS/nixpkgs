@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-Eb/9JtgPT2yOlfnn5Ox8M0kcQhSlRCuX8+Rq6amki8Q=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -40,9 +39,7 @@ buildPythonPackage rec {
     "test_from_socket_bad_socket"
   ];
 
-  pythonImportsCheck = [
-    "asyncio_dgram"
-  ];
+  pythonImportsCheck = [ "asyncio_dgram" ];
 
   meta = with lib; {
     description = "Python support for higher level Datagram";
