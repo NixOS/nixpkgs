@@ -56,6 +56,7 @@ buildPythonPackage rec {
     pyyaml
     requests
     rich
+    setuptools
     unidecode
   ];
 
