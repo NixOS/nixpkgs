@@ -8021,7 +8021,7 @@ with pkgs;
 
   findutils = callPackage ../tools/misc/findutils { };
 
-  findup = callPackage ../tools/misc/findup {
+  findup = callPackage ../by-name/fi/findup/package.nix {
     zig = zig_0_10;
   };
 
