@@ -15,17 +15,12 @@
 buildPythonPackage rec {
   pname = "rnginline";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JWqzs+OqOynIAWYVgGrZiuiCqObAgGe6rBt0DcP3U6E=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "docopt-ng"
@@ -33,7 +28,15 @@ buildPythonPackage rec {
     "lxml"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     docopt-ng
     lxml
     typing-extensions
