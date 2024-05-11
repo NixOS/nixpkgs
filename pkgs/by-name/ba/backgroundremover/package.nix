@@ -3,6 +3,7 @@
 , runCommand
 , fetchFromGitHub
 , fetchurl
+, gitUpdater
 }:
 
 let
@@ -78,6 +79,7 @@ let
           backgroundremover -i ${demoImage} -o $out
         '';
       };
+      updateScript = gitUpdater { rev-prefix = "v"; };
     };
 
     doCheck = false; # no tests
