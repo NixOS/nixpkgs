@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "python3-gnutls";
-  version = "3.1.9";
+  version = "3.1.10";
   pyproject = true;
 
   disabled = !isPy3k;
@@ -11,8 +11,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-gnutls";
-    rev = "324b78f7cd3d9fe58c89c7f0b2bf94199bd6a6e5"; # version not tagged
-    hash = "sha256-18T8bAHlNERHobsspUFvSC6ulN55nrFFb5aqNwU8T00=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-AdFRF3ZlkkAoSm5rvf/09FSYIo7SsZ38sD2joOLyukA=";
   };
 
   nativeBuildInputs = [ setuptools ];
