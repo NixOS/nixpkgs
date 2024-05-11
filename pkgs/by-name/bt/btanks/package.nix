@@ -1,22 +1,29 @@
-{ lib, stdenv, fetchurl, fetchpatch, scons, pkg-config, SDL, libGL, zlib, smpeg
-, SDL_image, libvorbis, expat, zip, lua }:
+{
+  lib,
+  SDL,
+  SDL_image,
+  expat,
+  fetchpatch,
+  fetchurl,
+  libGL,
+  libvorbis,
+  lua,
+  pkg-config,
+  scons,
+  smpeg,
+  stdenv,
+  zip,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btanks";
   version = "0.9.8083";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/btanks/btanks-${finalAttrs.version}.tar.bz2";
     hash = "sha256-P9LOaitF96YMOxFPqa/xPLPdn7tqZc3JeYt2xPosQ0E=";
   };
-
-  nativeBuildInputs = [ scons pkg-config ];
-
-  buildInputs = [ SDL libGL zlib smpeg SDL_image libvorbis expat zip lua ];
-
-  enableParallelBuilding = true;
-
-  env.NIX_CFLAGS_COMPILE = "-I${SDL_image}/include/SDL";
 
   patches = [
     (fetchpatch {
@@ -42,10 +49,37 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
-    description = "Fast 2d tank arcade game";
+  nativeBuildInputs = [
+    SDL
+    pkg-config
+    scons
+    smpeg
+    zip
+  ];
+
+  buildInputs = [
+    SDL
+    SDL_image
+    expat
+    libGL
+    libvorbis
+    lua
+    smpeg
+    zlib
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL_image}/include/SDL";
+
+  enableParallelBuilding = true;
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://sourceforge.net/projects/btanks/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    description = "Fast 2d tank arcade game with multiplayer and split-screen modes";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "btanks";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (SDL.meta) platforms;
   };
-}
+})
