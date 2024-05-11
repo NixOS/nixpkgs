@@ -1,10 +1,4 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  installShellFiles,
-}:
+{ lib, buildGoModule, fetchFromGitHub, testers, installShellFiles, myks, }:
 
 buildGoModule rec {
   pname = "myks";
@@ -32,6 +26,8 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   CGO_ENABLED = 0;
+
+  passthru.tests.version = testers.testVersion { package = myks; };
 
   postInstall = ''
     installShellCompletion --cmd myks \
