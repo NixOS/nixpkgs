@@ -1515,6 +1515,8 @@ self: super: with self; {
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
 
+  binance-connector = callPackage ../development/python-modules/binance-connector { };
+
   binary = callPackage ../development/python-modules/binary { };
 
   binary2strings = callPackage ../development/python-modules/binary2strings { };

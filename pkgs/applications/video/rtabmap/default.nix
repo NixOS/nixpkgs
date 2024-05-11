@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtabmap";
-  version = "0.21.4";
+  version = "0.21.4.1";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     rev = "refs/tags/${version}";
-    hash = "sha256-HrIATYRuhFfTlO4oTRZo7CM30LFVyatZJON31Fe4HTQ=";
+    hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook3 ];

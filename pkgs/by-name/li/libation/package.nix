@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  wrapGAppsHook3,
 
-, libX11
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
-, glew
-, gtk3
+  libX11,
+  libICE,
+  libSM,
+  libXi,
+  libXcursor,
+  libXext,
+  libXrandr,
+  fontconfig,
+  glew,
+  gtk3,
 }:
 
 buildDotnetModule rec {
@@ -61,10 +62,10 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-    install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-    install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace "/usr/bin/libation" "${meta.mainProgram}"
+    install -Dm644 LoadByOS/LinuxConfigApp/libation_glass.svg $out/share/icons/hicolor/scalable/apps/libation.svg
+    install -Dm644 LoadByOS/LinuxConfigApp/Libation.desktop $out/share/applications/libation.desktop
+    substituteInPlace $out/share/applications/libation.desktop \
+        --replace-fail "/usr/bin/libation" "${meta.mainProgram}"
   '';
 
   # wrap manually, because we need lower case excutables
