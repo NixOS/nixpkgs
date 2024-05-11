@@ -13,19 +13,19 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.6";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "v${version}";
-    hash = "sha256-7YG15kt+pIxAK22QYiTApu5lBV6Afe3Jss6L5dTGsGI=";
+    hash = "sha256-1mgtyOXSvovO2f4XSdirzTIcUlbFoT9t/UFa2uW5CpI=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-0.11.0" = "sha256-UzZ0tbC6Dhn178GQDyLl70WTp3h5WdaBCsEKgLisZ2M=";
+      "typst-0.11.0" = "sha256-J3oSrxylR00r3Tc4KDmuW6ungQkoYJiI7cZEpbyyNsc=";
       "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
       "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
     };
