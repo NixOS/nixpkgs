@@ -32,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.10.0";
+  version = "0.11.0";
 
 
   availableAccelerations = flatten [
@@ -78,7 +78,7 @@ let
   # to use a specific device type as it is relying on llama-cpp only being
   # built to use one type of device.
   #
-  # See: https://github.com/TabbyML/tabby/blob/v0.10.0/crates/llama-cpp-bindings/include/engine.h#L20
+  # See: https://github.com/TabbyML/tabby/blob/v0.11.0/crates/llama-cpp-bindings/include/engine.h#L20
   #
   llamaccpPackage = llama-cpp.override {
     rocmSupport = enableRocm;
@@ -108,13 +108,14 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     rev = "v${version}";
-    hash = "sha256-Oi4KY2H6/dSBydjvPmycdinXUWCdbbhV32wKRvjjnuo=";
+    hash = "sha256-7PHCvI2/QSFVs6SAXrx8rohU5Wu8QRaqsI1CimnUGQY=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "apalis-0.5.1" = "sha256-hGvVuSy32lSTR5DJdiyf8q1sXbIeuLSGrtyq6m2QlUQ=";
       "tree-sitter-c-0.20.6" = "sha256-Etl4s29YSOxiqPo4Z49N6zIYqNpIsdk/Qd0jR8jdvW4=";
       "tree-sitter-cpp-0.20.3" = "sha256-UrQ48CoUMSHmlHzOMu22c9N4hxJtHL2ZYRabYjf5byA=";
       "tree-sitter-solidity-0.0.3" = "sha256-b+LthCf+g19sjKeNgXZmUV0RNi94O3u0WmXfgKRpaE0=";
