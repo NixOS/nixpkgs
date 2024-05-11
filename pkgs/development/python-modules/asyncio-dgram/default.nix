@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "asyncio-dgram";
-  version = "2.1.2";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "jsbronder";
-    repo = pname;
-    rev = "refs/tagsv${version}";
+    repo = "asyncio-dgram";
+    rev = "refs/tags/v${version}";
     hash = "sha256-Eb/9JtgPT2yOlfnn5Ox8M0kcQhSlRCuX8+Rq6amki8Q=";
   };
 
