@@ -101,10 +101,14 @@ stdenvNoCC.mkDerivation {
   ];
 
 
-  inherit preferLocalBuild meta allowedRequisites;
+  inherit preferLocalBuild allowedRequisites;
 
   passthru = {
     gitRepoUrl = url;
   };
+
+  meta = {
+    repository = [ url ];
+  } // meta;
 }
 )
