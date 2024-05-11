@@ -48,6 +48,27 @@ buildPythonPackage rec {
     "test_s3_info"
   ];
 
+  pytestFlagsArray = [
+    # Fail with RecursionError
+    # https://github.com/ome/ome-zarr-py/issues/352
+    "--deselect=tests/test_cli.py::TestCli::test_astronaut_download"
+    "--deselect=tests/test_cli.py::TestCli::test_astronaut_info"
+    "--deselect=tests/test_cli.py::TestCli::test_coins_info"
+    "--deselect=tests/test_emitter.py::test_close"
+    "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
+    "--deselect=tests/test_node.py::TestNode::test_image"
+    "--deselect=tests/test_node.py::TestNode::test_label"
+    "--deselect=tests/test_node.py::TestNode::test_labels"
+    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_download"
+    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_info"
+    "--deselect=tests/test_reader.py::TestReader::test_image"
+    "--deselect=tests/test_reader.py::TestReader::test_label"
+    "--deselect=tests/test_reader.py::TestReader::test_labels"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_label"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_labels"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_top_level"
+  ];
+
   pythonImportsCheck = [
     "ome_zarr"
     "ome_zarr.cli"
