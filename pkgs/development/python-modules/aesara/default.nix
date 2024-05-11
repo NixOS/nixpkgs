@@ -16,6 +16,7 @@
 , numba-scipy
 , numpy
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , scipy
 , typing-extensions
@@ -26,7 +27,8 @@ buildPythonPackage rec {
   version = "2.9.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # Python 3.12 is not supported: https://github.com/aesara-devs/aesara/issues/1520
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
