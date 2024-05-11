@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, certifi
-, charset-normalizer
-, courlan
-, fetchPypi
-, htmldate
-, justext
-, lxml
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  charset-normalizer,
+  courlan,
+  fetchPypi,
+  htmldate,
+  justext,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace-fail "trafilatura_bin = 'trafilatura'" "trafilatura_bin = '$out/bin/trafilatura'"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     certifi
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disable tests that require an internet connection
@@ -65,9 +62,7 @@ buildPythonPackage rec {
     "test_whole"
   ];
 
-  pythonImportsCheck = [
-    "trafilatura"
-  ];
+  pythonImportsCheck = [ "trafilatura" ];
 
   meta = with lib; {
     description = "Python package and command-line tool designed to gather text on the Web";
