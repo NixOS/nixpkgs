@@ -61,5 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
       "libva-glx" "libva-wayland" "libva-x11"
     ];
     platforms = platforms.unix;
+    badPlatforms = [
+      # Mandatory libva shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })
