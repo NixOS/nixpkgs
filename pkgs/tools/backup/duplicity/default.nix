@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , python3
 , librsync
+, glib
 , ncftp
 , gnupg
 , gnutar
@@ -10,6 +11,7 @@
 , util-linux
 , rsync
 , makeWrapper
+, wrapGAppsNoGuiHook
 , gettext
 , getconf
 , testers
@@ -57,11 +59,14 @@ let self = python3.pkgs.buildPythonApplication rec {
     makeWrapper
     gettext
     python3.pkgs.wrapPython
+    wrapGAppsNoGuiHook
     python3.pkgs.setuptools-scm
   ];
 
   buildInputs = [
     librsync
+    # For Gio typelib
+    glib
   ];
 
   pythonPath = with python3.pkgs; [
@@ -99,7 +104,10 @@ let self = python3.pkgs.buildPythonApplication rec {
     fasteners
   ]);
 
-  postInstall = let
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = let
     binPath = lib.makeBinPath ([
       gnupg
       ncftp
@@ -107,8 +115,16 @@ let self = python3.pkgs.buildPythonApplication rec {
     ] ++ lib.optionals stdenv.isDarwin [
       getconf
     ]); in ''
-    wrapProgram $out/bin/duplicity \
+    makeWrapperArgsBak=("''${makeWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix PATH : "${binPath}"
+    )
+  '';
+
+  postFixup = ''
+    # Restore previous value for tests wrapping in preInstallCheck
+    makeWrapperArgs=("''${makeWrapperArgsBak[@]}")
   '';
 
   preCheck = ''

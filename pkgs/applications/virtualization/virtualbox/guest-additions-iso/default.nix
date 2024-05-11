@@ -1,22 +1,11 @@
-{ stdenv, fetchurl, lib, virtualbox}:
+{ fetchurl, lib, virtualbox}:
 
 let
   inherit (virtualbox) version;
 in
-stdenv.mkDerivation rec {
-  pname = "VirtualBox-GuestAdditions-iso";
-  inherit version;
-
-  src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0efbcb9bf4722cb19292ae00eba29587432e918d3b1f70905deb70f7cf78e8ce";
-  };
-
-  buildCommand = ''
-    mkdir -p $out
-    cp $src $out/
-  '';
-
+fetchurl {
+  url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
+  sha256 = "0efbcb9bf4722cb19292ae00eba29587432e918d3b1f70905deb70f7cf78e8ce";
   meta = {
     description = "Guest additions ISO for VirtualBox";
     longDescription = ''

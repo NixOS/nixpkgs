@@ -12,18 +12,18 @@
 , vulkan-loader
 , xorg
 
-, nix-update-script
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "unstable-2024-03-04";
+  version = "0-unstable-2024-05-08";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "1bfdf67358add5f573efedbec1fa65d18b790e0e";
-    hash = "sha256-qF5oMI9B5a1oE2gQb/scbom/39Efccja0pTPHHaHMA8=";
+    rev = "5ddd6024efafa82c7a432c9dd8a67e3d5c3f9b38";
+    hash = "sha256-m6Xhi6xlDWiVqtYyxpQP2vp5JsB2EKsoXkmd0IYtPQ8=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +52,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch=openxr" ];
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+    branch = "openxr";
   };
 
   meta = with lib; {

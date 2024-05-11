@@ -1962,7 +1962,7 @@
   };
   atry = {
     name = "Bo Yang";
-    email = "atry@fb.com";
+    email = "yang-bo@yang-bo.com";
     github = "Atry";
     githubId = 601530;
   };
@@ -5382,6 +5382,12 @@
     github = "dramaturg";
     githubId = 472846;
     name = "Sebastian Krohn";
+  };
+  drawbu = {
+    email = "clement21.boillot@gmail.com";
+    github = "drawbu";
+    githubId = 69208565;
+    name = "Clément Boillot";
   };
   drets = {
     email = "dmitryrets@gmail.com";
@@ -13808,6 +13814,12 @@
     githubId = 133448;
     name = "Mikołaj Siedlarek";
   };
+  msladecek = {
+    email = "martin.sladecek+nixpkgs@gmail.com";
+    name = "Martin Sladecek";
+    github = "msladecek";
+    githubId = 7304317;
+  };
   mslingsby = {
     email = "morten.slingsby@eviny.no";
     github = "MortenSlingsby";
@@ -15434,6 +15446,12 @@
     github = "PassiveLemon";
     githubId = 72527881;
     name = "PassiveLemon";
+  };
+  pathob = {
+    email = "patrick@hobusch.net";
+    github = "pathob";
+    githubId = 4580157;
+    name = "Patrick Hobusch";
   };
   patka = {
     email = "patka@patka.dev";
@@ -22102,6 +22120,12 @@
     github = "y0no";
     githubId = 2242427;
     name = "Yoann Ono";
+  };
+  yah = {
+    email = "yah@singularpoint.cc";
+    github = "wangxiaoerYah";
+    githubId = 48443038;
+    name = "Yah";
   };
   yajo = {
     email = "yajo.sk8@gmail.com";

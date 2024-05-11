@@ -22,18 +22,17 @@
   darwin,
   makeFontsConf,
   vulkan-loader,
-  makeDesktopItem,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.133.7";
+  version = "0.134.4";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-alhOAcp4aika+v9FWnM2UWVLmzXnAhJD0z2WnYwDN8k=";
+    hash = "sha256-2/onI/tc5FlwyRuu4Yq3xJYqwNXhnIrCebQQpCKGzfs=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-S1PNdQ9YbJgLLsJU1mvDZ3feVDIrZGwU37JqIm+kfcE=";
+      "blade-graphics-0.4.0" = "sha256-J6mVvMC8u3+8RGp6qSwU/EpvdtUPyIs2Ry9XGGiimB0=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
       "heed-0.20.0-alpha.9" = "sha256-8bzoMmfKS+6AmeTzh0/F7WM9OBdIex+NYFER28bpA/s=";
       "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";
@@ -137,49 +136,10 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mv $out/bin/Zed $out/bin/zed
-    install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/Zed.png
-    install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/Zed.png
+    install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+    install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
+    install -D ${src}/crates/zed/resources/zed.desktop $out/share/applications/dev.zed.Zed.desktop
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "dev.zed.Zed";
-      exec = "zed %F";
-      tryExec = "zed";
-      icon = "Zed";
-      comment = meta.description;
-      desktopName = "Zed";
-      genericName = "Text Editor";
-      categories = [
-        "Utility"
-        "TextEditor"
-        "Development"
-      ];
-      keywords = [
-        "Text"
-        "Editor"
-      ];
-      terminal = false;
-      type = "Application";
-      mimeTypes = [
-        "inode/directory"
-        "text/plain"
-        "text/x-makefile"
-        "text/x-c++hdr"
-        "text/x-c++src"
-        "text/x-chdr"
-        "text/x-csrc"
-        "text/x-java"
-        "text/x-moc"
-        "text/x-pascal"
-        "text/x-tcl"
-        "text/x-tex"
-        "application/x-shellscript"
-        "text/x-c"
-        "text/x-c++"
-      ];
-    })
-  ];
 
   meta = with lib; {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";

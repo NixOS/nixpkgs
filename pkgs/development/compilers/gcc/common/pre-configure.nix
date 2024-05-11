@@ -38,31 +38,6 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
 ''
 
-# On x86_64-darwin, the gnat-bootstrap bootstrap compiler that we need to build a
-# native GCC with Ada support emits assembly that is accepted by the Clang
-# integrated assembler, but not by the GNU assembler in cctools-port that Nix
-# usually in the x86_64-darwin stdenv.  In particular, x86_64-darwin gnat-bootstrap
-# emits MOVQ as the mnemonic for quadword interunit moves, such as between XMM
-# and general registers (e.g "movq %xmm0, %rbp"); the cctools-port assembler,
-# however, only recognises MOVD for such moves.
-#
-# Therefore, for native x86_64-darwin builds that support Ada, we have to use
-# the Clang integrated assembler to build (at least stage 1 of) GCC, but have to
-# target GCC at the cctools-port GNU assembler.  In the wrapped x86_64-darwin
-# gnat-bootstrap, the former is provided as `as`, while the latter is provided as
-# `gas`.
-#
-+ lib.optionalString (
-    langAda
-    && buildPlatform == hostPlatform
-    && hostPlatform == targetPlatform
-    && targetPlatform.isx86_64
-    && targetPlatform.isDarwin
-  ) ''
-  export AS_FOR_BUILD=${gnat-bootstrap}/bin/as
-  export AS_FOR_TARGET=${gnat-bootstrap}/bin/gas
-''
-
 # NOTE 2020/3/18: This environment variable prevents configure scripts from
 # detecting the presence of aligned_alloc on Darwin.  There are many facts that
 # collectively make this fix necessary:
