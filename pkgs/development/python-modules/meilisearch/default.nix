@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.31.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
@@ -21,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-rD9f0J8Ez+WrpEyDZa3GVuBxj6Kv7McBzIuk9RtsjHk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     camel-converter
     requests
   ] ++ camel-converter.optional-dependencies.pydantic;
