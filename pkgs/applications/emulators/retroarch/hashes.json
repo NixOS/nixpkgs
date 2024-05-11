@@ -601,10 +601,10 @@
         "src": {
             "owner": "libretro",
             "repo": "opera-libretro",
-            "rev": "cacba231c3bd71833f06943e230fe03d8ebec0ab",
-            "hash": "sha256-pWLcolQw5ctWrL7YQUaUK04QPS4ReUeJhdig3O5T8BM="
+            "rev": "5121aa6d36eff884bd56ccbadb6c112f1e951fee",
+            "hash": "sha256-mD/BEUwbWmRtB9llsqhz+/DhrzH9HiuXyJkX0pBks5M="
         },
-        "version": "unstable-2024-04-24"
+        "version": "unstable-2024-05-06"
     },
     "parallel-n64": {
         "fetcher": "fetchFromGitHub",
