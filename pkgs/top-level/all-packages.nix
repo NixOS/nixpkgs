@@ -8099,8 +8099,6 @@ with pkgs;
 
   flowblade = callPackage ../applications/video/flowblade { };
 
-  fontfor = callPackage ../tools/misc/fontfor { };
-
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     python = python3;
