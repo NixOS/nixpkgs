@@ -1,17 +1,18 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, cryptography
-, dnspython
-, fetchFromGitHub
-, gssapi
-, hatchling
-, ldap3
-, msldap
-, pyasn1
-, pytestCheckHook
-, pythonOlder
-, winacl
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  cryptography,
+  dnspython,
+  fetchFromGitHub,
+  gssapi,
+  hatchling,
+  ldap3,
+  msldap,
+  pyasn1,
+  pytestCheckHook,
+  pythonOlder,
+  winacl,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-+Lw9Apm+zzUlM19fGgxOb2bTmmKQ1Nd7dUjF9rhHXKQ=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     asn1crypto
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     winacl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bloodyAD"
-  ];
+  pythonImportsCheck = [ "bloodyAD" ];
 
   disabledTests = [
     # Tests require network access
