@@ -1,6 +1,5 @@
-diff -ur a/src/simutrans/simmain.cc b/src/simutrans/simmain.cc
---- a/src/simutrans/simmain.cc
-+++ b/src/simutrans/simmain.cc
+--- a/src/simutrans/simmain.cc	(revision 11174)
++++ b/src/simutrans/simmain.cc	(revision 11175)
 @@ -589,6 +589,11 @@
  			}
  		}
@@ -13,9 +12,8 @@ diff -ur a/src/simutrans/simmain.cc b/src/simutrans/simmain.cc
  	// set portable, if base dir and user dir were same
  	not_portable &= strcmp( env_t::user_dir, env_t::base_dir )!=0;
  
-diff -ur a/src/simutrans/sys/simsys.cc b/src/simutrans/sys/simsys.cc
---- a/src/simutrans/sys/simsys.cc
-+++ b/src/simutrans/sys/simsys.cc
+--- a/src/simutrans/sys/simsys.cc	(revision 11174)
++++ b/src/simutrans/sys/simsys.cc	(revision 11175)
 @@ -379,13 +379,15 @@
  {
  	if(  path  &&  *path  ) {
@@ -53,3 +51,14 @@ diff -ur a/src/simutrans/sys/simsys.cc b/src/simutrans/sys/simsys.cc
  	strcat(buffer, PATH_SEPARATOR);
  	return buffer;
  }
+--- a/src/simutrans/sys/simsys.h	(revision 11174)
++++ b/src/simutrans/sys/simsys.h	(revision 11175)
+@@ -163,7 +163,7 @@
+ * @param base_dir_arg : command line argument "-set_basedir"
+ * @param executable_path : Path to executable (as stored in argv[0])
+ */
+-bool dr_set_basedir(const char * base_dir_arg, char * executable_path);
++bool dr_set_basedir(const char *base_dir_arg, char *executable_path);
+ 
+ /* query home directory */
+ char const* dr_query_homedir();
