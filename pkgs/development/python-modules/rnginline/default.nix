@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "docopt-ng"
+    "importlib-metadata"
+    "lxml"
   ];
 
   propagatedBuildInputs = [
