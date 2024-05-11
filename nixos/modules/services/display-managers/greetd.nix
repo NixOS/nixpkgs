@@ -27,6 +27,17 @@ in
       '';
     };
 
+    greeterManagesPlymouth = mkOption {
+      type = types.bool;
+      internal = true;
+      default = false;
+      description = ''
+        Don't configure the greetd service to wait for Plymouth to exit.
+
+        Enable this if the greeter you're using can manage Plymouth itself to provide a smoother handoff.
+      '';
+    };
+
     vt = mkOption {
       type = types.int;
       default = 1;
@@ -72,8 +83,9 @@ in
         ];
         After = [
           "systemd-user-sessions.service"
-          "plymouth-quit-wait.service"
           "getty@${tty}.service"
+        ] ++ lib.optionals (!cfg.greeterManagesPlymouth) [
+          "plymouth-quit-wait.service"
         ];
         Conflicts = [
           "getty@${tty}.service"
