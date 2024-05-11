@@ -1,4 +1,5 @@
 { lib
+, babel
 , buildPythonPackage
 , fetchPypi
 , langcodes
@@ -10,17 +11,18 @@
 
 buildPythonPackage rec {
   pname = "courlan";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PDVRHDZSXLL5Qc1nCbejp0LtlfC55WyX7sDBb9wDUYM=";
+    hash = "sha256-1wZoQzTxi+StofvVfyaArfADZkj22ECFL3pIItOt/Y0=";
   };
 
   propagatedBuildInputs = [
+    babel
     langcodes
     tld
     urllib3
