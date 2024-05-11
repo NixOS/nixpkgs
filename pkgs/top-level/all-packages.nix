@@ -40412,6 +40412,15 @@ with pkgs;
 
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
+    stdenv =
+      if pkgs.stdenv.isDarwin then
+        # Match upstream, which builds with the latest SDK and a 10.7 deployment target.
+        overrideSDK pkgs.stdenv {
+          darwinMinVersion = "10.7";
+          darwinSdkVersion = "11.0";
+        }
+      else
+        pkgs.stdenv;
 
     inherit wineBuild;
 
