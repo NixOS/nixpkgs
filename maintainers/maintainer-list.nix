@@ -20692,6 +20692,11 @@
     githubId = 9870613;
     name = "Hubert Mühlhans";
   };
+  trishtzy = {
+    github = "trishtzy";
+    githubId = 5356506;
+    name = "Tricia Tan";
+  };
   trobert = {
     email = "thibaut.robert@gmail.com";
     github = "trobert";
