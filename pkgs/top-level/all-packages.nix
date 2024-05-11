@@ -32778,7 +32778,7 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  mepo = callPackage ../applications/misc/mepo {
+  mepo = callPackage ../by-name/me/mepo/package.nix {
     inherit (gnome) zenity;
     zig = zig_0_11;
   };
