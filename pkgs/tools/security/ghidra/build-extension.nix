@@ -9,7 +9,7 @@
 let
   metaCommon = oldMeta:
     oldMeta // (with lib; {
-      maintainers = (oldMeta.maintainers or []) ++ (with maintainers; [ emilytrau ]);
+      maintainers = (oldMeta.maintainers or []) ++ (with maintainers; [ vringar ]);
       platforms = oldMeta.platforms or ghidra.meta.platforms;
     });
 

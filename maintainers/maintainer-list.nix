@@ -21576,6 +21576,12 @@
     name = "Kostas Karachalios";
     githubId = 81346;
   };
+  vringar = {
+    email = "git@zabka.it";
+    github = "vringar";
+    name = "Stefan Zabka";
+    githubId = 13276717;
+  };
   vrthra = {
     email = "rahul@gopinath.org";
     github = "vrthra";
