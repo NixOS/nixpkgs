@@ -31810,7 +31810,7 @@ with pkgs;
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
-  waylock = callPackage ../applications/misc/waylock {
+  waylock = callPackage ../by-name/wa/waylock/package.nix {
     zig = zig_0_11;
   };
 
