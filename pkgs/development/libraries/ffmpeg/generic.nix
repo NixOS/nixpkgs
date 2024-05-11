@@ -427,6 +427,11 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
         hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
       }
+      {
+        name = "5.x-CVE-2024-31585.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8711cea3841fc385cccb1e7255176479e865cd4d";
+        hash = "sha256-WT+ly/l04yM/tRVbhkESA3sDDjwvtd/Cg2y8tQo4ApI=";
+      }
     ])
     ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       { # this can be removed post 6.1
