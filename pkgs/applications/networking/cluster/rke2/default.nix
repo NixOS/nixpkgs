@@ -58,6 +58,15 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = rke2;
+      version = "v${version}";
+    };
+  } // lib.optionalAttrs stdenv.isLinux {
+    inherit (nixosTests) rke2;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";
     description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution.";
