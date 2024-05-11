@@ -293,11 +293,19 @@ let
 
     sourceRoot = "simutrans-r${src.rev}/trunk";
 
+    # We're building from the stable revision, but we still need to apply some patches.
+    # These patches are all merged upstream. Generate them with `svn diff -r ${x-1}:${x}`.
+    # We're *not* building a newer revision because multiplayer compatibility depends on the revision number.
     patches = [
-      # The Makefile contains a typo. Already fixed upstream.
+      # The Makefile contains a typo.
+      # We need this to build.
       ./r11174.patch
-      # The implementation of check_and_set_dir() is broken. This patch has been submitted upstream.
-      ./fix-dirs.patch
+      # The implementation of check_and_set_dir() is broken.
+      # We depend on this function to set the user and install directories.
+      ./r11175.patch
+      # r11175 contains a use-after-free when validating the base directory.
+      # I don't think it's exploitable on NixOS, but we should fix it anyway.
+      ./r11178.patch
     ];
 
     nativeBuildInputs = [ pkg-config ];
