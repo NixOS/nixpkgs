@@ -30,4 +30,6 @@ stdenv.mkDerivation {
 
   inherit url rev;
   preferLocalBuild = true;
+
+  meta.repository = [ url ];
 }
