@@ -20,9 +20,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ nose ];
 
  postPatch = ''
-    hidapi=${hidapi}/lib/
+    hidapi=${hidapi}/lib
     test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
-    sed -i -e "s|libhidapi|$hidapi/libhidapi|" hid/__init__.py
+    substituteInPlace hid/__init__.py \
+      --replace-fail libhidapi $hidapi/libhidapi
   '';
 
   meta = with lib; {
