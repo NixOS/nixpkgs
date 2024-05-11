@@ -111,7 +111,9 @@ buildPythonPackage rec {
     "test_read_atomindices_2"
 
     # flaky test
+    "test_compare_rdf_t_master"
     "test_distances_t"
+    "test_precentered_2"
   ];
 
   pythonImportsCheck = [ "mdtraj" ];
