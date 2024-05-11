@@ -202,6 +202,8 @@ buildPythonPackage rec {
     #"-W" "ignore" # uncomment for debugging help
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   # check the binary works outside the build env
   doInstallCheck = true;
   postInstallCheck = ''
