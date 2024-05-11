@@ -24,14 +24,22 @@ let
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  meta = {
+  meta = with lib; {
     description = "Open source API development ecosystem";
-    mainProgram = "hoppscotch";
+    longDescription = ''
+      Hoppscotch is a lightweight, web-based API development suite. It was built
+      from the ground up with ease of use and accessibility in mind providing
+      all the functionality needed for API developers with minimalist,
+      unobtrusive UI.
+    '';
     homepage = "https://hoppscotch.com";
-    changelog = "https://github.com/hoppscotch/hoppscotch/releases/tag/${version}";
+    downloadPage = "https://hoppscotch.com/downloads";
+    changelog = "https://hoppscotch.com/changelog";
+    license = licenses.mit;
+    maintainers = with maintainers; [ DataHearth ];
+    mainProgram = "hoppscotch";
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ DataHearth ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 in
 if stdenv.isDarwin then stdenv.mkDerivation
