@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, python
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fastbencode";
   version = "0.3.1";
-  pyproject  =true;
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-X+DLfRc2iRr2HSreQM6UiUHUbpCLFvU4P1XxJ4SNoZc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  pythonImportsCheck = [
-    "fastbencode"
-  ];
+  pythonImportsCheck = [ "fastbencode" ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest fastbencode.tests.test_suite
