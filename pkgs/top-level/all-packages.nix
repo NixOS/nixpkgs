@@ -19193,8 +19193,6 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  myks = callPackage ../development/tools/myks { };
-
   haskell-ci = haskell.lib.compose.justStaticExecutables haskellPackages.haskell-ci;
 
   nailgun = callPackage ../development/tools/nailgun { };
