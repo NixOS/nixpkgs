@@ -30261,7 +30261,7 @@ with pkgs;
 
   cwm = callPackage ../applications/window-managers/cwm { };
 
-  cyber = callPackage ../development/interpreters/cyber {
+  cyber = callPackage ../by-name/cy/cyber/package.nix {
     zig = zig_0_11;
   };
 
