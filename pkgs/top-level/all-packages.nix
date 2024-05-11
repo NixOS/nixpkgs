@@ -7823,7 +7823,7 @@ with pkgs;
 
   enscript = callPackage ../tools/text/enscript { };
 
-  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { stdenv = gcc8Stdenv; };
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
 
   entr = callPackage ../tools/misc/entr { };
 
