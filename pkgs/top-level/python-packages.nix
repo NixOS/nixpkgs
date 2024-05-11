@@ -1338,6 +1338,8 @@ self: super: with self; {
 
   paddlepaddle = callPackage ../development/python-modules/paddlepaddle { };
 
+  pcffont = callPackage ../development/python-modules/pcffont { };
+
   pueblo = callPackage ../development/python-modules/pueblo { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
