@@ -1,8 +1,18 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    types
+    mkMerge
+    mkIf
+    optionals
+    mkDefault
+    mapAttrsToList
+    nameValuePair
+    listToAttrs
+    filterAttrs;
 
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
