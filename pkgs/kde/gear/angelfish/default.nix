@@ -25,9 +25,8 @@ mkKdeDerivation rec {
   extraNativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
-    corrosion
     rustc
   ];
 
-  extraBuildInputs = [qtsvg qtwebengine qcoro];
+  extraBuildInputs = [qtsvg qtwebengine corrosion qcoro];
 }

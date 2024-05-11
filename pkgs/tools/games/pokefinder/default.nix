@@ -4,6 +4,7 @@
 , makeDesktopItem
 , fetchFromGitHub
 , cmake
+, python3
 , qtbase
 , qttools
 , qtwayland
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems imagemagick ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook python3 ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems imagemagick ];
 
   desktopItems = [
     (makeDesktopItem {

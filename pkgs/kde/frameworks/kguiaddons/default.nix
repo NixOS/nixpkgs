@@ -2,12 +2,11 @@
   mkKdeDerivation,
   qtwayland,
   pkg-config,
-  wayland,
 }:
 mkKdeDerivation {
   pname = "kguiaddons";
 
   extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtwayland wayland];
+  extraBuildInputs = [qtwayland];
   meta.mainProgram = "kde-geo-uri-handler";
 }

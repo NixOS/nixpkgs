@@ -11,6 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , readme-renderer
+, setuptools
 , wheel-filename
 }:
 
@@ -53,8 +54,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    jsonschema
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    setuptools
+    jsonschema
   ];
 
   pythonImportsCheck = [
