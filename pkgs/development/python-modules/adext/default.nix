@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "adext";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ajschmidt8";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0h5k9kzms2f0r48pdhsgv8pimk0vsxw8vs0k6880mank8ij914wr";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-y8BvcSc3vD0FEWiyzW2Oh6PBS2Itjs2sz+9Dzh5yqSg=";
   };
 
   nativeBuildInputs = [
