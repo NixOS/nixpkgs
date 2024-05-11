@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "trafilatura";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a4eN/b1cXftV0Pgwfyt9wVrDRYBU90hh/5ihcvXjhyA=";
+    hash = "sha256-5oM9KauKE+2FOTfXyR5oaLxi774QIUrCsQZDbdI9FBI=";
   };
 
   nativeBuildInputs = [
@@ -45,14 +45,15 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Disable tests that require an internet connection
+    "test_cli_pipeline"
+    "test_crawl_page"
     "test_download"
     "test_fetch"
-    "test_redirection"
     "test_meta_redirections"
-    "test_crawl_page"
-    "test_whole"
     "test_probing"
-    "test_cli_pipeline"
+    "test_queue"
+    "test_redirection"
+    "test_whole"
   ];
 
   # patch out gui cli because it is not supported in this packaging
