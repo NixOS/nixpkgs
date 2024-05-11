@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python library and command-line tool for loading multi-file RELAX NG schemas from arbitary URLs, and flattening them into a single RELAX NG schema";
     homepage = "https://github.com/h4l/rnginline";
+    changelog = "https://github.com/h4l/rnginline/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse ];
   };
