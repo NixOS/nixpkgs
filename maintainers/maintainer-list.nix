@@ -3031,6 +3031,12 @@
     githubId = 25644444;
     name = "Ben C";
   };
+  bwkam = {
+    email = "beshoykamel391@gmail.com";
+    github = "bwkam";
+    githubId = 91009118;
+    name = "Beshoy Kamel";
+  };
   bwlang = {
     email = "brad@langhorst.com";
     github = "bwlang";
