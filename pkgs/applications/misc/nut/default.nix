@@ -3,7 +3,8 @@
 , autoreconfHook
 , avahi
 , coreutils
-, fetchurl
+, fetchFromGitHub
+, nix-update-script
 , freeipmi
 , gd
 , i2c-tools
@@ -21,13 +22,15 @@
 , gnused
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nut";
-  version = "2.8.0";
+  version = "2.8.2";
 
-  src = fetchurl {
-    url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-w+WnCNp5e3xwtlPTexIGoAD8tQO4VRn+TN9jU/eSv+U=";
+  src = fetchFromGitHub {
+    owner = "networkupstools";
+    repo = "nut";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-o8X9z/LVGIb5nU5+VVSGmj3vW6UTaaBFd7FHXsiy0W8=";
   };
 
   patches = [
@@ -90,6 +93,8 @@ stdenv.mkDerivation rec {
     rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules
   '';
 
+  passthru.updateScript = nix-update-script {};
+
   meta = with lib; {
     description = "Network UPS Tools";
     longDescription = ''
@@ -103,4 +108,4 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl1Plus gpl2Plus gpl3Plus ];
     priority = 10;
   };
-}
+})
