@@ -11,7 +11,7 @@
 , configText ? ""
 }:
 let
-  version = "2312.1";
+  version = "";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -37,7 +37,7 @@ let
     inherit version;
     src = fetchurl {
       url = "https://download3.vmware.com/software/CART25FQ1_LIN_2312.1_TARBALL/VMware-Horizon-Client-Linux-2312.1-8.12.1-23543969.tar.gz";
-      sha256 = "23d18be2955ba60ab3cca941a529fa3b804af97ebf1602d246ca6147cced8135";
+      sha256 = "I9GL4pVbpgqzzKlBpSn6O4BK+X6/FgLSRsphR8ztgTU=";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
