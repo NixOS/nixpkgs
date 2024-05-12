@@ -12,7 +12,7 @@ let
   );
 
   fishAliases = builtins.concatStringsSep "\n" (
-    builtins.mapAttrsFlatten (k: v: "alias ${k} ${builtins.escapeShellArg v}")
+    lib.mapAttrsFlatten (k: v: "alias ${k} ${builtins.escapeShellArg v}")
       (builtins.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
