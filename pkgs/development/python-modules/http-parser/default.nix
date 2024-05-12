@@ -32,6 +32,11 @@ buildPythonPackage rec {
     "http_parser"
   ];
 
+  # The imp module is deprecated since version 3.4, and was removed in 3.12
+  # https://docs.python.org/3.11/library/imp.html
+  # Fix from: https://github.com/benoitc/http-parser/pull/101/
+  patches = [ ./imp-importlib.diff ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
