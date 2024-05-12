@@ -17,16 +17,16 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.11.0";
+    version = "0.12.0";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-sOmXLqc1O96/50A08b9Rlk5xlmqg2S+5nWachC74IV8=";
+      hash = "sha256-rqwDubKNBvtJ4rTQheCoSIcbfQZQN3iD99PcZewmx5c=";
     };
 
-    vendorHash = "sha256-tZvzCQzYIIqoSefm4ty+RI7fFKWWw2OopYGGX8zS6JM=";
+    vendorHash = "sha256-bnmlh11gtNdgcrI20gjNqxWB+OQTv0b9lgETucoBaXc=";
 
     inherit overrideModAttrs;
 
@@ -50,6 +50,7 @@ let
     postInstall = ''
       installShellCompletion --cmd temporal \
         --bash <($out/bin/temporal completion bash) \
+        --fish <($out/bin/temporal completion fish) \
         --zsh <($out/bin/temporal completion zsh)
     '';
 
