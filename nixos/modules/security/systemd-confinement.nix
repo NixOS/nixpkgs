@@ -107,7 +107,7 @@ in {
         serviceConfig = {
           ReadOnlyPaths = [ "+/" ];
           RuntimeDirectory = [ "confinement/${mkPathSafeName name}" ];
-          RootDirectory = lib.mkDefault "/run/confinement/${mkPathSafeName name}";
+          RootDirectory = "/run/confinement/${mkPathSafeName name}";
           InaccessiblePaths = [
             "-+/run/confinement/${mkPathSafeName name}"
           ];
