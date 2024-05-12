@@ -13,7 +13,7 @@ let
     if x11Mode then "linux-x11"
     else if qtMode then "linux-qt4"
     else if stdenv.hostPlatform.isLinux  then "linux"
-    else if stdenv.hostPlatform.isDarwin then "macosx10.10"
+    else if stdenv.hostPlatform.isDarwin then "macosx10.14"
     # We probably want something different for Darwin
     else "unix";
   userDir = "~/.config/nethack";
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
-      -i sys/unix/hints/macosx10.10
+      -i sys/unix/hints/macosx10.14
     sed -e '/define CHDIR/d' -i include/config.h
     ${lib.optionalString qtMode ''
     sed \

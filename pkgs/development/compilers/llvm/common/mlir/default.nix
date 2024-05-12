@@ -1,6 +1,9 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , buildLlvmTools
-, monorepoSrc, runCommand
+, monorepoSrc
+, runCommand
 , cmake
 , ninja
 , libxml2
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
   inherit version doCheck;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/mlir "$out"
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     "-DLLVM_INSTALL_TOOLCHAIN_ONLY=OFF"
     "-DMLIR_TOOLS_INSTALL_DIR=${placeholder "out"}/bin/"
     "-DLLVM_ENABLE_IDE=OFF"
-    "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "out"}/lib/cmake/mlir"
+    "-DMLIR_INSTALL_PACKAGE_DIR=${placeholder "out"}/lib/cmake/mlir"
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"

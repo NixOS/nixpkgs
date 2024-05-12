@@ -40,15 +40,15 @@ let
         allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
       };
     };
-    inherit (Agda) meta;
+    # Agda is a split package with multiple outputs; do not inherit them here.
+    meta = removeAttrs Agda.meta [ "outputsToInstall" ];
   } ''
     mkdir -p $out/bin
-    makeWrapper ${Agda}/bin/agda $out/bin/agda \
+    makeWrapper ${Agda.bin}/bin/agda $out/bin/agda \
       --add-flags "--with-compiler=${ghc}/bin/ghc" \
-      --add-flags "--library-file=${library-file}" \
-      --add-flags "--local-interfaces"
-    ln -s ${Agda}/bin/agda-mode $out/bin/agda-mode
-    ''; # Local interfaces has been added for now: See https://github.com/agda/agda/issues/4526
+      --add-flags "--library-file=${library-file}"
+    ln -s ${Agda.bin}/bin/agda-mode $out/bin/agda-mode
+    '';
 
   withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
 
@@ -90,13 +90,14 @@ let
         buildPhase = if buildPhase != null then buildPhase else ''
           runHook preBuild
           agda ${includePathArgs} ${everythingFile}
+          rm ${everythingFile} ${lib.interfaceFile Agda.version everythingFile}
           runHook postBuild
         '';
 
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
 

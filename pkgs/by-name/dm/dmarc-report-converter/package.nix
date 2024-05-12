@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "dmarc-report-converter";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "tierpod";
     repo = "dmarc-report-converter";
     rev = "v${version}";
-    hash = "sha256-cP96tiBpMFNEHuIF0sovi+Q4yW8wMUqr138RyMOFoho=";
+    hash = "sha256-TqvAqMZEXhMO3/0VNY3Mr/E15QQbucuKyG95j2jWU5g=";
   };
 
   vendorHash = null;

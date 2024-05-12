@@ -102,84 +102,6 @@ self: super: builtins.intersectAttrs super {
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
 
-  # PLUGINS WITH ENABLED TESTS
-  # haskell-language-server plugins all use the same test harness so we give them what they want in this loop.
-  # Every hls plugin should either be in the test disabled list below, or up here in the list fixing it’s tests.
-  inherit (pkgs.lib.mapAttrs
-      (_: overrideCabal (drv: {
-        testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.git ];
-        preCheck = ''
-          export HOME=$TMPDIR/home
-        '' + (drv.preCheck or "");
-      }))
-      super)
-    hls-brittany-plugin
-    hls-floskell-plugin
-    hls-fourmolu-plugin
-    hls-overloaded-record-dot-plugin
-  ;
-
-  # PLUGINS WITH DISABLED TESTS
-  # 2023-04-01: TODO: We should reenable all these tests to figure if they are still broken.
-  inherit (pkgs.lib.mapAttrs (_: dontCheck) super)
-    # Tests require ghcide-test-utils which is broken
-    hls-semantic-tokens-plugin
-
-    # Tests have file permissions expections that don’t work with the nix store.
-    hls-gadt-plugin
-
-    # https://github.com/haskell/haskell-language-server/pull/3431
-    hls-cabal-plugin
-    hls-cabal-fmt-plugin
-    hls-code-range-plugin
-    hls-explicit-record-fields-plugin
-
-    # Flaky tests
-    hls-explicit-fixity-plugin
-    hls-hlint-plugin
-    hls-pragmas-plugin
-    hls-class-plugin
-    hls-rename-plugin
-    hls-alternate-number-format-plugin
-    hls-qualify-imported-names-plugin
-    hls-haddock-comments-plugin
-    hls-tactics-plugin
-    hls-call-hierarchy-plugin
-    hls-selection-range-plugin
-    hls-ormolu-plugin
-
-    # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
-    hls-eval-plugin
-
-    # 2021-06-20: Tests fail: https://github.com/haskell/haskell-language-server/issues/1949
-    hls-refine-imports-plugin
-
-    # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2373
-    hls-explicit-imports-plugin
-
-    # 2021-11-20: https://github.com/haskell/haskell-language-server/pull/2374
-    hls-module-name-plugin
-
-    # 2022-09-19: https://github.com/haskell/haskell-language-server/issues/3200
-    hls-refactor-plugin
-
-    # 2021-09-14: Tests are flaky.
-    hls-splice-plugin
-
-    # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
-    hls-stylish-haskell-plugin
-
-    # Necesssary .txt files are not included in sdist.
-    # https://github.com/haskell/haskell-language-server/pull/2887
-    hls-change-type-signature-plugin
-
-    # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3549
-    hls-retrie-plugin
-
-    # 2024-01-25: Golden files are missing
-    hls-stan-plugin
-  ;
-
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
@@ -305,7 +227,13 @@ self: super: builtins.intersectAttrs super {
   ghc-debug-brick  = enableSeparateBinOutput super.ghc-debug-brick;
   nixfmt  = enableSeparateBinOutput super.nixfmt;
   calligraphy = enableSeparateBinOutput super.calligraphy;
-  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
+  niv = overrideCabal (drv: {
+      buildTools = (drv.buildTools or []) ++ [ pkgs.buildPackages.makeWrapper ];
+      postInstall = ''
+        wrapProgram ''${!outputBin}/bin/niv --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
+      '';
+    })
+    (enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv));
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] super.hnix;
@@ -426,6 +354,7 @@ self: super: builtins.intersectAttrs super {
 
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
+  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
@@ -515,7 +444,7 @@ self: super: builtins.intersectAttrs super {
   leksah = dontCheck (overrideCabal (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
       gnome.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
-      wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      wrapGAppsHook3           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
     postPatch = (drv.postPatch or "") + ''
@@ -790,14 +719,63 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = overrideCabal (drv: {
-    # This is an instance of https://github.com/NixOS/nix/pull/1085
-    # Fails with:
-    #   gpg: can't connect to the agent: File name too long
-    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
-      substituteInPlace Test.hs \
-        --replace ', testCase "crypto" test_crypto' ""
-    '' + (drv.postPatch or "");
+  git-annex = let
+    # Executables git-annex needs at runtime. git-annex detects these at configure
+    # time and expects to be able to execute them. This means that cross-compiling
+    # git-annex is not possible and strictDeps must be false (runtimeExecDeps go
+    # into executableSystemDepends/buildInputs).
+    runtimeExecDeps = [
+      pkgs.bup
+      pkgs.curl
+      pkgs.git
+      pkgs.gnupg
+      pkgs.lsof
+      pkgs.openssh
+      pkgs.perl
+      pkgs.rsync
+      pkgs.wget
+      pkgs.which
+    ];
+  in
+  overrideCabal (drv: {
+    executableSystemDepends = runtimeExecDeps;
+    enableSharedExecutables = false;
+
+    preConfigure = drv.preConfigure or "" + ''
+      export HOME=$TEMPDIR
+      patchShebangs .
+    '';
+
+    # git-annex ships its test suite as part of the final executable instead of
+    # using a Cabal test suite.
+    checkPhase = ''
+      runHook preCheck
+
+      # Setup PATH for the actual tests
+      ln -sf dist/build/git-annex/git-annex git-annex
+      ln -sf git-annex git-annex-shell
+      PATH+=":$PWD"
+
+      echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+
+      # Doesn't use Cabal's test mechanism
+      git-annex test $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+
+      runHook postCheck
+    '';
+
+    # Use default installPhase of pkgs/stdenv/generic/setup.sh. We need to set
+    # the environment variables it uses via the preInstall hook since the Haskell
+    # generic builder doesn't accept them as arguments.
+    preInstall = drv.preInstall or "" + ''
+      installTargets="install"
+      installFlagsArray+=(
+        "BUILDER=:"
+        "PREFIX="
+        "DESTDIR=$out"
+      )
+    '';
+    installPhase = null;
 
     # Ensure git-annex uses the exact same coreutils it saw at build-time.
     # This is especially important on Darwin but also in Linux environments
@@ -815,13 +793,6 @@ self: super: builtins.intersectAttrs super {
     # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
-
-    # Install man pages which is no longer done by Setup.hs
-    # TODO(@sternenseemann): figure out why install-desktops wants to create /usr
-    # and run that, too.
-    postInstall = drv.postInstall or "" + ''
-      make install-mans "DESTDIR=$out" PREFIX=
-    '';
   }) (super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
@@ -1144,6 +1115,8 @@ self: super: builtins.intersectAttrs super {
     # very useful.
     # Flag added in Agda 2.6.4.1, was always enabled before
     (enableCabalFlag "debug")
+    # Split outputs to reduce closure size
+    enableSeparateBinOutput
   ];
 
   # ats-format uses cli-setup in Setup.hs which is quite happy to write
@@ -1217,9 +1190,11 @@ self: super: builtins.intersectAttrs super {
     {
       fourmolu = fourmoluTestFix super.fourmolu;
       fourmolu_0_14_1_0 = fourmoluTestFix super.fourmolu_0_14_1_0;
+      fourmolu_0_15_0_0 = fourmoluTestFix super.fourmolu_0_15_0_0;
     })
     fourmolu
     fourmolu_0_14_1_0
+    fourmolu_0_15_0_0
     ;
 
   # Test suite needs to execute 'disco' binary
@@ -1352,14 +1327,22 @@ self: super: builtins.intersectAttrs super {
     __onlyPropagateKnownPkgConfigModules = true;
     }) super)
       gi-javascriptcore
-      webkit2gtk3-javascriptcore
-      gi-webkit2
       gi-webkit2webextension
       gi-gtk_4_0_8
       gi-gdk_4_0_7
       gi-gsk
       gi-adwaita
       ;
+
+    webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
+      (addBuildDepend pkgs.xorg.libXtst)
+      (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
+    ];
+
+    gi-webkit2 = lib.pipe super.gi-webkit2 [
+      (addBuildDepend pkgs.xorg.libXtst)
+      (overrideCabal { __onlyPropagateKnownPkgConfigModules = true; })
+    ];
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
@@ -1388,4 +1371,10 @@ self: super: builtins.intersectAttrs super {
     libraryPkgconfigDepends = drv.librarySystemDepends;
     librarySystemDepends = [];
   }) super.postgresql-libpq;
+
+  # Test failure is related to a GHC implementation detail of primitives and doesn't
+  # cause actual problems in dependent packages, see https://github.com/lehins/pvar/issues/4
+  pvar = dontCheck super.pvar;
+
+  kmonad = enableSeparateBinOutput super.kmonad;
 }

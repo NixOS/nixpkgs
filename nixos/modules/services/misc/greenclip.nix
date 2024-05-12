@@ -7,7 +7,7 @@ let
 in {
 
   options.services.greenclip = {
-    enable = mkEnableOption (lib.mdDoc "Greenclip daemon");
+    enable = mkEnableOption "Greenclip, a clipboard manager";
 
     package = mkPackageOption pkgs [ "haskellPackages" "greenclip" ] { };
   };
@@ -18,7 +18,10 @@ in {
       description = "greenclip daemon";
       wantedBy = [ "graphical-session.target" ];
       after    = [ "graphical-session.target" ];
-      serviceConfig.ExecStart = "${cfg.package}/bin/greenclip daemon";
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/greenclip daemon";
+        Restart = "always";
+      };
     };
 
     environment.systemPackages = [ cfg.package ];

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , boost
 , pkg-config
@@ -17,14 +18,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "nzbget-ng";
-  version = "23.0";
+  pname = "nzbget";
+  version = "24.0";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JqC82zpsIqRYB7128gTSOQMWJFR/t63NJXlPgGqP0jE=";
+    hash = "sha256-vEtbf4y3Jc69FrEzGE34Xt/4oDmZlWTbwispvoypRI0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

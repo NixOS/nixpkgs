@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11, cmake, imagemagick
-, pkg-config, perl, wrapGAppsHook, nixosTests, writeScript
+, pkg-config, perl, wrapGAppsHook3, nixosTests, writeScript
 , isMobile ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20240302.80aac31";
+  version = "20240330.fd304c5";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    hash = "sha256-0+bmGq4wM+0/ldQz8ieKdkuG0HHazctQr9ul/qLT0gg=";
+    hash = "sha256-usEgCfbeKOkAg/sHpRxuMcPGHxb+J5+r92aO4Ar7iUA=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     imagemagick
     perl
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";

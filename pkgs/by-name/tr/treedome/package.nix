@@ -13,18 +13,18 @@
 , pkg-config
 , rustPlatform
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , sqlite
 }:
 
 let
   pname = "treedome";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-FBzRsBoV3wnt2nu5WMnaTnBNC51jG120E0Orm55KhBg=";
+    hash = "sha256-YkyjG/ee5WeO5OD4FZnWaqcOJO3YC0uQkbwGkCNBxC8=";
     fetchLFS = true;
   };
 
@@ -98,7 +98,7 @@ rustPlatform.buildRustPackage {
     cmake
     pkg-config
     cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

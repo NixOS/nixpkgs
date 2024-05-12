@@ -2,7 +2,9 @@
 , lib
 , fetchFromGitHub
 , gfortran
-, cmake
+, meson
+, ninja
+, pkg-config
 , mctc-lib
 , mstore
 , toml-f
@@ -22,20 +24,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-dfXiKKCGJ69aExSKpVC3Bp//COy256R9PDyxCNmDsfo=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [ gfortran meson ninja pkg-config ];
 
   buildInputs = [ mctc-lib mstore toml-f blas ];
 
   outputs = [ "out" "dev" ];
-
-  # Fix the Pkg-Config files for doubled store paths
-  postPatch = ''
-    substituteInPlace config/template.pc \
-      --replace "\''${prefix}/" ""
-  '';
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-  ];
 
   doCheck = true;
   preCheck = ''
@@ -47,7 +40,7 @@ stdenv.mkDerivation rec {
     mainProgram = "s-dftd3";
     license = with licenses; [ lgpl3Only gpl3Only ];
     homepage = "https://github.com/dftd3/simple-dftd3";
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
 }

@@ -12,6 +12,7 @@
 , MetalKit
 
 , config
+, autoAddDriverRunpath
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
@@ -42,11 +43,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
       which
       makeWrapper
-    ] ++ lib.optionals cudaSupport ( with cudaPackages ;[
-      cuda_nvcc
-
+    ] ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
       autoAddDriverRunpath
-    ]);
+    ];
 
   buildInputs = [
       SDL2

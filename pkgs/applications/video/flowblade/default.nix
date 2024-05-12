@@ -1,25 +1,25 @@
 { lib, fetchFromGitHub, stdenv
 , ffmpeg, frei0r, sox, gtk3, python3, ladspaPlugins
-, gobject-introspection, makeWrapper, wrapGAppsHook
+, gobject-introspection, makeWrapper, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.12.0.2";
+  version = "2.14.0.2";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SZ/J03PYeAbqQlNQXdqLSduo/5VjQ7VH4eErJqO3Ua0=";
+    sha256 = "sha256-M+M6qkgYD5zM8IOFwQsuQlK7qQsvmSjR+CXVpTW+O8k=";
   };
 
   buildInputs = [
     ffmpeg frei0r sox gtk3 ladspaPlugins
-    (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow ]))
+    (python3.withPackages (ps: with ps; [ mlt pygobject3 dbus-python numpy pillow libusb1 ]))
   ];
 
-  nativeBuildInputs = [ gobject-introspection makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection makeWrapper wrapGAppsHook3 ];
 
   installPhase = ''
     runHook preInstall

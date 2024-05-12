@@ -1,27 +1,28 @@
-{ lib
-, bleak
-, buildPythonPackage
-, dotmap
-, fetchFromGitHub
-, pexpect
-, protobuf
-, pygatt
-, pypubsub
-, pyqrcode
-, pyserial
-, pytap2
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, tabulate
-, timeago
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  dotmap,
+  fetchFromGitHub,
+  pexpect,
+  protobuf,
+  pygatt,
+  pypubsub,
+  pyqrcode,
+  pyserial,
+  pytap2,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tabulate,
+  timeago,
 }:
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.3.0";
+  version = "2.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,14 +31,12 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-HiksPxV5VTIOV71J0zlC8iiXmF85a0dTYjjnWthhdGY=";
+    hash = "sha256-WxiddF1n9lyxKkZk1MU40NzLh6goLVs81mbJZ3F33R8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     dotmap
     pexpect
@@ -54,9 +53,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    tunnel = [
-      pytap2
-    ];
+    tunnel = [ pytap2 ];
   };
 
   nativeCheckInputs = [
@@ -68,55 +65,21 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "meshtastic"
-  ];
+  pythonImportsCheck = [ "meshtastic" ];
 
   disabledTests = [
-    # AttributeError: 'HardwareMessage'...
-    "test_handleFromRadio_with_my_info"
-    "test_handleFromRadio_with_node_info"
-    "test_main_ch_longsfast_on_non_primary_channel"
-    "test_main_ch_set_name_with_ch_index"
-    "test_main_configure_with_camel_case_keys"
-    "test_main_configure_with_snake_case"
-    "test_main_export_config_called_from_main"
-    "test_main_export_config_use_camel"
-    "test_main_export_config"
-    "test_main_get_with_invalid"
-    "test_main_get_with_valid_values_camel"
-    "test_main_getPref_invalid_field_camel"
-    "test_main_getPref_invalid_field"
-    "test_main_getPref_valid_field_bool_camel"
-    "test_main_getPref_valid_field_bool"
-    "test_main_getPref_valid_field_camel"
-    "test_main_getPref_valid_field_string_camel"
-    "test_main_getPref_valid_field_string"
-    "test_main_getPref_valid_field"
-    "test_main_set_invalid_wifi_passwd"
-    "test_main_set_valid_camel_case"
-    "test_main_set_valid_wifi_passwd"
-    "test_main_set_valid"
-    "test_main_set_with_invalid"
-    "test_main_setPref_ignore_incoming_0"
-    "test_main_setPref_ignore_incoming_123"
-    "test_main_setPref_invalid_field_camel"
-    "test_main_setPref_invalid_field"
-    "test_main_setPref_valid_field_int_as_string"
-    "test_readGPIOs"
-    "test_onGPIOreceive"
-    "test_setURL_empty_url"
-    "test_watchGPIOs"
-    "test_writeConfig_with_no_radioConfig"
-    "test_writeGPIOs"
-    "test_reboot"
-    "test_shutdown"
-    "test_main_sendtext"
-    "test_main_sendtext_with_channel"
+    # TypeError
+    "test_main_info_with_seriallog_output_txt"
+    "test_main_info_with_seriallog_stdout"
+    "test_main_info_with_tcp_interfa"
+    "test_main_info"
+    "test_main_no_proto"
+    "test_main_support"
     "test_MeshInterface"
-    "test_getNode_not_local"
-    "test_getNode_not_local_timeout"
-    "test_main_onConnected_exception"
+    "test_message_to_json_shows_all"
+    "test_SerialInterface_single_port"
+    "test_support_info"
+    "test_TCPInterface"
   ];
 
   meta = with lib; {

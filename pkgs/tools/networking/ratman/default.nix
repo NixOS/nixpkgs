@@ -6,7 +6,7 @@
 , protobuf
 , rustPlatform
 , fetchYarnDeps
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , stdenv
 , yarn
 , nodejs
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       sha256 = "sha256-pWjKL41r/bTvWv+5qCgCFVL9+o64BiV2/ISdLeKEOqE=";
     };
 
-    nativeBuildInputs = [ yarn nodejs prefetch-yarn-deps ];
+    nativeBuildInputs = [ yarn nodejs fixup-yarn-lock ];
 
     outputs = [ "out" "dist" ];
 
@@ -88,6 +88,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.irde.st/we/irdest";
     platforms = platforms.unix;
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ spacekookie yuka ];
+    maintainers = with maintainers; [ spacekookie ];
   };
 }

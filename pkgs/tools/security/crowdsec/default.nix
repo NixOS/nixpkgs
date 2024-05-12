@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5jK+f6IFPhGit+jxkSLTcWN1+nJRQaCZKpWZYId+2bk=";
+    hash = "sha256-CCQDMIBpKmaUSRwyjryTO3YWVIrr6FwW64K+alTrcdw=";
   };
 
-  vendorHash = "sha256-tUvFT+rE58yxNJGhqqwSG0GlGushkUpngxLkmyjjFFY=";
+  vendorHash = "sha256-K38hxWcrYOznXr8eST0xQBL0nNxHMAiGji5rFwAK0Qw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,9 +23,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Version=v${version}"
-    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.BuildDate=1970-01-01_00:00:00"
-    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Tag=${src.rev}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Version=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/version.BuildDate=1970-01-01_00:00:00"
+    "-X github.com/crowdsecurity/go-cs-lib/version.Tag=${src.rev}"
     "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
@@ -41,6 +41,11 @@ buildGoModule rec {
       --bash <($out/bin/cscli completion bash) \
       --fish <($out/bin/cscli completion fish) \
       --zsh <($out/bin/cscli completion zsh)
+  '';
+
+  # It's important that the version is correctly set as it also determines feature capabilities
+  checkPhase = ''
+    $GOPATH/bin/cscli version 2>&1 | grep -q "version: v${version}"
   '';
 
   meta = with lib; {

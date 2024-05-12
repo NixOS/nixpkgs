@@ -1,10 +1,15 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   logPrefix = "services.prometheus.exporters.snmp";
   cfg = config.services.prometheus.exporters.snmp;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    escapeShellArg
+    concatStringsSep
+    ;
 
   # This ensures that we can deal with string paths, path types and
   # store-path strings with context.
@@ -31,7 +36,7 @@ in
     configurationPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a snmp exporter configuration file. Mutually exclusive with 'configuration' option.
       '';
       example = literalExpression "./snmp.yml";
@@ -40,7 +45,7 @@ in
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
       '';
       example = {
@@ -54,7 +59,7 @@ in
     enableConfigCheck = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to run a correctness check for the configuration file. This depends
         on the configuration file residing in the nix-store. Paths passed as string will
         be copied to the store.
@@ -64,7 +69,7 @@ in
     logFormat = mkOption {
       type = types.enum ["logfmt" "json"];
       default = "logfmt";
-      description = lib.mdDoc ''
+      description = ''
         Output format of log messages.
       '';
     };
@@ -72,7 +77,7 @@ in
     logLevel = mkOption {
       type = types.enum ["debug" "info" "warn" "error"];
       default = "info";
-      description = lib.mdDoc ''
+      description = ''
         Only log messages with the given severity or above.
       '';
     };

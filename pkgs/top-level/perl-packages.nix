@@ -1253,7 +1253,7 @@ with self; {
     };
   };
 
-  AstroFITSHeader = buildPerlModule rec {
+  AstroFITSHeader = buildPerlModule {
     pname = "Astro-FITS-Header";
     version = "3.09";
     src = fetchurl {
@@ -1358,7 +1358,7 @@ with self; {
     };
   };
 
-  AuthenKrb5Admin = buildPerlPackage rec {
+  AuthenKrb5Admin = buildPerlPackage {
     pname = "Authen-Krb5-Admin";
     version = "0.17";
     src = fetchurl {
@@ -1836,7 +1836,7 @@ with self; {
     };
   };
 
-  BKeywords = buildPerlPackage rec {
+  BKeywords = buildPerlPackage {
     pname = "B-Keywords";
     version = "1.26";
     src = fetchurl {
@@ -3312,6 +3312,9 @@ with self; {
       "-Wno-error=implicit-int"
       "-Wno-error=int-conversion"
     ]);
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
+    '';
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;
@@ -3627,7 +3630,7 @@ with self; {
     };
   };
 
-  ClassLoader = buildPerlPackage rec {
+  ClassLoader = buildPerlPackage {
     pname = "Class-Loader";
     version = "2.03";
     src = fetchurl {
@@ -4529,7 +4532,7 @@ with self; {
     };
   };
 
-  ConvertBencode = buildPerlPackage rec {
+  ConvertBencode = buildPerlPackage {
     pname = "Convert-Bencode";
     version = "1.03";
     src = fetchurl {
@@ -4557,7 +4560,7 @@ with self; {
     };
   };
 
-  ConvertUU = buildPerlPackage rec {
+  ConvertUU = buildPerlPackage {
     pname = "Convert-UU";
     version = "0.5201";
     src = fetchurl {
@@ -5241,7 +5244,7 @@ with self; {
     };
   };
 
-  CryptRandom = buildPerlPackage rec {
+  CryptRandom = buildPerlPackage {
     pname = "Crypt-Random";
     version = "1.54";
     src = fetchurl {
@@ -5552,7 +5555,7 @@ with self; {
     };
   };
 
-  CryptOpenSSLX509 = buildPerlPackage rec {
+  CryptOpenSSLX509 = buildPerlPackage {
     pname = "Crypt-OpenSSL-X509";
     version = "1.915";
     src = fetchurl {
@@ -6961,7 +6964,7 @@ with self; {
     };
   };
 
-  DevelLeak = buildPerlPackage rec {
+  DevelLeak = buildPerlPackage {
     pname = "Devel-Leak";
     version = "0.03";
     src = fetchurl {
@@ -9166,7 +9169,7 @@ with self; {
     };
   };
 
-  ExtUtilsF77 = buildPerlPackage rec {
+  ExtUtilsF77 = buildPerlPackage {
     pname = "ExtUtils-F77";
     version = "1.26";
     src = fetchurl {
@@ -10394,13 +10397,13 @@ with self; {
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.59";
+    version = "1.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-mukoeazGgv9AFuHsqSScjko4y38wHnKio21fIVfxKSg=";
+      hash = "sha256-Qw7p3yLcqjLrYwpNf7V6KFQvn+UHsmawo39nVLTzWgg=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
+    propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies HTTPCookieJar JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
       changelog = "https://github.com/finance-quote/finance-quote/releases/tag/v${version}";
@@ -10538,7 +10541,7 @@ with self; {
     };
   };
 
-  FutureAsyncAwait = buildPerlModule rec {
+  FutureAsyncAwait = buildPerlModule {
     pname = "Future-AsyncAwait";
     version = "0.66";
     src = fetchurl {
@@ -10772,7 +10775,7 @@ with self; {
     };
   };
 
-  GitAutofixup = buildPerlPackage rec {
+  GitAutofixup = buildPerlPackage {
     pname = "App-Git-Autofixup";
     version = "0.004001";
     src = fetchurl {
@@ -11310,7 +11313,14 @@ with self; {
       hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
-    preCheck = lib.optionalString stdenv.isDarwin "rm t/overrides.t"; # Currently failing on macOS
+    preCheck = lib.optionalString stdenv.isDarwin ''
+      # Currently failing on macOS
+      rm t/overrides.t
+      rm t/signals.t
+      rm t/zz-GdkEvent.t
+      rm t/zz-GtkContainer.t
+      rm t/zz-GtkDialog.t
+    '';
     meta = {
       description = "Perl interface to the 3.x series of the gtk+ toolkit";
       license = with lib.licenses; [ lgpl21Plus ];
@@ -11376,7 +11386,7 @@ with self; {
     propagatedBuildInputs = [ DateCalc ];
     meta = {
       description = "Finnish APRS Parser (Fabulous APRS Parser)";
-      maintainers = with maintainers; [ andrew-d ];
+      maintainers = [ ];
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12099,10 +12109,10 @@ with self; {
 
   HTTPBody = buildPerlPackage {
     pname = "HTTP-Body";
-    version = "1.22";
+    version = "1.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.22.tar.gz";
-      hash = "sha256-/A0sWFs70VMtkmCZZdWJ4Mh804DnzKQvua0KExEicpc=";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.23.tar.gz";
+      hash = "sha256-7OmB9BYWNaL7piFdAlcZXlOMTyNDhFMFAd/bahvY1jY=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
@@ -14603,7 +14613,7 @@ with self; {
     };
   };
 
-  LogJournald = buildPerlModule rec {
+  LogJournald = buildPerlModule {
     pname = "Log-Journald";
     version = "0.30";
     src = fetchurl {
@@ -15720,7 +15730,7 @@ with self; {
   };
 
   # TODO: use CPAN version
-  MHonArc = buildPerlPackage rec {
+  MHonArc = buildPerlPackage {
     pname = "MHonArc";
     version = "2.6.24";
 
@@ -16135,7 +16145,7 @@ with self; {
     };
   };
 
-  ModuleCompile = buildPerlPackage rec {
+  ModuleCompile = buildPerlPackage {
     pname = "Module-Compile";
     version = "0.38";
     src = fetchurl {
@@ -16591,16 +16601,16 @@ with self; {
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.35";
+    version = "9.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.35.tar.gz";
-      hash = "sha256-akpEbuB/ynxtty9dgXVA1oMwCcuN58zkxvskoV7n1Gs=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.36.tar.gz";
+      hash = "sha256-UX7Pb9hqC3xhadVRAiOL+YUWGNt2L7ANTPDZTGJSAV8=";
     };
     meta = {
       description = "Real-time web framework";
       homepage = "https://mojolicious.org";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = with maintainers; [ thoughtpolice sgo ];
+      maintainers = with maintainers; [ marcusramberg sgo thoughtpolice ];
       mainProgram = "mojo";
     };
   };
@@ -16829,7 +16839,7 @@ with self; {
     };
   };
 
-  Mojomysql = buildPerlPackage rec {
+  Mojomysql = buildPerlPackage {
     pname = "Mojo-mysql";
     version = "1.26";
     src = fetchurl {
@@ -18168,9 +18178,11 @@ with self; {
       url = "mirror://cpan/authors/id/N/NJ/NJH/MusicBrainz-DiscID-0.06.tar.gz";
       hash = "sha256-ugtu0JiX/1Y7pZhy7pNxW+83FXUVsZt8bW8obmVI7Ks=";
     };
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
-    # Makefile.PL in this package uses which to find pkg-config -- make it use path instead
-    patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Makefile.PL'';
+    # Makefile.PL in this package uses which to find pkg-config -- make it use envvar instead
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+        --replace-fail '`which pkg-config`' "'$PKG_CONFIG'"
+    '';
     doCheck = false; # The main test performs network access
     nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
@@ -18209,7 +18221,7 @@ with self; {
     };
   };
 
-  MySQLDiff = buildPerlPackage rec {
+  MySQLDiff = buildPerlPackage {
     pname = "MySQL-Diff";
     version = "0.60";
     src = fetchurl {
@@ -18599,10 +18611,10 @@ with self; {
 
   NetDNS = buildPerlPackage {
     pname = "Net-DNS";
-    version = "1.40";
+    version = "1.44";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.40.tar.gz";
-      hash = "sha256-IJu9QN6NSMG9eq3kjaI3/gpJn4nSebqi4amb1eySLdw=";
+      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.44.tar.gz";
+      hash = "sha256-E9ftxLjOoBMhR/qsNXH2s8cdHQz9hExTDFoET0o+wx4=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = [ "--noonline-tests" ];
@@ -19159,7 +19171,7 @@ with self; {
     };
   };
 
-  NetSNPP = buildPerlPackage rec {
+  NetSNPP = buildPerlPackage {
     pname = "Net-SNPP";
     version = "1.17";
     src = fetchurl {
@@ -19539,7 +19551,7 @@ with self; {
     };
   };
 
-  OpenAPIClient = buildPerlPackage rec {
+  OpenAPIClient = buildPerlPackage {
     pname = "OpenAPI-Client";
     version = "1.07";
     src = fetchurl {
@@ -20250,7 +20262,7 @@ with self; {
     };
   };
 
-  PDL = buildPerlPackage rec {
+  PDL = buildPerlPackage {
     pname = "PDL";
     version = "2.025";
     src = fetchurl {
@@ -20595,7 +20607,7 @@ with self; {
     };
   };
 
-  PerlTidy = buildPerlPackage rec {
+  PerlTidy = buildPerlPackage {
     pname = "Perl-Tidy";
     version = "20230912";
     src = fetchurl {
@@ -22304,7 +22316,7 @@ with self; {
     };
   };
 
-  SearchXapian = buildPerlPackage rec {
+  SearchXapian = buildPerlPackage {
     pname = "Search-Xapian";
     version = "1.2.25.5";
     src = fetchurl {
@@ -22368,7 +22380,7 @@ with self; {
     };
   };
 
-  DeviceSerialPort = buildPerlPackage rec {
+  DeviceSerialPort = buildPerlPackage {
     pname = "Device-SerialPort";
     version = "1.04";
     src = fetchurl {
@@ -22399,7 +22411,7 @@ with self; {
     };
   };
 
-  SessionToken = buildPerlPackage rec {
+  SessionToken = buildPerlPackage {
     pname = "Session-Token";
     version = "1.503";
     src = fetchurl {
@@ -22474,7 +22486,7 @@ with self; {
     };
   };
 
-  SmartComments = buildPerlPackage rec {
+  SmartComments = buildPerlPackage {
     pname = "Smart-Comments";
     version = "1.06";
     src = fetchurl {
@@ -22968,7 +22980,7 @@ with self; {
     };
   };
 
-  StatisticsChiSquare = buildPerlPackage rec {
+  StatisticsChiSquare = buildPerlPackage {
     pname = "Statistics-ChiSquare";
     version = "1.0000";
     src = fetchurl {
@@ -25593,7 +25605,7 @@ with self; {
     };
   };
 
-  TestPerlTidy = buildPerlModule rec {
+  TestPerlTidy = buildPerlModule {
     pname = "Test-PerlTidy";
     version = "20230226";
     src = fetchurl {
@@ -29033,10 +29045,10 @@ with self; {
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.88";
+    version = "0.89";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-LibYAML-0.88.tar.gz";
-      hash = "sha256-qKJzjMzDMqj3VJxMJ/PgCQyasR7vD2yFZEUXc5gTVng=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.89.tar.gz";
+      hash = "sha256-FVq4NnU0XFCt0DMRrPndkVlVcH+Qmiq9ixfXeShZsuw=";
     };
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";

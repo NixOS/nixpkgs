@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "aiomqtt";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-bV1elEO1518LVLwNDN5pzjxRgcG34K1XUsK7fTw8h+8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     paho-mqtt
     typing-extensions
   ];

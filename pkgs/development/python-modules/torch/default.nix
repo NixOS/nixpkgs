@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages,
+  autoAddDriverRunpath,
   effectiveMagma ?
   if cudaSupport then magma-cuda-static
   else if rocmSupport then magma-hip
@@ -13,7 +14,7 @@
   buildDocs ? false,
 
   # Native build inputs
-  cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  cmake, symlinkJoin, which, pybind11, removeReferencesTo,
   pythonRelaxDepsHook,
 
   # Build inputs
@@ -52,13 +53,15 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages,
+  rocmPackages_5,
   gpuTargets ? [ ]
 }:
 
 let
   inherit (lib) attrsets lists strings trivial;
   inherit (cudaPackages) cudaFlags cudnn nccl;
+
+  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 
@@ -127,7 +130,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -145,7 +148,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6z8G5nMbGHbpA+xfmOR726h9E4N9NoEtaFgcYE0DuUE=";
+    hash = "sha256-UmH4Mv5QL7Mz4Y4pvxn8F1FGBR/UzYZjE2Ys8Oc0FWQ=";
   };
 
   patches = lib.optionals cudaSupport [
@@ -202,8 +205,8 @@ in buildPythonPackage rec {
   # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
   # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
   + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") ''
-    substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace '#if __cplusplus >= 201703L
-    inline void *aligned_alloc(size_t align, size_t size)' '#if __cplusplus >= 201703L && 0
+    substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace-fail '#if (__cplusplus >= 201703L) && (!defined(__MINGW32__)) && (!defined(_MSC_VER))
+    inline void *aligned_alloc(size_t align, size_t size)' '#if 0
     inline void *aligned_alloc(size_t align, size_t size)'
   '';
 

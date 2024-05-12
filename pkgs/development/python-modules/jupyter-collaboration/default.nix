@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "2.0.4";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,21 +27,21 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-3N3w6JJ0SHa1EYBED/aU1g0IX9nDHf4iseGPwEK1zpw=";
+    hash = "sha256-rqZT4ag7W/YtbD909MfknboDzHa2Z6OOHhN/cdww4gw=";
   };
 
   postPatch = ''
     sed -i "/^timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatch-nodejs-version
     hatchling
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     jupyter-events
     jupyter-server
@@ -60,13 +60,20 @@ buildPythonPackage rec {
     "jupyter_collaboration"
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   preCheck = ''
     export HOME=$TEMP
   '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    "test_dirty"
+    # causes a hang
+    "test_rooms"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

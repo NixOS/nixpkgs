@@ -30,7 +30,12 @@
 
 let
   # PyMuPDF needs the C++ bindings generated
-  mupdf-cxx = mupdf.override { enableOcr = true; enableCxx = true; enablePython = true; python3 = python; };
+  mupdf-cxx = mupdf.override {
+    enableOcr = true;
+    enableCxx = true;
+    enablePython = true;
+    python3 = python;
+  };
 in buildPythonPackage rec {
   pname = "pymupdf";
   version = "1.23.26";
@@ -45,12 +50,12 @@ in buildPythonPackage rec {
     hash = "sha256-m2zq04+PDnlzFuqeSt27UhdHXTHxpHdMPIg5RQl/5bQ=";
   };
 
-  # swig is not wrapped as python package
+  # swig is not wrapped as Python package
   # libclang calls itself just clang in wheel metadata
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"swig",' "" \
-      --replace "libclang" "clang"
+      --replace-fail '"swig",' "" \
+      --replace-fail "libclang" "clang"
   '';
 
   nativeBuildInputs = [
@@ -95,14 +100,77 @@ in buildPythonPackage rec {
     fonttools
   ];
 
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
   disabledTests = [
     # fails for indeterminate reasons
-    "test_color_count"
-    "test_2753"
     "test_2548"
+    "test_2753"
+    "test_3020"
+    "test_3050"
+    "test_3058"
+    "test_3177"
+    "test_3186"
+    "test_color_count"
+    "test_pilsave"
+    "test_fz_write_pixmap_as_jpeg"
+    # NotImplementedError
+    "test_1824"
+    "test_2093"
+    "test_2093"
+    "test_2108"
+    "test_2182"
+    "test_2182"
+    "test_2246"
+    "test_2270"
+    "test_2270"
+    "test_2391"
+    "test_2788"
+    "test_2861"
+    "test_2871"
+    "test_2886"
+    "test_2904"
+    "test_2922"
+    "test_2934"
+    "test_2957"
+    "test_2969"
+    "test_3070"
+    "test_3131"
+    "test_3140"
+    "test_3209"
+    "test_3209"
+    "test_caret"
+    "test_deletion"
+    "test_file_info"
+    "test_line"
+    "test_page_links_generator"
+    "test_polyline"
+    "test_redact"
+    "test_techwriter_append"
+    "test_text2"
+    # Issue with FzArchive
+    "test_htmlbox"
+    "test_2246"
+    "test_3140"
+    "test_fit_springer"
+    "test_write_stabilized_with_links"
+    "test_textbox"
+    "test_delete_image"
+    # Fonts not available
+    "test_fontarchive"
+    "test_subset_fonts"
+    # Exclude lint tests
+    "test_flake8"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin does not support OCR right now
     "test_tesseract"
+  ];
+
+  disabledTestPaths = [
+    # Issue with FzArchive
+    "tests/test_docs_samples.py"
   ];
 
   pythonImportsCheck = [

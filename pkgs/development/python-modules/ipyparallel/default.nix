@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "8.7.0";
+  version = "8.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QDwJca5Wwrajn/6PNfMcf9FwzhJ5JGKUWc3X96C058M=";
+    hash = "sha256-JATVn4ajqqO9J79rV993e/9cE2PBxuYEA3WdFu1C3Hs=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -66,6 +66,5 @@ buildPythonPackage rec {
     homepage = "https://ipyparallel.readthedocs.io/";
     changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
   };
 }

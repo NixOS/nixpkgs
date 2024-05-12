@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, autoAddDriverRunpath
 , fetchurl
 , python
 , pythonAtLeast
@@ -24,7 +25,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.2.1";
+  version = "2.3.0";
 in buildPythonPackage {
   inherit version;
 
@@ -33,14 +34,14 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
+  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
@@ -108,7 +109,7 @@ in buildPythonPackage {
     # torch-bin used to vendor CUDA. It still links against CUDA and MKL.
     license = with licenses; [ bsd3 issl unfreeRedistributable ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
     hydraPlatforms = []; # output size 3.2G on 1.11.0
     maintainers = with maintainers; [ junjihashimoto ];
   };

@@ -5,10 +5,11 @@ argparse,,,,,,
 basexx,,,,,,
 binaryheap,,,,,,vcunat
 busted,,,,,,
-cassowary,,,,,,marsam alerque
+cassowary,,,,,,alerque
 cldr,,,,,,alerque
 compat53,,,,,,vcunat
-cosmo,,,,,,marsam
+commons.nvim,,,,,,mrcjkb
+cosmo,,,,,,
 coxpcall,,,,1.17.0-1,,
 cqueues,,,,,,vcunat
 cyan,,,,,,
@@ -18,6 +19,8 @@ fennel,,,,,,misterio77
 fidget.nvim,,,,,,mrcjkb
 fifo,,,,,,
 fluent,,,,,,alerque
+funnyfiles.nvim,,,,,,mrcjkb
+fzf-lua,,,,,,mrcjkb
 fzy,,,,,,mrcjkb
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
 haskell-tools.nvim,,,,,,
@@ -75,6 +78,7 @@ luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
 luarocks-build-rust-mlua,,,,,,mrcjkb
+luarocks-build-treesitter-parser,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasnip,,,,,,
 luasocket,,,,,,
@@ -85,6 +89,7 @@ luaunbound,,,,,,
 luaunit,,,,,,lockejan
 luautf8,,,,,,pstn
 luazip,,,,,,
+lua-utils.nvim,,,,,,mrcjkb
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
 luuid,,,,20120509-2,,
@@ -98,15 +103,21 @@ middleclass,,,,,,
 mimetypes,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
+neotest,,,,,,mrcjkb
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 nvim-nio,,,,,,mrcjkb
+pathlib.nvim,,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 rocks.nvim,,,,,5.1,teto mrcjkb
 rest.nvim,,,,,5.1,teto
+rocks.nvim,,,,,,mrcjkb
+rocks-git.nvim,,,,,,mrcjkb
+rocks-config.nvim,,,,,,mrcjkb
+rocks-dev.nvim,,,,,,mrcjkb
 rustaceanvim,,,,,,mrcjkb
 say,https://github.com/Olivine-Labs/say.git,,,,,
 serpent,,,,,,lockejan
@@ -121,6 +132,7 @@ tiktoken_core,,,,,,natsukium
 tl,,,,,,mephistophiles
 toml,,,,,,mrcjkb
 toml-edit,,,,,5.1,mrcjkb
+tree-sitter-norg,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
 xml2lua,,,,,,teto

@@ -6,18 +6,19 @@
 , alsa-utils
 , alsa-lib
 , gtk4
+, openssl
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "alsa-scarlett-gui";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lIwDNyzuvolDhTVCslCtUfbsC/TxKtxQF97h0zYxp9k=";
+    sha256 = "sha256-+74JRQn2xwgPHZSrp5b+uny0+aLnsFvx/cOKIdj4J40=";
   };
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=\${out}" "PREFIX=''" ];
   sourceRoot = "${src.name}/src";
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 makeWrapper ];
-  buildInputs = [ gtk4 alsa-lib ];
+  buildInputs = [ gtk4 alsa-lib openssl ];
   postInstall = ''
     wrapProgram $out/bin/alsa-scarlett-gui --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
 
@@ -37,11 +38,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
-    description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3 Mixer Driver";
+    description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3/4 Mixer Driver";
     mainProgram = "alsa-scarlett-gui";
     homepage = "https://github.com/geoffreybennett/alsa-scarlett-gui";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sebtm ];
+    maintainers = with maintainers; [ mdorman ];
     platforms = platforms.linux;
   };
 }

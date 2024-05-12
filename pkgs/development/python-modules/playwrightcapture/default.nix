@@ -1,26 +1,27 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, playwright
-, playwright-stealth
-, poetry-core
-, puremagic
-, pydub
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, requests
-, setuptools
-, speechrecognition
-, tzdata
-, w3lib
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  playwright,
+  playwright-stealth,
+  poetry-core,
+  puremagic,
+  pydub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  requests,
+  setuptools,
+  speechrecognition,
+  tzdata,
+  w3lib,
 }:
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.23.13";
+  version = "1.24.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNTVdGrUQaYHgTxz6zYTdxNQoXEfy/zshherC/gGmng=";
+    hash = "sha256-91EVR4cW383HiwcAg4BuhuC5jlwLwP1IFodD1iIo1j4=";
   };
 
   pythonRelaxDeps = [
@@ -39,12 +40,11 @@ buildPythonPackage rec {
     "tzdata"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     beautifulsoup4
     dateparser
     playwright
@@ -68,9 +68,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "playwrightcapture"
-  ];
+  pythonImportsCheck = [ "playwrightcapture" ];
 
   meta = with lib; {
     description = "Capture a URL with Playwright";

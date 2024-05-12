@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp-lextudio";
-  version = "6.0.11";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h/FxiGjBZqO82omkVqz+fws398Iz1EkHbZPMYIzG+t0=";
+    hash = "sha256-iVej39OmTPiZL11+IetnqHaxFAhZ/YR7tjiRoc7pu8U=";
   };
 
   nativeBuildInputs = [

@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, fetchpatch, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -41,12 +41,9 @@
 , monorepoSrc ? null
 }:
 
-assert let
-  int = a: if a then 1 else 0;
-  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
-in
+assert
   lib.assertMsg
-    (xor
+    (lib.xor
       (gitRelease != null)
       (officialRelease != null))
     ("must specify `gitRelease` or `officialRelease`" +
@@ -85,7 +82,57 @@ in let
 
   in {
 
-    libllvm = callPackage ./llvm {
+    libllvm = callPackage ../common/llvm {
+      patches = [
+        ./llvm/gnu-install-dirs.patch
+
+        # Running the tests involves invoking binaries (like `opt`) that depend on
+        # the LLVM dylibs and reference them by absolute install path (i.e. their
+        # nix store path).
+        #
+        # Because we have not yet run the install phase (we're running these tests
+        # as part of `checkPhase` instead of `installCheckPhase`) these absolute
+        # paths do not exist yet; to work around this we point the loader (`ld` on
+        # unix, `dyld` on macOS) at the `lib` directory which will later become this
+        # package's `lib` output.
+        #
+        # Previously we would just set `LD_LIBRARY_PATH` to include the build `lib`
+        # dir but:
+        #   - this doesn't generalize well to other platforms; `lit` doesn't forward
+        #     `DYLD_LIBRARY_PATH` (macOS):
+        #     + https://github.com/llvm/llvm-project/blob/0d89963df354ee309c15f67dc47c8ab3cb5d0fb2/llvm/utils/lit/lit/TestingConfig.py#L26
+        #   - even if `lit` forwarded this env var, we actually cannot set
+        #     `DYLD_LIBRARY_PATH` in the child processes `lit` launches because
+        #     `DYLD_LIBRARY_PATH` (and `DYLD_FALLBACK_LIBRARY_PATH`) is cleared for
+        #     "protected processes" (i.e. the python interpreter that runs `lit`):
+        #     https://stackoverflow.com/a/35570229
+        #   - other LLVM subprojects deal with this issue by having their `lit`
+        #     configuration set these env vars for us; it makes sense to do the same
+        #     for LLVM:
+        #     + https://github.com/llvm/llvm-project/blob/4c106cfdf7cf7eec861ad3983a3dd9a9e8f3a8ae/clang-tools-extra/test/Unit/lit.cfg.py#L22-L31
+        #
+        # !!! TODO: look into upstreaming this patch
+        ./llvm/llvm-lit-cfg-add-libs-to-dylib-path.patch
+
+        # `lit` has a mode where it executes run lines as a shell script which is
+        # constructs; this is problematic for macOS because it means that there's
+        # another process in between `lit` and the binaries being tested. As noted
+        # above, this means that `DYLD_LIBRARY_PATH` is cleared which means that our
+        # tests fail with dyld errors.
+        #
+        # To get around this we patch `lit` to reintroduce `DYLD_LIBRARY_PATH`, when
+        # present in the test configuration.
+        #
+        # It's not clear to me why this isn't an issue for LLVM developers running
+        # on macOS (nothing about this _seems_ nix specific)..
+        ./llvm/lit-shell-script-runner-set-dyld-library-path.patch
+      ];
+      pollyPatches = [
+        ./llvm/gnu-install-dirs-polly.patch
+
+        # Just like the `llvm-lit-cfg` patch, but for `polly`.
+        ./llvm/polly-lit-cfg-add-libs-to-dylib-path.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -93,7 +140,17 @@ in let
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm;
 
-    libclang = callPackage ./clang {
+    libclang = callPackage ../common/clang {
+      patches = [
+        ./clang/purity.patch
+        # https://reviews.llvm.org/D51899
+        ./clang/gnu-install-dirs.patch
+        ../common/clang/add-nostdlibinc-flag.patch
+        (substituteAll {
+          src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
+          libllvmLibdir = "${tools.libllvm.lib}/lib";
+        })
+      ];
       inherit llvm_meta;
     };
 
@@ -139,7 +196,11 @@ in let
       extraBuildCommands = mkExtraBuildCommands cc;
     };
 
-    lld = callPackage ./lld {
+    lld = callPackage ../common/lld {
+      patches = [
+        ./lld/gnu-install-dirs.patch
+        ./lld/add-table-base.patch
+      ];
       inherit llvm_meta;
     };
 
@@ -213,6 +274,7 @@ in let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      nixSupport.cc-ldflags = lib.optionals (!stdenv.targetPlatform.isWasm) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -283,14 +345,40 @@ in let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
-    compiler-rt-libc = callPackage ./compiler-rt {
+    compiler-rt-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+        # ../common/compiler-rt/armv7l-15.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
 
-    compiler-rt-no-libc = callPackage ./compiler-rt {
+    compiler-rt-no-libc = callPackage ../common/compiler-rt {
+      patches = [
+        ./compiler-rt/X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+        ./compiler-rt/gnu-install-dirs.patch
+        # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+        # extra `/`.
+        ./compiler-rt/normalize-var.patch
+        # Prevent a compilation error on darwin
+        ./compiler-rt/darwin-targetconditionals.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/186575
+        ../common/compiler-rt/darwin-plistbuddy-workaround.patch
+        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
+        # ../common/compiler-rt/armv7l-15.patch
+      ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
@@ -309,17 +397,30 @@ in let
     # `libcxx` requires a fairly modern C++ compiler,
     # so: we use the clang from this LLVM package set instead of the regular
     # stdenv's compiler.
-    libcxx = callPackage ./libcxx {
+    libcxx = callPackage ../common/libcxx {
+      patches = lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+        # https://github.com/llvm/llvm-project/issues/64226
+        (fetchpatch {
+          name = "0042-mbstate_t-not-defined.patch";
+          url = "https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch";
+          hash = "sha256-jo+DYA6zuSv9OH3A0bYwY5TlkWprup4OKQ7rfK1WHBI=";
+        })
+      ];
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    libunwind = callPackage ./libunwind {
+    libunwind = callPackage ../common/libunwind {
       inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
-    openmp = callPackage ./openmp {
+    openmp = callPackage ../common/openmp {
+      patches = [
+        ./openmp/fix-find-tool.patch
+        ./openmp/gnu-install-dirs.patch
+        ./openmp/run-lit-directly.patch
+      ];
       inherit llvm_meta targetLlvm;
     };
   });

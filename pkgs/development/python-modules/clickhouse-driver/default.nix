@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , clickhouse-cityhash
-, cython_3
+, cython
 , fetchFromGitHub
 , freezegun
 , lz4
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     setuptools
   ];
 

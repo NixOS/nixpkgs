@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.10.7";
+  version = "3.0.0";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-I+jmMtqWadWfT7nk2D9im6C2BGpPLts/7cdJ3NHsIks=";
+    hash = "sha256-OX9VJpO+SWIsocaSu+BhF3HT+zrhhgxb5NBvaRTadIY=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-3SyD1mC+tc8cf5MGcw891W5VbX+b7d0cIJQfwNq2NU8=";
+  vendorHash = "sha256-GRVSZB4GojXv2xAdx8Y5RSuhF/3paRhhq7HOWLRmmHE=";
 
   subPackages = [ "cmd/traefik" ];
 
   preBuild = ''
     GOOS= GOARCH= CGO_ENABLED=0 go generate
 
-    CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
+    CODENAME=$(grep -Po "CODENAME \?=\s\K.+$" Makefile)
 
     buildFlagsArray+=("-ldflags= -s -w \
       -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Version=${version} \

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch
 , desktopToDarwinBundle
-, docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook, yelp-tools
+, docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook3, yelp-tools
 , curl, gdk-pixbuf, gtk3, json-glib, libxml2
 , gpsbabel
 , withGeoClue ? true, geoclue2
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook yelp-tools ]
+  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook3 yelp-tools ]
     ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [ curl gdk-pixbuf gtk3 json-glib libxml2 ]

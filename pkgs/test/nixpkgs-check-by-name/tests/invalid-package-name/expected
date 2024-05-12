@@ -1,2 +1,0 @@
-pkgs/by-name/fo/fo@: Invalid package directory name "fo@", must be ASCII characters consisting of a-z, A-Z, 0-9, "-" or "_".
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

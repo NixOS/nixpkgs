@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, skawarePackages, skalibs }:
 
 let
-  version = "2.9.4.0";
+  version = "2.9.5.1";
 
 in skawarePackages.buildPackage {
   inherit version;
 
   pname = "execline";
   # ATTN: also check whether there is a new manpages version
-  sha256 = "mrVdVhU536dv9Kl5BvqZX8SiiOPeUiXLGp2PqenrxJs=";
+  sha256 = "33UANdD7IccmW/+37X4bZh3h6EKUSiJSvc3cMtDZchc=";
 
   # Maintainer of manpages uses following versioning scheme: for every
   # upstream $version he tags manpages release as ${version}.1, and,
@@ -16,8 +16,8 @@ in skawarePackages.buildPackage {
   # ${version}.3 and so on are created.
   manpages = skawarePackages.buildManPages {
     pname = "execline-man-pages";
-    version = "2.9.3.0.5";
-    sha256 = "0fcjrj4xp7y7n1c55k45rxr5m7zpv6cbhrkxlxymd4j603i9jh6d";
+    version = "2.9.5.1.1";
+    sha256 = "hLo0TJJ4F2UQ+NkyO9DvVHO0ec86Eps1z99HthBzoIc=";
     description = "Port of the documentation for the execline suite to mdoc";
     maintainers = [ lib.maintainers.sternenseemann ];
   };

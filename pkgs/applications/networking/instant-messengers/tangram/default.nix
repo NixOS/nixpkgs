@@ -20,7 +20,7 @@
 , python3
 , webkitgtk_6_0
 , blueprint-compiler
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     blueprint-compiler
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

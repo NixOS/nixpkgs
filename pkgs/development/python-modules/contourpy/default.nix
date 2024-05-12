@@ -23,7 +23,7 @@
 , pytestCheckHook
 }:
 
-let countourpy = buildPythonPackage rec {
+let contourpy = buildPythonPackage rec {
   pname = "contourpy";
   version = "1.2.0";
   format = "pyproject";
@@ -61,7 +61,7 @@ let countourpy = buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    check = countourpy.overridePythonAttrs (_: { doCheck = true; });
+    check = contourpy.overridePythonAttrs (_: { doCheck = true; });
   };
 
   pythonImportsCheck = [
@@ -76,4 +76,4 @@ let countourpy = buildPythonPackage rec {
     maintainers = with maintainers; [ ];
   };
 };
-in countourpy
+in contourpy

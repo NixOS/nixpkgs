@@ -1,41 +1,42 @@
 { lib
 , buildPythonPackage
 , chromadb
-, fetchFromGitHub
+, fetchPypi
 , llama-index-core
-, onnxruntime
+, pythonOlder
 , poetry-core
-, pythonRelaxDepsHook
-, tokenizers
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-chroma";
-
-  inherit (llama-index-core) version src meta;
-
+  version = "0.1.8";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/vector_stores/${pname}";
+  disabled = pythonOlder "3.8";
 
-  pythonRelaxDeps = [
-    "onnxruntime"
-    "tokenizers"
-  ];
+  src = fetchPypi {
+    pname = "llama_index_vector_stores_chroma";
+    inherit version;
+    hash = "sha256-nFdLrzcPr0Vry2e51eonOm+h8rT9IFpZxHtoESNkuec=";
+  };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     chromadb
     llama-index-core
-    onnxruntime
-    tokenizers
   ];
 
   pythonImportsCheck = [
     "llama_index.vector_stores.chroma"
   ];
+
+  meta = with lib; {
+    description = "LlamaIndex Vector Store Integration for Chroma";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/vector_stores/llama-index-vector-stores-chroma";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

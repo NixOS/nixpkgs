@@ -33,7 +33,7 @@ in
         extraHosts = hosts;
         firewall.allowedTCPPorts = [
           config.services.redis.servers.mastodon.port
-          config.services.postgresql.port
+          config.services.postgresql.settings.port
         ];
       };
 

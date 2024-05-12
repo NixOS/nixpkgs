@@ -12,13 +12,22 @@
 , ale-py
 , gym
 , pygame
+, torchsnapshot
 , gymnasium
 , mujoco
+, h5py
+, huggingface-hub
+, minari
+, pandas
+, pillow
+, requests
+, scikit-learn
+, torchvision
+, tqdm
 , moviepy
 , git
 , hydra-core
 , tensorboard
-, tqdm
 , wandb
 , packaging
 , tensordict
@@ -27,11 +36,12 @@
 , pytestCheckHook
 , pyyaml
 , scipy
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "torchrl";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,17 +50,17 @@ buildPythonPackage rec {
     owner = "pytorch";
     repo = "rl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lETW996IKPUGgZpe+cyzrXvVmDSwj5G4XFreFmGxReQ=";
+    hash = "sha256-8wSyyErqveP9zZS/UGvWVBYyylu9BuA447GEjXIzBIk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     ninja
     setuptools
     wheel
     which
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     numpy
     packaging
@@ -64,9 +74,23 @@ buildPythonPackage rec {
       gym
       pygame
     ];
+    checkpointing = [
+      torchsnapshot
+    ];
     gym-continuous = [
       gymnasium
       mujoco
+    ];
+    offline-data = [
+      h5py
+      huggingface-hub
+      minari
+      pandas
+      pillow
+      requests
+      scikit-learn
+      torchvision
+      tqdm
     ];
     rendering = [
       moviepy
@@ -103,6 +127,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     scipy
+    torchvision
   ]
   ++ passthru.optional-dependencies.atari
   ++ passthru.optional-dependencies.gym-continuous
@@ -137,5 +162,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
+    # ~3k tests fail with: RuntimeError: internal error
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

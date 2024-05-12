@@ -14,26 +14,26 @@
 , pango
 , fontconfig
 , freetype
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.0.7";
+  version = "7.2.1";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NODeDEgmf/nSKrM+RxAUsUwsbVQT7OSDrTOGVBwOzpw=";
+    sha256 = "sha256-CK3XkHX16Ec/j1DhC29uoj/YqcLXs/KsIb7v/cfoiaM=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3Packages; [

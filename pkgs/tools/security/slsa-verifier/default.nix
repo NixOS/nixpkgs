@@ -5,20 +5,18 @@
 
 buildGoModule rec {
   pname = "slsa-verifier";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "slsa-framework";
     repo = "slsa-verifier";
     rev = "v${version}";
-    hash = "sha256-swyBDJTv6Sp65Q46QGm/N/kIfGfln+vBTYXVOI9CAOE=";
+    hash = "sha256-vDzgbE/Cl3TMVzf6H300EtDpGPYBkkSOJBu+0l2fPFw=";
   };
 
-  vendorHash = "sha256-rCGj2o59US2t/ckqXirEDgYn9dGvVSzMVcFEZosasBc=";
+  vendorHash = "sha256-NkEYr56Wb3EV7TI+0W7w7PdmbZpX3/yQ4TbOebqW9ng=";
 
   CGO_ENABLED = 0;
-  GO111MODULE = "on";
-  GOFLAGS = "-trimpath";
 
   subPackages = [ "cli/slsa-verifier" ];
 

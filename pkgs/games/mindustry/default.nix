@@ -98,6 +98,7 @@ let
     desktopName = "Mindustry";
     exec = "mindustry";
     icon = "mindustry";
+    categories = [ "Game" ];
   };
 
   cleanupMindustrySrc = ''

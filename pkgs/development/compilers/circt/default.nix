@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , ninja
 , lit
+, z3
 , gitUpdater
 , callPackage
 }:
@@ -17,18 +18,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.70.0";
+  version = "1.74.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-OELkfyN0fxnQIGQxfwuRM/+DYdb+8m5wlT/H+eQNjq0=";
+    hash = "sha256-RFvWUd98OiL2I3aFrP61LQRZr4FSKrrZ5YOblBKRCA4=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  nativeBuildInputs = [ cmake ninja git pythonEnv ];
+  nativeBuildInputs = [ cmake ninja git pythonEnv z3 ];
   buildInputs = [ circt-llvm ];
 
   cmakeFlags = [

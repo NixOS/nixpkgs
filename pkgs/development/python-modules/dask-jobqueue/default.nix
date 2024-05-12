@@ -8,6 +8,7 @@
 , fetchPypi
 , pytest-asyncio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -16,7 +17,8 @@ buildPythonPackage rec {
   version = "0.8.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  # Python 3.12 support should be added in 0.8.6
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

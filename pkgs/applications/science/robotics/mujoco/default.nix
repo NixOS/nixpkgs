@@ -12,12 +12,12 @@
 let
   pin = {
 
-    # See https://github.com/google-deepmind/mujoco/blob/3.0.0/cmake/MujocoDependencies.cmake#L17-L64
+    # See https://github.com/google-deepmind/mujoco/blob/<VERSION>/cmake/MujocoDependencies.cmake#L17-L64
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "2f9e432cce407ce0ae50676696666f33a77d42ac";
-      hash = "sha256-D4E11bICKr3Z5RRah7QkfXVsXtuUg32FMmKpiOGjZDM=";
+      rev = "d7aaad83b488fd62bd51c81ecf16cd938532cc0a";
+      hash = "sha256-eA2/dZpNOlex1O5PNa3XSZhpMB3AmaIoHzVDI9TD/cg=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
@@ -70,8 +70,8 @@ let
     marchingcubecpp = fetchFromGitHub {
       owner = "aparis69";
       repo = "MarchingCubeCpp";
-      rev = "5b79e5d6bded086a0abe276a4b5a69fc17ae9bf1";
-      hash = "sha256-L0DH1GJZ/3vatQAU/KZj/2xTKE6Fwcw9eQYzLdqX2N4=";
+      rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
+      hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
 
     tmd = stdenv.mkDerivation rec {
@@ -129,7 +129,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.1.3";
+  version = "3.1.5";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -137,7 +137,7 @@ in stdenv.mkDerivation rec {
     owner = "google-deepmind";
     repo = "mujoco";
     rev = "refs/tags/${version}";
-    hash = "sha256-22yH3zAD479TRNS3XSqy6PuuLqyWmjvwScUTVfKumzY=";
+    hash = "sha256-XKN489oexHf2/Gv0MVxXUzqyeJJTJXV99+fNi8shdsg=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];

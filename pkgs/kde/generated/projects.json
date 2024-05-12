@@ -569,6 +569,12 @@
     "project_path": "kde/workspace/breeze-plymouth",
     "repo_path": "plasma/breeze-plymouth"
   },
+  "brio": {
+    "description": "Application for creating animations in Inkscape",
+    "name": "brio",
+    "project_path": "playground/graphics/brio",
+    "repo_path": "graphics/brio"
+  },
   "brooklyn": {
     "description": "Protocol independent software which forwards messages between various chat services.",
     "name": "brooklyn",
@@ -1052,7 +1058,7 @@
   "glaxnimate": {
     "description": "Simple vector animation program.",
     "name": "glaxnimate",
-    "project_path": "playground/graphics/glaxnimate",
+    "project_path": "kdereview/glaxnimate",
     "repo_path": "graphics/glaxnimate"
   },
   "gluon": {
@@ -1112,7 +1118,7 @@
   "hash-o-matic": {
     "description": "Simple hash validator allowing to compare two files, generate the checksum of a file and verify if a hash matches a file.",
     "name": "hash-o-matic",
-    "project_path": "kdereview/utils/hash-o-matic",
+    "project_path": "extragear/utils/hash-o-matic",
     "repo_path": "utilities/hash-o-matic"
   },
   "heaptrack": {
@@ -1914,7 +1920,7 @@
     "repo_path": "unmaintained/kdenetwork-strigi-analyzers"
   },
   "kdenlive": {
-    "description": "Free and open source video editor, based on MLT Framework and KDE Frameworks 5",
+    "description": "Free and open source video editor, based on MLT Framework and KDE Frameworks",
     "name": "kdenlive",
     "project_path": "kde/kdemultimedia/kdenlive",
     "repo_path": "multimedia/kdenlive"
@@ -2802,9 +2808,9 @@
     "repo_path": "education/klettres"
   },
   "klevernotes": {
-    "description": "A convergent markdown note taking application.",
+    "description": "A note-taking and management application using markdown.",
     "name": "klevernotes",
-    "project_path": "playground/office/klevernotes",
+    "project_path": "kdereview/klevernotes",
     "repo_path": "office/klevernotes"
   },
   "klickety": {
@@ -5660,7 +5666,7 @@
   "print-manager": {
     "description": "A tool for managing print jobs and printers",
     "name": "print-manager",
-    "project_path": "kde/kdeworkspace/print-manager",
+    "project_path": "kde/workspace/print-manager",
     "repo_path": "plasma/print-manager"
   },
   "printer-applet": {
@@ -5894,7 +5900,7 @@
   "rkward": {
     "description": "Easily extensible and easy-to-use IDE/GUI for R",
     "name": "rkward",
-    "project_path": "kdereview/rkward",
+    "project_path": "extragear/education/rkward",
     "repo_path": "education/rkward"
   },
   "rocs": {
@@ -7031,6 +7037,12 @@
     "project_path": "websites/discover-kde-org",
     "repo_path": "websites/discover-kde-org"
   },
+  "websites-docs-glaxnimate-org": {
+    "description": "Documentation website for Glaxnimate \u2014 docs.glaxnimate.org",
+    "name": "websites-docs-glaxnimate-org",
+    "project_path": "websites/docs-glaxnimate-org",
+    "repo_path": "websites/docs-glaxnimate-org"
+  },
   "websites-docs-kde-org": {
     "description": "Scripts and other materials needed to support and operate docs.kde.org",
     "name": "websites-docs-kde-org",
@@ -7156,6 +7168,12 @@
     "name": "websites-ghostwriter-kde-org",
     "project_path": "websites/ghostwriter-kde-org",
     "repo_path": "websites/ghostwriter-kde-org"
+  },
+  "websites-glaxnimate-org": {
+    "description": "Website for Glaxnimate \u2014 glaxnimate.org",
+    "name": "websites-glaxnimate-org",
+    "project_path": "websites/glaxnimate-org",
+    "repo_path": "websites/glaxnimate-org"
   },
   "websites-go-kde-org": {
     "description": "Data for the KDE Short URL Redirector Service - go.kde.org",

@@ -18,6 +18,9 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
+  # https://www.mediawiki.org/wiki/Compatibility
+  php = pkgs.php81;
+
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
     inherit (src) version;
@@ -46,7 +49,7 @@ let
   } ''
     mkdir -p $out/bin
     for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
-      makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
+      makeWrapper ${php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
         --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
         --add-flags ${pkg}/share/mediawiki/maintenance/$i
     done
@@ -192,7 +195,7 @@ in
   options = {
     services.mediawiki = {
 
-      enable = mkEnableOption (lib.mdDoc "MediaWiki");
+      enable = mkEnableOption "MediaWiki";
 
       package = mkPackageOption pkgs "mediawiki" { };
 
@@ -201,7 +204,7 @@ in
         readOnly = true;
         default = pkg;
         defaultText = literalExpression "pkg";
-        description = lib.mdDoc ''
+        description = ''
           The final package used by the module. This is the package that will have extensions and skins installed.
         '';
       };
@@ -210,7 +213,7 @@ in
         type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
-        description = lib.mdDoc "Name of the wiki.";
+        description = "Name of the wiki.";
       };
 
       url = mkOption {
@@ -229,13 +232,13 @@ in
           if "mediawiki uses ssl" then "{"https" else "http"}://''${cfg.hostName}" else "http://localhost";
         '';
         example = "https://wiki.example.org";
-        description = lib.mdDoc "URL of the wiki.";
+        description = "URL of the wiki.";
       };
 
       uploadsDir = mkOption {
         type = types.nullOr types.path;
         default = "${stateDir}/uploads";
-        description = lib.mdDoc ''
+        description = ''
           This directory is used for uploads of pictures. The directory passed here is automatically
           created and permissions adjusted as required.
         '';
@@ -243,7 +246,9 @@ in
 
       passwordFile = mkOption {
         type = types.path;
-        description = lib.mdDoc "A file containing the initial password for the admin user.";
+        description = ''
+          A file containing the initial password for the administrator account "admin".
+        '';
         example = "/run/keys/mediawiki-password";
       };
 
@@ -262,13 +267,13 @@ in
             else
               config.services.httpd.adminAddr else "root@localhost"
         '';
-        description = lib.mdDoc "Contact address for password reset.";
+        description = "Contact address for password reset.";
       };
 
       skins = mkOption {
         default = {};
         type = types.attrsOf types.path;
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of paths whose content is copied to the {file}`skins`
           subdirectory of the MediaWiki installation in addition to the default skins.
         '';
@@ -277,7 +282,7 @@ in
       extensions = mkOption {
         default = {};
         type = types.attrsOf (types.nullOr types.path);
-        description = lib.mdDoc ''
+        description = ''
           Attribute set of paths whose content is copied to the {file}`extensions`
           subdirectory of the MediaWiki installation and enabled in configuration.
 
@@ -297,46 +302,46 @@ in
       webserver = mkOption {
         type = types.enum [ "apache" "none" "nginx" ];
         default = "apache";
-        description = lib.mdDoc "Webserver to use.";
+        description = "Webserver to use.";
       };
 
       database = {
         type = mkOption {
           type = types.enum [ "mysql" "postgres" "mssql" "oracle" ];
           default = "mysql";
-          description = lib.mdDoc "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
+          description = "Database engine to use. MySQL/MariaDB is the database of choice by MediaWiki developers.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = lib.mdDoc "Database host address.";
+          description = "Database host address.";
         };
 
         port = mkOption {
           type = types.port;
           default = if cfg.database.type == "mysql" then 3306 else 5432;
           defaultText = literalExpression "3306";
-          description = lib.mdDoc "Database host port.";
+          description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = lib.mdDoc "Database name.";
+          description = "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "mediawiki";
-          description = lib.mdDoc "Database user.";
+          description = "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/mediawiki-dbpassword";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password corresponding to
             {option}`database.user`.
           '';
@@ -345,7 +350,7 @@ in
         tablePrefix = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             If you only have access to a single database and wish to install more than
             one version of MediaWiki, or have other applications that also use the
             database, you can give the table names a unique prefix to stop any naming
@@ -363,14 +368,14 @@ in
             else
               null;
           defaultText = literalExpression "/run/mysqld/mysqld.sock";
-          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
+          description = "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = cfg.database.type == "mysql" || cfg.database.type == "postgres";
           defaultText = literalExpression "true";
-          description = lib.mdDoc ''
+          description = ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
           '';
@@ -381,7 +386,7 @@ in
         type = types.str;
         example = literalExpression ''wiki.example.com'';
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The hostname to use for the nginx virtual host.
           This is used to generate the nginx configuration.
         '';
@@ -397,7 +402,7 @@ in
             enableACME = true;
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           See [](#opt-services.httpd.virtualHosts) for further information.
         '';
@@ -413,7 +418,7 @@ in
           "pm.max_spare_servers" = 4;
           "pm.max_requests" = 500;
         };
-        description = lib.mdDoc ''
+        description = ''
           Options for the MediaWiki PHP pool. See the documentation on `php-fpm.conf`
           for details on configuration directives.
         '';
@@ -421,7 +426,7 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Any additional text to be appended to MediaWiki's
           LocalSettings.php configuration file. For configuration
           settings, see <https://www.mediawiki.org/wiki/Manual:Configuration_settings>.
@@ -485,8 +490,7 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      # https://www.mediawiki.org/wiki/Compatibility
-      phpPackage = pkgs.php81;
+      phpPackage = php;
       settings = (if (cfg.webserver == "apache") then {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
@@ -598,8 +602,8 @@ in
         fi
 
         echo "exit( wfGetDB( DB_MASTER )->tableExists( 'user' ) ? 1 : 0 );" | \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/eval.php --conf ${mediawikiConfig} && \
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/install.php \
           --confpath /tmp \
           --scriptpath / \
           --dbserver ${lib.escapeShellArg dbAddr} \
@@ -613,7 +617,7 @@ in
           ${lib.escapeShellArg cfg.name} \
           admin
 
-        ${pkgs.php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
+        ${php}/bin/php ${pkg}/share/mediawiki/maintenance/update.php --conf ${mediawikiConfig} --quick
       '';
 
       serviceConfig = {

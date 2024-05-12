@@ -67,7 +67,7 @@ let
       deprecatedNativeMessagingHost = option: pkg:
         if (cfg.${option} or false)
           then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts.packages` instead"
+            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
             [pkg]
           else [];
 

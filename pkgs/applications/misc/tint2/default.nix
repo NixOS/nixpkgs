@@ -20,7 +20,7 @@
 , libpthreadstubs
 , libXdmcp
 , libstartup_notification
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

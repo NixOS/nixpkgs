@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   pname = "...";
   version = "...";
 
-  src = fetchurl { ... };
+  src = fetchurl { /* ... */ };
 
   nativeBuildInputs = [
     ant
@@ -48,8 +48,10 @@ installs a JAR named `foo.jar` in its `share/java` directory, and
 another package declares the attribute
 
 ```nix
-buildInputs = [ libfoo ];
-nativeBuildInputs = [ jdk ];
+{
+  buildInputs = [ libfoo ];
+  nativeBuildInputs = [ jdk ];
+}
 ```
 
 then `CLASSPATH` will be set to
@@ -62,13 +64,15 @@ If your Java package provides a program, you need to generate a wrapper
 script to run it using a JRE. You can use `makeWrapper` for this:
 
 ```nix
-nativeBuildInputs = [ makeWrapper ];
+{
+  nativeBuildInputs = [ makeWrapper ];
 
-installPhase = ''
-  mkdir -p $out/bin
-  makeWrapper ${jre}/bin/java $out/bin/foo \
-    --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
-'';
+  installPhase = ''
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/foo \
+      --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
+  '';
+}
 ```
 
 Since the introduction of the Java Platform Module System in Java 9,
@@ -92,16 +96,18 @@ let
   something = (pkgs.something.override { jre = my_jre; });
   other = (pkgs.other.override { jre = my_jre; });
 in
-  ...
+  <...>
 ```
 
 You can also specify what JDK your JRE should be based on, for example
 selecting a 'headless' build to avoid including a link to GTK+:
 
 ```nix
-my_jre = pkgs.jre_minimal.override {
-  jdk = jdk11_headless;
-};
+{
+  my_jre = pkgs.jre_minimal.override {
+    jdk = jdk11_headless;
+  };
+}
 ```
 
 Note all JDKs passthru `home`, so if your application requires
@@ -116,7 +122,9 @@ It is possible to use a different Java compiler than `javac` from the
 OpenJDK. For instance, to use the GNU Java Compiler:
 
 ```nix
-nativeBuildInputs = [ gcj ant ];
+{
+  nativeBuildInputs = [ gcj ant ];
+}
 ```
 
 Here, Ant will automatically use `gij` (the GNU Java Runtime) instead of

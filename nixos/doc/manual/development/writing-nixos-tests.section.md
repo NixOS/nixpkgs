@@ -8,10 +8,10 @@ A NixOS test is a module that has the following structure:
   # One or more machines:
   nodes =
     { machine =
-        { config, pkgs, ... }: { … };
+        { config, pkgs, ... }: { /* ... */ };
       machine2 =
-        { config, pkgs, ... }: { … };
-      …
+        { config, pkgs, ... }: { /* ... */ };
+      # …
     };
 
   testScript =
@@ -46,16 +46,20 @@ Tests are invoked differently depending on whether the test is part of NixOS or 
 Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
 
 ```nix
+{
   hostname = runTest ./hostname.nix;
+}
 ```
 
 Overrides can be added by defining an anonymous module in `all-tests.nix`.
 
 ```nix
+{
   hostname = runTest {
     imports = [ ./hostname.nix ];
     defaults.networking.firewall.enable = false;
   };
+}
 ```
 
 You can run a test with attribute name `hostname` in `nixos/tests/all-tests.nix` by invoking:
@@ -161,7 +165,7 @@ For faster dev cycles it's also possible to disable the code-linters
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
-    { configuration…
+    { # configuration…
     };
 
   testScript =
@@ -177,12 +181,14 @@ linter directly (again, don't commit this within the Nixpkgs
 repository):
 
 ```nix
+{
   testScript =
     ''
       # fmt: off
       Python code…
       # fmt: on
     '';
+}
 ```
 
 Similarly, the type checking of test scripts can be disabled in the following
@@ -193,7 +199,7 @@ way:
   skipTypeCheck = true;
   nodes.machine =
     { config, pkgs, ... }:
-    { configuration…
+    { # configuration…
     };
 }
 ```

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       A fork of the Bruteforce Exploit Detector Tool (BED).
       BED is a program which is designed to check daemons for potential buffer overflows, format string bugs etc.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ pamplemousse ];
   };
 }

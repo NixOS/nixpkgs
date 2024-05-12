@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.29";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VGgmJPNLEsD1y6e6CRw1Wipmy9MKAQkydyHNNjPyvhQ=";
+    hash = "sha256-0ta7rBWc4qUqsKDU/KSzx2x+fF2GVw77lQvRgt4bkpI=";
   };
 
   nativeBuildInputs = [

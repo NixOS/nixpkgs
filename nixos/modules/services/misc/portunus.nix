@@ -8,18 +8,18 @@ let
 in
 {
   options.services.portunus = {
-    enable = mkEnableOption (lib.mdDoc "Portunus, a self-contained user/group management and authentication service for LDAP");
+    enable = mkEnableOption "Portunus, a self-contained user/group management and authentication service for LDAP";
 
     domain = mkOption {
       type = types.str;
       example = "sso.example.com";
-      description = lib.mdDoc "Subdomain which gets reverse proxied to Portunus webserver.";
+      description = "Subdomain which gets reverse proxied to Portunus webserver.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = lib.mdDoc ''
+      description = ''
         Port where the Portunus webserver should listen on.
 
         This must be put behind a TLS-capable reverse proxy because Portunus only listens on localhost.
@@ -31,7 +31,7 @@ in
     seedPath = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a portunus seed file in json format.
         See <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration> for available options.
       '';
@@ -40,7 +40,7 @@ in
     seedSettings = lib.mkOption {
       type = with lib.types; nullOr (attrsOf (listOf (attrsOf anything)));
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Seed settings for users and groups.
         See upstream for format <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration>
       '';
@@ -49,40 +49,40 @@ in
     stateDir = mkOption {
       type = types.path;
       default = "/var/lib/portunus";
-      description = lib.mdDoc "Path where Portunus stores its state.";
+      description = "Path where Portunus stores its state.";
     };
 
     user = mkOption {
       type = types.str;
       default = "portunus";
-      description = lib.mdDoc "User account under which Portunus runs its webserver.";
+      description = "User account under which Portunus runs its webserver.";
     };
 
     group = mkOption {
       type = types.str;
       default = "portunus";
-      description = lib.mdDoc "Group account under which Portunus runs its webserver.";
+      description = "Group account under which Portunus runs its webserver.";
     };
 
     dex = {
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = mkEnableOption ''
         Dex ldap connector.
 
         To activate dex, first a search user must be created in the Portunus web ui
         and then the password must to be set as the `DEX_SEARCH_USER_PASSWORD` environment variable
         in the [](#opt-services.dex.environmentFile) setting.
-      '');
+      '';
 
       oidcClients = mkOption {
         type = types.listOf (types.submodule {
           options = {
             callbackURL = mkOption {
               type = types.str;
-              description = lib.mdDoc "URL where the OIDC client should redirect";
+              description = "URL where the OIDC client should redirect";
             };
             id = mkOption {
               type = types.str;
-              description = lib.mdDoc "ID of the OIDC client";
+              description = "ID of the OIDC client";
             };
           };
         });
@@ -93,7 +93,7 @@ in
             id = "service";
           }
         ];
-        description = lib.mdDoc ''
+        description = ''
           List of OIDC clients.
 
           The OIDC secret must be set as the `DEX_CLIENT_''${id}` environment variable
@@ -104,7 +104,7 @@ in
       port = mkOption {
         type = types.port;
         default = 5556;
-        description = lib.mdDoc "Port where dex should listen on.";
+        description = "Port where dex should listen on.";
       };
     };
 
@@ -116,14 +116,14 @@ in
         # TODO: remove in NixOS 24.11 (cf. same note on pkgs/servers/portunus/default.nix)
         default = pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; };
         defaultText = lib.literalExpression "pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; }";
-        description = lib.mdDoc "The OpenLDAP package to use.";
+        description = "The OpenLDAP package to use.";
       };
 
       searchUserName = mkOption {
         type = types.str;
         default = "";
         example = "admin";
-        description = lib.mdDoc ''
+        description = ''
           The login name of the search user.
           This user account must be configured in Portunus either manually or via seeding.
         '';
@@ -132,7 +132,7 @@ in
       suffix = mkOption {
         type = types.str;
         example = "dc=example,dc=org";
-        description = lib.mdDoc ''
+        description = ''
           The DN of the topmost entry in your LDAP directory.
           Please refer to the Portunus documentation for more information on how this impacts the structure of the LDAP directory.
         '';
@@ -141,7 +141,7 @@ in
       tls = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable LDAPS protocol.
           This also adds two entries to the `/etc/hosts` file to point [](#opt-services.portunus.domain) to localhost,
           so that CLIs and programs can use ldaps protocol and verify the certificate without opening the firewall port for the protocol.
@@ -153,13 +153,13 @@ in
       user = mkOption {
         type = types.str;
         default = "openldap";
-        description = lib.mdDoc "User account under which Portunus runs its LDAP server.";
+        description = "User account under which Portunus runs its LDAP server.";
       };
 
       group = mkOption {
         type = types.str;
         default = "openldap";
-        description = lib.mdDoc "Group account under which Portunus runs its LDAP server.";
+        description = "Group account under which Portunus runs its LDAP server.";
       };
     };
   };
@@ -231,12 +231,14 @@ in
     };
 
     systemd.services = {
-      dex.serviceConfig = mkIf cfg.dex.enable {
-        # `dex.service` is super locked down out of the box, but we need some
-        # place to write the SQLite database. This creates $STATE_DIRECTORY below
-        # /var/lib/private because DynamicUser=true, but it gets symlinked into
-        # /var/lib/dex inside the unit
-        StateDirectory = "dex";
+      dex = mkIf cfg.dex.enable {
+        serviceConfig = {
+          # `dex.service` is super locked down out of the box, but we need some
+          # place to write the SQLite database. This creates $STATE_DIRECTORY below
+          # /var/lib/private because DynamicUser=true, but it gets symlinked into
+          # /var/lib/dex inside the unit
+          StateDirectory = "dex";
+        };
       };
 
       portunus = {

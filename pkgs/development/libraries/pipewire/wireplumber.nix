@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.5.0";
+  version = "0.5.2";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    hash = "sha256-zcYZvyGsGuiwuL9nOD5mW6RFwa9cPB9HvoQqdw2jlmY=";
+    hash = "sha256-SXLHQbjh4IygV+925fsPXgj7DFIPQj48oLNKWkUhuK8=";
   };
 
   nativeBuildInputs = [

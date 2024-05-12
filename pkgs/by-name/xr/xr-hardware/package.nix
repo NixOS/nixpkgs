@@ -1,21 +1,27 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitLab
-}: stdenvNoCC.mkDerivation {
+{ lib
+, stdenvNoCC
+, fetchFromGitLab
+, nix-update-script
+}:
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";
-  version = "unstable-2023-11-08";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado/utilities";
     repo = "xr-hardware";
-    rev = "9204de323210d2a5ab8635c2ee52127100de67b1";
-    hash = "sha256-ZS15WODms/WKsPu+WbfILO2BOwnxrhCY/SoF8jzOX5Q=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-w35/LoozCJz0ytHEHWsEdCaYYwyGU6sE13iMckVdOzY=";
   };
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installTargets = "install_package";
   installFlagsArray = "DESTDIR=${placeholder "out"}";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Hardware description for XR devices";
@@ -24,4 +30,4 @@
     maintainers = with maintainers; [ Scrumplex ];
     platforms = platforms.linux;
   };
-}
+})

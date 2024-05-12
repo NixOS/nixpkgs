@@ -12,6 +12,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
   };
 
+  build-system = with python3Packages; [
+    cython
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     # requirements
     pyaes
@@ -36,7 +40,6 @@ python3Packages.buildPythonApplication rec {
     cryptography
 
     # requirements-hw
-    cython
     trezor
     keepkey
     btchip-python

@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pillow
-, poetry-core
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pillow,
+  poetry-core,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.1.7";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "ollama";
     repo = "ollama-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xNH9kAjSdVXrCI7zkyR7tYxJ/NG8/08ykkDZQJI8Za4=";
+    hash = "sha256-kfotKUUXBekUd0X32BYAjNWvQJO94bdEDCSrBg2yJRQ=";
   };
 
   postPatch = ''
@@ -30,18 +31,13 @@ buildPythonPackage rec {
       --replace-fail "0.0.0" "${version}"
   '';
 
-  pythonRelaxDeps = [
-    "httpx"
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
     pillow
@@ -50,9 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ollama"
-  ];
+  pythonImportsCheck = [ "ollama" ];
 
   meta = with lib; {
     description = "Ollama Python library";

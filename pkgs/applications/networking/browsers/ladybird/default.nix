@@ -11,6 +11,7 @@
 , cmake
 , ninja
 , libxcrypt
+, python3
 , qt6Packages
 , nixosTests
 , AppKit
@@ -103,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with qt6Packages; [
     cmake
     ninja
+    python3
     wrapQtAppsHook
   ];
 
@@ -151,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ladybird.dev";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
   };
 })

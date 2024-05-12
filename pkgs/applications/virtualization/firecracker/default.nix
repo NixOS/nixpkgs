@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
   # nixpkgs-update: no auto update
 
   suffix = {
@@ -13,7 +13,7 @@ let
 
   dlbin = sha256: fetchurl {
     url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-    sha256 = sha256."${stdenv.hostPlatform.system}";
+    sha256 = sha256."${stdenv.hostPlatform.system}"or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
 in
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux = "sha256-FflAYvWTcigIchVrAaUgg6IRleEtis6eh6fCqrZ5lb8=";
-    aarch64-linux = "sha256-4O0kPMl7RbMjszUNql0OQrl/4or/e8ZCHPngqq0CNxk=";
+    x86_64-linux = "sha256-Vb0+bVmf3RCONuUvmu4jGfBsGKkPL6SbZOk/3wb1/1M=";
+    aarch64-linux = "sha256-PLoQA4a6qulxSns/ZRSgn6EtHr46/hstNhP1pAHt9VA=";
   };
 
   dontConfigure = true;
@@ -54,6 +54,6 @@ stdenv.mkDerivation {
     mainProgram = "firecracker";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice endocrimes qjoly ];
+    maintainers = with maintainers; [ thoughtpolice qjoly ];
   };
 }

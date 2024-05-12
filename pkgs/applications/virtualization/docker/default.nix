@@ -12,7 +12,7 @@ rec {
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+      , go-md2man, go, containerd, runc, tini, libtool
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
@@ -137,6 +137,7 @@ rec {
       installPhase = ''
         cd ./go/src/${goPackagePath}
         install -Dm755 ./bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
+        install -Dm755 ./bundles/dynbinary-daemon/docker-proxy $out/libexec/docker/docker-proxy
 
         makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
           --prefix PATH : "$out/libexec/docker:$extraPath"
@@ -144,7 +145,6 @@ rec {
         ln -s ${docker-containerd}/bin/containerd $out/libexec/docker/containerd
         ln -s ${docker-containerd}/bin/containerd-shim $out/libexec/docker/containerd-shim
         ln -s ${docker-runc}/bin/runc $out/libexec/docker/runc
-        ln -s ${docker-proxy}/bin/docker-proxy $out/libexec/docker/docker-proxy
         ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
         # systemd
@@ -172,7 +172,7 @@ rec {
   buildGoPackage (lib.optionalAttrs (!clientOnly) {
     # allow overrides of docker components
     # TODO: move packages out of the let...in into top-level to allow proper overrides
-    inherit docker-runc docker-containerd docker-proxy docker-tini moby;
+    inherit docker-runc docker-containerd docker-tini moby;
   } // rec {
     pname = "docker";
     inherit version;
@@ -294,9 +294,23 @@ rec {
   };
 
   docker_25 = callPackage dockerGen rec {
-    version = "25.0.3";
+    version = "25.0.5";
     cliRev = "v${version}";
-    cliHash = "sha256-Jvb0plV1O/UzrcpzN4zH5OulmTVF+p9UQQQ9xqkiObQ=";
+    cliHash = "sha256-CACMi3bXUN6oGc2f/Z+lNQqMgQ4llRWPRKgijdpiPGg=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-4QGz22fXxyAD77pyUWb2lF3VKqxmPIrGqcJGoyrEHew=";
+    runcRev = "v1.1.12";
+    runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
+    containerdRev = "v1.7.13";
+    containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
+  docker_26 = callPackage dockerGen rec {
+    version = "26.0.0";
+    cliRev = "v${version}";
+    cliHash = "sha256-jGg/AVnIzI8e+DdF0uKlSZApRxcwuOjCQpfnBaCY4fI=";
     mobyRev = "v${version}";
     mobyHash = "sha256-cDlRVdQNzH/X2SJUYHK1QLUHlKQtSyRYCVbz3wPx1ZM=";
     runcRev = "v1.1.12";
@@ -306,4 +320,5 @@ rec {
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
+
 }

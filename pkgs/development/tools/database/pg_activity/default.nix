@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";
-  version = "3.5.0";
+  version = "3.5.1";
   disabled = python3Packages.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dalibo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-raEQbpADSkJZu+ULxzJg9GqFQ4/qmONDHGqoc7quMjI=";
+    sha256 = "sha256-fqRECReeXjdoCieCYIsIumIjcMGN7UUbWHxxAfzm9co=";
   };
 
   propagatedBuildInputs = with python3Packages; [

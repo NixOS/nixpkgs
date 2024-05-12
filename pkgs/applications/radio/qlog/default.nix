@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qlog";
-  version = "0.33.1";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
     rev = "v${version}";
-    hash = "sha256-stPzkCLcjzQT0n1NRGT7YN625RPYhJ9FuMkjtFZwtbA=";
+    hash = "sha256-zPIGqVfpd7Gkm3Ify+AwiCSWQ67ybv9BmuolSu9WzHM=";
     fetchSubmodules = true;
   };
 

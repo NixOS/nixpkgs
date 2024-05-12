@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.32.0";
+  version = "0.33.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-XA0zSMZTeEOiAKgzU6/znZIoJr4VtGjxWjOqDE7TFbk=";
+    hash = "sha256-4qwRBJNbPkqEHrRY67wgxtmVLzaVkCSvvMc8gKPblew=";
   };
 
-  cargoHash = "sha256-94oSlnTZdGkYLAn5uShIDg2UAMPVu580ofVcgHZvI2M=";
+  cargoHash = "sha256-5NGW9uTemoHWvrhz06suVXzjZ48pk+jN6DUkdzIXT5k=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

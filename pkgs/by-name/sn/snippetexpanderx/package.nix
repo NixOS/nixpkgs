@@ -3,7 +3,7 @@
 , fetchFromSourcehut
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , installShellFiles
 , scdoc
 , at-spi2-atk
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     installShellFiles
     scdoc
   ];
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     snippetexpanderd
   ];
 
+  makeFlags = [ "VERSION=${src.rev}" ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -53,12 +55,12 @@ stdenv.mkDerivation rec {
   # There are no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Your little expandable text snippet helper auto expander daemon";
     homepage = "https://snippetexpander.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ianmjones ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ianmjones ];
+    platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderx";
   };
 }

@@ -1,41 +1,37 @@
 { lib
 , stdenv
 , fetchFromGitea, fetchYarnDeps
-, prefetch-yarn-deps, yarn, nodejs
+, fixup-yarn-lock, yarn, nodejs
+, git
 , python3, pkg-config, libsass
 }:
 
 stdenv.mkDerivation rec {
   pname = "admin-fe";
-  version = "unstable-2024-02-25";
+  version = "unstable-2024-04-27";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "admin-fe";
-    rev = "2a1e175f7c2b02e66d728f808cb7e9449231a288";
-    hash = "sha256-PLSJ+doZUZ2n4hWUahY299VoCvNq76Tm8qpdvOIHD9c=";
+    rev = "7e16abcbaab10efa6c2c4589660cf99f820a718d";
+    hash = "sha256-W/2Ay2dNeVQk88lgkyTzKwCNw0kLkfI6+Azlbp0oMm4=";
   };
 
-  patches = [ ./deps.patch ];
-
   offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-h+QUBT2VwPWu2l05Zkcp+0vHN/x40uXxw2KYjq7l/Xk=";
+    yarnLock = src + "/yarn.lock";
+    hash = "sha256-acF+YuWXlMZMipD5+XJS+K9vVFRz3wB2fZqc3Hd0Bjc=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     yarn
     nodejs
     pkg-config
     python3
+    git
     libsass
   ];
-
-  postPatch = ''
-    cp ${./yarn.lock} yarn.lock
-  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -44,6 +40,8 @@ stdenv.mkDerivation rec {
 
     yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg offlineCache}
     fixup-yarn-lock yarn.lock
+    substituteInPlace yarn.lock \
+      --replace-fail '"git://github.com/adobe-webplatform/eve.git#eef80ed"' '"https://github.com/adobe-webplatform/eve.git#eef80ed"'
 
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/cross-env

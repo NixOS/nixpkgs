@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , substituteAll
 , llhttp
+, python
 # build_requires
 , cython
 , setuptools
@@ -21,8 +22,7 @@
 , freezegun
 , gunicorn
 , pytest-mock
-, pytestCheckHook
-, pytest_7
+, pytest7CheckHook
 , python-on-whales
 , re-assert
 , trustme
@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.9.3";
+  version = "3.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "aiohttp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dEeMHruFJ1o0J6VUJcpUk7LhEC8sV8hUKXoKcd618lE=";
+    hash = "sha256-FRtirmwgU8v+ee3db7rOFsmy0rNW8A7+yRZC5d6uYNA=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     touch .git  # tools/gen.py uses .git to find the project root
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     make cythonize
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     multidict
     async-timeout
@@ -78,12 +78,17 @@ buildPythonPackage rec {
     brotli
   ];
 
+  postInstall = ''
+    # remove source code file with reference to dev dependencies
+    rm $out/${python.sitePackages}/aiohttp/_cparser.pxd{,.orig}
+  '';
+
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
     freezegun
     gunicorn
     pytest-mock
-    (pytestCheckHook.override { pytest = pytest_7; })
+    pytest7CheckHook
     python-on-whales
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
@@ -97,14 +102,6 @@ buildPythonPackage rec {
     "test_client_session_timeout_zero"
     "test_mark_formdata_as_processed"
     "test_requote_redirect_url_default"
-    # Disable tests that trigger deprecation warnings in pytest
-    "test_async_with_session"
-    "test_session_close_awaitable"
-    "test_close_run_until_complete_not_deprecated"
-    # https://github.com/aio-libs/aiohttp/issues/7130
-    "test_static_file_if_none_match"
-    "test_static_file_if_match"
-    "test_static_file_if_modified_since_past_date"
     # don't run benchmarks
     "test_import_time"
   ] ++ lib.optionals stdenv.is32bit [

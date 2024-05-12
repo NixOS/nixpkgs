@@ -2,29 +2,16 @@
 , lib
 , alsa-lib
 , autoPatchelfHook
-, buildFHSEnv
-, ciscoPacketTracer8
 , copyDesktopItems
 , dbus
 , dpkg
 , expat
 , fontconfig
 , glib
-, libdrm
-, libglvnd
-, libpulseaudio
-, libudev0-shim
-, libxkbcommon
-, libxml2
-, libxslt
-, lndir
 , makeDesktopItem
 , makeWrapper
-, nspr
-, nss
 , qt5
 , requireFile
-, xorg
 }:
 
 let
@@ -40,14 +27,14 @@ let
   };
 in
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (args: {
   pname = "ciscoPacketTracer8";
 
   version = "8.2.2";
 
   src = requireFile {
-    name = names.${version};
-    hash = hashes.${version};
+    name = names.${args.version};
+    hash = hashes.${args.version};
     url = "https://www.netacad.com";
   };
 
@@ -88,6 +75,7 @@ stdenvNoCC.mkDerivation rec {
 
     makeWrapper "$out/opt/pt/bin/PacketTracer" "$out/bin/packettracer8" \
       "''${qtWrapperArgs[@]}" \
+      --set QT_QPA_PLATFORMTHEME "" \
       --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
 
     install -D $out/opt/pt/art/app.png $out/share/icons/hicolor/128x128/apps/ciscoPacketTracer8.png
@@ -122,4 +110,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "packettracer8";
   };
-}
+})

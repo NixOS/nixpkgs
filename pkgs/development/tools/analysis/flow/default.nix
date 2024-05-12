@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.231.0";
+  version = "0.235.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    hash = "sha256-xZ6hyAnfWMwNZfkDIPV+0Cjs/HBMwBME6tZwQW38Cmk=";
+    hash = "sha256-aSL6C9MBn3fmuUrtWvb+6VBd1tpoIyqDXEqThGRNx7U=";
   };
 
   postPatch = ''
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with maintainers; [ marsam puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh ];
   };
 }

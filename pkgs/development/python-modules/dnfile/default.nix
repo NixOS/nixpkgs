@@ -9,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "dnfile";
-  version = "0.14.1";
-  format = "pyproject";
+  version = "0.15.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,15 +18,15 @@ buildPythonPackage rec {
     owner = "malwarefrank";
     repo = "dnfile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5xkoG7c9Piwrv+9qour7MZ+rabdngtd05b0T+AU8tSo=";
+    hash = "sha256-HzlMJ4utBHyLLhO+u0uiTfqtk8jX80pEyO75QvpJ3yg=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pefile
   ];
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to parse .NET executable files";
-    homepage = "hhttps://github.com/malwarefrank/dnfile";
+    homepage = "https://github.com/malwarefrank/dnfile";
     changelog = "https://github.com/malwarefrank/dnfile/blob/v${version}/HISTORY.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

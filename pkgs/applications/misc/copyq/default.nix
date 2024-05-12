@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, extra-cmake-modules
 , qtbase
 , qtsvg
 , qttools

@@ -1,76 +1,64 @@
-{ stdenv, lib, config, newScope, buildPackages, pkgsHostHost, makeSetupHook, substituteAll, runtimeShell, ... }:
+{
+  lib,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
+  callPackage,
+  crossLibcStdenv,
+  attributePathToSplice ? [ "freebsd" ],
+  branch ? "release/14.0.0",
+}:
+
 let
   versions = builtins.fromJSON (builtins.readFile ./versions.json);
-in lib.makeScope newScope (self:
-let
-  byName = lib.packagesFromDirectoryRecursive {
-    callPackage = self.callPackage;
-    directory = ./by-name;
-  };
-  mkTerminate = terminate: target: if terminate then throw "Cannot recurse deeper than one level into FreeBSD scopes" else target;
-in byName // (with self; { inherit stdenv;
-  compatIsNeeded = !self.stdenv.hostPlatform.isFreeBSD;
 
-  # build a self which is parameterized with whatever the targeted version is
-  # so e.g. pkgsCross.x86_64-freebsd.freebsd.branches."releng/14.0".buildFreebsd will get you
-  # freebsd.branches."releng/14.0"
-  buildFreebsd = mkTerminate terminate buildPackages.freebsd.overrideScope (_: _: { inherit hostBranch; terminate = true; });
-  branches = mkTerminate terminate lib.flip lib.mapAttrs versions (branch: _: self.overrideScope (_: _: { hostBranch = branch; terminate = true; }));
-
-  packages13 = mkTerminate terminate self.overrideScope (_: _: { hostBranch = "release/13.2.0"; terminate = true; });
-  packages14 = mkTerminate terminate self.overrideScope (_: _: { hostBranch = "release/14.0.0"; terminate = true; });
-  packagesGit = mkTerminate terminate self.overrideScope (_: _: { hostBranch = "main"; terminate = true; });
-  terminate = false;
-
-  hostBranch = let
-    supportedBranches = builtins.attrNames (lib.filterAttrs (k: v: v.supported) versions);
-    fallbackBranch = let
-        branchRegex = "releng/.*";
-        candidateBranches = builtins.filter (name: builtins.match branchRegex name != null) supportedBranches;
-      in
-        lib.last (lib.naturalSort candidateBranches);
-    envBranch = builtins.getEnv "NIXPKGS_FREEBSD_BRANCH";
-    selectedBranch =
-      if config.freebsdBranch != null then
-        config.freebsdBranch
-      else if envBranch != "" then
-        envBranch
-      else null;
-    chosenBranch = if selectedBranch != null then selectedBranch else fallbackBranch;
-  in
-    if versions ? ${chosenBranch} then chosenBranch else throw ''
-      Unknown FreeBSD branch ${chosenBranch}!
+  badBranchError =
+    branch:
+    throw ''
+      Unknown FreeBSD branch ${branch}!
       FreeBSD branches normally look like one of:
       * `release/<major>.<minor>.0` for tagged releases without security updates
       * `releng/<major>.<minor>` for release update branches with security updates
       * `stable/<major>` for stable versions working towards the next minor release
       * `main` for the latest development version
 
-      Set one with the NIXPKGS_FREEBSD_BRANCH environment variable or by setting `nixpkgs.config.freebsdBranch`.
+      Branches can be selected by overriding the `branch` attribute on the freebsd package set.
     '';
 
-  sourceData = versions.${hostBranch};
-  versionData = sourceData.version;
-  hostVersion = versionData.revision;
-
-  hostArchBsd = {
-    x86_64 = "amd64";
-    aarch64 = "arm64";
-    i486 = "i386";
-    i586 = "i386";
-    i686 = "i386";
-  }.${self.stdenv.hostPlatform.parsed.cpu.name} or self.stdenv.hostPlatform.parsed.cpu.name;
-
-  patchesRoot = ./patches/${hostVersion};
-
-  compatIfNeeded = lib.optional compatIsNeeded compat;
-
-  # for cross-compiling or bootstrapping
-  install-wrapper = builtins.readFile ./install-wrapper.sh;
-  boot-install = buildPackages.writeShellScriptBin "boot-install" (install-wrapper + ''
-    ${xinstallBootstrap}/bin/xinstall "''${args[@]}"
-  '');
-
-  # libs, bins, and data
-  libncurses-tinfo = if hostVersion == "13.2" then libncurses else byName.libncurses-tinfo;
-}))
+  # `./package-set.nix` should never know the name of the package set we
+  # are constructing; just this function is allowed to know that. This
+  # is why we:
+  #
+  #  - do the splicing for cross compilation here
+  #
+  #  - construct the *anonymized* `buildFreebsd` attribute to be passed
+  #    to `./package-set.nix`.
+  callFreeBSDWithAttrs =
+    extraArgs:
+    let
+      # we do not include the branch in the splice here because the branch
+      # parameter to this file will only ever take on one value - more values
+      # are provided through overrides.
+      otherSplices = generateSplicesForMkScope attributePathToSplice;
+    in
+    makeScopeWithSplicing' {
+      inherit otherSplices;
+      f =
+        self:
+        {
+          inherit branch;
+        }
+        // callPackage ./package-set.nix (
+          {
+            sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
+            versionData = self.sourceData.version;
+            buildFreebsd = otherSplices.selfBuildHost;
+            patchesRoot = ./patches/${self.versionData.revision};
+          }
+          // extraArgs
+        ) self;
+    };
+in
+{
+  freebsd = callFreeBSDWithAttrs { };
+  freebsdCross = callFreeBSDWithAttrs { stdenv = crossLibcStdenv; };
+}

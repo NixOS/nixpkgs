@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pykalman";
-  version = "0.9.5";
+  version = "0.9.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gWr0dyDZJKTGAW+nS54sjCEWWgjZFpPDIqF0Ho4H+zg=";
+    hash = "sha256-E1d5IAOTxrNwIhmQ9zFnQEcvVBNG6SEdEWMOLC2PuKA=";
   };
 
   patches = [

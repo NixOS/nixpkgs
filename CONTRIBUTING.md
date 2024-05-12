@@ -512,6 +512,7 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 - Check for unnecessary whitespace with `git diff --check` before committing.
 
 - If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
+  See [Squashing Commits](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History#_squashing) for additional information.
 
 - For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
 
@@ -557,7 +558,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   foo {
-    arg = ...;
+    arg = <...>;
   }
   ```
 
@@ -566,14 +567,14 @@ Names of files and directories should be in lowercase, with dashes between words
   ```nix
   foo
   {
-    arg = ...;
+    arg = <...>;
   }
   ```
 
   Also fine is
 
   ```nix
-  foo { arg = ...; }
+  foo { arg = <...>; }
   ```
 
   if it's a short call.
@@ -581,41 +582,45 @@ Names of files and directories should be in lowercase, with dashes between words
 - In attribute sets or lists that span multiple lines, the attribute names or list elements should be aligned:
 
   ```nix
-  # A long list.
-  list = [
-    elem1
-    elem2
-    elem3
-  ];
+  {
+    # A long list.
+    list = [
+      elem1
+      elem2
+      elem3
+    ];
 
-  # A long attribute set.
-  attrs = {
-    attr1 = short_expr;
-    attr2 =
-      if true then big_expr else big_expr;
-  };
+    # A long attribute set.
+    attrs = {
+      attr1 = short_expr;
+      attr2 =
+        if true then big_expr else big_expr;
+    };
 
-  # Combined
-  listOfAttrs = [
-    {
-      attr1 = 3;
-      attr2 = "fff";
-    }
-    {
-      attr1 = 5;
-      attr2 = "ggg";
-    }
-  ];
+    # Combined
+    listOfAttrs = [
+      {
+        attr1 = 3;
+        attr2 = "fff";
+      }
+      {
+        attr1 = 5;
+        attr2 = "ggg";
+      }
+    ];
+  }
   ```
 
 - Short lists or attribute sets can be written on one line:
 
   ```nix
-  # A short list.
-  list = [ elem1 elem2 elem3 ];
+  {
+    # A short list.
+    list = [ elem1 elem2 elem3 ];
 
-  # A short set.
-  attrs = { x = 1280; y = 1024; };
+    # A short set.
+    attrs = { x = 1280; y = 1024; };
+  }
   ```
 
 - Breaking in the middle of a function argument can give hard-to-read code, like
@@ -649,7 +654,7 @@ Names of files and directories should be in lowercase, with dashes between words
   ```nix
   { arg1, arg2 }:
   assert system == "i686-linux";
-  stdenv.mkDerivation { ...
+  stdenv.mkDerivation { /* ... */ }
   ```
 
   not
@@ -657,41 +662,41 @@ Names of files and directories should be in lowercase, with dashes between words
   ```nix
   { arg1, arg2 }:
     assert system == "i686-linux";
-      stdenv.mkDerivation { ...
+      stdenv.mkDerivation { /* ... */ }
   ```
 
 - Function formal arguments are written as:
 
   ```nix
-  { arg1, arg2, arg3 }:
+  { arg1, arg2, arg3 }: { /* ... */ }
   ```
 
   but if they don't fit on one line they're written as:
 
   ```nix
   { arg1, arg2, arg3
-  , arg4, ...
-  , # Some comment...
-    argN
-  }:
+  , arg4
+  # Some comment...
+  ,  argN
+  }: { }
   ```
 
 - Functions should list their expected arguments as precisely as possible. That is, write
 
   ```nix
-  { stdenv, fetchurl, perl }: ...
+  { stdenv, fetchurl, perl }: <...>
   ```
 
   instead of
 
   ```nix
-  args: with args; ...
+  args: with args; <...>
   ```
 
   or
 
   ```nix
-  { stdenv, fetchurl, perl, ... }: ...
+  { stdenv, fetchurl, perl, ... }: <...>
   ```
 
   For functions that are truly generic in the number of arguments (such as wrappers around `mkDerivation`) that have some required arguments, you should write them using an `@`-pattern:
@@ -700,7 +705,7 @@ Names of files and directories should be in lowercase, with dashes between words
   { stdenv, doCoverageAnalysis ? false, ... } @ args:
 
   stdenv.mkDerivation (args // {
-    ... if doCoverageAnalysis then "bla" else "" ...
+    foo = if doCoverageAnalysis then "bla" else "";
   })
   ```
 
@@ -710,32 +715,40 @@ Names of files and directories should be in lowercase, with dashes between words
   args:
 
   args.stdenv.mkDerivation (args // {
-    ... if args ? doCoverageAnalysis && args.doCoverageAnalysis then "bla" else "" ...
+    foo = if args ? doCoverageAnalysis && args.doCoverageAnalysis then "bla" else "";
   })
   ```
 
 - Unnecessary string conversions should be avoided. Do
 
   ```nix
-  rev = version;
+  {
+    rev = version;
+  }
   ```
 
   instead of
 
   ```nix
-  rev = "${version}";
+  {
+    rev = "${version}";
+  }
   ```
 
 - Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
 
   ```nix
-  buildInputs = lib.optional stdenv.isDarwin iconv;
+  {
+    buildInputs = lib.optional stdenv.isDarwin iconv;
+  }
   ```
 
   instead of
 
   ```nix
-  buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+  {
+    buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+  }
   ```
 
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oras";
-  version = "0.1.28";
+  version = "0.1.29";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,25 +20,19 @@ buildPythonPackage rec {
     owner = "oras-project";
     repo = "oras-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-yka4TypKqGczW+NugmCGa8PgtaSJeaQ4sPphPsIPLow=";
+    hash = "sha256-ZV+J5zqRBRIddWdmLzzjpZi3M5E/HfkG8lWK9xzy5tw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "oras"
-  ];
+  pythonImportsCheck = [ "oras" ];
 
   disabledTests = [
     # Test requires network access

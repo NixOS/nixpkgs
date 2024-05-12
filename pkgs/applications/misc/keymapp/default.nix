@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , libusb1
 , webkitgtk
 , gtk3
@@ -22,17 +22,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.0.8";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-adFQCuHkorXixn/dId/vrCcnjQ2VDDQM049UrodjFgA=";
+    hash = "sha256-tbRlJ65hHPBDwoXAXf++OdcW67RcqR1x1vfhbPCo1Ls=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

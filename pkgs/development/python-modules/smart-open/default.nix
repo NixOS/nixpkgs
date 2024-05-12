@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , azure-common
 , azure-core
 , azure-storage-blob
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "7.0.1";
+  version = "7.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,8 +29,18 @@ buildPythonPackage rec {
     owner = "RaRe-Technologies";
     repo = "smart_open";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yGy4xNoHCE+LclBBTMVtTKP6GYZ5w09NJ0OmsUPnir4=";
+    hash = "sha256-4HOTaF6AKXGlVCvSGKnnaH73aa4IO0aRxz03XQ4gSd8=";
   };
+
+  patches = [
+    # https://github.com/RaRe-Technologies/smart_open/pull/822
+    # fix test_smart_open.py on python 3.12
+    (fetchpatch {
+      name = "fix-smart-open-test.patch";
+      url = "https://github.com/RaRe-Technologies/smart_open/commit/3d29564ca034a56d343c9d14b178aaa0ff4c937c.patch";
+      hash = "sha256-CrAeqaIMM8bctWiFnq9uamnIlkaslDyjaWL6k9wUjT8=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -88,6 +99,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog =  "https://github.com/piskvorky/smart_open/releases/tag/v${version}";
     description = "Library for efficient streaming of very large file";
     homepage = "https://github.com/RaRe-Technologies/smart_open";
     license = licenses.mit;

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tbb";
-  version = "2021.8.0";
+  version = "2021.11.0";
 
   outputs = [ "out" "dev" ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "oneapi-src";
     repo = "oneTBB";
     rev = "v${version}";
-    hash = "sha256-7MjUdPB1GsPt7ZkYj7DCisq20X8psljsVCjDpCSTYT4=";
+    hash = "sha256-zGZHMtAUVzBKFbCshpepm3ce3tW6wQ+F30kYYXAQ/TE=";
   };
 
   nativeBuildInputs = [
@@ -28,27 +28,11 @@ stdenv.mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/899.patch";
       hash = "sha256-kU6RRX+sde0NrQMKlNtW3jXav6J4QiVIUmD50asmBPU=";
     })
-
-    # Fix/suppress warnings on gcc12.1 from https://github.com/oneapi-src/oneTBB/pull/866
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/oneapi-src/oneTBB/pull/866.patch";
-      hash = "sha256-e44Yv84Hfl5xoxWWTnLJLSGeNA1RBbah4/L43gPLS+c=";
-    })
-
-    # Fix build with GCC 13
-    (fetchpatch {
-      url = "https://github.com/oneapi-src/oneTBB/commit/154cc73ca4d359621202399cc0c3c91058e56e79.patch";
-      hash = "sha256-BVQQXgBg8T19DGw2gmFkm3KKOuzzJJNOTf/iNIcnHag=";
-    })
-    (fetchpatch {
-      url = "https://github.com/oneapi-src/oneTBB/commit/e131071769ee3df51b56b053ba6bfa06ae9eff25.patch";
-      hash = "sha256-IfV/DDb0luxE1l6TofAbQIeJEVxCxZfZqcONGwQEndY=";
-    })
   ];
 
   # Fix build with modern gcc
   # In member function 'void std::__atomic_base<_IntTp>::store(__int_type, std::memory_order) [with _ITp = bool]',
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-error=stringop-overflow" ] ++
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-error=array-bounds" "-Wno-error=stringop-overflow" ] ++
     # error: variable 'val' set but not used
     lib.optionals stdenv.cc.isClang [ "-Wno-error=unused-but-set-variable" ] ++
     # Workaround for gcc-12 ICE when using -O3

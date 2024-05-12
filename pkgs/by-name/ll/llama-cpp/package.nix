@@ -1,4 +1,5 @@
 { lib
+, autoAddDriverRunpath
 , cmake
 , darwin
 , fetchFromGitHub
@@ -16,6 +17,8 @@
 , clblast
 
 , blasSupport ? builtins.all (x: !x) [ cudaSupport metalSupport openclSupport rocmSupport vulkanSupport ]
+, blas
+
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , vulkanSupport ? false
@@ -69,31 +72,41 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "2481";
+  version = "2781";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-40GSZZEnjM9L9KVVKdSKtBoSRy996l98ORM4NeltsSM=";
+    hash = "sha256-a+Ji8h0Yh52pGnDsrJSgfG5kdMDAmhEQ6YKdtZRc7S8=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C "$out" rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   postPatch = ''
     substituteInPlace ./ggml-metal.m \
-      --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+      --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+
+    substituteInPlace ./scripts/build-info.cmake \
+      --replace-fail 'set(BUILD_NUMBER 0)' 'set(BUILD_NUMBER ${finalAttrs.version})' \
+      --replace-fail 'set(BUILD_COMMIT "unknown")' "set(BUILD_COMMIT \"$(cat COMMIT)\")"
   '';
 
   nativeBuildInputs = [ cmake ninja pkg-config git ]
     ++ optionals cudaSupport [
     cudaPackages.cuda_nvcc
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
-    ++ optionals mpiSupport mpi
+    ++ optionals mpiSupport [ mpi ]
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs;
 
   cmakeFlags = [
@@ -104,7 +117,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_SHARED_LIBS" true)
     (cmakeBool "LLAMA_BLAS" blasSupport)
     (cmakeBool "LLAMA_CLBLAST" openclSupport)
-    (cmakeBool "LLAMA_CUBLAS" cudaSupport)
+    (cmakeBool "LLAMA_CUDA" cudaSupport)
     (cmakeBool "LLAMA_HIPBLAS" rocmSupport)
     (cmakeBool "LLAMA_METAL" metalSupport)
     (cmakeBool "LLAMA_MPI" mpiSupport)
@@ -128,8 +141,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         # Should likely use `rocmPackages.clr.gpuTargets`.
         "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
       ]
-      ++ optionals metalSupport [ (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1") ]
-      ++ optionals blasSupport [ (cmakeFeature "LLAMA_BLAS_VENDOR" "OpenBLAS") ];
+      ++ optionals metalSupport [
+        (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+        (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+      ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
   # additional steps after that

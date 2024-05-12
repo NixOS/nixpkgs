@@ -19,6 +19,7 @@
 , dasht
 , deno
 , direnv
+, duckdb
 , fish
 , fzf
 , gawk
@@ -77,7 +78,7 @@
 , # sved dependencies
   glib
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , # sniprun dependencies
   bashInteractive
 , coreutils
@@ -245,7 +246,7 @@
   };
 
   cmp-git = super.cmp-git.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-greek = super.cmp-greek.overrideAttrs {
@@ -321,12 +322,12 @@
 
   codeium-nvim = let
     # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-    codeiumVersion = "1.6.7";
+    codeiumVersion = "1.8.25";
     codeiumHashes = {
-      x86_64-linux = "sha256-z1cZ6xmP25iPezeLpz4xRh7czgx1JLwsYwGAEUA6//I=";
-      aarch64-linux = "sha256-8cSdCiIVbqv91lUMOLV1Xld8KuIzJA5HCIDbhyyc404=";
-      x86_64-darwin = "sha256-pjW7tNyO0cIFdIm69H6I3HDBpFwnJIRmIN7WRi1OfLw=";
-      aarch64-darwin = "sha256-DgE4EVNCM9+YdTVJeVYnrDGAXOJV1VrepiVeX3ziwfg=";
+      x86_64-linux = "sha256-6sIYDI6+1/p54Af+E/GmRAFlfDYJVwxhn0qF47ZH+Zg=";
+      aarch64-linux = "sha256-1ImcjAqCZm5KZZYHWhG1eO7ipAdrP4Qjj2eBxTst++s=";
+      x86_64-darwin = "sha256-yHthItxZYFejJlwJJ7BrM2csnLsZXjy/IbzF1iaCCyI=";
+      aarch64-darwin = "sha256-GIx0yABISj/rH/yVkkx6NBs5qF0P8nhpMyvnzXJ92mA=";
     };
 
     codeium' = codeium.overrideAttrs rec {
@@ -402,6 +403,13 @@
       make build
       rm ruby/command-t/ext/command-t/*.o
     '';
+  };
+
+  competitest-nvim = super.competitest-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "competitest";
   };
 
   compe-tabnine = super.compe-tabnine.overrideAttrs {
@@ -716,6 +724,13 @@
     src = "${hurl.src}/contrib/vim";
   };
 
+  idris2-nvim = super.idris2-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim nvim-lspconfig ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "idris2";
+  };
+
   image-nvim = super.image-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter
@@ -745,6 +760,10 @@
 
   jellybeans-nvim = super.jellybeans-nvim.overrideAttrs {
     dependencies = with self; [ lush-nvim ];
+  };
+
+  jupytext-nvim = super.jupytext-nvim.overrideAttrs {
+    passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
 
   LanguageClient-neovim =
@@ -951,7 +970,7 @@
   };
 
   neotest = super.neotest.overrideAttrs {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [ nvim-nio plenary-nvim ];
   };
 
   neotest-gradle = super.neotest-gradle.overrideAttrs {
@@ -986,6 +1005,13 @@
     dependencies = with self; [ nvim-dap ];
   };
 
+  nvim-dap-ui = super.nvim-dap-ui.overrideAttrs {
+    dependencies = with self; [ nvim-dap nvim-nio ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "dapui";
+  };
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = with self; [ popfix ];
   };
@@ -1002,8 +1028,32 @@
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
+  nvim-dbee = super.nvim-dbee.overrideAttrs (oa: let
+        dbee-go = buildGoModule {
+          name = "nvim-dbee";
+          src = "${oa.src}/dbee";
+          vendorHash = "sha256-AItvgOehVskGLARJWDnJLtWM5YHKN/zn/FnZQ0evAtI=";
+          buildInputs = [ duckdb ];
+        };
+      in {
+    dependencies = [ self.nui-nvim ];
+
+    # nvim-dbee looks for the go binary in paths returned bu M.dir() and M.bin() defined in lua/dbee/install/init.lua
+    postPatch = ''
+      substituteInPlace lua/dbee/install/init.lua \
+        --replace-fail 'return vim.fn.stdpath("data") .. "/dbee/bin"' 'return "${dbee-go}/bin"'
+    '';
+
+    preFixup = ''
+      mkdir $target/bin
+      ln -s ${dbee-go}/bin/dbee $target/bin/dbee
+      '';
+
+    meta.platforms = lib.platforms.linux;
+  });
+
   nvim-navic = super.nvim-navic.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig ];
+    dependencies =  [ self.nvim-lspconfig ];
   };
 
   nvim-spectre = super.nvim-spectre.overrideAttrs (old:
@@ -1013,7 +1063,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-VDnrJ2EJ8LDykqxYKD1VR8BkDqzzifazJzL/0UsmSCk=";
+        cargoHash = "sha256-seBq1zJNzNVfCQckIHq7rHI/Y8MyxP88cee3NO7NYgo=";
 
 
         preCheck = ''
@@ -1192,12 +1242,12 @@
 
   sniprun =
     let
-      version = "1.3.11";
+      version = "1.3.13";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-f/EifFvlHr41wP0FfkwSGVdXLyz739st/XtnsSbzNT4=";
+        hash = "sha256-PQ3nAZ+bMbHHJWD7cV6h1b3g3TzrakA/N8vVumIooMg=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1207,7 +1257,7 @@
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-SmhfjOnw89n/ATGvmyvd5clQSucIh7ky3v9JsSjtyfI=";
+        cargoHash = "sha256-I8R2V9zoLqiM4lu0D7URoVof68wtKHI+8T8fVrUg7i4=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -1287,11 +1337,11 @@
 
   sved =
     let
-      # we put the script in its own derivation to benefit the magic of wrapGAppsHook
+      # we put the script in its own derivation to benefit the magic of wrapGAppsHook3
       svedbackend = stdenv.mkDerivation {
         name = "svedbackend-${super.sved.name}";
         inherit (super.sved) src;
-        nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+        nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
         buildInputs = [
           glib
           (python3.withPackages (ps: with ps; [ pygobject3 pynvim dbus-python ]))

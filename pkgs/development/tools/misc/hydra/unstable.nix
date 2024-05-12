@@ -43,6 +43,7 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
+, fetchpatch2
 , nixosTests
 }:
 
@@ -123,13 +124,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2023-12-24";
+  version = "2024-03-08";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "02e453fc8c39751843220eaecdeaf7d539b7e765";
-    hash = "sha256-hIXRgu2MGqFYCALDKAiP+8lE859zftRe4OVIgGOTkvc=";
+    rev = "8f56209bd6f3b9ec53d50a23812a800dee7a1969";
+    hash = "sha256-mhEj02VruXPmxz3jsKHMov2ERNXk9DwaTAunWEO1iIQ=";
   };
 
   buildInputs = [
@@ -204,6 +205,15 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  patches = [
+    # https://github.com/NixOS/hydra/security/advisories/GHSA-2p75-6g9f-pqgx
+    (fetchpatch2 {
+      name = "CVE-2024-32657.patch";
+      url = "https://github.com/NixOS/hydra/commit/b72528be5074f3e62e9ae2c2ae8ef9c07a0b4dd3.patch";
+      hash = "sha256-+y27N8AIaHj13mj0LwW7dkpzfzZ4xfjN8Ld23c5mzuU=";
+    })
+  ];
 
   postPatch = ''
     # Change 5s timeout for init to 30s

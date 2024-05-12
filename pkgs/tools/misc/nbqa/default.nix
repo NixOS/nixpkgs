@@ -7,14 +7,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nbqa";
-  version = "1.8.4";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbQA-dev";
     repo = "nbQA";
     rev = "refs/tags/${version}";
-    hash = "sha256-clxIe97pWeA9IGt+650tJfxTmU+qbrL/9B2VRVIML+s=";
+    hash = "sha256-vRJxpWs2i4A8gi8F4YrTlmgBSnA73KeMCrmjLNF1zpA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

@@ -8,7 +8,7 @@
 , gettext
 , desktop-file-utils
 , appstream-glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 # Not native
 , gst_all_1
@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
-  version = "0.92.1";
+  version = "0.92.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-aoH9SpD7AfM6c6moMCCuQ1igkcrKgqAf1iLlpuXtaic=";
+    sha256 = "sha256-df35UJnRolVSiYcArpnrglxNKbTKA3LAGsNwlDF7cj4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     desktop-file-utils
     appstream-glib
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
   ];
 

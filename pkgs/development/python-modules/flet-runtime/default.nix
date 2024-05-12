@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "A base package for Flet desktop and Flet mobile";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lucasew wegank ];
+    maintainers = with lib.maintainers; [ lucasew ];
   };
 }

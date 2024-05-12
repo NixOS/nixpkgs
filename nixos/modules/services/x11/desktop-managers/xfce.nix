@@ -49,25 +49,25 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Xfce desktop environment.";
+        description = "Enable the Xfce desktop environment.";
       };
 
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Don't install XFCE desktop components (xfdesktop and panel).";
+        description = "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable the XFWM (default) window manager.";
+        description = "Enable the XFWM (default) window manager.";
       };
 
       enableScreensaver = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable the XFCE screensaver.";
+        description = "Enable the XFCE screensaver.";
       };
     };
 
@@ -75,7 +75,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which packages XFCE should exclude from the default environment";
+      description = "Which packages XFCE should exclude from the default environment";
     };
   };
 
@@ -145,7 +145,7 @@ in
     services.xserver.desktopManager.session = [{
       name = "xfce";
       desktopNames = [ "XFCE" ];
-      bgSupport = true;
+      bgSupport = !cfg.noDesktop;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
         waitPID=$!
@@ -164,7 +164,7 @@ in
     services.gvfs.enable = true;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
 
     # Enable default programs
     programs.dconf.enable = true;

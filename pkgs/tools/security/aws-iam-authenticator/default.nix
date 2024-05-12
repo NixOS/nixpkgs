@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "aws-iam-authenticator";
-  version = "0.6.18";
+  version = "0.6.20";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QhtDfi6USazpPq+7VnJX9YqTxsm7y1CZpIXiZyHaGG4=";
+    hash = "sha256-72l+EgqWy8+7wdTKwXnebZ+wm5VCgYODw4D6lkL4NBA=";
   };
 
-  vendorHash = "sha256-TDsY05jnutNIKx0z6/8vGvsgYCIKBkTxh9mXqk4IR38=";
+  vendorHash = "sha256-7FYR8c1Q9SS3prt8yrTzbOqgqG1tGuvzjH42MkY0tAo=";
 
   ldflags = let PKG = "sigs.k8s.io/aws-iam-authenticator"; in [
     "-s"

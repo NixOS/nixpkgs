@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neil";
-  version = "0.2.63";
+  version = "0.3.65";
 
   src = fetchFromGitHub {
     owner = "babashka";
     repo = "neil";
     rev = "v${version}";
-    sha256 = "sha256-mcygDOx5yzOW80bv54cPOKl1t443DXFRq4Hb4KYD5e8=";
+    sha256 = "sha256-QhWoCEoM04/MlUgCFCeAR7kF6QSg0joz/i9ZbXRQtDs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

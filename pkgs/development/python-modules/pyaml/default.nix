@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "23.12.0";
+  version = "24.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zm9kjv37GzpVefjO2wT6zw+h6PZIRrY5MJtYW7MitOU=";
+    hash = "sha256-Dkg9kokBDnR6Ml3EMXG8w51lYt0d1HGejMfnyWyZ/OY=";
   };
 
   nativeBuildInputs = [

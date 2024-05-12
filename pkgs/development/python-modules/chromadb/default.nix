@@ -1,55 +1,56 @@
-{ lib
-, stdenv
-, bcrypt
-, build
-, buildPythonPackage
-, cargo
-, chroma-hnswlib
-, darwin
-, fastapi
-, fetchFromGitHub
-, grpcio
-, hypothesis
-, importlib-resources
-, kubernetes
-, mmh3
-, numpy
-, onnxruntime
-, openssl
-, opentelemetry-api
-, opentelemetry-exporter-otlp-proto-grpc
-, opentelemetry-instrumentation-fastapi
-, opentelemetry-sdk
-, orjson
-, overrides
-, pkg-config
-, posthog
-, protobuf
-, pulsar-client
-, pydantic
-, pypika
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, rustc
-, rustPlatform
-, setuptools
-, setuptools-scm
-, tenacity
-, tokenizers
-, tqdm
-, typer
-, typing-extensions
-, uvicorn
-, zstd
+{
+  lib,
+  stdenv,
+  bcrypt,
+  build,
+  buildPythonPackage,
+  cargo,
+  chroma-hnswlib,
+  darwin,
+  fastapi,
+  fetchFromGitHub,
+  grpcio,
+  hypothesis,
+  importlib-resources,
+  kubernetes,
+  mmh3,
+  numpy,
+  onnxruntime,
+  openssl,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-grpc,
+  opentelemetry-instrumentation-fastapi,
+  opentelemetry-sdk,
+  orjson,
+  overrides,
+  pkg-config,
+  posthog,
+  protobuf,
+  pulsar-client,
+  pydantic,
+  pypika,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  rustc,
+  rustPlatform,
+  setuptools,
+  setuptools-scm,
+  tenacity,
+  tokenizers,
+  tqdm,
+  typer,
+  typing-extensions,
+  uvicorn,
+  zstd,
 }:
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.4.23";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -58,18 +59,16 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-5gI+FE2jx4G/qahATLcYsONfPZZkk1RFFYK5nrpE0Ug=";
+    hash = "sha256-gM+fexjwifF3evR8jZvMbIDz655RFKPUizrsB2q5tbw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-glItbT8gg5SAySnfx3A9TaPyFmd1R46JpAB1JnjBE5M=";
+    hash = "sha256-zyiFv/gswGupm7Y8BhviklqJzM914v0QyUsRwbGKZ48=";
   };
 
-  pythonRelaxDeps = [
-    "orjson"
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
   nativeBuildInputs = [
     cargo
@@ -85,9 +84,7 @@ buildPythonPackage rec {
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   propagatedBuildInputs = [
     bcrypt
@@ -126,9 +123,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "chromadb"
-  ];
+  pythonImportsCheck = [ "chromadb" ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -137,6 +132,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-x" ];
 
   preCheck = ''
+    (($(ulimit -n) < 1024)) && ulimit -n 1024
     export HOME=$(mktemp -d)
   '';
 

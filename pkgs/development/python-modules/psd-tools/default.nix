@@ -10,13 +10,14 @@
 , numpy
 , aggdraw
 , pytestCheckHook
+, pytest-cov
 , ipython
 , cython
 }:
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.31";
+  version = "1.9.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +26,12 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HUFJ2FP9WGcG9pkukS2LHIgPYFRAXAneiVK6VfYQ+zU=";
+    hash = "sha256-H235bZOzTxmmLEFje8hhYxrN4l1S34tD1LMhsymRy9w=";
   };
+
+  postPatch = ''
+    sed -i "/addopts =/d" pyproject.toml
+  '';
 
   nativeBuildInputs = [
     cython
@@ -45,6 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov
   ];
 
   pythonImportsCheck = [

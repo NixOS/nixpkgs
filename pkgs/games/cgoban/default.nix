@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cgoban";
-  version = "3.5.23";
+  version = "3.5.144";
 
   nativeBuildInputs = [ adoptopenjdk-jre-bin makeWrapper ];
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20210116034119/https://files.gokgs.com/javaBin/cgoban.jar";
-    sha256 = "0srw1hqr9prgr9dagfbh2j6p9ivaj40kdpyhs6zjkg7lhnnrrrcv";
+    url = "https://web.archive.org/web/20240314222506/https://files.gokgs.com/javaBin/cgoban.jar";
+    hash = "sha256-ehN/aQU23ZEtDh/+r3H2PDPBrWhgoMfgEfKq5q08kFY=";
   };
 
   dontConfigure = true;

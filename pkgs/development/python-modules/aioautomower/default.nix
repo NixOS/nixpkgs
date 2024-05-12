@@ -1,20 +1,21 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, poetry-core
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, syrupy
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  mashumaro,
+  poetry-core,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.3.3";
+  version = "2024.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,39 +24,34 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZJRc5nzp1P3X93PxGVB55VgN1HZ2kvn43LT2wYEPxSo=";
+    hash = "sha256-/mwKomgY+yifN27bpCK9FjhbZRdllr471Ku+Kn2rUPM=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     pyjwt
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "aioautomower"
-  ];
+  pythonImportsCheck = [ "aioautomower" ];
 
-  pytestFlagsArray = [
-    "--snapshot-update"
-  ];
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   disabledTests = [
     # File is missing

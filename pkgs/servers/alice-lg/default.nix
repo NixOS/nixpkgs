@@ -6,7 +6,7 @@
 , yarn
 , nodejs
 , nixosTests
-, prefetch-yarn-deps
+, fixup-yarn-lock
 }:
 
 buildGoModule rec {
@@ -32,7 +32,7 @@ buildGoModule rec {
       hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
     };
 
-    nativeBuildInputs = [ nodejs yarn prefetch-yarn-deps ];
+    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ];
     configurePhase = ''
       runHook preConfigure
 

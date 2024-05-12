@@ -31,6 +31,7 @@ let
     "collectd"
     "dmarc"
     "dnsmasq"
+    "dnssec"
     "domain"
     "dovecot"
     "fastly"
@@ -55,6 +56,7 @@ let
     "modemmanager"
     "mongodb"
     "mysqld"
+    "nats"
     "nextcloud"
     "nginx"
     "nginxlog"
@@ -128,32 +130,32 @@ let
   );
 
   mkExporterOpts = ({ name, port }: {
-    enable = mkEnableOption (lib.mdDoc "the prometheus ${name} exporter");
+    enable = mkEnableOption "the prometheus ${name} exporter";
     port = mkOption {
       type = types.port;
       default = port;
-      description = lib.mdDoc ''
+      description = ''
         Port to listen on.
       '';
     };
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc ''
+      description = ''
         Address to listen on.
       '';
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Extra commandline options to pass to the ${name} exporter.
       '';
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open port in firewall for incoming connections.
       '';
     };
@@ -163,23 +165,34 @@ let
       example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify a filter for iptables to use when
         {option}`services.prometheus.exporters.${name}.openFirewall`
         is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
+    firewallRules = mkOption {
+      type = types.nullOr types.lines;
+      default = null;
+      example = literalExpression ''
+        iifname "eth0" tcp dport ${toString port} counter accept
+      '';
+      description = ''
+        Specify rules for nftables to add to the input chain
+        when {option}`services.prometheus.exporters.${name}.openFirewall` is true.
+      '';
+    };
     user = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = lib.mdDoc ''
+      description = ''
         User name under which the ${name} exporter shall be run.
       '';
     };
     group = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = lib.mdDoc ''
+      description = ''
         Group under which the ${name} exporter shall be run.
       '';
     };
@@ -194,6 +207,7 @@ let
         } // extraOpts);
       } ({ config, ... }: mkIf config.openFirewall {
         firewallFilter = mkDefault "-p tcp -m tcp --dport ${toString config.port}";
+        firewallRules = mkDefault ''tcp dport ${toString config.port} accept comment "${name}-exporter"'';
       })];
       internal = true;
       default = {};
@@ -212,6 +226,7 @@ let
   mkExporterConf = { name, conf, serviceOpts }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
+      nftables = config.networking.nftables.enable;
     in
     mkIf conf.enable {
       warnings = conf.warnings or [];
@@ -223,10 +238,11 @@ let
       users.groups = (mkIf (conf.group == "${name}-exporter" && !enableDynamicUser) {
         "${name}-exporter" = {};
       });
-      networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
+      networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
+      networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -279,7 +295,7 @@ in
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
       ];
     };
-    description = lib.mdDoc "Prometheus exporter configuration";
+    description = "Prometheus exporter configuration";
     default = {};
     example = literalExpression ''
       {

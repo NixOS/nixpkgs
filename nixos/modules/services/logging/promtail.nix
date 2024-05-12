@@ -12,12 +12,12 @@ let
   positionsFile = cfg.configuration.positions.filename;
 in {
   options.services.promtail = with types; {
-    enable = mkEnableOption (lib.mdDoc "the Promtail ingresser");
+    enable = mkEnableOption "the Promtail ingresser";
 
 
     configuration = mkOption {
       type = (pkgs.formats.json {}).type;
-      description = lib.mdDoc ''
+      description = ''
         Specify the configuration for Promtail in Nix.
       '';
     };
@@ -26,7 +26,7 @@ in {
       type = listOf str;
       default = [];
       example = [ "--server.http-listen-port=3101" ];
-      description = lib.mdDoc ''
+      description = ''
         Specify a list of additional command line flags,
         which get escaped and are then passed to Loki.
       '';
@@ -40,6 +40,10 @@ in {
       description = "Promtail log ingress";
       wantedBy = [ "multi-user.target" ];
       stopIfChanged = false;
+
+      preStart = ''
+        ${lib.getExe pkgs.promtail} -config.file=${prettyJSON cfg.configuration} -check-syntax
+      '';
 
       serviceConfig = {
         Restart = "on-failure";

@@ -1,32 +1,44 @@
-{ lib
-, buildNimPackage
-, fetchFromSourcehut
-, nim
-, nix-prefetch
-, nix-prefetch-git
-, openssl
-, makeWrapper
+{
+  lib,
+  buildNimPackage,
+  fetchFromSourcehut,
+  nim,
+  nix-prefetch,
+  nix-prefetch-git,
+  openssl,
+  makeWrapper,
 }:
 
+let
+  nim' = nim.passthru.nim;
+in
 buildNimPackage (finalAttrs: {
   pname = "nim_lk";
-  version = "20231031";
+  version = "20240510";
 
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_lk";
     rev = finalAttrs.version;
-    hash = "sha256-dXm3dfXAxgucek19f1KdRShOsJyELPTB32qgGSKId6A=";
+    hash = "sha256-fwoGyYkbGstWG0qw15dOq1gmr3GyIn6ZEBeBmEivHlA=";
   };
+
+  lockFile = ./lock.json;
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ makeWrapper ];
 
-  lockFile = ./lock.json;
+  nimFlags = [ "--path:${nim'}/nim" ];
 
   postFixup = ''
     wrapProgram $out/bin/nim_lk \
-      --suffix PATH : ${lib.makeBinPath [ nim nix-prefetch nix-prefetch-git ]}
+      --suffix PATH : ${
+        lib.makeBinPath [
+          nim'
+          nix-prefetch
+          nix-prefetch-git
+        ]
+      }
   '';
 
   meta = finalAttrs.src.meta // {

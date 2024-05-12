@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.43.4";
+  version = "0.43.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nesI3rYGPCih+rckT6E6pyy6kZdfxBOjpfwvzKt8c6I=";
+    hash = "sha256-z/IO25hcHv1pimUecIIX5hZPYF2/1QkROqZ2D4Tk7DE=";
   };
 
   nativeBuildInputs = [

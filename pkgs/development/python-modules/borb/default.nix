@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://borbpdf.com/";
     changelog = "https://github.com/jorisschellekens/borb/releases/tag/v${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

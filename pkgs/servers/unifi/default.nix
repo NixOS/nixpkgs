@@ -45,26 +45,6 @@ let
 in rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
 
-  unifiLTS = generic {
-    version = "5.6.42";
-    sha256 = "0wxkv774pw43c15jk0sg534l5za4j067nr85r5fw58iar3w2l84x";
-  };
-
-  unifi5 = generic {
-    version = "5.14.23";
-    sha256 = "1aar05yjm3z5a30x505w4kakbyz35i7mk7xyg0wm4ml6h94d84pv";
-
-    postInstall = ''
-      # Remove when log4j is updated to 2.12.2 or 2.16.0.
-      ${zip}/bin/zip -q -d $out/lib/log4j-core-*.jar org/apache/logging/log4j/core/lookup/JndiLookup.class
-    '';
-  };
-
-  unifi6 = generic {
-    version = "6.5.55";
-    sha256 = "sha256-NUGRO+f6JzWvYPwiitZsgp+LQwnGSncnost03mgNVxA=";
-  };
-
   unifi7 = generic {
     version = "7.5.187";
     suffix = "-f57f5bf7ab";
@@ -72,7 +52,7 @@ in rec {
   };
 
   unifi8 = generic {
-    version = "8.1.113";
-    sha256 = "sha256-1knm+l8MSb7XKq2WIbehAnz7loRPjgnc+R98zpWKEAE=";
+    version = "8.1.127";
+    sha256 = "sha256-7Xg4I0Kuvta4oKzkduCda7aonTFzutrQJK03FLqM0KE=";
   };
 }

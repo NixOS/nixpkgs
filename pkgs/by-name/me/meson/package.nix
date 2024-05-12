@@ -17,17 +17,17 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenGL;
+  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenAL OpenGL;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-7M/El2snWsQi+gaZWPHnEr9gpJW3trqG1RbnT43M49s=";
+    hash = "sha256-hRTmKO2E6SIdvAhO7OJtV8dcsGm39c51H+2ZGEkdcFY=";
   };
 
   patches = [
@@ -71,6 +71,10 @@ python3.pkgs.buildPythonApplication rec {
 
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
+
+    # Fix cross-compilation of proc-macro (and mesa)
+    # https://github.com/mesonbuild/meson/issues/12973
+    ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -94,6 +98,7 @@ python3.pkgs.buildPythonApplication rec {
     Cocoa
     Foundation
     LDAP
+    OpenAL
     OpenGL
     openldap
   ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
@@ -107,6 +112,7 @@ python3.pkgs.buildPythonApplication rec {
       patchShebangs 'test cases'
       substituteInPlace \
         'test cases/native/8 external program shebang parsing/script.int.in' \
+        'test cases/common/273 customtarget exe for test/generate.py' \
           --replace /usr/bin/env ${coreutils}/bin/env
     ''
   ]

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3bar-river";
-  version = "0.1.6";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "i3bar-river";
     rev = "v${version}";
-    hash = "sha256-wtyC8cGK408KZYpWniW2y4XI1ScTSBZJJlUt6b2Z5KA=";
+    hash = "sha256-Rw4jildX3t853hIwEem/KzTBUyO3a/kour3dvSw8DVA=";
   };
 
-  cargoHash = "sha256-PdSMDsV3yFy3kSNS6OBxFdrZsIn70gXOTd2AhyU4a9o=";
+  cargoHash = "sha256-uGzXEeQ2yzk8HEdgY/gTxqaCoMO25kbiD1XrpJwmVp4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pango ];

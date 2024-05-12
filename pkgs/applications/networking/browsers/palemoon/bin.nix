@@ -13,24 +13,16 @@
 , libXt
 , libpulseaudio
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
+, writeScript
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.0.0";
+  version = "33.1.0";
 
-  src = fetchzip {
-    urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-    ];
-    hash = if withGTK3 then
-      "sha256-qZX23dsKNg5AOIaBAAmTWT6VDEl3OGz3kb3idtvJElw="
-    else
-      "sha256-Lz1+5I8Rj0GrBUBTJoRsatpyzkqVHZuWbKARkuWFs5U=";
-  };
+  src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
   preferLocalBuild = true;
 
@@ -39,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -155,8 +147,49 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGApp $out/lib/palemoon/palemoon
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    sources = let
+      urlRegionVariants = buildVariant: map
+        (region: "https://rm-${region}.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-${buildVariant}.tar.xz")
+        [
+          "eu"
+          "us"
+        ];
+    in {
+      gtk3 = fetchzip {
+        urls = urlRegionVariants "gtk3";
+        hash = "sha256-qjztSvNL7KNFG3sszgk5qH77do0HFQ8YTrgjFi2ZM00=";
+      };
+      gtk2 = fetchzip {
+        urls = urlRegionVariants "gtk2";
+        hash = "sha256-q4zAmnCN9SHGb8PthjAx7d5FKq/oAQ8c0R+U1SWqjAA=";
+      };
+    };
+
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = writeScript "update-palemoon-bin" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+      set -eu -o pipefail
+
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+
+      for variant in gtk3 gtk2; do
+        # The script will not perform an update when the version attribute is up to date from previous platform run
+        # We need to clear it before each run
+        update-source-version palemoon-bin 0 "${lib.fakeHash}" --source-key="sources.$variant"
+        update-source-version palemoon-bin "$version" --source-key="sources.$variant"
+      done
+    '';
   };
 
   meta = with lib; {
@@ -173,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
       licenses.mpl20
       {

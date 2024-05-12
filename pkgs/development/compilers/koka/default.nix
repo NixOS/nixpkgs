@@ -20,7 +20,7 @@
 , FloatingHex
 , isocline
 , lens
-, lsp_2_4_0_0
+, lsp
 , mtl
 , network
 , network-simple
@@ -86,7 +86,7 @@ mkDerivation rec {
     FloatingHex
     isocline
     lens
-    lsp_2_4_0_0
+    lsp
     mtl
     network
     network-simple

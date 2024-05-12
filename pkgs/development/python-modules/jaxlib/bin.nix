@@ -5,6 +5,7 @@
 # See `python3Packages.jax.passthru` for CUDA tests.
 
 { absl-py
+, autoAddDriverRunpath
 , autoPatchelfHook
 , buildPythonPackage
 , config
@@ -23,7 +24,7 @@
 }:
 
 let
-  inherit (cudaPackagesGoogle) autoAddDriverRunpath cudaVersion;
+  inherit (cudaPackagesGoogle) cudaVersion;
 
   version = "0.4.24";
 
@@ -228,6 +229,11 @@ buildPythonPackage {
       !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
       || !(cudaSupport -> lib.versionAtLeast cudaPackagesGoogle.cudnn.version "8.2")
       || !(cudaSupport -> stdenv.isLinux)
-      || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"));
+      || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"))
+      # Fails at pythonImportsCheckPhase:
+      # ...-python-imports-check-hook.sh/nix-support/setup-hook: line 10: 28017 Illegal instruction: 4
+      # /nix/store/5qpssbvkzfh73xih07xgmpkj5r565975-python3-3.11.9/bin/python3.11 -c
+      # 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))'
+      || (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

@@ -18,18 +18,18 @@
 , hicolor-icon-theme
 , wayland
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , marco
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "s70EoJTQ61vX3DOA728MSdmp1SCXM9fM17RtBmogjLo=";
+    sha256 = "UTPGT1lpro7uvm6LukUN6nkssL4G2a4cNuhWnS+FJLo=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     # See https://github.com/mate-desktop/mate-panel/issues/1402
-    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook
+    # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
     gnome.dconf-editor
   ];
 

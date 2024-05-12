@@ -13,18 +13,18 @@
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "1.6.3";
+  version = "1.6.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z9Vu9mj82hwuPva56tmav4jN9RCoNIZxL+C3GYtYsOo=";
+    hash = "sha256-bf+umrb5EIoCD2kheVpf9IwsW4Sf2hR7XOEzscYtLA8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2or419evNxi99HIvL2TlSWFFh4BCky8qI/dVQbq/X38=";
+    hash = "sha256-0a57RmZPztcIeRs7GNYe18JO+LlWoeNWG3nD9cG0XIU=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-rust";
     description = "Binary Rust extensions for SkyTemple";
     license = licenses.mit;
-    maintainers = with maintainers; [ xfix marius851000 ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

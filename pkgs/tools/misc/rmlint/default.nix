@@ -1,11 +1,11 @@
 { lib, stdenv
 , cairo
+, elfutils
 , fetchFromGitHub
 , glib
 , gobject-introspection
 , gtksourceview3
 , json-glib
-, libelf
 , makeWrapper
 , pango
 , pkg-config
@@ -14,7 +14,7 @@
 , scons
 , sphinx
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGui ? false }:
 
 assert withGui -> !stdenv.isDarwin;
@@ -41,14 +41,13 @@ stdenv.mkDerivation rec {
     scons
   ] ++ lib.optionals withGui [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
   buildInputs = [
     glib
     json-glib
-    libelf
     util-linux
   ] ++ lib.optionals withGui [
     cairo
@@ -57,6 +56,8 @@ stdenv.mkDerivation rec {
     polkit
     python3
     python3.pkgs.pygobject3
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   prePatch = ''

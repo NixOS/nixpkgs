@@ -2,7 +2,7 @@
 , blockdiag
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, pynose
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -11,29 +11,38 @@
 buildPythonPackage rec {
   pname = "actdiag";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
-    repo = pname;
-    rev = version;
+    repo = "actdiag";
+    rev = "refs/tags/${version}";
     hash = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
-  propagatedBuildInputs = [
-    blockdiag
+  build-system = [
     setuptools
   ];
 
+  propagatedBuildInputs = [
+    blockdiag
+  ];
+
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
     "src/actdiag/tests/"
+  ];
+
+  disabledTests = [
+    # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
+    "svg"
+    "noviewbox"
   ];
 
   pythonImportsCheck = [
@@ -42,10 +51,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
-    mainProgram = "actdiag";
     homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/actdiag/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "actdiag";
+    platforms = platforms.unix;
   };
 }

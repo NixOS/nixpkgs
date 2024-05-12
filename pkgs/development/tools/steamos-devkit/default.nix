@@ -23,7 +23,7 @@ let
     };
 
     nativeBuildInputs = with python3.pkgs; [
-      cython
+      cython_0
       pkg-config
       SDL2
     ];

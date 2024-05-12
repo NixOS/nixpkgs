@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, bash-completion
 , pkg-config
 , meson
 , mesonEmulatorHook
@@ -10,6 +11,7 @@
 , polkit
 , dbus
 , gobject-introspection
+, wrapGAppsNoGuiHook
 , gettext
 , gtk-doc
 , docbook-xsl-nons
@@ -25,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.20";
+  version = "0.21";
 
   outputs = [ "out" "devdoc" ];
 
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-8wSRPR/1ELcsZ9K3LvSNlPcJvxRhb/LRjTIxKtdQlCA=";
+    sha256 = "sha256-5JbMbz38SeNEkVKFjJLxeUHiOrx+QCaK/vXgRPbzwzY=";
   };
 
   nativeBuildInputs = [
@@ -48,17 +50,21 @@ stdenv.mkDerivation rec {
     libxml2 # for xmllint for stripping GResources
     libxslt # for xsltproc for building docs
     gobject-introspection
+    wrapGAppsNoGuiHook
     # checkInput but cheked for during the configuring
     (python3.pythonOnBuildForHost.withPackages (ps: with ps; [
       pygobject3
       dbus-python
       python-dbusmock
+      argparse-manpage
+      shtab
     ]))
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
   buildInputs = [
+    bash-completion
     libgudev
     systemd
     upower
@@ -84,10 +90,15 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
+    "-Dpylint=disabled"
+    "-Dzshcomp=${placeholder "out"}/share/zsh/site-functions"
     "-Dtests=${lib.boolToString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)}"
   ];
 
   doCheck = true;
+
+  # Only need to wrap the Python tool (powerprofilectl)
+  dontWrapGApps = true;
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -98,6 +109,10 @@ stdenv.mkDerivation rec {
 
     patchShebangs --host \
       src/powerprofilesctl
+  '';
+
+  postFixup = ''
+    wrapGApp "$out/bin/powerprofilesctl"
   '';
 
   passthru = {
@@ -112,6 +127,6 @@ stdenv.mkDerivation rec {
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz picnoir ];
   };
 }

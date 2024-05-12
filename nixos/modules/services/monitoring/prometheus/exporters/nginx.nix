@@ -1,9 +1,16 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.nginx;
+  inherit (lib)
+    mkOption
+    types
+    mkMerge
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    mkIf
+    concatStringsSep
+    ;
 in
 {
   port = 9113;
@@ -11,7 +18,7 @@ in
     scrapeUri = mkOption {
       type = types.str;
       default = "http://localhost/nginx_status";
-      description = lib.mdDoc ''
+      description = ''
         Address to access the nginx status page.
         Can be enabled with services.nginx.statusPage = true.
       '';
@@ -19,14 +26,14 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };
     sslVerify = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to perform certificate verification for https.
       '';
     };
@@ -37,7 +44,7 @@ in
         "label1=value1"
         "label2=value2"
       ];
-      description = lib.mdDoc ''
+      description = ''
         A list of constant labels that will be used in every metric.
       '';
     };

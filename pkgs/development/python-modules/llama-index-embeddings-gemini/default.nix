@@ -1,36 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, google-generativeai
-, llama-index-core
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-generativeai,
+  llama-index-core,
+  poetry-core,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-gemini";
-  version = "0.1.3";
-
-  inherit (llama-index-core) src meta;
-
+  version = "0.1.6";
   pyproject = true;
 
-  sourceRoot = "${src.name}/llama-index-integrations/embeddings/${pname}";
+  disabled = pythonOlder "3.9";
 
-  nativeBuildInputs = [
+  src = fetchPypi {
+    pname = "llama_index_embeddings_gemini";
+    inherit version;
+    hash = "sha256-HYwYA67/7gDxE7ZxQkkyblgwE83gZXuDmUuseXujr5g=";
+  };
+
+  pythonRelaxDeps = [ "google-generativeai" ];
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     google-generativeai
     llama-index-core
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  # Tests are only available in the mono repo
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.embeddings.gemini"
-  ];
+  pythonImportsCheck = [ "llama_index.embeddings.gemini" ];
+
+  meta = with lib; {
+    description = "LlamaIndex Llms Integration for Gemini";
+    homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/embeddings/llama-index-embeddings-gemini";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

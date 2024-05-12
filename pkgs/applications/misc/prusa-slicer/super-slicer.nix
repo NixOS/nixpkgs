@@ -16,6 +16,7 @@ let
       ];
       sha256 = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
     })
+    ./meshboolean-const.patch
   ];
 
   versions = {

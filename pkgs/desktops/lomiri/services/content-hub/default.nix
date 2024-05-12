@@ -25,7 +25,7 @@
 , qtfeedback
 , qtgraphicaleffects
 , validatePkgConfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qtdeclarative # qmlplugindump
     validatePkgConfig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -161,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput share/applications/$exampleExe.desktop $examples
     done
     moveToOutput share/icons $examples
+    moveToOutput share/content-hub/peers $examples
   '';
 
   postFixup = ''

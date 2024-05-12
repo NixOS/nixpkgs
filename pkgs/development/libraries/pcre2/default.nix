@@ -13,6 +13,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-4qU5hP8LB9/bWuRIa7ubIcyo598kNAlsyb8bcow1C8s=";
   };
 
+  postPatch = ''
+    # Fix jit autodetection:
+    #   https://github.com/PCRE2Project/pcre2/pull/396
+    # Applying manually to avoid fetchpatch and autoreconfHook.
+    # TODO: remove once 10.44 is released
+    substituteInPlace configure --replace-fail \
+      '#include "src/sljit/sljitConfigInternal.h"' \
+      '#include "src/sljit/sljitConfigCPU.h"'
+  '';
+
   configureFlags = [
     "--enable-pcre2-16"
     "--enable-pcre2-32"

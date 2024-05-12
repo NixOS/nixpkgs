@@ -107,7 +107,7 @@ let
       ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
+      ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
 
     buildInputs = lib.optionals stdenv.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -165,33 +165,27 @@ let
       echo "Testing GraalVM"
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
-      # Workaround GraalVM issue where the builder does not have access to the
-      # environment variables since 21.0.0
-      # Only needed for native-image tests
-      # https://github.com/oracle/graal/pull/6095
-      # https://github.com/oracle/graal/pull/6095
-      # https://github.com/oracle/graal/issues/7502
-      export NATIVE_IMAGE_DEPRECATED_BUILDER_SANITATION="true";
+      extraNativeImageArgs="$(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n)"
 
       echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
+      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces -march=compatibility $extraNativeImageArgs HelloWorld
       ./helloworld | fgrep 'Hello World'
 
       ${# --static is only available in Linux
       lib.optionalString (stdenv.isLinux && !useMusl) ''
         echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
-        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC HelloWorld
+        $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
         ./helloworld | fgrep 'Hello World'
 
         echo "Ahead-Of-Time compilation with --static"
-        $out/bin/native-image --static HelloWorld
+        $out/bin/native-image $extraNativeImageArgs -march=compatibility --static HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 
       ${# --static is only available in Linux
       lib.optionalString (stdenv.isLinux && useMusl) ''
         echo "Ahead-Of-Time compilation with --static and --libc=musl"
-        $out/bin/native-image --static HelloWorld --libc=musl
+        $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 

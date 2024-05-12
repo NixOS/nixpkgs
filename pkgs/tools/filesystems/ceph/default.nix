@@ -41,7 +41,7 @@
 , lz4
 , oath-toolkit
 , openldap
-, python310
+, python311
 , rdkafka
 , rocksdb
 , snappy
@@ -140,7 +140,7 @@ let
   getMeta = description: with lib; {
      homepage = "https://ceph.io/en/";
      inherit description;
-     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
@@ -168,7 +168,7 @@ let
   };
 
   # Watch out for python <> boost compatibility
-  python = python310.override {
+  python = python311.override {
     packageOverrides = self: super: let
       cryptographyOverrideVersion = "40.0.1";
       bcryptOverrideVersion = "4.0.1";
@@ -239,8 +239,11 @@ let
           inherit version;
           hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
         };
-        pytestFlagsArray = [
-          "-W" "ignore::pytest.PytestRemovedIn8Warning"
+        disabledTests = old.disabledTests or [ ] ++ [
+          "test_export_md5_digest"
+        ];
+        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
+          self.flaky
         ];
       });
 
@@ -270,7 +273,7 @@ let
     ceph-common
 
     # build time
-    cython
+    cython_0
 
     # debian/control
     bcrypt

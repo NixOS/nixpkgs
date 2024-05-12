@@ -4,7 +4,7 @@
 , pythonOlder
 
 # build-system
-, cython_3
+, cython
 , setuptools
 
 # dependencies
@@ -25,24 +25,24 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "23.1.0";
+  version = "24.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1Y2hcgvn0Msx17t1sH5N8cg2wmYo6YqFWPUqUNTNN5M=";
+    hash = "sha256-wQR3dwN5O++TdtQh+Wcj7c7TNMaRj2lMlOuXOAPVU0Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohappyeyeballs
     async-interrupt
     chacha20poly1305-reuseable

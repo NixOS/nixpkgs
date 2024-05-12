@@ -6,8 +6,6 @@
 , cctools
 , IOKit
 , lib
-, fetchpatch
-, makeBinaryWrapper
 , nixosTests
 , enableLocalIcons ? false
 , nix-update-script
@@ -29,16 +27,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.8.9";
+  version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-wG7+w6Hsqs1skxUyEMx2j3R8qh3dHXtBg2ADdWBPc/g=";
+    hash = "sha256-5AGtNfeFI5fkeXg1PK9ylifHzp9P6XW80XQQFY1YGj8=";
   };
 
-  npmDepsHash = "sha256-ZpH9rVe3bAhVbq7uTVDvaPpA6XRRKT/ySdytZMlemCE=";
+  npmDepsHash = "sha256-UrRpjbFGziPNN03Fj9T+K+kav0LhaAFp/o+SXja6Jxk=";
 
   preBuild = ''
     mkdir -p config

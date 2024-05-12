@@ -5,7 +5,7 @@
 , ninja
 , vala
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , pantheon
 , gtksourceview5
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

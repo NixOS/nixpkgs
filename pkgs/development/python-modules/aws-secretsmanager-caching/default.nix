@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aws-secretsmanager-caching";
-  version = "1.1.1.5";
+  version = "1.1.2";
   pyprject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aws_secretsmanager_caching";
     inherit version;
-    hash = "sha256-XO4nYruJty8+USP+7o5F++RP/hY7/KCLKPJ7Lit3cuE=";
+    hash = "sha256-hhdo+I1yA/pLA+YFDFi8Ekrv27xQLpxiqXh1+4XqteA=";
   };
 
   patches = [
@@ -32,11 +32,11 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner'," ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     botocore
     setuptools  # Needs pkg_resources at runtime.
   ];

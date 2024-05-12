@@ -2,12 +2,11 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
-, oldest-supported-numpy
 , setuptools
 , wheel
 , numpy
 , hdf5
-, cython
+, cython_0
 , pkgconfig
 , mpi4py ? null
 , openssh
@@ -21,21 +20,27 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "3.10.0";
+  version = "3.11.0";
   pname = "h5py";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2TrcSM7rMzR+skpjT7eH78euRkTm6kunM9CZYFBFwEk=";
+    hash = "sha256-e36PeAcqLt7IfJg28l80ID/UkqRHVwmhi0F6M8+yH6k=";
   };
+
+  patches = [
+    # Unlock an overly strict locking of mpi4py version (seems not to be necessary).
+    # See also: https://github.com/h5py/h5py/pull/2418/files#r1589372479
+    ./mpi4py-requirement.patch
+  ];
 
   # avoid strict pinning of numpy
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mpi4py ==" "mpi4py >="
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy >=2.0.0rc1" "numpy"
   '';
 
   HDF5_DIR = "${hdf5}";
@@ -50,8 +55,8 @@ in buildPythonPackage rec {
   preBuild = lib.optionalString mpiSupport "export CC=${lib.getDev mpi}/bin/mpicc";
 
   nativeBuildInputs = [
-    cython
-    oldest-supported-numpy
+    cython_0
+    numpy
     pkgconfig
     setuptools
     wheel

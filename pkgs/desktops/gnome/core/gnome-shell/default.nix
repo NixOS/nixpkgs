@@ -12,18 +12,17 @@
 , python3
 , polkit
 , networkmanager
-, gtk-doc
-, docbook-xsl-nons
+, gi-docgen
 , at-spi2-core
 , libstartup_notification
 , unzip
 , shared-mime-info
 , libgweather
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , geoclue2
 , perl
-, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -67,13 +66,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "45.5";
+  version = "46.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-vVw9PQKNRyM+QgUiPwrAKsmpc7aZvCd0OQlNQaeNarA=";
+    hash = "sha256-ZPmZhEwQHmO/KU1FsTjeVjGa0vMmKCchqtD6hgZTs2k=";
   };
 
   patches = [
@@ -100,8 +99,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Work around failing fingerprint auth
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
-      sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
+      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
+      hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
+    })
+
+    # screencast: Correct expected bus name for streams
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/3303
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/50a011a19dcc6997ea6173c07bb80b2d9888d363.patch";
+      hash = "sha256-ccEpdWgDxwnj7ouzFekpoln5Y2PtgRikWetwK+0U9Fg=";
     })
   ];
 
@@ -110,9 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    gtk-doc
+    gi-docgen
     perl
     wrapGAppsHook4
     sassc
@@ -188,10 +192,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];
@@ -211,6 +216,9 @@ stdenv.mkDerivation (finalAttrs: {
     for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   separateDebugInfo = true;
@@ -225,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.21";
+  version = "0.22";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-ajUZGf+JvafJXIlUcmAYaNs9qrlqlYs44DYokNWHYLY=";
+    hash = "sha256-hZB0tGHqS4MlpzQYwgfKM7XmVmsI5rWH65FkQWVppt0=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \
-      --replace "'include-what-you-use'" "'$out/bin/include-what-you-use'"
+      --replace-fail "'include-what-you-use'" "'$out/bin/include-what-you-use'"
 
 
     mv $out/bin/include-what-you-use $out/bin/.include-what-you-use-unwrapped

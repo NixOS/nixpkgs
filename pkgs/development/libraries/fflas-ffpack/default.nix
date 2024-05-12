@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Finite Field Linear Algebra Subroutines";
     mainProgram = "fflas-ffpack-config";
     license = licenses.lgpl21Plus;

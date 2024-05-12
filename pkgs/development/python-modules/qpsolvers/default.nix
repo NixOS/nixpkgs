@@ -19,14 +19,14 @@
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.3.1";
+  version = "4.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/HLc9dFf9F/6W7ux2Fj2yJuV/xCVeGyO6MblddwIGdM=";
+    hash = "sha256-EU7/OGLeOIHw7wyNTibMmHZLAiRTCUFwjEaVNsHg1vw=";
   };
 
   nativeBuildInputs = [

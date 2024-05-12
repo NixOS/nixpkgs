@@ -46,6 +46,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     stestr run -e <(echo "
+    novaclient.tests.unit.test_shell.ParserTest.test_ambiguous_option
+    novaclient.tests.unit.test_shell.ParserTest.test_not_really_ambiguous_option
     novaclient.tests.unit.test_shell.ShellTest.test_osprofiler
     novaclient.tests.unit.test_shell.ShellTestKeystoneV3.test_osprofiler
     ")

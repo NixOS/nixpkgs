@@ -3,7 +3,6 @@
 let
   pname = "station";
   version = "1.52.2";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/getstation/desktop-app-releases/releases/download/${version}/Station-${version}-x86_64.AppImage";
@@ -11,10 +10,10 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -23,7 +22,6 @@ in appimageTools.wrapType2 rec {
   multiArch = false;
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
     install -m 444 -D ${appimageContents}/browserx.desktop $out/share/applications/browserx.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/browserx.png \
       $out/share/icons/hicolor/512x512/apps/browserx.png

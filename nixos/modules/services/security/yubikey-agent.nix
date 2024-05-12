@@ -18,12 +18,12 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to start yubikey-agent when you log in.  Also sets
           SSH_AUTH_SOCK to point at yubikey-agent.
 
           Note that yubikey-agent will use whatever pinentry is
-          specified in programs.gnupg.agent.pinentryFlavor.
+          specified in programs.gnupg.agent.pinentryPackage.
         '';
       };
 

@@ -165,8 +165,6 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
-        # TODO: qemu script already catpures this env variable, legacy?
-        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
         return (
             f"{self._cmd}"
@@ -1250,6 +1248,5 @@ class Machine:
             check_return=False,
             check_output=False,
         )
-        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
         self.connected = False
         self.connect()

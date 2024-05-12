@@ -21,7 +21,7 @@ let
 
   # only doing this because only on darwin placing clang.cc in nativeBuildInputs
   # doesn't build
-  bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
+  bootstrapTools = runCommand "tinygo-bootstrap-tools" { } ''
     mkdir -p $out
     ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
   '';
@@ -29,13 +29,13 @@ in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.31.1";
+  version = "0.31.2";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-YocRTgGSyjnQsYd4a2nCQ0vdQi/z2gHPguix5xIkkgc=";
+    sha256 = "sha256-e0zXxIdAtJZXJdP/S6lHRnPm5Rsf638Fhox8XcqOWrk=";
     fetchSubmodules = true;
   };
 

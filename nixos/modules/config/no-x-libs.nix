@@ -10,7 +10,7 @@ with lib;
     environment.noXlibs = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Switch off the options in the default configuration that
         require X11 libraries. This includes client-side font
         configuration and SSH forwarding of X11 authentication
@@ -31,8 +31,11 @@ with lib;
       cairo = super.cairo.override { x11Support = false; };
       dbus = super.dbus.override { x11Support = false; };
       fastfetch = super.fastfetch.override { vulkanSupport = false; waylandSupport = false; x11Support = false; };
+      ffmpeg = super.ffmpeg.override { ffmpegVariant = "headless"; };
       ffmpeg_4 = super.ffmpeg_4.override { ffmpegVariant = "headless"; };
       ffmpeg_5 = super.ffmpeg_5.override { ffmpegVariant = "headless"; };
+      ffmpeg_6 = super.ffmpeg_6.override { ffmpegVariant = "headless"; };
+      ffmpeg_7 = super.ffmpeg_7.override { ffmpegVariant = "headless"; };
       # dep of graphviz, libXpm is optional for Xpm support
       gd = super.gd.override { withXorg = false; };
       ghostscript = super.ghostscript.override { cupsSupport = false; x11Support = false; };
@@ -44,7 +47,7 @@ with lib;
       gst_all_1 = super.gst_all_1 // {
         gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
         gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableWayland = false; enableX11 = false; };
-        gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableX11 = false; };
+        gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableWayland = false; enableX11 = false; gtkSupport = false; qt5Support = false; qt6Support = false; };
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };

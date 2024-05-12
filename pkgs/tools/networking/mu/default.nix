@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.12.2";
+  version = "1.12.5";
 
   outputs = [ "out" "mu4e" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-ab5nTB7mp9zB53JsPS2aPhbnW4O+56+cWunqTVENMPA=";
+    hash = "sha256-dQeXL+CcysmlV6VYSuZtWGSgIhoqP6Y20Qora4l0iP8=";
   };
 
   postPatch = ''

@@ -21,7 +21,7 @@
 , nss
 , libical
 , gperf
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib-networking
 , gsettings-desktop-schemas
 , pcre
@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.50.4";
+  version = "3.52.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1+3/vgOgu87L7mc5MhS4McexjNiVuExNv+E4d3biV8U=";
+    hash = "sha256-gls9fVRoRApn0R3SojkzlgwHue7MeXuxJYQ8sshwo0g=";
   };
 
   patches = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     gettext
     python3
     gperf
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     vala
   ];
@@ -147,10 +147,6 @@ stdenv.mkDerivation rec {
       --replace "-Wl,--no-undefined" ""
     substituteInPlace src/services/evolution-alarm-notify/e-alarm-notify.c \
       --replace "G_OS_WIN32" "__APPLE__"
-  '' + lib.optionalString stdenv.cc.isClang ''
-    # https://gitlab.gnome.org/GNOME/evolution-data-server/-/issues/513
-    substituteInPlace src/addressbook/libebook-contacts/e-phone-number-private.cpp \
-      --replace "std::auto_ptr" "std::unique_ptr"
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
@@ -185,7 +181,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
-    homepage = "https://wiki.gnome.org/Apps/Evolution";
+    homepage = "https://gitlab.gnome.org/GNOME/evolution-data-server";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

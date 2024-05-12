@@ -2,20 +2,20 @@
 
 buildNpmPackage rec {
   pname = "typescript";
-  version = "5.4.3";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
     rev = "v${version}";
-    hash = "sha256-yB87R6LyuTbSbQOcRi+QOhrnUy+ra76PiCzsEvPx3ds=";
+    hash = "sha256-W2ulYb06K4VSlFTYOmXTBHrjWXnQdDGzkwBxvl+QJWo=";
   };
 
   patches = [
     ./disable-dprint-dstBundler.patch
   ];
 
-  npmDepsHash = "sha256-XlXDof0yFxEpNCZN+4ZY2BVgpbAkwdAUJcTRxIXi8eQ=";
+  npmDepsHash = "sha256-T0WfJaSVzwbNbTL1AiuzMUW/3MKMOZo14v4Ut9Iqxas=";
 
   passthru.tests = {
     version = testers.testVersion {
@@ -28,7 +28,7 @@ buildNpmPackage rec {
     homepage = "https://www.typescriptlang.org/";
     changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "tsc";
   };
 }

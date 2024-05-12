@@ -12,7 +12,7 @@
 , sqlite
 , tinyxml
 , boost
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK32
 , gtk3
 , xdg-utils
@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.66.5";
+  version = "3.67.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.xz";
-    hash = "sha256-khIoGbrmNBBwuktuy0V+ZzC0bn3ImUKZCQPymJA9Gzs=";
+    hash = "sha256-5drcgH25mc60ZJhPl00+9ZtWLFlUZlgFfpsgEYOtr5o=";
   };
 
   configureFlags = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     boost

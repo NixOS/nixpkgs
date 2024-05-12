@@ -37,6 +37,5 @@ buildPythonPackage rec {
     description = "An audio library based on libsndfile, CFFI and NumPy";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/bastibe/python-soundfile";
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

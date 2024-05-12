@@ -1,12 +1,13 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , fetchpatch2
+, pythonAtLeast
 , pythonOlder
 , substituteAll
 
-# build
+# build-system
 , setuptools
 
 # patched in
@@ -14,11 +15,11 @@
 , gdal
 , withGdal ? false
 
-# propagates
+# dependencies
 , asgiref
 , sqlparse
 
-# extras
+# optional-dependencies
 , argon2-cffi
 , bcrypt
 
@@ -43,15 +44,16 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.0.3";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
-  src = fetchPypi {
-    pname = "Django";
-    inherit version;
-    hash = "sha256-X7N1gNz0omL5JYwfQ3OBmqzKkGQx9QXkaI4386mRld8=";
+  src = fetchFromGitHub {
+    owner = "django";
+    repo = "django";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0/AbPmTl38E9BpHVKs0r79fISjEa1d4XO/se1pA7zxg=";
   };
 
   patches = [
@@ -64,11 +66,6 @@ buildPythonPackage rec {
     # disable test that excpects timezone issues
     ./django_5_disable_failing_tests.patch
 
-    (fetchpatch2 {
-      # fix test on 3.12; https://github.com/django/django/pull/17843
-      url = "https://github.com/django/django/commit/bc8471f0aac8f0c215b9471b594d159783bac19b.patch";
-      hash = "sha256-g1T9b73rmQ0uk1lB+iQy1XwK3Qin3mf5wpRsyYISJaw=";
-    })
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_5_set_geos_gdal_lib.patch;
@@ -81,18 +78,23 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tests/utils_tests/test_autoreload.py \
       --replace "/usr/bin/python" "${python.interpreter}"
+  '' + lib.optionalString (pythonAtLeast "3.12" && stdenv.hostPlatform.system == "aarch64-linux") ''
+    # Test regression after xz was reverted from 5.6.0 to 5.4.6
+    # https://hydra.nixos.org/build/254532197
+    substituteInPlace tests/view_tests/tests/test_debug.py \
+      --replace-fail "test_files" "dont_test_files"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     sqlparse
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     argon2 = [
       argon2-cffi
     ];
@@ -118,7 +120,7 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   doCheck = !stdenv.isDarwin;
 

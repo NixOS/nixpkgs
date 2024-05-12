@@ -1,5 +1,6 @@
 {
   lib,
+  bash,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -33,9 +34,14 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace jishaku/shell.py \
+      --replace-fail '"/bin/bash"' '"${lib.getExe bash}"'
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     discordpy
     click
     braceexpand

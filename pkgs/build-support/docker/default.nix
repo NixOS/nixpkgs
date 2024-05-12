@@ -517,7 +517,7 @@ rec {
 
   buildLayeredImage = lib.makeOverridable ({ name, compressor ? "gz", ... }@args:
     let
-      stream = streamLayeredImage args;
+      stream = streamLayeredImage (builtins.removeAttrs args ["compressor"]);
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}"
@@ -637,7 +637,7 @@ rec {
             if tag != null
             then tag
             else
-              lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
+              lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext result.outPath)));
         } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
@@ -1001,7 +1001,7 @@ rec {
               if tag != null
               then tag
               else
-                lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
+                lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext conf.outPath)));
             paths = buildPackages.referencesByPopularity overallClosure;
             nativeBuildInputs = [ jq ];
           } ''
@@ -1287,7 +1287,7 @@ rec {
   # Wrapper around streamNixShellImage to build an image from the result
   buildNixShellImage = { drv, compressor ? "gz", ... }@args:
     let
-      stream = streamNixShellImage args;
+      stream = streamNixShellImage (builtins.removeAttrs args ["compressor"]);
       compress = compressorForImage compressor drv.name;
     in
     runCommand "${drv.name}-env.tar${compress.ext}"

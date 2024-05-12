@@ -12,24 +12,38 @@
 , pycrypto
 , pycryptodomex
 , pyelftools
+, python-gnupg
 , python-u2flib-host
 , pythonOlder
+, pythonRelaxDepsHook
+, setuptools
+, setuptools-scm
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.48";
-  format = "setuptools";
+  version = "0.1.53";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LVRNcsTmJOR3zTBhbKV4V0zCQk0sk/Uf6kSmfbAhgfY=";
+    hash = "sha256-j5FCQnp+MNrJ8zgYeLRuWF+Gdq0FwJeBYyJALb+H8So=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
+  dependencies = [
     ecpy
     future
     hidapi
@@ -39,6 +53,7 @@ buildPythonPackage rec {
     pycrypto
     pycryptodomex
     pyelftools
+    python-gnupg
     python-u2flib-host
     websocket-client
   ]

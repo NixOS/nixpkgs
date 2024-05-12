@@ -7,11 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "FoxDot";
+  pname = "foxdot";
   version = "0.8.12";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "FoxDot";
+    inherit version;
     sha256 = "528999da55ad630e540a39c0eaeacd19c58c36f49d65d24ea9704d0781e18c90";
   };
 

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.7.0";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "refs/tags/v${version}";
-    hash = "sha256-krMOjXzI9tmLGLEswXLLqc8J68Gwnl1VrRO2fLbDv0o=";
+    hash = "sha256-CqfwAKhrq4VEBU258x19JT8+ay2vOYIzVoFWjAzh3wY=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/jjjake/internetarchive";
     changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "ia";
   };
 }

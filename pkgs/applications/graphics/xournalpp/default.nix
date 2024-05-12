@@ -3,7 +3,7 @@
 
 , cmake
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 
 , alsa-lib
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --replace-fail "addr2line" "${binutils}/bin/addr2line"
   '';
 
-  nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook3 ];
 
   buildInputs =
     lib.optionals stdenv.isLinux [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://xournalpp.github.io/";
     changelog   = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ andrew-d sikmir ];
+    maintainers = with maintainers; [ sikmir ];
     platforms   = platforms.unix;
     mainProgram = "xournalpp";
   };

@@ -16,6 +16,7 @@ import typing
 import urllib.request
 
 _QUERY_VERSION_PATTERN = re.compile('^([A-Z]+)="(.+)"$')
+_RELEASE_PATCH_PATTERN = re.compile('^RELEASE-p([0-9]+)$')
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MIN_VERSION = packaging.version.Version("13.0.0")
 MAIN_BRANCH = "main"

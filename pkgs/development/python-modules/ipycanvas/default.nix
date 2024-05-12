@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, jupyter-packaging
+, hatchling
 , ipywidgets
 , numpy
 , pillow
@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ipycanvas";
-  version = "0.13.1";
-  format = "pyproject";
+  version = "0.13.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+cOUBoG8ODgzkPjEbqXYRF1uEcbaZITDfYnfWuHawTE=";
+    hash = "sha256-Ujh9nYf2WVXzlVL7eSfEReXl5JN9hTgU2RDL6O+g+3k=";
   };
 
   # We relax dependencies here instead of pulling in a patch because upstream
@@ -26,13 +26,16 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"jupyterlab==3.*",' "" \
-      --replace 'jupyter_packaging~=' 'jupyter_packaging>='
+      --replace-fail '"jupyterlab>=3,<5",' "" \
   '';
 
-  nativeBuildInputs = [ jupyter-packaging ];
+  build-system = [
+    hatchling
+  ];
 
-  propagatedBuildInputs = [ ipywidgets numpy pillow ];
+  env.HATCH_BUILD_NO_HOOKS = true;
+
+  dependencies = [ ipywidgets numpy pillow ];
 
   doCheck = false;  # tests are in Typescript and require `npx` and `chromium`
   pythonImportsCheck = [ "ipycanvas" ];

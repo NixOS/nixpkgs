@@ -347,6 +347,22 @@ div.appendix div.example {
     margin-top: 1.5em;
 }
 
+div.book div.example details,
+div.appendix div.example details {
+    padding: 5px;
+}
+
+div.book div.example details[open],
+div.appendix div.example details[open] {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+div.book div.example details>summary,
+div.appendix div.example details>summary {
+    cursor: pointer;
+}
+
 div.book br.example-break,
 div.appendix br.example-break {
     display: none;
@@ -413,4 +429,13 @@ div.book .informaltable td,
 div.appendix .informaltable th,
 div.appendix .informaltable td {
     padding: 0.5rem;
+}
+
+/*
+  This relies on highlight.js applying certain classes on the prompts.
+  For more details, see https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#stylable-scopes
+*/
+.hljs-meta.prompt_ {
+    user-select: none;
+    -webkit-user-select: none;
 }

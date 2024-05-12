@@ -1,7 +1,13 @@
 { lib, stdenv, fetchFromGitLab, cmake, openal, pkg-config, libogg,
   libvorbis, SDL2, makeWrapper, libpng, libjpeg_turbo, libGLU }:
 
-with lib;
+let
+  inherit (lib)
+    licenses
+    maintainers
+    platforms
+    ;
+in
 
 stdenv.mkDerivation rec {
 
@@ -27,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://osslugaru.gitlab.io";
     maintainers = [ ];
     platforms = platforms.linux;
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

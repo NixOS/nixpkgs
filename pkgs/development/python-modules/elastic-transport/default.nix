@@ -4,19 +4,24 @@
 , certifi
 , fetchFromGitHub
 , mock
+, opentelemetry-api
+, opentelemetry-sdk
+, orjson
 , pytest-asyncio
 , pytest-httpserver
 , pytestCheckHook
 , pythonOlder
 , requests
+, respx
+, setuptools
 , trustme
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.12.0";
-  format = "setuptools";
+  version = "8.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,13 +29,17 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZLzaCiopdkhpqjzZzv/NT1+f5bHZYuqQvSgM5jeMaqg=";
+    hash = "sha256-KmZCaAbzbfqbPwFuF43ckwgVhZVbPvwjF7uqPKHml9Q=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace " --cov-report=term-missing --cov=elastic_transport" ""
   '';
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     urllib3
@@ -40,10 +49,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     mock
+    opentelemetry-api
+    opentelemetry-sdk
+    orjson
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook
     requests
+    respx
     trustme
   ];
 

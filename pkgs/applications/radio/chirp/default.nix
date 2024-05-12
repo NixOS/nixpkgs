@@ -1,28 +1,29 @@
 { lib
 , fetchFromGitHub
+, writeShellScript
 , glib
 , gsettings-desktop-schemas
 , python3
 , unstableGitUpdater
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chirp";
-  version = "unstable-2024-02-08";
+  version = "0.4.0-unstable-2024-05-03";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "902043a937ee3611744f2a4e35cd902c7b0a8d0b";
-    hash = "sha256-oDUtR1xD73rfBRKkbE1f68siO/4oxoLxw16w1qa9fEo=";
+    rev = "e95140ff433b805ca16df04cba501b7332a9ec95";
+    hash = "sha256-UU3Ve6Yb7UK2nOLTfJasrlMX4iu1cpLBLScvhRhTUJ0=";
   };
   buildInputs = [
     glib
     gsettings-desktop-schemas
   ];
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   propagatedBuildInputs = with python3.pkgs; [
     future
@@ -37,7 +38,9 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   passthru.updateScript = unstableGitUpdater {
-    branch = "py3";
+    tagConverter = writeShellScript "chirp-tag-converter.sh" ''
+      sed -e 's/^release_//g' -e 's/_/./g'
+    '';
   };
 
   meta = with lib; {

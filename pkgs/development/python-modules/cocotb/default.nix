@@ -52,6 +52,10 @@ buildPythonPackage rec {
   patches = [
     # Fix "can't link with bundle (MH_BUNDLE) only dylibs (MH_DYLIB) file" error
     ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
+
+    # For the 1.8.1 release only: remove the test_unicode_handle_assignment_deprecated test
+    # It's more thoroughly removed upstream master with 425e1edb8e7133f4a891f2f87552aa2748cd8d2c
+    ./0002-Patch-remove-test_unicode_handle_assignment_deprecated-test.patch
   ];
 
   nativeCheckInputs = [ cocotb-bus pytestCheckHook swig verilog ghdl ];

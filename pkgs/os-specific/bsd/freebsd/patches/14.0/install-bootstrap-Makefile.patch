@@ -5,7 +5,7 @@
  
  LIBADD=		md
 -CFLAGS+=	-DWITH_MD5 -DWITH_RIPEMD160
-+CFLAGS=		-I${BSDSRCDIR}/contrib/libc-vis -I${BSDSRCDIR}/lib/libnetbsd
++CFLAGS+=		-I${BSDSRCDIR}/contrib/libc-vis -I${BSDSRCDIR}/lib/libnetbsd
  
  .ifdef BOOTSTRAPPING
  # For the bootstrap we disable copy_file_range()

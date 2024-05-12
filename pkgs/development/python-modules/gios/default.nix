@@ -8,23 +8,29 @@
 , pytest-error-for-skips
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, syrupy
 }:
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "3.2.2";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
+    repo = "gios";
     rev = "refs/tags/${version}";
-    hash = "sha256-5CiKikhIZ+1pb5/NJ2XzpG1XHrkyuW1WUvvNEpxJIcw=";
+    hash = "sha256-rjC4zWWtaPxuBcjiO9dVsXD4dTa47iwkKuSFx+QXeXw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     dacite
   ];
@@ -34,6 +40,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
   disabledTests = [

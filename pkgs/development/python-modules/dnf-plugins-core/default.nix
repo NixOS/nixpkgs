@@ -22,7 +22,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf-plugins-core";
-  version = "4.5.0";
+  version = "4.7.0";
   format = "other";
 
   outputs = [ "out" "man" ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "rpm-software-management";
     repo = "dnf-plugins-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-og20X2AUzoOphwF+508EobGEp/VYLtxWY7N4k327o8o=";
+    hash = "sha256-AQnnXjkUajztbyoKzKhxiKxZsb2o2+7C15fsrxGkWcM=";
   };
 
   patches = [

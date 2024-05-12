@@ -10,6 +10,8 @@
 , pillow
 , pytest
 , pytest-astropy
+, pytest-dependency
+, pytest-rerunfailures
 , pytestCheckHook
 , pyvo
 , astropy-helpers
@@ -19,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.4.6";
+  version = "0.4.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MHylVMtzSgypoi+G9e/+fkE6+ROuZeFXiXLYR7H+E+4=";
+    hash = "sha256-BH+6ywpPrsTNtiZ16RnCRMHDXmYQRPy7bJqTMzF0fsk=";
   };
 
   disabled = !isPy3k;
@@ -46,11 +48,16 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  checkInputs = [
     matplotlib
     pillow
     pytest
     pytest-astropy
-    pytestCheckHook
+    pytest-dependency
+    pytest-rerunfailures
   ];
 
   pytestFlagsArray = [

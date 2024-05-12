@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "strictdoc";
-  version = "0.0.49";
+  version = "0.0.54";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
-    rev = version;
-    hash = "sha256-WtDplupXBtq39oKyo31p5NgXMWtbWgxtpnKn4qCJz3I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-gsZgvT3bSHxxFLhEqlHjoRZiYZwyFr377CGYWYOssyM=";
   };
 
   nativeBuildInputs = [

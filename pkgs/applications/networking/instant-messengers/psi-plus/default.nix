@@ -100,7 +100,7 @@ mkDerivation rec {
     homepage = "https://psi-plus.com";
     description = "XMPP (Jabber) client based on Qt5";
     mainProgram = "psi-plus";
-    maintainers = with maintainers; [ orivej misuzu unclechu ];
+    maintainers = with maintainers; [ orivej unclechu ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };

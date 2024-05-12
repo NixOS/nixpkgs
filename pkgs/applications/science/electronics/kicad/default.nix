@@ -193,14 +193,14 @@ stdenv.mkDerivation rec {
       "${symbols}/share/kicad/template"
     ];
   };
-  # We are emulating wrapGAppsHook, along with other variables to the wrapper
+  # We are emulating wrapGAppsHook3, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
-    # wrapGAppsHook did these two as well, no idea if it matters...
+    # wrapGAppsHook3 did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
     # required to open a bug report link in firefox-wayland

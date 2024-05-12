@@ -1,21 +1,33 @@
 { lib
 , fetchFromGitHub
+, fetchurl
 , buildGoModule
 , nixosTests
 }:
 
+let
+  hlsJs = fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.8/dist/hls.min.js";
+    hash = "sha256-KG8Cm0dAsFbrBHuMi9c+bMocpSvWWK4c9aWH9LGfDY4=";
+  };
+in
 buildGoModule rec {
   pname = "mediamtx";
-  version = "1.5.1";
+  # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FtMjcPeXLkITuGFwjHQ2Tu5pK3Hb/3L9SmcJaJFkP9k=";
+    hash = "sha256-4ypAM1dW13qKaCEXGET1Xe2+kDBEwJHaOQ1ZghFymFM=";
   };
 
-  vendorHash = "sha256-nchBsmk5hAqBPXk5aUSf/H46PdCg8JfGbeV4VBXBs+E=";
+  vendorHash = "sha256-+K772WVLRaLXZgpULwv8/pL5zbHpvhbMikSqMF9MOs4=";
+
+  postPatch = ''
+    cp ${hlsJs} internal/servers/hls/hls.min.js
+  '';
 
   # Tests need docker
   doCheck = false;

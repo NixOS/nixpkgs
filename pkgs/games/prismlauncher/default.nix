@@ -31,13 +31,13 @@ assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is on
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "8.2";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = finalAttrs.version;
-    hash = "sha256-4VsoxZzi/EfEsnDvvwzg2xhj7j5B+k3gvaSqwJFDweE=";
+    hash = "sha256-1YGzCgNdzscnOVeNlHMFJa0RbMo6C2qQjtBOeDxHakI=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja stripJavaArchivesHook ];
@@ -60,7 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLauncher_BUILD_PLATFORM=nixpkgs"
   ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
   ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
-  ++ lib.optionals stdenv.isDarwin [ "-DINSTALL_BUNDLE=nodeps" "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''" ];
+  ++ lib.optionals stdenv.isDarwin [
+    "-DINSTALL_BUNDLE=nodeps"
+    "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/Applications/"
+  ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus

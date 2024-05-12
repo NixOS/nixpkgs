@@ -7,14 +7,12 @@
 , async-upnp-client
 , attrs
 , click
-, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "python-songpal";
-  version = "0.16.1";
-
-  format = "pyproject";
+  version = "0.16.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,19 +20,18 @@ buildPythonPackage rec {
     owner = "rytilahti";
     repo = "python-songpal";
     rev = "refs/tags/release/${version}";
-    hash = "sha256-qlypUGrObvn6YyzFhJe2rJvVdI6v+PkWLfjMpc1Lm2k=";
+    hash = "sha256-PYw6xlUtBrxl+YeVO/2Njt5LYWEprzGPVNk1Mlr83HM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-upnp-client
     attrs
     click
-    importlib-metadata
   ];
 
   # no tests implemented

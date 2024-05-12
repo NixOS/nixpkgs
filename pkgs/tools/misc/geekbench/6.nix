@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   inherit version;
   pname = "geekbench";
 
-  src = fetchurl (sources.${stdenv.system});
+  src = fetchurl (sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
 
   dontConfigure = true;
   dontBuild = true;

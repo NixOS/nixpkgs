@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "myst-nb";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "myst_nb";
-    hash = "sha256-kHfkKhxrRB6lUHhQb4NVXdpdbIFu9JMIQdcdI54+DF4=";
+    hash = "sha256-kniEDoRPXXgLWsxUAMv2PZfKrM+OtEKlXr2aA+JSLV4=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/MyST-NB";
     changelog = "https://github.com/executablebooks/MyST-NB/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

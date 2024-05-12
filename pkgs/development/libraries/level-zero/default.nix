@@ -1,22 +1,34 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , addOpenGLRunpath
 , cmake
+, fetchFromGitHub
+, fmt_9
+, spdlog
+, stdenv
+, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.16.1";
+  version = "1.16.15";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iPWEZ9aJ3uI4cAKRgur78zdVwGtD6q1TqwNpK+mg5hw=";
+    hash = "sha256-J+XIqaV1ThD0RqqcyIkzvTWCkIztjkHzGzUbj0qojJs=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./system-spdlog.diff;
+      spdlog = lib.getDev spdlog;
+    })
+  ];
+
   nativeBuildInputs = [ cmake addOpenGLRunpath ];
+
+  buildInputs = [ fmt_9 ];
 
   postFixup = ''
     addOpenGLRunpath $out/lib/libze_loader.so

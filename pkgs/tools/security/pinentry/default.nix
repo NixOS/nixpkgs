@@ -4,7 +4,7 @@
 , fetchpatch
 , pkg-config
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , libgpg-error
 , libassuan
 , libsForQt5
@@ -29,7 +29,7 @@ let
     gnome3 = {
       flag = "gnome3";
       buildInputs = [ gcr ];
-      nativeBuildInputs = [ wrapGAppsHook ];
+      nativeBuildInputs = [ wrapGAppsHook3 ];
     };
     qt = {
       flag = "qt";
@@ -103,7 +103,7 @@ let
           platforms.all;
         longDescription = ''
           Pinentry provides a console and (optional) GTK and Qt GUIs allowing users
-          to enter a passphrase when `gpg' or `gpg2' is run and needs it.
+          to enter a passphrase when `gpg` or `gpg2` is run and needs it.
         '';
         maintainers = with maintainers; [ fpletz ];
         mainProgram = "pinentry";

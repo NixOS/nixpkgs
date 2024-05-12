@@ -42,6 +42,6 @@ mkDerivation rec {
     description = "Open Source DVR";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.titanous ];
+    maintainers = [ ];
   };
 }

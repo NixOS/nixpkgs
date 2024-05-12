@@ -159,12 +159,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
+  passthru.shellPath = "/bin/ash";
+
   meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
-    priority = 10;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

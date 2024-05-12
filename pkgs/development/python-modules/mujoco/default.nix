@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "mujoco";
-  version = "3.1.3";
+  version = "3.1.5";
 
   pyproject = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9wDQdAMQYLRhEd22BDLQBCX4Ie7q8MzHbtldR4Yb1N4=";
+    hash = "sha256-kJm6YAE0HMnji3uUuO96ZzRsdjj6PpT1IHQ6NXiR8pY=";
   };
 
   nativeBuildInputs = [ cmake setuptools ];

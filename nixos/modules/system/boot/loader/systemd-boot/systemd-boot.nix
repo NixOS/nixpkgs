@@ -7,8 +7,22 @@ let
 
   efi = config.boot.loader.efi;
 
+  # We check the source code in a derivation that does not depend on the
+  # system configuration so that most users don't have to redo the check and require
+  # the necessary dependencies.
+  checkedSource = pkgs.runCommand "systemd-boot" {
+    preferLocalBuild = true;
+  } ''
+    install -m755 -D ${./systemd-boot-builder.py} $out
+    ${lib.getExe pkgs.buildPackages.mypy} \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
+
   systemdBootBuilder = pkgs.substituteAll rec {
-    src = ./systemd-boot-builder.py;
+    src = checkedSource;
 
     isExecutable = true;
 
@@ -66,19 +80,9 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" { } ''
-    mkdir -p $out/bin
-    install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
-    ${lib.getExe pkgs.buildPackages.mypy} \
-      --no-implicit-optional \
-      --disallow-untyped-calls \
-      --disallow-untyped-defs \
-      $out/bin/systemd-boot-builder
-  '';
-
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder}/bin/systemd-boot-builder "$@"
+    ${systemdBootBuilder} "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
@@ -105,7 +109,7 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
         For more information about systemd-boot:
         https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
@@ -146,7 +150,7 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc ''
+      description = ''
         Whether to allow editing the kernel command-line before
         boot. It is recommended to set this to false, as it allows
         gaining root access by passing init=/bin/sh as a kernel
@@ -158,7 +162,7 @@ in {
     xbootldrMountPoint = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Where the XBOOTLDR partition is mounted.
 
         If set, this partition will be used as $BOOT to store boot loader entries and extra files
@@ -171,7 +175,7 @@ in {
       default = null;
       example = 120;
       type = types.nullOr types.int;
-      description = lib.mdDoc ''
+      description = ''
         Maximum number of latest generations in the boot menu.
         Useful to prevent boot partition running out of disk space.
 
@@ -188,7 +192,7 @@ in {
         sed -i "s|@INIT@|$init_value|g" /boot/custom/config_with_placeholder.conf
       '';
       type = types.lines;
-      description = lib.mdDoc ''
+      description = ''
         Additional shell commands inserted in the bootloader installer
         script after generating menu entries. It can be used to expand
         on extra boot entries that cannot incorporate certain pieces of
@@ -201,7 +205,7 @@ in {
 
       type = types.enum [ "0" "1" "2" "auto" "max" "keep" ];
 
-      description = lib.mdDoc ''
+      description = ''
         The resolution of the console. The following values are valid:
 
         - `"0"`: Standard UEFI 80x25 mode
@@ -217,7 +221,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Make Memtest86+ available from the systemd-boot menu. Memtest86+ is a
           program for testing memory.
         '';
@@ -226,7 +230,7 @@ in {
       sortKey = mkOption {
         default = "o_memtest86";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
           it should start with {file}`o` or onwards.
@@ -240,7 +244,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Make `netboot.xyz` available from the
           `systemd-boot` menu. `netboot.xyz`
           is a menu system that allows you to boot OS installers and
@@ -251,7 +255,7 @@ in {
       sortKey = mkOption {
         default = "o_netbootxyz";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           `systemd-boot` orders the menu entries by their sort keys,
           so if you want something to appear after all the NixOS entries,
           it should start with {file}`o` or onwards.
@@ -271,7 +275,7 @@ in {
           sort-key z_memtest
         '''; }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Any additional entries you want added to the `systemd-boot` menu.
         These entries will be copied to {file}`$BOOT/loader/entries`.
         Each attribute name denotes the destination file name,
@@ -290,7 +294,7 @@ in {
       example = literalExpression ''
         { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
       '';
-      description = lib.mdDoc ''
+      description = ''
         A set of files to be copied to {file}`$BOOT`.
         Each attribute name denotes the destination file name in
         {file}`$BOOT`, while the corresponding
@@ -303,7 +307,7 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc ''
+      description = ''
         Invoke `bootctl install` with the `--graceful` option,
         which ignores errors when EFI variables cannot be written or when the EFI System Partition
         cannot be found. Currently only applies to random seed operations.

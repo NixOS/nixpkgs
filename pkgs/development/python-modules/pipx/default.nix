@@ -4,12 +4,12 @@
 , fetchFromGitHub
 , hatchling
 , hatch-vcs
-, importlib-metadata
+, installShellFiles
 , packaging
-, pip
 , platformdirs
 , pytestCheckHook
 , pythonOlder
+, tomli
 , userpath
 , git
 }:
@@ -17,29 +17,33 @@
 buildPythonPackage rec {
   pname = "pipx";
   version = "1.4.3";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "pipxproject";
-    repo = pname;
+    owner = "pypa";
+    repo = "pipx";
     rev = "refs/tags/${version}";
     hash = "sha256-NxXOeVXwBhGqi4DUABV8UV+cDER0ROBFdgiyYTzdvuo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     argcomplete
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  nativeBuildInputs = [
+      installShellFiles
   ];
 
   nativeCheckInputs = [
@@ -77,12 +81,20 @@ buildPythonPackage rec {
     "determination"
     "json"
     "test_list_short"
+    "test_skip_maintenance"
   ];
+
+  postInstall =  ''
+    installShellCompletion --cmd pipx \
+      --bash <(${argcomplete}/bin/register-python-argcomplete pipx --shell bash) \
+      --zsh <(${argcomplete}/bin/register-python-argcomplete pipx --shell zsh) \
+      --fish <(${argcomplete}/bin/register-python-argcomplete pipx --shell fish)
+  '';
 
   meta = with lib; {
     description = "Install and run Python applications in isolated environments";
     mainProgram = "pipx";
-    homepage = "https://github.com/pipxproject/pipx";
+    homepage = "https://github.com/pypa/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ yshym ];

@@ -20,13 +20,14 @@
 , qtsvg
 , qtx11extras
 , readline
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , zlib
 
 , LocalAuthentication
 
 , withKeePassBrowser ? true
+, withKeePassBrowserPasskeys ? true
 , withKeePassFDOSecrets ? true
 , withKeePassKeeShare ? true
 , withKeePassNetworking ? true
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
   ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (lib.optional withKeePassBrowserPasskeys "-DWITH_XC_BROWSER_PASSKEYS=ON")
   ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
   ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
@@ -95,7 +97,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
   ]
-  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook;
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
   preFixup = ''

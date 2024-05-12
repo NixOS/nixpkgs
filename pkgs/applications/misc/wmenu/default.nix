@@ -9,13 +9,14 @@
 , pango
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "wmenu";
-  version = "0.1.7";
+  version = "0.1.8";
 
   strictDeps = true;
 
@@ -23,10 +24,10 @@ stdenv.mkDerivation rec {
     owner = "~adnano";
     repo = "wmenu";
     rev = version;
-    hash = "sha256-9do7zL7yaZuqVjastySwjsByo5ja+KUP3590VjIyVnI=";
+    hash = "sha256-gVoqRHQ5bcY58LTgKxpPM1PnZJrLRoSOJUiYYqc/vRI=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja wayland-scanner ];
   buildInputs = [ cairo pango wayland libxkbcommon wayland-protocols scdoc ];
 
   meta = with lib; {

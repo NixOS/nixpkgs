@@ -6,7 +6,6 @@
 
 # build-system
 , setuptools
-, setuptools-git-versioning
 
 # dependencies
 , async-timeout
@@ -37,10 +36,18 @@ buildPythonPackage rec {
     hash = "sha256-VoO9B27CNY2Cnt/Q2HsU6DVYkukQMgbIHc6xqfN0P7w=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
   nativeBuildInputs = [
     pythonRelaxDepsHook
+  ];
+
+  build-system = [
     setuptools
-    setuptools-git-versioning
   ];
 
   pythonRelaxDeps = [

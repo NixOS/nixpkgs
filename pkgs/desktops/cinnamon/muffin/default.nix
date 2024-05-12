@@ -33,7 +33,7 @@
 , udev
 , wayland
 , wayland-protocols
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorgserver
 , xwayland
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     xorgserver # for cvt command
     gobject-introspection
   ];

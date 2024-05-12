@@ -6,6 +6,7 @@
 , perl
 , pkg-config
 , sage-setup
+, pythonRelaxDepsHook
 , gd
 , iml
 , libpng
@@ -48,7 +49,7 @@
 , cvxopt
 , cypari2
 , cysignals
-, cython_3
+, cython
 , fpylll
 , gmpy2
 , importlib-metadata
@@ -102,6 +103,11 @@ buildPythonPackage rec {
     pip # needed to query installed packages
     pkg-config
     sage-setup
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "networkx"
   ];
 
   buildInputs = [
@@ -153,7 +159,7 @@ buildPythonPackage rec {
     cvxopt
     cypari2
     cysignals
-    cython_3
+    cython
     fpylll
     gmpy2
     importlib-metadata

@@ -14,14 +14,11 @@
 , ninja
 , ant
 , openjdk
-, perl536Packages
+, perl
+, perlPackages
 , makeWrapper
 }:
-let
-  # log says: polymake does not work with perl 5.37 or newer;
-  perlPackages = perl536Packages;
-  inherit (perlPackages) perl;
-in
+
 # polymake compiles its own version of sympol and atint because we
 # don't have those packages. other missing optional dependencies:
 # javaview, libnormaliz, scip, soplex, jreality.

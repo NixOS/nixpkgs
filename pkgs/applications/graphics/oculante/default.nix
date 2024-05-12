@@ -17,28 +17,28 @@
 , gtk3
 , darwin
 , perl
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.8.16";
+  version = "0.8.21";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = "oculante";
     rev = version;
-    hash = "sha256-C8USTDW5C+mjj/fr242is/42RpmUvcK3lUeaq0/BSGA=";
+    hash = "sha256-2QX7cD9SjhLb82O8T90BTQGsy3/gDaNwoX4Mbe2H6s4=";
   };
 
-  cargoHash = "sha256-w8k0QG509PRHHB1e4WThYnM6R0PwWMbSBxs2B0zQ0ww=";
+  cargoHash = "sha256-VAWLs15xsjoT0VSJjS/j0wd5P7OjQGrvyUSHp4B8hHI=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     nasm
     perl
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access

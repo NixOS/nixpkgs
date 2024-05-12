@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoPatchelfHook
 , makeDesktopItem
 , atk
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     autoPatchelfHook
   ];
   buildInputs = [

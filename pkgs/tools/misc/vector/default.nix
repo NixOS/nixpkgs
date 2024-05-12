@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , pkg-config
 , openssl
@@ -36,7 +37,7 @@
 
 let
   pname = "vector";
-  version = "0.36.1";
+  version = "0.38.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -45,14 +46,20 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iY0Bi1FG3kEiZtPTXonoVGYiquZkTPF51PWEZEoxQSw=";
+    hash = "sha256-sJgryN6/XaM1qXxv76/5RGanUpBYxIsGYGToOCXDvwA=";
   };
+
+  patches = [
+    # Enable LTO to bring down binary size
+    # Adapted from https://github.com/vectordotdev/vector/pull/20034
+    ./vector-lto.patch
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "greptime-proto-0.1.0" = "sha256-Q8xr6qN6SAGGK0W96WuNRdQ5/8iNlruqzhXD6xq3Ua8=";
-      "greptimedb-client-0.1.0" = "sha256-l4r/2DGllXiFgOwpa83ZRiK9o0L4bokVltCGD1cp3NM=";
+      "greptimedb-client-0.1.0" = "sha256-evL8Q2Ikct9s0r4DWTgSP/8g4XTishuJHmwRoCfQFbU=";
       "heim-0.1.0-rc.1" = "sha256-TFgLR5zb/oqceVOH4mIOvFFY/HMOLSo8VI5Eh9KP60E=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
@@ -60,6 +67,7 @@ rustPlatform.buildRustPackage {
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
+
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
   buildInputs =
     [ oniguruma openssl protobuf rdkafka zstd ]

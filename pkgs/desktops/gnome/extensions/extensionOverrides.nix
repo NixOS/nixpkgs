@@ -21,7 +21,7 @@
 , touchegg
 , util-linux
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 let
@@ -46,7 +46,7 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
-    nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+    nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
     buildInputs = [ vte ];
     postFixup = ''
       substituteInPlace "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm" --replace "gjs" "${gjs}/bin/gjs"
@@ -94,7 +94,7 @@ super: lib.trivial.pipe super [
   }))
 
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
-    nativeBuildInputs = [ wrapGAppsHook ];
+    nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [
       (substituteAll {
         inherit gjs util-linux xdg-utils;
@@ -103,6 +103,14 @@ super: lib.trivial.pipe super [
         src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
         nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
       })
+    ];
+  }))
+
+  (patchExtension "mullvadindicator@pobega.github.com" (old: {
+    patches = [
+      # Patch from https://github.com/Pobega/gnome-shell-extension-mullvad-indicator/pull/36
+      # tweaked to drop the Makefile changes to fix application
+      ./extensionOverridesPatches/mullvadindicator_at_pobega.github.com.patch
     ];
   }))
 

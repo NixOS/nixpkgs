@@ -101,8 +101,10 @@ You can keep a NixOS system up-to-date automatically by adding the
 following to `configuration.nix`:
 
 ```nix
-system.autoUpgrade.enable = true;
-system.autoUpgrade.allowReboot = true;
+{
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = true;
+}
 ```
 
 This enables a periodically executed systemd service named
@@ -114,5 +116,7 @@ the new generation contains a different kernel, initrd or kernel
 modules. You can also specify a channel explicitly, e.g.
 
 ```nix
-system.autoUpgrade.channel = "https://channels.nixos.org/nixos-23.11";
+{
+  system.autoUpgrade.channel = "https://channels.nixos.org/nixos-23.11";
+}
 ```

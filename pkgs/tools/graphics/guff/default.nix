@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "A plot device";
     homepage = "https://github.com/silentbicycle/guff";
     license = licenses.isc;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "guff";
   };

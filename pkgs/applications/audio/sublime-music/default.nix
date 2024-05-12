@@ -4,7 +4,7 @@
 , gobject-introspection
 , gtk3
 , pango
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 , chromecastSupport ? false
 , serverSupport ? false
@@ -26,6 +26,7 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
+        doCheck = false; # no tests
       });
 
       dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
@@ -56,7 +57,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     python.pkgs.flit-core
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postPatch = ''

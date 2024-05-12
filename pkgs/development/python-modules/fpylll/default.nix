@@ -5,7 +5,7 @@
 
 # build-system
 , cysignals
-, cython_3
+, cython
 , pkgconfig
 , setuptools
 
@@ -14,6 +14,9 @@
 , mpfr
 , fplll
 , numpy
+
+# Reverse dependency
+, sage
 
 # tests
 , pytestCheckHook
@@ -36,10 +39,14 @@ buildPythonPackage rec {
       url = "https://github.com/fplll/fpylll/commit/fc432b21fa7e4b9891f5b761b3539989eb958f2b.diff";
       hash = "sha256-+UidQ5xnlmjeVeVvR4J2zDzAuXP5LUPXCh4RP4o9oGA=";
     })
+    (fetchpatch {
+      url = "https://github.com/fplll/fpylll/commit/cece9c9b182dc3ac2c9121549cb427ccf4c4a9fe.diff";
+      hash = "sha256-epJb8gorQ7gEEylZ2yZFdM9+EZ4ys9mUUUPiJ2D0VOM=";
+    })
   ];
 
   nativeBuildInputs = [
-    cython_3
+    cython
     cysignals
     pkgconfig
     setuptools
@@ -67,6 +74,8 @@ buildPythonPackage rec {
     # should be identical anyway.
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "A Python interface for fplll";

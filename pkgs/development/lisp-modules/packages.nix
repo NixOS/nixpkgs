@@ -201,6 +201,14 @@ let
     '';
   };
 
+  cephes = build-with-compile-into-pwd {
+    inherit (super.cephes) pname version src lispLibs;
+    patches = [ ./patches/cephes-make.patch ];
+    postConfigure = ''
+      substituteAllInPlace cephes.asd
+    '';
+  };
+
   clx-truetype = build-asdf-system {
     pname = "clx-truetype";
     version = "20160825-git";
@@ -362,7 +370,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.11.5";
+    version = "3.11.6";
 
     lispLibs = (with super; [
       alexandria
@@ -473,8 +481,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.11.5";
-      hash = "sha256-l3igC4jfCvx7Q0WO2Zf2ByWLz7sCteYdW1rNvwrc97g=";
+      rev = "3.11.6";
+      hash = "sha256-o+4LnSNyhdz5YAjNQJuE2ERtt48PckjKfts9QVRw82A=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -506,7 +514,7 @@ let
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
 
-    # TODO(kasper): use wrapGAppsHook
+    # TODO(kasper): use wrapGAppsHook3
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
@@ -564,6 +572,23 @@ let
   });
 
   stumpwm-unwrapped = super.stumpwm;
+
+  clfswm = super.clfswm.overrideAttrs (o: rec {
+    buildScript = pkgs.writeText "build-clfswm.lisp" ''
+      (load "${o.asdfFasl}/asdf.${o.faslExt}")
+      (asdf:load-system 'clfswm)
+      (sb-ext:save-lisp-and-die
+        "clfswm"
+        :executable t
+        #+sb-core-compression :compression
+        #+sb-core-compression t
+        :toplevel #'clfswm:main)
+    '';
+    installPhase = o.installPhase + ''
+      mkdir -p $out/bin
+      mv $out/clfswm $out/bin
+    '';
+  });
 
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {

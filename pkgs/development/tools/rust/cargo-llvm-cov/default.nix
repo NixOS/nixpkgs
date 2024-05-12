@@ -26,7 +26,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.7";
+  version = "0.6.9";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -37,7 +37,7 @@ let
   cargoLock = fetchurl {
     name = "Cargo.lock";
     url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
-    sha256 = "sha256-2DjHXZ80sqr5uNqTwoECdzU1dxtu3hw9wJLA1XZq02Y=";
+    sha256 = "sha256-r4C7z2/z4OVEf+IhFe061E7FzSx0VzADmg56Lb+DO/g=";
     downloadToTemp = true;
     postFetch = ''
       tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
@@ -55,8 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wvyiIJd448EjqtBjrzS8XcWJerRSBctggwTZA0ku7pU=";
-    leaveDotGit = true;
+    sha256 = "sha256-fZrYmsulKOvgW/WtsYL7r4Cby+m9ShgXozxj1ZQ5ZAY=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -64,7 +63,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoSha256 = "sha256-TMBKsZsIPw42ZHVcUnwsTzJseD+6Z3o+ZlB2FzbjnBY=";
+  cargoSha256 = "sha256-pfNb5P3IG1fQdhiQE3FGW8s4Rt2YyLxTejuzs3nqZUU=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests
@@ -75,11 +74,10 @@ rustPlatform.buildRustPackage {
     git
   ];
 
+  # `cargo-llvm-cov` tests rely on `git ls-files.
   preCheck = ''
-    # `cargo-llvm-cov`'s tests rely on `git ls-files` so the staging area needs
-    # to not have everything staged as deleted, which is how `leaveDotGit` in
-    # `fetchFromGitHub` leaves the staging area for reproducibility reasons.
-    git restore --staged .
+    git init -b main
+    git add .
   '';
 
   meta = {

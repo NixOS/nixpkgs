@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zSPbOb7+U45Vmad6IwNtkunLXdT3ledKAE4QWlSeP0g=";
+    hash = "sha256-TpK6VK2YoOtc4ueag33m5n1umcUWOUgcda/MZEEOR7g=";
   };
 
   postPatch = ''
@@ -57,8 +57,12 @@ buildPythonPackage rec {
     x265
   ];
 
-  # clang-16: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  env = {
+    # clang-16: error: argument unused during compilation: '-fno-strict-overflow'
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+
+    RELEASE_FULL_FLAG = 1;
+  };
 
   propagatedBuildInputs = [
     pillow

@@ -28,10 +28,6 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  # 2024-02-22: Needed for haskell-language-server-2.6.0.0
-  - lsp < 2.4.0.0
-  # 2024-02-22: Needed for hls-fourmolu-plugin-2.6.0.0 and others
-  - lsp-test < 0.17.0.0
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
@@ -70,6 +66,7 @@ extra-packages:
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
+  - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
@@ -102,6 +99,7 @@ extra-packages:
   - text == 2.0.2                       # 2023-09-14: Needed for elm (which is currently on ghc-8.10)
   - th-abstraction < 0.6                # 2023-09-11: needed for aeson-2.2.0.0
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
+  - warp < 3.3.31                       # 2024-03-20: for twain, which requires http2 3.0.3
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
@@ -111,6 +109,7 @@ extra-packages:
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
+  - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
 
 package-maintainers:
   abbradar:
@@ -251,22 +250,22 @@ package-maintainers:
   libjared:
     - sensei
   maralorn:
+    - bluefin
     - cabal-fmt
-    - clay
     - eventlog2html
+    - falsify
     - generic-optics
     - ghc-debug-brick
     - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server
-    - hedgehog
     - hledger
     - hledger-ui
     - hledger-web
     - hlint
-    - hmatrix
     - hspec-discover
+    - jsaddle-warp
     - matrix-client
     - optics
     - pandoc
@@ -275,9 +274,9 @@ package-maintainers:
     - postgresql-simple
     - purebred-email
     - reflex-dom
-    - releaser
     - replace-megaparsec
     - req
+    - say
     - shake-bench
     - shh
     - shh-extras
@@ -285,13 +284,17 @@ package-maintainers:
     - stm-containers
     - streamly
     - streamly-bytestring
+    - string-interpolate
     - taskwarrior
+    - tasty
     - threadscope
     - tz
     - weeder
     - witch
   ncfavier:
+    - irc-client
     - lambdabot
+    - shake
   nomeata:
     - cabal-plan-bounds
     - candid
@@ -354,6 +357,10 @@ package-maintainers:
     - mpi-hs-store
     - mpi-hs-cereal
     - mpi-hs-binary
+    - cpython
+    - massiv
+    - massiv-io
+    - massiv-test
   shlok:
     - streamly-archive
     - streamly-lmdb
@@ -361,6 +368,7 @@ package-maintainers:
     - X11
     - X11-xft
     - html-parse-util
+    - kmonad
     - optparse-applicative-cmdline-util
     - xmonad
     - xmonad-contrib
@@ -418,12 +426,19 @@ package-maintainers:
     - irc-client
     - chatter
     - envy
+  t4ccer:
+    - aeson-better-errors
+    - cheapskate
+    - containers-unicode-symbols
+    - numerals-base
+    - pattern-arrows
   tbidne:
     - rest-rewrite
   terlar:
     - nix-diff
   turion:
     - Agda
+    - cabal-gild
     - dunai
     - essence-of-live-coding
     - essence-of-live-coding-gloss
@@ -633,6 +648,7 @@ unsupported-platforms:
   monomer:                                      [ platforms.darwin ] # depends on mesa
   monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
+  mueval:                                       [ aarch64-linux ] # https://hydra.nixos.org/build/257076117/nixlog/2 https://gitlab.haskell.org/ghc/ghc/-/issues/24432
   nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
@@ -644,6 +660,7 @@ unsupported-platforms:
   piyo:                                         [ platforms.darwin ]
   PortMidi-simple:                              [ platforms.darwin ]
   PortMidi:                                     [ platforms.darwin ]
+  portmidi-utility:                             [ platforms.darwin ]
   posix-api:                                    [ platforms.darwin ]
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
@@ -691,6 +708,7 @@ supported-platforms:
   btrfs:                                        [ platforms.linux ] # depends on linux
   bytepatch:                                    [ platforms.x86 ] # due to blake3
   cpuid:                                        [ platforms.x86 ] # needs to be i386 compatible (IA-32)
+  cpython:                                      [ platforms.x86 ] # c2hs errors on glibc headers
   crc32c:                                       [ platforms.x86 ] # uses x86 intrinsics
   d3d11binding:                                 [ platforms.windows ]
   DirectSound:                                  [ platforms.windows ]

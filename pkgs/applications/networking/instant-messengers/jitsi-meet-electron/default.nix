@@ -10,18 +10,17 @@
 , libXtst
 , zlib
 , electron
-, pipewire
 }:
 
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2023.11.3";
+  version = "2024.3.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-gE5CP0l3SrAHGNS6Hr5/MefTtE86JTmc85CwOmylEpg=";
+    hash = "sha256-BGN+t9Caw5n/NN1E5Oi/ruMLjoVh0jUlpzYR6vodHbw=";
   };
 
   nativeBuildInputs = [
@@ -38,16 +37,11 @@ buildNpmPackage rec {
     zlib
   ];
 
-  npmDepsHash = "sha256-JZVJcKzG4X7YIUvIRWZsDQnHx+dNqCj6kFm8mZaSH2k=";
+  npmDepsHash = "sha256-KanG8y+tYzswCCXjSkOlk+p9XKaouP2Z7IhsD5bDtRk=";
 
   makeCacheWritable = true;
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  postPatch = ''
-    substituteInPlace main.js \
-        --replace "require('electron-is-dev')" "false"
-  '';
 
   preBuild = ''
     # remove some prebuilt binaries
@@ -72,8 +66,8 @@ buildNpmPackage rec {
 
     makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
         --add-flags $out/share/jitsi-meet-electron/resources/app.asar \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pipewire ]} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --set-default ELECTRON_IS_DEV 0 \
         --inherit-argv0
 
     install -Dm644 resources/icons/512x512.png $out/share/icons/hicolor/512x512/apps/jitsi-meet-electron.png

@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

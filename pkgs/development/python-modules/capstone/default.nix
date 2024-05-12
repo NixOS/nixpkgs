@@ -17,9 +17,11 @@ buildPythonPackage rec {
   src = capstone.src;
   sourceRoot = "${src.name}/bindings/python";
 
+  # libcapstone.a is not built with BUILD_SHARED_LIBS. For some reason setup.py
+  # checks if it exists but it is not really needed. Most likely a bug in setup.py.
   postPatch = ''
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
-    ln -s ${capstone}/lib/libcapstone.a prebuilt/
+    touch prebuilt/libcapstone${stdenv.targetPlatform.extensions.staticLibrary}
     substituteInPlace setup.py --replace manylinux1 manylinux2014
   '';
 

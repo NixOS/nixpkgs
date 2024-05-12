@@ -4,7 +4,7 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , makeWrapper
 , autoSignDarwinBinariesHook
 , nodejs
@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "24.0.4";
+  version = "24.2.5";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-+TCnVXcmAEpa7MiL0dyeoh2aUfIIO8eze9pEaHgKnME=";
+    hash = "sha256-8Cs+uME6uXWIWeuS9cgKnlYJG/m13l2BIVNDG0bqEmc=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-QS0bkDDQq3sn79TQ+pTZsmbmXgMccyLmlPLTsko7eGg=";
+    hash = "sha256-tQFcdZc+4N6TYY6MDAwUgpaIvqYkU681DbuYCQhvJ1c=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     makeWrapper
     nodejs
     yarn

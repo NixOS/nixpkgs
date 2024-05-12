@@ -1,12 +1,17 @@
 # This file defines the structure of the `config` nixpkgs option.
 
+# This file is tested in `pkgs/test/config.nix`.
+# Run tests with:
+#
+#     nix-build -A tests.config
+#
+
 { config, lib, ... }:
 
 let
   inherit (lib)
     literalExpression
     mapAttrsToList
-    mdDoc
     mkOption
     optionals
     types
@@ -15,7 +20,7 @@ let
   mkMassRebuild = args: mkOption (builtins.removeAttrs args [ "feature" ] // {
     type = args.type or (types.uniq types.bool);
     default = args.default or false;
-    description = mdDoc ((args.description or ''
+    description = ((args.description or ''
       Whether to ${args.feature} while building nixpkgs packages.
     '') + ''
       Changing the default may cause a mass rebuild.
@@ -40,7 +45,7 @@ let
     /* Config options */
 
     warnUndeclaredOptions = mkOption {
-      description = mdDoc "Whether to warn when `config` contains an unrecognized attribute.";
+      description = "Whether to warn when `config` contains an unrecognized attribute.";
       type = types.bool;
       default = false;
     };
@@ -80,11 +85,11 @@ let
     allowAliases = mkOption {
       type = types.bool;
       default = true;
-      description = mdDoc ''
+      description = ''
         Whether to expose old attribute names for compatibility.
 
         The recommended setting is to enable this, as it
-        improves backward compatibity, easing updates.
+        improves backward compatibility, easing updates.
 
         The only reason to disable aliases is for continuous
         integration purposes. For instance, Nixpkgs should
@@ -100,7 +105,7 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
-      description = mdDoc ''
+      description = ''
         Whether to allow unfree packages.
 
         See [Installing unfree packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unfree) in the NixOS manual.
@@ -112,7 +117,7 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1"'';
-      description = mdDoc ''
+      description = ''
         Whether to allow broken packages.
 
         See [Installing broken packages](https://nixos.org/manual/nixpkgs/stable/#sec-allow-broken) in the NixOS manual.
@@ -124,7 +129,7 @@ let
       default = false;
       # getEnv part is in check-meta.nix
       defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1"'';
-      description = mdDoc ''
+      description = ''
         Whether to allow unsupported packages.
 
         See [Installing packages on unsupported systems](https://nixos.org/manual/nixpkgs/stable/#sec-allow-unsupported-system) in the NixOS manual.
@@ -146,7 +151,7 @@ let
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [];
-      description = mdDoc ''
+      description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.
 
@@ -161,7 +166,7 @@ let
     checkMeta = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };

@@ -17,6 +17,7 @@
 , Cocoa
 , CoreServices
 , gobject-introspection
+, rustc
 , testers
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
@@ -24,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.22.9";
+  version = "1.24.2";
 
   outputs = [
     "bin"
@@ -36,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-HnEk00fozcgPCOwdNwwgG+UTACrxECuyDoPFJ5y0jr0=";
+    hash = "sha256-nK/dI70YDxaBxWzTpoeahJfM8k2m9CKmtvNW+gdKhIE=";
   };
 
   depsBuildBuild = [
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     bash-completion
     gobject-introspection
+    rustc
   ] ++ lib.optionals stdenv.isLinux [
     libcap # for setcap binary
   ] ++ lib.optionals enableDocumentation [
@@ -67,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
@@ -93,7 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
       gst/parse/gen_grammar.py.in \
       gst/parse/gen_lex.py.in \
       libs/gst/helpers/ptp_helper_post_install.sh \
-      scripts/extract-release-date-from-doap-file.py
+      scripts/extract-release-date-from-doap-file.py \
+      docs/gst-plugins-doc-cache-generator.py
   '';
 
   postInstall = ''

@@ -1,2 +1,0 @@
-pkgs/by-name/aa/FOO: Incorrect directory location, should be pkgs/by-name/fo/FOO instead.
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

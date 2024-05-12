@@ -38,6 +38,7 @@
 , knot-resolver
 , ngtcp2-gnutls
 , ocamlPackages
+, pkgsStatic
 , python3Packages
 , qemu
 , rsyslog
@@ -96,6 +97,12 @@ stdenv.mkDerivation rec {
     sed 's:/usr/lib64/pkcs11/ /usr/lib/pkcs11/ /usr/lib/x86_64-linux-gnu/pkcs11/:`pkg-config --variable=p11_module_path p11-kit-1`:' -i tests/p11-kit-trust.sh
   '' + lib.optionalString stdenv.hostPlatform.isMusl '' # See https://gitlab.com/gnutls/gnutls/-/issues/945
     sed '2iecho "certtool tests skipped in musl build"\nexit 0' -i tests/cert-tests/certtool.sh
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # Adapted from https://gitlab.com/gnutls/gnutls/-/commit/d214cd4570fb1559a20e941bb7ceac7df52e96d3
+    # Can be removed with 3.8.5+.
+    sed -i lib/nettle/backport/rsa-sign-tr.c -e \
+      '/^#include <nettle\/rsa\.h>/i\
+    #define nettle_rsa_compute_root_tr _gnutls_nettle_backport_rsa_compute_root_tr'
   '';
 
   preConfigure = "patchShebangs .";
@@ -152,6 +159,7 @@ stdenv.mkDerivation rec {
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;
     rsyslog = rsyslog.override { withGnutls = true; };
+    static = pkgsStatic.gnutls;
   };
 
   meta = with lib; {

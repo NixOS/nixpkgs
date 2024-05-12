@@ -1,8 +1,12 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
-  version = "2.0.9";
+  version = "2.2.17";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.10";
@@ -11,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "hyprland-community";
     repo = "pyprland";
     rev = "refs/tags/${version}";
-    hash = "sha256-dfE4KQguLp9DEWOuCtNDw8TA3sK9vEqU4VqAVlVaUvw=";
+    hash = "sha256-S1bIIazrBWyjF8tOcIk0AwwWq9gbpTKNsjr9iYA5lKk=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
@@ -53,12 +57,15 @@ python3Packages.buildPythonApplication rec {
     "pyprland.plugins.workspaces_follow_focus"
   ];
 
-  meta = with lib; {
+  meta = {
     mainProgram = "pypr";
     description = "An hyperland plugin system";
     homepage = "https://github.com/hyprland-community/pyprland";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iliayar ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      iliayar
+      johnrtitor
+    ];
+    platforms = lib.platforms.linux;
   };
 }

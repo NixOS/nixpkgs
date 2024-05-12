@@ -1,2 +1,0 @@
-pkgs.foo: This attribute is defined using `_internalCallByNamePackageFile`, which is an internal function not intended for manual use.
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

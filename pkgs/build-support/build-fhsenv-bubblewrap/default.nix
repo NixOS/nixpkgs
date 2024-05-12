@@ -9,10 +9,7 @@
 , bubblewrap
 }:
 
-{ name ? null
-, pname ? null
-, version ? null
-, runScript ? "bash"
+{ runScript ? "bash"
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -29,7 +26,7 @@
 , ...
 } @ args:
 
-assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
+assert (!args ? pname || !args ? version) -> (args ? name); # You must provide name if pname or version (preferred) is missing.
 
 let
   inherit (lib)
@@ -43,16 +40,16 @@ let
 
   inherit (lib.attrsets) removeAttrs;
 
-  pname = if args ? name && args.name != null then args.name else args.pname;
-  versionStr = optionalString (version != null) ("-" + version);
-  name = pname + versionStr;
+  name = args.name or "${args.pname}-${args.version}";
+  executableName = args.pname or args.name;
+  # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
+  nameAttrs = lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" ]) args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
-    "pname" "version"
   ]);
 
   etcBindEntries = let
@@ -133,6 +130,8 @@ let
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -146,6 +145,7 @@ let
       fi
     done
 
+    # loop through the entries of /etc in the fhs environment.
     if [[ -d ${fhsenv}/etc ]]; then
       for i in ${fhsenv}/etc/*; do
         path="/''${i##*/}"
@@ -154,7 +154,11 @@ let
         if [[ $path == '/fonts' || $path == '/ssl' ]]; then
           continue
         fi
-        ro_mounts+=(--ro-bind "$i" "/etc$path")
+        if [[ -L $i ]]; then
+          symlinks+=(--symlink "$i" "/etc$path")
+        else
+          ro_mounts+=(--ro-bind "$i" "/etc$path")
+        fi
         etc_ignored+=("/etc$path")
       done
     fi
@@ -166,6 +170,7 @@ let
       ro_mounts+=(--ro-bind /etc /.host-etc)
     fi
 
+    # link selected etc entries from the actual root
     for i in ${escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
@@ -244,7 +249,7 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
-  '' + optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
+  '' + optionalString fhsenv.isMultiBuild (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
@@ -262,8 +267,7 @@ let
   '';
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
-in runCommandLocal name {
-  inherit pname version;
+in runCommandLocal name (nameAttrs // {
   inherit meta;
 
   passthru = passthru // {
@@ -277,9 +281,9 @@ in runCommandLocal name {
     '';
     inherit args fhsenv;
   };
-} ''
+}) ''
   mkdir -p $out/bin
-  ln -s ${bin} $out/bin/${pname}
+  ln -s ${bin} $out/bin/${executableName}
 
   ${extraInstallCommands}
 ''

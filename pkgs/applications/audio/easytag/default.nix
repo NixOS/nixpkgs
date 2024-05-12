@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, intltool, gtk3, glib, libid3tag, id3lib, taglib
 , libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
-, gnome, wrapGAppsHook
+, gnome, wrapGAppsHook3
 }:
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lid3tag -lz";
 
-  nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook3 ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
     gsettings-desktop-schemas gnome.adwaita-icon-theme
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "View and edit tags for various audio files";
     mainProgram = "easytag";
-    homepage = "https://wiki.gnome.org/Apps/EasyTAG";
+    homepage = "https://gitlab.gnome.org/GNOME/easytag";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

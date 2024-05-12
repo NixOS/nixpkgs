@@ -6,6 +6,9 @@
 , autoreconfHook
 , pkg-config
 
+, waylandSupport ? true
+, x11Support ? true
+
 , cairo
 , glib
 , libnotify
@@ -13,6 +16,8 @@
 , wl-clipboard
 , xclip
 , xsel
+, xdotool
+, wtype
 }:
 
 stdenv.mkDerivation rec {
@@ -38,8 +43,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     chmod +x $out/share/rofi-emoji/clipboard-adapter.sh
     wrapProgram $out/share/rofi-emoji/clipboard-adapter.sh \
-      --prefix PATH ":" ${lib.makeBinPath [ libnotify wl-clipboard xclip xsel ]}
+     --prefix PATH ":" ${lib.makeBinPath ([ libnotify wl-clipboard xclip xsel ]
+       ++ lib.optionals waylandSupport [ wtype ]
+       ++ lib.optionals x11Support [ xdotool ])}
   '';
+
 
   nativeBuildInputs = [
     autoreconfHook

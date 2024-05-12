@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ldc, dub }:
+{
+  lib,
+  buildDubPackage,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation {
+buildDubPackage {
   pname = "Literate";
   version = "unstable-2021-01-22";
 
@@ -8,21 +12,29 @@ stdenv.mkDerivation {
     owner = "zyedidia";
     repo = "Literate";
     rev = "7004dffec0cff3068828514eca72172274fd3f7d";
-    sha256 = "sha256-erNFe0+FlrslEENyO/YxYQbmec0voK31UWr5qVt+nXQ=";
+    hash = "sha256-erNFe0+FlrslEENyO/YxYQbmec0voK31UWr5qVt+nXQ=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ ldc dub ];
+  # as there aren't any non-local dub dependencies, this file just has any empty list
+  dubLock = ./dub-lock.json;
 
-  HOME = "home";
+  # generate the actual .d source files defined in .lit files
+  preBuild = ''
+    make d-files
+  '';
 
-  installPhase = "install -D bin/lit $out/bin/lit";
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 bin/lit -t $out/bin
+    runHook preInstall
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "A literate programming tool for any language";
     homepage = "https://zyedidia.github.io/literate/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "lit";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

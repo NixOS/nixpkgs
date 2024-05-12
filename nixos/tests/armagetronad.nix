@@ -1,4 +1,9 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
   user = "alice";
@@ -16,7 +21,8 @@ let
       test-support.displayManager.auto.user = user;
     };
 
-in {
+in
+makeTest {
   name = "armagetronad";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ numinit ];
@@ -269,4 +275,4 @@ in {
         srv.node.wait_until_fails(f"ss --numeric --udp --listening | grep -q {srv.port}")
     '';
 
-})
+}

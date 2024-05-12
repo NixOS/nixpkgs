@@ -3,8 +3,7 @@
 buildDunePackage {
   pname = "irmin-mirage";
 
-  inherit (irmin) version src strictDeps;
-  duneVersion = "3";
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [
     irmin fmt ptime mirage-clock

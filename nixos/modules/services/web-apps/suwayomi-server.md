@@ -100,7 +100,7 @@ Not all the configuration options are available directly in this module, but you
       server = {
         port = 4567;
         autoDownloadNewChapters = false;
-        maxSourcesInParallel" = 6;
+        maxSourcesInParallel = 6;
         extensionRepos = [
           "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
         ];

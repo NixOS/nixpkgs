@@ -4,7 +4,7 @@
 , pythonOlder
 , pytestCheckHook
   # build_requires
-, cython_3
+, cython
   # install_requires
 , certifi
 , importlib-metadata
@@ -23,7 +23,7 @@
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.7.3";
+  version = "0.7.8";
 
   format = "setuptools";
 
@@ -33,10 +33,10 @@ buildPythonPackage rec {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MA902Dyx3a8GTZ52LYY0UrWqNEFmibqIsdz6PFZIkIY=";
+    hash = "sha256-tdf9aYKAFpRyaqGGNxXs4bzmY6mdhKZ5toFBJRmD2VY=";
   };
 
-  nativeBuildInputs = [ cython_3 ];
+  nativeBuildInputs = [ cython ];
   setupPyBuildFlags = [ "--inplace" ];
   enableParallelBuilding = true;
 

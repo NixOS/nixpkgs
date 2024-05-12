@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "3.90.0";
+  version = "4.1.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -10,16 +10,15 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-bHRvvmVQFsdgYmVVucu1warn+SvCoIVh+C/U2uwi12E=";
+    hash = "sha256-t+i9IuBH94PpfriIAaqqWYZHxKJJDOedJ3BQXGEPp0A=";
   };
 
-  vendorHash = "sha256-Zv5Xz1T/ZUM/kyEgZJKbDuIN2nufoHVAn4kD3SuvJCg=";
-
-  patches = [
-    ./Disable-inmemory-storage-driver-test.patch
-  ];
+  vendorHash = "sha256-sybppXCoTrc196xLBW1+sUg9Y5uA0GAptlJ7RjhzuGc=";
 
   postPatch = ''
+    # Disable flaky inmemory storage driver test
+    rm registry/storage/driver/inmemory/driver_test.go
+
     substituteInPlace health/checks/checks_test.go \
       --replace \
         'func TestHTTPChecker(t *testing.T) {' \

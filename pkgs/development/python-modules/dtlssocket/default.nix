@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , autoconf
-, cython
+, cython_0
 , setuptools
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     autoconf
-    cython
+    cython_0
     setuptools
   ];
 

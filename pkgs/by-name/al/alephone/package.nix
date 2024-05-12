@@ -32,13 +32,13 @@
 stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "icons" ];
   pname = "alephone";
-  version = "1.7";
+  version = "1.7.1";
 
   src = fetchurl {
     url =
-      let date = "20231125";
+      let date = "20240119";
       in "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${date}/AlephOne-${date}.tar.bz2";
-    sha256 = "sha256-qRHmtkzPi6PKeAzoMPdSbboiilG+L2fCXvXXu3vIchs=";
+    sha256 = "sha256-esqjhOSrqtapnS9xF/EThgn2c/vW4hTpMpecXW6BzAQ=";
   };
 
   nativeBuildInputs = [ pkg-config icoutils ];

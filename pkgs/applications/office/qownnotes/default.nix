@@ -14,19 +14,21 @@
 , botan2
 , pkg-config
 , nixosTests
+, installShellFiles
+, xvfb-run
 }:
 
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.3.5";
+  version = "24.5.1";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-s3OeTK6XodIMrNTuImdljbQYX1Abj7SFOZmPJgm2teo=";
+    hash = "sha256-ktf28AKNr0FcWzJ0A2s3mpU2qgmibpT0rUN9d18mE88=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +36,8 @@ stdenv.mkDerivation {
     qttools
     wrapQtAppsHook
     pkg-config
+    installShellFiles
+    xvfb-run
   ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
   buildInputs = [
@@ -49,9 +53,16 @@ stdenv.mkDerivation {
     "USE_SYSTEM_BOTAN=1"
   ];
 
-  postInstall =
+  postInstall = ''
+    installShellCompletion --cmd ${appname} \
+      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+      --fish <(xvfb-run $out/bin/${appname} --completion fish)
+    installShellCompletion --cmd ${pname} \
+      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+      --fish <(xvfb-run $out/bin/${appname} --completion fish)
+  ''
   # Create a lowercase symlink for Linux
-  lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.isLinux ''
     ln -s $out/bin/${appname} $out/bin/${pname}
   ''
   # Wrap application for macOS as lowercase binary

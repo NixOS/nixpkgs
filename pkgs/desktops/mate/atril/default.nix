@@ -14,7 +14,7 @@
 , itstool
 , hicolor-icon-theme
 , texlive
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableEpub ? true
 , webkitgtk_4_1
 , enableDjvu ? true
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -2,7 +2,7 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pest";
-  version = "2.34.5";
+  version = "2.34.7";
 
   src = fetchFromGitHub {
     owner = "pestphp";
@@ -13,7 +13,7 @@ php.buildComposerProject (finalAttrs: {
 
   composerLock = ./composer.lock;
 
-  vendorHash = "sha256-skNf6bUyGUN/F9Ffpz325napOmPINYk1TyUyYqWmwRM=";
+  vendorHash = "sha256-+FKNGjwq+KFPw8agdwsgnwb2ENgFAWK5EngmS4hMcSA=";
 
   meta = {
     changelog = "https://github.com/pestphp/pest/releases/tag/v${finalAttrs.version}";

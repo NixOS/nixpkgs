@@ -86,7 +86,7 @@ in rec {
           Privacy resolver increasing end user privacy. Stubby is developed by
           the getdns team.
         '';
-        homepage = "https://dnsprivacy.org/wiki/x/JYAT";
+        homepage = "https://dnsprivacy.org/dns_privacy_daemon_-_stubby/";
       };
   };
 
