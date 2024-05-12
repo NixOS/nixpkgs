@@ -20,6 +20,8 @@ in {
 
   config = lib.mkIf cfg.defaultEditor {
     environment.systemPackages = [ cfg.package ];
-    environment.variables = { EDITOR = lib.mkOverride 900 "vim"; };
+    environment.variables = {
+      EDITOR = lib.mkOverride 900 "/run/current-system/sw/bin/vim";
+    };
   };
 }
