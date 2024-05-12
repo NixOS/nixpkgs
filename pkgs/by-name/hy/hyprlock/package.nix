@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.3.0-unstable-2024-04-24";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
