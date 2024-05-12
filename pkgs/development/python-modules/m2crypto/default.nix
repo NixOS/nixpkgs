@@ -4,16 +4,16 @@
   buildPythonPackage,
   fetchPypi,
   openssl,
-  parameterized,
   pytestCheckHook,
   pythonOlder,
-  swig2,
+  setuptools,
+  swig,
 }:
 
 buildPythonPackage rec {
   pname = "m2crypto";
   version = "0.41.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,15 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-OhNYx+6EkEbZF4Knd/F4a/AnocHVG1+vjxlDW/w/FJU=";
   };
 
-  nativeBuildInputs = [
-    swig2
-    openssl
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    openssl
-    parameterized
-  ];
+  nativeBuildInputs = [ swig ];
+
+  buildInputs = [ openssl ];
 
   env =
     {
@@ -44,7 +40,10 @@ buildPythonPackage rec {
       CPP = "${stdenv.cc.targetPrefix}cpp";
     };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    openssl
+  ];
 
   pythonImportsCheck = [ "M2Crypto" ];
 
