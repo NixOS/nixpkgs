@@ -1,11 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , psycopg2
 , pymysql
 , sqlalchemy
-, pathlib
 , six
 , flask
 , pendulum
@@ -17,7 +15,6 @@
 , pytest-sugar
 , postgresql
 , postgresqlTestHook
-,
 }:
 buildPythonPackage rec {
   pname = "sqlbag";
@@ -46,8 +43,7 @@ buildPythonPackage rec {
       pymysql
 
       setuptools # needed for 'pkg_resources'
-    ]
-    ++ lib.optional isPy27 pathlib;
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook
