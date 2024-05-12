@@ -6,6 +6,7 @@
   libXft,
   libXrandr,
   pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/config.mk \
       --replace pkg-config "$PKG_CONFIG"
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://www.uninformativ.de/git/katriawm.git/";
+    rev-prefix = "v";
+  };
 
   meta = {
     homepage = "https://www.uninformativ.de/git/katriawm/file/README.html";
