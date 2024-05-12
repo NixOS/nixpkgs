@@ -1,23 +1,23 @@
 {
-  fetchFromGitHub,
   lib,
   stdenv,
-  ffmpeg-headless,
+  fetchFromGitHub,
   cmake,
-  libpng,
   pkg-config,
+  ffmpeg-headless,
+  libpng,
   libjpeg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
-  version = "unstable-2022-02-18";
+  version = "unstable-2024-01-04";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    rev = "3db9fe895b2fa656bb40ddb7a62e27604a688171";
-    sha256 = "0606pbg391l4s8mpyyalm9zrcnm75fwqdlrxy2gif9n21i2fm3rc";
+    rev = "1b5a77983240bcf00a4ef7702c07bcd8f4e5f97c";
+    hash = "sha256-7SPRQMPgdvP7J3HCf7F1eXxZjUH5vCYZ9UOwTUFMLp0=";
   };
 
   nativeBuildInputs = [
