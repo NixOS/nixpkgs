@@ -21,7 +21,7 @@ let
 in
 buildDunePackage' rec {
   pname = "docfd";
-  version = "5.1.0";
+  version = "6.0.0";
 
   minimalOCamlVersion = "5.1";
 
@@ -29,7 +29,7 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-54gsX5C8AJAOkqnBxHLI76k6cEqWqEydxbZjJZl7FjE=";
+    hash = "sha256-zG6x1ahBdLrKmiVh7uDGyHXJ1TG/8IvmjkPB1wbjJGQ=";
   };
 
   nativeBuildInputs = [
