@@ -20,7 +20,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tests/__init__.py \
       --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'" \
-      --replace "'3.9', '3.10']" "'3.9', '3.10', '3.11']" # if the Python version used isn't in this list, tests fail
+      --replace "'3.9', '3.10']" "'3.9', '3.10', '3.11', '3.12']" # if the Python version used isn't in this list, tests fail
 
     substituteInPlace tests/test_virtualenv_sys.py \
       --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
