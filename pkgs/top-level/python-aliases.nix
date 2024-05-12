@@ -310,6 +310,7 @@ mapAliases ({
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
+  pathlib = throw "pathlib was removed as it has been integrated in python standard library in version 3.4"; # added 2024-05-13
   pathpy = path; # added 2022-04-12
   pcbnew-transition = pcbnewtransition; # added 2024-03-21
   pdfposter = throw "pdfposter was promoted to a top-level attribute"; # Added 2023-06-29
