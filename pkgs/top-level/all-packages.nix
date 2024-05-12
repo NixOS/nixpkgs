@@ -36223,8 +36223,6 @@ with pkgs;
 
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
-  openethereum = callPackage ../applications/blockchains/openethereum { };
-
   polkadot = callPackage ../applications/blockchains/polkadot {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
