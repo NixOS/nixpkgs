@@ -9,7 +9,6 @@
 , krb5
 , GSS
 , parameterized
-, shouldbe
 , cython
 , python
 , k5test
@@ -56,7 +55,6 @@ buildPythonPackage rec {
     k5test
     nose
     parameterized
-    shouldbe
     six
   ];
 
