@@ -2,6 +2,7 @@
 , babel
 , buildPythonPackage
 , fetchFromGitLab
+, fetchpatch
 , pythonRelaxDepsHook
 , html2text
 , lxml
@@ -34,6 +35,14 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "no-deprecated-pkg_resources.patch";
+      url = "https://gitlab.com/woob/woob/-/commit/3283c4c1a935cc71acea98b2d8c88bc4bf28f643.patch";
+      hash = "sha256-3bRuv93ivKRxbGr52coO023DlxHZWwUeInXTPqQAeL8=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
