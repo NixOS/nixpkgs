@@ -7,7 +7,6 @@
 , pytestCheckHook
 , python
 , pythonOlder
-, freebsd
 }:
 
 buildPythonPackage rec {
@@ -38,9 +37,7 @@ buildPythonPackage rec {
       CoreFoundation
     ] ++ lib.optionals stdenv.isDarwin [
       IOKit
-    ] ++ lib.optionals stdenv.isFreeBSD [
-      freebsd.libdevstat freebsd.libkvm
-    ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

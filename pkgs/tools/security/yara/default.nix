@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pcre
 , pkg-config
@@ -23,6 +24,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-AecHsUBtBleUkWuYMQ4Tx/PY8cs9j7JwqncBziJD0hA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "LFS64.patch";
+      url = "https://github.com/VirusTotal/yara/commit/833a580430abe0fbc9bc17a21fb95bf36dacf367.patch";
+      hash = "sha256-EmwyDsxaNd9zfpAOu6ZB9kzg04qB7LAD7UJB3eAuKd8=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

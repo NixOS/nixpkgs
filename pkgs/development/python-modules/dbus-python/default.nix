@@ -15,7 +15,7 @@
 , dbus-glib
 }:
 
-buildPythonPackage rec {
+lib.fix (finalPackage: buildPythonPackage rec {
   pname = "dbus-python";
   version = "1.3.2";
   pyproject = true;
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    dbus # build systems checks for `dbus-run-session` in PATH
     meson
     meson-python
     pkg-config
@@ -65,6 +66,10 @@ buildPythonPackage rec {
   pypaBuildFlags = [
     # Don't discard meson build directory, still needed for tests!
     "-Cbuild-dir=_meson-build"
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "tests" finalPackage.doInstallCheck)
   ];
 
   # workaround bug in meson-python
@@ -98,4 +103,4 @@ buildPythonPackage rec {
     platforms = dbus.meta.platforms;
     maintainers = with maintainers; [ ];
   };
-}
+})

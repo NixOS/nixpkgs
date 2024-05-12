@@ -61,6 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/Makefile.am \
       --replace-fail "noinst_PROGRAMS = testpcsc pcsc-wirecheck pcsc-wirecheck-gen" \
                      "noinst_PROGRAMS = testpcsc"
+  '' + ''
+    substituteInPlace src/libredirect.c src/spy/libpcscspy.c \
+      --replace-fail "libpcsclite_real.so.1" "$lib/lib/libpcsclite_real.so.1"
   '';
 
   postInstall = ''

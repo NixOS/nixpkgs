@@ -45,7 +45,6 @@ in
 
     # dynamic libraries
     freebsd.libc
-    freebsd.libkvm
     freebsd.libdl
     freebsd.libcasper
     freebsd.libnv

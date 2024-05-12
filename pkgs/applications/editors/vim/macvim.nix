@@ -11,6 +11,7 @@
 , perl
 , luajit
 , darwin
+, libiconv
 , python3
 }:
 
@@ -127,7 +128,7 @@ stdenv.mkDerivation {
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \
-      --replace " -L${darwin.libiconv}/lib" ""
+      --replace " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
     # Assert now that this pattern no longer appears in config.mk.

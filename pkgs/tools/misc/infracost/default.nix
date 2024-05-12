@@ -24,14 +24,13 @@ buildGoModule rec {
     # want but also limits the tests
     unset subPackages
 
-    # checkFlags aren't correctly passed through via buildGoModule so we use buildFlagsArray
-    # -short only runs the unit-tests tagged short
-    # move to checkFlags after https://github.com/NixOS/nixpkgs/pull/173702
-    buildFlagsArray+="-short"
-
     # remove tests that require networking
     rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
   '';
+
+  checkFlags = [
+    "-short"
+  ];
 
   postInstall = ''
     export INFRACOST_SKIP_UPDATE_CHECK=true

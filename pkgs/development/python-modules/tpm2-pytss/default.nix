@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchurl
 , substituteAll
 , buildPythonPackage
 , fetchPypi
@@ -37,6 +38,10 @@ buildPythonPackage rec {
   patches = [
     # Fix hardcoded `fapi-config.json` configuration path
     ./fapi-config.patch
+    (fetchurl {
+      url = "https://github.com/tpm2-software/tpm2-pytss/pull/571/commits/b02fdc8e259fe977c1065389c042be69e2985bdf.patch";
+      hash = "sha256-+jZFv+s9p52JxtUcNeJx7ayzKDVtPoQSSGgyZqPDuEc=";
+    })
   ] ++ lib.optionals isCross [
     # pytss will regenerate files from headers of tpm2-tss.
     # Those headers are fed through a compiler via pycparser. pycparser expects `cpp`
