@@ -40,7 +40,10 @@ let cfg = config.services.libinput;
         type = types.nullOr types.str;
         default = null;
         example = "-0.5";
-        description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
+        description = ''
+            Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).
+            This only applies to the flat or adaptive profile.
+          '';
       };
 
       accelPointsFallback = mkOption {
