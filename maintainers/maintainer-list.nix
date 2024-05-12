@@ -17811,6 +17811,14 @@
       fingerprint = "D260 79E3 C2BC 2E43 905B  D057 BB3E FA30 3760 A0DB";
     }];
   };
+  ryze = {
+    name = "Ryze";
+    github = "ryze312";
+    githubId = 50497128;
+    keys = [{
+      fingerprint = "73D5 BFF5 0AD7 F3C1 AF1A  AC24 9B29 6C5C EAEA AAC1";
+    }];
+  };
   rzetterberg = {
     email = "richard.zetterberg@gmail.com";
     github = "rzetterberg";
