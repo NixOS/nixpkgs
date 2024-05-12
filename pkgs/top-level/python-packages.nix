@@ -13568,6 +13568,8 @@ self: super: with self; {
 
   sarif-om = callPackage ../development/python-modules/sarif-om { };
 
+  sarif-tools = callPackage ../development/python-modules/sarif-tools { };
+
   sarge = callPackage ../development/python-modules/sarge { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
