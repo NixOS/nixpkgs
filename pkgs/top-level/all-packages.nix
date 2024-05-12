@@ -7807,8 +7807,6 @@ with pkgs;
 
   endlessh = callPackage ../servers/endlessh { };
 
-  endlessh-go = callPackage ../servers/endlessh-go { };
-
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
@@ -19527,8 +19525,6 @@ with pkgs;
   sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
   scala-cli = callPackage ../development/tools/build-managers/scala-cli { };
-
-  scc = callPackage ../development/tools/misc/scc { };
 
   scss-lint = callPackage ../development/tools/scss-lint { };
 
@@ -39588,6 +39584,16 @@ with pkgs;
   nix = nixVersions.stable;
 
   nixStatic = pkgsStatic.nix;
+
+  lixVersions = recurseIntoAttrs (callPackage ../tools/package-management/lix {
+    storeDir = config.nix.storeDir or "/nix/store";
+    stateDir = config.nix.stateDir or "/nix/var";
+    inherit (darwin.apple_sdk.frameworks) Security;
+  });
+
+  lix = lixVersions.stable;
+
+  lixStatic = pkgsStatic.lix;
 
   inherit (callPackages ../applications/networking/cluster/nixops { })
     nixops_unstable_minimal

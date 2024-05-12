@@ -98,7 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument"
+    ++ lib.optional stdenv.cc.isClang "-Wno-cast-function-type-strict");
 
   postPatch = ''
     patchShebangs perf/*
