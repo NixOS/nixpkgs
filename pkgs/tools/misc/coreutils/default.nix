@@ -138,7 +138,10 @@ stdenv.mkDerivation rec {
     # the boot time is set to the epoch because the system has no RTC. We
     # explicitly enable it for cases where it can't be detected automatically,
     # such as when cross-compiling.
-    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
+    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes"
+    # this function exists in libc but is not provided by any header, leading
+    # to its detection at configure flag and failure at build time, I think
+    ++ optional stdenv.hostPlatform.isFreeBSD "ac_cv_func_random_r=no";
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),

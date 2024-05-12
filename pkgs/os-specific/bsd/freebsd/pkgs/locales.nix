@@ -1,4 +1,4 @@
-{ mkDerivation, lib, hostVersion, symlinkJoin, bsdSetupHook, freebsdSetupHook, bmakeMinimal, install, tsort, lorder, mandoc, groff, localedef,
+{ mkDerivation, lib, symlinkJoin, bsdSetupHook, freebsdSetupHook, makeMinimal, install, tsort, lorder, mandoc, groff, localedef,
 allLocales ? true, locales ? [ "en_US.UTF-8" ] }:
 let
   build = name: needsLocaledef: mkDerivation {
@@ -7,7 +7,7 @@ let
     extraPaths = lib.optional needsLocaledef "tools/tools/locale/etc/final-maps" ;
     nativeBuildInputs = [
       bsdSetupHook freebsdSetupHook
-      bmakeMinimal
+      makeMinimal
       install tsort lorder mandoc groff
     ] ++ lib.optional needsLocaledef localedef;
   };
@@ -26,7 +26,5 @@ let
 in
 symlinkJoin {
   name = "freebsd-locales";
-  version = hostVersion;
-
   paths = lib.mapAttrsToList build directories;
 }

@@ -1,4 +1,4 @@
-{ mkDerivation, pkgsBuildBuild, libjail, libmd, libnetbsd, libcapsicum, libcasper, libelf, libxo, libncurses-tinfo, libedit, lib, stdenv, bsdSetupHook, freebsdSetupHook, bmakeMinimal, install, tsort, lorder, mandoc, groff, yacc, gencat }:
+{ mkDerivation, pkgsBuildBuild, libjail, libmd, libnetbsd, libcapsicum, libcasper, libelf, libxo, libncurses-tinfo, libedit, lib, stdenv, bsdSetupHook, freebsdSetupHook, makeMinimal, install, tsort, lorder, mandoc, groff, yacc, gencat }:
 mkDerivation {
   pname = "bins";
   path = "bin";
@@ -6,7 +6,7 @@ mkDerivation {
   buildInputs = [libjail libmd libnetbsd libcapsicum libcasper libelf libxo libncurses-tinfo libedit];
   nativeBuildInputs = [
     bsdSetupHook freebsdSetupHook
-    bmakeMinimal
+    makeMinimal
     install tsort lorder mandoc groff
 
     yacc

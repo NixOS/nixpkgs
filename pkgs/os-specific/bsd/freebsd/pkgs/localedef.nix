@@ -1,4 +1,4 @@
-{ patchesRoot, mkDerivation, lib, stdenv, compat, bsdSetupHook, byacc, freebsdSetupHook, makeMinimal, install }:
+{ mkDerivation, lib, stdenv, compat, bsdSetupHook, byacc, freebsdSetupHook, makeMinimal, install }:
 mkDerivation ({
   path = "usr.bin/localedef";
 
@@ -22,8 +22,6 @@ mkDerivation ({
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${compat}/include -D__unused= -D__pure= -Wno-strict-aliasing"
     export NIX_LDFLAGS="$NIX_LDFLAGS -L${compat}/lib"
   '';
-
-  patches = lib.optionals (!stdenv.hostPlatform.isFreeBSD) [ /${patchesRoot}/localedef.patch ];
 
   MK_TESTS = "no";
 } // lib.optionalAttrs (!stdenv.hostPlatform.isFreeBSD) {
