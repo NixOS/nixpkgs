@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marisa-trie
-, poetry-core
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marisa-trie,
+  poetry-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
-    marisa-trie
-  ];
+  dependencies = [ marisa-trie ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "language_data"
-  ];
+  pythonImportsCheck = [ "language_data" ];
 
   meta = with lib; {
     description = "Supplement module for langcodes";
