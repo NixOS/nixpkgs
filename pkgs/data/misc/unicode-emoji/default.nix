@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "15.0";
+  version = "15.1";
 
   fetchData = { suffix, hash }: stdenvNoCC.mkDerivation {
     pname = "unicode-emoji-${suffix}";
