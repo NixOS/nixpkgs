@@ -18,12 +18,14 @@ index 9ca1d129..02929ab6 100644
  
  
  class FILE(Structure):
-@@ -28,9 +24,7 @@ class FILE(Structure):
- FILE_ptr = POINTER(FILE)
+@@ -29,11 +25,6 @@ class FILE(Structure):
  
  if sys.platform == "linux":
 -    libcname = ctypes.util.find_library("c")
--    assert libcname
+-    if not libcname:
+-        # Likely this is a system using musl libc, see the following bug:
+-        # https://github.com/python/cpython/issues/65821
+-        libcname = "libc.so"
 -    libc = ctypes.cdll.LoadLibrary(libcname)
 +    libc = ctypes.cdll.LoadLibrary("@libc@")
  
