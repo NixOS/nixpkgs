@@ -45,7 +45,7 @@ runCommand testName {
         if [[ "$moduleVersion" == "$version" ]]; then
           echo "✅ pkg-config module $moduleName exists and has version $moduleVersion"
         else
-          echo "❌ pkg-config module $moduleName exists and has version $moduleVersion when $version was expected"
+          echo "${if versionCheck then "❌" else "⚠"} pkg-config module $moduleName exists and has version $moduleVersion when $version was expected"
           ((versionMismatch+=1))
         fi
         printf '%s\t%s\n' "$moduleName" "$version" >> "$out"
