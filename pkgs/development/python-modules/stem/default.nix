@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , setuptools
 , cryptography
 , mock
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     rev = "9a9c7d43a7fdcde6d4a9cf95b831fb5e5923a160";
     hash = "sha256-Oc73Jx31SLzuhT9Iym5HHszKfflKZ+3aky5flXudvmI=";
   };
+
+  patches = [
+    # fixes deprecated test assertion, assertRaisesRegexp in python 3
+    (fetchpatch {
+      url = "https://github.com/trishtzy/stem/commit/d5012a1039f05c69ebe832723ce96ecbe8f79fe1.patch";
+      hash = "sha256-ozOTx4/c86sW/9Ss5eZ6ZxX63ByJT5x7JF6wBBd+VFY=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
