@@ -9,6 +9,7 @@
 , filetype
 , lxml
 , natsort
+, nix-update-script
 , pillow
 , python-slugify
 , requests
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     gui = [
       pyside6
     ];
+    updateScript = nix-update-script { };
   };
 
   pythonImportsCheck = [ "mandown" ];
