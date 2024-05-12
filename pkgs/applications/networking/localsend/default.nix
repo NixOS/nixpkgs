@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , flutter313
 , makeDesktopItem
+, nixosTests
 , pkg-config
 , libayatana-appindicator
 , undmg
@@ -58,7 +59,10 @@ let
       categories = [ "Network" ];
     };
 
-    passthru.updateScript = ./update.sh;
+    passthru = {
+      updateScript = ./update.sh;
+      tests.localsend = nixosTests.localsend;
+    };
 
     meta = metaCommon // {
       mainProgram = "localsend_app";
