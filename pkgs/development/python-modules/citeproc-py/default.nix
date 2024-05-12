@@ -2,39 +2,41 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  pytestCheckHook,
   git,
   lxml,
   rnc2rng,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "citeproc-py";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d9e3a224f936fe2e5033b5d9ffdacab769cedb61d96c4e0cf2f0b488f1d24b4e";
+    hash = "sha256-2eOiJPk2/i5QM7XZ/9rKt2nO22HZbE4M8vC0iPHSS04=";
   };
 
   buildInputs = [ rnc2rng ];
 
-  propagatedBuildInputs = [ lxml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ lxml ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
     git
   ];
-  checkPhase = "nosetests tests";
-  doCheck = false; # seems to want a Git repository, but fetchgit with leaveDotGit also fails
+  # doCheck = false;  # seems to want a Git repository, but fetchgit with leaveDotGit also fails
   pythonImportsCheck = [ "citeproc" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/brechtm/citeproc-py";
     description = "Citation Style Language (CSL) parser for Python";
     mainProgram = "csl_unsorted";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }
