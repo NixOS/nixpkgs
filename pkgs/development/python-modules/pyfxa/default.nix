@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pyfxa";
   version = "0.7.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-DMFZl1hbYNaScOTWkAbK2nKti6wD5SS5A30q7TW5vO4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cryptography
     hawkauthlib
     pybrowserid
