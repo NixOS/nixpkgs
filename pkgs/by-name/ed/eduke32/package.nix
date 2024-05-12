@@ -28,6 +28,7 @@ let
     ;
   wrapper = "eduke32-wrapper";
   swWrapper = "voidsw-wrapper";
+  furyWrapper = "fury-wrapper";
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -125,6 +126,15 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Shadow Warrior source port";
       categories = [ "Game" ];
     })
+    (makeDesktopItem {
+      name = "fury";
+      icon = "fury";
+      exec = "${furyWrapper}";
+      comment = "Ion Fury eduke32 source port";
+      desktopName = "Ion Fury";
+      genericName = "Ion Fury source port";
+      categories = [ "Game" ];
+    })
   ];
 
   enableParallelBuilding = true;
@@ -138,13 +148,19 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
         --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
-        --add-flags '-g "$EDUKE32_DATA_DIR/DUKE3D.GRP"'
+        --add-flags '-j"$EDUKE32_DATA_DIR"' \
+        --add-flags '-gamegrp DUKE3D.GRP'
       makeWrapper $out/bin/voidsw $out/bin/${swWrapper} \
         --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
-        --add-flags '-g"$EDUKE32_DATA_DIR/SW.GRP"'
+        --add-flags '-j"$EDUKE32_DATA_DIR"'
+      makeWrapper $out/bin/eduke32 $out/bin/${furyWrapper} \
+        --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+        --add-flags '-j"$EDUKE32_DATA_DIR"' \
+        --add-flags '-gamegrp FURY.GRP'
       mkdir -p $out/share/icons/hicolor/scalable/apps
       gm convert "./source/duke3d/rsrc/game_icon.ico[10]" $out/share/icons/hicolor/scalable/apps/eduke32.png
       install -Dm644 ./source/sw/rsrc/game_icon.svg $out/share/icons/hicolor/scalable/apps/voidsw.svg
+      gm convert "./source/duke3d/rsrc/fury/game_icon.ico[4]" $out/share/icons/hicolor/scalable/apps/fury.png
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
