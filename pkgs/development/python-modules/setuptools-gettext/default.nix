@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonAtLeast,
   setuptools,
   tomli,
   pytestCheckHook,
@@ -12,17 +11,16 @@
 
 buildPythonPackage rec {
   pname = "setuptools-gettext";
-  version = "0.1.11";
+  version = "0.1.14";
   pyproject = true;
 
-  # >=3.12 doesn't work because the package depends on `distutils`
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "setuptools-gettext";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yLKn4wwGgRdlsISAT71lD2vkIefsTJRB+OEA030adZY=";
+    hash = "sha256-05xKWRxmoI8tnRENuiK3Z3WNMyjgXIX5p3vhzSUeytQ=";
   };
 
   build-system = [ setuptools ];
