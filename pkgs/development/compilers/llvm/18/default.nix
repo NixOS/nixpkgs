@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, fetchpatch, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -146,6 +146,11 @@ in let
         # https://reviews.llvm.org/D51899
         ./clang/gnu-install-dirs.patch
         ../common/clang/add-nostdlibinc-flag.patch
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/48c1364200b5649dda2f9ccbe382b0bd908b99de.patch";
+          sha256 = "sha256-beSydky0P/06YDLk0GJDtcREpMcU2FspxuYU6EnQGfA=";
+          stripLen = 1;
+        })
         (substituteAll {
           src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
           libllvmLibdir = "${tools.libllvm.lib}/lib";
