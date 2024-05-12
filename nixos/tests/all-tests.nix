@@ -516,6 +516,7 @@ in {
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix {};
   litestream = handleTest ./litestream.nix {};
   lldap = handleTest ./lldap.nix {};
+  localsend = handleTest ./localsend.nix {};
   locate = handleTest ./locate.nix {};
   login = handleTest ./login.nix {};
   logrotate = handleTest ./logrotate.nix {};
