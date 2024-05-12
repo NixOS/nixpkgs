@@ -408,21 +408,21 @@
         "src": {
             "owner": "libretro",
             "repo": "mame",
-            "rev": "3272473e69880675756547fc5896d0869ba14255",
-            "hash": "sha256-DWDPQM4YWuH4oH+03VmFs6yXN2dAKxc5zXSV42YbMyg=",
+            "rev": "1c6d288bf15705ab93c66a11af40eaf9d2a515a2",
+            "hash": "sha256-h5hMfCwoECTyH/VU7IheQg5Jx9skpYrZlA9Xh+4lotQ=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-05-04"
+        "version": "unstable-2024-05-09"
     },
     "mame2000": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "libretro",
             "repo": "mame2000-libretro",
-            "rev": "1472da3a39ab14fff8325b1f51a1dfdb8eabb5c8",
-            "hash": "sha256-Nd5OqkoMJZ8TzEZGqDT0YX6lHK/H3I5EqJ841PteLi8="
+            "rev": "905808fbcc3adf8c610c1c60f0e41ce4b35db1c5",
+            "hash": "sha256-2J3QGlSb4YhDZND4T0wmt9zzDjOuNiscsMxn9zA1TtI="
         },
-        "version": "unstable-2023-10-31"
+        "version": "unstable-2024-05-07"
     },
     "mame2003": {
         "fetcher": "fetchFromGitHub",
@@ -652,11 +652,11 @@
         "src": {
             "owner": "jpd002",
             "repo": "Play-",
-            "rev": "9f8d623f5d7e6a9bb6fa7ff30ce4d5b1fdf72a1e",
-            "hash": "sha256-DtPIAQGHXR3urmKeFXNfKIdqQVU3HrrH6M28Ctwj3eI=",
+            "rev": "700a44a1548d099705c901203414724518c90d43",
+            "hash": "sha256-OZO8vVA2B/SdckC2Rm/v35cdJDzkpdU9lJhFYEyyl1U=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-05-01"
+        "version": "unstable-2024-05-05"
     },
     "ppsspp": {
         "fetcher": "fetchFromGitHub",

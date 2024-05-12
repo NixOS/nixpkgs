@@ -28,8 +28,8 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.14.0";
-  format = "pyproject";
+  version = "0.16.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,9 +37,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    rev = "refs/tags/@gradio/client@${version}";
+    rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-7oC/Z3YUiOFZdv/60q7PkfluV77broRkHgWiY9Vim9Y=";
+    hash = "sha256-SVUm9LrjYG0r3U1yOd3rctxVMYlnAOW+Opqy9c3osnw=";
   };
   prePatch = ''
     cd client/python
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme

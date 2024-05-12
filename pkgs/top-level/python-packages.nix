@@ -1515,6 +1515,8 @@ self: super: with self; {
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
 
+  binance-connector = callPackage ../development/python-modules/binance-connector { };
+
   binary = callPackage ../development/python-modules/binary { };
 
   binary2strings = callPackage ../development/python-modules/binary2strings { };
@@ -7203,8 +7205,6 @@ self: super: with self; {
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
   marshmallow-dataclass = callPackage ../development/python-modules/marshmallow-dataclass { };
-
-  marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
 
   marshmallow-oneofschema = callPackage ../development/python-modules/marshmallow-oneofschema { };
 
@@ -15186,6 +15186,8 @@ self: super: with self; {
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
 
   tinysegmenter = callPackage ../development/python-modules/tinysegmenter { };
+
+  tinytuya = callPackage ../development/python-modules/tinytuya { };
 
   tissue = callPackage ../development/python-modules/tissue { };
 

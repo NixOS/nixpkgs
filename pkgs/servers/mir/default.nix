@@ -31,6 +31,7 @@
 , xorg
 , xwayland
 , dbus
+, gobject-introspection
 , gtest
 , umockdev
 , wlcs
@@ -130,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    gobject-introspection
   ];
 
   checkInputs = [
