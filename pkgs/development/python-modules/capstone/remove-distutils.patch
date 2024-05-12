@@ -1,0 +1,91 @@
+diff --git a/bindings/python/capstone/__init__.py b/bindings/python/capstone/__init__.py
+index bda2fdb6..78243d95 100755
+--- a/capstone/__init__.py
++++ b/capstone/__init__.py
+@@ -376,8 +376,8 @@ CS_OPT   = {v:k for k,v in locals().items() if k.startswith('CS_OPT_')}
+ 
+ import ctypes, ctypes.util
+ from os.path import split, join, dirname
+-import distutils.sysconfig
+-import pkg_resources
++import sysconfig
++import importlib.resources as importlib_resources
+ 
+ import inspect
+ if not hasattr(sys.modules[__name__], '__file__'):
+@@ -407,17 +407,17 @@ _cs = None
+ 
+ # Loading attempts, in order
+ # - user-provided environment variable
+-# - pkg_resources can get us the path to the local libraries
++# - importlib_resources can get us the path to the local libraries
+ # - we can get the path to the local libraries by parsing our filename
+ # - global load
+ # - python's lib directory
+ # - last-gasp attempt at some hardcoded paths on darwin and linux
+ 
+ _path_list = [os.getenv('LIBCAPSTONE_PATH', None),
+-              pkg_resources.resource_filename(__name__, 'lib'),
++              importlib_resources.files(__name__) / "lib",
+               join(split(__file__)[0], 'lib'),
+               '',
+-              distutils.sysconfig.get_python_lib(),
++              sysconfig.get_path('platlib'),
+               "/usr/local/lib/" if sys.platform == 'darwin' else '/usr/lib64']
+ 
+ for _path in _path_list:
+diff --git a/bindings/python/setup.py b/bindings/python/setup.py
+index f7f6e7d7..f6c74374 100755
+--- a/setup.py
++++ b/setup.py
+@@ -6,13 +6,16 @@ import shutil
+ import sys
+ import platform
+ 
+-from distutils import log
++import logging
+ from setuptools import setup
+-from distutils.util import get_platform
+-from distutils.command.build import build
+-from distutils.command.sdist import sdist
++from sysconfig import get_platform
++from setuptools.command.build import build
++from setuptools.command.sdist import sdist
+ from setuptools.command.bdist_egg import bdist_egg
+ 
++logger = logging.getLogger(__name__)
++logging.basicConfig(level=logging.INFO)
++
+ PYTHON2 = sys.version_info[0] == 2
+ if PYTHON2:
+     import io
+@@ -106,7 +109,7 @@ def copy_sources():
+ 
+     for filename in src:
+         outpath = os.path.join(SRC_DIR, os.path.basename(filename))
+-        log.info("%s -> %s" % (filename, outpath))
++        logger.info("%s -> %s" % (filename, outpath))
+         shutil.copy(filename, outpath)
+ 
+ def build_libraries():
+@@ -165,9 +168,9 @@ class custom_sdist(sdist):
+ class custom_build(build):
+     def run(self):
+         if 'LIBCAPSTONE_PATH' in os.environ:
+-            log.info('Skipping building C extensions since LIBCAPSTONE_PATH is set')
++            logger.info('Skipping building C extensions since LIBCAPSTONE_PATH is set')
+         else:
+-            log.info('Building C extensions')
++            logger.info('Building C extensions')
+             build_libraries()
+         return build.run(self)
+ 
+@@ -189,7 +192,7 @@ try:
+     from setuptools.command.develop import develop
+     class custom_develop(develop):
+         def run(self):
+-            log.info("Building C extensions")
++            logger.info("Building C extensions")
+             build_libraries()
+             return develop.run(self)
+ 
