@@ -37051,6 +37051,8 @@ with pkgs;
 
   neverball = callPackage ../games/neverball { };
 
+  neverest = darwin.apple_sdk_11_0.callPackage ../by-name/ne/neverest/package.nix { };
+
   nexuiz = callPackage ../games/nexuiz { };
 
   nile = python3Packages.callPackage ../games/nile { };
