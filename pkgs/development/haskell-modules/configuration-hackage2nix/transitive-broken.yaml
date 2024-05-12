@@ -2536,7 +2536,6 @@ dont-distribute-packages:
  - language-qux
  - language-spelling
  - large-anon
- - large-records
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
