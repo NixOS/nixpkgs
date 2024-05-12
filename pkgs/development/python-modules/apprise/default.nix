@@ -38,7 +38,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     markdown
