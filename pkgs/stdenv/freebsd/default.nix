@@ -168,6 +168,8 @@ in
         };
         stdenvNoCC = stdenvNoCC;
         libc = bootstrapLibs;
+        runtimeShell = "${bash}/bin/bash";
+        expand-response-params = "";
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
@@ -179,6 +181,8 @@ in
           inherit lib;
           stdenvNoCC = stdenvNoCC;
           name = "freebsd-boot-0-bintools";
+          runtimeShell = "${bash}/bin/bash";
+          expand-response-params = "";
           libc = bootstrapLibs;
           propagateDoc = false;
           nativeTools = false;
@@ -258,6 +262,8 @@ in
         name = "freebsd-boot-1-cc";
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils libcxx;
+        runtimeShell = "${prevStage.bashReal}/bin/bash";
+        expand-response-params = prevStage.expand-response-params;
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
@@ -276,6 +282,8 @@ in
           name = "freebsd-boot-1-bintools";
           inherit (prevStage.freebsd) libc;
           inherit (prevStage) gnugrep coreutils;
+          runtimeShell = "${prevStage.bashReal}/bin/bash";
+          expand-response-params = prevStage.expand-response-params;
           bintools = prevStage.binutils-unwrapped;
           propagateDoc = false;
           nativeTools = false;
@@ -350,6 +358,8 @@ in
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils;
         inherit (prevStage.llvmPackages) libcxx;
+        runtimeShell = "${prevStage.bashReal}/bin/bash";
+        expand-response-params = prevStage.expand-response-params;
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
