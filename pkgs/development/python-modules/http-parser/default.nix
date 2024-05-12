@@ -5,6 +5,7 @@
   cython,
   setuptools,
   pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,12 @@ buildPythonPackage rec {
   # The imp module is deprecated since version 3.4, and was removed in 3.12
   # https://docs.python.org/3.11/library/imp.html
   # Fix from: https://github.com/benoitc/http-parser/pull/101/
-  patches = [ ./imp-importlib.diff ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/benoitc/http-parser/commit/4d4984ce129253f9de475bfd3c683301c916e8b1.patch";
+      hash = "sha256-d3k1X41/D9PpPWsDety2AiYyLv9LJIhpkOo3a6qKcB8=";
+    })
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
