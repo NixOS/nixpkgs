@@ -111,3 +111,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # pkgs/os-specific/bsd: Reformat with nixfmt-rfc-style 2024-03-01
 3fe3b055adfc020e6a923c466b6bcd978a13069a
+
+# k3s: format with nixfmt-rfc-style
+6cfcd3c75428ede517bc6b15a353d704837a2830

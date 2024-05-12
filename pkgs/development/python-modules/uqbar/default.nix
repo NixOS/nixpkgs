@@ -4,8 +4,10 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, defusedxml
 , setuptools
 , sphinx
+, typing-extensions
 , unidecode
 }:
 
@@ -38,6 +40,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    defusedxml
+    typing-extensions
   ];
 
   disabledTests = [

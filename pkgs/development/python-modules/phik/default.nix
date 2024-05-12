@@ -3,20 +3,17 @@
 , cmake
 , fetchFromGitHub
 , joblib
-, jupyter
-, jupyter-client
 , matplotlib
-, nbconvert
 , ninja
-, numba
 , numpy
 , pandas
+, pathspec
+, pyproject-metadata
 , pybind11
 , pytestCheckHook
 , pythonOlder
-, scikit-build
+, scikit-build-core
 , scipy
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -24,7 +21,7 @@ buildPythonPackage rec {
   version = "0.12.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KaveIO";
@@ -33,57 +30,38 @@ buildPythonPackage rec {
     hash = "sha256-YsH7vVn6gzejunUjUY/RIcvWtaQ/W1gbciJWKi5LDTk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
-    scikit-build
-    setuptools
+    pathspec
+    pybind11
+    pyproject-metadata
+    scikit-build-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     joblib
-    numpy
-    scipy
-    pandas
     matplotlib
-    numba
-    pybind11
+    numpy
+    pandas
+    scipy
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    nbconvert
-    jupyter
-    jupyter-client
   ];
 
-  # Uses setuptools to drive build process
+  # Uses scikit-build-core to drive build process
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [
     "phik"
   ];
 
-  postInstall = ''
-    rm -r $out/bin
-  '';
-
   preCheck = ''
     # import from $out
     rm -r phik
   '';
-
-  disabledTests = [
-    # TypeError: 'numpy.float64' object cannot be interpreted as an integer
-    # https://github.com/KaveIO/PhiK/issues/73
-    "test_significance_matrix_hybrid"
-    "test_significance_matrix_mc"
-  ];
-
-  disabledTestPaths = [
-    # Don't test integrations
-    "tests/phik_python/integration/"
-  ];
 
   meta = with lib; {
     description = "Phi_K correlation analyzer library";

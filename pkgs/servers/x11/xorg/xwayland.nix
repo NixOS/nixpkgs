@@ -1,6 +1,7 @@
 { egl-wayland
 , libepoxy
 , fetchurl
+, fetchpatch
 , fontutil
 , lib
 , libei
@@ -52,6 +53,17 @@ stdenv.mkDerivation rec {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
     hash = "sha256-HJo2a058ytug+b0xPFnq4S0jvXJUOyKibq+LIINc/G0=";
   };
+
+  patches = [
+    # Backport fix for libei scrolling
+    # Notably affects Steam Input, but also anything else using xtest
+    # FIXME: remove when merged
+    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1531
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/317712eb5a1aa4a1c3d737a8fcaee57add9981c9.patch";
+      hash = "sha256-TZo38Pyr9IJUF+3bqlmF4M84XGgo9G6WFTvbaP9r0XU=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config

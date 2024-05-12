@@ -1515,6 +1515,8 @@ self: super: with self; {
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
 
+  binance-connector = callPackage ../development/python-modules/binance-connector { };
+
   binary = callPackage ../development/python-modules/binary { };
 
   binary2strings = callPackage ../development/python-modules/binary2strings { };
@@ -6964,6 +6966,8 @@ self: super: with self; {
 
   lnkparse3 = callPackage ../development/python-modules/lnkparse3 { };
 
+  loadcredential = callPackage ../development/python-modules/loadcredential { };
+
   loca = callPackage ../development/python-modules/loca { };
 
   localimport = callPackage ../development/python-modules/localimport { };
@@ -7201,8 +7205,6 @@ self: super: with self; {
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
   marshmallow-dataclass = callPackage ../development/python-modules/marshmallow-dataclass { };
-
-  marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
 
   marshmallow-oneofschema = callPackage ../development/python-modules/marshmallow-oneofschema { };
 
@@ -9888,6 +9890,8 @@ self: super: with self; {
   pmsensor = callPackage ../development/python-modules/pmsensor { };
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
+
+  private-gpt = callPackage ../development/python-modules/private-gpt { };
 
   prodict = callPackage ../development/python-modules/prodict { };
 
@@ -13564,6 +13568,8 @@ self: super: with self; {
 
   sarif-om = callPackage ../development/python-modules/sarif-om { };
 
+  sarif-tools = callPackage ../development/python-modules/sarif-tools { };
+
   sarge = callPackage ../development/python-modules/sarge { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
@@ -15184,6 +15190,8 @@ self: super: with self; {
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
 
   tinysegmenter = callPackage ../development/python-modules/tinysegmenter { };
+
+  tinytuya = callPackage ../development/python-modules/tinytuya { };
 
   tissue = callPackage ../development/python-modules/tissue { };
 

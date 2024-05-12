@@ -2,7 +2,7 @@
   lib,
   stdenv,
   mkDerivation,
-  patchesRoot,
+  versionData,
   bsdSetupHook,
   freebsdSetupHook,
   makeMinimal,
@@ -17,7 +17,7 @@ let
   inherit (freebsd-lib) mkBsdArch;
 in
 
-mkDerivation rec {
+mkDerivation {
   pname = "compat";
   path = "tools/build";
   extraPaths =
@@ -40,6 +40,9 @@ mkDerivation rec {
       # Take only individual headers, or else we will clobber native libc, etc.
 
       "sys/rpc/types.h"
+    ]
+    ++ lib.optionals (versionData.major == 14) [ "sys/sys/bitcount.h" ]
+    ++ [
 
       # Listed in Makekfile as INC
       "include/mpool.h"
@@ -53,6 +56,13 @@ mkDerivation rec {
       "include/nl_types.h"
       "include/elf.h"
       "sys/sys/ctf.h"
+    ]
+    ++ lib.optionals (versionData.major == 14) [
+      "include/bitstring.h"
+      "sys/sys/bitstring.h"
+      "sys/sys/nv_namespace.h"
+    ]
+    ++ [
 
       # Listed in Makekfile as SYSINC
 
@@ -80,6 +90,12 @@ mkDerivation rec {
       "sys/sys/font.h"
       "sys/sys/consio.h"
       "sys/sys/fnv_hash.h"
+      #"sys/sys/cdefs.h"
+      #"sys/sys/param.h"
+      "sys/sys/_null.h"
+      #"sys/sys/types.h"
+      "sys/sys/_pthreadtypes.h"
+      "sys/sys/_stdint.h"
 
       "sys/crypto/chacha20/_chacha.h"
       "sys/crypto/chacha20/chacha.h"
@@ -92,12 +108,11 @@ mkDerivation rec {
 
       "lib/libcapsicum"
       "lib/libcasper"
-    ];
+      "lib/libmd"
 
-  patches = [
-    /${patchesRoot}/compat-install-dirs.patch
-    /${patchesRoot}/compat-fix-typedefs-locations.patch
-  ];
+      # idk bro
+      "sys/sys/kbio.h"
+    ];
 
   preBuild =
     ''
@@ -151,4 +166,9 @@ mkDerivation rec {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       cp --no-preserve=mode -r cross-build/include/darwin/* $out/1-include
     '';
+
+  # Compat is for making other platforms look like FreeBSD (e.g. to
+  # build build-time dependencies for building FreeBSD packages). It is
+  # not needed when building for FreeBSD.
+  meta.broken = stdenv.hostPlatform.isFreeBSD;
 }

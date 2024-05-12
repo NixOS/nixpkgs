@@ -47,15 +47,16 @@ buildPythonPackage rec {
     sentry-sdk
   ];
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  preCheck = ''
     PATH=$out/bin:$PATH
     ${redis-server}/bin/redis-server &
-    REDIS_PID=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
-    kill $REDIS_PID
+  postCheck = ''
+    kill %%
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   disabledTests = [
     # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f

@@ -3,13 +3,13 @@
 alephone.makeWrapper rec {
   pname = "marathon-infinity";
   desktopName = "Marathon-Infinity";
-  version = "20240119";
+  version = "20240510";
   icon = alephone.icons + "/marathon-infinity.png";
 
   zip = fetchurl {
     url =
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/MarathonInfinity-${version}-Data.zip";
-    sha256 = "sha256-KfFu+cboaZMfjnu3W84/Qbcrc9kbkIZ2Y0GM1fXeXh8=";
+    sha256 = "sha256-+FPym4Avqzyo4cZtfYPHXCS+q21+g9AIdKOImkd/UjU=";
   };
 
   meta = {

@@ -10,11 +10,11 @@ let
   mainProgram = "proton-mail";
 in stdenv.mkDerivation rec {
   pname = "protonmail-desktop";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/proton-mail_${version}_amd64.deb";
-    hash = "sha256-fNK//x3DOsynWSkG9N+nZ3wjYoC+RreaYVC6KEDXh4w=";
+    hash = "sha256-c+0iFBpcg+t983oOttPokA5sLGsIQFIsC+GbsVY6hmI=";
   };
 
   dontConfigure = true;

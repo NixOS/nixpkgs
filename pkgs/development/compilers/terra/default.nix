@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
+{ lib, stdenv, fetchFromGitHub, llvmPackages_16, ncurses, cmake, libxml2
 , symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
 , libffi, libobjc, libpfm, Cocoa, Foundation
 }:
@@ -14,6 +14,7 @@ let
     sha256 = "1g87pl014b5v6z2nnhiwn3wf405skawszfr5wdzyfbx00j3kgxd0";
   };
 
+  llvmPackages = llvmPackages_16;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [

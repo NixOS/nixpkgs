@@ -2,7 +2,6 @@
   stdenv,
   mkDerivation,
   freebsd-lib,
-  patchesRoot,
   buildPackages,
   bsdSetupHook,
   freebsdSetupHook,
@@ -15,7 +14,7 @@
   file2c,
   gawk,
   uudecode,
-  xargs-j, # , ctfconvert
+  xargs-j,
 }:
 
 mkDerivation (
@@ -39,12 +38,6 @@ mkDerivation (
       gawk
       uudecode
       xargs-j
-      #ctfconvert
-    ];
-
-    patches = [
-      /${patchesRoot}/sys-gnu-date.patch
-      /${patchesRoot}/sys-no-explicit-intrinsics-dep.patch
     ];
 
     # --dynamic-linker /red/herring is used when building the kernel.

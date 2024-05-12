@@ -6,29 +6,31 @@
 
 buildGoModule rec {
   pname = "goose";
-  version = "3.19.2";
+  version = "3.20.0";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kGa3vZSFQ8Dgndc0qRnFnQwlU2hst6j3UFUXw+tfYR0=";
+    hash = "sha256-DgxFczS2YAnicf8RTMf7gDzCtDyj/zqzrGfeb3YcYzg=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-aoBxReKRk7dkFR/fJ5uHDZrJRGutLTU2BhDWCTBN2BA=";
+  vendorHash = "sha256-KzIOylWrsOF5oAuuFKUKVSnSJWq3KWZ3Ot7sryNnjIY=";
 
   # skipping: end-to-end tests require a docker daemon
   postPatch = ''
-    rm -r tests/e2e
     rm -r tests/gomigrations
-    rm -r tests/vertica
   '';
+
+  subPackages = [
+    "cmd/goose"
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.gooseVersion=${version}"
+    "-X=main.version=${version}"
   ];
 
   checkFlags = [

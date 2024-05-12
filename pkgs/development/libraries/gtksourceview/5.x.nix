@@ -115,5 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
+    # https://hydra.nixos.org/build/258191535/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 })

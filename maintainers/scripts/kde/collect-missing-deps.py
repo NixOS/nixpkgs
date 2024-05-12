@@ -28,6 +28,7 @@ OK_MISSING_BY_PACKAGE = {
     "discover": {
         "rpm-ostree-1",  # we don't have rpm-ostree (duh)
         "Snapd",  # we don't have snaps and probably never will
+        "packagekitqt6",  # intentionally disabled
     },
     "elisa": {
         "UPNPQT",  # upstream says it's broken
@@ -35,6 +36,9 @@ OK_MISSING_BY_PACKAGE = {
     "extra-cmake-modules": {
         "Sphinx",  # only used for docs, bloats closure size
         "QCollectionGenerator"
+    },
+    "gwenview": {
+        "Tiff",  # duplicate?
     },
     "kio-extras-kf5": {
         "KDSoapWSDiscoveryClient",  # actually vendored on KF5 version

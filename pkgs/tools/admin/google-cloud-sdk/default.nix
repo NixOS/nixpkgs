@@ -13,7 +13,7 @@ let
   pythonEnv = python.withPackages (p: with p; [
     cffi
     cryptography
-    openssl
+    pyopenssl
     crcmod
     numpy
   ] ++ lib.optional (with-gce) google-compute-engine);

@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
+import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
 {
   name = firefoxPackage.pname;
 
@@ -55,7 +55,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
     };
 
   testScript = let
-    exe = firefoxPackage.unwrapped.binaryName;
+    exe = lib.getExe firefoxPackage;
   in ''
       from contextlib import contextmanager
 
