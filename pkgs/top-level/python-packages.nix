@@ -2567,8 +2567,6 @@ self: super: with self; {
 
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
 
-  cryptacular = callPackage ../development/python-modules/cryptacular { };
-
   cryptg = callPackage ../development/python-modules/cryptg { };
 
   cryptodatahub = callPackage ../development/python-modules/cryptodatahub { };
