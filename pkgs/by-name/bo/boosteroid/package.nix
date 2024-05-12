@@ -112,6 +112,7 @@ stdenv.mkDerivation {
     description = "Boosteroid cloud gaming client";
     maintainers = with maintainers; [cab404];
     license = licenses.unfree;
+    mainProgram = "Boosteroid";
     platforms = ["x86_64-linux"];
   };
 }
