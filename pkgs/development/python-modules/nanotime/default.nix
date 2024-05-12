@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,17 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-x8wjH8X220AbRI16tRyW0KRzP0tp+r5Wmldvif/flms=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Tests currently failing
   # https://github.com/jbenet/nanotime/issues/2
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nanotime"
-  ];
+  pythonImportsCheck = [ "nanotime" ];
 
   meta = with lib; {
     description = "Provides a time object that keeps time as the number of nanoseconds since the UNIX epoch";
