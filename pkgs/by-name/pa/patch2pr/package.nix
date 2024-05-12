@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "patch2pr";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "bluekeyes";
     repo = "patch2pr";
     rev = "v${version}";
-    hash = "sha256-tG0pSXmrWT5PCcR25XngbKAS3q9jKdDKqWdPqA62omE=";
+    hash = "sha256-ot/PECNRuhJUYX1woektKC6VEV+rLKiSnCVCLIRhSUo=";
   };
 
-  vendorHash = "sha256-Z6BHUD7WrEpUmCaLvrFYCQCSbhPhee+gR5ep1oLzqbE=";
+  vendorHash = "sha256-K2qYfS0A1gOo2n3pBy00oLbd1/q/p5N8RoId+OP1Jmw=";
 
   ldflags = [
     "-X main.version=${version}"
