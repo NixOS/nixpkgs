@@ -10,11 +10,11 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "HentaiAtHome";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchzip {
     url = "https://repo.e-hentai.org/hath/HentaiAtHome_${version}_src.zip";
-    hash = "sha256-ioL/GcnbYjt1IETH8521d1TcLGtENdFzceJui1ywXTY=";
+    hash = "sha512-kBB5mn9MwpkZ0z+Fl5ABs4YWBkXkMRcADYSAPkeifyhbYQQPOnijXKYZCkzE4UB3uQ1j6Kj6WnpO/4jquYEiOQ==";
     stripRoot = false;
   };
 
