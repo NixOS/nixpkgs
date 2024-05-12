@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, SDL2_net
-, alsa-lib
-, copyDesktopItems
-, darwin
-, fluidsynth
-, glib
-, gtest
-, iir1
-, libGL
-, libGLU
-, libjack2
-, libmt32emu
-, libogg
-, libpng
-, libpulseaudio
-, libslirp
-, libsndfile
-, makeDesktopItem
-, makeWrapper
-, meson
-, ninja
-, opusfile
-, pkg-config
-, speexdsp
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  SDL2_net,
+  alsa-lib,
+  copyDesktopItems,
+  darwin,
+  fluidsynth,
+  glib,
+  gtest,
+  iir1,
+  libGL,
+  libGLU,
+  libjack2,
+  libmt32emu,
+  libogg,
+  libpng,
+  libpulseaudio,
+  libslirp,
+  libsndfile,
+  makeDesktopItem,
+  makeWrapper,
+  meson,
+  ninja,
+  opusfile,
+  pkg-config,
+  speexdsp,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,31 +51,35 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    fluidsynth
-    glib
-    iir1
-    libGL
-    libGLU
-    libjack2
-    libmt32emu
-    libogg
-    libpng
-    libpulseaudio
-    libslirp
-    libsndfile
-    opusfile
-    SDL2
-    SDL2_image
-    SDL2_net
-    speexdsp
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AudioUnit
-    Carbon
-    Cocoa
-  ]);
+  buildInputs =
+    [
+      fluidsynth
+      glib
+      iir1
+      libGL
+      libGLU
+      libjack2
+      libmt32emu
+      libogg
+      libpng
+      libpulseaudio
+      libslirp
+      libsndfile
+      opusfile
+      SDL2
+      SDL2_image
+      SDL2_net
+      speexdsp
+    ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        AudioUnit
+        Carbon
+        Cocoa
+      ]
+    );
 
   desktopItems = [
     (makeDesktopItem {
@@ -84,7 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
       comment = "x86 dos emulator enhanced";
       desktopName = "DosBox-Staging";
       genericName = "DOS emulator";
-      categories = [ "Emulator" "Game" ];
+      categories = [
+        "Emulator"
+        "Game"
+      ];
     })
   ];
 
@@ -102,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://dosbox-staging.github.io/";
@@ -114,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
       practices.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ joshuafern AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      joshuafern
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
     priority = 101;
   };
