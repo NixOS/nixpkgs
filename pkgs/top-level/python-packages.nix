@@ -6232,6 +6232,8 @@ self: super: with self; {
 
   installer = callPackage ../development/python-modules/installer { };
 
+  install-freedesktop = callPackage ../development/python-modules/install-freedesktop {};
+
   insteon-frontend-home-assistant = callPackage ../development/python-modules/insteon-frontend-home-assistant { };
 
   instructor = callPackage ../development/python-modules/instructor { };
