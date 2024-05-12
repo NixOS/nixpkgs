@@ -27,14 +27,14 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2024-02-17";
+  version = "0-unstable-2024-06-19";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "8afa42e388e0434b38979fdddc763363717a2727";
-    hash = "sha256-dyZ4JtDBxsTDe9uQDWxJe7M74X7m+5wpEHm+i+s9hwo=";
+    rev = "e35219148c8f3b0547408c1c00909158f7ec5c9d";
+    hash = "sha256-08lPtVXfilBaRl1qDTNcHg4M+LK25A32VxtezbUi4Js=";
   };
 
   patches = [
