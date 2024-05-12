@@ -315,17 +315,22 @@ let
 
     # We're building from the stable revision, but we still need to apply some patches.
     # These patches are all merged upstream. Generate them with `svn diff -r ${x-1}:${x}`.
+    # Modified by hand to be prefixed with `a/` and `b/` and exclude the svn "Index:" line.
     # We're *not* building a newer revision because multiplayer compatibility depends on the revision number.
     patches = [
       # The Makefile contains a typo.
       # We need this to build.
       ./r11174.patch
-      # The implementation of check_and_set_dir() is broken.
+      # The implementation of check_and_set_dir() is broken (rejects all user and install directories).
       # We depend on this function to set the user and install directories.
       ./r11175.patch
       # r11175 contains a use-after-free when validating the base directory.
       # I don't think it's exploitable on NixOS, but we should fix it anyway.
       ./r11178.patch
+      # The fixed implementation of check_and_set_dir() still has a bug where it doesn't allow nonexistent directories.
+      # We need this so that the overridden directories can be created on startup.
+      # That can be worked around with `mkdir` in the wrapper but it's better to fix at the srouce.
+      ./r11204.patch
     ];
 
     nativeBuildInputs = [ pkg-config ];
