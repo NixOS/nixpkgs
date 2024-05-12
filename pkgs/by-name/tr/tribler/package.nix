@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchPypi
-, python3
-, makeWrapper
-, libtorrent-rasterbar-1_2_x
-, qt5
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchPypi,
+  python3,
+  makeWrapper,
+  libtorrent-rasterbar-1_2_x,
+  qt5,
+  nix-update-script,
 }:
 
 let
   libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tribler";
-  version = "7.13.0";
+  version = "7.14.0";
 
   src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-${version}.tar.xz";
-    hash = "sha256-j9+Kq6dOqiJCTY3vuRWGnciuwACU7L0pl73l6nkDLN4=";
+    url = "https://github.com/Tribler/tribler/releases/download/v${finalAttrs.version}/Tribler-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fQJOs9P4y71De/+svmD7YZ4+tm/bC3rspm7SbOHlSR4=";
   };
 
   nativeBuildInputs = [
@@ -28,57 +30,55 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    python3.pkgs.python
-  ];
+  buildInputs = [ python3.pkgs.python ];
 
-  pythonPath = [
-    libtorrent
-  ] ++ (with python3.pkgs; [
-    # requirements-core.txt
-    aiohttp
-    aiohttp-apispec
-    anyio
-    chardet
-    configobj
-    cryptography
-    decorator
-    faker
-    libnacl
-    lz4
-    marshmallow
-    netifaces
-    networkx
-    pony
-    psutil
-    pyasn1
-    pydantic_1
-    pyopenssl
-    pyyaml
-    sentry-sdk
-    service-identity
-    yappi
-    yarl
-    bitarray
-    (pyipv8.overrideAttrs (p: rec {
-      version = "2.10.0";
-      src = fetchPypi {
-        inherit (p) pname;
-        inherit version;
-        hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
-      };
-    }))
-    libtorrent
-    file-read-backwards
-    brotli
-    human-readable
-    # requirements.txt
-    pillow
-    pyqt5
-    #pyqt5-sip
-    pyqtgraph
-    pyqtwebengine
-  ]);
+  pythonPath =
+    [ libtorrent ]
+    ++ (with python3.pkgs; [
+      # requirements-core.txt
+      aiohttp
+      aiohttp-apispec
+      anyio
+      chardet
+      configobj
+      cryptography
+      decorator
+      faker
+      libnacl
+      lz4
+      marshmallow
+      netifaces
+      networkx
+      pony
+      psutil
+      pyasn1
+      pydantic_1
+      pyopenssl
+      pyyaml
+      sentry-sdk
+      service-identity
+      yappi
+      yarl
+      bitarray
+      filelock
+      (pyipv8.overrideAttrs (p: rec {
+        version = "2.10.0";
+        src = fetchPypi {
+          inherit (p) pname;
+          inherit version;
+          hash = "sha256-yxiXBxBiPokequm+vjsHIoG9kQnRnbsOx3mYOd8nmiU=";
+        };
+      }))
+      file-read-backwards
+      brotli
+      human-readable
+      # requirements.txt
+      pillow
+      pyqt5
+      #pyqt5-sip
+      pyqtgraph
+      pyqtwebengine
+    ]);
 
   installPhase = ''
     mkdir -pv $out
@@ -106,12 +106,19 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
     mainProgram = "tribler";
     homepage = "https://www.tribler.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ xvapx viric mkg20001 ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/Tribler/tribler/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
+      xvapx
+      viric
+      mkg20001
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})
