@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pythonAtLeast
 , pythonOlder
+, llvmPackages
 , pytest7CheckHook
 , setuptools
 , numpy
@@ -32,6 +33,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-E20pI5BrcTrMYrhriuOUl5/liSaQQy6eqRyCoauwb9Q=";
   };
+
+  buildInputs = [
+    llvmPackages.openmp
+  ];
 
   build-system = [ setuptools ];
 
@@ -102,6 +107,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "accelerate"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://huggingface.co/docs/accelerate";
