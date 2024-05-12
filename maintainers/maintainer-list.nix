@@ -8598,6 +8598,12 @@
     githubId = 3948275;
     name = "Harikrishnan R";
   };
+  ilya-epifanov = {
+    email = "mail@ilya.network";
+    github = "ilya-epifanov";
+    githubId = 92526;
+    name = "Ilya";
+  };
   ilya-fedin = {
     email = "fedin-ilja2010@ya.ru";
     github = "ilya-fedin";
