@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nanomsg
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nanomsg,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage {
@@ -20,20 +21,14 @@ buildPythonPackage {
     hash = "sha256-NHurZWiW/Csp6NyuSV+oD16+L2uPUZWGzb2nWi9b/uE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    nanomsg
-  ];
+  buildInputs = [ nanomsg ];
 
   # Tests requires network connections
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nanomsg"
-  ];
+  pythonImportsCheck = [ "nanomsg" ];
 
   meta = with lib; {
     description = "Bindings for nanomsg";
