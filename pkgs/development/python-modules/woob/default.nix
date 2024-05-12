@@ -12,6 +12,7 @@
 , pycountry
 , pytestCheckHook
 , python-dateutil
+, python-jose
 , pythonOlder
 , pyyaml
 , requests
@@ -56,6 +57,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     babel
     python-dateutil
+    python-jose
     html2text
     lxml
     packaging
