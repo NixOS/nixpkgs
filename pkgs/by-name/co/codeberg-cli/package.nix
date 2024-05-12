@@ -1,30 +1,42 @@
-{ lib
-, CoreServices
-, Security
-, fetchFromGitea
-, installShellFiles
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  darwin,
+  fetchFromGitea,
+  installShellFiles,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codeberg-cli";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "RobWalt";
     repo = "codeberg-cli";
     rev = "v${version}";
-    hash = "sha256-KjH78yqfZoN24TBYyFZuxf7z9poRov0uFYQ8+eq9p/o=";
+    hash = "sha256-g5V3Noqh7Y9v/t/dt7n45/NblqNtpZCKELPc9DOkb8A=";
   };
 
-  cargoHash = "sha256-RE4Zwa5vUWPc42w5GaaYkS6fLIbges1fAsOUuwqR2ag=";
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  cargoHash = "sha256-zTg/3PcFWzBmKZA7lRIpM3P03d1qpNVBczqWFbnxpic=";
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin (
+      let
+        d = darwin.apple_sdk.frameworks;
+      in
+      [
+        d.CoreServices
+        d.Security
+      ]
+    );
 
   postInstall = ''
     installShellCompletion --cmd berg \
