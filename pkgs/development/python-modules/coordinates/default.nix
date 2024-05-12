@@ -1,33 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "coordinates";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "clbarnes";
     repo = "coordinates";
-    rev = "v${version}";
-    sha256 = "1zha594rshjg3qjq9mrai2hfldya282ihasp2i3km7b2j4gjdw2b";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-S/AmH5FinTpHFFcrGAUSyjfqoIgq14QlHk9CnUkqCv4=";
   };
 
-  nativeCheckInputs = [ pytest ];
+  build-system = [ setuptools ];
 
-  checkPhase = ''
-    runHook preCheck
-    pytest tests/
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "coordinates" ];
 
   meta = with lib; {
     description = "Convenience class for doing maths with explicit coordinates";
     homepage = "https://github.com/clbarnes/coordinates";
+    changelog = "https://github.com/clbarnes/coordinates/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

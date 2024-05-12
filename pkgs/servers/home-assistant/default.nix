@@ -573,6 +573,7 @@ in python.pkgs.buildPythonApplication rec {
     "orjson"
     "pillow"
     "pyopenssl"
+    "sqlalchemy"
     "typing-extensions"
     "urllib3"
   ];

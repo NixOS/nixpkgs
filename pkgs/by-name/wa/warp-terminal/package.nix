@@ -99,7 +99,7 @@ meta = with lib; {
   homepage = "https://www.warp.dev";
   license = licenses.unfree;
   sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-  maintainers = with maintainers; [ emilytrau Enzime imadnyc ];
+  maintainers = with maintainers; [ emilytrau Enzime imadnyc donteatoreo ];
   platforms = platforms.darwin ++ [ "x86_64-linux" ];
 };
 

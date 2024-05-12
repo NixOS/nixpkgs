@@ -6,20 +6,24 @@
 
 buildGoModule rec {
   pname = "endlessh-go";
-  version = "20230625-3";
+  version = "2024.0119.1";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
     rev = version;
-    sha256 = "sha256-ug01nwlUCKe7DkhSJJ9XUU4QHZeH0A2f/oH6wl2VzIc=";
+    hash = "sha256-CLmlcuRb5dt1oPNdBfx0ql1Zmn/HahcmhVA0k50i6yA=";
   };
 
-  vendorHash = "sha256-n7lzSLtR3bUslT6Q1khsFeofSvwuSaBv3n33+HIdssU=";
+  vendorHash = "sha256-unIyU60IrbiKDIjUf9F2pqqGNIA4gFp5XyQlvx6+xxQ=";
+
+  CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests = nixosTests.endlessh-go;
+  passthru.tests = {
+    inherit (nixosTests) endlessh-go;
+  };
 
   meta = with lib; {
     description = "An implementation of endlessh exporting Prometheus metrics";

@@ -77,6 +77,9 @@ buildPythonPackage rec {
     "test_remote_code"
     "test_transformers_model"
 
+    # nondeterministic, tests GC behaviour by thresholding global ram usage
+    "test_free_memory_dereferences_prepared_components"
+
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
   ] ++ lib.optionals (pythonAtLeast "3.12") [
