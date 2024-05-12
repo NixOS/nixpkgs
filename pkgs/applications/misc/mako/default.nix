@@ -14,7 +14,6 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
   };
 
-  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook3 ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
