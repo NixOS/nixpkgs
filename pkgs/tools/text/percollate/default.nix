@@ -2,21 +2,21 @@
 
 buildNpmPackage rec {
   pname = "percollate";
-  version = "4.0.5";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "danburzo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-St9a22Af2QV3gOR80LmDMeq0x9tf/ZJz9Z4IgeeM80I=";
+    hash = "sha256-AmvdigxLZA3lgT48Z9EVEWOC92kWNA2ve37RMJTR0UA=";
   };
 
-  npmDepsHash = "sha256-WHOv5N893G35bMC03aGb2m7rQz5xIRd9hPldbRku+RY=";
+  npmDepsHash = "sha256-21Q47puHZ8/jXIlLFrro87hOYahBjov8Pbg/Z2wgt+g=";
 
   dontNpmBuild = true;
 
   # Dev dependencies include an unnecessary Java dependency (epubchecker)
-  # https://github.com/danburzo/percollate/blob/v4.0.5/package.json#L40
+  # https://github.com/danburzo/percollate/blob/v4.2.0/package.json#L40
   npmInstallFlags = [ "--omit=dev" ];
 
   nativeBuildInputs = [ makeWrapper ];
