@@ -3,9 +3,10 @@ from pathlib import Path
 import collections
 import sys
 import os
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
 do_abort: bool = False
-packages: Dict[str, Dict[str, List[Dict[str, List[str]]]]] = collections.defaultdict(list)
+packages: Dict[str, Dict[str, Dict[str, List[str]]]] = collections.defaultdict(dict)
+found_paths: Set[Path] = set()
 out_path: Path = Path(os.getenv("out"))
 version: Tuple[int, int] = sys.version_info
 site_packages_path: str = f'lib/python{version[0]}.{version[1]}/site-packages'
@@ -31,20 +32,22 @@ def describe_parents(parents: List[str]) -> str:
 
 # inserts an entry into 'packages'
 def add_entry(name: str, version: str, store_path: str, parents: List[str]) -> None:
-    if name not in packages:
-        packages[name] = {}
-    if store_path not in packages[name]:
-        packages[name][store_path] = []
-    packages[name][store_path].append(dict(
+    packages[name][store_path] = dict(
         version=version,
         parents=parents,
-    ))
+    )
 
 
 # transitively discover python dependencies and store them in 'packages'
 def find_packages(store_path: Path, site_packages_path: str, parents: List[str]) -> None:
     site_packages: Path = (store_path / site_packages_path)
     propagated_build_inputs: Path = (store_path / "nix-support/propagated-build-inputs")
+
+    # only visit each path once, to avoid exponential complexity with highly
+    # connected dependency graphs
+    if store_path in found_paths:
+        return
+    found_paths.add(store_path)
 
     # add the current package to the list
     if site_packages.exists():
@@ -55,10 +58,9 @@ def find_packages(store_path: Path, site_packages_path: str, parents: List[str])
     # recursively add dependencies
     if propagated_build_inputs.exists():
         with open(propagated_build_inputs, "r") as f:
-            build_inputs: List[str] = f.read().strip().split(" ")
+            build_inputs: List[str] = f.read().split()
             for build_input in build_inputs:
-                if build_input not in parents:
-                    find_packages(Path(build_input), site_packages_path, parents + [build_input])
+                find_packages(Path(build_input), site_packages_path, parents + [build_input])
 
 
 find_packages(out_path, site_packages_path, [f"this derivation: {out_path}"])
@@ -68,10 +70,9 @@ for name, store_paths in packages.items():
     if len(store_paths) > 1:
         do_abort = True
         print("Found duplicated packages in closure for dependency '{}': ".format(name))
-        for store_path, candidates in store_paths.items():
-            for candidate in candidates:
-                print(f"  {name} {candidate['version']} ({store_path})")
-                print(describe_parents(candidate['parents']))
+        for store_path, candidate in store_paths.items():
+            print(f"  {name} {candidate['version']} ({store_path})")
+            print(describe_parents(candidate['parents']))
 
 # fail if duplicates were found
 if do_abort:
