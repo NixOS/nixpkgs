@@ -31,6 +31,8 @@ let cfg = config.services.libinput;
             `adaptive`: Pointer acceleration depends on the input speed.
             This is the default profile for most devices.
             `custom`: Allows the user to define a custom acceleration function.
+            To define custom functions use the accelPoints<Fallback/Motion/Scroll>
+            and accelStep<Fallback/Motion/Scroll> options.
           '';
       };
 
@@ -39,6 +41,70 @@ let cfg = config.services.libinput;
         default = null;
         example = "-0.5";
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
+      };
+
+      accelPointsFallback = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0 1.0 2.4 2.5";
+        description = ''
+            Sets the points of the fallback acceleration function. The string must be a space-separated
+            list of floating point non-negative numbers. This only applies to the custom profile.
+          '';
+      };
+
+      accelPointsMotion = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0 1.0 2.4 2.5";
+        description = ''
+            Sets the points of the (pointer) motion acceleration function. The string must be a
+            space-separated list of floating point non-negative numbers. This only applies to
+            the custom profile.
+          '';
+      };
+
+      accelPointsScroll = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.0 1.0 2.4 2.5";
+        description = ''
+            Sets the points of the scroll acceleration function. The string must be a space-separated
+            list of floating point non-negative numbers. This only applies to the custom profile.
+          '';
+      };
+
+      accelStepFallback = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.1";
+        description = ''
+            Sets the step between the points of the fallback acceleration function. When a step of
+            0.0 is provided, libinput's Fallback acceleration function is used. This only applies
+            to the custom profile.
+          '';
+      };
+
+      accelStepMotion = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.1";
+        description = ''
+            Sets the step between the points of the (pointer) motion acceleration function. When a
+            step of 0.0 is provided, libinput's Fallback acceleration function is used. This only
+            applies to the custom profile.
+          '';
+      };
+
+      accelStepScroll = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "0.1";
+        description = ''
+            Sets the step between the points of the scroll acceleration function. When a step of
+            0.0 is provided, libinput's Fallback acceleration function is used. This only applies
+            to the custom profile.
+          '';
       };
 
       buttonMapping = mkOption {
@@ -204,6 +270,12 @@ let cfg = config.services.libinput;
       ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
       Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
       ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+      ${optionalString (cfg.${deviceType}.accelPointsFallback != null) ''Option "AccelPointsFallback" "${cfg.${deviceType}.accelPointsFallback}"''}
+      ${optionalString (cfg.${deviceType}.accelPointsMotion != null) ''Option "AccelPointsMotion" "${cfg.${deviceType}.accelPointsMotion}"''}
+      ${optionalString (cfg.${deviceType}.accelPointsScroll != null) ''Option "AccelPointsScroll" "${cfg.${deviceType}.accelPointsScroll}"''}
+      ${optionalString (cfg.${deviceType}.accelStepFallback != null) ''Option "AccelStepFallback" "${cfg.${deviceType}.accelStepFallback}"''}
+      ${optionalString (cfg.${deviceType}.accelStepMotion != null) ''Option "AccelStepMotion" "${cfg.${deviceType}.accelStepMotion}"''}
+      ${optionalString (cfg.${deviceType}.accelStepScroll != null) ''Option "AccelStepScroll" "${cfg.${deviceType}.accelStepScroll}"''}
       ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
       ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
       ${optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
