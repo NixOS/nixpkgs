@@ -55,7 +55,7 @@ runCommand testName {
       fi
     done
 
-    if [[ $notFound -eq 0 ]] && ([[ $versionMismatch -eq 0 ]] || [[ "$versionCheck" == false ]]); then
+    if [[ $notFound -eq 0 ]] && ([[ $versionMismatch -eq 0 ]] || [[ -z "$versionCheck" ]]); then
       exit 0
     fi
     if [[ $notFound -ne 0 ]]; then
