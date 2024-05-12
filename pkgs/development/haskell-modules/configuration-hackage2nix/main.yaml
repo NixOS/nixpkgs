@@ -47,7 +47,6 @@ extra-packages:
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
-  - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - brick == 0.70.*                     # 2022-08-13: needed by taskell
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
@@ -114,6 +113,8 @@ extra-packages:
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
+  - versions < 6                        # 2024-04-22: required by spago-0.21
+  - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
 
 package-maintainers:
   abbradar:
