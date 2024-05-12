@@ -54,7 +54,7 @@ let
         pakName:
         {
           prefix ? "",
-          hash,
+          hash ? lib.fakeHash,
 
           fetcher ? fetchzip,
 
@@ -93,11 +93,11 @@ let
 
         pak64 = {
           srcPath = [
-            "123-0"
-            "simupak64-123-0.zip"
+            "124-0"
+            "simupak64-124-0.zip"
           ];
           prefix = "/pak";
-          hash = "sha256-TZ9VqCIdSHcdQCtcOZzfomhTpONU+ecsltlocl2HZPk=";
+          hash = "sha256-jnEjsHjABxq/cyNOTAgES7SxDKjLfEeNhXzh5tchDsU=";
         };
         "pak64.classic" = {
           basePath = "pakHAJO";
@@ -113,9 +113,9 @@ let
           hash = "sha256-pacX91SOCqIRRNr9yfroMJQX2Zw+S5sK/Wfz7lzUupQ=";
         };
         "pak64.german" = {
-          url = "https://simutrans-germany.com/pak.german/pak64.german_0-123-0-0-2_full.zip";
+          url = "https://simutrans-germany.com/pak.german/pak64.german_0-124-0-0-2_full.zip";
           prefix = "/pak64.german";
-          hash = "sha256-nTbI7OK09u3fDYwoW6JpiwGkOoIXV2Rj+zgwHG+x7+I=";
+          hash = "sha256-EMT4IqvsoG1FYvvWUcqR7sur0ERDfApC/iVEJKp3Prw=";
         };
         "pak64.ho-scale" = {
           url = "http://simutrans.bilkinfo.de/pak64.ho-scale-latest.tar.gz";
@@ -138,6 +138,12 @@ let
           prefix = "/pak64.scifi";
           hash = "sha256-Itm8O8OGpGvQPAPJYWniycDWRI9m93Wm4iWUOwPWNio=";
         };
+        "pak64.ttd" = {
+          basePath = "pakTTD";
+          srcPath = [ "simupakTTD-124-0.zip" ];
+          prefix = "/pakTTD";
+          hash = "sha256-oi2V6FuXgwcd57hIR2I21IWz2n+qc39WpOYMFmuPOdA=";
+        };
 
         "pak96.comic" = {
           srcPath = [
@@ -156,11 +162,11 @@ let
 
         pak128 = {
           srcPath = [
-            "pak128 2.8.2 for ST 123up"
-            "simupak128-2.8.2-for123.zip"
+            "pak128 for ST 124up (2.9)"
+            "simupak128-2.9-for124.zip"
           ];
           prefix = "/pak128";
-          hash = "sha256-ILAbpaH3lsPVEEldzHxUvYPR50pYK+vOLHZkBgbypHY=";
+          hash = "sha256-qjgnlIz7aQ73W7gFJpqBiE8BXabSrVgHwWVQotGwseE=";
         };
         "pak128.britain" = {
           srcPath = [
@@ -172,17 +178,23 @@ let
         };
         "pak128.cs" = {
           basePath = "Pak128.CS";
-          srcPath = [ "pak128.cz_v.0.2.1.zip" ];
-          hash = "sha256-9NIlJzVjE7QRaKHvT9PZLxo2Xq8sUHCHdVoPqyTcgbY=";
+          # This one is called "nightly builds" on the official site.
+          # It's referenced in the game version 124.0, and it was last updated in 2021.
+          # So, despite the name, it is compatible with the stable game (124.0 is from 2024)
+          srcPath = [
+            "nightly builds"
+            "pak128.CS-r2096.zip"
+          ];
+          hash = "sha256-vQ8HZqwICB3CUGQW8NwEWGVA3anUbCOdj3BEV3lLLpk=";
         };
         "pak128.german" = {
           basePath = "PAK128.german";
           srcPath = [
-            "PAK128.german_2.1_for_ST_123.0"
-            "PAK128.german_2.1_for_ST_123.0.zip"
+            "PAK128.german_2.2_for_ST_124.0"
+            "PAK128.german_2.2_for_ST_124.0.zip"
           ];
           prefix = "/PAK128.german";
-          hash = "sha256-p6uR2h/uWrLMxFoKYZYdqVkg/9Q1uTcFMxKqm7W6ssA=";
+          hash = "sha256-QafYmTFq8zb2NdH6EThQi9Zb+xmCqbxYABaEfzotPg0=";
         };
         "pak128.japan" = {
           fetcher = fetchcab;
@@ -191,9 +203,17 @@ let
           hash = "sha256-dJOpYVdh55mHm3kCKBwlShl3+6I/TRBAkD7ivoFI1HI=";
         };
 
+        "pak144.excentrique" = {
+          # 124.0 ships a nightly tag of this pakset. We're using a permanent tag.
+          # Upstream has been notified, and it has been fixed in their development branch.
+          # The only consequence will be that the in-game downloader will break for this pakset.
+          url = "https://github.com/Varkalandar/pak144.Excentrique/releases/download/r0.08/pak144.Excentrique_v008.zip";
+          hash = "sha256-Iqe6enB3AD8BgaLshwTHjv61xfp9OMaoLwkfDakr53I=";
+        };
+
         "pak192.comic" = {
-          url = "https://github.com/Flemmbrav/Pak192.Comic/releases/download/V0.6/pak192.comic-serverset.zip";
-          hash = "sha256-1TXSiRrulcUM/bfHmADau5p0OD0mESn0hhOtMn355/Q=";
+          url = "https://github.com/Flemmbrav/Pak192.Comic/releases/download/V0.7.1/pak192.comic-serverset.zip";
+          hash = "sha256-T3FdreBWA76wGdPSSF0G0YWQoPsmancJe2Nl7akFBz0=";
         };
       };
 
