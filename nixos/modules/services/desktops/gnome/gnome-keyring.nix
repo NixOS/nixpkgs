@@ -26,14 +26,7 @@ in
         '';
       };
 
-      enableSSHSupport = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Enable SSH agent support in Gnome Keyring by setting SSH_AUTH_SOCK
-          environment variable correctly.
-        '';
-      };
+      enableSSHSupport = lib.mkEnableOption "SSH agent support for GNOME Keyring by setting the SSH_AUTH_SOCK environment variable";
 
     };
 
