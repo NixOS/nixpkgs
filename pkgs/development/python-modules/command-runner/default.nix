@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, psutil
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,15 @@ buildPythonPackage rec {
     hash = "sha256-QzqkcF2/YExK/dz+b0Uk0Af/rAXRMuRIeEynyFgDql8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    psutil
-  ];
+  dependencies = [ psutil ];
 
   # Tests are execute ping
   # ping: socket: Operation not permitted
   doCheck = false;
 
-  pythonImportsCheck = [
-    "command_runner"
-  ];
+  pythonImportsCheck = [ "command_runner" ];
 
   meta = with lib; {
     homepage = "https://github.com/netinvent/command_runner";
