@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "neo";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VnXR+jgaU8LH7ri16SnsA5neILsLUkU+G5nsbWbckfM=";
+    hash = "sha256-gVhbKLZaTciakucc7TlCxdv9qnG90sw4U3G3ebVlTK0=";
   };
 
   nativeBuildInputs = [ setuptools ];
