@@ -4402,6 +4402,8 @@ self: super: with self; {
 
   easywatch = callPackage ../development/python-modules/easywatch { };
 
+  easywebdav = callPackage ../development/python-modules/easywebdav { };
+
   ebaysdk = callPackage ../development/python-modules/ebaysdk { };
 
   ebcdic = callPackage ../development/python-modules/ebcdic { };
