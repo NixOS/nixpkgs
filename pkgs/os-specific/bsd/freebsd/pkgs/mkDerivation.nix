@@ -98,6 +98,8 @@ lib.makeOverridable (
       preBuild =
         ''
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
+        ''
+        + lib.optionalString (versionData.major == 13) ''
           export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
         ''
         + (attrs.preBuild or "");

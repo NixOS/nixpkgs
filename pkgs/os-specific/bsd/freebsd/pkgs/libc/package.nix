@@ -42,7 +42,10 @@ mkDerivation {
       "contrib/gdtoa"
       "contrib/libc-pwcache"
       "contrib/libc-vis"
-      "contrib/tzcode/stdtime"
+    ]
+    ++ lib.optionals (versionData.major == 13) [ "contrib/tzcode/stdtime" ]
+    ++ lib.optionals (versionData.major == 14) [ "contrib/tzcode" ]
+    ++ [
 
       # libthr
       "lib/libthr"
