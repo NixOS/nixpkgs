@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mako";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sUFMcCrc5iNPeAmRbqDaT/n8OIlFJEwJTzY1HMx94RU=";
+    sha256 = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
   };
 
   depsBuildBuild = [ pkg-config ];
