@@ -9,20 +9,20 @@
 buildPythonPackage rec {
   pname = "adext";
   version = "0.4.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ajschmidt8";
-    repo = pname;
+    repo = "adext";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-y8BvcSc3vD0FEWiyzW2Oh6PBS2Itjs2sz+9Dzh5yqSg=";
+    hash = "sha256-y8BvcSc3vD0FEWiyzW2Oh6PBS2Itjs2sz+9Dzh5yqSg=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alarmdecoder
   ];
 
