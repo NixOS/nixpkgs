@@ -5,13 +5,13 @@
 , cryptography
 , cssselect
 , fetchPypi
-, fetchpatch
 , glibcLocales
 , installShellFiles
 , itemadapter
 , itemloaders
 , jmespath
 , lxml
+, fetchpatch
 , packaging
 , parsel
 , pexpect
@@ -48,16 +48,15 @@ buildPythonPackage rec {
     # https://github.com/scrapy/scrapy/pull/6316
     # fix test_get_func_args. remove on next update
     (fetchpatch {
-      name = "test_get_func_args.patch";
-      url = "https://github.com/scrapy/scrapy/commit/b1fe97dc6c8509d58b29c61cf7801eeee1b409a9.patch";
+      name = "fix-test_get_func_args.patch";
+      url =  "https://github.com/scrapy/scrapy/commit/b1fe97dc6c8509d58b29c61cf7801eeee1b409a9.patch";
       hash = "sha256-POlmsuW4SD9baKwZieKfmlp2vtdlb7aKQ62VOmNXsr0=";
     })
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    setuptools
-  ];
+  nativeBuildInputs = [ installShellFiles ];
+  build-system = [ setuptools ];
+
 
   propagatedBuildInputs = [
     cryptography
@@ -111,7 +110,7 @@ buildPythonPackage rec {
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
-    "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "FileFeedStoragePreFeedOptionsTest" # https://github.com/scrapy/scrapy/issues/5157
     "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
@@ -145,9 +144,7 @@ buildPythonPackage rec {
       --bash extras/scrapy_bash_completion
   '';
 
-  pythonImportsCheck = [
-    "scrapy"
-  ];
+  pythonImportsCheck = [ "scrapy" ];
 
   __darwinAllowLocalNetworking = true;
 

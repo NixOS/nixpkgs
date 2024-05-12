@@ -1,10 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
 , pkgs
 , python
-, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -23,8 +22,6 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.db ];
 
-  doCheck = pythonOlder "3.12"; # distutils usage
-
   checkPhase = ''
     ${python.interpreter} test.py
   '';
@@ -37,10 +34,17 @@ buildPythonPackage rec {
     export BERKELEYDB_DIR=${pkgs.db.dev};
   '';
 
+  postPatch = ''
+    substituteInPlace test3.py \
+      --replace-fail "from distutils.util import get_platform" "import platform" \
+      --replace-fail "get_platform()" "f'{platform.system().lower()}-{platform.machine()}'" \
+      --replace-fail "_TextTestResult" "TextTestResult"
+  '';
+
   meta = with lib; {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
-    license = with licenses; [ agpl3Only ]; # License changed from bsd3 to agpl3 since 6.x
+    license = with licenses; [ agpl3Only ];
     maintainers = [ ];
   };
 
