@@ -6,14 +6,14 @@ let
 
   cfg = config.programs.fish;
 
-  fishAbbrs = builtins.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "abbr -ag ${k} ${builtins.escapeShellArg v}")
+  fishAbbrs = lib.concatStringsSep "\n" (
+    lib.mapAttrsFlatten (k: v: "abbr -ag ${k} ${lib.escapeShellArg v}")
       cfg.shellAbbrs
   );
 
-  fishAliases = builtins.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "alias ${k} ${builtins.escapeShellArg v}")
-      (builtins.filterAttrs (k: v: v != null) cfg.shellAliases)
+  fishAliases = lib.concatStringsSep "\n" (
+    lib.mapAttrsFlatten (k: v: "alias ${k} ${lib.escapeShellArg v}")
+      (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
@@ -147,7 +147,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    programs.fish.shellAliases = builtins.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
+    programs.fish.shellAliases = lib.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
     # Required for man completions
     documentation.man.generateCaches = lib.mkDefault true;
