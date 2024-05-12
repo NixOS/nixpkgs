@@ -6,7 +6,6 @@
   SDL2_image,
   SDL2_net,
   alsa-lib,
-  copyDesktopItems,
   darwin,
   fluidsynth,
   glib,
@@ -18,10 +17,10 @@
   libmt32emu,
   libogg,
   libpng,
+  zlib-ng,
   libpulseaudio,
   libslirp,
   libsndfile,
-  makeDesktopItem,
   makeWrapper,
   meson,
   ninja,
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    copyDesktopItems
     gtest
     makeWrapper
     meson
@@ -62,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       libmt32emu
       libogg
       libpng
+      zlib-ng
       libpulseaudio
       libslirp
       libsndfile
@@ -81,20 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "dosbox-staging";
-      exec = "dosbox-staging";
-      icon = "dosbox-staging";
-      comment = "x86 dos emulator enhanced";
-      desktopName = "DosBox-Staging";
-      genericName = "DOS emulator";
-      categories = [
-        "Emulator"
-        "Game"
-      ];
-    })
-  ];
+  postInstall = ''
+    install -Dm644 $src/contrib/linux/dosbox-staging.desktop $out/share/applications/
+  '';
 
   postFixup = ''
     # Rename binary, add a wrapper, and copy manual to avoid conflict with
