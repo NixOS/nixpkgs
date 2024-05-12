@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = pname;
+    repo = "sarif-tools";
     rev = "v${version}";
     hash = "sha256-80amYGnf7xZdpxzTjBGwgg39YN/jJsEkTm0uAlVbH0w=";
   };
