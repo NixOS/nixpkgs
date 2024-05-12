@@ -4759,7 +4759,6 @@ broken-packages:
   - pro-source # failure in job https://hydra.nixos.org/build/233226793 at 2023-09-02
   - prosper # failure in job https://hydra.nixos.org/build/233244079 at 2023-09-02
   - proteaaudio # failure in job https://hydra.nixos.org/build/233225498 at 2023-09-02
-  - proto3-wire # failure in job https://hydra.nixos.org/build/233208217 at 2023-09-02
   - protocol-buffers # failure in job https://hydra.nixos.org/build/233220653 at 2023-09-02
   - protocol-buffers-fork # failure in job https://hydra.nixos.org/build/233228361 at 2023-09-02
   - protocol # failure in job https://hydra.nixos.org/build/233224436 at 2023-09-02
