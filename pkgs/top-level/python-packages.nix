@@ -10535,8 +10535,6 @@ self: super: with self; {
     debugger = pkgs.gdb;
   };
 
-  pxml = callPackage ../development/python-modules/pxml { };
-
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
   py-air-control-exporter = callPackage ../development/python-modules/py-air-control-exporter { };
