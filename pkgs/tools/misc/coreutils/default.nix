@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
+    # The test tends to fail on cephfs
+    sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
+
     # Some target platforms, especially when building inside a container have
     # issues with the inotify test.
     sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh

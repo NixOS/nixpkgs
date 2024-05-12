@@ -2578,7 +2578,6 @@ self: super: with self; {
   cryptodatahub = callPackage ../development/python-modules/cryptodatahub { };
 
   cryptography = callPackage ../development/python-modules/cryptography {
-    inherit (pkgs.darwin) libiconv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
@@ -2603,7 +2602,6 @@ self: super: with self; {
   css-html-js-minify = callPackage ../development/python-modules/css-html-js-minify { };
 
   css-inline = callPackage ../development/python-modules/css-inline {
-    inherit (pkgs.darwin) libiconv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
@@ -11696,9 +11694,7 @@ self: super: with self; {
 
   pyreaderwriterlock = callPackage ../development/python-modules/pyreaderwriterlock { };
 
-  pyreadstat = callPackage ../development/python-modules/pyreadstat {
-    inherit (pkgs.darwin) libiconv;
-  };
+  pyreadstat = callPackage ../development/python-modules/pyreadstat { };
 
   pyrealsense2 = toPythonModule (pkgs.librealsense.override {
     enablePython = true;

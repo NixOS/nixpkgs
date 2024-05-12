@@ -18,9 +18,9 @@ buildGo122Module rec {
 
   vendorHash = "sha256-sAVMmDeHXEgQXb/Xi4nXYztXjuykE0TFebkeubMTZ3k=";
 
-  preCheck = ''
-    buildFlagsArray+="-short"
-  '';
+  checkFlags = [
+    "-short"
+  ];
 
   meta = with lib; {
     description = "Utility for ensuring secure connections to Google Cloud SQL instances";

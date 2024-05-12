@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, writeText
+{ lib, stdenv, fetchurl, fetchFromGitLab, fetchFromGitHub, runCommand, writeText
 # docs deps
 , libxslt, docbook_xml_dtd_412, docbook_xml_dtd_43, docbook_xsl, xmlto
 # runtime deps
 , resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
+, shared-mime-info
 , perl, perlPackages
 , mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
@@ -121,6 +122,7 @@ let
         "$KTRADER" = true;
       };
       prologue = "${writeText "xdg-mime-prologue" ''
+        export XDG_DATA_DIRS="$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${shared-mime-info}/share"
         export PERL5LIB=${with perlPackages; makePerlPath [ FileMimeInfo ]}
         export PATH=$PATH:${lib.makeBinPath [ coreutils perlPackages.FileMimeInfo ]}
       ''}";
@@ -237,7 +239,7 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (self: {
   pname = "xdg-utils";
   version = "1.2.1";
 
@@ -245,7 +247,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${version}";
+    rev = "v${self.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -269,6 +271,34 @@ stdenv.mkDerivation rec {
 
   preFixup = lib.concatStringsSep "\n" (map (resholve.phraseSolution "xdg-utils-resholved") solutions);
 
+  passthru.tests.xdg-mime = runCommand "xdg-mime-test" {
+    nativeBuildInputs = [ self.finalPackage ];
+    preferLocalBuild = true;
+    xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
+      "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
+        "https://staging.cohostcdn.org/attachment/0f5d9832-0cda-4d07-b35f-832b287feb6c/kernelkisser.png"
+        "https://static1.e621.net/data/0e/76/0e7672980d48e48c2d1373eb2505db5a.png"
+      ];
+      "sha256-Si9AtB7J9o6rK/oftv+saST77CNaeWomWU5ECfbRioM=" = [
+        "https://static1.e621.net/data/25/3d/253dc77fbc60d7214bc60e4a647d1c32.jpg"
+      ];
+      "sha256-Z+onQRY5zlDWPp5/y4E6crLz3TaMCNipcxEEMSHuLkM=" = [
+        "https://d.furaffinity.net/art/neotheta/1691409857/1691409857.neotheta_quickmakeanentry_by_neotheta-sig.png"
+        "https://static1.e621.net/data/bf/e4/bfe43ba264ad68e5d8a101ecef69c03e.png"
+      ];
+    };
+  } ''
+    for x in $xenias; do
+      ext=''${x##*.}
+      type="$(xdg-mime query filetype $x)"
+      [ $? -eq 0 ] && [ "$type" = "image/''${ext/jpg/jpeg}" ] || {
+        echo "Incorrect MIME type '$type' for '$x'" >&2
+        exit 1
+      }
+    done
+    touch $out
+  '';
+
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
@@ -276,4 +306,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };
-}
+})
