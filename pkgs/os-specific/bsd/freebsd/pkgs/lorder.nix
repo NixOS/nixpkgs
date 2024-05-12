@@ -3,8 +3,7 @@
   bsdSetupHook,
   freebsdSetupHook,
 }:
-
-mkDerivation rec {
+mkDerivation {
   path = "usr.bin/lorder";
   noCC = true;
   dontBuild = true;
