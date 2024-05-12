@@ -1,7 +1,9 @@
 # GNOME Keyring daemon.
 
 { config, pkgs, lib, ... }:
-
+let
+  cfg = config.services.gnome.gnome-keyring;
+in
 {
 
   meta = {
@@ -24,6 +26,15 @@
         '';
       };
 
+      enableSSHSupport = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Enable SSH agent support in Gnome Keyring by setting SSH_AUTH_SOCK
+          environment variable correctly.
+        '';
+      };
+
     };
 
   };
@@ -31,7 +42,7 @@
 
   ###### implementation
 
-  config = lib.mkIf config.services.gnome.gnome-keyring.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
 
@@ -47,6 +58,12 @@
       capabilities = "cap_ipc_lock=ep";
       source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
     };
+
+    environment.extraInit = lib.mkIf cfg.enableSSHSupport ''
+      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/keyring/ssh"
+      fi
+    '';
 
   };
 
