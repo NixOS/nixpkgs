@@ -652,7 +652,6 @@ unsupported-platforms:
   monomer:                                      [ platforms.darwin ] # depends on mesa
   monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
-  mueval:                                       [ aarch64-linux ] # https://hydra.nixos.org/build/257076117/nixlog/2 https://gitlab.haskell.org/ghc/ghc/-/issues/24432
   nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
