@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, openssl
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, swig2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  openssl,
+  parameterized,
+  pytestCheckHook,
+  pythonOlder,
+  swig2,
 }:
 
 buildPythonPackage rec {
@@ -32,22 +33,20 @@ buildPythonPackage rec {
     parameterized
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
-      "-Wno-error=implicit-function-declaration"
-      "-Wno-error=incompatible-pointer-types"
-    ]);
-  } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-    CPP = "${stdenv.cc.targetPrefix}cpp";
-  };
+  env =
+    {
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+        "-Wno-error=implicit-function-declaration"
+        "-Wno-error=incompatible-pointer-types"
+      ]);
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+      CPP = "${stdenv.cc.targetPrefix}cpp";
+    };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "M2Crypto"
-  ];
+  pythonImportsCheck = [ "M2Crypto" ];
 
   meta = with lib; {
     description = "A Python crypto and SSL toolkit";
