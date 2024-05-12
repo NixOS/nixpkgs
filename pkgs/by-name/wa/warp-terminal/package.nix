@@ -10,9 +10,12 @@
 , libglvnd
 , libxkbcommon
 , vulkan-loader
+, wayland
 , xdg-utils
 , xorg
 , zlib
+, makeWrapper
+, waylandSupport ? false
 }:
 
 let
@@ -35,7 +38,7 @@ linux = stdenv.mkDerivation (finalAttrs:  {
       --replace /opt/ $out/opt/
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook zstd ];
+  nativeBuildInputs = [ autoPatchelfHook zstd makeWrapper ];
 
   buildInputs = [
     curl
@@ -54,7 +57,7 @@ linux = stdenv.mkDerivation (finalAttrs:  {
     xorg.libxcb
     xorg.libXcursor
     xorg.libXi
-  ];
+  ] ++ lib.optionals waylandSupport [wayland];
 
   installPhase = ''
     runHook preInstall
@@ -62,6 +65,9 @@ linux = stdenv.mkDerivation (finalAttrs:  {
     mkdir $out
     cp -r opt usr/* $out
 
+  '' + lib.optionalString waylandSupport ''
+    wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
+  '' + ''
     runHook postInstall
   '';
 });
@@ -93,7 +99,7 @@ meta = with lib; {
   homepage = "https://www.warp.dev";
   license = licenses.unfree;
   sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-  maintainers = with maintainers; [ emilytrau Enzime imadnyc ];
+  maintainers = with maintainers; [ emilytrau Enzime imadnyc donteatoreo ];
   platforms = platforms.darwin ++ [ "x86_64-linux" ];
 };
 
