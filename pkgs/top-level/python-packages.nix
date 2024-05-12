@@ -6908,6 +6908,8 @@ self: super: with self; {
 
   insightface = callPackage ../development/python-modules/insightface { };
 
+  install-freedesktop = callPackage ../development/python-modules/install-freedesktop { };
+
   installer = callPackage ../development/python-modules/installer { };
 
   insteon-frontend-home-assistant =
