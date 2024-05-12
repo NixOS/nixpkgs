@@ -166,8 +166,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_22 = common {
-    version = "2.22.0";
-    hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
+    version = "2.22.1";
+    hash = "sha256-5Q1WkpTWH7fkVfYhHDc5r0A+Vc+K5xB1UhzrLzBCrB8=";
   };
 
   git = common rec {
