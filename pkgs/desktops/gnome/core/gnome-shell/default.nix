@@ -103,6 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
     })
+
+    # screencast: Correct expected bus name for streams
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/3303
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/50a011a19dcc6997ea6173c07bb80b2d9888d363.patch";
+      hash = "sha256-ccEpdWgDxwnj7ouzFekpoln5Y2PtgRikWetwK+0U9Fg=";
+    })
   ];
 
   nativeBuildInputs = [
