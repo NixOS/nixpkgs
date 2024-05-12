@@ -11,13 +11,13 @@
 }:
 let
   pname = "feishin";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Nj8GwrH49ph14xvJldj5GQR4mlt9unCPEcgLrsH/sx8=";
+    hash = "sha256-eNGHrSF/MgRHh0CVc0l8denZIbAnPXwFCZJZcvF+Xtc=";
   };
 
   electron = electron_27;
@@ -26,7 +26,7 @@ buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-+pr9fWg/9kxkYMmthtqhjgF6MOomSQxVCO5V8tHHRdE=";
+  npmDepsHash = "sha256-7oh5bl5APAvzb/TxHMUP/saRWLwuP9xqGvn7/RDhFk8=";
 
   npmFlags = [ "--legacy-peer-deps" ];
   makeCacheWritable = true;
@@ -60,7 +60,7 @@ buildNpmPackage {
         inherit version;
 
         src = "${src}/release/app";
-        npmDepsHash = "sha256-MRwKxe1hoFs5bPXT6K/UspSDs9XBdcRJGvxGlTKExp4=";
+        npmDepsHash = "sha256-NgWPr3mctn7f6X2JFsbdNNHkN84RRlLAywqfbyahCQw=";
 
         npmFlags = [ "--ignore-scripts" ];
         dontNpmBuild = true;
