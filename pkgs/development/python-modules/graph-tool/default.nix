@@ -24,11 +24,11 @@
 buildPythonPackage rec {
   pname = "graph-tool";
   format = "other";
-  version = "2.45";
+  version = "2.65";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-+S2nrM/aArKXke/k8LPtkzKfJyMq9NOvwHySQh7Ghmg=";
+    hash = "sha256-ozpFv9rri2toG8BeNTqzoJdkwB06GdJ69XjtPkjUKZw=";
   };
 
   configureFlags = [
