@@ -5,11 +5,13 @@ let
   version = "2.15.0";
   sources = {
     linux = fetchurl {
-      url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
+      url =
+        "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
       sha256 = "sha256-ZBDhlrqrRYqSBOKar7V0X8oAOipsA4byxuXAS2diH6c=";
     };
     darwin-x86_64 = fetchurl {
-      url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}.dmg";
+      url =
+        "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}.dmg";
       sha256 = "sha256-rgJUA+Rs3v/wE80MO4jY7cWhg6dtqmPLYsfGKQBTN6U=";
     };
     darwin-aarch64 = fetchurl {
@@ -33,7 +35,10 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
-    src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
+    src = if stdenv.isAarch64 then
+      sources.darwin-aarch64
+    else
+      sources.darwin-x86_64;
 
     nativeBuildInputs = [ undmg ];
     sourceRoot = ".";
