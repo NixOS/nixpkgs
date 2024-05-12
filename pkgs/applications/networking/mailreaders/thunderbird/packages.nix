@@ -1,9 +1,7 @@
-{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2 }:
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2, config }:
 
 rec {
   thunderbird = thunderbird-115;
-
-  thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
 
   thunderbird-115 = (buildMozillaMach rec {
     pname = "thunderbird";
@@ -54,3 +52,7 @@ rec {
     });
   };
 }
+ // lib.optionalAttrs config.allowAliases {
+  thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
+}
+
