@@ -6,6 +6,7 @@
   libX11,
   libXft,
   libXrandr,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "prefix=$(out)" ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://www.uninformativ.de/git/bevelbar.git/";
+    rev-prefix = "v";
+  };
 
   meta = {
     homepage = "https://www.uninformativ.de/git/bevelbar/file/README.html";
