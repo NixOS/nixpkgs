@@ -3300,6 +3300,8 @@ self: super: with self; {
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
 
+  django-ratelimit = callPackage ../development/python-modules/django-ratelimit { };
+
   django-raster = callPackage ../development/python-modules/django-raster { };
 
   django-redis = callPackage ../development/python-modules/django-redis { };
