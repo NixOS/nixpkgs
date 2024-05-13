@@ -243,6 +243,7 @@ in {
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./matrix/dendrite.nix {};
+  devpi-server = handleTest ./devpi-server.nix {};
   dex-oidc = handleTest ./dex-oidc.nix {};
   dhparams = handleTest ./dhparams.nix {};
   disable-installer-tools = handleTest ./disable-installer-tools.nix {};

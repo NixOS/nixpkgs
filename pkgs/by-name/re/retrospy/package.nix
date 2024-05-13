@@ -9,20 +9,10 @@
 , libXcursor
 , libICE
 , libSM
+, runCommandLocal
 }:
 let
   version = "6.4.8";
-
-  executables = [
-    "RetroSpy"
-    "GBPemu"
-    "GBPUpdater"
-    "UsbUpdater"
-  ];
-in
-buildDotnetModule {
-  pname = "retrospy";
-  inherit version;
 
   src = fetchFromGitHub {
     owner = "retrospy";
@@ -30,6 +20,24 @@ buildDotnetModule {
     rev = "v${version}";
     hash = "sha256-0rdLdud78gnBX8CIdG81caJ1IRoIjGzb7coP4huEPDA=";
   };
+
+  executables = [
+    "RetroSpy"
+    "GBPemu"
+    "GBPUpdater"
+    "UsbUpdater"
+  ];
+
+  retrospy-icons = runCommandLocal "retrospy-icons" { } ''
+    mkdir -p $out/share/retrospy
+    ${builtins.concatStringsSep "\n" (map (e: "cp ${src}/${e}.ico $out/share/retrospy/${e}.ico") executables)}
+  '';
+in
+buildDotnetModule {
+  pname = "retrospy";
+  inherit version;
+
+  inherit src;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -57,18 +65,13 @@ buildDotnetModule {
 
   inherit executables;
 
-  postInstall = ''
-    mkdir -p $out/share/retrospy
-    ${builtins.concatStringsSep "\n" (map (e: "cp ./${e}.ico $out/share/retrospy/${e}.ico") executables)}
-  '';
-
   passthru.updateScript = ./update.sh;
 
   desktopItems = map
     (e: (makeDesktopItem {
       name = e;
       exec = e;
-      icon = "${placeholder "out"}/share/retrospy/${e}.ico";
+      icon = "${retrospy-icons}/share/retrospy/${e}.ico";
       desktopName = "${e}";
       categories = [ "Utility" ];
       startupWMClass = e;

@@ -52,13 +52,6 @@ in
             type = types.path;
             description = "The main data storage, put this on your large storage (e.g. high capacity HDD)";
           };
-
-          replication_mode = mkOption {
-            default = "none";
-            type = types.enum ([ "none" "1" "2" "3" "2-dangerous" "3-dangerous" "3-degraded" 1 2 3 ]);
-            apply = v: toString v;
-            description = "Garage replication mode, defaults to none, see: <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#replication-mode> for reference.";
-          };
         };
       };
       description = "Garage configuration, see <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/> for reference.";
@@ -71,6 +64,24 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [
+      # We removed our module-level default for replication_mode. If a user upgraded
+      # to garage 1.0.0 while relying on the module-level default, they would be left
+      # with a config which evaluates and builds, but then garage refuses to start
+      # because either replication_factor or replication_mode is required.
+      # This assertion can be removed in NixOS 24.11, when all users have been warned once.
+      {
+        assertion = (cfg.settings ? replication_factor || cfg.settings ? replication_mode) || lib.versionOlder cfg.package "1.0.0";
+        message = ''
+          Garage 1.0.0 requires an explicit replication factor to be set.
+          Please set replication_factor to 1 explicitly to preserve the previous behavior.
+          https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v1.0.0/doc/book/reference-manual/configuration.md#replication_factor
+
+        '';
+      }
+    ];
+
     environment.etc."garage.toml" = {
       source = configFile;
     };
