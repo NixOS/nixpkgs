@@ -1,7 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
 , dj-rest-auth
 , django
 , django-allauth
@@ -18,19 +16,25 @@
 , drf-jwt
 , drf-nested-routers
 , drf-spectacular-sidecar
+, fetchFromGitHub
+, fetchpatch
 , inflection
 , jsonschema
 , psycopg2
 , pytest-django
 , pytestCheckHook
+, pythonOlder
 , pyyaml
+, setuptools
 , uritemplate
 }:
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
   version = "0.27.1";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
@@ -47,7 +51,11 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     django
     djangorestframework
     inflection
@@ -77,9 +85,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # requires django with gdal
+    # Test requires django with gdal
     "test_rest_framework_gis"
-    # outdated test artifact
+    # Outdated test artifact
     "test_pydantic_decoration"
   ];
 
