@@ -10,17 +10,18 @@
 , re2c
 , buildPackages
 , buildDocs ? true
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ninja";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${version}";
-    hash = "sha256-ewMn735TJTiQZYk3Y7QxNLRnKh6xdRUcdJzCX+HCmEo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -81,7 +82,9 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {};
+
+  meta = {
     description = "Small build system with a focus on speed";
     mainProgram = "ninja";
     longDescription = ''
@@ -91,8 +94,8 @@ stdenv.mkDerivation rec {
       to run builds as fast as possible.
     '';
     homepage = "https://ninja-build.org/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice bjornfor orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice bjornfor orivej ];
   };
-}
+})
