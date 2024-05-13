@@ -1,40 +1,57 @@
 { lib
 , fetchFromGitHub
+, makeWrapper
 , rustPlatform
 , cmake
 , pkgconf
 , freetype
 , expat
+, wayland
+, xorg
+, libxkbcommon
+, pop-launcher
+, vulkan-loader
+, libGL
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "onagre";
-  version = "1.0.0-alpha.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "oknozor";
-    repo = pname;
-    rev = version;
-    hash = "sha256-hP+slfCWgsTgR2ZUjAmqx9f7+DBu3MpSLvaiZhqNK1Q=";
+    owner = "onagre-launcher";
+    repo = "onagre";
+    rev = "1.1.0";
+    hash = "sha256-ASeLvgj2RyhsZQtkUTYeA7jWyhbLg8yl6HbN2A/Sl2M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pop-launcher-1.2.1" = "sha256-LeKaJIvooD2aUlY113P0mzxOcj63sGkrA0SIccNqCLY=";
-    };
-  };
+  cargoHash = "sha256-17Hw3jtisOXwARpp0jB0hrNax7nzMWS0kCE3ZAruBj8=";
 
-  cargoSha256 = "sha256-IOhAGrAiT2mnScNP7k7XK9CETUr6BjGdQVdEUvTYQT4=";
+  nativeBuildInputs = [ makeWrapper cmake pkgconf ];
+  buildInputs = [
+    expat
+    freetype
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+  ];
 
-  nativeBuildInputs = [ cmake pkgconf ];
-  buildInputs = [ freetype expat ];
+  postFixup = let
+    rpath = lib.makeLibraryPath [ libGL vulkan-loader wayland libxkbcommon ];
+  in ''
+    patchelf --set-rpath ${rpath} $out/bin/onagre
+    wrapProgram $out/bin/onagre \
+      --prefix PATH ':' ${lib.makeBinPath [
+        pop-launcher
+      ]}
+  '';
 
   meta = with lib; {
     description = "A general purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
-    homepage = "https://github.com/oknozor/onagre";
+    homepage = "https://github.com/onagre-launcher/onagre";
     license = licenses.mit;
-    maintainers = [ maintainers.jfvillablanca ];
+    maintainers = [ maintainers.jfvillablanca maintainers.ilya-epifanov ];
     platforms = platforms.linux;
     mainProgram = "onagre";
   };
