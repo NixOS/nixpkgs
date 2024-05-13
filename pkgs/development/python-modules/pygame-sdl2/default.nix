@@ -1,16 +1,16 @@
 { lib, buildPythonPackage, fetchurl, isPy27, renpy
-, cython_0, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
+, cython_0, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng, setuptools }:
 
 buildPythonPackage rec {
   pname = "pygame-sdl2";
   version = "2.1.0";
-  format = "setuptools";
+  pyproject = true;
   renpy_version = renpy.base_version;
   name = "${pname}-${version}-${renpy_version}";
 
   src = fetchurl {
     url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}+renpy${renpy_version}.tar.gz";
-    hash = "sha256-mrfrsRAVEqw7fwtYdeATp/8AtMn74x9pJEXwYZPOl2I=";
+    hash = "sha256-Zib39NyQ1pGVCWPrK5/Tl3dAylUlmKZKxU8pf+OpAdY=";
   };
 
   # force rebuild of headers needed for install
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    SDL2.dev cython_0
+    SDL2.dev cython_0 setuptools
   ];
 
   buildInputs = [
