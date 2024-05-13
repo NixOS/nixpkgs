@@ -5,7 +5,6 @@
 , gtk3
 , pango
 , wrapGAppsHook3
-, xvfb-run
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
@@ -15,34 +14,7 @@
 , networkmanager
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      semver = super.semver.overridePythonAttrs (oldAttrs: rec {
-        version = "2.13.0";
-        src = fetchFromGitHub {
-          owner = "python-semver";
-          repo = "python-semver";
-          rev = "refs/tags/${version}";
-          hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
-        };
-        doCheck = false; # no tests
-      });
-
-      dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.7";
-        src = fetchFromGitHub {
-          owner = "lidatong";
-          repo = "dataclasses-json";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-0tw5Lz+c4ymO+AGpG6THbiALWGBrehC84+yWWk1eafc=";
-        };
-        nativeBuildInputs = [ python3.pkgs.setuptools ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
   version = "0.12.0";
   format = "pyproject";
@@ -55,7 +27,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    python.pkgs.flit-core
+    python3.pkgs.flit-core
     gobject-introspection
     wrapGAppsHook3
   ];
@@ -76,7 +48,7 @@ python.pkgs.buildPythonApplication rec {
   ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     bleach
     bottle
     dataclasses-json
@@ -94,13 +66,14 @@ python.pkgs.buildPythonApplication rec {
   ++ lib.optional keyringSupport keyring
   ;
 
-  nativeCheckInputs = with python.pkgs; [
-    pytest
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    ${xvfb-run}/bin/xvfb-run pytest
-  '';
+  disabledTests = [
+    # https://github.com/sublime-music/sublime-music/issues/439
+    "test_get_music_directory"
+  ];
 
   pythonImportsCheck = [
     "sublime_music"
