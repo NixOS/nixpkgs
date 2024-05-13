@@ -4,6 +4,7 @@
 , cmake
 , boost
 , eigen
+, example-robot-data
 , collisionSupport ? !stdenv.isDarwin
 , jrl-cmakemodules
 , hpp-fcl
@@ -22,6 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-Ks5dvKi5iutjM+iovDOYGx3vsr45JWRqGOXV8+Ko4gg=";
   };
+
+  # example-robot-data models are used in checks.
+  # Upstream provide them as git submodule, but we can use our own version instead.
+  postPatch = ''
+    rmdir models/example-robot-data
+    ln -s ${example-robot-data.src} models/example-robot-data
+  '';
 
   strictDeps = true;
 
