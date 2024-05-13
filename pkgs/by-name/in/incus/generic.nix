@@ -81,7 +81,8 @@ buildGoModule rec {
     make incus-agent incus-migrate
   '';
 
-  preCheck =
+  # Disable tests requiring local operations
+  checkFlags =
     let
       skippedTests = [
         "TestValidateConfig"
@@ -91,10 +92,7 @@ buildGoModule rec {
         "TestContainerTestSuite"
       ];
     in
-    ''
-      # Disable tests requiring local operations
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd incus \

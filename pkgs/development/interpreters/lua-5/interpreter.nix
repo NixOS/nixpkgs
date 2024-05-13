@@ -3,6 +3,7 @@
 , makeWrapper
 , self
 , packageOverrides ? (final: prev: {})
+, substituteAll
 , pkgsBuildBuild
 , pkgsBuildHost
 , pkgsBuildTarget
@@ -51,9 +52,10 @@ stdenv.mkDerivation (finalAttrs:
 
   LuaPathSearchPaths  = luaPackages.luaLib.luaPathList;
   LuaCPathSearchPaths = luaPackages.luaLib.luaCPathList;
-  setupHook = luaPackages.lua-setup-hook
-    finalAttrs.LuaPathSearchPaths
-    finalAttrs.LuaCPathSearchPaths;
+  setupHook = builtins.toFile "lua-setup-hook" ''
+      source @out@/nix-support/utils.sh
+      addEnvHooks "$hostOffset" addToLuaPath
+      '';
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline ];
@@ -107,7 +109,12 @@ stdenv.mkDerivation (finalAttrs:
   inherit postBuild;
 
   postInstall = ''
-    mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
+    mkdir -p "$out/nix-support" "$out/share/doc/lua" "$out/lib/pkgconfig"
+    cp ${substituteAll {
+      src = ./utils.sh;
+      luapathsearchpaths=lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
+      luacpathsearchpaths=lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
+    }} $out/nix-support/utils.sh
     mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
     rmdir $out/{share,lib}/lua/${luaversion} $out/{share,lib}/lua
     mkdir -p "$out/lib/pkgconfig"

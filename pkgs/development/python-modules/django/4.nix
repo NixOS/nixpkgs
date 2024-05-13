@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch2
+, fetchFromGitHub
 , pythonAtLeast
 , pythonOlder
 , substituteAll
@@ -44,15 +43,16 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.11";
+  version = "4.2.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "Django";
-    inherit version;
-    hash = "sha256-bm/z2y2N0MmGtO7IVUyOT5GbXB/2KltDkMF6/y7W5cQ=";
+  src = fetchFromGitHub {
+    owner = "django";
+    repo = "django";
+    rev = "refs/tags/${version}";
+    hash = "sha256-n6esWUpZpCP4J4bNckNKJ9E61qFjTPS7XF+WgxNS2JE=";
   };
 
   patches = [
@@ -63,13 +63,6 @@ buildPythonPackage rec {
     # make sure the tests don't remove packages from our pythonpath
     # and disable failing tests
     ./django_4_tests.patch
-
-    (fetchpatch2 {
-      # https://github.com/django/django/pull/17979
-      name = "django-mime-utf8-surrogates.patch";
-      url = "https://github.com/django/django/commit/0d3ddcaf2c74638a32781f361d467af572ced95f.patch";
-      hash = "sha256-AoIFvehBsXIrzIlCsqOZ++RqtDFl/H+zXqA25OMQr7g=";
-    })
 
   ] ++ lib.optionals withGdal [
     (substituteAll {

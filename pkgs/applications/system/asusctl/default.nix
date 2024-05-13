@@ -3,31 +3,34 @@
 , fetchFromGitLab
 , systemd
 , coreutils
+, gnugrep
 , pkg-config
-, cmake
 , fontconfig
-, gtk3
-, libappindicator
 , libGL
+, libinput
+, libxkbcommon
+, mesa
+, seatd
+, wayland
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "5.0.10";
+  version = "6.0.6";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-H8x3nfOFRv9DkbDkFw+LO1tdHiVyU3SzetqED4twPSk=";
+    hash = "sha256-to2HJAqU3+xl6Wt90GH7RA7079v1QyP+AE0pL/9rd/M=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
-      "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.1.2" = "sha256-WDbUgvWExk5cs2cpjo88CiROdEbc01o2DELhRi9gju4=";
+      "const-field-offset-0.1.5" = "sha256-53pT9ERsmF4lM9tVG09hgbM0zfbTp1qSM+NDyFQxe3c=";
+      "notify-rust-4.7.0" = "sha256-A7edUorty5GpGXCUQPszZuXtLdEmbmrDSU9JcoDaiaI=";
+      "supergfxctl-5.2.2" = "sha256-hg1QJ7DLtn5oH6IqQu7BcWIsZKAsFy6jjsjF/2o1Cos=";
     };
   };
 
@@ -37,7 +40,9 @@ rustPlatform.buildRustPackage rec {
       asusd-user/src/daemon.rs
       asusd/src/ctrl_anime/config.rs
       rog-aura/src/aura_detection.rs
+      rog-control-center/src/lib.rs
       rog-control-center/src/main.rs
+      rog-control-center/src/tray.rs
     "
     for file in $files; do
       substituteInPlace $file --replace /usr/share $out/share
@@ -50,21 +55,38 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace data/asusd-user.service \
       --replace /usr/bin/asusd-user $out/bin/asusd-user \
       --replace /usr/bin/sleep ${coreutils}/bin/sleep
+
+    substituteInPlace Makefile \
+      --replace /usr/bin/grep ${lib.getExe gnugrep}
   '';
 
-  nativeBuildInputs = [ pkg-config cmake rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ systemd fontconfig gtk3 ];
+  buildInputs = [
+    fontconfig
+    libGL
+    libinput
+    libxkbcommon
+    mesa
+    seatd
+    systemd
+    wayland
+  ];
+
+  # force linking to all the dlopen()ed dependencies
+  RUSTFLAGS = map (a: "-C link-arg=${a}") [
+    "-Wl,--push-state,--no-as-needed"
+    "-lEGL"
+    "-lfontconfig"
+    "-lwayland-client"
+    "-Wl,--pop-state"
+  ];
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
 
   postInstall = ''
     make prefix=$out install-data
-  '';
-
-  postFixup = ''
-    patchelf --add-rpath "${libappindicator}/lib:${libGL}/lib" "$out/bin/rog-control-center"
   '';
 
   meta = with lib; {

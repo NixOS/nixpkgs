@@ -28,7 +28,7 @@ in
     command = "local-ai --help";
   };
 
-  health = testers.runNixOSTest ({ config, ... }: {
+  health = testers.runNixOSTest {
     name = self.name + "-health";
     nodes.machine = common-config;
     testScript =
@@ -40,10 +40,9 @@ in
         machine.succeed("curl -f http://localhost:${port}/readyz")
 
         machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-
         machine.copy_from_vm("metrics.json")
       '';
-  });
+  };
 
   # https://localai.io/features/embeddings/#bert-embeddings
   bert =
@@ -84,11 +83,12 @@ in
           machine.succeed("curl -f http://localhost:${port}/readyz")
           machine.succeed("curl -f http://localhost:${port}/v1/models --output models.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .data[].id == \"${model}\"' models.json")
+
           machine.succeed("curl -f http://localhost:${port}/embeddings --json @${writers.writeJSON "request.json" requests.request} --output embeddings.json")
+          machine.copy_from_vm("embeddings.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .model == \"${model}\"' embeddings.json")
 
           machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-
           machine.copy_from_vm("metrics.json")
         '';
     };
@@ -183,19 +183,21 @@ in
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .data[].id == \"${model}\"' models.json")
 
           machine.succeed("curl -f http://localhost:${port}/v1/chat/completions --json @${writers.writeJSON "request-chat-completions.json" requests.chat-completions} --output chat-completions.json")
+          machine.copy_from_vm("chat-completions.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .object == \"chat.completion\"' chat-completions.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .choices | first.message.content | tonumber == 3' chat-completions.json")
 
           machine.succeed("curl -f http://localhost:${port}/v1/edits --json @${writers.writeJSON "request-edit-completions.json" requests.edit-completions} --output edit-completions.json")
+          machine.copy_from_vm("edit-completions.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .object == \"edit\"' edit-completions.json")
           machine.succeed("${jq}/bin/jq --exit-status '.usage.completion_tokens | debug == ${toString requests.edit-completions.max_tokens}' edit-completions.json")
 
           machine.succeed("curl -f http://localhost:${port}/v1/completions --json @${writers.writeJSON "request-completions.json" requests.completions} --output completions.json")
+          machine.copy_from_vm("completions.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .object ==\"text_completion\"' completions.json")
           machine.succeed("${jq}/bin/jq --exit-status '.usage.completion_tokens | debug == ${toString model-configs.${model}.parameters.max_tokens}' completions.json")
 
           machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-
           machine.copy_from_vm("metrics.json")
         '';
     };
@@ -257,12 +259,15 @@ in
           machine.succeed("curl -f http://localhost:${port}/readyz")
           machine.succeed("curl -f http://localhost:${port}/v1/models --output models.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug' models.json")
+
           machine.succeed("curl -f http://localhost:${port}/tts --json @${writers.writeJSON "request.json" requests.request} --output out.wav")
+          machine.copy_from_vm("out.wav")
+
           machine.succeed("curl -f http://localhost:${port}/v1/audio/transcriptions --header 'Content-Type: multipart/form-data' --form file=@out.wav --form model=${model-stt} --output transcription.json")
+          machine.copy_from_vm("transcription.json")
           machine.succeed("${jq}/bin/jq --exit-status 'debug | .segments | first.text == \"${requests.request.input}\"' transcription.json")
 
           machine.succeed("${prom2json}/bin/prom2json http://localhost:${port}/metrics > metrics.json")
-
           machine.copy_from_vm("metrics.json")
         '';
     };

@@ -12,6 +12,7 @@
 }:
 
 mkDerivation {
+  isStatic = true;
   path = "lib/csu";
   extraPaths = [
     "lib/Makefile.inc"

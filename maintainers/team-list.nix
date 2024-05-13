@@ -723,6 +723,16 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  lix = {
+    members = [
+      raitobezarius
+      qyriad
+    ];
+    scope = "Maintain the Lix package manager inside of Nixpkgs.";
+    shortName = "Lix ecosystem";
+    enableFeatureFreezePing = true;
+  };
+
   module-system = {
     members = [
       infinisil
