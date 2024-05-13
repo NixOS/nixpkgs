@@ -586,7 +586,7 @@ in
     ];
   };
 
-  nokogiri = attrs: {
+  nokogiri = attrs: ({
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-lib=${zlib.out}/lib"
@@ -601,7 +601,9 @@ in
       "--with-iconv-dir=${libiconv}"
       "--with-opt-include=${libiconv}/include"
     ];
-  };
+  } // lib.optionalAttrs stdenv.isDarwin {
+    buildInputs = [ libxml2 ];
+  });
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
