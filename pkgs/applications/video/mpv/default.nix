@@ -1,4 +1,5 @@
 { lib
+, buildPackages
 , config
 , stdenv
 , fetchFromGitHub
@@ -19,7 +20,6 @@
 , libuchardet
 , libiconv
 , xcbuild
-, rcodesign
 
 , waylandSupport ? stdenv.isLinux
   , wayland
@@ -99,7 +99,7 @@ let
     else stdenv;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.37.0";
+  version = "0.38.0";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
@@ -107,10 +107,8 @@ in stdenv'.mkDerivation (finalAttrs: {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-izAz9Iiam7tJAWIQkmn2cKOfoaog8oPKq4sOUtp1nvU=";
+    hash = "sha256-dFajnCpGlNqUv33A8eFEn8kjtzIPkcBY5j0gNVlaiIY=";
   };
-
-  patches = [ ./darwin-sigtool-no-deep.patch ];
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
@@ -162,7 +160,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ]
-  ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun rcodesign ]
+  ++ lib.optionals stdenv.isDarwin [ buildPackages.darwin.sigtool xcbuild.xcrun ]
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
