@@ -220,7 +220,6 @@
 , "tailwindcss"
 , "teck-programmer"
 , "tern"
-, "textlint"
 , "textlint-plugin-latex"
 , "textlint-rule-abbr-within-parentheses"
 , "textlint-rule-alex"
