@@ -66,9 +66,7 @@ rustPlatform.buildRustPackage rec {
     git
   ];
 
-  buildInputs = [
-    sqlite
-  ] ++ lib.optional libvaSupport libva;
+  buildInputs = [ sqlite ] ++ lib.optional libvaSupport libva;
 
   buildFeatures = lib.optional libvaSupport "vaapi";
 
@@ -95,7 +93,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/dim \
-      --prefix PATH : ${lib.makeBinPath [ffmpeg_5]}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg_5 ]}
   '';
 
   meta = {
