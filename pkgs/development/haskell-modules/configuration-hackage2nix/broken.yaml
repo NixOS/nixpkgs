@@ -369,7 +369,6 @@ broken-packages:
   - bash # failure in job https://hydra.nixos.org/build/252719390 at 2024-03-16
   - basic-gps # failure in job https://hydra.nixos.org/build/252718385 at 2024-03-16
   - basics # failure in job https://hydra.nixos.org/build/236678238 at 2023-10-04
-  - basic-sop # failure in job https://hydra.nixos.org/build/233253357 at 2023-09-02
   - baskell # failure in job https://hydra.nixos.org/build/233246705 at 2023-09-02
   - battlenet # failure in job https://hydra.nixos.org/build/233260076 at 2023-09-02
   - battleplace # failure in job https://hydra.nixos.org/build/233230199 at 2023-09-02
@@ -3428,7 +3427,6 @@ broken-packages:
   - lens-process # failure in job https://hydra.nixos.org/build/233242948 at 2023-09-02
   - lensref # failure in job https://hydra.nixos.org/build/233205479 at 2023-09-02
   - lens-simple # failure in job https://hydra.nixos.org/build/233245452 at 2023-09-02
-  - lens-sop # failure in job https://hydra.nixos.org/build/252721754 at 2024-03-16
   - lens-tell # failure in job https://hydra.nixos.org/build/233234619 at 2023-09-02
   - lens-text-encoding # failure in job https://hydra.nixos.org/build/233222713 at 2023-09-02
   - lens-th-rewrite # failure in job https://hydra.nixos.org/build/233201025 at 2023-09-02
@@ -4928,7 +4926,6 @@ broken-packages:
   - record-encode # failure in job https://hydra.nixos.org/build/233216156 at 2023-09-02
   - record # failure in job https://hydra.nixos.org/build/233242406 at 2023-09-02
   - records # failure in job https://hydra.nixos.org/build/233254822 at 2023-09-02
-  - records-sop # failure in job https://hydra.nixos.org/build/233251652 at 2023-09-02
   - record-wrangler # failure in job https://hydra.nixos.org/build/233212838 at 2023-09-02
   - rec-smallarray # failure in job https://hydra.nixos.org/build/233258592 at 2023-09-02
   - recursive-line-count # failure in job https://hydra.nixos.org/build/252736942 at 2024-03-16
