@@ -5,7 +5,6 @@
 , djangorestframework
 , djangorestframework-simplejwt
 , fetchFromGitHub
-, fetchpatch
 , python
 , pythonOlder
 , responses
@@ -15,33 +14,26 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "5.0.2";
+  version = "6.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
     rev = "refs/tags/${version}";
-    hash = "sha256-TqeNpxXn+v89fEiJ4AVNhp8blCfYQKFQfYmZ6/QlRbQ=";
+    hash = "sha256-fNy1uN3oH54Wd9+EqYpiV0ot1MbSSC7TZoAARQeR81s=";
   };
-
-  patches = [
-    # https://github.com/iMerica/dj-rest-auth/pull/597
-    (fetchpatch {
-      name = "disable-email-confirmation-ratelimit-in-tests-to-support-new-allauth.patch";
-      url = "https://github.com/iMerica/dj-rest-auth/commit/c8f19e18a93f4959da875f9c5cdd32f7d9363bba.patch";
-      hash = "sha256-Y/YBjV+c5Gw1wMR5r/4VnyV/ewUVG0z4pjY/MB4ca9Y=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "==" ">="
+      --replace-fail "==" ">="
+    substituteInPlace dj_rest_auth/tests/test_api.py \
+      --replace-fail "assertEquals" "assertEqual"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -49,7 +41,7 @@ buildPythonPackage rec {
     django
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     djangorestframework
   ];
 
@@ -66,7 +58,7 @@ buildPythonPackage rec {
   preCheck = ''
     # Test connects to graph.facebook.com
     substituteInPlace dj_rest_auth/tests/test_serializers.py \
-      --replace "def test_http_error" "def dont_test_http_error"
+      --replace-fail "def test_http_error" "def dont_test_http_error"
   '';
 
   checkPhase = ''
