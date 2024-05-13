@@ -94,6 +94,7 @@ self: super: {
   diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
   generics-sop = doJailbreak super.generics-sop_0_5_1_4; # th-abstraction >=0.6 && <0.7
   ghc-trace-events = doJailbreak super.ghc-trace-events; # text < 2.1, bytestring < 0.12, base < 4.19
+  hashing = doJailbreak super.hashing; # bytestring <0.12
   json-sop = doJailbreak super.json-sop; # aeson <2.2, base <4.19, text <2.1
   primitive-unlifted = doJailbreak super.primitive-unlifted; # bytestring < 0.12
   statestack = doJailbreak super.statestack; # base < 4.19
@@ -105,6 +106,7 @@ self: super: {
   terminfo_0_4_1_6 = doJailbreak super.terminfo_0_4_1_6;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   raven-haskell = doJailbreak super.raven-haskell; # aeson <2.2
+  saltine = doJailbreak super.saltine; # bytestring  && <0.12, deepseq <1.5, text > 1.2 && <1.3 || >=2.0 && <2.1
   stripe-concepts = doJailbreak super.stripe-concepts; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
   stripe-signature = doJailbreak super.stripe-signature; # text >=1.2.5 && <1.3 || >=2.0 && <2.1
   string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
