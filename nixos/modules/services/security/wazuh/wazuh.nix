@@ -18,7 +18,7 @@ in {
         managerIP = mkOption {
           type = types.str;
           description = ''
-            The IP address or hostname of the manager. This is a required value.
+            The IP address or hostname of the manager.
           '';
           example = "192.168.1.2";
         };
