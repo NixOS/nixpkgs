@@ -1,14 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
 }:
 
 let
-  inherit (qt5)
-    qmake
-    qtscript
-    wrapQtAppsHook;
+  inherit (qt5) qmake qtscript wrapQtAppsHook;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
@@ -26,15 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtscript
-  ];
+  buildInputs = [ qtscript ];
 
   dontUseQmakeConfigure = true;
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     homepage = "https://www.smplayer.info";
