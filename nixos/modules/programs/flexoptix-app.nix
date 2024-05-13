@@ -1,19 +1,17 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.flexoptix-app;
 in {
   options = {
     programs.flexoptix-app = {
-      enable = mkEnableOption "FLEXOPTIX app + udev rules";
+      enable = lib.mkEnableOption "FLEXOPTIX app + udev rules";
 
-      package = mkPackageOption pkgs "flexoptix-app" { };
+      package = lib.mkPackageOption pkgs "flexoptix-app" { };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
   };

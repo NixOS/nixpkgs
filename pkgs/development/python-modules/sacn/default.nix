@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "sacn";
-  version = "1.9.0";
+  version = "1.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LimA0I8y1tdjFk244iWvKJj0Rx3OEaYOSIJtirRHh4o=";
+    hash = "sha256-ppXWRBZVm4QroxZ19S388sRuI5zpaDgJrJqhnwefr3k=";
   };
 
   # no tests

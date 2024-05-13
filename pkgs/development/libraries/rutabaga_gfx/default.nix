@@ -54,14 +54,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wuF3Isrp+u5J8jPQoPsIOWYGNKLSNa2pLfvladAWkLs=";
   };
 
+  CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
+    "${stdenv.cc.targetPrefix}cc";
+
+  postConfigure = ''
+    cd rutabaga_gfx/ffi
+    substituteInPlace Makefile --replace-fail pkg-config "$PKG_CONFIG"
+  '';
+
   # make install always rebuilds
   dontBuild = true;
 
-  makeFlags = [ "prefix=$(out)" ];
-
-  preInstall = ''
-    cd rutabaga_gfx/ffi
-  '';
+  makeFlags = [
+    "prefix=$(out)"
+    "OUT=target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+  ];
 
   meta = with lib; {
     homepage = "https://crosvm.dev/book/appendix/rutabaga_gfx.html";

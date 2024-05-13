@@ -185,6 +185,10 @@ stdenvNoCC.mkDerivation (args // {
 
   inherit selfContainedBuild useAppHost useDotnetFromEnv;
 
+  # propagate the runtime sandbox profile since the contents apply to published
+  # executables
+  propagatedSandboxProfile = toString dotnet-runtime.__propagatedSandboxProfile;
+
   passthru = {
     inherit nuget-source;
   } // lib.optionalAttrs (!lib.isDerivation nugetDeps) {
@@ -316,8 +320,4 @@ stdenvNoCC.mkDerivation (args // {
   } // args.passthru or { };
 
   meta = (args.meta or { }) // { inherit platforms; };
-}
-  # ICU tries to unconditionally load files from /usr/share/icu on Darwin, which makes builds fail
-  # in the sandbox, so disable ICU on Darwin. This, as far as I know, shouldn't cause any built packages
-  # to behave differently, just the dotnet build tool.
-  // lib.optionalAttrs stdenvNoCC.isDarwin { DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = 1; })
+})

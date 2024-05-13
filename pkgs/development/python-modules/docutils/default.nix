@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromRepoOrCz
 , buildPythonPackage
 , flit-core
 , pillow
@@ -8,17 +8,20 @@
 , pythonOlder
 }:
 
+# Note: this package is used to build LLVM’s documentation, which is part of the Darwin stdenv.
+# It cannot use `fetchgit` because that would pull curl into the bootstrap, which is disallowed.
+
 let self = buildPythonPackage rec {
   pname = "docutils";
-  version = "0.21.1";
+  version = "0.21.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchgit {
-    url = "git://repo.or.cz/docutils.git";
+  src = fetchFromRepoOrCz {
+    repo = "docutils";
     rev = "docutils-${version}";
-    hash = "sha256-ahnj6iKjyUCDxhgxJdwEb8huFIGpbuuLQBHDzKj6O9E=";
+    hash = "sha256-Q+9yW+BYUEvPYV504368JsAoKKoaTZTeKh4tVeiNv5Y=";
   };
 
   build-system = [ flit-core ];

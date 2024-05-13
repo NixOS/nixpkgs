@@ -42,7 +42,7 @@ rec {
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
-    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook;
 
   inherit lua;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;

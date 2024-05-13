@@ -24,7 +24,7 @@ in
 
 {
   meta = with lib; {
-    maintainers = teams.c3d2.members;
+    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
   };
 
   options.services.pretalx = {
@@ -329,10 +329,47 @@ in
         serviceConfig = {
           User = "pretalx";
           Group = "pretalx";
-          StateDirectory = [ "pretalx" "pretalx/media" ];
+          StateDirectory = [
+            "pretalx"
+            "pretalx/media"
+          ];
+          StateDirectoryMode = "0750";
           LogsDirectory = "pretalx";
           WorkingDirectory = cfg.settings.filesystem.data;
           SupplementaryGroups = [ "redis-pretalx" ];
+          AmbientCapabilities = "";
+          CapabilityBoundingSet = [ "" ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          ProcSubset = "pid";
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "@chown"
+          ];
+          UMask = "0027";
         };
       };
     in {
@@ -395,6 +432,8 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
       });
+
+      nginx.serviceConfig.SupplementaryGroups = lib.mkIf cfg.nginx.enable [ "pretalx" ];
     };
 
     systemd.sockets.pretalx-web.socketConfig = {
@@ -403,11 +442,9 @@ in
     };
 
     users = {
-      groups."${cfg.group}" = {};
-      users."${cfg.user}" = {
+      groups.${cfg.group} = {};
+      users.${cfg.user} = {
         isSystemUser = true;
-        createHome = true;
-        home = cfg.settings.filesystem.data;
         inherit (cfg) group;
       };
     };

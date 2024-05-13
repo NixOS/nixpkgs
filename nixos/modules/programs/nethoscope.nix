@@ -1,16 +1,14 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.programs.nethoscope;
 in
 {
-  meta.maintainers = with maintainers; [ _0x4A6F ];
+  meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
   options = {
     programs.nethoscope = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add nethoscope to the global environment and configure a
@@ -20,7 +18,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ nethoscope ];
     security.wrappers.nethoscope = {
       source = "${pkgs.nethoscope}/bin/nethoscope";

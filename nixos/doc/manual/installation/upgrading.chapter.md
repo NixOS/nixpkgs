@@ -33,8 +33,8 @@ To see what channels are available, go to <https://channels.nixos.org>.
 contains the channel's latest version and includes ISO images and
 VirtualBox appliances.) Please note that during the release process,
 channels that are not yet released will be present here as well. See the
-Getting NixOS page <https://nixos.org/nixos/download.html> to find the
-newest supported stable release.
+Getting NixOS page <https://nixos.org/download/> to find the newest
+supported stable release.
 
 When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For

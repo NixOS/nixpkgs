@@ -925,8 +925,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ flokli kloenk ];
     platforms = lib.platforms.linux;
     priority = 10;
-    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
-    broken = stdenv.hostPlatform.isStatic;
+    badPlatforms = [
+      # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })

@@ -34,7 +34,7 @@
 buildPythonPackage rec {
   pname = "qtile";
   version = "0.25.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
@@ -59,13 +59,13 @@ buildPythonPackage rec {
         --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
-  nativeBuildInputs = [
-    pkg-config
+  build-system = [
     setuptools
     setuptools-scm
+    pkg-config
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     (cairocffi.override { withXcffib = true; })
     dbus-next
     dbus-python
@@ -102,6 +102,6 @@ buildPythonPackage rec {
     description = "A small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arjan-s ];
+    maintainers = with maintainers; [ arjan-s sigmanificient ];
   };
 }

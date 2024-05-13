@@ -4,31 +4,33 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, flit-core
 , babel
 , markupsafe
 , pytestCheckHook
 , sphinxHook
 , pallets-sphinx-themes
-, setuptools
 , sphinxcontrib-log-cabinet
 , sphinx-issues
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
   pname = "jinja2";
-  version = "3.1.3";
+  version = "3.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Jinja2";
-    inherit version;
-    hash = "sha256-rIvWVE1Lssl5K/OhWegLuo/afwfoG8Ou1WVDLVklupA=";
+    inherit pname version;
+    hash = "sha256-Sjruesu+cwOu3o6WSNE7i/iKQpKCqmEiqZPwrIAMs2k=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    flit-core
   ];
 
   propagatedBuildInputs = [
@@ -75,6 +77,8 @@ buildPythonPackage rec {
     inherit (python) pythonVersion;
     inherit meta;
   };
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     changelog = "https://github.com/pallets/jinja/blob/${version}/CHANGES.rst";

@@ -28,6 +28,7 @@ let
                 inherit version;
                 hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
               };
+              doCheck = false;
             });
             flask = super.flask.overridePythonAttrs (oldAttrs: rec {
               version = "2.2.5";

@@ -391,7 +391,7 @@ if [[ -n $flake ]]; then
        flakeAttr="${BASH_REMATCH[2]}"
     fi
     if [[ -z $flakeAttr ]]; then
-        read -r hostname < /proc/sys/kernel/hostname
+        hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
         if [[ -z $hostname ]]; then
             hostname=default
         fi

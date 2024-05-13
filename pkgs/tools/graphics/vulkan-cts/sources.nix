@@ -25,8 +25,8 @@ rec {
   nvidia-video-samples = fetchFromGitHub {
     owner = "Igalia";
     repo = "vk_video_samples";
-    rev = "ce80453dadeea7b1a6409434f3358ef1e46e4ae7";
-    hash = "sha256-zgHMaUA7rdLbmkX8lr4p2TW9g1RDyBmUs5rK++wmUjE=";
+    rev = "6821adf11eb4f84a2168264b954c170d03237699";
+    hash = "sha256-prshOzxUHLYi64Pbyytsp+XvmtIIyhx/3n5IVimYH64=";
   };
 
   spirv-headers = fetchFromGitHub {

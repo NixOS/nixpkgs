@@ -387,6 +387,46 @@ let
         };
       });
 
+      # newer sigstore version transitivevly require pydantic>=2
+      sigstore = super.sigstore.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.2";
+        src = fetchFromGitHub {
+          owner = "sigstore";
+          repo = "sigstore-python";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-QqY5GOBS75OkbSaF5Ua5jnJAhsYfVRuWLUoWDxX8Ino=";
+        };
+        dependencies = with self; [
+          appdirs
+          cryptography
+          id
+          pydantic
+          pyjwt
+          pyopenssl
+          requests
+          securesystemslib
+          sigstore-protobuf-specs
+          tuf
+        ];
+        doCheck = false; # pytest too new
+      });
+
+      sigstore-protobuf-specs = super.sigstore-protobuf-specs.overridePythonAttrs {
+        version = "0.1.0";
+        src = fetchPypi {
+          pname = "sigstore-protobuf-specs";
+          version = "0.1.0";
+          hash = "sha256-YistIxYToo7T5mYKzYeBhnW06DSG9JoPDBmKxUdfy4E=";
+        };
+        nativeBuildInputs = with self; [
+          flit-core
+          pythonRelaxDepsHook
+        ];
+        pythonRelaxDeps = [
+          "betterproto"
+        ];
+      };
+
       tesla-powerwall = super.tesla-powerwall.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.1";
         src = fetchFromGitHub {
@@ -396,6 +436,19 @@ let
           hash = "sha256-if/FCfxAB48WGXZOMvCtdSOW2FWO43OrlcHZbXIPmGE=";
         };
       });
+
+      tuf = super.tuf.overridePythonAttrs rec {
+        version = "2.1.0";
+        src = fetchFromGitHub {
+          owner = "theupdateframework";
+          repo = "python-tuf";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-MdPctAZuKn/YAwpMJ5gWU7PXJD3iK7bYprLXV52wNQQ=";
+        };
+        disabledTests = [
+          "test_sign_failures"
+        ];
+      };
 
       versioningit = super.versioningit.overridePythonAttrs {
         doCheck = false;
@@ -476,7 +529,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.5.1";
+  hassVersion = "2024.5.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -494,13 +547,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-/JuKN0V2wMZW56l2nt4T3cpDnQiHeC27+QVBi3j3aDI=";
+    hash = "sha256-KNuBv3BSEkIBEN9rC4vqJcd8TE4ik/BlF3IB+ZTu4Pk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-3Tqs+69e1ESOcEMCx3LTt1c04pG5pK/RGX30x8WRegQ=";
+    hash = "sha256-0asL9TAzAASPq8ytA8HhyaOUgfVUzQPsZJCz1TUygf4=";
   };
 
   build-system = with python.pkgs; [
@@ -514,11 +567,13 @@ in python.pkgs.buildPythonApplication rec {
     "bcrypt"
     "ciso8601"
     "cryptography"
+    "jinja2"
     "hass-nabucasa"
     "httpx"
     "orjson"
     "pillow"
     "pyopenssl"
+    "sqlalchemy"
     "typing-extensions"
     "urllib3"
   ];
@@ -628,6 +683,7 @@ in python.pkgs.buildPythonApplication rec {
     "default_config"
     "debugpy"
     "hue"
+    "qwikswitch"
     "sentry"
   ];
 
@@ -641,12 +697,10 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
-    # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
-    "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
-    # SystemError: PyThreadState_SetAsyncExc failed
-    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # AssertionError: assert 6 == 5
     "--deselect=tests/helpers/test_translation.py::test_caching"
+    # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
+    "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
     # tests are located in tests/
     "tests"
   ];

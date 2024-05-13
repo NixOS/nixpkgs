@@ -48,8 +48,21 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "equinox" ];
 
   disabledTests = [
-    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    "test_tracetime"
+    # For simplicity, JAX has removed its internal frames from the traceback of the following exception.
+    # https://github.com/patrick-kidger/equinox/issues/716
+    "test_abstract"
+    "test_complicated"
+    "test_grad"
+    "test_jvp"
+    "test_mlp"
+    "test_num_traces"
+    "test_pytree_in"
+    "test_simple"
+    "test_vmap"
+
+    # AssertionError: assert 'foo:\n   pri...pe=float32)\n' == 'foo:\n   pri...pe=float32)\n'
+    # Also reported in patrick-kidger/equinox#716
+    "test_backward_nan"
   ];
 
   meta = with lib; {

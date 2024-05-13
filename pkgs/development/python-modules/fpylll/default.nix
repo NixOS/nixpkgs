@@ -15,6 +15,9 @@
 , fplll
 , numpy
 
+# Reverse dependency
+, sage
+
 # tests
 , pytestCheckHook
 }:
@@ -71,6 +74,8 @@ buildPythonPackage rec {
     # should be identical anyway.
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "A Python interface for fplll";

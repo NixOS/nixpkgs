@@ -1,7 +1,12 @@
-{ mkDerivation
-, bsdSetupHook, netbsdSetupHook
-, makeMinimal
-, install, mandoc, groff, rsync
+{
+  mkDerivation,
+  bsdSetupHook,
+  netbsdSetupHook,
+  makeMinimal,
+  install,
+  mandoc,
+  groff,
+  rsync,
 }:
 
 # Don't add this to nativeBuildInputs directly.
@@ -12,8 +17,12 @@ mkDerivation {
   version = "9.2";
   sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
   nativeBuildInputs = [
-    bsdSetupHook netbsdSetupHook
+    bsdSetupHook
+    netbsdSetupHook
     makeMinimal
-    install mandoc groff rsync
+    install
+    mandoc
+    groff
+    rsync
   ];
 }

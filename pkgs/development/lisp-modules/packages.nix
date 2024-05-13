@@ -573,6 +573,23 @@ let
 
   stumpwm-unwrapped = super.stumpwm;
 
+  clfswm = super.clfswm.overrideAttrs (o: rec {
+    buildScript = pkgs.writeText "build-clfswm.lisp" ''
+      (load "${o.asdfFasl}/asdf.${o.faslExt}")
+      (asdf:load-system 'clfswm)
+      (sb-ext:save-lisp-and-die
+        "clfswm"
+        :executable t
+        #+sb-core-compression :compression
+        #+sb-core-compression t
+        :toplevel #'clfswm:main)
+    '';
+    installPhase = o.installPhase + ''
+      mkdir -p $out/bin
+      mv $out/clfswm $out/bin
+    '';
+  });
+
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
       url = "https://github.com/uthar/ltk/archive/f19162e76d6c7c2f51bd289b811d9ba20dd6555e.tar.gz";

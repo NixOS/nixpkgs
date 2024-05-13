@@ -24,6 +24,9 @@
 # See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
 assert enableKvm -> !enableHardening;
 
+# The web services use Java infrastructure.
+assert enableWebService -> javaBindings;
+
 with lib;
 
 let
@@ -251,7 +254,7 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
-    ln -s "${virtualboxGuestAdditionsIso}/VBoxGuestAdditions_${version}.iso" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+    ln -s "${virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''

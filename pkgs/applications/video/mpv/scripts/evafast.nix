@@ -16,7 +16,8 @@ buildLua {
     hash = "sha256-BGWD2XwVu8zOSiDJ+9oWi8aPN2Wkw0Y0gF58X4f+tdI=";
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  # Drop the `branch` parameter once upstream merges `rewrite` back into `master`
+  passthru.updateScript = unstableGitUpdater { branch = "rewrite"; };
 
   meta = with lib; {
     description = "Seeking and hybrid fastforwarding like VHS";

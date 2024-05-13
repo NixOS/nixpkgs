@@ -6,8 +6,8 @@ tectonic-unwrapped.override (old: {
       src = fetchFromGitHub {
         owner = "let-def";
         repo = "tectonic";
-        rev = "7729f1360a7e1e8b8a9f8a6a23f96b5f7cc023d0";
-        hash = "sha256-OyVkA2EuejxpQvA6pOuFaZh8ghZZ3HaV9q5DZ/2sIrY=";
+        rev = "b38cb3b2529bba947d520ac29fbb7873409bd270";
+        hash = "sha256-ap7fEPHsASAphIQkjcvk1CC7egTdxaUh7IpSS5os4W8=";
         fetchSubmodules = true;
       };
       cargoHash = "sha256-62sxvPIiY3len1wsl7QelK3u4ekftIjcTqoIGZMYb5A=";

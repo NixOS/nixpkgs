@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpp";
-  version = "10.0.29";
+  version = "10.0.30";
 
   src = fetchFromGitHub {
     owner = "brainboxdotcc";
     repo = "DPP";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BJMg3MLSfb9x/2lPHITeI3SWwW1OZVUUMVltTWUcw9I=";
+    hash = "sha256-FW1DKbVwPPlvLtv8XzpqaAZjS1y5hasq3Rhh2u08Sz0=";
   };
 
   nativeBuildInputs = [

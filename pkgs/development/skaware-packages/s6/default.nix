@@ -2,13 +2,13 @@
 
 skawarePackages.buildPackage {
   pname = "s6";
-  version = "2.12.0.3";
-  sha256 = "gA0xIm9sJc3T7AtlJA+AtWzl7BNzQdCo0VTndjjlgQM=";
+  version = "2.12.0.4";
+  sha256 = "yV1ReHYC4MjI5PkqcQy9qk7nl+6IbnE0Jyfil0+VwGs=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-man-pages";
-    version = "2.12.0.2.1";
-    sha256 = "sha256-fFU+cRwXb4SwHsI/r0ghuzCf6hEK/muPPp2XMvD8VtQ=";
+    version = "2.12.0.4.1";
+    sha256 = "9n4oIGfgcu+Q/UcY1Edr3n09Ecrbg77AI8TRBQoFzs0=";
     description = "Port of the documentation for the s6 supervision suite to mdoc";
     maintainers = [ lib.maintainers.sternenseemann ];
   };

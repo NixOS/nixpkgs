@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "antares";
-  version = "0.7.23";
+  version = "0.7.24";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
     rev = "v${version}";
-    hash = "sha256-7bj0f7JrUgHr2g489ABjNLfRERQFx0foDP0YqBTNkzI=";
+    hash = "sha256-jMtUDqxWwfXl9x61ycohTaacNAhWawL3Z4+OPW5nbOI=";
   };
 
-  npmDepsHash = "sha256-pRrg7fY5P2awds1ncsnD/lDvKmiOKhzjNcKXKy70bcs=";
+  npmDepsHash = "sha256-GC1hdRO8rrM97AMYCxWeNtJhyVdbKgitKLkWX7kGCwg=";
 
   buildInputs = [ nodejs ];
 

@@ -29,7 +29,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.25";
+  version = "0.4.28";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/jax-v${version}";
-    hash = "sha256-poQQo2ZgEhPYzK3aCs+BjaHTNZbezJAECd+HOdY1Yok=";
+    hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,14 @@ buildPythonPackage rec {
     "-W ignore::DeprecationWarning"
     "tests/"
   ];
+
+  # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
+  # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
+  # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
+  # NOTE: this doesn't seem to be an issue on linux
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
+  '';
 
   disabledTests = [
     # Exceeds tolerance when the machine is busy

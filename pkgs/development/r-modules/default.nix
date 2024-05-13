@@ -335,6 +335,7 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
+    interpolation = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
@@ -379,6 +380,7 @@ let
     LOMAR = [ pkgs.gmp.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
+    rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
@@ -588,12 +590,14 @@ let
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
     gdalcubes = with pkgs; [ proj.dev gdal sqlite.dev netcdf ];
+    rsbml = [ pkgs.libsbml ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
+    interpolation = [ pkgs.gmp ];
     image_textlinedetector = with pkgs; [ pkg-config opencv ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
     magick = [ pkgs.pkg-config ];
@@ -1165,6 +1169,11 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    luajr = old.luajr.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+      postPatch = "patchShebangs configure";
+    });
+
     RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -1196,6 +1205,10 @@ let
 
    rsgeo = old.rsgeo.overrideAttrs (attrs: {
       nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
+    });
+
+   instantiate = old.instantiate.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 

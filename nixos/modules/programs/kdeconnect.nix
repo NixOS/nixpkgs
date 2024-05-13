@@ -1,8 +1,7 @@
 { config, pkgs, lib, ... }:
-with lib;
 {
   options.programs.kdeconnect = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       kdeconnect.
 
       Note that it will open the TCP and UDP port from
@@ -11,7 +10,7 @@ with lib;
       `gnomeExtensions.gsconnect` as an alternative
       implementation if you use Gnome
     '';
-    package = mkPackageOption pkgs [ "plasma5Packages" "kdeconnect-kde" ] {
+    package = lib.mkPackageOption pkgs [ "plasma5Packages" "kdeconnect-kde" ] {
       example = "gnomeExtensions.gsconnect";
     };
   };
@@ -19,7 +18,7 @@ with lib;
     let
       cfg = config.programs.kdeconnect;
     in
-      mkIf cfg.enable {
+      lib.mkIf cfg.enable {
         environment.systemPackages = [
           cfg.package
           pkgs.sshfs

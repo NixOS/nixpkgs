@@ -6,6 +6,7 @@
 , cargo
 , rustPlatform
 , rustc
+, objsize
 , pydantic
 , pytestCheckHook
 , y-py
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.8.13";
+  version = "0.8.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-puYJ0mR1JpwD823P6JrXmNjFvqZUPqEj2T4Wk81oBMU=";
+    hash = "sha256-3j5OhjeVE42n4EEOOMUGlQGdnQ/xia0KD543uCMFpCo=";
   };
 
   postPatch = ''
@@ -44,13 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycrdt" ];
 
-  # requires pydantic>=2.5
-  doCheck = false;
-
   nativeCheckInputs = [
+    objsize
+    pydantic
     pytestCheckHook
     y-py
-    pydantic
   ];
 
   meta = with lib; {

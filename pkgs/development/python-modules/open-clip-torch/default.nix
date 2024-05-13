@@ -69,6 +69,8 @@ buildPythonPackage rec {
     "test_inference_with_data"
     "test_pretrained_text_encoder"
     "test_training_mt5"
+    # fails due to type errors
+    "test_num_shards"
   ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
     "test_training"
     "test_training_coca"

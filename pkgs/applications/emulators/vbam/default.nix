@@ -14,6 +14,8 @@
 , sfml
 , zip
 , zlib
+, wrapGAppsHook3
+, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t5/CM5KXDG0OCByu7mUyuC5NkYmB3BFmEHHgnMY05nE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     cairo
@@ -41,6 +43,7 @@ stdenv.mkDerivation rec {
     zlib
     wxGTK32
     gtk3
+    gsettings-desktop-schemas
   ];
 
   cmakeFlags = [
@@ -56,5 +59,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lassulus netali ];
     homepage = "https://vba-m.com/";
     platforms = lib.platforms.linux;
+    mainProgram = "visualboyadvance-m";
   };
 }

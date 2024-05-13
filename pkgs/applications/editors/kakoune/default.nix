@@ -1,30 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kakoune-unwrapped";
-  version = "2023.08.05";
+  version = "2024.05.09";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "v${version}";
-    sha256 = "sha256-RR3kw39vEjsg+6cIY6cK2i3ecGHlr1yzuBKaDtGlOGo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Dfp33zk9ZUMrCZRfPNfoSX6rgQKItvOQx+CuRNQgtTA=";
   };
-  patches = [
-    # Use explicit target types for gather calls to bypass clang regression
-    #
-    # Since clang-16 there has been a regression in the P0522R0 support.
-    # (Bug report at https://github.com/llvm/llvm-project/issue/63281)
-    #
-    # Closes mawww/kakoune#4892
-    (fetchpatch {
-      url = "https://github.com/mawww/kakoune/commit/7577fa1b668ea81eb9b7b9af690a4161187129dd.patch";
-      hash = "sha256-M0jKaEDhkpvX+n7k8Jf2lWaRNy8bqZ1kRHR4eG4npss=";
-    })
-  ];
   makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
 
-  preConfigure = ''
-    export version="v${version}"
+  postPatch = ''
+    echo "v${finalAttrs.version}" >.version
   '';
 
   enableParallelBuilding = true;
@@ -51,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.unix;
   };
-}
+})

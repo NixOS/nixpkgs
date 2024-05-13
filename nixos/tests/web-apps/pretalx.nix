@@ -27,5 +27,9 @@
     pretalx.wait_for_unit("pretalx-worker.service")
 
     pretalx.wait_until_succeeds("curl -q --fail http://talks.local/orga/")
+
+    pretalx.succeed("pretalx-manage --help")
+
+    pretalx.log(pretalx.succeed("systemd-analyze security pretalx-web.service"))
   '';
 }

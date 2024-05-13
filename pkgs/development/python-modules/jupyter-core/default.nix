@@ -7,6 +7,9 @@
 , traitlets
 , pip
 , pytestCheckHook
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -60,6 +63,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "jupyter_core" ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Base package on which Jupyter projects rely";

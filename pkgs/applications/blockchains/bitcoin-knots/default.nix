@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "25.1.knots20231115";
+  version = "26.1.knots20240325";
 
   src = fetchurl {
-    url = "https://bitcoinknots.org/files/25.x/${version}/bitcoin-${version}.tar.gz";
-    sha256 = "b6251beee95cf6701c6ebc443b47fb0e99884880f2661397f964a8828add4002";
+    url = "https://bitcoinknots.org/files/26.x/${version}/bitcoin-${version}.tar.gz";
+    hash = "sha256-PqpePDna2gpCzF2K43N4h6cV5Y9w/e5ZcUvaNEaFaIk=";
   };
 
   nativeBuildInputs =
@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withWallet [ sqlite ]
+    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   configureFlags = [

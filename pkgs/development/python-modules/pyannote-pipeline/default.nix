@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, pyannote-core
-, pyannote-database
-, pyyaml
-, optuna
-, tqdm
-, docopt
-, filelock
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  filelock,
+  optuna,
+  pyannote-core,
+  pyannote-database,
+  pyyaml,
+  scikit-learn,
+  setuptools,
+  tqdm,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +22,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyannote";
     repo = "pyannote-pipeline";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-0wSgy6kbKi9Wa5dimOz34IV5/8fSwaHDMUpaBW7tm2Y=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Remove vendorized versioeer.py
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     pyannote-core
     pyannote-database
     pyyaml
@@ -36,18 +47,13 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
   pythonImportsCheck = [ "pyannote.pipeline" ];
 
   meta = with lib; {
     description = "Tunable pipelines";
-    mainProgram = "pyannote-pipeline";
     homepage = "https://github.com/pyannote/pyannote-pipeline";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "pyannote-pipeline";
   };
 }

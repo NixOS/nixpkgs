@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , poetry-core
 , pythonRelaxDepsHook
+, pythonOlder
 , ebooklib
 , lxml
 , pillow
@@ -13,6 +14,7 @@ buildPythonPackage rec {
   pname = "comicon";
   version = "1.0.1";
   pyproject = true;
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
@@ -27,8 +29,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "lxml"
-    "pillow"
+    "pypdf"
   ];
 
   propagatedBuildInputs = [

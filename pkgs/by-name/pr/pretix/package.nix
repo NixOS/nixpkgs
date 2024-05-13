@@ -213,6 +213,11 @@ python.pkgs.buildPythonApplication rec {
     "--reruns" "3"
   ];
 
+  disabledTests = [
+    # unreliable around day changes
+    "test_order_create_invoice"
+  ];
+
   preCheck = ''
     export PYTHONPATH=$(pwd)/src:$PYTHONPATH
     export DJANGO_SETTINGS_MODULE=tests.settings

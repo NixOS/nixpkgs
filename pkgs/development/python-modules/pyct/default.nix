@@ -3,7 +3,7 @@
 , fetchPypi
 , param
 , pytestCheckHook
-, pythonOlder
+, pythonAtLeast
 , pyyaml
 , requests
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "femtolisp";
-  version = "unstable-2023-07-12";
+  version = "0-unstable-2023-07-12";
 
   src = fetchFromSourcehut {
     owner = "~ft";

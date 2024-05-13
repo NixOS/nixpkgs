@@ -18,13 +18,14 @@
 , pythonOlder
 , python-daemon
 , pyyaml
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
   version = "2.3.6";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -40,13 +41,19 @@ buildPythonPackage rec {
       hash = "sha256-eTnQkftvjK0YHU+ovotRVSuVlvaVeXp5SvYk1DPCg88=";
       excludes = [ ".github/workflows/ci.yml" "tox.ini" ];
     })
+    (fetchpatch {
+      # python 3.12 compat
+      url = "https://github.com/ansible/ansible-runner/commit/dc248497bb2375a363222ce755bf3a31f21d5f64.patch";
+      hash = "sha256-QT28Iw0uENoO35rqZpYBcmJB/GNDEF4m86SKf6p0XQU=";
+    })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     pbr
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     psutil
     pexpect

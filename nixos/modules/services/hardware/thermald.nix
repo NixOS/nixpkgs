@@ -50,8 +50,8 @@ in
             ${optionalString cfg.debug "--loglevel=debug"} \
             ${optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
-            --dbus-enable \
-            --adaptive
+            ${optionalString (cfg.configFile == null) "--adaptive"} \
+            --dbus-enable
         '';
       };
     };

@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, meson
-, ninja
-, fetchFromGitHub
-, fetchFromGitLab
-, re2c
-, gperf
-, gawk
-, pkg-config
-, boost182
-, fmt
-, luajit_openresty
-, ncurses
-, serd
-, sord
-, libcap
-, liburing
-, openssl
-, cereal
-, cmake
-, asciidoctor
-, makeWrapper
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  re2c,
+  gperf,
+  gawk,
+  pkg-config,
+  boost182,
+  fmt,
+  luajit_openresty,
+  ncurses,
+  serd,
+  sord,
+  libcap,
+  liburing,
+  openssl,
+  cereal,
+  cmake,
+  asciidoctor,
+  makeWrapper,
 }:
 
 let
   trial-protocol-wrap = fetchFromGitHub {
-      owner = "breese";
-      repo = "trial.protocol";
-      rev = "79149f604a49b8dfec57857ca28aaf508069b669";
-      name = "trial-protocol";
-      hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
+    owner = "breese";
+    repo = "trial.protocol";
+    rev = "79149f604a49b8dfec57857ca28aaf508069b669";
+    name = "trial-protocol";
+    hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitLab {
-      owner = "emilua";
-      repo = "emilua";
-      rev = "v${version}";
-      hash = "sha256-gt+THEr3nilweDEDmEMwIsU4i9own4ICJlZD+z8XWRQ=";
+    owner = "emilua";
+    repo = "emilua";
+    rev = "v${version}";
+    hash = "sha256-j8ohhqHjSBgc4Xk9PcQNrbADmsz4VH2zCv+UNqiCv4I=";
   };
 
   buildInputs = [
@@ -83,7 +84,6 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "enable_tests" true)
     (lib.mesonBool "enable_manpages" true)
     (lib.mesonOption "version_suffix" "-nixpkgs1")
-    (lib.mesonOption "ipc_actor_msg_max_members_number" "40")
   ];
 
   postPatch = ''

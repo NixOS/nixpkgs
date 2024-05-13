@@ -22,7 +22,8 @@
 , makeHardcodeGsettingsPatch
 , testers
 , gobject-introspection
-, withIntrospection ? stdenv.buildPlatform.canExecute stdenv.hostPlatform && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+, mesonEmulatorHook
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -150,6 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection'
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];

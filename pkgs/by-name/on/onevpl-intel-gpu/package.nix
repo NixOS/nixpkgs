@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "onevpl-intel-gpu";
-  version = "23.4.3";
+  version = "24.2.2";
 
   outputs = [ "out" "dev" ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "oneapi-src";
     repo = "oneVPL-intel-gpu";
     rev = "intel-onevpl-${version}";
-    sha256 = "sha256-oDwDMUq6JpRJH5nbANb7TJLW7HRYA9y0xZxEsoepx/U=";
+    sha256 = "sha256-JtvRh4p4wPRnqFfE86tJW+yS9AKMoi3TPZO+LZ2Q7Mo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

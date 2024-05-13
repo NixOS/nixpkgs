@@ -16,7 +16,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.17.2";
+  version = "0.18.0";
 in buildPythonPackage {
   inherit version;
 
@@ -26,7 +26,7 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
+  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
 
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs = with cudaPackages; lib.optionals stdenv.isLinux [
@@ -63,7 +63,7 @@ in buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

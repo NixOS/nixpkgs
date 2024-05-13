@@ -460,6 +460,14 @@ with lib.maintainers; {
     shortName = "Home Assistant";
   };
 
+  infisical = {
+    members = [
+      akhilmhdh
+    ];
+    scope = "Maintain Infisical";
+    shortName = "Infisical";
+  };
+
   iog = {
     members = [
       cleverca22
@@ -712,6 +720,16 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";
+    enableFeatureFreezePing = true;
+  };
+
+  lix = {
+    members = [
+      raitobezarius
+      qyriad
+    ];
+    scope = "Maintain the Lix package manager inside of Nixpkgs.";
+    shortName = "Lix ecosystem";
     enableFeatureFreezePing = true;
   };
 

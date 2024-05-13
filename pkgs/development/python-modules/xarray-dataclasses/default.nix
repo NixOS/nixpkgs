@@ -4,6 +4,7 @@
 , pythonOlder
 , poetry-core
 , pytestCheckHook
+, pythonRelaxDepsHook
 , numpy
 , typing-extensions
 , xarray
@@ -25,6 +26,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "xarray"
   ];
 
   propagatedBuildInputs = [

@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-eventlog";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.eventlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-YiWW1olaIKoBfiZfr4TfIEsnj/C4cmn6sYosvjeiEfM=";
+    hash = "sha256-MvCHeeuwwE/EOK5rh5vtwTtMrSO/BtfFenQZn5VTgb0=";
   };
 
   nativeBuildInputs = [

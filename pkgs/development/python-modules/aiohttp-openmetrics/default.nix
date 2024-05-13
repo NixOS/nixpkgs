@@ -4,12 +4,13 @@
 , aiohttp
 , prometheus-client
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-openmetrics";
   version = "0.0.12";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-/ZRngcMlroCVTvIl+30DR4SI8LsSnTovuzg3YduWgWA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     prometheus-client
   ];

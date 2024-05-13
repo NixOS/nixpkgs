@@ -88,6 +88,20 @@ in
     # but cross is currently very broken anyway, so we can figure this out later.
     deps = map (dep: self.${dep}) filteredDepNames;
 
+    traceDuplicateDeps = attrName: attrValue:
+      let
+        pretty = lib.generators.toPretty {};
+        duplicates = builtins.filter (dep: (builtins.elem (lib.getName dep) filteredDepNames)) attrValue;
+      in
+        if duplicates != []
+        then lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"
+        else lib.id;
+
+    traceAllDuplicateDeps = lib.flip lib.pipe [
+      (traceDuplicateDeps "extraBuildInputs" extraBuildInputs)
+      (traceDuplicateDeps "extraPropagatedBuildInputs" extraPropagatedBuildInputs)
+    ];
+
     defaultArgs = {
       inherit version src;
 
@@ -128,4 +142,4 @@ in
 
     pos = builtins.unsafeGetAttrPos "pname" args;
   in
-    stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta pos; })
+    traceAllDuplicateDeps (stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta pos; }))

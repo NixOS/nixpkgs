@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-information";
-  version = "0.4.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hi-rustin";
     repo = "cargo-information";
     rev = "v${version}";
-    hash = "sha256-k481iHQ1tVi9fF5/xYR99/1/oRv1nS3WH7W55aPSyfc=";
+    hash = "sha256-5F8O8M8cz7sdXtqGYuDIeTolovZjx2BLEBCZuBIb9YA=";
   };
 
   cargoLock = {
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=cargo_information::within_ws::case"
     "--skip=cargo_information::within_ws_with_alternative_registry::case"
     "--skip=cargo_information::within_ws_without_lockfile::case"
+    "--skip=cargo_information::transitive_dependency_within_ws::case"
   ];
 
   nativeBuildInputs = [

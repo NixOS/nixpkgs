@@ -29,16 +29,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-SowZ3qo06x32+A02Wmq4N/rU/yxyKqkn407qHzJLU0M=";
+    hash = "sha256-TPbvKQdoGfZMzp+fl72vy6MtRV1yGcOG/es67VOA0xw=";
   };
 
-  cargoHash = "sha256-DaF669mOnICTnUzH4mc640xIecin/UEZSk7PWDjQbr0=";
+  cargoHash = "sha256-+9R505xyEycv5Dav4ZCh1BiYRp3U1I9yBDqSPefo9uY=";
 
   buildInputs =
     [

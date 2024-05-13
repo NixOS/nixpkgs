@@ -64,11 +64,11 @@ in
     };
   };
 
-  config.services.oauth2-proxy = lib.mkIf (cfg.virtualHosts != [] && (lib.hasPrefix "127.0.0.1:" cfg.proxy)) {
+  config.services.oauth2-proxy = lib.mkIf (cfg.virtualHosts != {} && (lib.hasPrefix "127.0.0.1:" cfg.proxy)) {
     enable = true;
   };
 
-  config.services.nginx = lib.mkIf (cfg.virtualHosts != [] && config.services.oauth2-proxy.enable) (lib.mkMerge ([
+  config.services.nginx = lib.mkIf (cfg.virtualHosts != {} && config.services.oauth2-proxy.enable) (lib.mkMerge ([
     {
       virtualHosts.${cfg.domain}.locations."/oauth2/" = {
         proxyPass = cfg.proxy;
@@ -78,7 +78,7 @@ in
         '';
       };
     }
-  ] ++ lib.optional (cfg.virtualHosts != []) {
+  ] ++ lib.optional (cfg.virtualHosts != {}) {
     recommendedProxySettings = true; # needed because duplicate headers
   } ++ (lib.mapAttrsToList (vhost: conf: {
     virtualHosts.${vhost} = {

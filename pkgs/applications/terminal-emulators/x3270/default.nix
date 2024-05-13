@@ -18,6 +18,8 @@
 , fontbitstream100dpi
 , tcl
 , ncurses
+, openssl
+, readline
 }:
 let
   majorVersion = "4";
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
     tcl
     ncurses
     expat
+    openssl
+    readline
   ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {

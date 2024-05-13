@@ -18,6 +18,9 @@
 , pyzmq
 , tornado
 , traitlets
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -63,6 +66,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
+    inherit sage;
   };
 
   meta = {

@@ -1,4 +1,4 @@
-{ maven, lib, fetchFromGitHub }:
+{ maven, stdenv, lib, fetchFromGitHub }:
 
 maven.buildMavenPackage rec {
   pname = "keycloak-metrics-spi";
@@ -11,7 +11,11 @@ maven.buildMavenPackage rec {
     hash = "sha256-iagXbsKsU4vNP9eg05bwXEo67iij3N2FF0BW50MjRGE=";
   };
 
-  mvnHash = "sha256-+ySBrQ9yQ5ZxuVUh/mnHNEmugru3n8x5VR/RYEDCLAo=";
+  mvnHash = {
+    aarch64-linux = "sha256-zO79pRrY8TqrSK4bB8l4pl6834aFX2pidyk1j9Itz1E=`";
+    x86_64-linux = "sha256-+ySBrQ9yQ5ZxuVUh/mnHNEmugru3n8x5VR/RYEDCLAo=";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system} for ${pname}");
+
 
   installPhase = ''
     runHook preInstall
@@ -24,5 +28,6 @@ maven.buildMavenPackage rec {
     description = "Keycloak Service Provider that adds a metrics endpoint";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 }

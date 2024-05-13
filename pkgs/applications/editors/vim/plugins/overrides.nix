@@ -1048,6 +1048,8 @@
       mkdir $target/bin
       ln -s ${dbee-go}/bin/dbee $target/bin/dbee
       '';
+
+    meta.platforms = lib.platforms.linux;
   });
 
   nvim-navic = super.nvim-navic.overrideAttrs {
@@ -1061,7 +1063,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-UxOAIyVlJWlp5RUFVU3Ib539D5pm6Z+3edjHLerkIRU=";
+        cargoHash = "sha256-seBq1zJNzNVfCQckIHq7rHI/Y8MyxP88cee3NO7NYgo=";
 
 
         preCheck = ''

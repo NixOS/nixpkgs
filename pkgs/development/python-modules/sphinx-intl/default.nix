@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-intl";
-  version = "2.1.0";
-  format = "setuptools";
+  version = "2.2.0";
+  format = "pyproject";
 
  src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = version;
-    hash = "sha256-U/YCviGrsZNruVzfP0P2dGcB0K0Afh+XUZtp71OeP6c=";
+    hash = "sha256-4sFKrUSk8DqPbEM+Q3cRijXyxRSIdkIEAI/mAmB0wB0=";
   };
 
   propagatedBuildInputs = [

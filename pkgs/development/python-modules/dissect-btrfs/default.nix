@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-btrfs";
-  version = "1.2";
+  version = "1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.btrfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-nWgeChHHCAjD5I98h2/1HrO5688aZUM4j2PJiD1xP0g=";
+    hash = "sha256-Xn7y9om/IuCaPR77lSuC0peF5umIxu2BS9esMPXsv+Y=";
   };
 
   nativeBuildInputs = [

@@ -241,8 +241,26 @@ let
       ./patches/cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
-      # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
-      ./patches/widevine-79.patch
+    ] ++ lib.optionals (packageName == "chromium") [
+      # This patch is limited to chromium and ungoogled-chromium because electron-source sets
+      # enable_widevine to false.
+      #
+      # The patch disables the automatic Widevine download (component) that happens at runtime
+      # completely (~/.config/chromium/WidevineCdm/). This would happen if chromium encounters DRM
+      # protected content or when manually opening chrome://components.
+      #
+      # It also prevents previously downloaded Widevine blobs in that location from being loaded and
+      # used at all, while still allowing the use of our -wv wrapper. This is because those old
+      # versions are out of out our control and may be vulnerable, given we literally disable their
+      # auto updater.
+      #
+      # bundle_widevine_cdm is available as gn flag, but we cannot use it, as it expects a bunch of
+      # files Widevine files at configure/compile phase that we don't have. Changing the value of the
+      # BUNDLE_WIDEVINE_CDM build flag does work in the way we want though.
+      # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
+      # flag (declare_args) so we simply hardcode it to false.
+      ./patches/widevine-disable-auto-download-allow-bundle.patch
+    ] ++ [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
@@ -418,10 +436,11 @@ let
       # Feature overrides:
       # Native Client support was deprecated in 2020 and support will end in June 2021:
       enable_nacl = false;
-      # Enabling the Widevine component here doesn't affect whether we can
-      # redistribute the chromium package; the Widevine component is either
-      # added later in the wrapped -wv build or downloaded from Google:
+    } // lib.optionalAttrs (packageName == "chromium") {
+      # Enabling the Widevine here doesn't affect whether we can redistribute the chromium package.
+      # Widevine in this drv is a bit more complex than just that. See Widevine patch somewhere above.
       enable_widevine = true;
+    } // {
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):

@@ -32,7 +32,7 @@ in
 rec {
   name = "quake3";
   meta = with lib.maintainers; {
-    maintainers = [ domenkozar eelco ];
+    maintainers = [ domenkozar ];
   };
 
   # TODO: lcov doesn't work atm

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.4.2";
+  version = "2.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SXUPzFDVw8+CmD/Jxm/EB70UBdOmauQs69hNr0l3l90=";
+    hash = "sha256-DGSHQbVfqkaHgxL2bBXSxKqshTdWqp1z2F+YA9lu20E=";
   };
 
   # build C version if it exists

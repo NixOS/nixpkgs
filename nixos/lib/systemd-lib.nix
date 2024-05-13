@@ -18,6 +18,7 @@ let
     flip
     head
     isInt
+    isFloat
     isList
     isPath
     length
@@ -152,7 +153,7 @@ in rec {
       "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
   assertRangeOrOneOf = name: min: max: values: group: attr:
-    optional (attr ? ${name} && !((min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
+    optional (attr ? ${name} && !(((isInt attr.${name} || isFloat attr.${name}) && min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
       "Systemd ${group} field `${name}' is not a value in range [${toString min},${toString max}], or one of ${toString values}";
 
   assertMinimum = name: min: group: attr:

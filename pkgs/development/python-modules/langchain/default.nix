@@ -51,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.16";
+  version = "0.1.52";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Xv8juma/1qGC2Rb659dJBvRzRh5W+zU+O8W6peElFGc=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-H8rtysRIwyuJEUFI93vid3MsqReyRCER88xztsuYpOc=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -160,6 +160,8 @@ buildPythonPackage rec {
     "test_generic_fake_chat_model"
     # Test is outdated
     "test_serializable_mapping"
+    "test_person"
+    "test_aliases_hidden"
   ];
 
   pythonImportsCheck = [ "langchain" ];

@@ -30,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://bitmagnet.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant viraptor ];
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "bitmagnet";
   };
 }

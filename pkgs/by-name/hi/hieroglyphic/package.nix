@@ -13,8 +13,13 @@
   glib,
   gtk4,
   libadwaita,
+  darwin,
+  gettext,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Foundation;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
   version = "1.0.1";
@@ -44,11 +49,19 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    libadwaita
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      libadwaita
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      Foundation
+    ];
+
+  # needed for darwin
+  env.GETTEXT_DIR = "${gettext}";
 
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";

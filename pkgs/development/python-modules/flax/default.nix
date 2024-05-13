@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.8.2";
+  version = "0.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,16 +34,16 @@ buildPythonPackage rec {
     owner = "google";
     repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UABgJGe1grUSkwOJpjeIoFqhXsqG//HlC1YyYPxXV+g=";
+    hash = "sha256-uDGTyksUZTTL6FiTJP+qteFLOjr75dcTj9yRJ6Jm8xU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     jaxlib
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jax
     msgpack
     numpy

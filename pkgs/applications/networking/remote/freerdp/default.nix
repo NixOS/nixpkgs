@@ -205,6 +205,7 @@ stdenv.mkDerivation rec {
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg lheckemann ];
     platforms = platforms.unix;

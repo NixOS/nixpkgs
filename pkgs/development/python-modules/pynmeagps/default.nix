@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pynmeagps";
-  version = "1.0.35";
+  version = "1.0.36";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "semuconsulting";
     repo = "pynmeagps";
-    rev = "v${version}";
-    hash = "sha256-ULGBfTHCFGUSF3cmJ4GEUrgGDo4uJwstBj8nZ7tj0AA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-n7dCr85TeBLxdrD1ZAA7PGJd9+3+xFJ8gjRU/JOFysY=";
   };
 
   nativeBuildInputs = [ setuptools ];

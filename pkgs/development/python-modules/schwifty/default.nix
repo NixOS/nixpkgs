@@ -7,6 +7,7 @@
 , hatch-vcs
 
 # dependencies
+, importlib-resources
 , iso3166
 , pycountry
 
@@ -22,9 +23,9 @@
 buildPythonPackage rec {
   pname = "schwifty";
   version = "2024.4.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -39,6 +40,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     iso3166
     pycountry
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    importlib-resources
   ];
 
   passthru.optional-dependencies = {

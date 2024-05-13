@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     owner = "has2k1";
     repo = "mizani";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tOydQvRZcY052Xh98NbFUezc55JJ8LRj0REIAzpcCp0=";
+    hash = "sha256-aEataiB432yKnQ80TxJvsU9DO9wI4ZVGq1k73qeuEv0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     palettable
     pandas

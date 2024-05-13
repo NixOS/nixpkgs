@@ -218,6 +218,8 @@ in
 
     services.displayManager.logToJournal = true;
 
+    services.logrotate.enable = mkOverride 150 false;
+
     # Make sure we use the Guest Agent from the QEMU package for testing
     # to reduce the closure size required for the tests.
     services.qemuGuest.package = pkgs.qemu_test.ga;

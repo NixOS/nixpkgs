@@ -19,6 +19,9 @@
 , blas
 , lapack
 
+# Reverse dependency
+, sage
+
 # tests
 , hypothesis
 , pytest-xdist
@@ -177,6 +180,7 @@ in buildPythonPackage rec {
     blas = blas.provider;
     blasImplementation = blas.implementation;
     inherit cfg;
+    tests = { inherit sage; };
   };
 
   # Disable test

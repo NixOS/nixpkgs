@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools-scm
+, packaging
 , requests
 , six
 , pytestCheckHook
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     requests
     six
   ];

@@ -9,16 +9,16 @@
 buildPythonPackage rec {
   pname = "apipkg";
   version = "3.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
-    repo = pname;
+    repo = "apipkg";
     rev = "refs/tags/v${version}";
     hash = "sha256-ANLD7fUMKN3RmAVjVkcpwUH6U9ASalXdwKtPpoC8Urs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];

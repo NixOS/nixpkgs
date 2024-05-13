@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp -r ${models}/models $out/share
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/realesrgan-ncnn-vulkan --add-needed libvulkan.so
   '';
 

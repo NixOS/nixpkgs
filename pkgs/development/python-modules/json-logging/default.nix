@@ -6,17 +6,18 @@
 , httpx
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 , quart
 , requests
 , sanic
+, setuptools
 , uvicorn
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "json-logging";
   version = "1.5.0-rc0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,16 +28,28 @@ buildPythonPackage rec {
     hash = "sha256-WOAEY1pONH+Gx1b8zHZDMNgJJSn7jvMO60LYTA8z/dE=";
   };
 
-  nativeCheckInputs = [
+  # The logging module introduced the `taskName` field in Python 3.12, which the tests don't expect
+  postPatch = lib.optionalString (pythonAtLeast "3.12") ''
+    substituteInPlace tests/helpers/constants.py \
+        --replace-fail '"written_at",' '"taskName", "written_at",'
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     fastapi
     flask
     httpx
-    pytestCheckHook
     quart
     requests
     sanic
     uvicorn
-    wheel
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

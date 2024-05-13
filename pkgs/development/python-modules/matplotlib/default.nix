@@ -69,6 +69,9 @@
 # required for headless detection
 , libX11
 , wayland
+
+# Reverse dependency
+, sage
 }:
 
 let
@@ -182,6 +185,8 @@ buildPythonPackage rec {
       enable_lto = !stdenv.isDarwin;
     };
   };
+
+  passthru.tests = { inherit sage; };
 
   env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 

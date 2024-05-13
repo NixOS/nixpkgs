@@ -1,20 +1,22 @@
 { lib
-, stdenv
 , buildPythonPackage
-, dask
-, distributed
+, pythonOlder
 , fetchFromGitHub
 , fetchpatch
+, setuptools
+, versioneer
+, dask
+, distributed
 , grpcio
-, pytestCheckHook
-, pythonOlder
 , skein
+, pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "dask-yarn";
   version = "0.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -33,9 +35,18 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    distributed
+  postPatch = ''
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     dask
+    distributed
     grpcio
     skein
   ];

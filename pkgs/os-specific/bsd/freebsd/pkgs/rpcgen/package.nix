@@ -1,6 +1,11 @@
-{ lib, mkDerivation, stdenv, patchesRoot }:
+{
+  lib,
+  mkDerivation,
+  stdenv,
+  patchesRoot,
+}:
 
-mkDerivation rec {
+mkDerivation {
   path = "usr.bin/rpcgen";
   patches = lib.optionals (stdenv.hostPlatform.libc == "glibc") [
     # `WUNTRACED` is defined privately `bits/waitflags.h` in glibc.
@@ -17,6 +22,6 @@ mkDerivation rec {
     #
     # This hacks around this by manually including `WUNTRACED` until
     # the problem is fixed properly in glibc.
-    /${patchesRoot}/rpcgen-glibc-hack.patch
+    ./rpcgen-glibc-hack.patch
   ];
 }

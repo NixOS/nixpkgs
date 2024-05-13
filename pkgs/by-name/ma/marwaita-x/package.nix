@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marwaita-x";
-  version = "0.8.1";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-x";
     rev = finalAttrs.version;
-    sha256 = "sha256-AkhysmA7QTHiH6yLEHFHgXFhRXb3l0elvYfy+oXsvZE=";
+    sha256 = "sha256-yf/3ukb52rbCXMObeiHrMdD1cTRjY739p7Vg+DBFReo=";
   };
 
   buildInputs = [

@@ -1831,10 +1831,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-kp3SCEW90p9FWCvpoBc+obj45U3VAFuKIt5N/SDoWcg=",
+                "hash": "sha256-u9o+2M3dURfZkKSzb+bjZcvHygXDbt2IjaYLoSjWeBw=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v29.3.2"
+                "rev": "v29.3.3"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -2686,10 +2686,10 @@
         "electron_yarn_hash": "0f868gk3d2cablpczav8a4vhk4nfirph45yzjz18mgzgday7w8hf",
         "modules": "121",
         "node": "20.9.0",
-        "version": "29.3.2"
+        "version": "29.3.3"
     },
     "30": {
-        "chrome": "124.0.6367.91",
+        "chrome": "124.0.6367.119",
         "chromium": {
             "deps": {
                 "gn": {
@@ -2699,15 +2699,15 @@
                     "version": "2024-03-14"
                 }
             },
-            "version": "124.0.6367.91"
+            "version": "124.0.6367.119"
         },
         "chromium_npm_hash": "sha256-oILlQlzTcc0YqAvK5htRvG/YXWJTDtJ60Z1EcBEj9dw=",
         "deps": {
             "src": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-ILapZYs/QPrhei3wplqdT19o6O5vatGrN/Kz7gOq6o0=",
+                "hash": "sha256-mhH2pQskQw39PUCociK/g7QLjI/cDh2GXk9PJIeJ7HU=",
                 "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/third_party/hunspell/tests; rm -r $out/content/test/data; rm -r $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; ",
-                "rev": "124.0.6367.91",
+                "rev": "124.0.6367.119",
                 "url": "https://chromium.googlesource.com/chromium/src.git"
             },
             "src/chrome/test/data/perf/canvas_bench": {
@@ -2736,10 +2736,10 @@
             },
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-ERd8VqxIvGwZ9ckjvE6P8423cg6ASaFCsEDHYzqbN+4=",
+                "hash": "sha256-tW9LODdKT8W6UYmpqh1bwGTk5wQYJ3TSxSvxfAqc4uQ=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v30.0.2"
+                "rev": "v30.0.3"
             },
             "src/media/cdm/api": {
                 "fetcher": "fetchFromGitiles",
@@ -2899,14 +2899,14 @@
             },
             "src/third_party/dawn": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-5/aYPboYWGrVAYy7T5b+gyER6vLTpnS2+kVDz6saK8A=",
-                "rev": "810e0537ebdd1e87ec62fb4fc4ee7a8105b0f096",
+                "hash": "sha256-GUB25IUviLFxGI3UQJS/kf51BZBeoYFqbiaSTSY11qA=",
+                "rev": "394edde38c9323f7c910e3bdec9b7efc4ee39379",
                 "url": "https://dawn.googlesource.com/dawn.git"
             },
             "src/third_party/dawn/third_party/dxc": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-jn36GjAmmNjaCAA+4rKudNjPOpTgpLt9KhomIsAdwow=",
-                "rev": "bc18aec94c828f7dc3ba0eb8ad964dfb6453b903",
+                "hash": "sha256-wsQtYqH8gFsDmLTUA7SKvTYiGQWX7Vbcz1QtsAg/epY=",
+                "rev": "bd7aa97798735e1288d36de41dcda75e867550e4",
                 "url": "https://chromium.googlesource.com/external/github.com/microsoft/DirectXShaderCompiler"
             },
             "src/third_party/dawn/third_party/dxheaders": {
@@ -3595,14 +3595,14 @@
             },
             "src/v8": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-c+xwMud6rdGhfzf37h/j63rZrt9lt4MoqBD+GCSMZtI=",
-                "rev": "c546005d65b58039ccaf3f81be3772eee45454f9",
+                "hash": "sha256-rwEdjWYJz7shrwLWRyzOgbRvmIR0C9aZXn0vhcBLF50=",
+                "rev": "c6b8b43c3042d99f07d5cc0771e58511afaa66a3",
                 "url": "https://chromium.googlesource.com/v8/v8.git"
             }
         },
         "electron_yarn_hash": "0f868gk3d2cablpczav8a4vhk4nfirph45yzjz18mgzgday7w8hf",
         "modules": "123",
         "node": "20.11.1",
-        "version": "30.0.2"
+        "version": "30.0.3"
     }
 }

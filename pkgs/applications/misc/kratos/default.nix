@@ -1,8 +1,15 @@
-{ fetchFromGitHub, buildGoModule, lib, stdenv }:
-
-buildGoModule rec {
+{
+  fetchFromGitHub,
+  buildGoModule,
+  lib,
+  stdenv
+}:
+let
   pname = "kratos";
   version = "1.1.0";
+in
+buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ory";
@@ -17,6 +24,11 @@ buildGoModule rec {
 
   tags = [ "sqlite" ];
 
+  # Pass versioning information via ldflags
+  ldflags = [
+    "-X github.com/ory/kratos/driver/config.Version=${version}"
+  ];
+
   doCheck = false;
 
   preBuild = ''
@@ -30,14 +42,14 @@ buildGoModule rec {
     patchShebangs "''${files[@]}"
 
     # patchShebangs doesn't work for this Makefile, do it manually
-    substituteInPlace Makefile --replace '/bin/bash' '${stdenv.shell}'
+    substituteInPlace Makefile --replace-fail '/usr/bin/env bash' '${stdenv.shell}'
   '';
 
-  meta = with lib; {
-    maintainers = with maintainers; [ mrmebelman ];
-    homepage = "https://www.ory.sh/kratos/";
-    license = licenses.asl20;
-    description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+  meta = {
     mainProgram = "kratos";
+    description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+    homepage = "https://www.ory.sh/kratos/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

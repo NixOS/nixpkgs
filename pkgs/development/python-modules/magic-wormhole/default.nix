@@ -17,7 +17,9 @@
 , tqdm
 , click
 , humanize
+, iterable-io
 , txtorcon
+, zipstream-ng
 
 # optional-dependencies
 , noiseprotocol
@@ -34,7 +36,7 @@
 buildPythonPackage rec {
   pname = "magic-wormhole";
   version = "0.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -56,7 +58,9 @@ buildPythonPackage rec {
     tqdm
     click
     humanize
+    iterable-io
     txtorcon
+    zipstream-ng
   ]
   ++ autobahn.optional-dependencies.twisted
   ++ twisted.optional-dependencies.tls;
@@ -111,12 +115,12 @@ buildPythonPackage rec {
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/magic-wormhole/magic-wormhole/blob/${version}/NEWS.md";
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole";
-    license = licenses.mit;
-    maintainers = with maintainers; [ asymmetric ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mjoerg ];
     mainProgram = "wormhole";
   };
 }

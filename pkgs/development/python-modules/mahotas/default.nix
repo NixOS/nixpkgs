@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mahotas";
-  version = "1.4.13";
+  version = "1.4.14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
-    rev = "v${version}";
-    hash = "sha256-AmctF/9hLgHw6FUm0s61eCdcc12lBa1t0OkXclis//w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9tjk3rhcfAYROZKwmwHzHAN7Ui0EgmxPErQyF//K0r8=";
   };
 
   propagatedBuildInputs = [

@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "craftos-pc";
     publisher = "jackmacwindows";
-    version = "1.2.2";
-    hash = "sha256-A+MNroXv0t9Mw/gr0Fyov3cXyF/GGzwRLKrIxQ2tKCE=";
+    version = "1.2.3";
+    hash = "sha256-QoLMefSmownw9AEem0jx1+BF1bcolHYpiqyPKQNkdiQ=";
   };
   nativeBuildInputs = [
     jq

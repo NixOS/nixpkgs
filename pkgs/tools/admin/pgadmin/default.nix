@@ -15,30 +15,19 @@
 
 let
   pname = "pgadmin";
-  version = "8.5";
-  yarnHash = "sha256-VLf8GRJ2IIcrfBqdgT2uZG3kOEt0pd7Cksm+tdrQogA=";
+  version = "8.6";
+  yarnHash = "sha256-SDAU6goe5iu1SAcAsAEam2i+skZkG/hE9y3bGsKiFZ8=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-D/8tiVL2DwxvDiSqHeOF1P/yRRniZY39TyUfibrfAOo=";
+    hash = "sha256-a370dh5IHInhcPA1LeveUIjalrymTsdyoXjBNNKwSTs=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
   # this also makes potential future overrides easier
-  pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    # Flask 5.4.3 introduces an CSRF error which makes it impossible to login
-    # So either we downgrade flask here or use "WTF_CSRF_ENABLED = false" in the
-    # module config to disable CSRF.
-    flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
-      version = "5.4.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        hash = "sha256-Ay7+gk+zuUlXtw0LDdsnvSa22z+yE6VR1guu9QmiFvw=";
-      };
-    });
-  });
+  pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
 
   offlineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
@@ -159,7 +148,6 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     flask
-    flask-gravatar
     flask-login
     flask-mail
     flask-migrate
@@ -209,6 +197,7 @@ pythonPackages.buildPythonApplication rec {
     typer
     rich
     jsonformatter
+    libgravatar
   ];
 
   passthru.tests = {

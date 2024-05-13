@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , wrapQtAppsHook
 , python3
 , zbar
@@ -109,7 +110,30 @@ python.pkgs.buildPythonApplication {
     pyqt6
   ];
 
+  patches = [
+    # aiorpcx 0.23.1 compatibility
+    # Note: this patches `/run_electrum`.
+    # In the source repo, `/electrum/electrum`
+    # is a symlink to `../run_electrum`,
+    # so that path would also be affected by the patch.
+    # However, in the distribution tarball used here,
+    # `/electrum/electrum` is simply an exact copy of
+    # `/run_electrum` and is thereby *not* affected.
+    # So we have to manually copy the patched `/run_electrum`
+    # over `/electrum/electrum` after the patching (see below).
+    # XXX remove the copy command in `postPatch`
+    # as soon as the patch itself is removed!
+    (fetchpatch {
+      url = "https://github.com/spesmilo/electrum/commit/5f95d919dfa9868eaf82889903b94faa8c6443e0.patch";
+      hash = "sha256-cEkduLsL6A8qPhXS2KPQWzVtkQPYQhHSbuwQ2SnanHw=";
+    })
+  ];
+
   postPatch = ''
+    # copy the patched `/run_electrum` over `/electrum/electrum`
+    # so the aiorpcx compatibility patch is used
+    cp run_electrum electrum/electrum
+
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
       --replace "protobuf>=3.20,<4" "protobuf>=3.20"

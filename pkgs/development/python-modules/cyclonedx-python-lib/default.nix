@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, ddt
-, fetchFromGitHub
-, importlib-metadata
-, jsonschema
-, license-expression
-, lxml
-, packageurl-python
-, py-serializable
-, pythonRelaxDepsHook
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requirements-parser
-, sortedcontainers
-, setuptools
-, toml
-, types-setuptools
-, types-toml
-, xmldiff
+{
+  lib,
+  buildPythonPackage,
+  ddt,
+  fetchFromGitHub,
+  importlib-metadata,
+  jsonschema,
+  license-expression,
+  lxml,
+  packageurl-python,
+  py-serializable,
+  pythonRelaxDepsHook,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requirements-parser,
+  sortedcontainers,
+  setuptools,
+  toml,
+  types-setuptools,
+  types-toml,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "6.4.4";
+  version = "7.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,15 +33,14 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PNacp16WZHNblFyA117hSL87IKGMrW0OYNXCSoBoO8Q=";
+    hash = "sha256-rFxCeQTCQSpg0LQYyOxhk150KOUyV9PXdXo1mOA0KPw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     importlib-metadata
     license-expression
     packageurl-python
@@ -61,21 +61,15 @@ buildPythonPackage rec {
     xmldiff
   ];
 
-  pythonImportsCheck = [
-    "cyclonedx"
-  ];
+  pythonImportsCheck = [ "cyclonedx" ];
 
-  pythonRelaxDeps = [
-    "py-serializable"
-  ];
+  pythonRelaxDeps = [ "py-serializable" ];
 
   preCheck = ''
     export PYTHONPATH=tests''${PYTHONPATH+:$PYTHONPATH}
   '';
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     # These tests require network access

@@ -49,9 +49,9 @@ rustPlatform.buildRustPackage rec {
     sqlite
     zstd
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    darwin.apple_sdk_11_0.frameworks.CoreFoundation
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
   env = {

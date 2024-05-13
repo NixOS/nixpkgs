@@ -26,9 +26,8 @@ mkKdeDerivation rec {
   extraNativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo
-    corrosion
     rustc
   ];
 
-  extraBuildInputs = [xapian];
+  extraBuildInputs = [corrosion xapian];
 }
