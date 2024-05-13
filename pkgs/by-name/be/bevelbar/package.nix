@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchurl,
   pkg-config,
@@ -16,9 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8ceFwQFHhJ1qEXJtzoDXU0XRgudaAfsoWq7LYgGEqsM=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libX11
@@ -28,11 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.uninformativ.de/git/bevelbar/file/README.html";
     description = "X11 status bar with beveled borders";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres neeasade ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      neeasade
+    ];
+    platforms = lib.platforms.linux;
   };
 })
