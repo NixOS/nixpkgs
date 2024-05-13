@@ -1,6 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, python3, pkg-config, SDL2
-, libpng, ffmpeg, freetype, glew, libGL, libGLU, fribidi, zlib, harfbuzz
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  pkg-config,
+  SDL2,
+  libpng,
+  ffmpeg,
+  freetype,
+  glew,
+  libGL,
+  libGLU,
+  fribidi,
+  zlib,
+  harfbuzz,
+  makeWrapper,
 }:
 
 let
@@ -11,7 +25,8 @@ let
   base_version = "8.2.1";
   vc_version = "24030407";
   version = "${base_version}.${vc_version}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "renpy";
   inherit version;
 
@@ -31,21 +46,47 @@ in stdenv.mkDerivation {
     python3.pkgs.setuptools
   ];
 
-  buildInputs = [
-    SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib harfbuzz
-  ] ++ (with python3.pkgs; [
-    python pygame-sdl2 tkinter future six pefile requests ecdsa
-  ]);
+  buildInputs =
+    [
+      SDL2
+      libpng
+      ffmpeg
+      freetype
+      glew
+      libGLU
+      libGL
+      fribidi
+      zlib
+      harfbuzz
+    ]
+    ++ (with python3.pkgs; [
+      python
+      pygame-sdl2
+      tkinter
+      future
+      six
+      pefile
+      requests
+      ecdsa
+    ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" [
-    SDL2 SDL2.dev libpng ffmpeg.lib freetype glew.dev libGLU libGL fribidi zlib harfbuzz.dev
+    SDL2
+    SDL2.dev
+    libpng
+    ffmpeg.lib
+    freetype
+    glew.dev
+    libGLU
+    libGL
+    fribidi
+    zlib
+    harfbuzz.dev
   ];
 
   enableParallelBuilding = true;
 
-  patches = [
-    ./shutup-erofs-errors.patch
-  ];
+  patches = [ ./shutup-erofs-errors.patch ];
 
   postPatch = ''
     cp tutorial/game/tutorial_director.rpy{m,}
@@ -81,15 +122,17 @@ in stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame-sdl2}/include/${python.libPrefix}";
 
-  meta = with lib; {
+  meta = {
     description = "Visual Novel Engine";
     mainProgram = "renpy";
     homepage = "https://renpy.org/";
     changelog = "https://renpy.org/doc/html/changelog.html";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ shadowrz ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ shadowrz ];
   };
 
-  passthru = { inherit base_version vc_version; };
+  passthru = {
+    inherit base_version vc_version;
+  };
 }
