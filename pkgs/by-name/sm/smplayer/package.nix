@@ -1,11 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, qmake
-, qtscript
-, wrapQtAppsHook
+, qt5
 }:
 
+let
+  inherit (qt5)
+    qmake
+    qtscript
+    wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
   version = "23.12.0";
@@ -53,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
-    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
