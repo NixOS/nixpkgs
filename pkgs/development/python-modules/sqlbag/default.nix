@@ -87,5 +87,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/djrobstep/sqlbag";
     license = with licenses; [ unlicense ];
     maintainers = with maintainers; [ soispha ];
+    broken = true; # Fails to build against the current flask version
   };
 }
