@@ -16,7 +16,6 @@
       };
     };
     hash = "sha256-nSI+tkJxOedMtYgtiqW37v0ZjgxxU5o/0sH9bPAchBg=";
-    hash_deb_amd64 = "sha256-RvQdpDmWRcsASh1b8M0Zg+AvZprE5qhi14shfo0WlfE=";
     version = "124.0.6367.201";
   };
   ungoogled-chromium = {
@@ -33,7 +32,6 @@
       };
     };
     hash = "sha256-nSI+tkJxOedMtYgtiqW37v0ZjgxxU5o/0sH9bPAchBg=";
-    hash_deb_amd64 = "sha256-RvQdpDmWRcsASh1b8M0Zg+AvZprE5qhi14shfo0WlfE=";
     version = "124.0.6367.201";
   };
 }

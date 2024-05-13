@@ -5,6 +5,7 @@
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
 , lib, libkrb5
+, widevine-cdm
 , electron-source # for warnObsoleteVersionConditional
 
 # package customization
@@ -84,78 +85,6 @@ let
     ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix {};
   };
 
-  pkgSuffix = if channel == "dev" then "unstable" else
-    (if channel == "ungoogled-chromium" then "stable" else channel);
-  pkgName = "google-chrome-${pkgSuffix}";
-  chromeSrc =
-    let
-      # Use the latest stable Chrome version if necessary:
-      version = if chromium.upstream-info.hash_deb_amd64 != null
-        then chromium.upstream-info.version
-        else (import ./upstream-info.nix).stable.version;
-      hash = if chromium.upstream-info.hash_deb_amd64 != null
-        then chromium.upstream-info.hash_deb_amd64
-        else (import ./upstream-info.nix).stable.hash_deb_amd64;
-    in fetchurl {
-      urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
-        "https://dl.google.com/linux/chrome/deb/pool/main/g"
-        "http://95.31.35.30/chrome/pool/main/g"
-        "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
-        "http://repo.fdzh.org/chrome/deb/pool/main/g"
-      ];
-      inherit hash;
-  };
-
-  mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
-  widevineCdm = stdenv.mkDerivation {
-    name = "chrome-widevine-cdm";
-
-    src = chromeSrc;
-
-    unpackCmd = let
-      widevineCdmPath =
-        if (channel == "stable" || channel == "ungoogled-chromium") then
-          "./opt/google/chrome/WidevineCdm"
-        else if channel == "beta" then
-          "./opt/google/chrome-beta/WidevineCdm"
-        else if channel == "dev" then
-          "./opt/google/chrome-unstable/WidevineCdm"
-        else
-          throw "Unknown chromium channel.";
-    in ''
-      # Extract just WidevineCdm from upstream's .deb file
-      ar p "$src" data.tar.xz | tar xJ "${widevineCdmPath}"
-
-      # Move things around so that we don't have to reference a particular
-      # chrome-* directory later.
-      mv "${widevineCdmPath}" ./
-
-      # unpackCmd wants a single output directory; let it take WidevineCdm/
-      rm -rf opt
-    '';
-
-    doCheck = true;
-    checkPhase = ''
-      ! find -iname '*.so' -exec ldd {} + | grep 'not found'
-    '';
-
-    PATCH_RPATH = mkrpath [ gcc.cc glib nspr nss ];
-
-    patchPhase = ''
-      patchelf --set-rpath "$PATCH_RPATH" _platform_specific/linux_x64/libwidevinecdm.so
-    '';
-
-    installPhase = ''
-      mkdir -p $out/WidevineCdm
-      cp -a * $out/WidevineCdm/
-    '';
-
-    meta = {
-      platforms = [ "x86_64-linux" ];
-      license = lib.licenses.unfree;
-    };
-  };
-
   suffix = lib.optionalString (channel != "stable" && channel != "ungoogled-chromium") ("-" + channel);
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
@@ -169,7 +98,7 @@ let
         mkdir -p $out
         cp -a ${browser}/* $out/
         chmod u+w $out/libexec/chromium
-        cp -a ${widevineCdm}/WidevineCdm $out/libexec/chromium/
+        cp -a ${widevine-cdm}/share/google/chrome/WidevineCdm $out/libexec/chromium/
       ''
     else browser;
 
@@ -254,7 +183,7 @@ in stdenv.mkDerivation {
   passthru = {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
-    inherit chromeSrc sandboxExecutableName;
+    inherit sandboxExecutableName;
   };
 }
 # the following is a complicated and long-winded variant of
