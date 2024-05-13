@@ -5,15 +5,15 @@
 , nodejs
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bqn";
-  version = "unstable-2023-05-17";
+  version = "0-unstable-2024-05-13";
 
   src = fetchFromGitHub {
     owner = "mlochbaum";
     repo = "BQN";
-    rev = "070bd07dc10c291695215265218ec0ff856ce457";
-    hash = "sha256-GRIIzJwlJ+JTBHXZjoX/9vLFbAC7zyeuqVcrA/Jm/NA=";
+    rev = "c971a177421d532a13c4b7515535552df19681e1";
+    hash = "sha256-Fru1IIb4IxBQxrEEBoRYStxBqYJJqd+Q+Hwyk++QA68=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,44 +21,42 @@ stdenvNoCC.mkDerivation rec {
   buildInputs = [ nodejs ];
 
   patches = [
-    # Creates a @libbqn@ substitution variable, to be filled in the fixupPhase
+    # Creates a @libbqn@ substitution variable, to be filled in postFixup
     ./001-libbqn-path.patch
   ];
-
-  dontConfigure = true;
-
-  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/${pname}
-    cp bqn.js $out/share/${pname}/bqn.js
-    cp docs/bqn.js $out/share/${pname}/libbqn.js
+    mkdir -p $out/bin $out/share/bqn
+    cp bqn.js $out/share/bqn/bqn.js
+    cp docs/bqn.js $out/share/bqn/libbqn.js
 
     makeWrapper "${lib.getBin nodejs}/bin/node" "$out/bin/mbqn" \
-      --add-flags "$out/share/${pname}/bqn.js"
+      --add-flags "$out/share/bqn/bqn.js"
 
     ln -s $out/bin/mbqn $out/bin/bqn
 
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-
-    substituteInPlace $out/share/${pname}/bqn.js \
-      --subst-var-by "libbqn" "$out/share/${pname}/libbqn.js"
-
-    runHook postFixup
+  postFixup = ''
+    substituteInPlace $out/share/bqn/bqn.js \
+      --subst-var-by "libbqn" "$out/share/bqn/libbqn.js"
   '';
 
-  meta = with lib; {
+  dontConfigure = true;
+
+  dontBuild = true;
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/mlochbaum/BQN/";
     description = "The original BQN implementation in Javascript";
-    license = licenses.isc;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (nodejs.meta) platforms;
   };
-}
+})
 # TODO: install docs and other stuff
