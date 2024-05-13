@@ -7,6 +7,7 @@
   makeWrapper,
   runCommand,
   textlint,
+  textlint-rule-preset-ja-technical-writing,
 }:
 
 buildNpmPackage rec {
@@ -90,6 +91,12 @@ buildNpmPackage rec {
               grep ${ruleName'} <(textlint ${args}) > $out
             '';
       };
+
+    tests = lib.mergeAttrsList (
+      map (package: package.tests) [
+        textlint-rule-preset-ja-technical-writing
+      ]
+    );
   };
 
   meta = {
