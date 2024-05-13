@@ -61,6 +61,8 @@ in
   options.services.borgmatic = {
     enable = mkEnableOption "borgmatic";
 
+    package = mkPackageOption pkgs "borgmatic" { };
+
     settings = mkOption {
       description = ''
         See https://torsion.org/borgmatic/docs/reference/configuration/
@@ -87,7 +89,7 @@ in
         "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope"
     ;
 
-    environment.systemPackages = [ pkgs.borgmatic ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc = (optionalAttrs (cfg.settings != null) { "borgmatic/config.yaml".source = cfgfile; }) //
       mapAttrs'
@@ -96,7 +98,7 @@ in
           { source = settingsFormat.generate "${name}.yaml" value; })
         cfg.configurations;
 
-    systemd.packages = [ pkgs.borgmatic ];
+    systemd.packages = [ cfg.package ];
 
     # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
     systemd.timers.borgmatic.wantedBy = [ "timers.target" ];

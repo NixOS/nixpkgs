@@ -9,6 +9,7 @@
 , installShellFiles
 , borgmatic
 , testers
+, enableApprise ? false
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-hR2q49gCD9BZsk+jQ90EfKkkq7mX9qAO+gRsvdnuDec=";
   };
 
-  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov apprise ];
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -38,11 +39,7 @@ python3Packages.buildPythonApplication rec {
     ruamel-yaml
     requests
     setuptools
-  ];
-
-  passthru.optional-dependencies = {
-    apprise = with python3Packages; [ apprise ];
-  };
+  ] ++ lib.optional enableApprise apprise;
 
   postInstall = ''
     installShellCompletion --cmd borgmatic \
