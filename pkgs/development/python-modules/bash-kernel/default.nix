@@ -6,7 +6,7 @@
 , ipykernel
 , python
 , pexpect
-, bash
+, bashInteractive
 , substituteAll
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./bash-path.patch;
-      bash = lib.getExe bash;
+      bash = lib.getExe bashInteractive;
     })
   ];
 
@@ -45,8 +45,20 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out
   '';
 
-  # no tests
-  doCheck = false;
+  checkPhase = ''
+    runHook preCheck
+
+    # Create a JUPYTER_PATH with the kernelspec
+    export JUPYTER_PATH=$(mktemp -d)
+    mkdir -p $JUPYTER_PATH/kernels/bash
+    echo '{ "language": "bash", "argv": [ "${python}/bin/python", "-m", "bash_kernel", "-f", "{connection_file}" ] }' > $JUPYTER_PATH/kernels/bash/kernel.json
+
+    # Evaluate a test notebook with papermill
+    cd $(mktemp -d)
+    ${python.withPackages (ps: [ps.papermill])}/bin/papermill --kernel bash ${./test.ipynb} out.ipynb
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Bash Kernel for Jupyter";
