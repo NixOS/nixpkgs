@@ -51,7 +51,7 @@ let
       description = "Generic syntax highlighter";
       mainProgram = "pygmentize";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ sigmanificient ];
     };
   };
 in
