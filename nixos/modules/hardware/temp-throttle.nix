@@ -3,9 +3,8 @@
 let
   cfg = config.services.temp-throttle;
   configFile = let toString = builtins.toString;
-  in ''
+  in builtins.toFile "temp-throttle.conf" (''
     MAX_TEMP=${toString cfg.max_temp}
-  '' + lib.optionalString (cfg.interval != null) ''
     INTERVAL=${toString cfg.interval}
   '' + lib.optionalString (cfg.temp_file != null) ''
     TEMP_FILE=${cfg.temp_file}
@@ -13,8 +12,10 @@ let
     CORE=${toString cfg.core}
   '' + lib.optionalString (cfg.log_file != null) ''
     LOG_FILE=${cfg.log_file}
-  '';
+  '');
 in {
+  meta.maintainers = [ lib.maintainers.Sepero ];
+
   options = let
     mkOption = lib.mkOption;
     nullOr = lib.types.nullOr;
@@ -23,18 +24,14 @@ in {
   in {
     services.temp-throttle = {
       enable = lib.mkEnableOption "Whether to enable temp-throttle service";
-      package = mkOption {
-        type = lib.types.package;
-        default = pkgs.temp-throttle;
-        defaultText = lib.literalExpression "pkgs.temp-throttle";
-      };
+      package = lib.mkPackageOption pkgs "temp-throttle" { };
       max_temp = mkOption {
         type = int;
         default = 80;
         description = "Maximum desired temperature in Celcius";
       };
       interval = mkOption {
-        type = nullOr int;
+        type = int;
         default = 3;
         description = "Seconds between checking temperature. Default 3";
       };
@@ -63,11 +60,8 @@ in {
       description =
         "Linux shell script for throttling system CPU frequency based on a desired maximum temperature";
       wantedBy = [ "basic.target" ];
-      serviceConfig = with builtins; {
-        ExecStart = "${cfg.package}/bin/temp-throttle -c "
-          + toFile "temp-throttle.conf" configFile;
-        Type = "simple";
-      };
+      serviceConfig.ExecStart =
+        "${cfg.package}/bin/temp-throttle -c ${configFile}";
     };
   };
 }
