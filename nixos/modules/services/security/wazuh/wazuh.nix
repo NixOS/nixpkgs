@@ -24,7 +24,7 @@ in {
         };
 
         managerPort = mkOption {
-          type = types.int;
+          type = types.port;
           description = ''
             The port the manager is listening on to receive agent traffic.
           '';
