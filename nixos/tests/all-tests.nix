@@ -873,7 +873,8 @@ in {
   swap-random-encryption = handleTest ./swap-random-encryption.nix {};
   sway = handleTest ./sway.nix {};
   swayfx = handleTest ./swayfx.nix {};
-  switchTest = handleTest ./switch-test.nix {};
+  switchTest = handleTest ./switch-test.nix { ng = false; };
+  switchTestNg = handleTest ./switch-test.nix { ng = true; };
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
