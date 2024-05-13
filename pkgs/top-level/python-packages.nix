@@ -9841,6 +9841,8 @@ self: super: with self; {
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
+  phylophlan = callPackage ../development/python-modules/phylophlan { };
+
   pixcat = callPackage ../development/python-modules/pixcat { };
 
   pinecone-client = callPackage ../development/python-modules/pinecone-client { };
