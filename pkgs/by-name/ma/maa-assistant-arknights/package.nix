@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , asio
 , cmake
-, eigen
 , libcpr
 , onnxruntime
 , opencv
@@ -16,6 +15,13 @@
 
 let
   fastdeploy = callPackage ./fastdeploy-ppocr.nix { };
+  emulator-extras = fetchFromGitHub {
+    owner = "MaaXYZ";
+    repo = "EmulatorExtras";
+    # follows https://github.com/MaaAssistantArknights/MaaAssistantArknights/tree/dev/3rdparty
+    rev = "42442b11835844ee1ff01371e6537d0291ca9505";
+    hash = "sha256-gfzEono2v+G6V0PjU8+S7+TSZFBp7jXgJlPFM2KlYl8=";
+  };
   sources = lib.importJSON ./pin.json;
 in
 stdenv.mkDerivation (finalAttr: {
@@ -31,6 +37,8 @@ stdenv.mkDerivation (finalAttr: {
 
   # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=maa-assistant-arknights
   postPatch = ''
+    cp -r ${emulator-extras}/* ./3rdparty/EmulatorExtras
+
     substituteInPlace CMakeLists.txt \
       --replace-fail 'RUNTIME DESTINATION .' ' ' \
       --replace-fail 'LIBRARY DESTINATION .' ' ' \
