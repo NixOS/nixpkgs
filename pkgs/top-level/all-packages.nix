@@ -40941,8 +40941,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  treefmt = callPackage ../development/tools/treefmt { };
-
   nufmt = callPackage ../development/tools/nufmt { };
 
   bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
