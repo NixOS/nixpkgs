@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ db48 sqlite ]
+    ++ lib.optionals withWallet [ sqlite ]
+    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   configureFlags = [
