@@ -137,9 +137,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ
-/pkgs/development/perl-modules      @stigtsp @zakame @dasJ
+/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @dasJ @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo

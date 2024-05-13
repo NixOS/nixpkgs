@@ -17,13 +17,13 @@
 }:
 buildPythonPackage rec {
   pname = "hikari";
-  version = "2.0.0.dev124";
+  version = "2.0.0.dev125";
 
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
     rev = version;
-    hash = "sha256-zDgU3Ol/I3YNnwXm+aBh20KwonW746p5TObuwuWORog=";
+    hash = "sha256-qxgIYquXUWrm8bS8EamERMHOnjI2aPyK7bQieVG66uA=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,

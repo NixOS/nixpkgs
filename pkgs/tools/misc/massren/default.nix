@@ -23,7 +23,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  preCheck =
+  checkFlags =
     let
       skippedTests = [
         # Possible error about github.com/mattn/go-sqlite3
@@ -31,9 +31,7 @@ buildGoModule rec {
         "Test_processFileActions"
       ];
     in
-    ''
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = with lib; {
     description = "Easily rename multiple files using your text editor";

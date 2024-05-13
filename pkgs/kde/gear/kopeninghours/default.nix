@@ -16,5 +16,6 @@ mkKdeDerivation {
       enablePython = true;
       python = python3;
     })
+    python3
   ];
 }

@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2023-09-10";
+  version = "${kernel.version}-unstable-2024-05-03";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210916";
-    rev = "f6d4598290c5e9c8e545130e8a31d130f6d135f4";
-    hash = "sha256-jpMf8K9diJ3mbEkP9Cp+VwairK+pwiEGU/AtUIouCqM=";
+    rev = "3eacc28b721950b51b0249508cc31e6e54988a0c";
+    hash = "sha256-JP7mvwhnKqmkb/B0l4vhc11TBjjUA1Ubzbj/IVEXvBM=";
   };
 
   hardeningDisable = [ "pic" ];

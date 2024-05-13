@@ -7,7 +7,7 @@
   freebsdSetupHook,
 }:
 
-mkDerivation rec {
+mkDerivation {
   inherit (make) path;
 
   buildInputs = [ ];
@@ -24,6 +24,8 @@ mkDerivation rec {
     patchShebangs configure
     ${make.postPatch}
   '';
+
+  configureFlags = [ "--with-filemon=no" ];
 
   buildPhase = ''
     runHook preBuild

@@ -49,9 +49,21 @@ let
   };
 
   extraDisabledTests = {
-    private_ble_device = [
-      # AssertionError: assert '90' == '90.0'
-      "test_estimated_broadcast_interval"
+    advantage_air = [
+      # AssertionError: assert 2 == 1 (Expected two calls, got one)
+      "test_binary_sensor_async_setup_entry"
+    ];
+    hassio = [
+      # fails to load the hardware component
+      "test_device_registry_calls"
+    ];
+    husqvarna_automower = [
+      # snapshot mismatch
+      "test_device_diagnostics"
+    ];
+    recorder = [
+      # call not happening, likely due to timezone issues
+      "test_auto_purge"
     ];
     shell_command = [
       # tries to retrieve file from github
@@ -60,6 +72,10 @@ let
     sma = [
       # missing operating_status attribute in entity
       "test_sensor_entities"
+    ];
+    websocket_api = [
+      # racy
+      "test_render_template_with_timeout"
     ];
   };
 

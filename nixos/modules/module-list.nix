@@ -308,6 +308,7 @@
   ./programs/xwayland.nix
   ./programs/yabar.nix
   ./programs/yazi.nix
+  ./programs/ydotool.nix
   ./programs/yubikey-touch-detector.nix
   ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
@@ -699,6 +700,7 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/db-rest.nix
   ./services/misc/devmon.nix
+  ./services/misc/devpi-server.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
@@ -776,6 +778,7 @@
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
   ./services/misc/preload.nix
+  ./services/misc/private-gpt.nix
   ./services/misc/prowlarr.nix
   ./services/misc/pufferpanel.nix
   ./services/misc/pykms.nix

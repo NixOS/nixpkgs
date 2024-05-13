@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.42.0";
+  version = "0.43.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WML3/gAK1R9DEeRVZWeO0VRFuNVKP52i5I5mYV6vQcI=";
+    hash = "sha256-cATYN7GtS1l3GxcqBl95RsBTuszWoFB9CtuRgUSL0/A=";
     postFetch = ''
       cd $out
       mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \

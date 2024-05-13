@@ -1058,7 +1058,7 @@
   "glaxnimate": {
     "description": "Simple vector animation program.",
     "name": "glaxnimate",
-    "project_path": "playground/graphics/glaxnimate",
+    "project_path": "kdereview/glaxnimate",
     "repo_path": "graphics/glaxnimate"
   },
   "gluon": {
@@ -1920,7 +1920,7 @@
     "repo_path": "unmaintained/kdenetwork-strigi-analyzers"
   },
   "kdenlive": {
-    "description": "Free and open source video editor, based on MLT Framework and KDE Frameworks 5",
+    "description": "Free and open source video editor, based on MLT Framework and KDE Frameworks",
     "name": "kdenlive",
     "project_path": "kde/kdemultimedia/kdenlive",
     "repo_path": "multimedia/kdenlive"
@@ -2808,9 +2808,9 @@
     "repo_path": "education/klettres"
   },
   "klevernotes": {
-    "description": "A convergent markdown note taking application.",
+    "description": "A note-taking and management application using markdown.",
     "name": "klevernotes",
-    "project_path": "playground/office/klevernotes",
+    "project_path": "kdereview/klevernotes",
     "repo_path": "office/klevernotes"
   },
   "klickety": {
@@ -7037,6 +7037,12 @@
     "project_path": "websites/discover-kde-org",
     "repo_path": "websites/discover-kde-org"
   },
+  "websites-docs-glaxnimate-org": {
+    "description": "Documentation website for Glaxnimate \u2014 docs.glaxnimate.org",
+    "name": "websites-docs-glaxnimate-org",
+    "project_path": "websites/docs-glaxnimate-org",
+    "repo_path": "websites/docs-glaxnimate-org"
+  },
   "websites-docs-kde-org": {
     "description": "Scripts and other materials needed to support and operate docs.kde.org",
     "name": "websites-docs-kde-org",
@@ -7163,11 +7169,11 @@
     "project_path": "websites/ghostwriter-kde-org",
     "repo_path": "websites/ghostwriter-kde-org"
   },
-  "websites-glaxnimate-kde-org": {
-    "description": "Website for Glaxnimate \u2014 glaxnimate.kde.org",
-    "name": "websites-glaxnimate-kde-org",
-    "project_path": "websites/glaxnimate-kde-org",
-    "repo_path": "websites/glaxnimate-kde-org"
+  "websites-glaxnimate-org": {
+    "description": "Website for Glaxnimate \u2014 glaxnimate.org",
+    "name": "websites-glaxnimate-org",
+    "project_path": "websites/glaxnimate-org",
+    "repo_path": "websites/glaxnimate-org"
   },
   "websites-go-kde-org": {
     "description": "Data for the KDE Short URL Redirector Service - go.kde.org",

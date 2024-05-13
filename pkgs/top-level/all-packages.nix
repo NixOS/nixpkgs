@@ -193,7 +193,6 @@ with pkgs;
       pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
       autoPatchelfScript = ../build-support/setup-hooks/auto-patchelf.py;
     };
-    meta.platforms = lib.platforms.linux;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   tomato-c = callPackage ../applications/misc/tomato-c { };
@@ -496,10 +495,6 @@ with pkgs;
 
   cocogitto = callPackage ../development/tools/cocogitto {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  codeberg-cli = callPackage ../applications/version-management/codeberg-cli {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
   conftest = callPackage ../development/tools/conftest { };
@@ -1086,7 +1081,7 @@ with pkgs;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
     icu =  icu73;
-    protobuf = protobuf_21;
+    protobuf = protobuf_24;
   };
 
   mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
@@ -1761,8 +1756,6 @@ with pkgs;
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
   donkey = callPackage ../tools/security/donkey { };
-
-  dualsensectl = callPackage ../tools/games/dualsensectl { };
 
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
@@ -4485,10 +4478,6 @@ with pkgs;
     '';
   });
 
-  caddy = callPackage ../servers/caddy { };
-
-  xcaddy = callPackage ../servers/caddy/xcaddy { };
-
   traefik = callPackage ../servers/traefik { };
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
@@ -4775,8 +4764,6 @@ with pkgs;
   wshowkeys = callPackage ../tools/wayland/wshowkeys { };
 
   wtype = callPackage ../tools/wayland/wtype { };
-
-  ydotool = callPackage ../tools/wayland/ydotool { };
 
   cambalache = callPackage ../development/tools/cambalache { };
 
@@ -6485,8 +6472,6 @@ with pkgs;
 
   bfs = callPackage ../tools/system/bfs { };
 
-  bevelbar = callPackage ../tools/X11/bevelbar { };
-
   bgs = callPackage ../tools/X11/bgs { };
 
   bibclean = callPackage ../tools/typesetting/bibclean { };
@@ -7139,10 +7124,6 @@ with pkgs;
   cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaVersion = "12.2"; };
   cudaPackages_12_3 = callPackage ./cuda-packages.nix { cudaVersion = "12.3"; };
   cudaPackages_12 = cudaPackages_12_2; # Latest supported by cudnn
-
-  # Use the older cudaPackages for tensorflow and jax, as determined by cudnn
-  # compatibility: https://www.tensorflow.org/install/source#gpu
-  cudaPackagesGoogle = cudaPackages_11;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
@@ -7811,8 +7792,6 @@ with pkgs;
 
   endlessh = callPackage ../servers/endlessh { };
 
-  endlessh-go = callPackage ../servers/endlessh-go { };
-
   ericw-tools = callPackage ../applications/misc/ericw-tools { };
 
   cryfs = callPackage ../tools/filesystems/cryfs { };
@@ -7823,7 +7802,7 @@ with pkgs;
 
   enscript = callPackage ../tools/text/enscript { };
 
-  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { stdenv = gcc8Stdenv; };
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
 
   entr = callPackage ../tools/misc/entr { };
 
@@ -8098,8 +8077,6 @@ with pkgs;
   flips = callPackage ../tools/compression/flips { };
 
   flowblade = callPackage ../applications/video/flowblade { };
-
-  fontfor = callPackage ../tools/misc/fontfor { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -12940,8 +12917,6 @@ with pkgs;
 
   shout = nodePackages.shout;
 
-  showmethekey = callPackage ../applications/video/showmethekey { };
-
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
@@ -16324,7 +16299,7 @@ with pkgs;
     # assumption is that or any later version is good.
     choose = platform:
       /**/ if platform.isDarwin then 16
-      else if platform.isFreeBSD then 12
+      else if platform.isFreeBSD then 16
       else if platform.isAndroid then 12
       else if platform.isLinux then 17
       else if platform.isWasm then 16
@@ -16637,9 +16612,7 @@ with pkgs;
   };
   cargo-benchcmp = callPackage ../development/tools/rust/cargo-benchcmp { };
   cargo-binstall = callPackage ../development/tools/rust/cargo-binstall { };
-  cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc { };
   cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -16729,7 +16702,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
-  cargo-geiger = callPackage ../development/tools/rust/cargo-geiger { };
 
   cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -16757,9 +16729,6 @@ with pkgs;
 
   cargo-nextest = callPackage ../development/tools/rust/cargo-nextest { };
   cargo-play = callPackage ../development/tools/rust/cargo-play { };
-  cargo-raze = callPackage ../development/tools/rust/cargo-raze {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-rdme = callPackage ../by-name/ca/cargo-rdme/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -18555,8 +18524,6 @@ with pkgs;
 
   sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
-  cli11 = callPackage ../development/tools/misc/cli11 { };
-
   datree = callPackage ../development/tools/datree { };
 
   detekt = callPackage ../development/tools/detekt { };
@@ -19539,8 +19506,6 @@ with pkgs;
 
   scala-cli = callPackage ../development/tools/build-managers/scala-cli { };
 
-  scc = callPackage ../development/tools/misc/scc { };
-
   scss-lint = callPackage ../development/tools/scss-lint { };
 
   segger-ozone = callPackage ../development/tools/misc/segger-ozone { };
@@ -20485,8 +20450,6 @@ with pkgs;
 
   cre2 = callPackage ../development/libraries/cre2 { };
 
-  criterion = callPackage ../development/libraries/criterion { };
-
   croaring = callPackage ../development/libraries/croaring { };
 
   crocoddyl = callPackage ../development/libraries/crocoddyl { };
@@ -20565,8 +20528,6 @@ with pkgs;
   digiham = callPackage ../applications/radio/digiham { };
 
   directfb = callPackage ../development/libraries/directfb { };
-
-  discord-gamesdk = callPackage ../development/libraries/discord-gamesdk { };
 
   discord-rpc = callPackage ../development/libraries/discord-rpc {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -22533,18 +22494,18 @@ with pkgs;
 
   # GNU libc provides libiconv so systems with glibc don't need to
   # build libiconv separately. Additionally, Apple forked/repackaged
-  # libiconv so we use that instead of the vanilla version on that OS,
+  # libiconv, so build and use the upstream one with a compatible ABI,
   # and BSDs include libiconv in libc.
   #
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" "fblibc" ]
       then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
         then libcCross
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
-      then darwin.libiconv
+      then libiconv-darwin
     else libiconvReal;
 
   libcIconv = libc: let
@@ -22561,7 +22522,7 @@ with pkgs;
     if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ] then
       lib.getBin stdenv.cc.libc
     else if stdenv.hostPlatform.isDarwin then
-      lib.getBin darwin.libiconv
+      lib.getBin libiconv
     else
       lib.getBin libiconvReal;
 
@@ -26068,8 +26029,6 @@ with pkgs;
 
   olaris-server = callPackage ../servers/olaris { };
 
-  onagre = callPackage ../applications/misc/onagre { };
-
   onlyoffice-documentserver = callPackage ../servers/onlyoffice-documentserver { };
 
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
@@ -26713,8 +26672,6 @@ with pkgs;
   unstructured-api = callPackage ../servers/unstructured-api { };
 
   urserver = callPackage ../servers/urserver { };
-
-  uxplay = callPackage ../servers/uxplay { };
 
   vouch-proxy = callPackage ../servers/vouch-proxy { };
 
@@ -30207,8 +30164,6 @@ with pkgs;
 
   cplay-ng = callPackage ../applications/audio/cplay-ng { };
 
-  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
-
   cqrlog = callPackage ../applications/radio/cqrlog {
     hamlib = hamlib_4;
   };
@@ -31452,8 +31407,6 @@ with pkgs;
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
-  google-chrome = callPackage ../applications/networking/browsers/google-chrome { };
-
   go-graft = callPackage ../applications/networking/go-graft { };
 
   gostatic = callPackage ../applications/misc/gostatic { };
@@ -32678,8 +32631,6 @@ with pkgs;
 
   makeself = callPackage ../applications/misc/makeself { };
 
-  mako = callPackage ../applications/misc/mako { };
-
   mandelbulber = libsForQt5.callPackage ../applications/graphics/mandelbulber { };
 
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
@@ -32960,8 +32911,6 @@ with pkgs;
     libOnly = true;
     withConplay = false;
   };
-
-  mpg321 = callPackage ../applications/audio/mpg321 { };
 
   mpc-cli = callPackage ../applications/audio/mpc {
     inherit (python3Packages) sphinx;
@@ -35032,8 +34981,6 @@ with pkgs;
 
   tremc = callPackage ../applications/networking/p2p/tremc { };
 
-  tribler = callPackage ../applications/networking/p2p/tribler { };
-
   trillian-im = callPackage ../applications/networking/instant-messengers/trillian-im { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
@@ -35273,7 +35220,9 @@ with pkgs;
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
-    jdk = openjdk17;
+
+    # VirtualBox uses wsimport, which was removed after JDK 8.
+    jdk = jdk8;
   };
 
   virtualboxKvm = lowPrio (virtualbox.override {
@@ -36245,8 +36194,6 @@ with pkgs;
   zecwallet-lite = callPackage ../applications/blockchains/zecwallet-lite { };
 
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
-
-  openethereum = callPackage ../applications/blockchains/openethereum { };
 
   polkadot = callPackage ../applications/blockchains/polkadot {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
@@ -39606,6 +39553,16 @@ with pkgs;
 
   nixStatic = pkgsStatic.nix;
 
+  lixVersions = recurseIntoAttrs (callPackage ../tools/package-management/lix {
+    storeDir = config.nix.storeDir or "/nix/store";
+    stateDir = config.nix.stateDir or "/nix/var";
+    inherit (darwin.apple_sdk.frameworks) Security;
+  });
+
+  lix = lixVersions.stable;
+
+  lixStatic = pkgsStatic.lix;
+
   inherit (callPackages ../applications/networking/cluster/nixops { })
     nixops_unstable_minimal
 
@@ -39718,9 +39675,14 @@ with pkgs;
 
   dnadd = callPackage ../tools/nix/dnadd { };
 
-  nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_21;
-  };
+  nix-eval-jobs = if stdenv.isDarwin then
+    callPackage ../tools/package-management/nix-eval-jobs/2.19.nix {
+      nix = nixVersions.nix_2_19;
+    }
+  else
+    callPackage ../tools/package-management/nix-eval-jobs {
+      nix = nixVersions.nix_2_22;
+    };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
 
@@ -40416,6 +40378,15 @@ with pkgs;
 
   winePackagesFor = wineBuild: lib.makeExtensible (self: with self; {
     callPackage = newScope self;
+    stdenv =
+      if pkgs.stdenv.isDarwin then
+        # Match upstream, which builds with the latest SDK and a 10.7 deployment target.
+        overrideSDK pkgs.stdenv {
+          darwinMinVersion = "10.7";
+          darwinSdkVersion = "11.0";
+        }
+      else
+        pkgs.stdenv;
 
     inherit wineBuild;
 
@@ -40958,8 +40929,6 @@ with pkgs;
   fac-build = callPackage ../development/tools/build-managers/fac {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-
-  treefmt = callPackage ../development/tools/treefmt { };
 
   nufmt = callPackage ../development/tools/nufmt { };
 

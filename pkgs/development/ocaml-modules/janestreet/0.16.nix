@@ -569,13 +569,17 @@ with self;
     propagatedBuildInputs = [ base ppx_jane ];
   };
 
-  ocaml-compiler-libs = janePackage {
+  ocaml-compiler-libs = janePackage ({
     pname = "ocaml-compiler-libs";
-    version = "0.12.4";
-    hash = "00if2f7j9d8igdkj4rck3p74y17j6b233l91mq02drzrxj199qjv";
     minimalOCamlVersion = "4.04.1";
     meta.description = "OCaml compiler libraries repackaged";
-  };
+  } // (if lib.versionAtLeast ocaml.version "5.2" then {
+    version = "0.17.0";
+    hash = "sha256-QaC6BWrpFblra6X1+TrlK+J3vZxLvLJZ2b0427DiQzM=";
+  } else {
+    version = "0.12.4";
+    hash = "00if2f7j9d8igdkj4rck3p74y17j6b233l91mq02drzrxj199qjv";
+  }));
 
   ocaml-embed-file = janePackage {
     pname = "ocaml-embed-file";

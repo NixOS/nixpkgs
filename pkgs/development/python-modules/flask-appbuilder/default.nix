@@ -15,7 +15,6 @@
 , flask-jwt-extended
 , jsonschema
 , marshmallow
-, marshmallow-enum
 , marshmallow-sqlalchemy
 , python-dateutil
 , pythonOlder
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     flask-jwt-extended
     jsonschema
     marshmallow
-    marshmallow-enum
     marshmallow-sqlalchemy
     python-dateutil
     prison

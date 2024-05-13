@@ -30,5 +30,9 @@
     "6.8": {
         "version": "6.8.9",
         "hash": "sha256:1dn9bgmf03bdfbmgq98d043702g808rjikxs2i9yia57iqiz21gr"
+    },
+    "6.9": {
+        "version": "6.9",
+        "hash": "sha256:0jc14s7z2581qgd82lww25p7c4w72scpf49z8ll3wylwk3xh3yi4"
     }
 }

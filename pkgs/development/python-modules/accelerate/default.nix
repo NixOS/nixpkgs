@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pythonAtLeast
 , pythonOlder
+, llvmPackages
 , pytest7CheckHook
 , setuptools
 , numpy
@@ -21,21 +22,25 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.29.3";
+  version = "0.30.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oQGb/hlMN8JfwEyWufBvMk2Z1FMSl1lsdIbgZ3ZMdF8=";
+    hash = "sha256-E20pI5BrcTrMYrhriuOUl5/liSaQQy6eqRyCoauwb9Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  buildInputs = [
+    llvmPackages.openmp
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     packaging
     psutil
@@ -72,6 +77,9 @@ buildPythonPackage rec {
     "test_remote_code"
     "test_transformers_model"
 
+    # nondeterministic, tests GC behaviour by thresholding global ram usage
+    "test_free_memory_dereferences_prepared_components"
+
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
   ] ++ lib.optionals (pythonAtLeast "3.12") [
@@ -102,6 +110,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "accelerate"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://huggingface.co/docs/accelerate";

@@ -263,6 +263,9 @@ with lib.maintainers; {
 
   docs = {
     members = [ ];
+    githubTeams = [
+      "documentation-team"
+    ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
     enableFeatureFreezePing = true;
@@ -720,6 +723,16 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Nix package manager.";
     shortName = "Nix/nix-cli ecosystem";
+    enableFeatureFreezePing = true;
+  };
+
+  lix = {
+    members = [
+      raitobezarius
+      qyriad
+    ];
+    scope = "Maintain the Lix package manager inside of Nixpkgs.";
+    shortName = "Lix ecosystem";
     enableFeatureFreezePing = true;
   };
 

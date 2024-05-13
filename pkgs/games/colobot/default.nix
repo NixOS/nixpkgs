@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
   pname = "colobot";
   # Maybe require an update to package colobot-data as well
   # in file data.nix next to this one
-  version = "0.2.0-alpha";
+  version = "0.2.1-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
     repo = pname;
     rev = "colobot-gold-${version}";
-    sha256 = "sha256-Nu7NyicNIk5yza9sXfd4KbGdB65guVuGREd6rwRU3lU=";
+    hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };
 
   patches = [

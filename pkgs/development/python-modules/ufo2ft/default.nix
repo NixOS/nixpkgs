@@ -6,6 +6,7 @@
 , cu2qu
 , defcon
 , fetchPypi
+, fontmath
 , fonttools
 , pytestCheckHook
 , pythonOlder
@@ -38,6 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cu2qu
+    fontmath
     fonttools
     defcon
     compreffor

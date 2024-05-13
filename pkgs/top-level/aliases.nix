@@ -231,6 +231,7 @@ mapAliases ({
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
+  cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
   ### D ###
 
   dagger = throw "'dagger' has been removed from nixpkgs, as the trademark policy of the upstream project is incompatible"; # Added 2023-10-16
@@ -685,6 +686,7 @@ mapAliases ({
   linuxPackages_6_6 = linuxKernel.packages.linux_6_6;
   linuxPackages_6_7 = linuxKernel.packages.linux_6_7;
   linuxPackages_6_8 = linuxKernel.packages.linux_6_8;
+  linuxPackages_6_9 = linuxKernel.packages.linux_6_9;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
@@ -712,6 +714,7 @@ mapAliases ({
   linux_6_6 = linuxKernel.kernels.linux_6_6;
   linux_6_7 = linuxKernel.kernels.linux_6_7;
   linux_6_8 = linuxKernel.kernels.linux_6_8;
+  linux_6_9 = linuxKernel.kernels.linux_6_9;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -826,6 +829,7 @@ mapAliases ({
   mozart = throw "'mozart' has been renamed to/replaced by 'mozart2-binary'"; # Converted to throw 2023-09-10
   mpc_cli = mpc-cli; # moved from top-level 2022-01-24
   mpd_clientlib = libmpdclient; # Added 2021-02-11
+  mpg321 = throw "'mpg321' has been removed due to it being unmaintained by upstream. Consider using mpg123 instead."; # Added 2024-05-10
   mumble_git = throw "'mumble_git' has been renamed to/replaced by 'pkgs.mumble'"; # Converted to throw 2023-09-10
   murmur_git = throw "'murmur_git' has been renamed to/replaced by 'pkgs.murmur'"; # Converted to throw 2023-09-10
   mutt-with-sidebar = mutt; # Added 2022-09-17
@@ -929,6 +933,7 @@ mapAliases ({
   openconnect_gnutls = openconnect; # Added 2022-03-29
   openconnect_unstable = throw "openconnect_unstable was removed from nixpkgs as it was not being updated"; # Added 2023-06-01
   openelec-dvb-firmware = libreelec-dvb-firmware; # Added 2021-05-10
+  openethereum = throw "openethereum development has ceased by upstream. Use alternate clients such as go-ethereum, erigon, or nethermind"; # Added 2024-05-13
   openimagedenoise_1_2_x = throw "'openimagedenoise_1_2_x' has been renamed to/replaced by 'openimagedenoise'"; # Added 2023-06-07
   openimageio2 = openimageio; # Added 2023-01-05
   openimageio_1 = throw "'openimageio_1' has been removed, please update to 'openimageio' 2"; # Added 2023-06-14
@@ -956,7 +961,7 @@ mapAliases ({
   paper-note = throw "paper-note has been removed: abandoned by upstream"; # Added 2023-05-03
   paperless = paperless-ngx; # Added 2021-06-06
   paperless-ng = paperless-ngx; # Added 2022-04-11
-  parity = openethereum; # Added 2020-08-01
+  parity = throw "parity, renamed to openethereum, has been terminated by upstream"; # Added 2020-08-01
   partition-manager = libsForQt5.partitionmanager; # Added 2024-01-08
   pash = throw "'pash' has been removed: abandoned by upstream. Use 'powershell' instead"; # Added 2023-09-16
   patchelfStable = patchelf; # Added 2024-01-25

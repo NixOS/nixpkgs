@@ -169,18 +169,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # ../docs/tools/shooter.c:4:10: fatal error: 'cairo-xlib.h' file not found
-    "-Ddocumentation=${lib.boolToString x11Support}"
+    (lib.mesonBool "documentation" x11Support)
     "-Dbuild-tests=false"
-    "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
-    "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
-  ] ++ lib.optionals vulkanSupport [
-    "-Dvulkan=enabled"
-  ] ++ lib.optionals (!cupsSupport) [
-    "-Dprint-cups=disabled"
+    (lib.mesonEnable "tracker" trackerSupport)
+    (lib.mesonBool "broadway-backend" broadwaySupport)
+    (lib.mesonEnable "vulkan" vulkanSupport)
+    (lib.mesonEnable "print-cups" cupsSupport)
+    (lib.mesonBool "x11-backend" x11Support)
   ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
-  ] ++ lib.optionals (!x11Support) [
-    "-Dx11-backend=false"
   ];
 
   doCheck = false; # needs X11

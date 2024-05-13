@@ -6,13 +6,13 @@
 
 python312Packages.buildPythonPackage rec {
   pname = "ark-pixel-font";
-  version = "2024.04.05";
+  version = "2024.05.12";
 
   src = fetchFromGitHub {
     owner = "TakWolf";
-    repo = pname;
-    rev = version;
-    hash = "sha256-G34cu/mSt/p8UPJt+Q1T2qy6d9LGgT1Jslt9syRz5eo=";
+    repo = "ark-pixel-font";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PGhhKWHDpvOqa3vaI40wuIsAEdWGb62cN7QJeHQqiss=";
   };
 
   format = "other";

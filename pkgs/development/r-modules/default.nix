@@ -380,6 +380,7 @@ let
     LOMAR = [ pkgs.gmp.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
+    rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
@@ -589,6 +590,7 @@ let
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
     gdalcubes = with pkgs; [ proj.dev gdal sqlite.dev netcdf ];
+    rsbml = [ pkgs.libsbml ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];

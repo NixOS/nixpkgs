@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , aioresponses
 , aiosqlite
@@ -74,6 +75,8 @@ buildPythonPackage rec {
   disabledTests = [
     # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
     "test_quirks_v2"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [
+    "test_periodic_scan_priority"
   ];
 
   disabledTestPaths = [

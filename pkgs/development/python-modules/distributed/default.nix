@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.4.2";
+  version = "2024.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-xoQ+b7qzstZl9gRNs4jssNOsGQHDdvTXU7pTjBSuyWs=";
+    hash = "sha256-9W5BpBQHw1ZXCOWiFPeIlMns/Yys1gtdwQ4Lhd7qjK8=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
     setuptools-scm
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     "dask"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cloudpickle
     dask

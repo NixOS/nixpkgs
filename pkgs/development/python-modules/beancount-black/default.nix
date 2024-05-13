@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "beancount-black";
-  version = "0.2.1";
+  version = "1.0.2";
 
   disabled = pythonOlder "3.9";
   format = "pyproject";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beancount-black";
     rev = version;
-    hash = "sha256-wvAQnwnyHn5Koc/UN4zpJ3JDmFbDoUrpCTmJCpSP7Mg=";
+    hash = "sha256-SoAic9UYKE9lhMpl44VosJmmjKJjDrKOyMeUO931Ztg=";
   };
 
   buildInputs = [

@@ -5,35 +5,46 @@
 , postgresql
 , postgresqlTestHook
 , pytestCheckHook
+, setuptools
 , six
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "psycopg2cffi";
-  version = "2.8.1";
-  format = "setuptools";
+  version = "2.9.0";
+  pyproject = true;
 
-  # NB: This is a fork.
-  # The original repo exists at https://github.com/chtd/psycopg2cffi, however
-  # this is mostly unmaintained and does not build for PyPy. Given that the
-  # whole point of this cffi alternative to psycopg2 is to use it with PyPy, I
-  # chose to use a working fork instead, which was linked in the relevant issue:
-  # https://github.com/chtd/psycopg2cffi/issues/113#issuecomment-730548574
-  #
-  # If/when these changes get merged back upstream we should revert to using the
-  # original source as opposed to the fork.
   src = fetchFromGitHub {
-    owner = "Omegapol";
-    repo = pname;
-    rev = "c202b25cd861d5e8f0f55c329764ff1da9f020c0";
-    sha256 = "09hsnjkix1c0vlhmfvrp8pchpnz2ya4xrchyq15czj527nx2dmy2";
+    owner = "chtd";
+    repo = "psycopg2cffi";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9r5MYxw9cvdbLVj8StmMmn0AKQepOpCc7TIBGXZGWe4=";
   };
 
-  nativeBuildInputs = [ postgresql ];
+  postPatch = ''
+    substituteInPlace psycopg2cffi/_impl/_build_libpq.py \
+      --replace-fail "from distutils import sysconfig" "import sysconfig" \
+      --replace-fail "sysconfig.get_python_inc()" "sysconfig.get_path('include')"
+  '';
 
-  propagatedBuildInputs = [ six cffi ];
+  build-system = [
+    postgresql
+    setuptools
+  ];
 
-  nativeCheckInputs = [ postgresqlTestHook pytestCheckHook ];
+  dependencies = [
+    cffi
+    six
+  ];
+
+  # FATAL: could not create shared memory segment: Operation not permitted
+  doCheck = !stdenv.isDarwin;
+
+  nativeCheckInputs = [
+    postgresqlTestHook
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # AssertionError: '{}' != []

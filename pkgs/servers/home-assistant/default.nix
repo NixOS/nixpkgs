@@ -529,7 +529,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.5.2";
+  hassVersion = "2024.5.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -547,13 +547,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-OdtkkZ8Yl6H2dUBILrT/02ML3MnptdBydVzKhxoKjAY=";
+    hash = "sha256-KNuBv3BSEkIBEN9rC4vqJcd8TE4ik/BlF3IB+ZTu4Pk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-5ASuTREkAUCS94Ur5yNHU8ISrASGl90scyYWBHiKlKI=";
+    hash = "sha256-0asL9TAzAASPq8ytA8HhyaOUgfVUzQPsZJCz1TUygf4=";
   };
 
   build-system = with python.pkgs; [
@@ -567,11 +567,13 @@ in python.pkgs.buildPythonApplication rec {
     "bcrypt"
     "ciso8601"
     "cryptography"
+    "jinja2"
     "hass-nabucasa"
     "httpx"
     "orjson"
     "pillow"
     "pyopenssl"
+    "sqlalchemy"
     "typing-extensions"
     "urllib3"
   ];
@@ -681,6 +683,7 @@ in python.pkgs.buildPythonApplication rec {
     "default_config"
     "debugpy"
     "hue"
+    "qwikswitch"
     "sentry"
   ];
 
@@ -694,12 +697,10 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
-    # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
-    "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
-    # SystemError: PyThreadState_SetAsyncExc failed
-    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # AssertionError: assert 6 == 5
     "--deselect=tests/helpers/test_translation.py::test_caching"
+    # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
+    "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
     # tests are located in tests/
     "tests"
   ];

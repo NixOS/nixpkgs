@@ -7,11 +7,11 @@
 }:
 mkKdeDerivation rec {
   pname = "kirigami-addons";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/kirigami-addons/kirigami-addons-${version}.tar.xz";
-    hash = "sha256-jvNSSZE5YWsxQqbXqSqyN0nFaEA+zo2FTwZKlB0IVTY=";
+    hash = "sha256-j/NkWKqQ/x2YBik1e23fXoira8kXsBGn+fpdXhKs9Ro=";
   };
 
   extraBuildInputs = [qtdeclarative];

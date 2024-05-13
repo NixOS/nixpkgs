@@ -3,7 +3,6 @@
   qt5compat,
   qtsvg,
   pkg-config,
-  libkexiv2,
   samba,
   libssh,
   libmtp,
@@ -24,7 +23,6 @@ mkKdeDerivation {
   extraBuildInputs = [
     qt5compat
     qtsvg
-    libkexiv2
 
     samba
     libssh

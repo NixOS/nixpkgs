@@ -2,11 +2,12 @@
   lib,
   stdenv,
   stdenvNoCC,
+  versionData,
+  writeText,
+  patches,
   compatIfNeeded,
-  runCommand,
-  rsync,
   freebsd-lib,
-  source,
+  filterSource,
   bsdSetupHook,
   freebsdSetupHook,
   makeMinimal,
@@ -24,21 +25,13 @@ lib.makeOverridable (
   in
   stdenv'.mkDerivation (
     rec {
-      pname = "${attrs.pname or (baseNameOf attrs.path)}-freebsd";
       inherit (freebsd-lib) version;
-      src = runCommand "${pname}-filtered-src" { nativeBuildInputs = [ rsync ]; } ''
-        for p in ${lib.concatStringsSep " " ([ attrs.path ] ++ attrs.extraPaths or [ ])}; do
-          set -x
-          path="$out/$p"
-          mkdir -p "$(dirname "$path")"
-          src_path="${source}/$p"
-          if [[ -d "$src_path" ]]; then src_path+=/; fi
-          rsync --chmod="+w" -r "$src_path" "$path"
-          set +x
-        done
-      '';
-
-      extraPaths = [ ];
+      pname = "${attrs.pname or (baseNameOf attrs.path)}";
+      src = filterSource {
+        inherit pname;
+        inherit (attrs) path;
+        extraPaths = attrs.extraPaths or [ ];
+      };
 
       nativeBuildInputs = [
         bsdSetupHook
@@ -48,8 +41,8 @@ lib.makeOverridable (
         tsort
         lorder
         mandoc
-        groff # statHook
-      ];
+        groff
+      ] ++ attrs.extraNativeBuildInputs or [ ];
       buildInputs = compatIfNeeded;
 
       HOST_SH = stdenv'.shell;
@@ -72,11 +65,17 @@ lib.makeOverridable (
 
       strictDeps = true;
 
-      meta = with lib; {
-        maintainers = with maintainers; [ ericson2314 ];
-        platforms = platforms.unix;
-        license = licenses.bsd2;
-      };
+      meta =
+        with lib;
+        {
+          maintainers = with maintainers; [
+            rhelmot
+            artemist
+          ];
+          platforms = platforms.unix;
+          license = licenses.bsd2;
+        }
+        // attrs.meta or { };
     }
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
@@ -95,5 +94,71 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // attrs
+    // lib.optionalAttrs (stdenv'.hasCC && stdenv'.cc.isClang or false && attrs.clangFixup or true) {
+      preBuild =
+        ''
+          export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
+        ''
+        + lib.optionalString (versionData.major == 13) ''
+          export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
+        ''
+        + (attrs.preBuild or "");
+    }
+    // {
+      patches =
+        let
+          isDir =
+            file:
+            let
+              base = baseNameOf file;
+              type = (builtins.readDir (dirOf file)).${base} or null;
+            in
+            file == /. || type == "directory";
+          consolidatePatches =
+            patches:
+            if (lib.isDerivation patches) then
+              [ patches ]
+            else if (builtins.isPath patches) then
+              (if (isDir patches) then (lib.filesystem.listFilesRecursive patches) else [ patches ])
+            else if (builtins.isList patches) then
+              (lib.flatten (builtins.map consolidatePatches patches))
+            else
+              throw "Bad patches - must be path or derivation or list thereof";
+          consolidated = consolidatePatches patches;
+          splitPatch =
+            patchFile:
+            let
+              foldFunc =
+                a: b:
+                if (lib.strings.hasPrefix "--- " b) then
+                  (a ++ [ [ b ] ])
+                else
+                  ((lib.lists.init a) ++ (lib.lists.singleton ((lib.lists.last a) ++ [ b ])));
+              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] (
+                lib.strings.splitString "\n" (builtins.readFile patchFile)
+              );
+              partitionedPatches =
+                if (builtins.length partitionedPatches' > 1) then
+                  (lib.lists.drop 1 partitionedPatches')
+                else
+                  (throw "${patchFile} does not seem to be a unified patch (diff -u). this is required for FreeBSD.");
+              filterFunc =
+                patchLines:
+                let
+                  prefixedPath = builtins.elemAt (builtins.split " |\t" (builtins.elemAt patchLines 1)) 2;
+                  unfixedPath = lib.path.subpath.join (lib.lists.drop 1 (lib.path.subpath.components prefixedPath));
+                in
+                lib.lists.any (included: lib.path.hasPrefix (/. + ("/" + included)) (/. + ("/" + unfixedPath))) (
+                  (attrs.extraPaths or [ ]) ++ [ attrs.path ]
+                );
+              filteredLines = builtins.filter filterFunc partitionedPatches;
+              derive = patchLines: writeText "freebsd-patch" (lib.concatLines patchLines);
+              derivedPatches = builtins.map derive filteredLines;
+            in
+            derivedPatches;
+          picked = lib.lists.concatMap splitPatch consolidated;
+        in
+        picked ++ attrs.patches or [ ];
+    }
   )
 )

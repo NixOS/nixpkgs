@@ -1,19 +1,13 @@
 {
   lib,
   mkDerivation,
-  patchesRoot,
   buildPackages,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
-  rsync, # , nbperf
   rpcgen,
+  mtree,
 }:
 
 mkDerivation {
+  isStatic = true;
   path = "include";
 
   extraPaths = [
@@ -22,21 +16,10 @@ mkDerivation {
     "sys"
   ];
 
-  nativeBuildInputs = [
-    bsdSetupHook
-    freebsdSetupHook
-    makeMinimal
-    install
-    mandoc
-    groff
-    rsync # nbperf
+  extraNativeBuildInputs = [
     rpcgen
-
-    # HACK use NetBSD's for now
-    buildPackages.netbsd.mtree
+    mtree
   ];
-
-  patches = [ /${patchesRoot}/no-perms-BSD.include.dist.patch ];
 
   # The makefiles define INCSDIR per subdirectory, so we have to set
   # something else on the command line so those definitions aren't
@@ -46,6 +29,7 @@ mkDerivation {
       sed -i -E \
         -e 's_/usr/include_''${INCSDIR0}_' \
         {} \;
+    sed -E -i -e "/_PATH_LOGIN/d" $BSDSRCDIR/include/paths.h
   '';
 
   makeFlags = [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];

@@ -27,20 +27,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.16.1";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-rP3PHS6kuJCgbCQy4h+bJksmJAJvHDBMSysLM5FxQjk=";
+    hash = "sha256-z4KL6CX1jtuC4lxqYA6Mg1zPSc9/OpRb530jPIQK3Is=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-p4rBEOK9zKGO1q3SCKpfdX3EPMkYHRvn9UnGBhsksSE=";
+  npmDepsHash = "sha256-NIf7aMDAeE39+putw/7GTYODIdVmjJIvIwnL5O+sBmI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [

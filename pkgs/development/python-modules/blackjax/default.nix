@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "blackjax";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "blackjax-devs";
     repo = "blackjax";
     rev = "refs/tags/${version}";
-    hash = "sha256-vXyxK3xALKG61YGK7fmoqQNGfOiagHFrvnU02WKZThw=";
+    hash = "sha256-VoWBCjFMyE5LVJyf7du/pKlnvDHj22lguiP6ZUzH9ak=";
   };
 
   build-system = [
@@ -56,6 +56,10 @@ buildPythonPackage rec {
   disabledTests = [
     # too slow
     "test_adaptive_tempered_smc"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # Numerical test (AssertionError)
+    # https://github.com/blackjax-devs/blackjax/issues/668
+    "test_chees_adaptation"
   ];
 
   pythonImportsCheck = [
