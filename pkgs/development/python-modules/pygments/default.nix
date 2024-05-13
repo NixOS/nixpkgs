@@ -9,17 +9,20 @@
   # tests
   pytestCheckHook,
   wcag-contrast-ratio,
+  pythonOlder
 }:
 
 let
   pygments = buildPythonPackage rec {
     pname = "pygments";
-    version = "2.17.2";
+    version = "2.18.0";
     pyproject = true;
+
+    disabled = pythonOlder "3.8"; # 2.18.0 requirement
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-2kbOyf0t5b46inhPQ05MSrZwtP9U1gXEwnF+nUnEw2c=";
+      hash = "sha256-eG/4AvMukTEb/ziJ9umoboFQX+mfJzW7bWCuDFAE8Zk=";
     };
 
     nativeBuildInputs = [ hatchling ];
