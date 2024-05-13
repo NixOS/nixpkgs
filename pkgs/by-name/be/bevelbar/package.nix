@@ -1,24 +1,24 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchurl,
   pkg-config,
   libX11,
   libXft,
   libXrandr,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bevelbar";
-  version = "22.06";
+  version = "23.08";
 
   src = fetchurl {
     url = "https://www.uninformativ.de/git/bevelbar/archives/bevelbar-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-8ceFwQFHhJ1qEXJtzoDXU0XRgudaAfsoWq7LYgGEqsM=";
+    hash = "sha256-4wMSPi9tu+z1AW2uvPefxkeT/5DYo2oJybhNnpe82QU=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libX11
@@ -28,11 +28,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    url = "https://www.uninformativ.de/git/bevelbar.git/";
+    rev-prefix = "v";
+  };
+
+  meta = {
     homepage = "https://www.uninformativ.de/git/bevelbar/file/README.html";
     description = "X11 status bar with beveled borders";
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres neeasade ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      neeasade
+    ];
+    platforms = lib.platforms.linux;
   };
 })
