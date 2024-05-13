@@ -167,27 +167,30 @@ in stdenv'.mkDerivation (finalAttrs: {
   ++ lib.optionals swiftSupport [ swift ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 
+  propagatedBuildInputs = [
+    libass
+  ]
+  ++ lib.optionals archiveSupport     [ libarchive ]
+  ++ lib.optionals cmsSupport         [ lcms2 ]
+  ++ lib.optionals dvdnavSupport      [ libdvdnav libdvdnav.libdvdread ]
+  ++ lib.optionals javascriptSupport  [ mujs ];
+
   buildInputs = [
     bash
     ffmpeg
     freetype
-    libass
     libplacebo
     libpthreadstubs
     libuchardet
     luaEnv
     python3
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
-    ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
     ++ lib.optionals bs2bSupport        [ libbs2b ]
     ++ lib.optionals cacaSupport        [ libcaca ]
     ++ lib.optionals cddaSupport        [ libcdio libcdio-paranoia ]
-    ++ lib.optionals cmsSupport         [ lcms2 ]
     ++ lib.optionals drmSupport         [ libdrm mesa ]
-    ++ lib.optionals dvdnavSupport      [ libdvdnav libdvdnav.libdvdread ]
     ++ lib.optionals jackaudioSupport   [ libjack2 ]
-    ++ lib.optionals javascriptSupport  [ mujs ]
     ++ lib.optionals libpngSupport      [ libpng ]
     ++ lib.optionals openalSupport      [ openalSoft ]
     ++ lib.optionals pipewireSupport    [ pipewire ]
