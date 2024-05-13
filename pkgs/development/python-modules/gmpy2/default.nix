@@ -1,24 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPyPy
-, gmp
-, mpfr
-, libmpc
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPyPy,
+  gmp,
+  mpfr,
+  libmpc,
+  fetchpatch,
 
-# Reverse dependency
-, sage
-, fetchpatch
+  # Reverse dependency
+  sage,
 }:
 
-let
+buildPythonPackage rec {
   pname = "gmpy2";
   version = "2.1.5";
   format = "setuptools";
-in
-
-buildPythonPackage {
-  inherit pname version;
 
   disabled = isPyPy;
 
@@ -39,11 +36,17 @@ buildPythonPackage {
     })
   ];
 
-  buildInputs = [ gmp mpfr libmpc ];
+  buildInputs = [
+    gmp
+    mpfr
+    libmpc
+  ];
 
   pythonImportsCheck = [ "gmpy2" ];
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "GMP/MPIR, MPFR, and MPC interface to Python 2.6+ and 3.x";
