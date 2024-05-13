@@ -15,13 +15,13 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.0.2";
+  version = "11.0.3";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-Q5nolgqBG2LFVoEeEtzEPTt/cAHubPlRIFt3SYX9z1Y=";
+    hash = "sha256-Id595aKYHP1R3Zw9sV1oL32nAUAr7D/K4wn6Zs7q3Jo=";
   };
 
   gradle = gradle_7;

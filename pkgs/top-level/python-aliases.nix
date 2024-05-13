@@ -82,6 +82,7 @@ mapAliases ({
   cacheyou = throw "cacheyou has been removed, as it was no longer used for the only consumer pdm"; # added 2023-12-21
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   cchardet = faust-cchardet; # added 2023-03-02
+  cepa = throw "cepa has been removed, as onionshare switched back to stem"; # added 2024-05-07
   class-registry = phx-class-registry; # added 2021-10-05
   cntk = throw "cntk has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
   codespell = throw "codespell has been promoted to a top-level attribute name: `pkgs.codespell`"; # Added 2022-10-02

@@ -683,6 +683,7 @@ in python.pkgs.buildPythonApplication rec {
     "default_config"
     "debugpy"
     "hue"
+    "qwikswitch"
     "sentry"
   ];
 
@@ -696,12 +697,10 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
-    # AssertionError: assert 'WARNING' not in '2023-11-10 ...nt abc[L]>\n'"
-    "--deselect=tests/helpers/test_script.py::test_multiple_runs_repeat_choose"
-    # SystemError: PyThreadState_SetAsyncExc failed
-    "--deselect=tests/helpers/test_template.py::test_template_timeout"
     # AssertionError: assert 6 == 5
     "--deselect=tests/helpers/test_translation.py::test_caching"
+    # assert "Detected that integration 'hue' attempted to create an asyncio task from a thread at homeassistant/components/hue/light.py, line 23
+    "--deselect=tests/util/test_async.py::test_create_eager_task_from_thread_in_integration"
     # tests are located in tests/
     "tests"
   ];

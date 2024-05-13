@@ -1,12 +1,12 @@
 { lib, stdenv, linux }:
 
 stdenv.mkDerivation {
-  pname = "vm-tools";
+  pname = "mm-tools";
   inherit (linux) version src;
 
   makeFlags = [ "sbindir=${placeholder "out"}/bin" ];
 
-  preConfigure = "cd tools/vm";
+  preConfigure = "cd tools/mm";
 
   meta = with lib; {
     inherit (linux.meta) license platforms;

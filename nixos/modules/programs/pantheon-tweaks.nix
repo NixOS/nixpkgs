@@ -1,19 +1,17 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
   meta = {
-    maintainers = teams.pantheon.members;
+    maintainers = lib.teams.pantheon.members;
   };
 
   ###### interface
   options = {
-    programs.pantheon-tweaks.enable = mkEnableOption "Pantheon Tweaks, an unofficial system settings panel for Pantheon";
+    programs.pantheon-tweaks.enable = lib.mkEnableOption "Pantheon Tweaks, an unofficial system settings panel for Pantheon";
   };
 
   ###### implementation
-  config = mkIf config.programs.pantheon-tweaks.enable {
+  config = lib.mkIf config.programs.pantheon-tweaks.enable {
     services.xserver.desktopManager.pantheon.extraSwitchboardPlugs = [ pkgs.pantheon-tweaks ];
   };
 }
