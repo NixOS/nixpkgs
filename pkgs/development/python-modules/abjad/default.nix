@@ -8,6 +8,7 @@
   pythonOlder,
   pytestCheckHook,
   lilypond,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
     ply
     roman
     uqbar
+    typing-extensions
   ];
 
   buildInputs = [ lilypond ];
