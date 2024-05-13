@@ -14,6 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JReYgIqQISQuLPd4pUbqbKtBOXT0/YJCn9czz2VTVBs=";
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   preConfigure = ''
     chmod +x ./autogen.sh && ./autogen.sh
   '';
@@ -27,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
       m4. This means that ACR is faster, smaller and easy to use.
     '';
     license = lib.licenses.gpl2Plus;
+    mainProgram = "acr";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.all;
   };
