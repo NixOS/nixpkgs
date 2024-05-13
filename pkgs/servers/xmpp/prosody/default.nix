@@ -9,8 +9,6 @@
 , withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
-with lib;
-
 let
   luaEnv = lua.withPackages(p: with p; [
       luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
@@ -72,7 +70,7 @@ stdenv.mkDerivation rec {
 
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
-      ${concatMapStringsSep "\n" (module: ''
+      ${lib.concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       make -C tools/migration install
@@ -83,7 +81,7 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) prosody prosody-mysql; };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
     homepage = "https://prosody.im";
