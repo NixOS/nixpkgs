@@ -37,16 +37,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
-  version = "8.0.36";
+  version = "8.0.37";
 
   srcs = [
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-      hash = "sha256-9PJwa5WKinOA72yVjdlyMHvb7qRR76/DQuTEbim36d0=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
+      hash = "sha256-4GOgkazZ7EC7BfLATfZPiZan5OJuiDu2UChJ1fa0pho=";
     })
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-s0+7dbcLcgS8u/6p7vpVAV9sR2gf2j9VDnSCJvw77fQ=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
+      hash = "sha256-UtZ7/Ip5h9CXKy3lkSt8/TXJgbPPUO73rMSIFPfX0Is=";
     })
   ];
 
