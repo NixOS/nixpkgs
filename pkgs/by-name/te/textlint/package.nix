@@ -4,6 +4,9 @@
   fetchFromGitHub,
   autoconf,
   automake,
+  makeWrapper,
+  runCommand,
+  textlint,
 }:
 
 buildNpmPackage rec {
@@ -47,6 +50,15 @@ buildNpmPackage rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    withPackages =
+      ps:
+      runCommand "textlint-with-packages" { nativeBuildInputs = [ makeWrapper ]; } ''
+        makeWrapper ${textlint}/bin/textlint $out/bin/textlint \
+          --set NODE_PATH ${lib.makeSearchPath "lib/node_modules" ps}
+      '';
+  };
 
   meta = {
     description = "The pluggable natural language linter for text and markdown";
