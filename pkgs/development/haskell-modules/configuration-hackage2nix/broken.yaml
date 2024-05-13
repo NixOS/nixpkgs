@@ -3385,7 +3385,7 @@ broken-packages:
   - language-webidl # failure in job https://hydra.nixos.org/build/233194656 at 2023-09-02
   - laop # failure in job https://hydra.nixos.org/build/233204106 at 2023-09-02
   - LargeCardinalHierarchy # failure in job https://hydra.nixos.org/build/233250339 at 2023-09-02
-  - large-generics # failure in job https://hydra.nixos.org/build/233210324 at 2023-09-02
+  - large-records
   - Lastik # failure in job https://hydra.nixos.org/build/233194460 at 2023-09-02
   - latest-npm-version # failure in job https://hydra.nixos.org/build/233239108 at 2023-09-02
   - latex-formulae-image # failure in job https://hydra.nixos.org/build/233251243 at 2023-09-02
@@ -4759,7 +4759,6 @@ broken-packages:
   - pro-source # failure in job https://hydra.nixos.org/build/233226793 at 2023-09-02
   - prosper # failure in job https://hydra.nixos.org/build/233244079 at 2023-09-02
   - proteaaudio # failure in job https://hydra.nixos.org/build/233225498 at 2023-09-02
-  - proto3-wire # failure in job https://hydra.nixos.org/build/233208217 at 2023-09-02
   - protocol-buffers # failure in job https://hydra.nixos.org/build/233220653 at 2023-09-02
   - protocol-buffers-fork # failure in job https://hydra.nixos.org/build/233228361 at 2023-09-02
   - protocol # failure in job https://hydra.nixos.org/build/233224436 at 2023-09-02

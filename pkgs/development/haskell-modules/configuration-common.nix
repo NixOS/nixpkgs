@@ -2633,6 +2633,9 @@ self: super: {
     sha256 = "sha256-O+v/OxvqnlWX3HaDvDIBZnJ+Og3xs/SJqI3gaouU3ZI=";
   }) super.records-sop;
 
+  # Need https://github.com/well-typed/large-records/pull/151
+  large-generics = doJailbreak super.large-generics;
+
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial = appendPatch (fetchpatch {
     name = "haskell-polynomial.20.patch";
@@ -3065,4 +3068,11 @@ self: super: {
 
   # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
   currencies = doJailbreak super.currencies;
+
+  # https://github.com/awakesecurity/proto3-wire/pull/104
+  proto3-wire = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/awakesecurity/proto3-wire/commit/c1cadeb5fca2e82c5b28e2811c01f5b37eb21ed8.patch";
+    hash = "sha256-tFOWpjGmZANC7H82QapZ36raaNWuZ6F3BgjxnfTXpMs=";
+  }) super.proto3-wire;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
