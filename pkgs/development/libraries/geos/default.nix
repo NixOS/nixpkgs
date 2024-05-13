@@ -3,7 +3,7 @@
 , callPackage
 , fetchurl
 , testers
-
+, ngspice
 , cmake
 }:
 
@@ -17,6 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals stdenv.isDarwin [ ngspice ];
 
   # https://github.com/libgeos/geos/issues/930
   cmakeFlags = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
