@@ -14885,6 +14885,8 @@ self: super: with self; {
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     inherit (pkgs.config) cudaSupport;
+    # https://www.tensorflow.org/install/source#gpu
+    cudaPackages = pkgs.cudaPackages_11;
   };
 
   tensorflow-build = let
@@ -14892,6 +14894,8 @@ self: super: with self; {
       protobufTF = pkgs.protobuf_21.override {
         abseil-cpp = pkgs.abseil-cpp_202301;
       };
+      # https://www.tensorflow.org/install/source#gpu
+      cudaPackagesTF = pkgs.cudaPackages_11;
       grpcTF = (pkgs.grpc.overrideAttrs (
         oldAttrs: rec {
           # nvcc fails on recent grpc versions, so we use the latest patch level
@@ -14937,6 +14941,7 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
+    cudaPackages = compat.cudaPackagesTF;
     protobuf-core = compat.protobufTF;
     protobuf-python = compat.protobuf-pythonTF;
     grpc = compat.grpcTF;
