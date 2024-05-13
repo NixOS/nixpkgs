@@ -606,9 +606,9 @@ let
         compilerNames.ghc982
         compilerNames.ghc9101
       ] released;
-      primitive = lib.subtractLists released [
+      primitive = lib.subtractLists [
         compilerNames.ghc9101
-      ];
+      ] released;
       weeder = lib.subtractLists [
         compilerNames.ghc981
         compilerNames.ghc982
