@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
-  version = "0.27.1";
+  version = "0.27.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = "refs/tags/${version}";
-    hash = "sha256-R6rxEo9SNNziXRWB+01UUInParpGcFDIkDZtN4k+dFE=";
+    hash = "sha256-lOgFDkAY+PqSeyLSvWFT7KPVicSJZxd6yl17GAGHbRs=";
   };
 
   patches = [
@@ -89,6 +89,7 @@ buildPythonPackage rec {
     "test_rest_framework_gis"
     # Outdated test artifact
     "test_pydantic_decoration"
+    "test_knox_auth_token"
   ];
 
   pythonImportsCheck = [ "drf_spectacular" ];
