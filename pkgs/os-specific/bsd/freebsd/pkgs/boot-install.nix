@@ -5,6 +5,6 @@ buildPackages.writeShellScriptBin "boot-install" (
   freebsd-lib.install-wrapper
   + ''
 
-    ${buildPackages.netbsd.install}/bin/xinstall "''${args[@]}"
+    ${buildPackages.coreutils}/bin/install "''${args[@]}"
   ''
 )

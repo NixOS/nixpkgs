@@ -18,6 +18,6 @@ let
     lib.concatMapStringsSep "\n" (path: "/${path}") sortedPaths
   );
 in
-runCommand "${pname}-filtered-src" { nativeBuildInputs = [ pkgsBuildBuild.rsync ]; } ''
+runCommand "${pname}-filtered-src" { nativeBuildInputs = [ (pkgsBuildBuild.rsync.override { enableZstd = false; enableXXHash = false; enableOpenSSL = false; enableLZ4 = false; }) ]; } ''
   rsync -a -r --files-from=${filterText} ${source}/ $out
 ''

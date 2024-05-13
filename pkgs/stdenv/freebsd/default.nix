@@ -262,7 +262,7 @@ in
         name = "freebsd-boot-1-cc";
         inherit (prevStage.freebsd) libc;
         inherit (prevStage) gnugrep coreutils libcxx;
-        runtimeShell = "${prevStage.bashReal}/bin/bash";
+        runtimeShell = "${prevStage.bash}/bin/bash";
         expand-response-params = prevStage.expand-response-params;
         propagateDoc = false;
         nativeTools = false;
@@ -282,7 +282,7 @@ in
           name = "freebsd-boot-1-bintools";
           inherit (prevStage.freebsd) libc;
           inherit (prevStage) gnugrep coreutils;
-          runtimeShell = "${prevStage.bashReal}/bin/bash";
+          runtimeShell = "${prevStage.bash}/bin/bash";
           expand-response-params = prevStage.expand-response-params;
           bintools = prevStage.binutils-unwrapped;
           propagateDoc = false;
@@ -378,11 +378,12 @@ in
           name = "freebsd-boot-2-bintools";
           inherit (prevStage.freebsd) libc;
           inherit (prevStage) gnugrep coreutils;
+          runtimeShell = "${prevStage.bashReal}/bin/bash";
+          expand-response-params = prevStage.expand-response-params;
           bintools = prevStage.binutils-unwrapped;
           propagateDoc = false;
           nativeTools = false;
           nativeLibc = false;
-          buildPackages = prevStage.buildPackages;
         };
       });
       overrides = self: super: {
@@ -461,8 +462,9 @@ in
         inherit lib stdenvNoCC;
         name = "freebsd-cc";
         inherit (prevStage.freebsd) libc;
-        inherit (prevStage) gnugrep coreutils;
+        inherit (prevStage) gnugrep coreutils expand-response-params;
         inherit (prevStage.llvmPackages) libcxx;
+        runtimeShell = "${prevStage.bash}/bin/bash";
         propagateDoc = false;
         nativeTools = false;
         nativeLibc = false;
@@ -481,11 +483,12 @@ in
           name = "freebsd-bintools";
           inherit (prevStage.freebsd) libc;
           inherit (prevStage) gnugrep coreutils;
+          runtimeShell = "${prevStage.bash}/bin/bash";
+          expand-response-params = prevStage.expand-response-params;
           bintools = prevStage.binutils-unwrapped;
           propagateDoc = false;
           nativeTools = false;
           nativeLibc = false;
-          buildPackages = prevStage.buildPackages;
         };
       };
       overrides = self: super: {
