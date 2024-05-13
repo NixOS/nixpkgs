@@ -5419,6 +5419,8 @@ self: super: with self; {
 
   hcloud = callPackage ../development/python-modules/hcloud { };
 
+  hclust2 = callPackage ../development/python-modules/hclust2 { };
+
   hcs-utils = callPackage ../development/python-modules/hcs-utils { };
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
