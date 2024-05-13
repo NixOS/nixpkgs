@@ -32,11 +32,11 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.0.14";
-  virtualboxSha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
+  virtualboxVersion = "7.0.18";
+  virtualboxSha256 = "d999513533631674a024762668de999411d8197060c51e68c5faf0a2c0eea1a5";
 
-  kvmPatchVersion = "20240502";
-  kvmPatchHash = "sha256-KokIrrAoJutHzPg6e5YAJgDGs+nQoVjapmyn9kG5tV0=";
+  kvmPatchVersion = "20240515";
+  kvmPatchHash = "sha256-Kh/tlPScdf7CbEEpL54iqMpeUIdmnJL2r/mxnlEzLd0=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -135,8 +135,6 @@ in stdenv.mkDerivation (finalAttrs: {
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
-    ./libxml-2.12.patch
-    ./gcc-13.patch
   ];
 
   postPatch = ''
