@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ply,
-  roman,
-  uqbar,
-  pythonOlder,
-  pytestCheckHook,
-  lilypond,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ply
+, roman
+, uqbar
+, pythonOlder
+, pytestCheckHook
+, lilypond
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -26,6 +26,7 @@ buildPythonPackage rec {
     ply
     roman
     uqbar
+    typing-extensions
   ];
 
   buildInputs = [ lilypond ];
