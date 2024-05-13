@@ -23,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hmmoe1lzUR1DBwgg30KGfsIDzSNe5shghaieEXX/am4=";
   };
 
+  postPatch = ''
+    patchShebangs test/
+    patchShebangs build/sysinfo
+  '';
+
   outputs = [ "out" "dev" "doc" "lib" "man" ];
 
   nativeBuildInputs = [
@@ -54,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = "https://jasper-software.github.io/jasper/";
