@@ -26689,8 +26689,6 @@ with pkgs;
 
   urserver = callPackage ../servers/urserver { };
 
-  uxplay = callPackage ../servers/uxplay { };
-
   vouch-proxy = callPackage ../servers/vouch-proxy { };
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
