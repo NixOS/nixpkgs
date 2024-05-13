@@ -14438,8 +14438,6 @@ with pkgs;
 
   unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
 
-  unbound = callPackage ../tools/networking/unbound { };
-
   unbound-with-systemd = unbound.override {
     withSystemd = true;
   };
