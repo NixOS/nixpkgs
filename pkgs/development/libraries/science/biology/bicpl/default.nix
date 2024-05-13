@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc, netpbm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libminc,
+  netpbm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bicpl";
@@ -6,14 +13,17 @@ stdenv.mkDerivation rec {
 
   # current master is significantly ahead of most recent release, so use Git version:
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "a58af912a71a4c62014975b89ef37a8e72de3c9d";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "a58af912a71a4c62014975b89ef37a8e72de3c9d";
     sha256 = "0iw0pmr8xrifbx5l8a0xidfqbm1v8hwzqrw0lcmimxlzdihyri0g";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libminc netpbm ];
+  buildInputs = [
+    libminc
+    netpbm
+  ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
@@ -25,6 +35,9 @@ stdenv.mkDerivation rec {
     description = "Brain Imaging Centre programming library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = with licenses; [ hpndUc gpl3Plus ];
+    license = with licenses; [
+      hpndUc
+      gpl3Plus
+    ];
   };
 }
