@@ -6,18 +6,18 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 in stdenv.mkDerivation rec {
   name = "r8168-${kernel.version}-${version}";
   # on update please verify that the source matches the realtek version
-  version = "8.052.01";
+  version = "8.053.00";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
   # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
-  # I've verified manually (`diff -r`) that the source code for version 8.052.01
+  # I've verified manually (`diff -r`) that the source code for version 8.053.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "01mi7hh92nc7jaxkfrpz7j0ci78djrhgmq0im4k1270mwmvr0yzj";
+    sha256 = "0bHGs8jyWd+ZiixOoNkBqhS9RjDpRp3vveAgk1YuOWU=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timokau ];
-    broken = (lib.versions.majorMinor kernel.modDirVersion) != "5.15";
+    maintainers = with maintainers; [];
+    broken = (lib.versions.majorMinor kernel.modDirVersion) > "6.8";
   };
 }
