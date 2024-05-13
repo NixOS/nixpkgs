@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,25 +23,19 @@ buildPythonPackage rec {
     hash = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    lxml
-  ];
+  dependencies = [ lxml ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # AttributeError: 'tuple' object has no attribute 'shortDescription'
-    "test_basic_unittest_constructs"
-    "test_unexpected_success"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    "test_xmlrunner_hold_traceback"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.11") [
+      # AttributeError: 'tuple' object has no attribute 'shortDescription'
+      "test_basic_unittest_constructs"
+      "test_unexpected_success"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [ "test_xmlrunner_hold_traceback" ];
 
   pythonImportsCheck = [ "xmlrunner" ];
 
