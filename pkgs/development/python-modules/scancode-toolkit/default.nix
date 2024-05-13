@@ -136,11 +136,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
-  postInstall = ''
+  # Importing scancode needs a writeable home
+  prePythonImportsCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  preCheck = prePythonImportsCheck;
 
   pythonImportsCheck = [
     "scancode"
