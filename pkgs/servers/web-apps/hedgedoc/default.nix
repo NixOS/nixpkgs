@@ -84,19 +84,18 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/hedgedoc
-    cp -r bin $out
-    cp -r {app.js,lib,locales,node_modules,package.json,public} $out/share/hedgedoc
+    mkdir -p $out
+    cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
 
     for bin in $out/bin/*; do
       wrapProgram $bin \
         --set NODE_ENV production \
-        --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
+        --set NODE_PATH "$out/lib/node_modules"
     done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
-      --add-flags $out/share/hedgedoc/app.js \
+      --add-flags $out/app.js \
       --set NODE_ENV production \
-      --set NODE_PATH "$out/share/hedgedoc/lib/node_modules"
+      --set NODE_PATH "$out/lib/node_modules"
 
     runHook postInstall
   '';
