@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
   name = firefoxPackage.pname;
 
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco shlevy ];
+    maintainers = [ shlevy ];
   };
 
   nodes.machine =

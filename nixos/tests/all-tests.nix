@@ -885,7 +885,7 @@ in {
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-bpf = handleTest ./systemd-bpf.nix {};
-  systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-confinement = handleTest ./systemd-confinement {};
   systemd-coredump = handleTest ./systemd-coredump.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-credentials-tpm2 = handleTest ./systemd-credentials-tpm2.nix {};

@@ -1338,6 +1338,8 @@ self: super: with self; {
 
   paddlepaddle = callPackage ../development/python-modules/paddlepaddle { };
 
+  pcffont = callPackage ../development/python-modules/pcffont { };
+
   pueblo = callPackage ../development/python-modules/pueblo { };
 
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
@@ -2003,8 +2005,6 @@ self: super: with self; {
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
-
-  cepa = callPackage ../development/python-modules/cepa { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
@@ -5377,6 +5377,8 @@ self: super: with self; {
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
 
   hikari = callPackage ../development/python-modules/hikari { };
+
+  hikari-lightbulb = callPackage ../development/python-modules/hikari-lightbulb { };
 
   hikvision = callPackage ../development/python-modules/hikvision { };
 

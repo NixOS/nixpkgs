@@ -14,7 +14,7 @@ GEM
     gemojione (4.3.3)
       json
     github-markup (4.0.2)
-    gollum (5.3.2)
+    gollum (5.3.3)
       gemojione (~> 4.1)
       gollum-lib (>= 5.2.3, < 6.0)
       i18n (~> 1.8)
@@ -48,7 +48,7 @@ GEM
     htmlentities (4.3.4)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
-    json (2.7.1)
+    json (2.7.2)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -59,14 +59,14 @@ GEM
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2024.0305)
-    mini_portile2 (2.8.5)
+    mini_portile2 (2.8.6)
     multi_json (1.15.0)
     mustache (1.1.1)
     mustache-sinatra (2.0.0)
       mustache (~> 1.0)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.16.3)
+    nokogiri (1.16.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     octicons (12.1.0)
@@ -146,4 +146,4 @@ DEPENDENCIES
   wikicloth
 
 BUNDLED WITH
-   2.5.6
+   2.5.7

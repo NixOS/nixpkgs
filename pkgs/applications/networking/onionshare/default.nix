@@ -1,20 +1,18 @@
 { lib
 , stdenv
 , buildPythonApplication
-, cepa
 , colorama
 , fetchFromGitHub
+, fetchpatch
 , flask
 , flask-compress
-, flask-httpauth
 , flask-socketio
-, gevent-socketio
 , gevent-websocket
 , obfs4
 , psutil
+, packaging
 , pycrypto
 , pynacl
-, pyqt5
 , pyside6
 , pysocks
 , pytestCheckHook
@@ -22,10 +20,12 @@
 , qt5
 , requests
 , snowflake
+, stem
 , substituteAll
 , tor
 , unidecode
 , waitress
+, werkzeug
 }:
 
 let
@@ -79,23 +79,25 @@ rec {
       })
     ];
     propagatedBuildInputs = [
-      cepa
       colorama
       flask
       flask-compress
-      flask-httpauth
       flask-socketio
-      gevent-socketio
       gevent-websocket
+      packaging
       psutil
       pycrypto
       pynacl
       pyside6
+      pysocks
+      qrcode
       qrcode
       requests
+      stem
       unidecode
       waitress
-    ];
+      werkzeug
+    ] ++ requests.optional-dependencies.socks;
 
     buildInputs = [
       obfs4
@@ -138,18 +140,24 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+
+      # https://github.com/onionshare/onionshare/pull/1903
+      (fetchpatch {
+        url = "https://github.com/onionshare/onionshare/pull/1903/commits/f20db8fcbd18e51b58814ae8f98f3a7502b4f456.patch";
+        stripLen = 1;
+        hash = "sha256-wfIjdPhdUYAvbK5XyE1o2OtFOlJRj0X5mh7QQRjdyP0=";
+      })
     ];
 
     propagatedBuildInputs = [
       onionshare
-      psutil
-      pyqt5
       pyside6
-      pysocks
       qrcode
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+
+    buildInputs = [ qt5.qtwayland ];
 
     postInstall = ''
       mkdir -p $out/share/{appdata,applications,icons}

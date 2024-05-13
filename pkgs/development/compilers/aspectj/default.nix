@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.9.21.2";
+  version = "1.9.22";
   versionSnakeCase = builtins.replaceStrings [ "." ] [ "_" ] version;
 in
 stdenvNoCC.mkDerivation {
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/eclipse/org.aspectj/releases/download/V${versionSnakeCase}/aspectj-${version}.jar";
-    hash = "sha256-wqQtyopS03zX+GJme5YZwWiACqO4GAYFr3XAjzqSFnQ=";
+    hash = "sha256-kQsWu/rS7Qf7Fcg5VZ+QhggvK69aUVD3HCh0aJ2qhfw=";
   };
 
   dontUnpack = true;
