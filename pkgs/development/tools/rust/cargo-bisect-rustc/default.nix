@@ -2,13 +2,13 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  darwin,
   rustPlatform,
   pkg-config,
   openssl,
   runCommand,
   patchelf,
   zlib,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,7 +43,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   cargoHash = "sha256-CgEs0cejquFRY3VN6CgbE23Gipg+LEuWp/jSIkITrjw=";
 
