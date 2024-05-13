@@ -32,11 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    expat
-  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
+  buildInputs = lib.optional stdenv.isDarwin CoreFoundation;
 
   propagatedBuildInputs = [
+    expat
     freetype
   ];
 
