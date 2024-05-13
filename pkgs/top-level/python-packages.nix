@@ -7547,6 +7547,8 @@ self: super: with self; {
 
   metakernel = callPackage ../development/python-modules/metakernel { };
 
+  metaphlan = callPackage ../development/python-modules/metaphlan { };
+
   metar = callPackage ../development/python-modules/metar { };
 
   metawear = callPackage ../development/python-modules/metawear { };
