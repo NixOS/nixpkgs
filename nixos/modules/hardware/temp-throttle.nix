@@ -2,8 +2,7 @@
 
 let
   cfg = config.services.temp-throttle;
-  configFile = let toString = builtins.toString;
-  in builtins.toFile "temp-throttle.conf" (''
+  configFile = builtins.toFile "temp-throttle.conf" (''
     MAX_TEMP=${toString cfg.max_temp}
     INTERVAL=${toString cfg.interval}
   '' + lib.optionalString (cfg.temp_file != null) ''
