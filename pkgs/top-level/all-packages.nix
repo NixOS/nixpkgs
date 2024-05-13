@@ -29856,12 +29856,18 @@ with pkgs;
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
-  blender = callPackage  ../applications/misc/blender {
-    openexr = openexr_3;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
-  };
+  blender = blenderVersions.stable;
 
-  blender-hip = blender.override { hipSupport = true; };
+  blender-lts = blenderVersions.lts;
+
+  blender-hip = blenderVersions.stable.override { hipSupport = true; };
+
+  blender-hip-lts = blenderVersions.lts.override { hipSupport = true; };
+
+  blenderVersions = (import ../applications/misc/blender {
+    inherit callPackage lib openexr_3;
+    darwinFrameworks = darwin.apple_sdk.frameworks;
+  });
 
   blflash = callPackage ../tools/misc/blflash { };
 
