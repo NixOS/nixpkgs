@@ -34,7 +34,7 @@
 buildPythonPackage rec {
   pname = "qtile";
   version = "0.25.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
@@ -59,13 +59,13 @@ buildPythonPackage rec {
         --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
-  nativeBuildInputs = [
-    pkg-config
+  build-system = [
     setuptools
     setuptools-scm
+    pkg-config
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     (cairocffi.override { withXcffib = true; })
     dbus-next
     dbus-python
