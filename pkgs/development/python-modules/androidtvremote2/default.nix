@@ -11,9 +11,9 @@
 buildPythonPackage rec {
   pname = "androidtvremote2";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tronikos";
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-Zem2IWBUWmyVdBjqoVKFk+/lg5T7CPXCKFXhFusQFLY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     cryptography
     protobuf
