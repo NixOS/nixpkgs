@@ -216,7 +216,6 @@
 , "sql-formatter"
 , "stackdriver-statsd-backend"
 , "svelte-check"
-, "svelte-language-server"
 , "svgo"
 , "tailwindcss"
 , "teck-programmer"
