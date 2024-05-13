@@ -1,0 +1,67 @@
+@nix { "action": "setPhase", "phase": "unpackPhase" }
+Running phase: unpackPhase
+unpacking source archive /nix/store/xgxilpynviqjg46jl93l7pc3fln7jwrv-source
+source root is source
+@nix { "action": "setPhase", "phase": "patchPhase" }
+Running phase: patchPhase
+@nix { "action": "setPhase", "phase": "updateAutotoolsGnuConfigScriptsPhase" }
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+@nix { "action": "setPhase", "phase": "configurePhase" }
+Running phase: configurePhase
+no configure script, doing nothing
+@nix { "action": "setPhase", "phase": "buildPhase" }
+Running phase: buildPhase
+
+Welcome to Gradle 8.7!
+
+Here are the highlights of this release:
+ - Compiling and testing with Java 22
+ - Cacheable Groovy script compilation
+ - New methods in lazy collection properties
+
+For more details see https://docs.gradle.org/8.7/release-notes.html
+
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.7/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+
+
+[2A[1B[1m> Starting Daemon[m[17D[1B[2ADaemon will be stopped at the end of the build 
+[1B[0K
+[2A[0K[1B> IDLE[6D[1B[2A[1m<[0;1m-------------> 0% INITIALIZING [54ms][m[38D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [154ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [254ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [354ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [454ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [554ms][m[39D[1B[1m> Evaluating settings[m[21D[1B[2A[1m<[0;1m-------------> 0% INITIALIZING [654ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [754ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [854ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [954ms][m[39D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [1s][m[0K[36D[2B[2A[1m<[0;1m-------------> 0% INITIALIZING [2s][m[36D[2B[2A[1m<[0;1m-------------> 0% CONFIGURING [2s][m[0K[35D[1B[1m> Loading projects[m[0K[18D[1B[1A[1m> root project[m[0K[14D[1B[2A[1m<[0;1m-------------> 0% CONFIGURING [3s][m[35D[2B[2A[1m<[0;1m-------------> 0% CONFIGURING [4s][m[35D[2B[2A[1m<[0;1m-------------> 0% CONFIGURING [5s][m[35D[2B[2A[0K
+[31mFAILURE: [39m[31mBuild failed with an exception.[39m[0K
+
+* What went wrong:
+A problem occurred configuring root project 'haveno'.
+[33m> [39mCould not resolve all artifacts for configuration ':classpath'.
+   [33m> [39mCould not resolve com.google.protobuf:protobuf-gradle-plugin:0.8.17.
+     Required by:
+         project :
+      [33m> [39mNo cached version of com.google.protobuf:protobuf-gradle-plugin:0.8.17 available for offline mode.
+   [33m> [39mCould not resolve com.google.gradle:osdetector-gradle-plugin:1.7.3.
+     Required by:
+         project :
+      [33m> [39mNo cached version of com.google.gradle:osdetector-gradle-plugin:1.7.3 available for offline mode.
+   [33m> [39mCould not resolve com.github.johnrengelman:shadow:8.1.1.
+     Required by:
+         project :
+      [33m> [39mNo cached version of com.github.johnrengelman:shadow:8.1.1 available for offline mode.
+   [33m> [39mCould not resolve org.springframework.boot:spring-boot-gradle-plugin:3.2.3.
+     Required by:
+         project :
+      [33m> [39mNo cached version of org.springframework.boot:spring-boot-gradle-plugin:3.2.3 available for offline mode.
+   [33m> [39mCould not resolve com.gradle:gradle-enterprise-gradle-plugin:3.16.1.
+     Required by:
+         project :
+      [33m> [39mNo cached version of com.gradle:gradle-enterprise-gradle-plugin:3.16.1 available for offline mode.
+
+* Try:
+[33m> [39mRun with [1m--stacktrace[m option to get the stack trace.
+[0K
+[0K
+[2A[1m<[0;1m-------------> 6% CONFIGURING [5s][m[35D[1B> IDLE[6D[1B[2A[33m> [39mRun with [1m--info[m or [1m--debug[m option to get more log output.[0K
+[33m> [39mRun with [1m--scan[m to get full insights.[0K
+[33m> [39mGet more help at [1mhttps://help.gradle.org[m.
+
+[31;1mBUILD FAILED[0;39m in 7s
+[0K
+[0K
+[2A[1m<[0;1m-------------> 0% WAITING[m[26D[1B> IDLE[6D[1B[2A[2K[1B[2K[1A[0m[?12l[?25h
