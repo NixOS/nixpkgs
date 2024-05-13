@@ -1,25 +1,19 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-
-# build-system
-, setuptools
-
-# optionals
-, cbor2
 , cbor-diag
+, cbor2
 , cryptography
+, dtlssocket
+, fetchFromGitHub
 , filelock
 , ge25519
-, dtlssocket
-, websockets
-, termcolor
 , pygments
-
-# tests
 , pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, termcolor
+, websockets
 }:
 
 buildPythonPackage rec {
@@ -31,12 +25,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "chrysn";
-    repo = pname;
+    repo = "aiocoap";
     rev = "refs/tags/${version}";
     hash = "sha256-jBRxorHr5/CgAR6WVXBUycZpJ6n1DYVFQk6kqVv8D1Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
@@ -65,23 +59,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/chrysn/aiocoap/issues/339
-    "--deselect=tests/test_server.py::TestServerTCP::test_big_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_empty_accept"
-    "--deselect=tests/test_server.py::TestServerTCP::test_error_resources"
-    "--deselect=tests/test_server.py::TestServerTCP::test_fast_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_js_accept"
-    "--deselect=tests/test_server.py::TestServerTCP::test_manualbig_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_nonexisting_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_replacing_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_root_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_slow_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_slowbig_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_spurious_resource"
-    "--deselect=tests/test_server.py::TestServerTCP::test_unacceptable_accept"
-  ];
-
   disabledTestPaths = [
     # Don't test the plugins
     "tests/test_tls.py"
@@ -92,6 +69,21 @@ buildPythonPackage rec {
   disabledTests = [
     # Communication is not properly mocked
     "test_uri_parser"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/chrysn/aiocoap/issues/339
+    "TestServerTCP::test_big_resource"
+    "TestServerTCP::test_empty_accept"
+    "TestServerTCP::test_error_resources"
+    "TestServerTCP::test_fast_resource"
+    "TestServerTCP::test_js_accept"
+    "TestServerTCP::test_manualbig_resource"
+    "TestServerTCP::test_nonexisting_resource"
+    "TestServerTCP::test_replacing_resource"
+    "TestServerTCP::test_root_resource"
+    "TestServerTCP::test_slow_resource"
+    "TestServerTCP::test_slowbig_resource"
+    "TestServerTCP::test_spurious_resource"
+    "TestServerTCP::test_unacceptable_accept"
   ];
 
   pythonImportsCheck = [
