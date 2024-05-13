@@ -37,16 +37,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "emulsion";
-  version = "10.5";
+  version = "11.0";
 
   src = fetchFromGitHub {
     owner = "ArturKovacs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Wrb5jHr2rXDpXF/uHpNLKSc//Xdj0/VsXQcytit0hKY=";
+    sha256 = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
   };
 
-  cargoHash = "sha256-zfR4sp/AmK3+UcFdqMMZE9O9+oGathqmuqFw11SmUWI=";
+  cargoHash = "sha256-detJZRnxT3FubaF/A4w2pFdhW03BH0gsaeuNFYu+cBw=";
 
   nativeBuildInputs = [
     installShellFiles

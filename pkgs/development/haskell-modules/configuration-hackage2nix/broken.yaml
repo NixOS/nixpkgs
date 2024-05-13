@@ -5794,7 +5794,6 @@ broken-packages:
   - SVD2HS # failure in job https://hydra.nixos.org/build/233248575 at 2023-09-02
   - svfactor # failure in job https://hydra.nixos.org/build/233256743 at 2023-09-02
   - svg-builder-fork # failure in job https://hydra.nixos.org/build/233224461 at 2023-09-02
-  - svgsym # failure in job https://hydra.nixos.org/build/233255287 at 2023-09-02
   - svgutils # failure in job https://hydra.nixos.org/build/233193438 at 2023-09-02
   - svm-light-utils # failure in job https://hydra.nixos.org/build/233219138 at 2023-09-02
   - svm-simple # failure in job https://hydra.nixos.org/build/233235871 at 2023-09-02

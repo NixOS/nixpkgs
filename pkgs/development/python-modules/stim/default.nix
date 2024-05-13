@@ -32,7 +32,7 @@ buildPythonPackage rec {
   postPatch = ''
     # asked to relax this in https://github.com/quantumlib/Stim/issues/623
     substituteInPlace pyproject.toml \
-      --replace "pybind11==" "pybind11>="
+      --replace-quiet "pybind11~=" "pybind11>="
   '';
 
   nativeBuildInputs = [

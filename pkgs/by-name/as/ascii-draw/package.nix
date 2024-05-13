@@ -12,19 +12,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ascii-draw";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "ascii-draw";
     rev = "v${version}";
-    hash = "sha256-vI+j8OuQ3b6La0+7wWeoUtBal24dazlN/T0Bng5TgMo=";
+    hash = "sha256-opjYgLfHfKSbipB1HRxfBkgp+9c4yqIL1fiUOcFmCMc=";
   };
-
-  # Temporary fix for autosaving to flatpak directory
-  # https://github.com/Nokse22/ascii-draw/issues/31
-  patches = [ ./fix_palette_data_dir.patch ];
 
   nativeBuildInputs = [
     meson

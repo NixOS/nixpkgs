@@ -10397,10 +10397,10 @@ with self; {
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.60";
+    version = "1.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-UXrYQNvOhzdVjnMxNJ/fa7J5u7sMobV+3SN7T5jVw34=";
+      hash = "sha256-Qw7p3yLcqjLrYwpNf7V6KFQvn+UHsmawo39nVLTzWgg=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
     propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies HTTPCookieJar JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
@@ -29045,10 +29045,10 @@ with self; {
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.88";
+    version = "0.89";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-LibYAML-0.88.tar.gz";
-      hash = "sha256-qKJzjMzDMqj3VJxMJ/PgCQyasR7vD2yFZEUXc5gTVng=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.89.tar.gz";
+      hash = "sha256-FVq4NnU0XFCt0DMRrPndkVlVcH+Qmiq9ixfXeShZsuw=";
     };
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";

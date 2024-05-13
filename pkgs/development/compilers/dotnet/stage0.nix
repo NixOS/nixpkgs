@@ -25,8 +25,6 @@ let
 
   patchNupkgs = pkgsBuildHost.callPackage ./patch-nupkgs.nix {};
 
-  signAppHost = callPackage ./sign-apphost.nix {};
-
   deps = mkNugetDeps {
     name = "dotnet-vmr-deps";
     sourceFile = depsFile;
@@ -51,12 +49,6 @@ let
         -s //Project -t elem -n Import \
         -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
         src/*/Directory.Build.targets
-    '' + lib.optionalString stdenv.isDarwin ''
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n Import \
-        -i \$prev -t attr -n Project -v "${signAppHost}" \
-        src/runtime/Directory.Build.targets
     '';
 
     postConfigure = old.postConfigure or "" + ''

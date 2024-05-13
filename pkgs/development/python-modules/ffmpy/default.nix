@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -42,6 +43,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     go
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # expects a FFExecutableNotFoundError, gets a NotADirectoryError raised by os
+    "test_invalid_executable_path"
   ];
 
   # the vendored ffmpeg mock binary assumes FHS

@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, curl
-, xclip
-, wl-clipboard
-, stdenv
-, buildLua
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  curl,
+  xclip,
+  wl-clipboard,
+  stdenv,
+  buildLua,
+  unstableGitUpdater,
 }:
 buildLua {
   pname = "videoclip";
@@ -18,13 +19,15 @@ buildLua {
     hash = "sha256-Sg6LHU9OVmVx3cTs8Y0WL8wACb5BlVyeBRccoX+7BXY=";
   };
 
-  patchPhase = ''
-    substituteInPlace platform.lua \
-    --replace \'curl\' \'${lib.getExe curl}\' \
-  '' + lib.optionalString stdenv.isLinux ''
-    --replace xclip ${lib.getExe xclip} \
-    --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
-  '';
+  patchPhase =
+    ''
+      substituteInPlace platform.lua \
+      --replace \'curl\' \'${lib.getExe curl}\' \
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      --replace xclip ${lib.getExe xclip} \
+      --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
+    '';
 
   scriptPath = ".";
   passthru.scriptName = "videoclip";

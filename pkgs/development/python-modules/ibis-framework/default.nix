@@ -42,6 +42,7 @@
 , pytest-mock
 , pytest-randomly
 , pytest-snapshot
+, pytest-timeout
 , pytest-xdist
 , python-dateutil
 , pytz
@@ -65,15 +66,15 @@ let
     name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    # https://github.com/ibis-project/ibis/blob/8.0.0/nix/overlay.nix#L20-L26
-    rev = "2c6a4bb5d5d525058d8d5b2312a9fee5dafc5476";
-    hash = "sha256-Lq503bqh9ESZJSk6yVq/uZwkAubzmSmoTBZSsqMm0DY=";
+    # https://github.com/ibis-project/ibis/blob/9.0.0/nix/overlay.nix#L20-L26
+    rev = "1922bd4617546b877e66e78bb2b87abeb510cf8e";
+    hash = "sha256-l5d7r/6Voy6N2pXq3IivLX3N0tNfKKwsbZXRexzc8Z8=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "8.0.0";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -83,7 +84,7 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-KcNZslqmSbu8uPYKpkyvd7d8Fsf0nQt80y0auXsI8fs=";
+    hash = "sha256-ebTYCBL1zm2Rmwg998x2kYvKhyQDk8Di1pcx5lR37xo=";
   };
 
   nativeBuildInputs = [
@@ -120,6 +121,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-randomly
     pytest-snapshot
+    pytest-timeout
     pytest-xdist
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
 
@@ -133,8 +135,11 @@ buildPythonPackage rec {
     # breakage from sqlalchemy2 truediv changes
     "test_tpc_h17"
     # tries to download duckdb extensions
-    "test_register_sqlite"
+    "test_attach_sqlite"
+    "test_connect_extensions"
+    "test_load_extension"
     "test_read_sqlite"
+    "test_register_sqlite"
     # duckdb does not respect sample_size=2 (reads 3 lines of csv).
     "test_csv_reregister_schema"
     # duckdb fails with:

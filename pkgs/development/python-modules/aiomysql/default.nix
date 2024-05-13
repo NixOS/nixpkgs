@@ -4,6 +4,7 @@
 , fetchpatch
 , pymysql
 , pythonOlder
+, setuptools
 , setuptools-scm
 , wheel
 }:
@@ -11,13 +12,13 @@
 buildPythonPackage rec {
   pname = "aiomysql";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiomysql";
     rev = "refs/tags/v${version}";
     hash = "sha256-m/EgoBU3e+s3soXyYtACMDSjJfMLBOk/00qPtgawwQ8=";
   };
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
     wheel
   ];

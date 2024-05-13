@@ -6,6 +6,7 @@
 # plenary utilities
 , which
 , findutils
+, clang
 , coreutils
 , curl
 , cyrus_sasl
@@ -47,6 +48,7 @@
 , sol2
 , sqlite
 , tomlplusplus
+, tree-sitter
 , unbound
 , vimPlugins
 , vimUtils
@@ -91,7 +93,7 @@ in
     ];
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0',"
+        --replace-fail "'lua_cliargs = 3.0'," "'lua_cliargs >= 3.0-1',"
     '';
     postInstall = ''
       installShellCompletion --cmd busted \
@@ -143,6 +145,16 @@ in
     ];
     postInstall = ''
       installManPage fennel.1
+    '';
+  });
+
+  # Until https://github.com/swarn/fzy-lua/pull/8 is merged,
+  # we have to invoke busted manually
+  fzy = prev.fzy.overrideAttrs(oa: {
+    doCheck = true;
+    nativeCheckInputs = [ final.busted ];
+    checkPhase = ''
+      busted
     '';
   });
 
@@ -225,6 +237,10 @@ in
     preConfigure = ''
       make rock
     '';
+
+    # Lua 5.4 support is experimental at the moment, see
+    # https://github.com/lgi-devs/lgi/pull/249
+    meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
   lmathx = prev.luaLib.overrideLuarocks prev.lmathx (drv:
@@ -375,14 +391,6 @@ in
     externalDeps = [
       { name = "LDAP"; dep = openldap; }
     ];
-  });
-
-  luasnip = prev.luasnip.overrideAttrs (_: {
-    # Until https://github.com/L3MON4D3/LuaSnip/issues/1139 is solved
-    postConfigure = ''
-      substituteInPlace ''${rockspecFilename} \
-        --replace "'jsregexp >= 0.0.5, <= 0.0.6'" "'jsregexp >= 0.0.5'"
-    '';
   });
 
   luaossl = prev.luaossl.overrideAttrs (_: {
@@ -641,7 +649,8 @@ in
       tar xf *.tar.gz
     '';
 
-    propagatedBuildInputs = [ lua luaposix
+    propagatedBuildInputs = [
+      luaposix
       readline.out
     ];
 
@@ -700,9 +709,9 @@ in
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}" \
-        --replace "MAGIC_ENUM_SRC" "${magic-enum.src}"
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "TOML_PLUS_PLUS_SRC" \
+        "${tomlplusplus.src}"
     '';
   });
 
@@ -713,16 +722,26 @@ in
       hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
     };
 
-    nativeBuildInputs = let
-      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
-      # so we have to pass the correct package in here.
-      lua = lib.head oa.propagatedBuildInputs;
-    in oa.nativeBuildInputs ++ [
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo
       rustPlatform.cargoSetupHook
       lua.pkgs.luarocks-build-rust-mlua
     ];
 
+  });
+
+  tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
+    nativeBuildInputs = let
+      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
+      # so we have to pass the correct package in here.
+      lua = lib.head oa.propagatedBuildInputs;
+    in oa.nativeBuildInputs ++ [
+      lua.pkgs.luarocks-build-treesitter-parser
+    ] ++ (lib.optionals stdenv.isDarwin [
+      clang
+      tree-sitter
+    ]);
+    meta.broken = (luaOlder "5.1" || stdenv.isDarwin);
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
@@ -731,9 +750,11 @@ in
 
   vusted = prev.vusted.overrideAttrs (_: {
     postConfigure = ''
+      cat ''${rockspecFilename}
       substituteInPlace ''${rockspecFilename} \
-        --replace '"luasystem = 0.2.1",' '"luasystem",'
+        --replace-fail '"luasystem = 0.2.1",' "'luasystem >= 0.2',"
     '';
+
     # make sure vusted_entry.vim doesn't get wrapped
     postInstall = ''
       chmod -x $out/bin/vusted_entry.vim

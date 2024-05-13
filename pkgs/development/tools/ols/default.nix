@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2024-04-28";
+  version = "0-unstable-2024-05-06";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "49a63471d91120a23ec86f1621e99155d1be55c2";
-    hash = "sha256-fHCSPqeN24QbCzwMCLtvK5YnR0ExveDvXRuWL2nHt8M=";
+    rev = "5c646656e988ddcdaee09f1bea666dc00ea2ea4d";
+    hash = "sha256-W8D+szu4+mDYwDLWvGRL3ICZ9Dr93pFweEO2+0awHfo=";
   };
 
   passthru.updateScript = unstableGitUpdater {

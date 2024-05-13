@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "apscheduler";
   version = "3.10.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,11 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-5t8HGyfZvomOSGvHlAp75QtK8unafAjwdEqW1L1M70o=";
   };
 
-  buildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     setuptools
     six
@@ -51,7 +52,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov --tb=short" ""
+      --replace-fail " --cov --tb=short" ""
   '';
 
   disabledTests = [

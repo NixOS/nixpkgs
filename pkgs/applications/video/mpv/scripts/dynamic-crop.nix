@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, unstableGitUpdater
-, buildLua
+{
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  buildLua,
 }:
 buildLua {
   pname = "dynamic-crop";

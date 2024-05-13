@@ -12,14 +12,14 @@
 , withGpio ? stdenv.isLinux
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.0.1";
+  version = "1.1";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
-    rev = "2ca11f9a4101ea230081d448ab2b570425b7f0bd";
-    hash = "sha256-pm9g9iOJAKnzzY9couzt8RmqZFbIpKcO++zsUJ9o49U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CLwaGxVOo8FJaWfvrJ2hAm7XonP5nHT6YTsaw7scKCM=";
   };
 
   nativeBuildInputs = [
@@ -60,4 +60,4 @@ stdenv.mkDerivation {
     platforms = platforms.all;
     mainProgram = "flashprog";
   };
-}
+})

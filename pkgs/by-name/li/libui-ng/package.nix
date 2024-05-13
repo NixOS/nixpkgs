@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libui-ng";
-  version = "unstable-2024-02-05";
+  version = "4.1-unstable-2024-02-05";
 
   src = fetchFromGitHub {
     owner = "libui-ng";
@@ -47,7 +47,9 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "examples" (!stdenv.isDarwin))
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "alpha";
+  };
 
   meta = with lib; {
     description = "A portable GUI library for C";

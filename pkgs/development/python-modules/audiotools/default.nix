@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , stdenv
 , AudioToolbox
 , AudioUnit
@@ -10,7 +11,9 @@
 buildPythonPackage rec {
   pname = "audiotools";
   version = "3.1.1";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AudioToolbox

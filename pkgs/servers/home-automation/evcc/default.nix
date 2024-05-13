@@ -21,13 +21,13 @@ in
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.126.1";
+  version = "0.126.2";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-qNH1YdKQZptTGGOf/Nh4pBOpWCSgnq+JltF2OjlVGDk=";
+    hash = "sha256-jeOlBHCPn+k+rXADm0hcGqg+7qn8FOJKnCfSwZazRl8=";
   };
 
   vendorHash = "sha256-jJOxFkoVBT1NrnhntHPa2/irjHD09zKbtNDQoyelJp4=";
@@ -78,6 +78,7 @@ buildGoModule rec {
     # requires network access
     rm meter/template_test.go
     rm charger/template_test.go
+    rm tariff/template_test.go
   '';
 
   passthru = {

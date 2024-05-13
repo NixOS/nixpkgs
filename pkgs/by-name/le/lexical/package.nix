@@ -7,13 +7,13 @@
 
 beamPackages.mixRelease rec {
   pname = "lexical";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "lexical-lsp";
     repo = "lexical";
     rev = "refs/tags/v${version}";
-    hash = "sha256-20qfzYioR1PhA0ZBcft0nhcwxB95pw5L9zoPLWd7ZIE=";
+    hash = "sha256-gDiNjtYeEGoYoyoNmPh73EuYCvY36y9lUyLasbFrFgs=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {

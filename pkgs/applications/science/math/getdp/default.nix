@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.6.0";
   src = fetchurl {
     url = "http://getdp.info/src/getdp-${version}-source.tgz";
-    sha256 = "sha256-N1cb72W77Dr+TzeHpLgv5FuFb+SJqyGcfn+kOfEvZgA=";
+    hash = "sha256-nzefwCV+Z9BHDofuTfhR+vhqm3cCSiUT+7cbtn601N8=";
   };
 
   inherit (petsc) mpiSupport;

@@ -1,4 +1,8 @@
-{ lib, mkDerivation, libc }:
+{
+  lib,
+  mkDerivation,
+  libc,
+}:
 
 mkDerivation {
   path = "lib/libresolv";

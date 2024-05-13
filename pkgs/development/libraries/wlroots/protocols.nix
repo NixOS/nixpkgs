@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, wayland-scanner }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wlr-protocols";
   version = "unstable-2022-09-05";
 
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://gitlab.freedesktop.org/wlroots/wlr-protocols";
     license     = licenses.mit; # See file headers
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ Scrumplex ];
   };
 }

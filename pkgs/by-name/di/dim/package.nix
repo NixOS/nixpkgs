@@ -11,6 +11,7 @@
   sqlite,
   libvaSupport ? stdenv.hostPlatform.isLinux,
   libva,
+  fetchpatch,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "dim";
@@ -45,6 +46,14 @@ rustPlatform.buildRustPackage rec {
     # (ffmpeg) binaries in the same directory as the binary. Patch it to use
     # the working dir and PATH instead.
     ./relative-paths.diff
+
+    # Upstream has some unused imports that prevent things from compiling...
+    # Remove for next release.
+    (fetchpatch {
+      name = "remove-unused-imports.patch";
+      url = "https://github.com/Dusk-Labs/dim/commit/f62de1d38e6e52f27b1176f0dabbbc51622274cb.patch";
+      hash = "sha256-Gk+RHWtCKN7McfFB3siIOOhwi3+k17MCQr4Ya4RCKjc=";
+    })
   ];
 
   postConfigure = ''

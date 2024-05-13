@@ -48,14 +48,14 @@ let
   ]);
   path = lib.makeBinPath [ coreutils par2cmdline-turbo unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {
-  version = "4.3.0";
+  version = "4.3.1";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-2zRhDFKbWq4JA7XE5/VFbfkN2ZQcqcuqGD5kjHmeXUA=";
+    sha256 = "sha256-OlACGAYP4nMZZAVJduzj0AGTzSwM+lE7+H2xgmQVSWg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

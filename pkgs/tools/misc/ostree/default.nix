@@ -8,6 +8,7 @@
 , gobject-introspection
 , gjs
 , nixosTests
+, pkgsCross
 , curl
 , glib
 , systemd
@@ -140,6 +141,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
+      musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
     };
   };

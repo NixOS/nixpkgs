@@ -4,7 +4,7 @@
 , pkg-config
 , gtk3
 , libconfig
-, libsoup
+, libsoup_3
 , libsecret
 , libayatana-appindicator
 , openssl
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srain";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
     rev = version;
-    hash = "sha256-IGAb24aDeBXyxuyb/EWUetQZJg28GJLT0WK7ZmmHgyg=";
+    hash = "sha256-mhnlHnF23+VZvSPNuTYYUVcA6Md4y2AGqEuJphY1/IY=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     glib-networking
     dbus-glib
     libconfig
-    libsoup
+    libsoup_3
     libsecret
     libayatana-appindicator
     openssl

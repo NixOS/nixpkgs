@@ -6,7 +6,6 @@
 , pkg-config
 , python3
 , libxml2
-, gnome
 , gitUpdater
 , nautilus
 , glib
@@ -30,14 +29,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.52.0";
+  version = "3.52.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
     rev = version;
-    hash = "sha256-6+6/fgGlSM/57+n0SopuF0ZY9htma5usIgxy2BBAC+M=";
+    hash = "sha256-npoQfe5+HTn7CsrW6MuOoiYBc3rYMAMv4apC6dFR8O4=";
   };
 
   nativeBuildInputs = [
@@ -69,13 +68,7 @@ stdenv.mkDerivation rec {
     nautilus # For extension
   ];
 
-  # Silly build system, it looks for dbus file from gnome-shell in the
-  # installation tree of the package it is configuring.
   postPatch = ''
-    substituteInPlace src/meson.build \
-       --replace "gt_prefix / gt_dbusinterfacedir / 'org.gnome.ShellSearchProvider2.xml'" \
-       "'${gnome.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml'"
-
     patchShebangs \
       data/icons/meson_updateiconcache.py \
       data/meson_desktopfile.py \

@@ -151,7 +151,7 @@
   (fetchNuGet { pname = "Silk.NET.Vulkan.Extensions.EXT"; version = "2.16.0"; sha256 = "05918f6fl8byla2m7qjp7dvxww2rbpj2sqd4xq26rl885fmddfvf"; })
   (fetchNuGet { pname = "Silk.NET.Vulkan.Extensions.KHR"; version = "2.16.0"; sha256 = "1j4wsv7kjgjkmf2vlm5jjnqkdh265rkz5s1hx42i0f4bmdaz2kj1"; })
   (fetchNuGet { pname = "SixLabors.Fonts"; version = "1.0.0"; sha256 = "1lsc789fqsnh3jx5w0g5k2n1wlww58zyzrcf5rs3wx2fjrqi084k"; })
-  (fetchNuGet { pname = "SixLabors.ImageSharp"; version = "2.1.7"; sha256 = "07rd8vbd23ynhpz4y81b8fqnbn5q5q7rvcdwcky3nzngdg3vgw08"; })
+  (fetchNuGet { pname = "SixLabors.ImageSharp"; version = "2.1.8"; sha256 = "049k8zf9acqncfdbdc7875fvndk2089mwlm5igam88vwc5i5vh75"; })
   (fetchNuGet { pname = "SixLabors.ImageSharp.Drawing"; version = "1.0.0"; sha256 = "0gh6xzw0jhjxf2slky11sdj0s8mp5dmps5k0rlx4krm68xb98zr0"; })
   (fetchNuGet { pname = "SkiaSharp"; version = "2.88.3"; sha256 = "1yq694myq2rhfp2hwwpyzcg1pzpxcp7j72wib8p9pw9dfj7008sv"; })
   (fetchNuGet { pname = "SkiaSharp"; version = "2.88.6"; sha256 = "0xs11zjw9ha68maw3l825kfwlrid43qwy0mswljxhpjh0y1k6k6b"; })

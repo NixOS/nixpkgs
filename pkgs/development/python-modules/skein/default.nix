@@ -2,6 +2,7 @@
 , callPackage
 , fetchPypi
 , isPy27
+, pythonOlder
 , lib
 , cryptography
 , grpcio
@@ -10,6 +11,8 @@
 , hadoop
 , pytestCheckHook
 , python
+, setuptools
+, versioneer
 }:
 
 buildPythonPackage rec {
@@ -25,7 +28,8 @@ buildPythonPackage rec {
   jarHash = "sha256-x2KH6tnoG7sogtjrJvUaxy0PCEA8q/zneuI969oBOKo=";
   skeinJar = callPackage ./skeinjar.nix { inherit pname version jarHash; };
 
-  propagatedBuildInputs = [ cryptography grpcio pyyaml ];
+  propagatedBuildInputs = [ cryptography grpcio pyyaml ]
+    ++ lib.optionals (!pythonOlder "3.12") [ setuptools ];
   buildInputs = [ grpcio-tools ];
 
   preBuild = ''
@@ -37,7 +41,16 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace skein/core.py --replace "'yarn'" "'${hadoop}/bin/yarn'" \
       --replace "else 'java'" "else '${hadoop.jdk}/bin/java'"
+    # Remove vendorized versioneer
+    rm versioneer.py
+  '' + lib.optionalString (!pythonOlder "3.12") ''
+    substituteInPlace skein/utils.py \
+      --replace-fail "distutils" "setuptools._distutils"
   '';
+
+  build-system = [
+    versioneer
+  ];
 
   pythonImportsCheck = [ "skein" ];
 
@@ -51,12 +64,12 @@ buildPythonPackage rec {
     "test_cli"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jcristharif.com/skein";
     description = "A tool and library for easily deploying applications on Apache YARN";
     mainProgram = "skein";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ alexbiehl illustris ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ alexbiehl illustris ];
     # https://github.com/NixOS/nixpkgs/issues/48663#issuecomment-1083031627
     # replace with https://github.com/NixOS/nixpkgs/pull/140325 once it is merged
     broken = lib.traceIf isPy27 "${pname} not supported on ${python.executable}" isPy27;

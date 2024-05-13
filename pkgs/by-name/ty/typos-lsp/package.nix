@@ -4,6 +4,8 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "typos-lsp";
+  # Please update the corresponding VSCode extension too.
+  # See pkgs/applications/editors/vscode/extensions/tekumara.typos-vscode/default.nix
   version = "0.1.18";
 
   src = fetchFromGitHub {

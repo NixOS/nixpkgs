@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "smtpdfix";
-  version = "0.5.1";
+  version = "0.5.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-882i0T6EySZ6jxOgoM11MU+ha41XfKjDDhUjeX7qvp4=";
+    hash = "sha256-5NGs6Q83EqGRJ+2IdOaXqGFIwfSNKy2wwHIJaOjj7JU=";
   };
 
   nativeBuildInputs = [

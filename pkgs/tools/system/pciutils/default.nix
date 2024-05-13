@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
+    mainProgram = "lspci";
   };
 }

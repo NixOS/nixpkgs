@@ -49,7 +49,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionAtLeast info.version "29")
+  patches = base.patches ++ lib.optional (lib.versionAtLeast info.version "29" && lib.versionOlder info.version "30")
     (substituteAll {
       # disable a component that requires CIPD blobs
       name = "disable-screen-ai.patch";

@@ -1,14 +1,17 @@
-{ lib, stdenv, fetchFromGitHub }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-info";
-  version = "unstable-2024-01-05";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "mikesart";
     repo = "inotify-info";
-    rev = "a7ff6fa62ed96ec5d2195ef00756cd8ffbf23ae1";
-    hash = "sha256-yY+hjdb5J6dpFkIMMUWvZlwoGT/jqOuQIcFp3Dv+qB8=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-fsUvIXWnP6Iy9Db0wDG+ntSw6mUt0MQOTJA5vFxhH+U=";
   };
 
   installPhase = ''

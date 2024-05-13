@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simplified Find command made with Rust";
-    homepage = "https://github.com/LyonSyonII/hunt";
+    homepage = "https://github.com/LyonSyonII/hunt-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "hunt";

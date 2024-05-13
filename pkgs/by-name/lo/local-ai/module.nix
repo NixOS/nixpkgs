@@ -28,25 +28,33 @@ in
       type = types.either types.package types.str;
       default = "models";
     };
+
+    parallelRequests = mkOption {
+      type = types.int;
+      default = 1;
+    };
+
+    logLevel = mkOption {
+      type = types.enum [ "error" "warn" "info" "debug" "trace" ];
+      default = "warn";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.local-ai = {
       wantedBy = [ "multi-user.target" ];
+      environment.LLAMACPP_PARALLEL = toString cfg.parallelRequests;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = lib.escapeShellArgs ([
           "${cfg.package}/bin/local-ai"
-          "--debug"
-          "--address"
-          ":${toString cfg.port}"
-          "--threads"
-          (toString cfg.threads)
-          "--localai-config-dir"
-          "."
-          "--models-path"
-          (toString cfg.models)
+          "--address=:${toString cfg.port}"
+          "--threads=${toString cfg.threads}"
+          "--localai-config-dir=."
+          "--models-path=${cfg.models}"
+          "--log-level=${cfg.logLevel}"
         ]
+        ++ lib.optional (cfg.parallelRequests > 1) "--parallel-requests"
         ++ cfg.extraArgs);
         RuntimeDirectory = "local-ai";
         WorkingDirectory = "%t/local-ai";

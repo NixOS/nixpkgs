@@ -22,7 +22,7 @@ buildGoModule rec {
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";
-    maintainers = [ ];
+    maintainers = with maintainers; [ Scrumplex mic92 ];
     license = licenses.mpl20;
   };
 }

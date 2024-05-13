@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "jacoco";
-  version = "0.8.11";
+  version = "0.8.12";
 
   src = fetchzip {
     url = "https://search.maven.org/remotecontent?filepath=org/jacoco/jacoco/${version}/jacoco-${version}.zip";
     stripRoot = false;
-    sha256 = "sha256-Sd4Kh5ts0IdHhd9vF1XZzZ2KFRb+rsnzpam6Ysxu910=";
+    sha256 = "sha256-7bN68fcUycehJDJeBAyCloz8rb3SXgjwmC9zpob8YdI=";
   };
 
   outputs = [ "out" "doc" ];

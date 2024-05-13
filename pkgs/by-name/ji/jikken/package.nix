@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jikken";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
     rev = "v${version}";
-    hash = "sha256-A6+sezhob7GqAzuJsJGH7ZDLTJhCD+f0t3zx/IMdPsI=";
+    hash = "sha256-bV9NjwTcX1euk8zRJMGkAULegQmiT8z4jxngOwOPr+M=";
   };
 
-  cargoHash = "sha256-FxsI2ku52MlSGUph3/ovmn6HIwW+cUwVXuwzcd/1DV4=";
+  cargoHash = "sha256-gJg/l7L19qk6DELqo4fYc2ZWTHqKeUFEF3YU3+uyFjQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.IOKit
       darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
   passthru.updateScript = nix-update-script { };

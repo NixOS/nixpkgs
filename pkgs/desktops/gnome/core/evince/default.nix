@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "46.0";
+  version = "46.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-r/avaTksBJVr+tl23sXRWDtB1aM06TeZX3w8oHQN4iE=";
+    hash = "sha256-lLtSU2WwYKKML2AX0iy/KvURVQclSqQum/wAC7wYq2I=";
   };
 
   depsBuildBuild = [
@@ -109,8 +109,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!supportMultimedia) [
     "-Dmultimedia=disabled"
   ];
-
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")

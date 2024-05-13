@@ -52,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bdraco/aiodhcpwatcher/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hexa ];
+    platforms = platforms.linux;
   };
 }

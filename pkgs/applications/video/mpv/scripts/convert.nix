@@ -1,11 +1,12 @@
-{ lib
-, fetchgit
-, unstableGitUpdater
+{
+  lib,
+  fetchgit,
+  unstableGitUpdater,
 
-, buildLua
-, libnotify
-, mkvtoolnix-cli
-, yad
+  buildLua,
+  libnotify,
+  mkvtoolnix-cli,
+  yad,
 }:
 
 buildLua {
@@ -16,7 +17,7 @@ buildLua {
     rev = "f95cee43e390e843a47e8ec9d1711a12a8cd343d";
     sha256 = "13m7l4sy2r8jv2sfrb3vvqvnim4a9ilnv28q5drlg09v298z3mck";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   patches = [ ./convert.patch ];
 

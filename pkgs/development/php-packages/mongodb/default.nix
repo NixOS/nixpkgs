@@ -1,16 +1,17 @@
-{ stdenv
-, buildPecl
-, fetchFromGitHub
-, lib
-, libiconv
-, pcre2
-, pkg-config
-, cyrus_sasl
-, icu64
-, openssl
-, snappy
-, zlib
-, darwin
+{
+  stdenv,
+  buildPecl,
+  fetchFromGitHub,
+  lib,
+  libiconv,
+  pcre2,
+  pkg-config,
+  cyrus_sasl,
+  icu64,
+  openssl,
+  snappy,
+  zlib,
+  darwin,
 }:
 
 buildPecl rec {
@@ -26,18 +27,20 @@ buildPecl rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    cyrus_sasl
-    icu64
-    openssl
-    snappy
-    zlib
-    pcre2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.Libsystem
-    libiconv
-  ];
+  buildInputs =
+    [
+      cyrus_sasl
+      icu64
+      openssl
+      snappy
+      zlib
+      pcre2
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.Libsystem
+      libiconv
+    ];
 
   meta = {
     description = "The Official MongoDB PHP driver";

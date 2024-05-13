@@ -1,11 +1,17 @@
-{ mkDerivation
-, bsdSetupHook, netbsdSetupHook
-, makeMinimal
-, install, mandoc, groff, nbperf, rsync
-, compatIfNeeded
-, defaultMakeFlags
-, libterminfo
-, fetchNetBSD
+{
+  mkDerivation,
+  bsdSetupHook,
+  netbsdSetupHook,
+  makeMinimal,
+  install,
+  mandoc,
+  groff,
+  nbperf,
+  rsync,
+  compatIfNeeded,
+  defaultMakeFlags,
+  libterminfo,
+  fetchNetBSD,
 }:
 
 mkDerivation {
@@ -15,9 +21,14 @@ mkDerivation {
   HOSTPROG = "tic";
   buildInputs = compatIfNeeded;
   nativeBuildInputs = [
-    bsdSetupHook netbsdSetupHook
+    bsdSetupHook
+    netbsdSetupHook
     makeMinimal
-    install mandoc groff nbperf rsync
+    install
+    mandoc
+    groff
+    nbperf
+    rsync
   ];
   makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
   extraPaths = [

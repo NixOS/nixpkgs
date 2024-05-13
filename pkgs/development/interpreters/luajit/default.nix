@@ -3,6 +3,7 @@
 , buildPackages
 , version
 , src
+, substituteAll
 , extraMeta ? { }
 , self
 , packageOverrides ? (final: prev: {})
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     if test -n "''${dontStrip-}"; then
       # CCDEBUG must be non-empty or everything will be stripped, -g being
       # passed by nixpkgs CC wrapper is insufficient on its own
-      substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
+      substituteInPlace src/Makefile --replace-fail "#CCDEBUG= -g" "CCDEBUG= -g"
     fi
   '';
 
@@ -95,6 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
   postInstall = ''
+    mkdir -p $out/nix-support
+    cp ${substituteAll {
+      src = ../lua-5/utils.sh;
+      luapathsearchpaths=lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
+      luacpathsearchpaths=lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
+    }} $out/nix-support/utils.sh
     ( cd "$out/include"; ln -s luajit-*/* . )
     ln -s "$out"/bin/luajit-* "$out"/bin/lua
     if [[ ! -e "$out"/bin/luajit ]]; then
@@ -105,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
   LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
   LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.luaLib.luaPathList luaPackages.luaLib.luaCPathList;
+  setupHook = builtins.toFile "lua-setup-hook" ''
+      source @out@/nix-support/utils.sh
+      addEnvHooks "$hostOffset" addToLuaPath
+      '';
 
   # copied from python
   passthru = let

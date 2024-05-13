@@ -13,13 +13,13 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.27.6";
+      version = "1.27.7";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         rev = "v${version}";
-        hash = "sha256-BZAje6dA3wmJ6feHWIYPPYTA3sp1WGwl4MjUJS7iZCo=";
+        hash = "sha256-Y/gwQfb3ShOsXsNLomtqUlmYaw7FQQ6IUN1fHSYOouQ=";
       };
 
       vendorHash = "sha256-xVSSFFTqU7jww8YTeXKfa3096c2FmEgkcXvuqFHb12E=";

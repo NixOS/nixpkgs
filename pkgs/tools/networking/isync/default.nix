@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \
-        --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 ]}"
+        --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 cyrus_sasl.out ]}"
   '';
 
   meta = with lib; {

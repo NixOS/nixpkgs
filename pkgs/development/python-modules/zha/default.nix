@@ -45,6 +45,7 @@ buildPythonPackage rec {
   '';
 
   pythonRelaxDeps = [
+    "bellows"
     "universal-silabs-flasher"
     "zha-quirks"
   ];

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "character-encoding-utils";
-  version = "0.0.6";
+  version = "0.0.7";
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "character_encoding_utils";
     inherit version;
-    hash = "sha256-ugzWiSpa/xxlraVyVPTSq/uxPg11kOyePgb1cmzX3ug=";
+    hash = "sha256-cUggyNz5xphDF+7dSrx3vr3v3R8ISryHj9accMJfDbg=";
   };
 
   format = "pyproject";

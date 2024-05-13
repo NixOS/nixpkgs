@@ -1,18 +1,29 @@
-{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, videojs, nixosTests }:
-let
+{ lib
+, callPackage
+, crystal
+, fetchFromGitea
+, librsvg
+, pkg-config
+, libxml2
+, openssl
+, shards
+, sqlite
+, nixosTests
+
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
-  #   * pick the latest commit
-  #   * update .invidious.rev, .invidious.version, and .invidious.hash
+  #   * pick the latest tag
+  #   * update .invidious.version, .invidious.date, .invidious.commit and .invidious.hash
   #   * prefetch the videojs dependencies with scripts/fetch-player-dependencies.cr
   #     and update .videojs.hash (they are normally fetched during build
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
-  #     * update lsquic and boringssl if necessarry, lsquic.cr depends on
-  #       the same version of lsquic and lsquic requires the boringssl
-  #       commit mentioned in its README
-  versions = lib.importJSON ./versions.json;
+, versions ? lib.importJSON ./versions.json
+}:
+let
+  # normally video.js is downloaded at build time
+  videojs = callPackage ./videojs.nix { inherit versions; };
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
@@ -21,9 +32,10 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitea {
     domain = "gitea.invidious.io";
     owner = "iv-org";
-    repo = pname;
+    repo = "invidious";
     fetchSubmodules = true;
-    inherit (versions.invidious) rev hash;
+    rev = versions.invidious.rev or "v${version}";
+    inherit (versions.invidious) hash;
   };
 
   postPatch =
@@ -36,6 +48,8 @@ crystal.buildCrystalPackage rec {
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
+
+      inherit (versions.invidious) commit date;
     in
     ''
       for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
@@ -43,23 +57,23 @@ crystal.buildCrystalPackage rec {
       # Use the version metadata from the derivation instead of using git at
       # build-time
       substituteInPlace src/invidious.cr \
-          --replace ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
-          --replace ${lib.escapeShellArg versionTemplate} '"${lib.concatStringsSep "." (lib.drop 2 (lib.splitString "-" version))}"' \
-          --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
+          --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
+          --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
+          --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
+          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
 
       # Patch the assets and locales paths to be absolute
       substituteInPlace src/invidious.cr \
-          --replace 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
+          --replace-fail 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
       substituteInPlace src/invidious/helpers/i18n.cr \
-          --replace 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
+          --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
 
       # Reference sql initialisation/migration scripts by absolute path
       substituteInPlace src/invidious/database/base.cr \
-            --replace 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
+            --replace-fail 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
 
       substituteInPlace src/invidious/user/captcha.cr \
-          --replace 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
+          --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
   nativeBuildInputs = [ pkg-config shards ];
@@ -110,6 +124,11 @@ crystal.buildCrystalPackage rec {
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ sbruder ];
+    maintainers = with maintainers; [
+      _999eagle
+      GaetanLepage
+      sbruder
+      pbsds
+    ];
   };
 }

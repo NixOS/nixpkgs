@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     install -D -m 0755 src/nixos-anywhere.sh $out/bin/nixos-anywhere
+    install -D -m 0755 src/get-facts.sh $out/bin/get-facts.sh
 
     # We prefer the system's openssh over our own, since it might come with features not present in ours:
     # https://github.com/numtide/nixos-anywhere/issues/62

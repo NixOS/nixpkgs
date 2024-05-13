@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-evidence";
-  version = "3.8";
+  version = "3.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,26 +21,22 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.evidence";
     rev = "refs/tags/${version}";
-    hash = "sha256-/zmMPSVR6F6SIU7xuotErmU2SsKEV43rs/4oTVKAWz0=";
+    hash = "sha256-0WLX5mD+opJoRdnk4w8mMySn41473PcRod4YxEk3S2s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.evidence"
-  ];
+  pythonImportsCheck = [ "dissect.evidence" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parsers for various forensic evidence file containers";

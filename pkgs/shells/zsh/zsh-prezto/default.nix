@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
-  version = "unstable-2024-04-15";
+  version = "0-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "sorin-ionescu";

@@ -1048,6 +1048,8 @@
       mkdir $target/bin
       ln -s ${dbee-go}/bin/dbee $target/bin/dbee
       '';
+
+    meta.platforms = lib.platforms.linux;
   });
 
   nvim-navic = super.nvim-navic.overrideAttrs {
@@ -1061,7 +1063,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-UxOAIyVlJWlp5RUFVU3Ib539D5pm6Z+3edjHLerkIRU=";
+        cargoHash = "sha256-seBq1zJNzNVfCQckIHq7rHI/Y8MyxP88cee3NO7NYgo=";
 
 
         preCheck = ''
@@ -1240,12 +1242,12 @@
 
   sniprun =
     let
-      version = "1.3.12";
+      version = "1.3.13";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "refs/tags/v${version}";
-        hash = "sha256-siM0MBugee2OVaD1alr2hKn9ngoaV3Iy9No/F3wryJs=";
+        hash = "sha256-PQ3nAZ+bMbHHJWD7cV6h1b3g3TzrakA/N8vVumIooMg=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
@@ -1255,7 +1257,7 @@
           darwin.apple_sdk.frameworks.Security
         ];
 
-        cargoHash = "sha256-Gnpv0vAU3kTtCKsV2XGlSbzYuHEqR7iDFeKj9Vhq1UQ=";
+        cargoHash = "sha256-I8R2V9zoLqiM4lu0D7URoVof68wtKHI+8T8fVrUg7i4=";
 
         nativeBuildInputs = [ makeWrapper ];
 

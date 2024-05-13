@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.8.0";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hth8tk2DHuBGNAXdjknbdQinuwWJ//QF0e23neeTExw=";
+    hash = "sha256-Ejr0pmWIuYByzDS+iFTECO/aymzuJrJjaaW7HikNt2w=";
   };
 
-  npmDepsHash = "sha256-WlQ/u7yIbuFETsmbW7ddAOO7OVrNPOXR3ja3N0aFWRE=";
+  npmDepsHash = "sha256-md76I7W5QQvfbOmk5ODssMtJAVOj8nvaJ2PakEZ8WUA=";
 
   meta = with lib; {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";

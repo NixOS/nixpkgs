@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.7.1";
+  version = "1.7.2.1";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
     rev = finalAttrs.version;
-    hash = "sha256-mSka8QyoLjnaVEP23TtyzbPTBHDlnrSomVZdfw4PPng=";
+    hash = "sha256-H2jeKs0h4ZAcP33HB5jptlubq62cwnjPK2wSlEIfFWA=";
   };
 
   dontConfigure = true;
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # https://github.com/89luca89/distrobox/issues/408
     substituteInPlace ./distrobox-generate-entry \
-      --replace 'icon_default="''${HOME}/.local' "icon_default=\"$out"
+      --replace-fail 'icon_default="''${HOME}/.local' "icon_default=\"$out"
     ./install -P $out
 
     runHook postInstall

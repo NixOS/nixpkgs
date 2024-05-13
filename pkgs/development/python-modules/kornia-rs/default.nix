@@ -1,10 +1,12 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
 , cmake
 , nasm
 , substituteAll
+, libiconv
 }:
 
 buildPythonPackage rec {
@@ -25,6 +27,8 @@ buildPythonPackage rec {
     cmake # Only for dependencies.
     nasm # Only for dependencies.
   ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   cargoRoot = "py-kornia";
   cargoDeps = rustPlatform.importCargoLock {

@@ -4,7 +4,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "munin";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ domenkozar eelco ];
+    maintainers = [ domenkozar ];
   };
 
   nodes = {

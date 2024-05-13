@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "acquire";
-  version = "3.13";
+  version = "3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,15 +26,15 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "acquire";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z85bHM3MtS2MLX9BaKi8VqA13QjO9KdrgqhuyBzjILQ=";
+    hash = "sha256-QW5+npgjrIzyI2hztFovA5s6TMzgCCEiZx9aZREmYII=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     dissect-cstruct
     dissect-target

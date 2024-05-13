@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vgmtools";
-  version = "unstable-2023-08-27";
+  version = "0.1-unstable-2023-08-27";
 
   src = fetchFromGitHub {
     owner = "vgmrips";

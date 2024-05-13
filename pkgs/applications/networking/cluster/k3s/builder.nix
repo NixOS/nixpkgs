@@ -29,33 +29,42 @@ lib:
 # currently.
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
-{ lib
-, fetchpatch
-, makeWrapper
-, socat
-, iptables
-, iproute2
-, ipset
-, bridge-utils
-, btrfs-progs
-, conntrack-tools
-, buildGoModule
-, runc
-, rsync
-, kmod
-, libseccomp
-, pkg-config
-, ethtool
-, util-linux
-, fetchFromGitHub
-, fetchurl
-, fetchzip
-, fetchgit
-, zstd
-, yq-go
-, sqlite
-, nixosTests
-, pkgsBuildBuild
+{
+  lib,
+  makeWrapper,
+  socat,
+  iptables,
+  iproute2,
+  ipset,
+  bridge-utils,
+  btrfs-progs,
+  conntrack-tools,
+  buildGoModule,
+  runc,
+  rsync,
+  kmod,
+  libseccomp,
+  pkg-config,
+  ethtool,
+  util-linux,
+  fetchFromGitHub,
+  fetchurl,
+  fetchzip,
+  fetchgit,
+  zstd,
+  yq-go,
+  sqlite,
+  nixosTests,
+  pkgsBuildBuild,
+  go,
+  runCommand,
+  bash,
+  procps,
+  coreutils,
+  gnugrep,
+  findutils,
+  gnused,
+  systemd,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -83,7 +92,13 @@ let
     description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
-    maintainers = with maintainers; [ euank mic92 superherointj yajo ];
+    maintainers = with maintainers; [
+      euank
+      mic92
+      superherointj
+      wrmilling
+      yajo
+    ];
     platforms = platforms.linux;
 
     # resolves collisions with other installations of kubectl, crictl, ctr
@@ -93,8 +108,9 @@ let
 
   # https://github.com/k3s-io/k3s/blob/5fb370e53e0014dc96183b8ecb2c25a61e891e76/scripts/build#L19-L40
   versionldflags = [
-    "-X github.com/rancher/k3s/pkg/version.Version=v${k3sVersion}"
-    "-X github.com/rancher/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+    "-X github.com/k3s-io/k3s/pkg/version.Version=v${k3sVersion}"
+    "-X github.com/k3s-io/k3s/pkg/version.GitCommit=${lib.substring 0 8 k3sCommit}"
+    "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
     "-X k8s.io/client-go/pkg/version.gitVersion=v${k3sVersion}"
     "-X k8s.io/client-go/pkg/version.gitCommit=${k3sCommit}"
     "-X k8s.io/client-go/pkg/version.gitTreeState=clean"
@@ -156,6 +172,42 @@ let
     rev = "v${k3sVersion}";
     sha256 = k3sRepoSha256;
   };
+
+  # Modify the k3s installer script so that we can let it install only
+  # killall.sh
+  k3sKillallSh = runCommand "k3s-killall.sh" { } ''
+    # Copy the upstream k3s install script except for the last lines that
+    # actually run the install process
+    sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
+
+    # Let killall expect "containerd-shim" in the Nix store
+    to_replace="k3s/data/\[\^/\]\*/bin/containerd-shim"
+    replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
+    changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
+    if [ -z "$changes" ]; then
+      echo "failed to replace \"$to_replace\" in k3s installer script (install.sh)"
+      exit 1
+    fi
+
+    remove_matching_line() {
+      line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
+      if [ -z $line_to_delete ]; then
+        echo "failed to find expression \"$1\" in k3s installer script (install.sh)"
+        exit 1
+      fi
+      sed -i "''${line_to_delete}d" install.sh
+    }
+
+    # Don't change mode and owner of killall
+    remove_matching_line "chmod.*KILLALL_K3S_SH"
+    remove_matching_line "chown.*KILLALL_K3S_SH"
+
+    # Execute only the "create_killall" function of the installer script
+    sed -i '$acreate_killall' install.sh
+
+    KILLALL_K3S_SH=$out bash install.sh
+  '';
+
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
   # One of the ideas of k3s is that there's the single "k3s" binary which can
@@ -185,22 +237,20 @@ let
     src = k3sRepo;
     vendorHash = k3sVendorHash;
 
-    patches =
-      # Disable: Add runtime checking of golang version
-      (fetchpatch {
-        # https://github.com/k3s-io/k3s/pull/9054
-        url = "https://github.com/k3s-io/k3s/commit/b297996b9252b02e56e9425f55f6becbf6bb7832.patch";
-        hash = "sha256-xBOY2jnLhT9dtVKtq26V9QUnuX1q6E/9UcO9IaU719U=";
-        revert = true;
-      });
-
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libseccomp sqlite.dev ];
+    buildInputs = [
+      libseccomp
+      sqlite.dev
+    ];
 
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
 
-    tags = [ "ctrd" "libsqlite3" "linux" ];
+    tags = [
+      "ctrd"
+      "libsqlite3"
+      "linux"
+    ];
 
     # create the multicall symlinks for k3s
     postInstall = ''
@@ -246,7 +296,11 @@ buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
 
-  tags = [ "libsqlite3" "linux" "ctrd" ];
+  tags = [
+    "libsqlite3"
+    "linux"
+    "ctrd"
+  ];
   src = k3sRepo;
   vendorHash = k3sVendorHash;
 
@@ -284,6 +338,16 @@ buildGoModule rec {
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
+  ];
+
+  k3sKillallDeps = [
+    bash
+    systemd
+    procps
+    coreutils
+    gnugrep
+    findutils
+    gnused
   ];
 
   buildInputs = k3sRuntimeDeps;
@@ -342,6 +406,9 @@ buildGoModule rec {
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
+    install -m 0755 ${k3sKillallSh} -D $out/bin/k3s-killall.sh
+    wrapProgram $out/bin/k3s-killall.sh \
+      --prefix PATH : ${lib.makeBinPath (k3sRuntimeDeps ++ k3sKillallDeps)}
   '';
 
   doInstallCheck = true;
@@ -351,15 +418,17 @@ buildGoModule rec {
 
   passthru.updateScript = updateScript;
 
-  passthru.mkTests = version:
-    let k3s_version = "k3s_" + lib.replaceStrings ["."] ["_"] (lib.versions.majorMinor version);
-    in {
+  passthru.mkTests =
+    version:
+    let
+      k3s_version = "k3s_" + lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor version);
+    in
+    {
       etcd = nixosTests.k3s.etcd.${k3s_version};
       single-node = nixosTests.k3s.single-node.${k3s_version};
       multi-node = nixosTests.k3s.multi-node.${k3s_version};
     };
   passthru.tests = passthru.mkTests k3sVersion;
-
 
   meta = baseMeta;
 }

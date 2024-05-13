@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.turbovnc;
 in
@@ -12,8 +10,8 @@ in
 
     programs.turbovnc = {
 
-      ensureHeadlessSoftwareOpenGL = mkOption {
-        type = types.bool;
+      ensureHeadlessSoftwareOpenGL = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to set up NixOS such that TurboVNC's built-in software OpenGL
@@ -36,7 +34,7 @@ in
 
   };
 
-  config = mkIf cfg.ensureHeadlessSoftwareOpenGL {
+  config = lib.mkIf cfg.ensureHeadlessSoftwareOpenGL {
 
     # TurboVNC has builtin support for Mesa llvmpipe's `swrast`
     # software rendering to implement GLX (OpenGL on Xorg).

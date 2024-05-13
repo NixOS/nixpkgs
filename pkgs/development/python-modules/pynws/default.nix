@@ -9,24 +9,37 @@
 , pytest-cov
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
+, tenacity
 }:
 
 buildPythonPackage rec {
   pname = "pynws";
-  version = "1.6.0";
-  format = "setuptools";
+  version = "1.7.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "MatthewFlamm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-x56kfnmdVV0Fc7XSI60rrtEl4k3uzpIdZxTofUbkUHU=";
+    hash = "sha256-JjXGDjLITzJxEmCIv7RPvb+Jqe9hm++ptpJOryuK9M0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     aiohttp
     metar
+  ];
+
+  optional-dependencies.retry = [
+    tenacity
   ];
 
   nativeCheckInputs = [
@@ -35,7 +48,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pynws" ];
 

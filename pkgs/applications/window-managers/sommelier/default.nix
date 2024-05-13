@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation {
   pname = "sommelier";
-  version = "123.0";
+  version = "124.0";
 
   src = fetchzip rec {
     url = "https://chromium.googlesource.com/chromiumos/platform2/+archive/${passthru.rev}/vm_tools/sommelier.tar.gz";
-    passthru.rev = "1abc91204f35cde76db37853ff3643c5cdb607e6";
+    passthru.rev = "0ced021a6b362f35592cca5a3915d0ed784615f2";
     stripRoot = false;
-    sha256 = "Wa30MU7iK1Y7pKNeC+FPFXDwDxFLWOZPG4jkm8cnWeg=";
+    sha256 = "zSiGhF4FhLUavC7YEOGGq4NE2hxK4YNXF3CpLptoZbM=";
   };
 
   nativeBuildInputs = [

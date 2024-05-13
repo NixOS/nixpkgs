@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "libcxxrt";
-  version = "unstable-2024-04-15";
+  version = "4.0.10-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "libcxxrt";

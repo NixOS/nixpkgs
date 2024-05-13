@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U6idxc5U2Bt581c/vnGgIou5+hoEJJZSPCo97MEDaW4=";
+    hash = "sha256-CqfwAKhrq4VEBU258x19JT8+ay2vOYIzVoFWjAzh3wY=";
   };
 
   nativeBuildInputs = [

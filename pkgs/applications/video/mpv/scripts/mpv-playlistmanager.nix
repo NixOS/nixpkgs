@@ -1,4 +1,10 @@
-{ lib, buildLua, fetchFromGitHub, unstableGitUpdater, yt-dlp }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  yt-dlp,
+}:
 
 buildLua rec {
   pname = "mpv-playlistmanager";
@@ -10,7 +16,7 @@ buildLua rec {
     rev = "1911dc053951169c98cfcfd9f44ef87d9122ca80";
     hash = "sha256-pcdOMhkivLF5B86aNuHrqj77DuYLAFGlwFwY7jxkDkE=";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   postPatch = ''
     substituteInPlace playlistmanager.lua \

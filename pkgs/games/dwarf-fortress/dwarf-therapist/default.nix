@@ -4,10 +4,9 @@
 , qtbase
 , qtdeclarative
 , cmake
-, texlive
 , ninja
-, version ? "42.1.5"
-, hash ? "sha256-aUakfUjnIZWNDhCkG3A6u7BaaCG8kPMV/Fu2S73CoDg="
+, version ? "42.1.6"
+, hash ? "sha256-VjCXT4sl3HsFILrqTc3JJSeRedZaOXUbf4KvSzTo0uc="
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
     inherit hash;
   };
 
-  nativeBuildInputs = [ texlive cmake ninja ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ qtbase qtdeclarative ];
 
   enableParallelBuilding = true;

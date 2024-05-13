@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.26.4";
+  version = "2.28.1";
 
   src = passthru.sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform for blackfire: ${stdenv.hostPlatform.system}");
 
@@ -57,23 +57,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "czFzZ+Z2CYw0ETzsmimAMNKrpiIVufyguOYuZJu2L8s=";
+        sha256 = "n7bNRws6IwTYbWsUAHNtV1hfW+YDygJn/U1U5MaUuew=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "I/7ZESjJjlRSvV41ldEtdymp7fwe0tCCFeS/oouOUi8=";
+        sha256 = "zH6mEeW0EjYPVSAJ4cL3YpaQPd+h0zxO7qfN43qb67Q=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "lJn9iRAPkLCpv+Vbk72a58DaNgNOTfyFiycyHosBiq4=";
+        sha256 = "ncX9aHxZJhth3Md591PBhMO3uhsiI03L7M60hOm4uko=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "puvM/QB8nJgJaw1eDMJTb9aDrIdrqO3WVdDYWeayTAs=";
+        sha256 = "OcZ0tyNerGXZKwrJRN4a+1Z51CeHDokYvfA3ve0bNKA=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "srv99KyjxzEJNRA4hjoobSqzSab+Ox7g80tTun3G9KY=";
+        sha256 = "ypCC+u6rpGDYkXtw4Q6bBBwLfcmRk4GmmcXHKvmXqFI=";
       };
     };
 

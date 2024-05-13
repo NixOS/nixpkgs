@@ -1,4 +1,11 @@
-{ lib, buildNpmPackage, fetchFromGitHub, gitUpdater, nodejs, python3 }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  nodejs,
+  python3,
+}:
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
@@ -10,9 +17,7 @@ buildNpmPackage rec {
     rev = "v${version}";
     hash = "sha256-/dMtXcIyfAs++Zgz2CxRW0tkzn5QjS+WVGChlCyrU0U=";
   };
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace src/webtorrent.ts --replace-fail "node_path: 'node'" "node_path: '${lib.getExe nodejs}'"

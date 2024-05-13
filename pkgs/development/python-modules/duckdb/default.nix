@@ -69,6 +69,9 @@ buildPythonPackage rec {
     # tries to make http request
     "test_install_non_existent_extension"
 
+    # test is flaky https://github.com/duckdb/duckdb/issues/11961
+    "test_fetchmany"
+
     # https://github.com/duckdb/duckdb/issues/10702
     # tests are racy and interrupt can be delivered before or after target point
     # causing a later test to fail with a spurious KeyboardInterrupt

@@ -170,7 +170,7 @@ in {
         PrivateDevices = true;
         ProtectHome = true;
         ProtectSystem = "full";
-        ReadWriteDirectories = cfg.dataDir;
+        ReadWritePaths = [ cfg.dataDir ];
         RuntimeDirectory = "traefik";
       };
     };

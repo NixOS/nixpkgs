@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
       netaddr
       pyparsing
       pytest
+      setuptools
     ]);
 
   passthru.updateScript = writeScript "ovs-update.nu" ''

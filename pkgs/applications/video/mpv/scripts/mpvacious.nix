@@ -1,10 +1,11 @@
-{ lib
-, buildLua
-, fetchFromGitHub
-, gitUpdater
-, curl
-, wl-clipboard
-, xclip
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  curl,
+  wl-clipboard,
+  xclip,
 }:
 
 buildLua rec {
@@ -17,9 +18,7 @@ buildLua rec {
     rev = "v${version}";
     sha256 = "sha256-VHMXW2AzgX88EDnNshxo9Gh8mpXzRoTAq+58HKasUdo=";
   };
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   postPatch = ''
     substituteInPlace utils/forvo.lua \

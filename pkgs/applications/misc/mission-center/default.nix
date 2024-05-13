@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-J0wSu/jWpUJ7Ga6RecY4yLT7i5Ry1HiI+t30SAHOkMw=";
+    hash = "sha256-e5+uB2vzwRqjUiR+gxpSARHPqG+1iX3yifsfwv5LnZI=";
   };
 
   cargoDeps = symlinkJoin {
@@ -59,9 +59,6 @@ stdenv.mkDerivation rec {
     paths = [
       (rustPlatform.importCargoLock {
         lockFile = ./Cargo.lock;
-        outputHashes = {
-          "pathfinder_canvas-0.5.0" = "sha256-qEp16TVggPtvFvDuUyWsS6rH6MeO6FW0K6BnACghaCg=";
-        };
       })
       (rustPlatform.importCargoLock {
         lockFile = ./gatherer-Cargo.lock;

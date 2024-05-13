@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   meta.maintainers = with pkgs.lib.maintainers; [ evenbrenden ];
 
   nodes.machine = { pkgs, ... }: {
-    user.services.jotta-cli.enable = true;
+    services.jotta-cli.enable = true;
     imports = [ ./common/user-account.nix ];
   };
 

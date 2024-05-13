@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
-  version = "unstable-2021-11-21";
+  version = "0-unstable-2021-11-21";
 
   src = fetchFromGitHub {
     owner = "anthwlock";
@@ -30,7 +30,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    # Only stale "latest" tag
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";

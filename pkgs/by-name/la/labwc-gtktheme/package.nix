@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "labwc-gtktheme";
-  version = "unstable-2022-07-17";
+  version = "0-unstable-2022-07-17";
   pyproject = false;
 
   src = fetchFromGitHub {

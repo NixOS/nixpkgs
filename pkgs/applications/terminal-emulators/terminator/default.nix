@@ -7,6 +7,7 @@
 , gtk3
 , gobject-introspection
 , libnotify
+, makeBinaryWrapper
 , wrapGAppsHook3
 , vte
 , nixosTests
@@ -27,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     file
     intltool
     gobject-introspection
+    makeBinaryWrapper
     wrapGAppsHook3
     python3.pkgs.pytest-runner
   ];
@@ -55,8 +57,15 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  # HACK: 'wrapPythonPrograms' will add things to the $PATH in the wrapper. This bleeds into the
+  # terminal session produced by terminator. To avoid this, we force wrapPythonPrograms to only
+  # use gappsWrapperArgs by redefining wrapProgram to ignore its arguments and only apply the
+  # wrapper arguments we want it to use.
+  # TODO: Adjust wrapPythonPrograms to respect an argument that tells it to leave $PATH alone.
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    wrapProgram() {
+      wrapProgramBinary "$1" "''${gappsWrapperArgs[@]}"
+    }
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.terminator;

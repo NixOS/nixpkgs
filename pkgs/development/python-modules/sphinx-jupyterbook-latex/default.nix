@@ -12,6 +12,7 @@
 , sphinx-external-toc
 , sphinxcontrib-bibtex
 , texsoup
+, defusedxml
 }:
 
 buildPythonPackage rec {
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     sphinx-external-toc
     sphinxcontrib-bibtex
     texsoup
+    defusedxml
   ];
 
   meta = with lib; {

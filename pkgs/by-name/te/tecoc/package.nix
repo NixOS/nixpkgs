@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tecoc";
-  version = "unstable-2023-06-21";
+  version = "0-unstable-2023-06-21";
 
   src = fetchFromGitHub {
     owner = "blakemcbride";

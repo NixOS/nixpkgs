@@ -16,6 +16,7 @@
 , numba-scipy
 , numpy
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , scipy
 , typing-extensions
@@ -24,9 +25,10 @@
 buildPythonPackage rec {
   pname = "aesara";
   version = "2.9.3";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # Python 3.12 is not supported: https://github.com/aesara-devs/aesara/issues/1520
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
@@ -35,13 +37,13 @@ buildPythonPackage rec {
     hash = "sha256-aO0+O7Ts9phsV4ghunNolxfAruGBbC+tHjVkmFedcCI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cons
     etuples
     filelock
@@ -62,7 +64,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--durations=50" ""
+      --replace-fail "--durations=50" "" \
+      --replace-fail "hatch-vcs >=0.3.0,<0.4.0" "hatch-vcs"
   '';
 
   preBuild = ''
@@ -81,12 +84,23 @@ buildPythonPackage rec {
     "tests/sparse/sandbox/"
     # JAX is not available on all platform and often broken
     "tests/link/jax/"
+
+    # 2024-04-27: The current nixpkgs numba version is too recent and incompatible with aesara 2.9.3
+    "tests/link/numba/"
   ];
 
   disabledTests = [
     # Disable all benchmark tests
     "test_scan_multiple_output"
     "test_logsumexp_benchmark"
+
+    # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_api_deprecation_warning"
+    # AssertionError: assert ['Elemwise{Co..._i{0} 0', ...] == ['Elemwise{Co..._i{0} 0', ...]
+    # At index 3 diff: '| |Gemv{inplace} d={0: [0]} 2' != '| |CGemv{inplace} d={0: [0]} 2'
+    "test_debugprint"
+    # ValueError: too many values to unpack (expected 3)
+    "test_ExternalCOp_c_code_cache_version"
   ];
 
   meta = with lib; {

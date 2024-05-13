@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "gdown";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VQpy3FyigZ/kvMFdgNBdfJjAuQ5XJWJUt30CVrnfRoM=";
+    hash = "sha256-IUUWUGLYVSCjzZizVsntUixeeYTUCFNUCf1G+U3vx4c=";
   };
 
   build-system = [
