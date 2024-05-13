@@ -90,12 +90,12 @@ in stdenv.mkDerivation {
     for bin in $out/bin/*; do
       wrapProgram $bin \
         --set NODE_ENV production \
-        --set NODE_PATH "$out/lib/node_modules"
+        --set NODE_PATH "$out/node_modules"
     done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
       --add-flags $out/app.js \
       --set NODE_ENV production \
-      --set NODE_PATH "$out/lib/node_modules"
+      --set NODE_PATH "$out/node_modules"
 
     runHook postInstall
   '';
