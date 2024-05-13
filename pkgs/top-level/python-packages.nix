@@ -7406,6 +7406,8 @@ self: super: with self; {
 
   mhcgnomes = callPackage ../development/python-modules/mhcgnomes { };
 
+  miasm = callPackage ../development/python-modules/miasm { };
+
   miauth = callPackage ../development/python-modules/miauth { };
 
   micawber = callPackage ../development/python-modules/micawber { };
@@ -9280,6 +9282,8 @@ self: super: with self; {
   optax = callPackage ../development/python-modules/optax { };
 
   optimum = callPackage ../development/python-modules/optimum { };
+
+  optree = callPackage ../development/python-modules/optree { };
 
   optuna = callPackage ../development/python-modules/optuna { };
 
