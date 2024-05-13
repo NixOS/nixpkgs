@@ -732,7 +732,6 @@ self: super: {
   Rlang-QQ = dontCheck super.Rlang-QQ;
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
-  saltine = dontCheck super.saltine; # https://github.com/tel/saltine/pull/56
   scp-streams = dontCheck super.scp-streams;
   sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   separated = dontCheck super.separated;
