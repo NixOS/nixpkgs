@@ -1824,6 +1824,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  inherit (callPackage ../development/tools/genealogos { }) genealogos-cli genealogos-api;
+
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
   # This is to workaround gfal2-python broken against Python 3.12 or later.
