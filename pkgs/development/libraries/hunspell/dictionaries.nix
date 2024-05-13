@@ -990,6 +990,7 @@ rec {
       description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
       homepage = "https://github.com/tdd-ai/hunspell-tr/";
       license = with licenses; [mpl20];
+      maintainers = with maintainers; [ samemrecebi ];
       platforms = platforms.all;
     };
   };
