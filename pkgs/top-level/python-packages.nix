@@ -16586,6 +16586,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
+  uxsim = callPackage ../development/python-modules/uxsim { };
+
   vaa = callPackage ../development/python-modules/vaa { };
 
   vacuum-map-parser-base = callPackage ../development/python-modules/vacuum-map-parser-base { };
