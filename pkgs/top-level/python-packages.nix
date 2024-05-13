@@ -1858,10 +1858,6 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
-  cadquery = callPackage ../development/python-modules/cadquery {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   caffe = toPythonModule (pkgs.caffe.override {
     pythonSupport = true;
     inherit (self) python numpy boost;
@@ -2570,8 +2566,6 @@ self: super: with self; {
   crownstone-sse = callPackage ../development/python-modules/crownstone-sse { };
 
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
-
-  cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptg = callPackage ../development/python-modules/cryptg { };
 
@@ -4841,8 +4835,6 @@ self: super: with self; {
   glfw = callPackage ../development/python-modules/glfw { };
 
   glob2 = callPackage ../development/python-modules/glob2 { };
-
-  globre = callPackage ../development/python-modules/globre { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
@@ -9523,8 +9515,6 @@ self: super: with self; {
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
-  pathlib = callPackage ../development/python-modules/pathlib { };
-
   pathlib-abc = callPackage ../development/python-modules/pathlib-abc { };
 
   pathos = callPackage ../development/python-modules/pathos { };
@@ -10540,8 +10530,6 @@ self: super: with self; {
   pwntools = callPackage ../development/python-modules/pwntools {
     debugger = pkgs.gdb;
   };
-
-  pxml = callPackage ../development/python-modules/pxml { };
 
   py-air-control = callPackage ../development/python-modules/py-air-control { };
 
