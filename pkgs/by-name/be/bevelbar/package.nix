@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bevelbar";
-  version = "22.06";
+  version = "23.08";
 
   src = fetchurl {
     url = "https://www.uninformativ.de/git/bevelbar/archives/bevelbar-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-8ceFwQFHhJ1qEXJtzoDXU0XRgudaAfsoWq7LYgGEqsM=";
+    hash = "sha256-4wMSPi9tu+z1AW2uvPefxkeT/5DYo2oJybhNnpe82QU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
