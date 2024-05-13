@@ -4,21 +4,24 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "emoji";
   version = "2.11.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
-    repo = pname;
+    repo = "emoji";
     rev = "refs/tags/v${version}";
     hash = "sha256-+xgDVYMjTZAuXEb+2srGuEcJmqfd57jfOXTJ1oNjIKM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
