@@ -54,6 +54,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [];
-    broken = (lib.versions.majorMinor kernel.modDirVersion) > "6.8";
+    broken = lib.versionAtLeast kernel.modDirVersion "6.9";
   };
 }
