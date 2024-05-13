@@ -100,7 +100,7 @@ let
     sourceRoot = "source/native/fsNotifier/linux";
     buildPhase = ''
       runHook preBuild
-      cc -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
+      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
       runHook postBuild
     '';
     installPhase = ''
