@@ -73,6 +73,6 @@ mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut yana ];
+    maintainers = with maintainers; [ flokli mmahut yana ];
   };
 }
