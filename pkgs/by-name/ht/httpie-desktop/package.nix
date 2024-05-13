@@ -17,6 +17,7 @@ appimageTools.wrapType2 rec {
     homepage = "https://github.com/httpie/desktop";
     license = licenses.unfree;
     maintainers = with maintainers; [ luftmensch-luftmensch ];
+    mainProgram = "httpie-desktop";
     platforms = [ "x86_64-linux" ];
   };
 }
