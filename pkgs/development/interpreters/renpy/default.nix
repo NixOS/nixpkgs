@@ -25,7 +25,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-    python3.pkgs.cython
+    # Ren'Py currently does not compile on Cython 3.x.
+    # See https://github.com/renpy/renpy/issues/5359
+    python3.pkgs.cython_0
     python3.pkgs.setuptools
   ];
 
