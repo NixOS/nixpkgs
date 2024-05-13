@@ -308,6 +308,7 @@
   ./programs/xwayland.nix
   ./programs/yabar.nix
   ./programs/yazi.nix
+  ./programs/ydotool.nix
   ./programs/yubikey-touch-detector.nix
   ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
