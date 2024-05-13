@@ -14,19 +14,14 @@
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.8.13"; # ensure that jellyfin-web has matching version
+  version = "10.9.1"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "sha256-UtcrJRqDIPyewCNfI89E/IYrgLUhWx1me6MtPX+aeFU=";
+    sha256 = "sha256-ZvXz4gnpYE9bMvOHbmLhqJLUomPmk1K9ysw+Wlsyhr4=";
   };
-
-  patches = [
-    # when building some warnings are reported as error and fail the build.
-    ./disable-warnings.patch
-  ];
 
   propagatedBuildInputs = [
     sqlite
@@ -40,8 +35,8 @@ buildDotnetModule rec {
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   preInstall = ''
