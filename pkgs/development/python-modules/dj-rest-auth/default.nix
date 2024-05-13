@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, django
-, django-allauth
-, djangorestframework
-, djangorestframework-simplejwt
-, fetchFromGitHub
-, python
-, pythonOlder
-, responses
-, setuptools
-, unittest-xml-reporting
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-allauth,
+  djangorestframework,
+  djangorestframework-simplejwt,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  responses,
+  setuptools,
+  unittest-xml-reporting,
 }:
 
 buildPythonPackage rec {
@@ -33,21 +34,13 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
-  dependencies = [
-    djangorestframework
-  ];
+  dependencies = [ djangorestframework ];
 
-  passthru.optional-dependencies.with_social = [
-    django-allauth
-  ];
+  passthru.optional-dependencies.with_social = [ django-allauth ];
 
   nativeCheckInputs = [
     djangorestframework-simplejwt
@@ -67,9 +60,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "dj_rest_auth"
-  ];
+  pythonImportsCheck = [ "dj_rest_auth" ];
 
   meta = with lib; {
     description = "Authentication for Django Rest Framework";
