@@ -1024,6 +1024,8 @@ self: super: with self; {
 
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
 
+  avwx-engine = callPackage ../development/python-modules/avwx-engine { };
+
   aw-client = callPackage ../development/python-modules/aw-client { };
 
   aw-core = callPackage ../development/python-modules/aw-core { };
