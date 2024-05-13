@@ -167,7 +167,7 @@ let
     # ensure all required lock files exist, but none more
     script = ''
       GLOBIGNORE="${concatStringsSep ":" concurrencyLockfiles}"
-      rm -f *
+      rm -f -- *
       unset GLOBIGNORE
 
       xargs touch <<< "${toString concurrencyLockfiles}"
@@ -324,11 +324,11 @@ let
         cat key.pem fullchain.pem > full.pem
 
         # Group might change between runs, re-apply it
-        chown '${user}:${data.group}' *
+        chown '${user}:${data.group}' -- *
 
         # Default permissions make the files unreadable by group + anon
         # Need to be readable by group
-        chmod 640 *
+        chmod 640 -- *
       '';
     };
 
@@ -411,7 +411,7 @@ let
 
           expiration_line="$(
             set -euxo pipefail
-            openssl x509 -noout -enddate <$pem \
+            openssl x509 -noout -enddate <"$pem" \
                   | grep notAfter \
                   | sed -e 's/^notAfter=//'
           )"
@@ -419,8 +419,8 @@ let
 
           expiration_date="$(date -d "$expiration_line" +%s)"
           now="$(date +%s)"
-          expiration_s=$[expiration_date - now]
-          expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
+          expiration_s=$((expiration_date - now))
+          expiration_days=$((expiration_s / (3600 * 24)))   # rounds down
 
           [[ $expiration_days -gt ${toString data.validMinDays} ]]
         }
@@ -442,7 +442,7 @@ let
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
         # We also need an account key. Avoids #190493
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(find accounts -name '${data.email}.key')" ]; then
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
