@@ -1,39 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, glibcLocales
 , importlib-metadata
-, nose
 , numpy
+, pytestCheckHook
+, pythonOlder
 , setuptools
 , setuptools-scm
-, six
-, glibcLocales
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyfaidx";
   version = "0.8.1.1";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-bwSCNSYZ8sxWADyiIyG9sNB2S2VnlbweQGKx+psIaGs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
-    six
   ];
 
   nativeCheckInputs = [
     glibcLocales
-    nose
     numpy
     pytestCheckHook
   ];
@@ -48,10 +47,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mdshw5/pyfaidx";
     description = "Python classes for indexing, retrieval, and in-place modification of FASTA files using a samtools compatible index";
-    mainProgram = "faidx";
+    homepage = "https://github.com/mdshw5/pyfaidx";
+    changelog = "https://github.com/mdshw5/pyfaidx/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jbedo ];
+    mainProgram = "faidx";
   };
 }
