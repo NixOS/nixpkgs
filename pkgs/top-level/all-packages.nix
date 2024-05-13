@@ -4770,6 +4770,8 @@ with pkgs;
 
   ydotool = callPackage ../tools/wayland/ydotool { };
 
+  bulk-extractor_1 = callPackage ../by-name/bu/bulk-extractor/v1.nix { };
+
   cambalache = callPackage ../development/tools/cambalache { };
 
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
