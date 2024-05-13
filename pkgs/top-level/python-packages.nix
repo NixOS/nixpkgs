@@ -15426,6 +15426,8 @@ self: super: with self; {
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
+  truncnorm = callPackage ../development/python-modules/truncnorm { };
+
   trustme = callPackage ../development/python-modules/trustme { };
 
   truststore = callPackage ../development/python-modules/truststore { };
