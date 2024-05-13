@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "chrysn";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4iwoPfmIwk+PlWUp60aqA5qZgzyj34pnZHf9uH5UhnY=";
+    hash = "sha256-jBRxorHr5/CgAR6WVXBUycZpJ6n1DYVFQk6kqVv8D1Q=";
   };
 
   nativeBuildInputs = [
