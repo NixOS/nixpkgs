@@ -39,6 +39,7 @@ in {
       storage.data = mkDefault "db";
       storage.fts = mkDefault "db";
       storage.blob = mkDefault "blob";
+      storage.lookup = mkDefault "db";
       resolver.type = mkDefault "system";
       resolver.public-suffix = mkDefault ["https://publicsuffix.org/list/public_suffix_list.dat"];
     };
