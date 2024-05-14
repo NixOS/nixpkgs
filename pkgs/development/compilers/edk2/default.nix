@@ -41,6 +41,11 @@ edk2 = stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
       hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
     })
+    # https://github.com/tianocore/edk2/pull/5658
+    (fetchpatch {
+      url = "https://github.com/tianocore/edk2/commit/a34ff4a8f69a7b8a52b9b299153a8fac702c7df1.patch";
+      hash = "sha256-u+niqwjuLV5tNPykW4xhb7PW2XvUmXhx5uvftG1UIbU=";
+    })
   ];
 
   srcWithVendoring = fetchFromGitHub {
@@ -81,12 +86,6 @@ edk2 = stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.isDarwin) " -Wno-error=macro-redefined";
 
   hardeningDisable = [ "format" "fortify" ];
-
-  # For cross-compilation we need to build antlr and dlg for the build arch
-  preBuild = ''
-    BIN_DIR='.' make -C BaseTools/Source/C/VfrCompile/Pccts/antlr CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD -j$NIX_BUILD_CORES
-    BIN_DIR='.' make -C BaseTools/Source/C/VfrCompile/Pccts/dlg CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD -j$NIX_BUILD_CORES
-  '';
 
   installPhase = ''
     mkdir -vp $out
