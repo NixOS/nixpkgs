@@ -62,9 +62,7 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = [
-      ./0001-configs-rpi-allow-for-bigger-kernels.patch
-    ] ++ extraPatches;
+    patches = extraPatches;
 
     postPatch = ''
       ${lib.concatMapStrings (script: ''
@@ -492,42 +490,63 @@ in {
   };
 
   ubootRaspberryPi = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi2 = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_2_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi3_32bit = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_4_32b_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPi4_64bit = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
 
   ubootRaspberryPiZero = buildUBoot {
+    extraPatches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ];
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = ["armv6l-linux"];
     filesToInstall = ["u-boot.bin"];
