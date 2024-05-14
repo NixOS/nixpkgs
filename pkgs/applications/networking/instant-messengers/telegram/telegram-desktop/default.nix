@@ -44,6 +44,9 @@
 , libicns
 , nix-update-script
 , mainProgram ? if stdenv.isLinux then "telegram-desktop" else "Telegram"
+# We're allowed to used the API ID of the Snap package:
+, apiId ? 611335
+, apiHash ? "d524b414d21f4d37f08684c1df41ac9c"
 }:
 
 # Main reference:
@@ -186,9 +189,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
-    # We're allowed to used the API ID of the Snap package:
-    "-DTDESKTOP_API_ID=611335"
-    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
+    "-DTDESKTOP_API_ID=${toString apiId}"
+    "-DTDESKTOP_API_HASH=${apiHash}"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
     "-DDESKTOP_APP_DISABLE_SCUDO=ON"
