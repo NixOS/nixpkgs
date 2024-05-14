@@ -2619,6 +2619,19 @@ self: super: {
     hash = "sha256-Pzjl2yp01XsYWcyhpLnsuccg7bOACgv+RpafauUox8c=";
   }) super.dependent-sum-aeson-orphans;
 
+  # https://github.com/obsidiansystems/dependent-sum/pull/73
+  dependent-sum-template = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/dependent-sum/commit/619727ba1792e39a68d23c62e75a923672e87a54.patch";
+    hash = "sha256-SyD1/KrX1KUjrR82fvI+BRcqLC2Q3AbvSeKNrdGstjg=";
+    relative = "dependent-sum-template";
+  }) super.dependent-sum-template;
+
+  aeson-gadt-th = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/aeson-gadt-th/commit/8f6922a6440019dece637d73d70766c473bcd6c0.patch";
+    hash = "sha256-564DhfiubwNV8nAj8L5DzsWn4MdzqqaYYNmOSPUa7ys=";
+    excludes = [ ".github/**" ];
+  }) super.aeson-gadt-th;
+
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
 

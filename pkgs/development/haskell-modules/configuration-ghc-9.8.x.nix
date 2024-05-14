@@ -88,7 +88,7 @@ self: super: {
   #
   blaze-svg = doJailbreak super.blaze-svg; # base <4.19
   commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
-  dependent-sum-template_0_2_0_1 = doJailbreak super.dependent-sum-template_0_2_0_1; # template-haskell < 2.21
+  dependent-sum-template = doJailbreak super.dependent-sum-template_0_2_0_1; # template-haskell < 2.21
   diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
   diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
   diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1

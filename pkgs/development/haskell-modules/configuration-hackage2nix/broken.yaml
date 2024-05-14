@@ -83,7 +83,6 @@ broken-packages:
   - aeson-flat # failure in job https://hydra.nixos.org/build/233220787 at 2023-09-02
   - aeson-flatten # failure in job https://hydra.nixos.org/build/233242954 at 2023-09-02
   - aeson-flowtyped # failure in job https://hydra.nixos.org/build/233245878 at 2023-09-02
-  - aeson-gadt-th # failure in job https://hydra.nixos.org/build/233247060 at 2023-09-02
   - aeson-generics-typescript # failure in job https://hydra.nixos.org/build/245703304 at 2024-01-07
   - aeson-injector # failure in job https://hydra.nixos.org/build/233200351 at 2023-09-02
   - aeson-json-ast # failure in job https://hydra.nixos.org/build/233249406 at 2023-09-02
