@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hmcl";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ daru-san ];
     inherit (jre.meta) platforms;
   };
 })
