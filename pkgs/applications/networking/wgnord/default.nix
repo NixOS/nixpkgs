@@ -13,13 +13,13 @@
 
 resholve.mkDerivation rec {
   pname = "wgnord";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "phirecc";
     repo = pname;
     rev = version;
-    hash = "sha256-00513jr3Sk8YahqI14pQ7pU4P7MBUlsqXXfrACu35RQ=";
+    hash = "sha256-26cfYXtZVQ7kIRxY6oNGCqIjdw/hjwXhVKimVgolLgk=";
   };
 
   postPatch = ''
