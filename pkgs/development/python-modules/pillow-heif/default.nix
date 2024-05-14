@@ -79,6 +79,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # AVIF tests trigger SIGILL
+    # https://github.com/bigcat88/pillow_heif/issues/241
+    export PH_TESTS_NO_AVIF_DEC=1
+  '';
+
   disabledTests = [
     # Time based
     "test_decode_threads"
@@ -95,6 +101,9 @@ buildPythonPackage rec {
     "test_premultiplied_alpha"
     "test_hdr_save"
     "test_I_color_modes_to_10_12_bit"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # requires AV1 support enabled for tests
+    "test_pillow_register_avif_plugin"
   ];
 
   meta = {
