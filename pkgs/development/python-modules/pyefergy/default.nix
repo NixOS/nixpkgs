@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, codecov
-, fetchFromGitHub
-, iso4217
-, poetry-core
-, poetry-dynamic-versioning
-, pytest-asyncio
-, pythonOlder
-, pytz
-, types-pytz
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  codecov,
+  fetchFromGitHub,
+  iso4217,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pythonOlder,
+  pytz,
+  types-pytz,
 }:
 
 buildPythonPackage rec {
@@ -40,11 +41,9 @@ buildPythonPackage rec {
   ];
 
   # Tests require network access
-  doCheck  =false;
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "pyefergy"
-  ];
+  pythonImportsCheck = [ "pyefergy" ];
 
   meta = with lib; {
     description = "Python API library for Efergy energy meters";
