@@ -7,7 +7,6 @@
 , semver
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 , toml
 }:
 
@@ -25,16 +24,8 @@ buildPythonPackage rec {
     hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
-  pythonRelaxDeps = [
-    "astroid"
-  ];
-
   build-system = [
     poetry-core
-  ];
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -59,5 +50,7 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
     mainProgram = "detect-requirements";
+    # https://github.com/landscapeio/requirements-detector/issues/48
+    broken = versionAtLeast astroid.version "3";
   };
 }
