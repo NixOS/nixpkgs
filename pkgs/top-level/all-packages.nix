@@ -18285,11 +18285,11 @@ with pkgs;
 
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
-  bcc = callPackage ../os-specific/linux/bcc {
+  bcc = callPackage ../by-name/bc/bcc/package.nix {
     llvmPackages = llvmPackages_16;
   };
 
-  bpftrace = callPackage ../os-specific/linux/bpftrace {
+  bpftrace = callPackage ../by-name/bp/bpftrace/package.nix {
     llvmPackages = llvmPackages_16;
   };
 
@@ -19246,8 +19246,6 @@ with pkgs;
   pactorio = callPackage ../development/tools/pactorio {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  pahole = callPackage ../development/tools/misc/pahole { };
 
   panopticon = callPackage ../development/tools/analysis/panopticon { };
 
@@ -39951,8 +39949,6 @@ with pkgs;
   rivalcfg = callPackage ../misc/rivalcfg { };
 
   roadrunner = callPackage ../servers/roadrunner { };
-
-  rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
 
