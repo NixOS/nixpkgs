@@ -15306,6 +15306,8 @@ self: super: with self; {
 
   torchsde = callPackage ../development/python-modules/torchsde { };
 
+  torchsummary = callPackage ../development/python-modules/torchsummary { };
+
   torchvision = callPackage ../development/python-modules/torchvision { };
 
   torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix {
