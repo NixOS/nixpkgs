@@ -127,6 +127,9 @@ in
 
 ## Darwin
 
+# Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
+++ optional (atLeast14 && stdenv.isDarwin && stdenv.isx86_64) ../patches/14/libgcc-darwin-detection.patch
+
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
