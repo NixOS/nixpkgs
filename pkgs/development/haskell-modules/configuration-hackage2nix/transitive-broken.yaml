@@ -875,8 +875,6 @@ dont-distribute-packages:
  - cleff-plugin
  - cless
  - cleveland
- - cli-git
- - cli-nix
  - click-clack
  - clickhouse-haskell
  - clifford
@@ -2935,7 +2933,6 @@ dont-distribute-packages:
  - ngx-export-tools-extra
  - nikepub
  - nirum
- - nix-thunk
  - nkjp
  - nlp-scores-scripts
  - nom
