@@ -28,6 +28,7 @@
 , QTKit
 , AVKit
 , WebKit
+, System
 , waylandSupport ? false
 , x11Support ? stdenv.isLinux
 , testers
@@ -54,10 +55,6 @@ rustPlatform.buildRustPackage rec {
       "yaml-rust-0.4.6" = "sha256-wXFy0/s4y6wB3UO19jsLwBdzMy7CGX4JoUt5V6cU7LU=";
     };
   };
-
-  cargoPatches = lib.optionals stdenv.isDarwin [
-    ./inject-wx-on-darwin.patch
-  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -96,6 +93,7 @@ rustPlatform.buildRustPackage rec {
     QTKit
     AVKit
     WebKit
+    System
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
@@ -108,16 +106,13 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \
-      --replace target/mac/ $out/Applications/ \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail target/mac/ $out/Applications/ \
+      --replace-fail /bin/echo ${coreutils}/bin/echo
     patchShebangs scripts/create_bundle.sh
     substituteInPlace espanso/src/res/macos/Info.plist \
-      --replace "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
-    substituteInPlace espanso/src/res/macos/com.federicoterzi.espanso.plist \
-      --replace "<string>/Applications/Espanso.app/Contents/MacOS/espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>" \
-      --replace "<string>/usr/bin" "<string>${placeholder "out"}/bin:/usr/bin"
+      --replace-fail "<string>espanso</string>" "<string>${placeholder "out"}/Applications/Espanso.app/Contents/MacOS/espanso</string>"
     substituteInPlace espanso/src/path/macos.rs  espanso/src/path/linux.rs \
-      --replace '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
+      --replace-fail '"/usr/local/bin/espanso"' '"${placeholder "out"}/bin/espanso"'
   '';
 
   # Some tests require networking
@@ -153,6 +148,13 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat pyrox0 ];
     platforms = platforms.unix;
+    # With apple_sdk_10_12,
+    # kCFURLVolumeAvailableCapacityForImportantUsageKey
+    # is undefined.
+    # With apple_sdk_11_0, there is an issue with
+    # kColorSyncGenericGrayProfile.
+    broken = stdenv.hostPlatform.system == "x86_64-darwin";
+
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.
