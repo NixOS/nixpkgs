@@ -146,7 +146,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "espanso";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kimat pyrox0 ];
+    maintainers = with maintainers; [ kimat pyrox0 n8henrie ];
     platforms = platforms.unix;
     # With apple_sdk_10_12,
     # kCFURLVolumeAvailableCapacityForImportantUsageKey
