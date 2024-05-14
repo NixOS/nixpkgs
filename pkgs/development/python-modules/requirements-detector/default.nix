@@ -29,12 +29,15 @@ buildPythonPackage rec {
     "astroid"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astroid
     packaging
     toml
@@ -51,10 +54,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";
-    mainProgram = "detect-requirements";
     homepage = "https://github.com/landscapeio/requirements-detector";
     changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
+    mainProgram = "detect-requirements";
   };
 }
