@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xz }:
+{ lib, stdenv, fetchurl, xz, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "autoconf-archive";
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ xz ];
+  # texinfo being required on FreeBSD precipitates from the autotoolsAbspathHook.
+  # by patching the impure uname path on the FreeBSD code path, this triggers a
+  # file-was-modified check which rebuilds some doc information requiring texinfo.
+  nativeBuildInputs = lib.optionals stdenv.buildPlatform.isFreeBSD [ texinfo ];
 
   meta = with lib; {
     description = "Archive of autoconf m4 macros";
