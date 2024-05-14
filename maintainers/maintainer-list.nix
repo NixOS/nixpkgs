@@ -5247,6 +5247,12 @@
     githubId = 129093;
     name = "Desmond O. Chang";
   };
+  DogeRam1500 = {
+    name = "John Napoli";
+    email = "DogeRam1500@itsporkroll.com";
+    github = "DogeRam1500";
+    githubId = 82404846;
+  };
   domenkozar = {
     email = "domen@dev.si";
     github = "domenkozar";
