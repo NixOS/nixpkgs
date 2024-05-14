@@ -2129,6 +2129,7 @@ buildLuarocksPackage {
     homepage = "https://github.com/f4z3r/luatext/tree/main";
     description = "A small library to print colored text";
     license.fullName = "MIT";
+    maintainers = with lib.maintainers; [ f4z3r ];
   };
 }) {};
 
@@ -2877,23 +2878,23 @@ buildLuarocksPackage {
   };
 }) {};
 
-sofa = callPackage({ argparse, buildLuarocksPackage, compat53, fetchFromGitHub, fetchurl, luaAtLeast, luaOlder, lyaml }:
+sofa = callPackage({ argparse, buildLuarocksPackage, luatext, compat53, fetchFromGitHub, fetchurl, luaAtLeast, luaOlder, lyaml }:
 buildLuarocksPackage {
   pname = "sofa";
-  version = "0.4.0-1";
+  version = "0.5.0-0";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/sofa-0.4.0-1.rockspec";
-    sha256 = "0h40d5665cdnlqjq7xddqdbjn5ls970nk5c0wfp75qhs0s4xm4mc";
+    url    = "mirror://luarocks/sofa-0.5.0-0.rockspec";
+    sha256 = "0vimbvnnfwn1vaxz33vgvmrng3l87j970zgzxsmj4g0p5yqkmnsn";
   }).outPath;
   src = fetchFromGitHub {
     owner = "f4z3r";
     repo = "sofa";
-    rev = "v0.4.0";
-    hash = "sha256-K09kvBML5BxHTnGqHVhN7y9ckhw1tRAiskEeBa/HACE=";
+    rev = "v0.5.0";
+    hash = "sha256-dpYB94yxi/J3b/liy9srbO7wUsZh6FJma79m9uU8hCM=";
   };
 
   disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
-  propagatedBuildInputs = [ argparse compat53 lyaml ];
+  propagatedBuildInputs = [ argparse compat53 luatext lyaml ];
 
   meta = {
     homepage = "https://github.com/f4z3r/sofa";
