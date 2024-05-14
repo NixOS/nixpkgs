@@ -33011,7 +33011,7 @@ with pkgs;
     libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
-  mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
+  mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../by-name/mp/mpv-unwrapped/package.nix {
     stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
     inherit lua;
   };
@@ -33019,8 +33019,8 @@ with pkgs;
   shaka-packager = callPackage ../applications/video/shaka-packager { };
 
   # Wraps without triggering a rebuild
-  wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
-  mpv = wrapMpv mpv-unwrapped { };
+  wrapMpv = callPackage ../by-name/mp/mpv/package.nix { };
+  mpv = (callPackage ../by-name/mp/mpv/package.nix { }) mpv-unwrapped { };
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
