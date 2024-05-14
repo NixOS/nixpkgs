@@ -2877,7 +2877,7 @@ buildLuarocksPackage {
   };
 }) {};
 
-sofa = callPackage({ argparse, buildLuarocksPackage, compat53, fetchFromGitHub, fetchurl, lua, luaAtLeast, luaOlder, lyaml }:
+sofa = callPackage({ argparse, buildLuarocksPackage, compat53, fetchFromGitHub, fetchurl, luaAtLeast, luaOlder, lyaml }:
 buildLuarocksPackage {
   pname = "sofa";
   version = "0.4.0-1";
@@ -2893,7 +2893,7 @@ buildLuarocksPackage {
   };
 
   disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
-  propagatedBuildInputs = [ argparse compat53 lua lyaml ];
+  propagatedBuildInputs = [ argparse compat53 lyaml ];
 
   meta = {
     homepage = "https://github.com/f4z3r/sofa";
