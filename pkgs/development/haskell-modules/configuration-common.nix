@@ -1535,11 +1535,6 @@ self: super: {
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
 
-  # hasn’t bumped upper bounds
-  # upstream: https://github.com/obsidiansystems/which/pull/6
-  which = doJailbreak super.which;
-
-
   # 2024-02-28: The Hackage version dhall-lsp-server-1.1.3 requires
   # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
   # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
@@ -2063,18 +2058,31 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict version bounds on cryptonite and github.
-  # PRs are merged, will be fixed next release or Hackage revision.
-  nix-thunk = appendPatches [
-    (fetchpatch {
-      url = "https://github.com/obsidiansystems/nix-thunk/commit/49d27a85dd39cd9413c99958c67e596756a502b5.patch";
-      sha256 = "1p1n0123yrbdqyfk4kx3gq6bdv65l1bxgbsg51ckcwclg54xp2p5";
-    })
-    (fetchpatch {
-      url = "https://github.com/obsidiansystems/nix-thunk/commit/512867c651977265d5d8f456b538f7a364ec8a8b.patch";
-      sha256 = "121yg26y4g28k8xv7y1j6c3pxm17vsjn3vi62kkc8g928c47yd02";
-    })
-  ] super.nix-thunk;
+  # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
+  cli-extras = doJailbreak super.cli-extras;
+
+  # https://github.com/obsidiansystems/cli-git/pull/7 turned into a flat patch
+  cli-git = lib.pipe super.cli-git [
+    (appendPatch (fetchpatch {
+      url = "https://github.com/obsidiansystems/cli-git/commit/be378a97e2f46522174231b77c952f759df3fad6.patch";
+      sha256 = "sha256-6RrhqkKpnb+FTHxccHNx6pdC7ClfqcJ2eoo+W7h+JUo=";
+      excludes = [ ".github/**" ];
+    }))
+    doJailbreak
+    (addBuildTool pkgs.git)
+  ];
+
+  # Need https://github.com/obsidiansystems/cli-nix/pull/5 and more
+  cli-nix = addBuildTools [
+    pkgs.nix
+    pkgs.nix-prefetch-git
+  ] (doJailbreak super.cli-nix);
+
+  # https://github.com/obsidiansystems/nix-thunk/pull/51/
+  nix-thunk = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/nix-thunk/commit/c3dc3e799e8ce7756330f98b9f73f59c4b7a5502.patch";
+    sha256 = "sha256-C1ii1FXiCPFfw5NzyQZ0cEG6kIYGohVsnHycpYEJ24Q=";
+  }) (doJailbreak super.nix-thunk);
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);

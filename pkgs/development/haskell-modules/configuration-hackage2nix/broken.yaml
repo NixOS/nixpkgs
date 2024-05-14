@@ -802,7 +802,6 @@ broken-packages:
   - clevercss # failure in job https://hydra.nixos.org/build/233206298 at 2023-09-02
   - clexer # failure in job https://hydra.nixos.org/build/233229804 at 2023-09-02
   - cli-builder # failure in job https://hydra.nixos.org/build/233209961 at 2023-09-02
-  - cli-extras # failure in job https://hydra.nixos.org/build/233226908 at 2023-09-02
   - CLI # failure in job https://hydra.nixos.org/build/233191087 at 2023-09-02
   - clif # failure in job https://hydra.nixos.org/build/233197110 at 2023-09-02
   - clifm # failure in job https://hydra.nixos.org/build/233227426 at 2023-09-02
