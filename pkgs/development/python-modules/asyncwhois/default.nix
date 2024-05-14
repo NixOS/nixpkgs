@@ -25,11 +25,16 @@ buildPythonPackage rec {
     hash = "sha256-ESVgK4Z26OAamdHPEVxysnlJ0rEUlr8KNd24fawHuEg=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "python-socks[asyncio]" "python-socks"
+  '';
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-socks
     tldextract
     whodap
@@ -40,11 +45,6 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "python-socks[asyncio]" "python-socks"
-  '';
 
   disabledTests = [
     # Tests require network access
