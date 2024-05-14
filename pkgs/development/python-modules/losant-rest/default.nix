@@ -5,23 +5,28 @@
 , pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "losant-rest";
-  version = "1.19.5";
-  format = "setuptools";
+  version = "1.19.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Losant";
     repo = "losant-rest-python";
-    rev = "v${version}";
-    hash = "sha256-oYwbCpX2mD1RMk/0ymxaA8NF9kaJ+pGQdUKk3l5Jmrs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sbNR95FhcRhgHh/ulLC8lL6EHal0BBK3wP6i29VElmY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     requests
   ];
 
@@ -31,11 +36,11 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "tests/losantrest_tests.py"
+    "tests/platformrest_tests.py"
   ];
 
   pythonImportsCheck = [
-    "losantrest"
+    "platformrest"
   ];
 
   meta = with lib; {
