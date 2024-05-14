@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.56.0";
+  version = "2.56.1";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a7zCPyKV9kZ34XxVBYotcMvXUVrieunFpKGBK1Jhvo4=";
+    hash = "sha256-oUICnpVHRNCauWEplz7xH6AdP6CbbYX/Uy/QUPjwGHc=";
   };
 
-  vendorHash = "sha256-q0PXbLTS5Po3xTK+CkU7BtZ6tk1PfH3zVAVK1IbmitY=";
+  vendorHash = "sha256-zQjOOUlqL0Mj2DKHiG9rOfu41SKMO7C99JBJDycXAs4=";
 
   # Upgrade the Go version during the vendoring FOD build because it fails otherwise.
   overrideModAttrs = _: {
