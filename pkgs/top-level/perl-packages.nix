@@ -25522,6 +25522,21 @@ with self; {
     };
   };
 
+  TestNginx = buildPerlPackage {
+    pname = "Test-Nginx";
+    version = "0.30";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGENT/Test-Nginx-0.30.tar.gz";
+      hash = "sha256-gJdYU1HsIOLANWByNv54tSeevmJDXh/7kokV0m6xJrI=";
+    };
+    propagatedBuildInputs = [ HTTPMessage IPCRun LWP ListMoreUtils TestBase TestLongString TextDiff URI ];
+    meta = {
+      description =
+        "Data-driven test scaffold for Nginx C module and Nginx/OpenResty-based libraries and applications";
+      license = with lib.licenses; [ bsd3 ];
+    };
+  };
+
   TestNoTabs = buildPerlPackage {
     pname = "Test-NoTabs";
     version = "2.02";
