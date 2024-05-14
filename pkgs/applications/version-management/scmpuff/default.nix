@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, scmpuff }:
+{ lib, buildGoModule, fetchFromGitHub, testers, scmpuff, git, which }:
 
 buildGoModule rec {
   pname = "scmpuff";
@@ -19,6 +19,11 @@ buildGoModule rec {
     package = scmpuff;
     command = "scmpuff version";
   };
+
+  propagatedUserEnvPkgs = [
+    git
+    which
+  ];
 
   meta = with lib; {
     description = "Add numbered shortcuts to common git commands";
