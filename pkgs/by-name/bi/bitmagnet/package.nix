@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-exKQTsyP7LL63WHZ8/WchLh4y0Oj9LC4lxiZTOfWARU=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
 
   passthru = {
     updateScript = nix-update-script { };
