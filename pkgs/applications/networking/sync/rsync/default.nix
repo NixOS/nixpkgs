@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     "--disable-xxhash"
   ] ++ lib.optionals (!enableLZ4) [
     "--disable-lz4"
+  ] ++ lib.optionals (!enableOpenSSL) [
+    "--disable-openssl"
   ];
 
   enableParallelBuilding = true;
