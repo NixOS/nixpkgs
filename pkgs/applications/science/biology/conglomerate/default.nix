@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conglomerate";
-  version = "unstable-2017-09-10";
+  version = "unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = pname;
-    rev = "7343238bc6215942c7ecc885a224f24433a291b0";
-    hash = "sha256-OV/BR3QRQiEEZb0gFrFX5ALcG+UyB9DOXiMwOXx9mNY=";
+    rev = "6fb26084f2871a85044e2e4afc868982702b40ed";
+    hash = "sha256-Inr4b2bxguzkcRQBURObsQQ0Rb3H/Zz6hEzNRd+IX3w=";
   };
 
   nativeBuildInputs = [
