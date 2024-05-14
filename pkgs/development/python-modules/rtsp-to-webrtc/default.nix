@@ -5,14 +5,15 @@
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "rtsp-to-webrtc";
   version = "0.6.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
@@ -21,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-D022d2CDKtHTuvEGo8GkOGWHi5sV4g6UwNB9xS2xxIs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
   ];
 
@@ -37,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for RTSPtoWeb and RTSPtoWebRTC";
     homepage = "https://github.com/allenporter/rtsp-to-webrtc-client";
+    changelog = "https://github.com/allenporter/rtsp-to-webrtc-client/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
