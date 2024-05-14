@@ -1,23 +1,23 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{ lib
+, stdenv
 , astroid
+, buildPythonPackage
 , dill
+, fetchFromGitHub
+, gitpython
 , isort
 , mccabe
 , platformdirs
+, py
+, pytest-timeout
+, pytest-xdist
+, pytest7CheckHook
+, pythonOlder
 , requests
 , setuptools
 , tomli
 , tomlkit
 , typing-extensions
-, gitpython
-, py
-, pytest-timeout
-, pytest-xdist
-, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
@@ -34,11 +34,11 @@ buildPythonPackage rec {
     hash = "sha256-LmpLt2GCzYU73BUpORHaFbGqkxyYqoPoKZpUJSChqKQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astroid
     dill
     isort
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     tomlkit
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 
@@ -106,8 +106,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://pylint.readthedocs.io/en/stable/";
     description = "A bug and style checker for Python";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
     changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
@@ -118,7 +118,7 @@ buildPythonPackage rec {
       - symilar: an independent similarities checker
       - epylint: Emacs and Flymake compatible Pylint
     '';
-    license = licenses.gpl1Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };
 }
