@@ -160,7 +160,7 @@ in
       shell = "${bash}/bin/bash";
       fetchurlBoot = fetchurl;
       extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
-      cc = import ../../build-support/cc-wrapper ({
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         inherit lib;
         name = "freebsd-boot-0-cc";
         nixSupport = {
@@ -177,7 +177,7 @@ in
         coreutils = coreutils;
         cc = clang;
         isClang = true;
-        bintools = import ../../build-support/bintools-wrapper {
+        bintools = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           inherit lib;
           stdenvNoCC = stdenvNoCC;
           name = "freebsd-boot-0-bintools";
@@ -191,7 +191,7 @@ in
           gnugrep = gnugrep;
           coreutils = coreutils;
         };
-      });
+      };
       overrides = self: super: {
         gnutar = super.gnutar.overrideAttrs {
           NIX_LDFLAGS = "-lintl";  # picks up libintl.h but not libintl.so from bootstrap
@@ -257,7 +257,7 @@ in
       targetPlatform = localSystem;
       extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bash}/bin/bash";
-      cc = import ../../build-support/cc-wrapper ({
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) ({
         inherit lib stdenvNoCC;
         name = "freebsd-boot-1-cc";
         inherit (prevStage.freebsd) libc;
@@ -277,7 +277,7 @@ in
           libcxx-ldflags = ["-lunwind"];
         };
         extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
-        bintools = import ../../build-support/bintools-wrapper {
+        bintools = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           inherit lib stdenvNoCC;
           name = "freebsd-boot-1-bintools";
           inherit (prevStage.freebsd) libc;
@@ -352,7 +352,7 @@ in
       targetPlatform = localSystem;
       extraNativeBuildInputs = [./unpack-source.sh ./always-patchelf.sh ./autotools-abspath.sh];
       shell = "${prevStage.bashReal}/bin/bash";
-      cc = import ../../build-support/cc-wrapper ({
+      cc = lib.makeOverridable (import ../../build-support/cc-wrapper) ({
         inherit lib stdenvNoCC;
         name = "freebsd-boot-2-cc";
         inherit (prevStage.freebsd) libc;
@@ -373,7 +373,7 @@ in
           libcxx-ldflags = ["-lunwind"];
         };
         extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
-        bintools = import ../../build-support/bintools-wrapper {
+        bintools = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           inherit lib stdenvNoCC;
           name = "freebsd-boot-2-bintools";
           inherit (prevStage.freebsd) libc;
@@ -478,7 +478,7 @@ in
           libcxx-ldflags = ["-lunwind"];
         };
         extraBuildCommands = mkExtraBuildCommands prevStage.llvmPackages.clang-unwrapped prevStage.llvmPackages.compiler-rt;
-        bintools = import ../../build-support/bintools-wrapper {
+        bintools = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           inherit lib stdenvNoCC;
           name = "freebsd-bintools";
           inherit (prevStage.freebsd) libc;
