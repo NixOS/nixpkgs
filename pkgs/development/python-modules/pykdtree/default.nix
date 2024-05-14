@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-zCCypnxkBWSFoxTSwrbbo1SvfuHI+42uG+byk2o3Q0E=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-warn "numpy>=2.0.0rc1,<3" "numpy"
+  '';
+
   nativeBuildInputs = [
     cython
     numpy
