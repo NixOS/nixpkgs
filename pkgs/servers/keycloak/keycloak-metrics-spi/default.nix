@@ -1,5 +1,8 @@
-{ maven, lib, fetchFromGitHub }:
-
+{
+  maven,
+  lib,
+  fetchFromGitHub,
+}:
 let
   selectSystem =
     attrs:
