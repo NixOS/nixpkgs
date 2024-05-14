@@ -811,6 +811,7 @@ with lib.maintainers; {
       aanderse
       drupol
       ma27
+      patka
       talyz
     ];
     githubTeams = [
