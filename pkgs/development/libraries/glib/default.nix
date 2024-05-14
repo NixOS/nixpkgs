@@ -269,8 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
   '';
 
-  mesonCheckFlags = [ "--print-errorlogs" ];
-
   postCheck = ''
     rm $out/lib/libgobject-${librarySuffix}
     rm $out/lib/libgio-${librarySuffix}

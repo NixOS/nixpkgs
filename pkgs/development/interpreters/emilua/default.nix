@@ -99,8 +99,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   mesonCheckFlags = [
-    "--print-errorlogs"
-
     # Skipped test: libpsx
     # Known issue with no-new-privs disabled in the Nix build environment.
     "--no-suite" "libpsx"
