@@ -12387,8 +12387,6 @@ with pkgs;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
-  renpy = callPackage ../development/interpreters/renpy { };
-
   rep = callPackage ../development/tools/rep { };
 
   repseek = callPackage ../applications/science/biology/repseek { };
@@ -18285,11 +18283,11 @@ with pkgs;
 
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
-  bcc = callPackage ../os-specific/linux/bcc {
+  bcc = callPackage ../by-name/bc/bcc/package.nix {
     llvmPackages = llvmPackages_16;
   };
 
-  bpftrace = callPackage ../os-specific/linux/bpftrace {
+  bpftrace = callPackage ../by-name/bp/bpftrace/package.nix {
     llvmPackages = llvmPackages_16;
   };
 
@@ -19246,8 +19244,6 @@ with pkgs;
   pactorio = callPackage ../development/tools/pactorio {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  pahole = callPackage ../development/tools/misc/pahole { };
 
   panopticon = callPackage ../development/tools/analysis/panopticon { };
 
@@ -32072,6 +32068,10 @@ with pkgs;
     buildGoModule = buildGo121Module;
     go = go_1_21;
   }) k3s_1_26 k3s_1_27 k3s_1_28 k3s_1_29;
+  inherit (callPackage ../applications/networking/cluster/k3s {
+    buildGoModule = buildGo122Module;
+    go = go_1_22;
+  }) k3s_1_30;
   k3s = k3s_1_29;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
@@ -39947,8 +39947,6 @@ with pkgs;
   rivalcfg = callPackage ../misc/rivalcfg { };
 
   roadrunner = callPackage ../servers/roadrunner { };
-
-  rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
 
