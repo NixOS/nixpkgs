@@ -2,18 +2,17 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-
-# propagates
 , pycryptodome
 , requests
 , rtp
 , urllib3
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pytapo";
   version = "3.3.21";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-rc9XhV99vzgoUF5ERFmJHHB9GMwq5Y44CJKg+g5tjOo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pycryptodome
     requests
     rtp
