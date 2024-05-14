@@ -3,6 +3,7 @@
 , yarn, nodejs, python3, cacert
 , jq, moreutils
 , nix-update-script, nixosTests, xcbuild
+, util-linux
 }:
 
 let
@@ -21,7 +22,7 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.2";
+  version = "11.0.0";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,7 +30,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-ahG9ABJJUUgrFqqNjkJRA1Gia8T4J90jIsCMFOhZ55w=";
+    hash = "sha256-cC1dpgb8IiyPIqlVvn8Qi1l7j6lLtQF+BOOO+DQCp4E=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -65,16 +66,16 @@ buildGoModule rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-3CZgs732c6Z64t2sfWjPAmMFKVTzoolv2TwrbjeRCBA=";
+      x86_64-linux = "sha256-+Udq8oQSIAHku55VKnrfgHHevzBels0QiOZwnwuts8k=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-NKEajOe9uDZw0MF5leiKBIRH1CHUELRho7gyCa96BO8=";
+      aarch64-darwin = "sha256-m3jtZNz0J2nZwFHXVp3ApgDfnGBOJvFeUpqOPQqv200=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-XmIF/ZWVO1qjSmRPTFnHgxvnliXXicGgsV8gQcKJl9U=";
+  vendorHash = "sha256-kcdW6RQghyAOZUDmIo9G6YBC+YaLHdafvj+fCd+dcDE=";
 
   proxyVendor = true;
 
@@ -90,7 +91,6 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
     # Setup node_modules
@@ -105,7 +105,7 @@ buildGoModule rec {
 
     yarn config set enableTelemetry 0
     yarn config set cacheFolder $offlineCache
-    yarn --immutable-cache
+    yarn install --immutable-cache
 
     # The build OOMs on memory constrained aarch64 without this
     export NODE_OPTIONS=--max_old_space_size=4096
@@ -113,7 +113,9 @@ buildGoModule rec {
 
   postBuild = ''
     # After having built all the Go code, run the JS builders now.
-    yarn run build
+
+    # Workaround for https://github.com/nrwl/nx/issues/22445
+    ${util-linux}/bin/script -c 'yarn run build' /dev/null
     yarn run plugins:build-bundled
   '';
 
@@ -154,5 +156,8 @@ buildGoModule rec {
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     mainProgram = "grafana-server";
+    # requires util-linux to work around https://github.com/nrwl/nx/issues/22445
+    # `script` doesn't seem to be part of util-linux on Darwin though.
+    broken = stdenv.isDarwin;
   };
 }
