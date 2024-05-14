@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, libiconv
-, hypothesis
-, numpy
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  libiconv,
+  hypothesis,
+  numpy,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -43,17 +44,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "cramjam-python/tests"
-  ];
+  pytestFlagsArray = [ "cramjam-python/tests" ];
 
-  disabledTestPaths = [
-    "cramjam-python/benchmarks/test_bench.py"
-  ];
+  disabledTestPaths = [ "cramjam-python/benchmarks/test_bench.py" ];
 
-  pythonImportsCheck = [
-    "cramjam"
-  ];
+  pythonImportsCheck = [ "cramjam" ];
 
   meta = with lib; {
     description = "Thin Python bindings to de/compression algorithms in Rust";
