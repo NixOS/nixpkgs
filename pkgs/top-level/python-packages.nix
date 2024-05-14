@@ -3879,6 +3879,8 @@ self: super: with self; {
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
+  esper = callPackage ../development/python-modules/esper { };
+
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
   esprima = callPackage ../development/python-modules/esprima { };
