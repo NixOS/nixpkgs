@@ -5,6 +5,8 @@
 , makeWrapper
 , wrapGAppsHook3
 
+, enableOpenGL ? false
+
 , bison
 , blas
 , cairo
@@ -13,6 +15,7 @@
 , flex
 , gdal
 , geos
+, libGLU
 , libiconv
 , libmysqlclient
 , libpng
@@ -75,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     wxGTK32
     zlib
     zstd
+  ] ++ lib.optionals enableOpenGL [
+    libGLU
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   strictDeps = true;
@@ -104,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
     "--with-readline"
+  ] ++ lib.optionals (!enableOpenGL) [
     "--without-opengl"
   ] ++ lib.optionals stdenv.isDarwin [
     "--without-cairo"
