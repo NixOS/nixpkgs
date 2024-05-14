@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cython
+, fetchpatch2
 , zfs
 }:
 
@@ -16,6 +17,13 @@ buildPythonPackage rec {
     rev = "TS-${version}";
     hash = "sha256-vBLbjP1gQEQNsTLc2W6uRzCFHQXZp+jGiwE0Pe8VTuw=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/truenas/py-libzfs/commit/b5ffe1f1d6097df6e2f5cc6dd3c968872ec60804.patch";
+      hash = "sha256-6r5hQ/o7c4vq4Tfh0l1WbeK3AuPvi+1wzkwkIn1qEes=";
+    })
+  ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ zfs ];
