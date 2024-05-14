@@ -98,13 +98,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Skipped test: libpsx
-  # Known issue with no-new-privs disabled in the Nix build environment.
-  checkPhase = ''
-    runHook preCheck
-    meson test --print-errorlogs --no-suite libpsx
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    "--print-errorlogs"
+
+    # Skipped test: libpsx
+    # Known issue with no-new-privs disabled in the Nix build environment.
+    "--no-suite" "libpsx"
+  ];
 
   meta = with lib; {
     description = "Lua execution engine";
