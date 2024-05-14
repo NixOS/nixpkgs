@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, h5py
-, numpy
-, pandas
-, pytestCheckHook
-, pytest-mock
-, pytest-remotedata
-, pytest-rerunfailures
-, pytest-timeout
-, pythonOlder
-, pytz
-, requests
-, requests-mock
-, scipy
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  h5py,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-remotedata,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pythonOlder,
+  pytz,
+  requests,
+  requests-mock,
+  scipy,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-I+y59o4L+wLOF+hARLUh+341NYHlOKMfnq0ETs0ZUL0=";
   };
@@ -53,9 +54,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "pvlib"
-  ];
+  pythonImportsCheck = [ "pvlib" ];
 
   meta = with lib; {
     description = "Simulate the performance of photovoltaic energy systems";
