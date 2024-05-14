@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/maximbaz/wluma";
     changelog = "https://github.com/maximbaz/wluma/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ yshym jmc-figueira ];
+    maintainers = with maintainers; [ yshym jmc-figueira atemu ];
     platforms = platforms.linux;
     mainProgram = "wluma";
   };
