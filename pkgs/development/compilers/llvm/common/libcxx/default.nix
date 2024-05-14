@@ -93,12 +93,6 @@ let
 
   cmakeFlags = [
     "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" runtimes}"
-  ] ++ lib.optionals (useLLVM && !stdenv.hostPlatform.isWasm) [
-    # libcxxabi's CMake looks as though it treats -nostdlib++ as implying -nostdlib,
-    # but that does not appear to be the case for example when building
-    # pkgsLLVM.libcxxabi (which uses clangNoCompilerRtWithLibc).
-    "-DCMAKE_EXE_LINKER_FLAGS=-nostdlib"
-    "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
