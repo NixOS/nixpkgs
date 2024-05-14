@@ -1,0 +1,24 @@
+diff --git a/src/3rdparty/chromium/components/remote_cocoa/app_shim/native_widget_ns_window_bridge.mm b/src/3rdparty/chromium/components/remote_cocoa/app_shim/native_widget_ns_window_bridge.mm
+index 7c702f14028..443ba2d4107 100644
+--- a/src/3rdparty/chromium/components/remote_cocoa/app_shim/native_widget_ns_window_bridge.mm
++++ b/src/3rdparty/chromium/components/remote_cocoa/app_shim/native_widget_ns_window_bridge.mm
+@@ -1480,15 +1480,19 @@ void NativeWidgetNSWindowBridge::SetCanAppearInExistingFullscreenSpaces(
+     bool can_appear_in_existing_fullscreen_spaces) {
+   NSWindowCollectionBehavior collectionBehavior = window_.collectionBehavior;
+   if (can_appear_in_existing_fullscreen_spaces) {
++#if 0
+     if (@available(macOS 13.0, *)) {
+       collectionBehavior &= ~NSWindowCollectionBehaviorPrimary;
+     }
++#endif
+     collectionBehavior |= NSWindowCollectionBehaviorFullScreenAuxiliary;
+     collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+   } else {
++#if 0
+     if (@available(macOS 13.0, *)) {
+       collectionBehavior |= NSWindowCollectionBehaviorPrimary;
+     }
++#endif
+     collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
+     collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenAuxiliary;
+   }
