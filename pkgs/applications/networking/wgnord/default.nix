@@ -62,5 +62,6 @@ resholve.mkDerivation rec {
     maintainers = with lib.maintainers; [ urandom ];
     license = licenses.mit;
     mainProgram = "wgnord";
+    platforms = platforms.linux;
   };
 }
