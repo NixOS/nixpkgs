@@ -39,13 +39,13 @@ assert stdenv.isDarwin -> !x11Support;
 assert stdenv.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
-  version = "2.1.8";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "espanso";
     repo = "espanso";
     rev = "v${version}";
-    hash = "sha256-5TUo5B1UZZARgTHbK2+520e3mGZkZ5tTez1qvZvMnxs=";
+    hash = "sha256-41oF7aBxCy+Vbm1Tbx2qMkdywxVJpnH/kmKMtpgvWwc=";
   };
 
   cargoLock = {
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "modulo"
-  ] ++ lib.optionals waylandSupport[
+  ] ++ lib.optionals waylandSupport [
     "wayland"
   ] ++ lib.optionals stdenv.isLinux [
     "vendored-tls"
@@ -123,21 +123,22 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  postInstall = if stdenv.isDarwin then ''
-    EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
-  '' else ''
-    wrapProgram $out/bin/espanso \
-      --prefix PATH : ${lib.makeBinPath (
-        lib.optionals stdenv.isLinux [
-          libnotify
-          setxkbmap
-        ] ++ lib.optionals waylandSupport [
-          wl-clipboard
-        ] ++ lib.optionals x11Support [
-          xclip
-        ]
-      )}
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+    '' else ''
+      wrapProgram $out/bin/espanso \
+        --prefix PATH : ${lib.makeBinPath (
+          lib.optionals stdenv.isLinux [
+            libnotify
+            setxkbmap
+          ] ++ lib.optionals waylandSupport [
+            wl-clipboard
+          ] ++ lib.optionals x11Support [
+            xclip
+          ]
+        )}
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = espanso;
