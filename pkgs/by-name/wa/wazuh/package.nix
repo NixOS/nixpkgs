@@ -133,7 +133,8 @@ let
         sha256 = "sha256-KyLoWzUsffVQukCKQiUeUejf+myRqi4ftIBKsxf/vKA=";
       })
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "wazuh-agent";
   version = "4.7.3";
 
@@ -153,7 +154,7 @@ in stdenv.mkDerivation rec {
   };
 
   workingDirectory = "${builtins.currentSystem}-src";
-  
+
   env = {
     OSSEC_LIBS = "-lzstd";
   };

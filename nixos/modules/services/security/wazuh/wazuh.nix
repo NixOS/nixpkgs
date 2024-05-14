@@ -7,7 +7,8 @@ let
   cfg = config.services.wazuh;
   pkg = config.services.wazuh.package;
   generatedConfig = import ./generate-agent-config.nix { cfg = config.services.wazuh; pkgs = pkgs; };
-in {
+in
+{
   options = {
     services.wazuh = {
       agent = {
@@ -56,7 +57,7 @@ in {
     };
   };
 
-  config = lib.mkIf ( cfg.agent.enable ) {
+  config = lib.mkIf (cfg.agent.enable) {
     environment.systemPackages = [ pkg ];
 
     users.users.${ wazuhUser } = {
@@ -66,7 +67,7 @@ in {
       home = stateDir;
     };
 
-    users.groups.${ wazuhGroup } = {};
+    users.groups.${ wazuhGroup } = { };
 
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 ${wazuhUser} ${wazuhGroup}"
