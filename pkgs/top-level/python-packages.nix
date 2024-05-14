@@ -13862,8 +13862,6 @@ self: super: with self; {
 
   shortuuid = callPackage ../development/python-modules/shortuuid { };
 
-  shouldbe = callPackage ../development/python-modules/shouldbe { };
-
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 
   show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
