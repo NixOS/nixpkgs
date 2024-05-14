@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+
 , lxml
 , pyproj
 , pytestCheckHook
@@ -10,7 +11,6 @@
 , pytz
 , pyyaml
 , requests
-, python
 }:
 
 buildPythonPackage rec {
