@@ -8,6 +8,10 @@
 
 # This is an updater for unstable packages that should always use the latest
 # commit.
+# To use this updater, add the following to your package set:
+# passthru.updateScript = unstableGitUpdater { };
+# relevant attributes can be passed as below:
+
 { url ? null # The git url, if empty it will be set to src.gitRepoUrl
 , branch ? null
 , hardcodeZeroVersion ? false # Use a made-up version "0" instead of latest tag. Use when there is no previous release, or the project's tagging system is incompatible with what we expect from versions
