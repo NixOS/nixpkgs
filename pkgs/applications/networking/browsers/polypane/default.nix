@@ -16,8 +16,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  multiArch = false;
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
+  extraPkgs = pkgs: [ pkgs.bash ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop

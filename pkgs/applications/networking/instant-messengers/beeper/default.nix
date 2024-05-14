@@ -2,7 +2,6 @@
 , stdenvNoCC
 , fetchurl
 , appimageTools
-, libsecret
 , makeWrapper
 , writeShellApplication
 , curl
@@ -19,7 +18,7 @@ let
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
-    extraPkgs = pkgs: with pkgs; [ libsecret ];
+    extraPkgs = pkgs: [ pkgs.libsecret ];
   };
   appimageContents = appimageTools.extractType2 {
     inherit version pname src;

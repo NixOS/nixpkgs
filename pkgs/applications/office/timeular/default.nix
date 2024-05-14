@@ -1,7 +1,6 @@
 { lib
 , fetchurl
 , appimageTools
-, libsecret
 }:
 
 let
@@ -19,9 +18,7 @@ let
 in appimageTools.wrapType2 rec {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
