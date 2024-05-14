@@ -5,11 +5,7 @@
 , autoconf
 , automake
 , cmake
-, coreutils
 , curl
-, gcc
-, gnumake
-, libcxx
 , libgcc
 , libtool
 , openssl
@@ -137,10 +133,17 @@ let
         sha256 = "sha256-KyLoWzUsffVQukCKQiUeUejf+myRqi4ftIBKsxf/vKA=";
       })
   ];
-in
-stdenv.mkDerivation rec {
-  pname = "wazuh-agent-build";
+in stdenv.mkDerivation rec {
+  pname = "wazuh-agent";
   version = "4.7.3";
+
+  meta = {
+    description = "Wazuh agent for NixOS";
+    homepage = "https://wazuh.com";
+    maintainers = builtins.attrValues {
+      inherit (lib.maintainers) V3ntus sjdwhiting;
+    };
+  };
 
   src = fetchFromGitHub {
     owner = "wazuh";
@@ -149,15 +152,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h9gMAjE09f6nQ9zO7wdC+fspLKE6z5tlypHzdObJRGA=";
   };
 
+  workingDirectory = "${builtins.currentSystem}-src";
+  
+  env = {
+    OSSEC_LIBS = "-lzstd";
+  };
+
   buildInputs = [
     autoconf
     automake
     cmake
-    coreutils
     curl
-    gcc
-    gnumake
-    libcxx
+    stdenv.cc.libcxx
+    stdenv.cc.coreutils_bin
     libtool
     openssl
     perl
@@ -166,26 +173,26 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  unpackPhase = with lib.strings; ''
-    mkdir -p $out/src/src/external
-    cp --no-preserve=all -rf $src/* $out/src
-    ${(concatStringsSep "\n" (map(dep: "tar -xzf ${dep} -C $out/src/src/external") dependencies))}
+  unpackPhase = ''
+    mkdir -p $workingDirectory/src/external
+    cp --no-preserve=all -rf $src/* $workingDirectory
+    ${lib.strings.concatMapStringsSep "\n" (dep: "tar -xzf ${dep} -C $workingDirectory/src/external") dependencies}
   '';
 
   patchPhase = ''
     # Patch audit_userspace autogen.sh script
-    substituteInPlace $out/src/src/external/audit-userspace/autogen.sh \
-      --replace "cp INSTALL.tmp INSTALL" ""
+    substituteInPlace $workingDirectory/src/external/audit-userspace/autogen.sh \
+      --replace-warn "cp INSTALL.tmp INSTALL" ""
 
     # Required for OpenSSL to compile
     # Patch the script to use the Nix store path directly for Perl
-    substituteInPlace $out/src/src/external/openssl/config \
-      --replace "/usr/bin/env" "env"
+    substituteInPlace $workingDirectory/src/external/openssl/config \
+      --replace-warn "/usr/bin/env" "env"
 
     # Bypass check for tar file
-    touch $out/src/src/external/cpython.tar
+    touch $workingDirectory/src/external/cpython.tar
 
-    cat << EOF > "$out/src/etc/preloaded-vars.conf"
+    cat << EOF > "$workingDirectory/etc/preloaded-vars.conf"
     USER_LANGUAGE="en"
     USER_NO_STOP="y"
     USER_INSTALL_TYPE="agent"
@@ -201,49 +208,39 @@ stdenv.mkDerivation rec {
     USER_CA_STORE="no"
     EOF
 
-    ln -sf ${libgcc.lib}/lib/libgcc_s.so.1 $out/src/src/libgcc_s.so.1
-    ln -sf ${libgcc.lib}/lib/libstdc++.so.6 $out/src/src/libstdc++.so.6
+    ln -sf ${libgcc.lib}/lib/libgcc_s.so.1 $workingDirectory/src/libgcc_s.so.1
+    ln -sf ${libgcc.lib}/lib/libstdc++.so.6 $workingDirectory/src/libstdc++.so.6
   '';
 
-  configurePhase = ":";
+  dontConfigure = true;
 
-  buildPhase = ''
-    echo "Entering install phase"
+  makeFlags = [ "-C ${workingDirectory}/src" "TARGET=agent" "INSTALLDIR=$out" ];
 
-    echo "Running make deps..."
-    make -C $out/src/src deps
-
-    echo "Running make TARGET=agent..."
-    export OSSEC_LIBS="-lzstd"
-    make -C $out/src/src -j $(nproc) -d TARGET=agent INSTALLDIR=$out build
+  preBuild = ''
+    make -C $workingDirectory/src deps
   '';
 
-  fixupPhase = ":";
+  enableParallelBuilding = true;
+
+  dontFixup = true;
 
   installPhase = ''
-    echo "Post install"
     mkdir -p $out/{bin,etc/shared,queue,var,wodles,logs,lib,tmp,agentless,active-response}
 
     # Bypass root check
-    substituteInPlace $out/src/install.sh \
-      --replace "Xroot" "Xnixbld"
-    chmod u+x $out/src/install.sh
+    substituteInPlace $workingDirectory/install.sh \
+      --replace-warn "Xroot" "Xnixbld"
+    chmod u+x $workingDirectory/install.sh
 
     # Allow files to copy over even if permissions are not changed
-    substituteInPlace $out/src/src/init/inst-functions.sh \
-      --replace "WAZUH_GROUP='wazuh'" "WAZUH_GROUP='nixbld'" \
-      --replace "WAZUH_USER='wazuh'" "WAZUH_USER='nixbld'"
+    substituteInPlace $workingDirectory/src/init/inst-functions.sh \
+      --replace-warn "WAZUH_GROUP='wazuh'" "WAZUH_GROUP='nixbld'" \
+      --replace-warn "WAZUH_USER='wazuh'" "WAZUH_USER='nixbld'"
 
-    cd $out/src # Must run install from src
+    cd $workingDirectory # Must run install from src
     INSTALLDIR=$out USER_DIR=$out ./install.sh binary-install
 
     chmod u+x $out/bin/* $out/active-response/bin/*
     rm -rf $out/src # Remove src
   '';
-
-  meta = with lib; {
-    description = "Wazuh agent for NixOS";
-    homepage = "https://wazuh.com";
-    maintainers = with maintainers; [ V3ntus sjdwhiting ];
-  };
 }

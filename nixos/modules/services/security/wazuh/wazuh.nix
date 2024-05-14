@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   wazuhUser = "wazuh";
   wazuhGroup = wazuhUser;
@@ -8,23 +7,22 @@ let
   cfg = config.services.wazuh;
   pkg = config.services.wazuh.package;
   generatedConfig = import ./generate-agent-config.nix { cfg = config.services.wazuh; pkgs = pkgs; };
-  rsyncPath = "${pkgs.rsync}/bin";
 in {
   options = {
     services.wazuh = {
       agent = {
-        enable = mkEnableOption "Wazuh agent";
+        enable = lib.mkEnableOption "Wazuh agent";
 
-        managerIP = mkOption {
-          type = types.str;
+        managerIP = lib.mkOption {
+          type = lib.types.nonEmptyStr;
           description = ''
             The IP address or hostname of the manager.
           '';
           example = "192.168.1.2";
         };
 
-        managerPort = mkOption {
-          type = types.port;
+        managerPort = lib.mkOption {
+          type = lib.types.port;
           description = ''
             The port the manager is listening on to receive agent traffic.
           '';
@@ -32,45 +30,34 @@ in {
           default = 1514;
         };
 
-        extraConfig = mkOption {
-          type = types.lines;
+        extraConfig = lib.mkOption {
+          type = lib.types.lines;
           description = ''
             Extra configuration values to be appended to the bottom of ossec.conf.
           '';
           default = "";
           example = ''
-          <!-- The added ossec_config root tag is required -->
-          <ossec_config>
-            <!-- Extra configuration options as needed -->
-          </ossec_config>
+            <!-- The added ossec_config root tag is required -->
+            <ossec_config>
+              <!-- Extra configuration options as needed -->
+            </ossec_config>
           '';
         };
       };
 
-      package = mkOption {
+      package = lib.mkOption {
         default = pkgs.wazuh;
-        defaultText = literalExpression "pkgs.wazuh";
-        type = types.package;
+        defaultText = lib.literalExpression "pkgs.wazuh";
+        type = lib.types.package;
         description = ''
-        The Wazuh package to use.
+          The Wazuh package to use.
         '';
       };
     };
   };
 
-  config = mkIf ( cfg.agent.enable ) {
+  config = lib.mkIf ( cfg.agent.enable ) {
     environment.systemPackages = [ pkg ];
-
-    assertions = [
-      {
-        assertion = !( cfg.agent.managerIP == "" );
-        message = "services.wazuh.agent.managerIP must be set";
-      }
-      {
-        assertion = cfg.agent.managerPort > 0 && cfg.agent.managerPort <= 65535;
-        message = "services.wazuh.agent.managerPort is set to a port out of range";
-      }
-    ];
 
     users.users.${ wazuhUser } = {
       isSystemUser = true;
@@ -85,7 +72,7 @@ in {
       "d ${stateDir} 0750 ${wazuhUser} ${wazuhGroup}"
     ];
 
-    systemd.services.wazuh-agent = mkIf cfg.agent.enable {
+    systemd.services.wazuh-agent = lib.mkIf cfg.agent.enable {
       path = [
         "/run/current-system/sw"
       ];
