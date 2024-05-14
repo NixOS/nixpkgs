@@ -94,8 +94,8 @@ edk2 = stdenv.mkDerivation rec {
     mv -v edksetup.sh $out
     # patchShebangs fails to see these when cross compiling
     for i in $out/BaseTools/BinWrappers/PosixLike/*; do
-      substituteInPlace $i --replace '/usr/bin/env bash' ${buildPackages.bash}/bin/bash
       chmod +x "$i"
+      patchShebangs --build "$i"
     done
   '';
 
