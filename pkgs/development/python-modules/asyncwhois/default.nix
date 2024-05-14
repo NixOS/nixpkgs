@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pogzyb";
     repo = "asyncwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rJwJhSOFrZZ3WXEZmPMfdosBBW/R5/PMqs0QLnsPMoI=";
+    hash = "sha256-ESVgK4Z26OAamdHPEVxysnlJ0rEUlr8KNd24fawHuEg=";
   };
 
   nativeBuildInputs = [
