@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , substituteAll
@@ -44,17 +45,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    scipy
   ];
 
   propagatedBuildInputs = [
     more-itertools
     numba
     numpy
-    openai-triton
     tiktoken
     torch
     tqdm
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [
+    openai-triton
   ];
 
   preCheck = ''
@@ -63,6 +64,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ];
 
   disabledTests = [
