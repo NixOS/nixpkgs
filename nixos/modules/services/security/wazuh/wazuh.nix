@@ -73,15 +73,13 @@ in {
     ];
 
     users.users.${ wazuhUser } = {
-      uid = config.ids.uids.wazuh;
+      isSystemUser = true;
       group = wazuhGroup;
       description = "Wazuh daemon user";
       home = stateDir;
     };
 
-    users.groups.${ wazuhGroup } = {
-      gid = config.ids.gids.wazuh;
-    };
+    users.groups.${ wazuhGroup } = {};
 
     systemd.tmpfiles.rules = [
       "d ${stateDir} 0750 ${wazuhUser} ${wazuhGroup}"
