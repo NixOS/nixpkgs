@@ -31,8 +31,10 @@ in
 
         NOTE: You MUST keep pgbouncer as database name (special internal db)!!!
 
-        NOTE: Admin user (with password or passwordless) MUST exist
-        in the services.pgbouncer.authFile if authType other than any is used.
+        NOTE: ignore_startup_parameters MUST contain "extra_float_digits".
+
+        NOTE: Admin user (with password or passwordless) MUST exist in the
+        auth_file if auth_type other than "any" is used.
 
         WARNING: this secret is stored in the world-readable Nix store!
         Use {option}`connectionStringFile` instead.
@@ -49,8 +51,10 @@ in
 
         NOTE: You MUST keep pgbouncer as database name (special internal db)!!!
 
-        NOTE: Admin user (with password or passwordless) MUST exist
-        in the services.pgbouncer.authFile if authType other than any is used.
+        NOTE: ignore_startup_parameters MUST contain "extra_float_digits".
+
+        NOTE: Admin user (with password or passwordless) MUST exist in the
+        auth_file if auth_type other than "any" is used.
 
         {option}`connectionStringFile` takes precedence over {option}`connectionString`
       '';
