@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.isDarwin CoreServices
   ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
 
-  propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
+  propagatedBuildInputs = lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) ps;
 
   preConfigure = ''
     fixCmakeFiles .
