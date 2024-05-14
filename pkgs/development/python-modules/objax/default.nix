@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , jax
 , jaxlib
 , keras
@@ -30,7 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    # Issue reported upstream: https://github.com/google/objax/issues/270
+    ./replace-deprecated-device_buffers.patch
+  ];
+
+  build-system = [
     setuptools
   ];
 
@@ -40,7 +44,7 @@ buildPythonPackage rec {
     jaxlib
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jax
     numpy
     parameterized

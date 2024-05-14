@@ -11300,6 +11300,14 @@
     githubId = 887072;
     name = "Alexander Lebedev";
   };
+  lebensterben = {
+    name = "Lucius Hu";
+    github = "lebensterben";
+    githubId = 1222865;
+    keys = [{
+      fingerprint = "80C6 77F2 ED0B E732 3835 A8D3 7E47 4E82 E29B 5A7A";
+    }];
+  };
   lecoqjacob = {
     name = "Jacob LeCoq";
     email = "lecoqjacob@gmail.com";
@@ -22586,6 +22594,12 @@
     keys = [{
       fingerprint = "065A 0A98 FE61 E1C1 41B0  AFE7 64FA BC62 F457 2875";
     }];
+  };
+  zelkourban = {
+    name = "zelkourban";
+    email = "zelo.urban@gmail.com";
+    github = "zelkourban";
+    githubId = 33812622;
   };
   zendo = {
     name = "zendo";

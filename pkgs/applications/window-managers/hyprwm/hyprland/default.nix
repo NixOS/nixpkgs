@@ -81,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    hwdata
     jq
     makeWrapper
     meson
@@ -114,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     pciutils
     tomlplusplus
     # for subproject wlroots-hyprland
-    hwdata
     seatd
     libliftoff
     libdisplay-info

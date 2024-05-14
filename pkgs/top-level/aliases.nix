@@ -231,6 +231,7 @@ mapAliases ({
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
+  cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
   ### D ###
 
   dagger = throw "'dagger' has been removed from nixpkgs, as the trademark policy of the upstream project is incompatible"; # Added 2023-10-16
@@ -685,6 +686,7 @@ mapAliases ({
   linuxPackages_6_6 = linuxKernel.packages.linux_6_6;
   linuxPackages_6_7 = linuxKernel.packages.linux_6_7;
   linuxPackages_6_8 = linuxKernel.packages.linux_6_8;
+  linuxPackages_6_9 = linuxKernel.packages.linux_6_9;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
@@ -712,6 +714,7 @@ mapAliases ({
   linux_6_6 = linuxKernel.kernels.linux_6_6;
   linux_6_7 = linuxKernel.kernels.linux_6_7;
   linux_6_8 = linuxKernel.kernels.linux_6_8;
+  linux_6_9 = linuxKernel.kernels.linux_6_9;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
