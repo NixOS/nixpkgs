@@ -1,29 +1,48 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytestCheckHook, nose, glibcLocales, fetchpatch
-, numpy, scipy, matplotlib, h5py }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  numpy,
+  scipy,
+  h5py,
+  truncnorm,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "bayespy";
   version = "0.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   # Python 2 not supported and not some old Python 3 because MPL doesn't support
   # them properly.
   disabled = pythonOlder "3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-3N8w/LiTLsDZbHp3z26FvDg3vStB2l3XkIWx+Mma1G0=";
+  src = fetchFromGitHub {
+    owner = "bayespy";
+    repo = "bayespy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-X7CwJBrKHlU1jqMkt/7XEzaiwul1Yzkb/V64lXG4Aqo=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook nose glibcLocales ];
+  postPatch = ''
+    substituteInPlace versioneer.py \
+      --replace-fail SafeConfigParser ConfigParser \
+      --replace-fail readfp read_file
+  '';
 
-  propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
+  build-system = [ setuptools ];
 
-  disabledTests = [
-    # Assertion error
-    "test_message_to_parents"
+  dependencies = [
+    numpy
+    scipy
+    h5py
+    truncnorm
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bayespy" ];
 

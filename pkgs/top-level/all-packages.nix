@@ -4929,8 +4929,6 @@ with pkgs;
 
   dialogbox = libsForQt5.callPackage ../tools/misc/dialogbox { };
 
-  dibbler = callPackage ../tools/networking/dibbler { };
-
   dieharder = callPackage ../tools/security/dieharder { };
 
   diesel-cli = callPackage ../development/tools/diesel-cli {
@@ -13463,8 +13461,6 @@ with pkgs;
 
   tarssh = callPackage ../servers/tarssh { };
 
-  tartan = callPackage ../development/tools/analysis/tartan { };
-
   tartube = callPackage ../applications/video/tartube { };
 
   tartube-yt-dlp = callPackage ../applications/video/tartube {
@@ -20428,7 +20424,10 @@ with pkgs;
 
   ustream-ssl-wolfssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = wolfssl; additional_buildInputs = [ openssl ]; };
 
-  ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl { ssl_implementation = mbedtls_2; };
+  ustream-ssl-mbedtls = callPackage ../development/libraries/ustream-ssl {
+    ssl_implementation = mbedtls_2;
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   uri = callPackage ../development/libraries/uri { };
 

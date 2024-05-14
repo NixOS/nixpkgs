@@ -12,7 +12,7 @@ appimageTools.wrapType2 rec {
     hash = "sha256-D7qWwIFuCJmBvfdgf4Dsd2/jvi39tbAttaHOwLND4DY=";
   };
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands =
     let appimageContents = appimageTools.extract { inherit pname version src; };
