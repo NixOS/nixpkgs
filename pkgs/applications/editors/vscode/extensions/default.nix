@@ -2878,8 +2878,8 @@ let
         mktplcRef = {
           name = "debugpy";
           publisher = "ms-python";
-          version = "2023.3.13121011";
-          hash = "sha256-owYUEyQl2FQytApfuI97N4y9p7/dL0lu6EBk/AzSMjw=";
+          version = "2024.6.0";
+          hash = "sha256-VlPe65ViBur5P6L7iRKdGnmbNlSCwYrdZAezStx8Bz8=";
         };
         meta = {
           description = "Python debugger (debugpy) extension for VS Code";
