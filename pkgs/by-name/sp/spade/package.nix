@@ -2,6 +2,9 @@
 , rustPlatform
 , fetchFromGitLab
 , stdenv
+, nix-update
+, writeScript
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +27,18 @@ rustPlatform.buildRustPackage rec {
       "tracing-tree-0.2.0" = "sha256-/JNeAKjAXmKPh0et8958yS7joORDbid9dhFB0VUAhZc=";
     };
   };
+
+  # rust + gitlab is a rare combo
+  passthru.updateScript = [
+    (writeScript "update-spade" ''
+      VERSION="$(
+        ${lib.getExe git} ls-remote --tags --sort -version:refname ${lib.escapeShellArg src.gitRepoUrl} \
+          | cut -f2 | grep ^refs/tags/v | cut -d/ -f3- | cut -c2- \
+          | sort --version-sort --reverse | head -n1
+      )"
+      exec ${lib.getExe nix-update} --version "$VERSION" "$@"
+    '')
+  ];
 
   meta = with lib; {
     description = "A better hardware description language";
