@@ -1,12 +1,16 @@
-{ pname, version, pkgSha256 }:
-attrs@{ lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {}, ... }:
-stdenv.mkDerivation ( rec {
-  inherit pname version buildInputs;
+{ lib, stdenv, fetchurl, cmake, pkg-config
+, pname, version, sha256, buildInputs
+, nativeBuildInputs ? [ ]
+, postFixup ? ""
+, extraDrvParams ? { }
+}:
+stdenv.mkDerivation ( {
+  inherit pname version buildInputs postFixup;
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
-    sha256 = pkgSha256;
+    inherit sha256;
   };
-  nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkg-config cmake ];
+  nativeBuildInputs = nativeBuildInputs ++ [ pkg-config cmake ];
   setSourceRoot = ''
     mkdir build
     cd build
@@ -33,4 +37,4 @@ stdenv.mkDerivation ( rec {
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-} // drvParams)
+} // extraDrvParams)

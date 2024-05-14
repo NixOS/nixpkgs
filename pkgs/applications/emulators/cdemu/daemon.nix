@@ -1,13 +1,11 @@
 { callPackage, glib, libao, intltool, libmirage, coreutils }:
-let pkg = import ./base.nix {
-  version = "3.2.5";
+callPackage ./base.nix {
+  version = "3.2.6";
   pname = "cdemu-daemon";
-  pkgSha256 = "16g6fv1lxkdmbsy6zh5sj54dvgwvm900fd18aq609yg8jnqm644d";
-};
-in callPackage pkg {
+  sha256 = "sha256-puQE4+91xhRuNjVPZYgN/WO0uO8fVAOdxQWOGQ+FfY8=";
   nativeBuildInputs = [ intltool ];
   buildInputs = [ glib libao libmirage ];
-  drvParams.postInstall = ''
+  extraDrvParams.postInstall = ''
     mkdir -p $out/share/dbus-1/services
     cp -R ../$pname-$version/service-example $out/share/cdemu
     substitute \
