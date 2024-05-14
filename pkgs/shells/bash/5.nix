@@ -88,6 +88,10 @@ stdenv.mkDerivation rec {
     "bash_cv_termcap_lib=libncurses"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
     "--disable-nls"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # /dev/fd is optional on FreeBSD. we need it to work when built on a system
+    # with it and transferred to a system without it! This includes linux cross.
+    "bash_cv_dev_fd=absent"
   ];
 
   strictDeps = true;
