@@ -6,11 +6,10 @@
 , makeDesktopItem
 , copyDesktopItems
 , imagemagick
-, openjdk11
-, dpkg
+, openjdk21
 , gradle
 , gnumake
-, jdk21
+, protobuf
 , writeScript
 , bash
 , stripJavaArchivesHook
@@ -18,33 +17,21 @@
 , zip
 , xz
 , findutils
+, perl
 }:
 
 stdenv.mkDerivation rec {
   pname = "haveno";
-  version = "1.0.3";
+  version = "1.0.3-281b7d0";
 
   src = fetchFromGitHub {
     owner = "haveno-dex";
     repo = "haveno";
-    rev = "cc247bbc69994b3904f6e7237c4f1c6835a9e33e";
-    hash = "sha256-ptjrZ3dLPRtAUIHWBnXP7OTwWmN+4OylJwPimJotwW8=";
+    rev = "281b7d0905a0272d8c202c6776191642172843c7";
+    hash = "sha256-uDJhmK7Jr6BTe6bYY7pp19zhymnXJXtTuQ1jkzyRQ8E=";
   };
 
-  nativeBuildInputs = [
-    gnumake
-    jdk21
-    gradle
-
-    copyDesktopItems
-
-    imagemagick
-    makeWrapper
-    stripJavaArchivesHook
-    xz
-    zip
-    findutils
-  ];
+  nativeBuildInputs = [ gradle makeWrapper ];
 
   # TODO(Krey)
   # desktopItems = [
@@ -59,10 +46,9 @@ stdenv.mkDerivation rec {
   # ];
 
   # fake build to pre-download deps into fixed-output derivation
-  # TODO(Kreyn->Nikky): Plz figure this out thanku <3
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit src version postPatch;
+    inherit src version;
     nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
       export GRADLE_USER_HOME="$(mktemp -d)"
@@ -78,10 +64,13 @@ stdenv.mkDerivation rec {
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
-    outputHash = "sha256-cs95YI0SpvzCo5x5trMXlVUGepNKIH9oZ95AfLErKIU=";
+    # outputHash = "sha256-cs95YI0SpvzCo5x5trMXlVUGepNKIH9oZ95AfLErKIU=";
+    outputHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 
   preBuild = ''
+    # Use the local packages from deps
+    sed -i -e '/repositories {/a maven { url uri("${deps}") }' build.gradle
     mkdir -p .localnet
   '';
 
