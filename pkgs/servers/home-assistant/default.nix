@@ -179,6 +179,16 @@ let
         };
       });
 
+      homematicip = super.homematicip.overridePythonAttrs rec {
+        version = "1.1.0";
+        src = fetchFromGitHub {
+          owner = "hahn-th";
+          repo = "homematicip-rest-api";
+          rev = "refs/tags/${version}";
+          hash = "sha256-tx7/amXG3rLdUFgRPQcuf57qkBLAPxPWjLGSO7MrcWU=";
+        };
+      };
+
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
         version = "2.2.2";
         src = fetchFromGitHub {
