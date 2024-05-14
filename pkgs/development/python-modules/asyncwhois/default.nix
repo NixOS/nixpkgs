@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, python-socks
-, pythonOlder
-, setuptools
-, tldextract
-, whodap
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-socks,
+  pythonOlder,
+  setuptools,
+  tldextract,
+  whodap,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace-fail "python-socks[asyncio]" "python-socks"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     python-socks
@@ -63,9 +62,7 @@ buildPythonPackage rec {
     "test__get_top_level_domain"
   ];
 
-  pythonImportsCheck = [
-    "asyncwhois"
-  ];
+  pythonImportsCheck = [ "asyncwhois" ];
 
   meta = with lib; {
     description = "Python module for retrieving WHOIS information";
