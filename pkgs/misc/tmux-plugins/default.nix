@@ -646,20 +646,6 @@ in rec {
     inherit mkTmuxPlugin;
   };
 
-  urlview = mkTmuxPlugin {
-    pluginName = "urlview";
-    version = "unstable-2016-01-06";
-    src = fetchFromGitHub {
-      owner = "tmux-plugins";
-      repo = "tmux-urlview";
-      rev = "b84c876cffdd22990b4ab51247e795cbd7813d53";
-      sha256 = "1jp4jq57cn116b3i34v6yy69izd8s6mp2ijr260cw86g0470k0fn";
-    };
-    postInstall = ''
-      sed -i -e '14,20{s|urlview|${pkgs.urlview}/bin/urlview|g}' $target/urlview.tmux
-    '';
-  };
-
   vim-tmux-focus-events = mkTmuxPlugin {
     pluginName = "vim-tmux-focus-events";
     version = "1.0.0-unstable-2021-04-27";
