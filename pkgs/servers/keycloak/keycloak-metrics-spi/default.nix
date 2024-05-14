@@ -1,5 +1,10 @@
 { maven, lib, fetchFromGitHub }:
 
+let
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
 maven.buildMavenPackage rec {
   pname = "keycloak-metrics-spi";
   version = "5.0.0";
@@ -11,7 +16,10 @@ maven.buildMavenPackage rec {
     hash = "sha256-iagXbsKsU4vNP9eg05bwXEo67iij3N2FF0BW50MjRGE=";
   };
 
-  mvnHash = "sha256-+ySBrQ9yQ5ZxuVUh/mnHNEmugru3n8x5VR/RYEDCLAo=";
+  mvnHash = selectSystem {
+    x86_64-linux = "sha256-+ySBrQ9yQ5ZxuVUh/mnHNEmugru3n8x5VR/RYEDCLAo=";
+    aarch64-linux = "sha256-zO79pRrY8TqrSK4bB8l4pl6834aFX2pidyk1j9Itz1E=";
+  };
 
   installPhase = ''
     runHook preInstall
