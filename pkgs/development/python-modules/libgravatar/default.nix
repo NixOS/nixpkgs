@@ -1,10 +1,12 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "libgravatar";
   version = "1.0.4";
 
@@ -15,9 +17,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-rJv/jfdT+JldxR0kKtXQLOI5wXQYSQRWJnqwExwWjTA=";
   };
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "libgravatar" ];
 
