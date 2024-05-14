@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
   # linux 3.12
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
 
+  patches = [
+    # Use kernel version checks instead of API feature detection
+    # See https://github.com/NixOS/nixpkgs/pull/310680
+    ./override-features-api-detection.patch
+  ];
+
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
