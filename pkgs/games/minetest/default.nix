@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minetest";
-  version = "5.8.0";
+  version = "5.8.1-android";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "minetest";
     rev = finalAttrs.version;
-    hash = "sha256-Oct8nQORSH8PjYs+gHU9QrKObMfapjAlGvycj+AJnOs=";
+    hash = "sha256-hn55NS+EOKAwg5ox6ZnFxbIp89oTf00Fre5cGa9E34s=";
   };
 
   cmakeFlags = [
