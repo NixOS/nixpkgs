@@ -7,6 +7,7 @@
 , pkg-config
 , udev
 , v4l-utils
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,6 +44,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/wluma \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Automatic brightness adjustment based on screen contents and ALS";
