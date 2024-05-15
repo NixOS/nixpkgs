@@ -63,6 +63,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/317712eb5a1aa4a1c3d737a8fcaee57add9981c9.patch";
       hash = "sha256-TZo38Pyr9IJUF+3bqlmF4M84XGgo9G6WFTvbaP9r0XU=";
     })
+    # Backport fix for pkg-config generation to make CMake happy
+    # FIXME: remove when merged
+    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1543
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cb1c21a4240a5b6bf4aeeef51819639b4e0ad24.patch";
+      hash = "sha256-MZPP9QgYO4RFJ/vcjkpu7SVSo5Dh09ZdZjOwTopjdYQ=";
+    })
   ];
 
   depsBuildBuild = [
