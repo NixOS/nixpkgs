@@ -31501,8 +31501,6 @@ with pkgs;
 
   hexdino = callPackage ../applications/editors/hexdino { };
 
-  hexedit = callPackage ../applications/editors/hexedit { };
-
   hydrogen-web-unwrapped = callPackage ../applications/networking/instant-messengers/hydrogen-web/unwrapped.nix { };
 
   hydrogen-web = callPackage ../applications/networking/instant-messengers/hydrogen-web/wrapper.nix {
