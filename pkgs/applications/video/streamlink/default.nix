@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     setuptools
+    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -40,9 +41,14 @@ python3Packages.buildPythonApplication rec {
     "test_no_cache"
   ];
 
+  pythonRemoveDeps = [
+    # only used for Python<3.11, but pythonRuntimeDepsCheckHook will complain
+    # if it's left in
+    "exceptiongroup"
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     certifi
-    exceptiongroup
     isodate
     lxml
     pycountry
@@ -55,6 +61,7 @@ python3Packages.buildPythonApplication rec {
     urllib3
     websocket-client
   ];
+
 
   meta = {
     changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
