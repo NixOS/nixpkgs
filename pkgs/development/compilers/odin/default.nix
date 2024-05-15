@@ -30,13 +30,11 @@ in stdenv.mkDerivation rec {
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i src/main.cpp \
-      -e 's|-syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk|-syslibroot ${MacOSX-SDK}|'
-  '' + ''
-    sed -i build_odin.sh \
-      -e 's/^GIT_SHA=.*$/GIT_SHA=/' \
-      -e 's/LLVM-C/LLVM/' \
-      -e 's/framework System/lSystem/'
+    substituteInPlace src/linker.cpp \
+        --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
+    '' + ''
+    substituteInPlace build_odin.sh \
+        --replace-fail '-framework System' '-lSystem'
     patchShebangs build_odin.sh
   '';
 

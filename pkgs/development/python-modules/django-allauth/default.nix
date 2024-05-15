@@ -6,6 +6,9 @@
 # build-system
 , setuptools
 
+# build-time dependencies
+, gettext
+
 # dependencies
 , django
 , python3-openid
@@ -41,6 +44,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    gettext
     setuptools
   ];
 
@@ -51,6 +55,8 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
   ] ++ pyjwt.optional-dependencies.crypto;
+
+  preBuild = "python -m django compilemessages";
 
   passthru.optional-dependencies = {
     saml = [
