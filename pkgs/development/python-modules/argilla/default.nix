@@ -1,63 +1,64 @@
-{ lib
-, aiofiles
-, aiosqlite
-, alembic
-, asyncpg
-, backoff
-, brotli-asgi
-, buildPythonPackage
-, cleanlab
-, datasets
-, deprecated
-, elasticsearch8
-, evaluate
-, factory-boy
-, faiss
-, fastapi
-, fetchFromGitHub
-, flyingsquid
-, greenlet
-, httpx
-, huggingface-hub
-, luqum
-, monotonic
-, numpy
-, openai
-, opensearch-py
-, packaging
-, pandas
-, passlib
-, peft
-, pgmpy
-, plotly
-, prodict
-, psutil
-, psycopg2
-, pydantic
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, python-jose
-, python-multipart
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, rich
-, schedule
-, scikit-learn
-, sentence-transformers
-, seqeval
-, setuptools
-, smart-open
-, snorkel
-, spacy
-, spacy-transformers
-, sqlalchemy
-, tqdm
-, transformers
-, typer
-, uvicorn
-, wrapt
+{
+  lib,
+  aiofiles,
+  aiosqlite,
+  alembic,
+  asyncpg,
+  backoff,
+  brotli-asgi,
+  buildPythonPackage,
+  cleanlab,
+  datasets,
+  deprecated,
+  elasticsearch8,
+  evaluate,
+  factory-boy,
+  faiss,
+  fastapi,
+  fetchFromGitHub,
+  flyingsquid,
+  greenlet,
+  httpx,
+  huggingface-hub,
+  luqum,
+  monotonic,
+  numpy,
+  openai,
+  opensearch-py,
+  packaging,
+  pandas,
+  passlib,
+  peft,
+  pgmpy,
+  plotly,
+  prodict,
+  psutil,
+  psycopg2,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-jose,
+  python-multipart,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  rich,
+  schedule,
+  scikit-learn,
+  sentence-transformers,
+  seqeval,
+  setuptools,
+  smart-open,
+  snorkel,
+  spacy,
+  spacy-transformers,
+  sqlalchemy,
+  tqdm,
+  transformers,
+  typer,
+  uvicorn,
+  wrapt,
 # , flair
 # , setfit
 # , spacy-huggingface-hub
@@ -87,13 +88,9 @@ buildPythonPackage rec {
     "wrapt"
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     httpx
@@ -111,32 +108,39 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    server = [
-      aiofiles
-      aiosqlite
-      alembic
-      brotli-asgi
-      elasticsearch8
-      fastapi
-      greenlet
-      luqum
-      opensearch-py
-      passlib
-      psutil
-      python-jose
-      python-multipart
-      pyyaml
-      scikit-learn
-      smart-open
-      sqlalchemy
-      uvicorn
-    ] ++
-      elasticsearch8.optional-dependencies.async ++
-      uvicorn.optional-dependencies.standard ++
-      python-jose.optional-dependencies.cryptography ++
-      passlib.optional-dependencies.bcrypt;
-    postgresql = [ asyncpg psycopg2 ];
-    listeners = [ schedule prodict ];
+    server =
+      [
+        aiofiles
+        aiosqlite
+        alembic
+        brotli-asgi
+        elasticsearch8
+        fastapi
+        greenlet
+        luqum
+        opensearch-py
+        passlib
+        psutil
+        python-jose
+        python-multipart
+        pyyaml
+        scikit-learn
+        smart-open
+        sqlalchemy
+        uvicorn
+      ]
+      ++ elasticsearch8.optional-dependencies.async
+      ++ uvicorn.optional-dependencies.standard
+      ++ python-jose.optional-dependencies.cryptography
+      ++ passlib.optional-dependencies.bcrypt;
+    postgresql = [
+      asyncpg
+      psycopg2
+    ];
+    listeners = [
+      schedule
+      prodict
+    ];
     integrations = [
       cleanlab
       datasets
@@ -177,9 +181,7 @@ buildPythonPackage rec {
     factory-boy
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  disabledTestPaths = [
-    "tests/server/datasets/test_dao.py"
-  ];
+  disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 
   meta = with lib; {
     description = "Open-source data curation platform for LLMs";
