@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,26 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-faVTq9KVihncJUfDiM3lM5izkZYXWpvlnqHK9asKGAc=";
   };
 
-  pythonRemoveDeps = [
-    "contextlib2"
-  ];
+  pythonRemoveDeps = [ "contextlib2" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "schema"
-  ];
+  pythonImportsCheck = [ "schema" ];
 
   meta = with lib; {
     description = "Library for validating Python data structures";
