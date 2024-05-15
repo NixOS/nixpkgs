@@ -1,12 +1,25 @@
-# inherit arguments from derivation
-dotnetBuildFlags=( ${dotnetBuildFlags[@]-} )
-
 dotnetBuildHook() {
     echo "Executing dotnetBuildHook"
 
     runHook preBuild
 
-    if [ "${enableParallelBuilding-}" ]; then
+    local -r hostRuntimeId=@runtimeId@
+    local -r dotnetBuildType="${dotnetBuildType-Release}"
+    local -r dotnetRuntimeId="${dotnetRuntimeId-$hostRuntimeId}"
+
+    if [[ -n $__structuredAttrs ]]; then
+        local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
+        local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
+        local dotnetFlagsArray=( "${dotnetFlags[@]}" )
+        local dotnetBuildFlagsArray=( "${dotnetBuildFlags[@]}" )
+    else
+        local dotnetProjectFilesArray=($dotnetProjectFiles)
+        local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
+        local dotnetFlagsArray=($dotnetFlags)
+        local dotnetBuildFlagsArray=($dotnetBuildFlags)
+    fi
+
+    if [[ -n "${enableParallelBuilding-}" ]]; then
         local -r maxCpuFlag="$NIX_BUILD_CORES"
         local -r parallelBuildFlag="true"
     else
@@ -14,50 +27,53 @@ dotnetBuildHook() {
         local -r parallelBuildFlag="false"
     fi
 
-    if [ "${selfContainedBuild-}" ]; then
-        dotnetBuildFlags+=("-p:SelfContained=true")
+    if [[ -n ${dotnetSelfContainedBuild-} ]]; then
+        dotnetBuildFlagsArray+=("-p:SelfContained=true")
     else
-        dotnetBuildFlags+=("-p:SelfContained=false")
+        dotnetBuildFlagsArray+=("-p:SelfContained=false")
     fi
 
-    if [ "${useAppHost-}" ]; then
-        dotnetBuildFlags+=("-p:UseAppHost=true")
+    if [[ -n ${dotnetUseAppHost-} ]]; then
+        dotnetBuildFlagsArray+=("-p:UseAppHost=true")
     fi
 
-    local versionFlags=()
-    if [ "${version-}" ]; then
-        versionFlags+=("-p:InformationalVersion=${version-}")
+    local versionFlagsArray=()
+    if [[ -n ${version-} ]]; then
+        versionFlagsArray+=("-p:InformationalVersion=$version")
     fi
 
-    if [ "${versionForDotnet-}" ]; then
-        versionFlags+=("-p:Version=${versionForDotnet-}")
+    if [[ -n ${versionForDotnet-} ]]; then
+        versionFlagsArray+=("-p:Version=$versionForDotnet")
     fi
 
     dotnetBuild() {
-        local -r project="${1-}"
+        local -r projectFile="${1-}"
 
-        runtimeIdFlags=()
-        if [[ "$project" == *.csproj ]] || [ "${selfContainedBuild-}" ]; then
-            runtimeIdFlags+=("--runtime @runtimeId@")
+        local runtimeIdFlagsArray=()
+        if [[ $projectFile == *.csproj || -n ${dotnetSelfContainedBuild-} ]]; then
+            runtimeIdFlagsArray+=("--runtime" "$dotnetRuntimeId")
         fi
 
-        dotnet build ${project-} \
-            -maxcpucount:$maxCpuFlag \
-            -p:BuildInParallel=$parallelBuildFlag \
+        dotnet build ${1+"$projectFile"} \
+            -maxcpucount:"$maxCpuFlag" \
+            -p:BuildInParallel="$parallelBuildFlag" \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            --configuration "@buildType@" \
+            --configuration "$dotnetBuildType" \
             --no-restore \
-            ${versionFlags[@]} \
-            ${runtimeIdFlags[@]} \
-            ${dotnetBuildFlags[@]}  \
-            ${dotnetFlags[@]}
+            "${versionFlagsArray[@]}" \
+            "${runtimeIdFlagsArray[@]}" \
+            "${dotnetBuildFlagsArray[@]}" \
+            "${dotnetFlagsArray[@]}"
     }
 
-    (( "${#projectFile[@]}" == 0 )) && dotnetBuild
+    if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
+        dotnetBuild
+    fi
 
-    for project in ${projectFile[@]} ${testProjectFile[@]-}; do
-        dotnetBuild "$project"
+    local projectFile
+    for projectFile in "${dotnetProjectFilesArray[@]}" "${dotnetTestProjectFilesArray[@]}"; do
+        dotnetBuild "$projectFile"
     done
 
     runHook postBuild
@@ -65,6 +81,6 @@ dotnetBuildHook() {
     echo "Finished dotnetBuildHook"
 }
 
-if [[ -z "${dontDotnetBuild-}" && -z "${buildPhase-}" ]]; then
+if [[ -z ${dontDotnetBuild-} && -z ${buildPhase-} ]]; then
     buildPhase=dotnetBuildHook
 fi
