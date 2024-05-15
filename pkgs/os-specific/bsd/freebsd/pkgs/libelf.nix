@@ -1,7 +1,14 @@
-{ lib, stdenv, mkDerivation
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal, install, mandoc, groff
-, m4
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  bsdSetupHook,
+  freebsdSetupHook,
+  makeMinimal,
+  install,
+  mandoc,
+  groff,
+  m4,
 }:
 
 mkDerivation {
@@ -15,8 +22,12 @@ mkDerivation {
   ];
   BOOTSTRAPPING = !stdenv.isFreeBSD;
   nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
-    makeMinimal install mandoc groff
+    bsdSetupHook
+    freebsdSetupHook
+    makeMinimal
+    install
+    mandoc
+    groff
 
     m4
   ];

@@ -360,6 +360,7 @@ in
       serviceConfig = let
         runOptions = ''--config ${configPath} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
       in {
+        # Override the `ExecStart` line from upstream's systemd unit file by our own:
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
         ExecStart = [ "" ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}'' ];
@@ -367,7 +368,7 @@ in
         ExecReload = [ "" ''${cfg.package}/bin/caddy reload ${runOptions} --force'' ];
         User = cfg.user;
         Group = cfg.group;
-        ReadWriteDirectories = cfg.dataDir;
+        ReadWritePaths = [ cfg.dataDir ];
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
         LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
         Restart = "on-failure";

@@ -1,7 +1,7 @@
 { stdenv, bazel_5, buildBazelPackage, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch, fetchzip, linkFarm
 # Python deps
-, buildPythonPackage, pythonOlder, python
+, buildPythonPackage, pythonAtLeast, pythonOlder, python
 # Python libraries
 , numpy, tensorboard, abseil-cpp, absl-py
 , packaging, setuptools, wheel, keras-preprocessing, google-pasta
@@ -500,7 +500,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.12";
 
   src = bazel-build.python;
 

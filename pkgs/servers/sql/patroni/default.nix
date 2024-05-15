@@ -6,24 +6,17 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "2.1.3";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cBkiBrty/6A3rIv9A1oh8GvPjwxhHwYEKuDIsNzHw1g=";
+    sha256 = "sha256-gOjjE++hf3GOimvCxBR0jqqi3JNpbejLcWbLHpz2H4Q=";
   };
 
-  # cdiff renamed to ydiff; remove when patroni source reflects this.
-  postPatch = ''
-    for i in requirements.txt patroni/ctl.py tests/test_ctl.py; do
-      substituteInPlace $i --replace cdiff ydiff
-    done
-  '';
-
   propagatedBuildInputs = with pythonPackages; [
-    boto
+    boto3
     click
     consul
     dnspython

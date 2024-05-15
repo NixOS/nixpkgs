@@ -21,6 +21,6 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://pestphp.com";
     license = lib.licenses.mit;
     mainProgram = "pest";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ patka ];
   };
 })

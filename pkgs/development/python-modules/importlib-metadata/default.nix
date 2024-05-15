@@ -7,6 +7,9 @@
 , typing-extensions
 , toml
 , zipp
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -40,6 +43,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "importlib_metadata"
   ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Read metadata from Python packages";

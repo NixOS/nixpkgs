@@ -12,6 +12,9 @@
 , setuptools
 , sphinxcontrib-log-cabinet
 , sphinx-issues
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -75,6 +78,8 @@ buildPythonPackage rec {
     inherit (python) pythonVersion;
     inherit meta;
   };
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     changelog = "https://github.com/pallets/jinja/blob/${version}/CHANGES.rst";

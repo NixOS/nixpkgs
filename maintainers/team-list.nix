@@ -460,6 +460,14 @@ with lib.maintainers; {
     shortName = "Home Assistant";
   };
 
+  infisical = {
+    members = [
+      akhilmhdh
+    ];
+    scope = "Maintain Infisical";
+    shortName = "Infisical";
+  };
+
   iog = {
     members = [
       cleverca22

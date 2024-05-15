@@ -31,7 +31,7 @@ with lib;
     # attrNames (filterAttrs
     #  (_: drv: (builtins.tryEval (isDerivation drv && drv ? terminfo)).value)
     #  pkgs)
-    environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs; [
+    environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs.pkgsBuildBuild; [
       alacritty
       contour
       foot

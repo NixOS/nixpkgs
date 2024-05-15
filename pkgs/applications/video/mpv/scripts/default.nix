@@ -99,6 +99,7 @@ let
       convert = callPackage ./convert.nix { };
       cutter = callPackage ./cutter.nix { };
       dynamic-crop = callPackage ./dynamic-crop.nix { };
+      evafast = callPackage ./evafast.nix { };
       inhibit-gnome = callPackage ./inhibit-gnome.nix { };
       memo = callPackage ./memo.nix { };
       manga-reader = callPackage ./manga-reader.nix { };

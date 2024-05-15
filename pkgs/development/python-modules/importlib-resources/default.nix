@@ -10,6 +10,9 @@
 # dependencies
 , importlib-metadata
 
+# Reverse dependency
+, sage
+
 # tests
 , jaraco-collections
 , pytestCheckHook
@@ -45,6 +48,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "importlib_resources"
   ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Read resources from Python packages";

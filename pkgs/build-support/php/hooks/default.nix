@@ -1,7 +1,6 @@
 {
   lib,
   makeSetupHook,
-  diffutils,
   jq,
   writeShellApplication,
   moreutils,

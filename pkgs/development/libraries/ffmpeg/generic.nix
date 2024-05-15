@@ -40,7 +40,7 @@
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
 , withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
-, withAvisynth ? withFullDeps # AviSynth script files reading
+, withAvisynth ? withFullDeps && !stdenv.isDarwin # AviSynth script files reading; Darwin currently broken because libdevil fails to build
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps

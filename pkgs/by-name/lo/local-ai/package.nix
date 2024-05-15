@@ -100,8 +100,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "784e11dea1f5ce9638851b2b0dddb107e2a609c8";
-      hash = "sha256-yAQAUo5J+a6O2kTqhFL1UH0tANxpQn3JhAd3MByaC6I=";
+      rev = "6ecf3189e00a1e8e737a78b6d10e1d7006e050a2";
+      hash = "sha256-JS287UdCzj6Es134cbhr8y/AoejMEux0w++/pZ5NejY=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -254,8 +254,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "858452d58dba3acdc3431c9bced2bb8cfd9bf418";
-      hash = "sha256-2fT3RgGpBex1mF6GJsVDo4rb0F31YqxTymsXcrpQAZk=";
+      rev = "8fac6455ffeb0a0950a84e790ddb74f7290d33c4";
+      hash = "sha256-Dez/Q2vMvSmscS+BJwkgZ4QG+ebM/N8s1Okd5my0CWI=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
@@ -305,8 +305,8 @@ let
     src = fetchFromGitHub {
       owner = "mudler";
       repo = "go-stable-diffusion";
-      rev = "362df9da29f882dbf09ade61972d16a1f53c3485";
-      hash = "sha256-A5KvMZOviPsIpPHxM8cacT+qE2x1iFJAbPsRs4sLijY=";
+      rev = "4a3cd6aeae6f66ee57eae9a0075f8c58c3a6a38f";
+      hash = "sha256-KXUvMP6cDyWib4rG0RmVRm3pgrdsfKXaH3k0v5/mTe8=";
       fetchSubmodules = true;
     };
     buildFlags = [ "libstablediffusion.a" ];
@@ -342,8 +342,8 @@ let
     src = fetchFromGitHub {
       owner = "M0Rf30";
       repo = "go-tiny-dream";
-      rev = "22a12a4bc0ac5455856f28f3b771331a551a4293";
-      hash = "sha256-DAVHD6E0OKHf4C2ldoI0Mm7813DIrmWFONUhSCQPCfc=";
+      rev = "c04fa463ace9d9a6464313aa5f9cd0f953b6c057";
+      hash = "sha256-uow3vbAI4F/fTGjYOKOLqTpKq7NgGYSZhGlEhn7h6s0=";
       fetchSubmodules = true;
     };
     postUnpack = ''
@@ -373,12 +373,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.13.0";
+  version = "2.14.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-jZE8Ow9FFhnx/jvsURLYlYtSuKpE4UWBezxg/mpHs9g=";
+    hash = "sha256-wr7sTMjGofGiZZbRJ+RfgXx9TM9Adu2NBAXeB3P5Ep0=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {

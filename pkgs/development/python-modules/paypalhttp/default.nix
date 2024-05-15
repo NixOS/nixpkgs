@@ -24,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-3ihcpYtpcejPkiyf4g4jveyNU6flQB2sv9EZ5Pd7tUc=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/http_response_test.py \
+      --replace-fail assertEquals assertEqual
+  '';
+
   propagatedBuildInputs = [
     requests
     six

@@ -1105,10 +1105,10 @@ in {
             extraConfig = ''
               absolute_redirect off;
               location = /.well-known/carddav {
-                return 301 /remote.php/dav;
+                return 301 /remote.php/dav/;
               }
               location = /.well-known/caldav {
-                return 301 /remote.php/dav;
+                return 301 /remote.php/dav/;
               }
               location ~ ^/\.well-known/(?!acme-challenge|pki-validation) {
                 return 301 /index.php$request_uri;

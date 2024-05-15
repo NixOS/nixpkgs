@@ -10,7 +10,7 @@ buildPythonPackage {
   pyproject = true;
 
   postPatch = ''
-    substituteInPlace "py/src/nftables.py" \
+    substituteInPlace "src/nftables.py" \
       --replace-fail "libnftables.so.1" "${nftables}/lib/libnftables.so.1"
   '';
 

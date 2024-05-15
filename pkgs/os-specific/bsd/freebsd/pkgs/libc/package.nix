@@ -1,12 +1,20 @@
-{ lib, stdenv, mkDerivation
-, patchesRoot
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  patchesRoot,
 
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal
-, install
-, flex, byacc, gencat, rpcgen
+  bsdSetupHook,
+  freebsdSetupHook,
+  makeMinimal,
+  install,
+  flex,
+  byacc,
+  gencat,
+  rpcgen,
 
-, csu, include
+  csu,
+  include,
 }:
 
 mkDerivation rec {
@@ -63,13 +71,20 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
+    bsdSetupHook
+    freebsdSetupHook
     makeMinimal
     install
 
-    flex byacc gencat rpcgen
+    flex
+    byacc
+    gencat
+    rpcgen
   ];
-  buildInputs = [ include csu ];
+  buildInputs = [
+    include
+    csu
+  ];
   env.NIX_CFLAGS_COMPILE = "-B${csu}/lib";
 
   # Suppress lld >= 16 undefined version errors
