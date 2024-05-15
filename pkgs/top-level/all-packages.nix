@@ -35067,8 +35067,6 @@ with pkgs;
 
   unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
 
-  unipicker = callPackage ../applications/misc/unipicker { };
-
   unpaper = callPackage ../tools/graphics/unpaper { };
 
   unison-ucm = callPackage ../development/compilers/unison { };
