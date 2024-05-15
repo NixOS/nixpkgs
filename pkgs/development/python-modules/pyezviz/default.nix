@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pandas
-, pycryptodome
-, pythonOlder
-, requests
-, setuptools
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pandas,
+  pycryptodome,
+  pythonOlder,
+  requests,
+  setuptools,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-ngQu9g0qvJ3zDaTdGqJDGRoMhnGYdp5jHDoPiuXOwGs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     paho-mqtt
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # Project has no tests. test_cam_rtsp.py is more a sample for using the module
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyezviz"
-  ];
+  pythonImportsCheck = [ "pyezviz" ];
 
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";
