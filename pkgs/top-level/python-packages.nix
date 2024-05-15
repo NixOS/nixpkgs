@@ -4189,6 +4189,8 @@ self: super: with self; {
 
   filecheck = callPackage ../development/python-modules/filecheck { };
 
+  filedate = callPackage ../development/python-modules/filedate { };
+
   filedepot = callPackage ../development/python-modules/filedepot { };
 
   filelock = callPackage ../development/python-modules/filelock { };
