@@ -11,6 +11,7 @@
 , freefont_ttf
 , makeFontsConf
 , setuptools
+, python
 }:
 
 let
@@ -70,6 +71,7 @@ buildPythonPackage rec {
     homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
     license = licenses.mit;
+    broken = lib.versionAtLeast python.version "3.12";
     platforms = platforms.unix;
     maintainers = with maintainers; [ koral ];
   };
