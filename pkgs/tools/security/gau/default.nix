@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gau";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "lc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AtKakeQnxRbFAbK/aQ4OQoEowN753jm4P4M57Oo3x1Y=";
+    sha256 = "sha256-1sF33uat6nwtTaXbZzO8YF4jewyQJ6HvI2l/zyTrJsg=";
   };
 
   vendorHash = "sha256-nhsGhuX5AJMHg+zQUt1G1TwVgMCxnuJ2T3uBrx7bJNs=";
