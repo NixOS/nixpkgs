@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace tabula/backend.py \
-      --replace '"java"' '"${lib.getExe jre}"'
+      --replace-fail '"java"' '"${lib.getExe jre}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     jre
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     distro
     numpy
     pandas
