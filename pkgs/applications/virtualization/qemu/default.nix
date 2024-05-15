@@ -29,7 +29,7 @@
 , smbdSupport ? false, samba
 , tpmSupport ? !toolsOnly
 , uringSupport ? stdenv.isLinux, liburing
-, canokeySupport ? false, canokey-qemu
+, canokeySupport ? !toolsOnly, canokey-qemu
 , capstoneSupport ? !toolsOnly, capstone
 , enableDocs ? true
 , hostCpuOnly ? false
