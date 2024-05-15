@@ -15,9 +15,7 @@ appimageTools.wrapAppImage rec {
   };
 
   # At runtime, Lbry likes to have access to Ffmpeg
-  extraPkgs = pkgs: with pkgs; [
-    ffmpeg
-  ];
+  extraPkgs = pkgs: [ pkgs.ffmpeg ];
 
   # General fixup
   extraInstallCommands = ''

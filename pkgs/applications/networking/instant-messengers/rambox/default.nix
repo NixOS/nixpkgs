@@ -2,11 +2,11 @@
 
 let
   pname = "rambox";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/Rambox-${version}-linux-x64.AppImage";
-    hash = "sha256-fSj/AX1uCUAC3Vg5+rtGF3IDPFTHRAgJ8CPVL8BYc+E=";
+    hash = "sha256-9AGzhj4UL2rEe67qvkX5VYhQEMETGYSDWv5XOgABSEE=";
   };
 
   desktopItem = (makeDesktopItem {
@@ -30,7 +30,7 @@ appimageTools.wrapType2 {
     install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  extraPkgs = pkgs: with pkgs; [ procps ];
+  extraPkgs = pkgs: [ pkgs.procps ];
 
   meta = with lib; {
     description = "Workspace Simplifier - a cross-platform application organizing web services into Workspaces similar to browser profiles";

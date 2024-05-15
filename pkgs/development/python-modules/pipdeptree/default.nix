@@ -7,6 +7,7 @@
   graphviz,
   hatchling,
   hatch-vcs,
+  packaging,
   pytest-mock,
   pytestCheckHook,
   pip,
@@ -32,7 +33,10 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies = [ pip ];
+  dependencies = [
+    pip
+    packaging
+  ];
 
   passthru.optional-dependencies = {
     graphviz = [ graphviz ];

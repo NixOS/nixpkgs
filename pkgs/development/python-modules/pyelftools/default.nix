@@ -38,12 +38,18 @@ buildPythonPackage rec {
     "elftools"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for analyzing ELF files and DWARF debugging information";
     homepage = "https://github.com/eliben/pyelftools";
     changelog = "https://github.com/eliben/pyelftools/blob/v${version}/CHANGES";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ igsha pamplemousse ];
+    license = with lib.licenses; [
+      # Public domain with Unlicense waiver.
+      unlicense
+      # pyelftools bundles construct library that is licensed under MIT license.
+      # See elftools/construct/{LICENSE,README} in the source code.
+      mit
+    ];
+    maintainers = with lib.maintainers; [ igsha pamplemousse ];
     mainProgram = "readelf.py";
   };
 }

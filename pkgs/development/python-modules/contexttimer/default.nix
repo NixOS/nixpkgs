@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , fetchFromGitHub
 , mock
 , fetchpatch
@@ -10,6 +11,8 @@ buildPythonPackage rec {
   pname = "contexttimer";
   version = "unstable-2019-03-30";
   format = "setuptools";
+
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "brouberol";

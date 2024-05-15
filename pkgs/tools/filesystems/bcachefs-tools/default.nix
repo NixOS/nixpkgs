@@ -20,7 +20,7 @@
   rustc,
   rustPlatform,
   makeWrapper,
-  writeScript,
+  nix-update-script,
   python3,
   fuseSupport ? false,
 }:
@@ -104,15 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
-    updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl jq common-updater-scripts
-      res="$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-        -sL "https://api.github.com/repos/${finalAttrs.src.owner}/${finalAttrs.src.repo}/tags?per_page=1")"
-
-      version="$(echo $res | jq '.[0].name | split("v") | .[1]' --raw-output)"
-      update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
-    '';
+    updateScript = nix-update-script {};
   };
 
   enableParallelBuilding = true;

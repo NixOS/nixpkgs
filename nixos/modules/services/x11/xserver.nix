@@ -728,9 +728,6 @@ in
             rm -f /tmp/.X0-lock
           '';
 
-        # TODO: move declaring the systemd service to its own mkIf
-        script = mkIf (config.systemd.services.display-manager.enable == true) "${config.services.displayManager.execCmd}";
-
         # Stop restarting if the display manager stops (crashes) 2 times
         # in one minute. Starting X typically takes 3-4s.
         startLimitIntervalSec = 30;

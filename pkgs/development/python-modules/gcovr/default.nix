@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://www.gcovr.com/";
     changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

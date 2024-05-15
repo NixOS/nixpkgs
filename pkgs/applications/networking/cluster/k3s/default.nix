@@ -54,4 +54,15 @@ in
       ];
     }
   ) extraArgs;
+
+  # 1_30 can be built with the same builder as 1_26
+  k3s_1_30 = common (
+    (import ./1_30/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "30"
+      ];
+    }
+  ) extraArgs;
 }

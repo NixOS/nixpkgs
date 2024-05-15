@@ -16,9 +16,7 @@ on:
     # so it shouldn't be a problem
     types: [opened, synchronize, reopened, edited]
 
-permissions:
-  # We need this permission to cancel the workflow run if there's a merge conflict
-  actions: write
+permissions: {}
 
 # Create a check-by-name concurrency group based on the pull request number. if
 # an event triggers a run on the same PR while a previous run is still in
@@ -79,31 +77,27 @@ jobs:
 
           if [[ "$mergeable" == "true" ]]; then
             echo "The PR can be merged, checking the merge commit $mergedSha"
+            echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
           else
-            echo "The PR cannot be merged, it has a merge conflict, cancelling the workflow.."
-            gh api \
-              --method POST \
-              -H "Accept: application/vnd.github+json" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              /repos/"$GITHUB_REPOSITORY"/actions/runs/"$GITHUB_RUN_ID"/cancel
-            sleep 60
-            # If it's still not canceled after a minute, something probably went wrong, just exit
-            exit 1
+            echo "The PR cannot be merged, it has a merge conflict, skipping the rest.."
           fi
-          echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        if: env.mergedSha
         with:
           # pull_request_target checks out the base branch by default
           ref: ${{ env.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
       - name: Checking out base branch
+        if: env.mergedSha
         run: |
           base=$(mktemp -d)
           git worktree add "$base" "$(git rev-parse HEAD^1)"
           echo "base=$base" >> "$GITHUB_ENV"
       - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+        if: env.mergedSha
       - name: Fetching the pinned tool
+        if: env.mergedSha
         # Update the pinned version using pkgs/test/check-by-name/update-pinned-tool.sh
         run: |
           # The pinned version of the tooling to use
@@ -114,6 +108,7 @@ jobs:
           # Adds a result symlink as a GC root
           nix-store --realise "$toolPath" --add-root result
       - name: Running nixpkgs-check-by-name
+        if: env.mergedSha
         env:
           # Force terminal colors to be enabled. The library that
           # nixpkgs-check-by-name uses respects: https://bixense.com/clicolors/
