@@ -1,14 +1,14 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "drbd-driver";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ birkb ];
-  };
+  meta.maintainers = with pkgs.lib.maintainers; [ birkb ];
 
   nodes = {
     machine = { config, pkgs, ... }: {
-      boot.kernelModules = [ "drbd" ];
-      boot.extraModulePackages = with config.boot.kernelPackages; [ drbd ];
-      boot.kernelPackages = pkgs.linuxPackages;
+      boot = {
+        kernelModules = [ "drbd" ];
+        extraModulePackages = with config.boot.kernelPackages; [ drbd ];
+        kernelPackages = pkgs.linuxPackages;
+      };
     };
   };
 
