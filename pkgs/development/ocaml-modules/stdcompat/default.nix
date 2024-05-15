@@ -1,7 +1,11 @@
 { buildDunePackage
+, ocaml
 , lib
 , fetchurl
 }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
+  "stdcompat is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "stdcompat";
