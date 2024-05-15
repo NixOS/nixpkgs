@@ -28,7 +28,11 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 upsun $out/bin/upsun
+
+    runHook postInstall
   '';
 
   meta = {
