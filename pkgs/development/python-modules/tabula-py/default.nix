@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, jre
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, jpype1
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  jre,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  jpype1,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    jre
-  ];
+  buildInputs = [ jre ];
 
   dependencies = [
     distro
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     jpype1
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tabula"
-  ];
+  pythonImportsCheck = [ "tabula" ];
 
   disabledTests = [
     # Tests require network access
