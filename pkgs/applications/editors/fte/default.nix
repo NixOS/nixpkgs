@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A free text editor for developers";
     homepage = "https://fte.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = platforms.all;
   };
 }
