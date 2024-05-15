@@ -57,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   # mostly because it checks command line and nix append -isystem and all
   doCheck = false;
 
-  strictDeps = true;
-
   # -E exclude 4 tests based on names
   # see https://github.com/CastXML/CastXML/issues/90
   checkPhase = ''
