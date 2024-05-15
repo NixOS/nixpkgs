@@ -51,7 +51,10 @@ appimageTools.wrapAppImage rec {
     changelog = "https://github.com/Dygmalab/Bazecor/releases/tag/v${version}";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [
+      amesgen
+      gcleroux
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "bazecor";
   };
