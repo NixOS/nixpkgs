@@ -15178,12 +15178,6 @@ with pkgs;
   clang_17 = llvmPackages_17.clang;
 
   clang-tools = llvmPackages.clang-tools;
-  clang-tools_12 = llvmPackages_12.clang-tools;
-  clang-tools_13 = llvmPackages_13.clang-tools;
-  clang-tools_14 = llvmPackages_14.clang-tools;
-  clang-tools_15 = llvmPackages_15.clang-tools;
-  clang-tools_16 = llvmPackages_16.clang-tools;
-  clang-tools_17 = llvmPackages_17.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_14;
@@ -16258,14 +16252,12 @@ with pkgs;
       lld_18 = llvmPackages_18.lld;
       lldb_18 = llvmPackages_18.lldb;
       llvm_18 = llvmPackages_18.llvm;
-      clang-tools_18 = llvmPackages_18.clang-tools;
     })
       llvmPackages_18
       clang_18
       lld_18
       lldb_18
-      llvm_18
-      clang-tools_18;
+      llvm_18;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
