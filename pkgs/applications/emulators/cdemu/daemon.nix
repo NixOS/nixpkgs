@@ -2,7 +2,7 @@
 callPackage ./base.nix {
   version = "3.2.6";
   pname = "cdemu-daemon";
-  sha256 = "sha256-puQE4+91xhRuNjVPZYgN/WO0uO8fVAOdxQWOGQ+FfY8=";
+  hash = "sha256-puQE4+91xhRuNjVPZYgN/WO0uO8fVAOdxQWOGQ+FfY8=";
   nativeBuildInputs = [ intltool ];
   buildInputs = [ glib libao libmirage ];
   extraDrvParams.postInstall = ''

@@ -3,7 +3,7 @@
 callPackage ./base.nix {
   version = "3.2.6";
   pname = "image-analyzer";
-  sha256 = "sha256-7I8RUgd+k3cEzskJGbziv1f0/eo5QQXn62wGh/Y5ozc=";
+  hash = "sha256-7I8RUgd+k3cEzskJGbziv1f0/eo5QQXn62wGh/Y5ozc=";
   buildInputs = [ glib gtk3 libxml2 gnuplot libmirage gnome.adwaita-icon-theme gdk-pixbuf librsvg
                   python3Packages.pygobject3 python3Packages.matplotlib ];
   nativeBuildInputs = [ gobject-introspection cmake wrapGAppsHook3 intltool ];
