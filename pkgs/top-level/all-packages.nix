@@ -31132,9 +31132,9 @@ with pkgs;
 
   freenet = callPackage ../applications/networking/p2p/freenet {
     gradle = gradle_7;
-    jdk = jdk_headless;
+    jdk = jdk17_headless;
     # Reduce closure size
-    jre = pkgs.jre_minimal.override {
+    jre = pkgs.jre17_minimal.override {
       modules = [
         "java.base"
         "java.logging"
@@ -31143,7 +31143,7 @@ with pkgs;
         "java.desktop"
         "java.management"
       ];
-      jdk = jdk_headless;
+      jdk = jdk17_headless;
     };
   };
 
