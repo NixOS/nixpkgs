@@ -1,16 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config
-, pname, version, hash, buildInputs
-, nativeBuildInputs ? [ ]
-, postFixup ? ""
-, extraDrvParams ? { }
+{ lib, fetchurl
+, pname, version, hash
 }:
-stdenv.mkDerivation ( {
-  inherit pname version buildInputs postFixup;
+
+{
+  inherit pname version;
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
     inherit hash;
   };
-  nativeBuildInputs = nativeBuildInputs ++ [ pkg-config cmake ];
   meta = with lib; {
     description = "A suite of tools for emulating optical drives and discs";
     longDescription = ''
@@ -29,4 +26,4 @@ stdenv.mkDerivation ( {
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-} // extraDrvParams)
+}
