@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nodejs_20,
   overrideSDK,
   fetchFromGitHub,
   buildNpmPackage,
@@ -22,7 +23,7 @@ let
       }
     else
       stdenv;
-  buildNpmPackage' = buildNpmPackage.override { stdenv = stdenv'; };
+  buildNpmPackage' = buildNpmPackage.override { stdenv = stdenv'; nodejs = nodejs_20; };
 in
 buildNpmPackage' rec {
   pname = "jellyfin-web";
