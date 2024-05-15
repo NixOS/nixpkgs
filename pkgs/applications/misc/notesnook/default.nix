@@ -1,8 +1,9 @@
+
 { lib, stdenv, appimageTools, fetchurl, undmg }:
 
 let
   pname = "notesnook";
-  version = "2.6.1";
+  version = "3.0.4";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +17,9 @@ let
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash = {
-      x86_64-linux = "sha256-PLHP1Q4+xcHyr0323K4BD+oH57SspsrAcxRe/C6RFDU=";
-      x86_64-darwin = "sha256-gOUL3qLSM+/pr519Gc0baUtbmhA40lG6XzuCRyGILkc=";
-      aarch64-darwin = "sha256-d1nXdCv1mK4+4Gef1upIkHS3J2d9qzTLXbBWabsJwpw=";
+      x86_64-linux = "sha256-hgTtsxSiK38Ef/MDkTAgBXOZacCmyoBvcqwXZn3+n9U=";
+      x86_64-darwin = "sha256-ifKOGELkcU4t8a6SMzWDIShbYkVo2TgQqZVHV0GYOEs=";
+      aarch64-darwin = "sha256-10LGMzR66VQIJjV6Sa1sISArU2ZSUKXumn7T+QAQw8Y=";
     }.${system} or throwSystem;
   };
 
@@ -52,7 +53,7 @@ let
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/notesnook.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+        --replace-quiet 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
   };
 
