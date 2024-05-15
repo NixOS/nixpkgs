@@ -633,12 +633,11 @@ dont-distribute-packages:
  - bdcs-api
  - beam-automigrate
  - beam-postgres
- - beam-sqlite
  - beam-th
  - bearriver
  - beautifHOL
  - bech32-th
- - beeminder-api
+ - bech32-th_1_1_6
  - bein
  - belka
  - bff
@@ -1474,7 +1473,6 @@ dont-distribute-packages:
  - funion
  - funnyprint
  - funsat
- - fused-effects-squeal
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -1913,7 +1911,6 @@ dont-distribute-packages:
  - haskanoid
  - haskdeep
  - haskeem
- - haskell-abci
  - haskell-admin
  - haskell-admin-health
  - haskell-admin-managed-functions
@@ -3364,7 +3361,6 @@ dont-distribute-packages:
  - reflex-backend-wai
  - reflex-dom-colonnade
  - reflex-dynamic-containers
- - reflex-gadt-api
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
@@ -3663,7 +3659,6 @@ dont-distribute-packages:
  - si-clock
  - sibe
  - sigma-ij
- - signable
  - signals
  - signature
  - silvi
@@ -3773,6 +3768,7 @@ dont-distribute-packages:
  - sproxy
  - sproxy-web
  - sproxy2
+ - sq
  - sql-simple-mysql
  - sql-simple-pool
  - sql-simple-postgresql
@@ -4151,14 +4147,12 @@ dont-distribute-packages:
  - verifiable-expressions
  - verismith
  - versioning-servant
- - vessel
  - vflow-types
  - vformat-aeson
  - vformat-time
  - vfr-waypoints
  - vigilance
  - vimeta
- - vinyl-generics
  - vinyl-operational
  - vision
  - visual-graphrewrite
