@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
 , glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
-, json-glib, libunistring }:
+, json-glib, libunistring, wrapGAppsHook3, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libratbag";
@@ -14,12 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config gitMinimal swig check valgrind
+    meson ninja pkg-config gitMinimal swig check valgrind wrapGAppsHook3
   ];
 
   buildInputs = [
     glib systemd udev libevdev json-glib libunistring
     (python3.withPackages (ps: with ps; [ evdev pygobject3 ]))
+    gobject-introspection # ratbagctl needs this
   ];
 
   mesonFlags = [
