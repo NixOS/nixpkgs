@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libxml2 eigen python3 cairo pcre ];
 
+  cmakeFlags = [ "-DCMAKE_CXX_STANDARD=14" ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
