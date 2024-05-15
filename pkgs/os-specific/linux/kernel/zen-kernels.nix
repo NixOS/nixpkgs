@@ -84,8 +84,8 @@ let
       SCHED_PDS = yes;
 
       # Swap storage is compressed with LZ4 using zswap
-      ZSWAP_COMPRESSOR_DEFAULT_LZ4 = yes;
-      ZSWAP_COMPRESSOR_DEFAULT = freeform "lz4";
+      ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = lib.mkDefault no;
 
       # Fix error: unused option: XXX.
       CFS_BANDWIDTH = lib.mkForce (option no);

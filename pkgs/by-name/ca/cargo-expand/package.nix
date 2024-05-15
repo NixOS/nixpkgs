@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-expand";
-  version = "1.0.86";
+  version = "1.0.87";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = pname;
     rev = version;
-    hash = "sha256-wp4JYuAHtZrHer4db0vBCchf8mQIt6jXWqjqpGKws4o=";
+    hash = "sha256-sBL1/5was2qN8M2s8u443mb376ySE+T58bmdfO0XqE0=";
   };
 
-  cargoHash = "sha256-QNH3G34yTEecZyVgw2a1RJnd1CMfV4aw1OJqes/cK2s=";
+  cargoHash = "sha256-DhjZMOKfXBGSF8b7OQ7l++/RKjtww+cUJDj91JW9ROY=";
 
   meta = with lib; {
     description = "Cargo subcommand to show result of macro expansion";
