@@ -2651,6 +2651,7 @@ dont-distribute-packages:
  - lol-typing
  - loli
  - longshot
+ - looksee
  - looksee-trip
  - loop-effin
  - lorentz
@@ -2741,6 +2742,7 @@ dont-distribute-packages:
  - metar-http
  - metronome
  - micro-gateway
+ - microdns
  - microformats2-types
  - midimory
  - mighttpd
@@ -3218,6 +3220,8 @@ dont-distribute-packages:
  - process-qq
  - process-streaming
  - procrastinating-structure
+ - prodapi-proxy
+ - prodapi-userauth
  - producer
  - product
  - prof2dot
