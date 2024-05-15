@@ -9,12 +9,7 @@ tcl.mkTclDerivation rec {
     hash = "sha256-Safag7C92fRtBKBN7sGcd2e7mjI+QMR4H4nK92C5LDQ=";
   };
 
-  patches = lib.optionals (!stdenv.isFreeBSD) [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/buildroot/buildroot/c05e6aa361a4049eabd8b21eb64a34899ef83fc7/package/expect/0001-enable-cross-compilation.patch";
-      hash = "sha256-yyzE0Jjac5qaj7Svn4VpMiAqSNLYrw7VZbtFqgMVncs=";
-    })
-  ] ++ [
+  patches = [
     (substituteAll {
       src = ./fix-cross-compilation.patch;
       tcl = "${buildPackages.tcl}/bin/tclsh";
@@ -29,8 +24,15 @@ tcl.mkTclDerivation rec {
       hash = "sha256-PxQQ9roWgVXUoCMxkXEgu+it26ES/JuzHF6oML/nk54=";
     })
     # Include `sys/ioctl.h` and `util.h` on Darwin, which are required for `ioctl` and `openpty`.
-    ./fix-darwin-clang16.patch
+    # Include `termios.h` on FreeBSD for `openpty`
+    ./fix-darwin-bsd-clang16.patch
+  ] ++ lib.optionals (!stdenv.isFreeBSD) [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/buildroot/buildroot/c05e6aa361a4049eabd8b21eb64a34899ef83fc7/package/expect/0001-enable-cross-compilation.patch";
+      hash = "sha256-yyzE0Jjac5qaj7Svn4VpMiAqSNLYrw7VZbtFqgMVncs=";
+    })
   ] ++ lib.optionals (stdenv.isFreeBSD) [
+    # a nightmare, truly. context: https://github.com/NixOS/nixpkgs/pull/311770#issuecomment-2113440745
     ./link-unversioned.patch
   ];
 
