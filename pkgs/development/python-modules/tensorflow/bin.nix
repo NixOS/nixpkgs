@@ -52,10 +52,10 @@ in buildPythonPackage {
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
-    unit = if cudaSupport then "gpu" else "cpu";
-    key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl (packages.${key} or {});
+    platform = stdenv.system;
+    cuda = lib.optionalString cudaSupport "_gpu";
+    key = "${platform}_${pyVerNoDot}${cuda}";
+  in fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported system: ${stdenv.system}"));
 
   buildInputs = [
     llvmPackages.openmp
@@ -209,7 +209,7 @@ in buildPythonPackage {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.all;
     # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
     # ModuleNotFoundError: No module named 'distutils'
     # https://github.com/tensorflow/tensorflow/issues/58073
