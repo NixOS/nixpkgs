@@ -567,11 +567,16 @@ stdenv.mkDerivation ({
   # `--test-option`, so Cabal passes it to the underlying test suite binary.
   checkPhase = ''
     runHook preCheck
+
+    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during check.
+
     checkFlagsArray+=(
       "--show-details=streaming"
       ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
     )
     ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+    export GHC_PACKAGE_PATH="$packageConfDir:"
+
     runHook postCheck
   '';
 
