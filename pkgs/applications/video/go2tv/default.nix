@@ -19,8 +19,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
-    rev = "v${version}";
-    sha256 = "sha256-7m5GikrdcrJyl+KYuSk1JWLW2SsHOcBJNJuq2BahxHc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7m5GikrdcrJyl+KYuSk1JWLW2SsHOcBJNJuq2BahxHc=";
   };
 
   vendorHash = "sha256-na79rF/9o+s6E4i08Ocs6u98IABc19sTGFvjI6yeJFo=";
@@ -39,7 +39,8 @@ buildGoModule rec {
   ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel UserNotifications ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-linkmode=external"
   ];
 
@@ -51,6 +52,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Cast media files to UPnP/DLNA Media Renderers and Smart TVs";
     homepage = "https://github.com/alexballas/go2tv";
+    changelog = "https://github.com/alexballas/go2tv/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gdamjan ];
     mainProgram = "go2tv";
