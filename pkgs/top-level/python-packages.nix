@@ -10599,6 +10599,8 @@ self: super: with self; {
 
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
+  pyais = callPackage ../development/python-modules/pyais { };
+
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
 
   pyamg = callPackage ../development/python-modules/pyamg { };
