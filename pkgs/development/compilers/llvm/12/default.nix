@@ -305,6 +305,9 @@ let
         ../common/compiler-rt/armv6-mcr-dmb.patch
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+      ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # the code this removes is tuned for an extremely old version of FreeBSD we don't support
+        ../common/compiler-rt/freebsd-i386.patch
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
@@ -327,6 +330,9 @@ let
         ../common/compiler-rt/armv6-mcr-dmb.patch
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+      ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # the code this removes is tuned for an extremely old version of FreeBSD we don't support
+        ../common/compiler-rt/freebsd-i386.patch
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false

@@ -358,6 +358,9 @@ in let
         ../common/compiler-rt/darwin-plistbuddy-workaround.patch
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         # ../common/compiler-rt/armv7l-15.patch
+      ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # the code this removes is tuned for an extremely old version of FreeBSD we don't support
+        ../common/compiler-rt/freebsd-i386.patch
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
@@ -378,6 +381,9 @@ in let
         ../common/compiler-rt/darwin-plistbuddy-workaround.patch
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         # ../common/compiler-rt/armv7l-15.patch
+      ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # the code this removes is tuned for an extremely old version of FreeBSD we don't support
+        ../common/compiler-rt/freebsd-i386.patch
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
