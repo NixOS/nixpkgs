@@ -1,22 +1,22 @@
 {
   lib,
   stdenv,
-  llvmPackages,
+  clang-unwrapped,
+  clang,
+  libcxxClang,
+  llvm_meta,
   # enableLibcxx will use the c++ headers from clang instead of gcc.
   # This shouldn't have any effect on platforms that use clang as the default compiler already.
   enableLibcxx ? false,
 }:
 
-let
-  unwrapped = llvmPackages.clang-unwrapped;
-in
 stdenv.mkDerivation {
-  inherit unwrapped;
+  unwrapped = clang-unwrapped;
 
   pname = "clang-tools";
-  version = lib.getVersion unwrapped;
+  version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
-  clang = if enableLibcxx then llvmPackages.libcxxClang else llvmPackages.clang;
+  clang = if enableLibcxx then libcxxClang else clang;
 
   installPhase = ''
     runHook preInstall
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = unwrapped.meta // {
+  meta = llvm_meta // {
     description = "Standalone command line tools for C++ development";
     maintainers = with lib.maintainers; [ patryk27 ];
   };
