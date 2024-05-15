@@ -1,6 +1,7 @@
  { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , pkg-config
 , postgresql
 , libversion
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "PostgreSQL extension with support for version string comparison";
