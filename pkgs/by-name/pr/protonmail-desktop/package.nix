@@ -2,58 +2,64 @@
 , mkYarnPackage
 , fetchurl
 , makeWrapper
-, electron
 , zip
 , unzip
-, runCommandNoCC
 , git
+, stdenv
+, linkFarm
 }: let
-  electronZip = runCommandNoCC "electronZip-${electron.version}" { buildInputs = [ electron zip ]; }
-  ''
-    cp -r ${electron}/libexec/electron/ .
-    chmod -R 777 .
-    mkdir -p $out
-    zip -r $out/electron-v29.0.1-linux-x64.zip .
-  '';
+  electron = {
+    build = fetchurl {
+      url = "https://github.com/electron/electron/releases/download/v${electron.version}/electron-v${electron.version}-linux-x64.zip";
+      sha256 = "sha256-cVj/KmkLOGumZePcbedB8MjnJAihbF6eo3Th3BEb8EI=";
+    };
+    version = "29.0.1";
+    zip = linkFarm "electron-zip-dir" [
+      {
+        name = "${electron.build.name}";
+        path = electron.build;
+      }
+    ];
+  };
+
+  src = stdenv.mkDerivation {
+    pname = "pmd-source";
+    inherit version;
+
+    src = fetchurl {
+      url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/desktop-release-${version}.zip";
+      hash = "sha256-VVpX1gfPUIQKGkA6Eg9krJKvL8H8h+9TsctrSm5se5k=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+
+    dontUnpack = true;
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = ''
+      unzip -d $out $src
+      cp ${./forge.config.ts} $out
+    '';
+  };
 
   mainProgram = "proton-mail";
   version = "1.0.2";
 
 in mkYarnPackage {
   pname = "protonmail-desktop";
-  inherit version;
-
-  src = fetchurl {
-    url = "https://github.com/ProtonMail/inbox-desktop/releases/download/v${version}/desktop-release-${version}.zip";
-    hash = lib.fakeHash;
-  };
+  inherit version src;
 
   nativeBuildInputs = [
-    electron
-    # fakeroot
-    makeWrapper
-    zip
-    unzip
     git
-
-    # nodePackages."@electron-forge/cli"
+    zip
   ];
 
   env = {
-    DEBUG = "electron-forge:electron-packager";
-    # ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-    ELECTRON_OVERRIDE_DIST_PATH = "${electron}/bin/";
+    DEBUG = "*";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    electron_zip_dir = electron.zip;
   };
-
-  /*packageJSON = "$src/package.json";
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = "$/yarn.lock";
-    hash = lib.fakeHash;
-  };
-
-  # yarnPreBuild = "";
-  # yarnPostBuild = "";*/
 
   buildPhase = ''
     # set -x
@@ -61,8 +67,8 @@ in mkYarnPackage {
     pushd deps/proton-mail
     rm proton-mail
 
-    substituteInPlace forge.config.ts \
-      --replace-fail "@ELECTRON_ZIP@" "${electronZip}"
+    # substituteInPlace forge.config.ts \
+    #   --replace-fail "@ELECTRON_ZIP@" "${electron.zip}"
 
     popd
 
@@ -71,14 +77,14 @@ in mkYarnPackage {
     yarn --offline run package -a x64 -p linux
   '';
 
-  preFixup = ''
+  /*preFixup = ''
     makeWrapper ${lib.getExe electron} $out/bin/${mainProgram} \
       --add-flags $out/share/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
-  '';
+  '';*/
 
   meta = {
     description = "Desktop application for Mail and Calendar, made with Electron";

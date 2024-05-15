@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
 
 import { AutoUnpackNativesPlugin } from "@electron-forge/plugin-auto-unpack-natives";
@@ -9,6 +10,7 @@ import { getAppTransportSecuity, getExtraResource, getIco, getIcon, getName, isB
 import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
+import pkg from "./package.json";
 
 let currentArch = "";
 const config: ForgeConfig = {
@@ -22,12 +24,14 @@ const config: ForgeConfig = {
         },
     },
     packagerConfig: {
-        electronZipDir: "@ELECTRON_ZIP@",
+        electronZipDir: process.env.electron_zip_dir,
         icon: `${__dirname}/assets/icons/${getIcon()}`,
         asar: true,
         name: getName(),
         executableName: getName(),
         extraResource: getExtraResource(),
+        appVersion: pkg.version,
+        appCopyright: pkg.config.copyright,
         // Required for macOS mailto protocol
         protocols: [
             {
@@ -37,7 +41,7 @@ const config: ForgeConfig = {
         ],
         // Change category type of the application on macOS
         appCategoryType: "public.app-category.productivity",
-        appBundleId: "ch.protonmail.desktop",
+        appBundleId: pkg.config.appBundleId,
         osxSign: {},
         osxNotarize: {
             appleId: process.env.APPLE_ID!,
@@ -92,8 +96,8 @@ const config: ForgeConfig = {
                 options: {
                     bin: getName(),
                     icon: `${__dirname}/assets/linux/${getIcon()}.svg`,
-                    homepage: "https://proton.me/",
-                    categories: ["Utility"],
+                    homepage: pkg.author.url,
+                    categories: ["Network", "Email"],
                     mimeType: ["x-scheme-handler/mailto"],
                 },
             },
@@ -104,9 +108,9 @@ const config: ForgeConfig = {
                 options: {
                     bin: getName(),
                     icon: `${__dirname}/assets/linux/${getIcon()}.svg`,
-                    maintainer: "Proton",
-                    homepage: "https://proton.me/",
-                    categories: ["Utility"],
+                    maintainer: pkg.author.name,
+                    homepage: pkg.author.url,
+                    categories: ["Network", "Email"],
                     mimeType: ["x-scheme-handler/mailto"],
                 },
             },
@@ -123,8 +127,8 @@ const config: ForgeConfig = {
             config: {
                 prerelase: isBetaRelease,
                 repository: {
-                    owner: "ProtonMail",
-                    name: "inbox-desktop",
+                    owner: pkg.config.githubUser,
+                    name: pkg.config.githubRepo,
                 },
             },
         },
