@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
-  version = "1.24.0104";
+  version = "1.24.0512-2";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker";
     rev = "v${version}";
-    sha256 = "sha256-p3PdYOk0yvG3QkM17grzZmf9upK1n0zo4aOrlhGTvTU=";
+    sha256 = "sha256-6Ono/CgyetHh+bU5taWYZf2BfJ81w5/5dmGy2e24UQc=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
