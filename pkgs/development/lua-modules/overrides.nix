@@ -38,6 +38,7 @@
 , mpfr
 , neovim-unwrapped
 , openldap
+, openresty
 , openssl
 , pcre
 , pkg-config
@@ -53,6 +54,13 @@
 , yajl
 , zlib
 , zziplib
+
+, perl
+, perlPackages
+, runCommand
+, makeWrapper
+, bash
+, cacert
 }:
 
 final: prev:
@@ -429,6 +437,21 @@ in
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace '"lua-resty-session >= 2.8, <= 3.10",' '"lua-resty-session >= 2.8",'
+    '';
+  });
+
+  lua-resty-openssl = prev.lua-resty-openssl.overrideAttrs (oa: {
+    doCheck = true;
+    nativeCheckInputs = let
+      checksNginx = runCommand "checks-nginx-resty-openssl" { nativeBuildInputs = [ makeWrapper ]; } ''
+        makeWrapper ${openresty}/bin/nginx $out/bin/nginx \
+          --add-flags "-e /dev/null -g 'env PATH=${lib.makeBinPath [ openssl bash ]};'"
+      '';
+    in [ perl perlPackages.TestNginx checksNginx openssl ];
+    checkPhase = ''
+      sed -i '/=== TEST 7/a --- SKIP' t/openssl/x509/store.t  # Test fails
+      rm t/openssl/x509/store.t  # Expired fixture, fixed in 9ac51f3
+      prove -r t
     '';
   });
 
