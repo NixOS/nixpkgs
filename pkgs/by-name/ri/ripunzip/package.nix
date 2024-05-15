@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ripunzip";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "ripunzip";
     rev = "v${version}";
-    hash = "sha256-GyP4OPnPKhu9nXYXIfWCVLF/thwWiP0OqAQY/1D05LE=";
+    hash = "sha256-WcqN3Li0UiEhntKlQkGUrkP9N1I3NrjaGzIs9Q5i4y4=";
   };
 
-  cargoHash = "sha256-Jv9bCHT5xl/2CPnSuWd9HZuaGOttBC5iAbbpr3jaIhM=";
+  cargoHash = "sha256-CezigBDU632UVaeFNv+iM2dQQUabKhOP43etp6vjxTg=";
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
