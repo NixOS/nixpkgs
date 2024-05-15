@@ -15177,31 +15177,13 @@ with pkgs;
   clang_16 = llvmPackages_16.clang;
   clang_17 = llvmPackages_17.clang;
 
-  clang-tools = callPackage ../development/tools/clang-tools { };
-
-  clang-tools_12 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_12;
-  };
-
-  clang-tools_13 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_13;
-  };
-
-  clang-tools_14 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_14;
-  };
-
-  clang-tools_15 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_15;
-  };
-
-  clang-tools_16 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_16;
-  };
-
-  clang-tools_17 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_17;
-  };
+  clang-tools = llvmPackages.clang-tools;
+  clang-tools_12 = llvmPackages_12.clang-tools;
+  clang-tools_13 = llvmPackages_13.clang-tools;
+  clang-tools_14 = llvmPackages_14.clang-tools;
+  clang-tools_15 = llvmPackages_15.clang-tools;
+  clang-tools_16 = llvmPackages_16.clang-tools;
+  clang-tools_17 = llvmPackages_17.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_14;
@@ -16276,10 +16258,7 @@ with pkgs;
       lld_18 = llvmPackages_18.lld;
       lldb_18 = llvmPackages_18.lldb;
       llvm_18 = llvmPackages_18.llvm;
-
-      clang-tools_18 = callPackage ../development/tools/clang-tools {
-        llvmPackages = llvmPackages_18;
-      };
+      clang-tools_18 = llvmPackages_18.clang-tools;
     })
       llvmPackages_18
       clang_18
