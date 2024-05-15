@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     update-script = nix-update-script { };
-    stalwart-mail = nixosTests.stalwart-mail;
+    tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 
   meta = with lib; {
