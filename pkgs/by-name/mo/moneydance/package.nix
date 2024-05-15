@@ -1,9 +1,7 @@
 { lib, stdenv, fetchzip, makeWrapper, openjdk22, openjfx22, jvmFlags ? [ ] }:
 let
-  openjfx = openjfx22;
   jdk = openjdk22.override {
     enableJavaFX = true;
-    inherit openjfx;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk openjfx ];
+  buildInputs = [ jdk ] ++ lib.optional (stdenv.isLinux) openjfx22;
 
   # Note the double escaping in the call to makeWrapper. The escapeShellArgs
   # call quotes each element of the flags list as a word[1] and returns a
