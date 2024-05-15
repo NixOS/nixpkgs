@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-+R1J4IjJ+Vf/+V2kiZyIyAqTAgGLTMJjGePyVRuO5rs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pydantic
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "datauri"
-  ];
+  pythonImportsCheck = [ "datauri" ];
 
   disabledTests = [
     # Test is incompatible with pydantic >=2
