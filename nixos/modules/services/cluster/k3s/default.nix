@@ -190,5 +190,25 @@ in
         );
       };
     };
+
+    # K3s doesn't stop containers when service is stopped.
+    # On host shutdown, containers are still running and needs to be stopped for avoiding data corruption.
+    systemd.services.killall-k3s = {
+      # "killall-k3s" is used as service name, because naming `k3s-*` introduces a loop at `k3s-killall.sh`, delaying shutdown.
+      description = "Executes k3s-killall.sh on shutdown";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        # RemainAfterExit=true is required when ExecStart is missing because systemd won't
+        # attempt to run ExecStop if it thinks that the service is not running.
+        # RemainAfterExit=true causes systemd to believe that the service is running,
+        # thereby causing it to run ExecStop at shutdown.
+        RemainAfterExit = "yes";
+        Restart = "no";
+        # Shutdown order is the reverse of startup order. Hence the script has to be placed in ExecStop.
+        ExecStop = "${pkgs.k3s}/bin/k3s-killall.sh";
+      };
+    };
   };
 }
