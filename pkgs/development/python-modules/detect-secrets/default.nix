@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gibberish-detector
-, mock
-, pkgs
-, pyahocorasick
-, pytest7CheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, setuptools
-, unidiff
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gibberish-detector,
+  mock,
+  pkgs,
+  pyahocorasick,
+  pytest7CheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  setuptools,
+  unidiff,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     leaveDotGit = true;
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     gibberish-detector
@@ -65,9 +64,7 @@ buildPythonPackage rec {
     "test_start_halfway"
   ];
 
-  pythonImportsCheck = [
-    "detect_secrets"
-  ];
+  pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
     description = "Module for detecting and preventing secrets in code";
