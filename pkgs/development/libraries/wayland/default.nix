@@ -21,6 +21,8 @@
 , docbook_xml_dtd_45
 , docbook_xml_dtd_42
 , testers
+, makeFontsConf
+, dejavu_fonts
 }:
 
 # Documentation is only built when building libraries.
@@ -52,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     # the building of os-wrappers-test
     sed -i '/os-wrappers-test/d' tests/meson.build
   '';
+
+  FONTCONFIG_FILE = lib.optionalString withDocumentation (makeFontsConf {
+    fontDirectories = [ dejavu_fonts ];
+  });
 
   outputs = [ "out" "bin" "dev" ] ++ lib.optionals withDocumentation [ "doc" "man" ];
   separateDebugInfo = true;
