@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/ATLauncher/ATLauncher/blob/v${version}/CHANGELOG.md";
     description = "A simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
     downloadPage = "https://atlauncher.com/downloads";
     homepage = "https://atlauncher.com";
