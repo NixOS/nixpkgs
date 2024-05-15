@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "datauri";
-  version = "2.0.0";
+  version = "2.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "fcurella";
     repo = "python-datauri";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k4tlWRasGa2oQykCD9QJl65UAoZQMJVdyCfqlUBBgqY=";
+    hash = "sha256-+R1J4IjJ+Vf/+V2kiZyIyAqTAgGLTMJjGePyVRuO5rs=";
   };
 
   nativeBuildInputs = [
