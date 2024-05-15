@@ -31182,8 +31182,6 @@ with pkgs;
     python3Packages = python39Packages;
   };
 
-  fte = callPackage ../applications/editors/fte { };
-
   g933-utils = callPackage ../tools/misc/g933-utils { };
 
   gavrasm = callPackage ../development/compilers/gavrasm { };
