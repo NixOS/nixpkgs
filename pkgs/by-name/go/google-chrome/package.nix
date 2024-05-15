@@ -146,10 +146,11 @@ in stdenv.mkDerivation (finalAttrs: {
     updateScript = writeScript "update-google-chrome.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl jq common-updater-scripts
+      set -euo pipefail
       url="https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions/all/releases"
-      response=$(curl --silent $url)
-      version=$(jq ".releases[0].version" --raw-output <<< "$response")
-      update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
+      response="$(curl --silent --fail $url)"
+      version="$(jq ".releases[0].version" --raw-output <<< $response)"
+      update-source-version ${finalAttrs.pname} $version --ignore-same-hash
     '';
   };
 
