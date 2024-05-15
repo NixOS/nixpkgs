@@ -1,145 +1,101 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, deprecated
-, rich
-, backoff
-, packaging
-, pydantic
-, typer
-, tqdm
-, wrapt
-, numpy
-, httpx
-, pandas
-, monotonic
-# optional-dependencies
-, fastapi
-, opensearch-py
-, elasticsearch8
-, uvicorn
-, smart-open
-, brotli-asgi
-, alembic
-, sqlalchemy
-, greenlet
-, aiosqlite
-, luqum
-, scikit-learn
 , aiofiles
-, pyyaml
-, python-multipart
-, python-jose
-, passlib
-, psutil
-# , segment-analytics-python
+, aiosqlite
+, alembic
 , asyncpg
-, psycopg2
-, schedule
-, prodict
+, backoff
+, brotli-asgi
+, buildPythonPackage
 , cleanlab
 , datasets
-, huggingface-hub
-# , flair
+, deprecated
+, elasticsearch8
+, evaluate
+, factory-boy
 , faiss
+, fastapi
+, fetchFromGitHub
 , flyingsquid
+, greenlet
+, httpx
+, huggingface-hub
+, luqum
+, monotonic
+, numpy
+, openai
+, opensearch-py
+, packaging
+, pandas
+, passlib
+, peft
 , pgmpy
 , plotly
+, prodict
+, psutil
+, psycopg2
+, pydantic
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, python-jose
+, python-multipart
+, pythonOlder
+, pythonRelaxDepsHook
+, pyyaml
+, rich
+, schedule
+, scikit-learn
+, sentence-transformers
+, seqeval
+, setuptools
+, smart-open
 , snorkel
 , spacy
+, spacy-transformers
+, sqlalchemy
+, tqdm
 , transformers
-, evaluate
-, seqeval
+, typer
+, uvicorn
+, wrapt
+# , flair
 # , setfit
+# , spacy-huggingface-hub
 # , span_marker
-, openai
-, peft
-# test dependencies
-, pytestCheckHook
-, pytest-cov
-, pytest-mock
-, pytest-asyncio
-, factory-boy
+# , trl
 }:
-let
+
+buildPythonPackage rec {
   pname = "argilla";
   version = "1.28.0";
-  optional-dependencies = {
-    server = [
-      fastapi
-      opensearch-py
-      elasticsearch8
-      uvicorn
-      smart-open
-      brotli-asgi
-      alembic
-      sqlalchemy
-      greenlet
-      aiosqlite
-      luqum
-      scikit-learn
-      aiofiles
-      pyyaml
-      python-multipart
-      python-jose
-      passlib
-      psutil
-      # segment-analytics-python
-    ] ++
-      elasticsearch8.optional-dependencies.async ++
-      uvicorn.optional-dependencies.standard ++
-      python-jose.optional-dependencies.cryptography ++
-      passlib.optional-dependencies.bcrypt;
-    postgresql = [ asyncpg psycopg2 ];
-    listeners = [ schedule prodict ];
-    integrations = [
-      pyyaml
-      cleanlab
-      datasets
-      huggingface-hub
-      # flair
-      faiss
-      flyingsquid
-      pgmpy
-      plotly
-      snorkel
-      spacy
-      transformers
-      evaluate
-      seqeval
-      # setfit
-      # span_marker
-      openai
-      peft
-    ] ++ transformers.optional-dependencies.torch;
-  };
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "argilla-io";
-    repo = pname;
+    repo = "argilla";
     rev = "refs/tags/v${version}";
     hash = "sha256-gQpJ2umi3IE5BhRu3bM7ONPIP0hb2YG37jGvDKQHZWA=";
   };
 
   pythonRelaxDeps = [
-    "typer"
-    "rich"
+    "httpx"
     "numpy"
+    "rich"
+    "typer"
+    "wrapt"
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     deprecated
     packaging
@@ -154,7 +110,60 @@ buildPythonPackage {
     typer
   ];
 
-  # still quite a bit of optional dependencies missing
+  passthru.optional-dependencies = {
+    server = [
+      aiofiles
+      aiosqlite
+      alembic
+      brotli-asgi
+      elasticsearch8
+      fastapi
+      greenlet
+      luqum
+      opensearch-py
+      passlib
+      psutil
+      python-jose
+      python-multipart
+      pyyaml
+      scikit-learn
+      smart-open
+      sqlalchemy
+      uvicorn
+    ] ++
+      elasticsearch8.optional-dependencies.async ++
+      uvicorn.optional-dependencies.standard ++
+      python-jose.optional-dependencies.cryptography ++
+      passlib.optional-dependencies.bcrypt;
+    postgresql = [ asyncpg psycopg2 ];
+    listeners = [ schedule prodict ];
+    integrations = [
+      cleanlab
+      datasets
+      evaluate
+      faiss
+      flyingsquid
+      huggingface-hub
+      openai
+      peft
+      pgmpy
+      plotly
+      pyyaml
+      sentence-transformers
+      seqeval
+      snorkel
+      spacy
+      spacy-transformers
+      transformers
+      # flair
+      # setfit
+      # span_marker
+      # trl
+      # spacy-huggingface-hub
+    ] ++ transformers.optional-dependencies.torch;
+  };
+
+  # Still quite a bit of optional dependencies missing
   doCheck = false;
 
   preCheck = ''
@@ -163,26 +172,21 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
     pytest-mock
     pytest-asyncio
     factory-boy
-  ]
-    ++ optional-dependencies.server
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.listeners
-    ++ optional-dependencies.integrations;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [ "--ignore=tests/server/datasets/test_dao.py" ];
-
-  passthru.optional-dependencies = optional-dependencies;
+  disabledTestPaths = [
+    "tests/server/datasets/test_dao.py"
+  ];
 
   meta = with lib; {
-    description = "Argilla: the open-source data curation platform for LLMs";
-    mainProgram = "argilla";
+    description = "Open-source data curation platform for LLMs";
     homepage = "https://github.com/argilla-io/argilla";
     changelog = "https://github.com/argilla-io/argilla/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "argilla";
   };
 }
