@@ -1,0 +1,99 @@
+commit c7938d0c7b34ece8a379e75f148d8cba375158ba
+Author: Palmer Cox <p@lmercox.com>
+Date:   Tue May 14 23:16:01 2024 -0400
+
+    python312Packages.pybrowserid: Fix tests when not forking
+    
+    When running the tests on Linux, everything passes. This is because the
+    tests patch out the network calls and then run the tests against the
+    WorkerPoolVerifier which spawns child processes via fork() - ie, they
+    inherit the patched functions that skip the network calls.
+    
+    When running the tests on Darwin (or Windows), where the default
+    multiprocessing method is "spawn", however, this doesn't work. The
+    Spawned process does not inherit the patches since it starts up as a
+    completely fresh process.
+    
+    There is a second problem as well: the spawned process runs the setup()
+    function in setup.py again! This causes it to start the tests a second
+    time. Which causes a new process to spawn and to try to run the tests as
+    well. And so on.
+    
+    Anyway, we fix this issues by:
+    
+    1. Checking if we're in a child process. If so, we run the patching code
+       that the tests would normally run.
+    2. Check that __name__ == "__main__" before running setup.py - this
+       prevents us from attempting to recursively run the tests.
+
+diff --git a/setup.py b/setup.py
+index 49ff7fb..943de11 100644
+--- a/setup.py
++++ b/setup.py
+@@ -2,6 +2,7 @@
+ import os
+ import sys
+ from setuptools import setup, find_packages
++import multiprocessing
+ 
+ here = os.path.abspath(os.path.dirname(__file__))
+ 
+@@ -17,25 +18,36 @@ tests_require = requires + ['mock']
+ if sys.version_info < (2, 7):
+     tests_require.append("unittest2")
+ 
+-setup(name='PyBrowserID',
+-      version='0.14.0',
+-      description='Python library for the BrowserID Protocol',
+-      long_description=README + '\n\n' + CHANGES,
+-      license='MPLv2.0',
+-      classifiers=[
+-        "Programming Language :: Python",
+-        "Programming Language :: Python :: 2",
+-        "Programming Language :: Python :: 3",
+-        "Development Status :: 4 - Beta",
+-        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+-        ],
+-      author='Mozilla Identity Team',
+-      author_email='dev-identity@lists.mozilla.org',
+-      url='https://github.com/mozilla/PyBrowserID',
+-      keywords='authentication browserid login email',
+-      packages=find_packages(),
+-      include_package_data=True,
+-      zip_safe=False,
+-      install_requires=requires,
+-      tests_require=tests_require,
+-      test_suite="browserid.tests")
++# The problem here is that when tests are run on Mac OS, the worker
++# processes are spawned not forked like on Linux. That means that the
++# patches to the supportdoc fetching functions are lost. So, as a bit
++# of a hack, if the current process isn't the main process, we assume
++# that we must be a worker process inside of a test case and apply
++# the patches manually.
++if multiprocessing.current_process().name != "MainProcess":
++    from browserid.tests.support import patched_supportdoc_fetching
++    patched_supportdoc_fetching().__enter__()
++
++if __name__ == '__main__':
++    setup(name='PyBrowserID',
++          version='0.14.0',
++          description='Python library for the BrowserID Protocol',
++          long_description=README + '\n\n' + CHANGES,
++          license='MPLv2.0',
++          classifiers=[
++            "Programming Language :: Python",
++            "Programming Language :: Python :: 2",
++            "Programming Language :: Python :: 3",
++            "Development Status :: 4 - Beta",
++            "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
++            ],
++          author='Mozilla Identity Team',
++          author_email='dev-identity@lists.mozilla.org',
++          url='https://github.com/mozilla/PyBrowserID',
++          keywords='authentication browserid login email',
++          packages=find_packages(),
++          include_package_data=True,
++          zip_safe=False,
++          install_requires=requires,
++          tests_require=tests_require,
++          test_suite="browserid.tests")

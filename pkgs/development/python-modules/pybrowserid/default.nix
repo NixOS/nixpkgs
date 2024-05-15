@@ -19,6 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-bCJ2aeh8wleWrnb2oO9lAlUoyK2C01Jnn6mj5WY6ceM=";
   };
 
+  patches = [
+    ./fix_pickle_error.patch
+    ./fix_tests_when_spawning.patch
+  ];
+
   postPatch = ''
     substituteInPlace browserid/tests/* \
         --replace-warn 'assertEquals' 'assertEqual'
