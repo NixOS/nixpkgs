@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "detect-secrets";
-  version = "1.4.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-6EmL6XPySqcA3EA+FFkfw7Dkxl5LvyBorIw0hesV5eU=";
+    hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };
 
