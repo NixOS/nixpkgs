@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "gotailwind";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-gotailwind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JtMBud3iON4xLc9dQdXniv51EBqs7zkat8cYm3q0uEE=";
+    hash = "sha256-FRFcFn5aRg+H9M6ZwEfLO1Dwcybvs0ODQv2ruCG+4v0=";
   };
 
   postPatch = ''
