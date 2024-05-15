@@ -1,4 +1,4 @@
-{ copyDesktopItems, fetchurl, jre, lib, makeDesktopItem, makeWrapper, stdenv, udev, xorg }:
+{ copyDesktopItems, fetchurl, jre, lib, makeDesktopItem, makeWrapper, stdenv, discord-rpc, udev, xorg }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atlauncher";
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp $src $out/share/java/ATLauncher.jar
 
     makeWrapper ${jre}/bin/java $out/bin/atlauncher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm udev ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm udev discord-rpc ]}" \
       --add-flags "-jar $out/share/java/ATLauncher.jar" \
       --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
       --add-flags "--no-launcher-update"
