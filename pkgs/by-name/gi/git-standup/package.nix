@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, git }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git-standup";
   version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "kamranahmedse";
-    repo = pname;
-    rev = version;
+    repo = "git-standup";
+    rev = finalAttrs.version;
     sha256 = "1xnn0jjha56v7l2vj45zzxncl6m5x2hq6nkffgc1bcikhp1pidn7";
   };
 
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "git-standup";
   };
-}
+})

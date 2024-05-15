@@ -2441,8 +2441,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-standup = callPackage ../applications/version-management/git-standup { };
-
   git-stree = callPackage ../applications/version-management/git-stree { };
 
   git-subrepo = callPackage ../applications/version-management/git-subrepo { };
