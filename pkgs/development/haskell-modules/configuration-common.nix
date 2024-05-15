@@ -732,7 +732,6 @@ self: super: {
   Rlang-QQ = dontCheck super.Rlang-QQ;
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
-  saltine = dontCheck super.saltine; # https://github.com/tel/saltine/pull/56
   scp-streams = dontCheck super.scp-streams;
   sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   separated = dontCheck super.separated;
@@ -752,6 +751,7 @@ self: super: {
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
+  universe-some = dontCheck super.universe-some;
   wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
   webdriver = dontCheck super.webdriver;
@@ -1304,9 +1304,6 @@ self: super: {
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
-  # Generate shell completion for spago
-  spago = self.generateOptparseApplicativeCompletions [ "spago" ] super.spago;
-
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
 
@@ -1345,10 +1342,20 @@ self: super: {
     (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
+  # Requires pqueue <1.5 but it works fine with pqueue-1.5.0.0
+  # https://github.com/haskell-beam/beam/pull/705
+  beam-migrate = doJailbreak super.beam-migrate;
+
   users-postgresql-simple = addTestToolDepends [
     pkgs.postgresql
     pkgs.postgresqlTestHook
   ] super.users-postgresql-simple;
+
+  # Need https://github.com/obsidiansystems/gargoyle/pull/45
+  gargoyle = doJailbreak super.gargoyle;
+  gargoyle-postgresql = doJailbreak super.gargoyle-postgresql;
+  gargoyle-postgresql-nix = doJailbreak (addBuildTool [pkgs.postgresql] super.gargoyle-postgresql-nix);
+  gargoyle-postgresql-connect = doJailbreak super.gargoyle-postgresql-connect;
 
   # PortMidi needs an environment variable to have ALSA find its plugins:
   # https://github.com/NixOS/nixpkgs/issues/6860
@@ -1378,8 +1385,6 @@ self: super: {
 
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch ./patches/xattr-fix-build.patch super.xattr;
-
-  patch = dontCheck super.patch;
 
   esqueleto =
     overrideCabal
@@ -1530,11 +1535,6 @@ self: super: {
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
 
-  # hasn’t bumped upper bounds
-  # upstream: https://github.com/obsidiansystems/which/pull/6
-  which = doJailbreak super.which;
-
-
   # 2024-02-28: The Hackage version dhall-lsp-server-1.1.3 requires
   # lsp-1.4.0.0 which is hard to build with this LTS. However, the latest
   # git version of dhall-lsp-server works with lsp-2.1.0.0, and only
@@ -1561,13 +1561,11 @@ self: super: {
       doJailbreak
     ];
 
-  # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
-      sed -i 's/lens.*4.20/lens/' jsaddle-dom.cabal
       rm Setup.hs
     '';
-  }) (doJailbreak super.jsaddle-dom);
+  }) super.jsaddle-dom;
   jsaddle-hello = doJailbreak super.jsaddle-hello;
   ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
 
@@ -1833,9 +1831,6 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
-  # https://github.com/obsidiansystems/dependent-sum/issues/55
-  dependent-sum = doJailbreak super.dependent-sum;
-
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
 
@@ -2063,18 +2058,31 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict version bounds on cryptonite and github.
-  # PRs are merged, will be fixed next release or Hackage revision.
-  nix-thunk = appendPatches [
-    (fetchpatch {
-      url = "https://github.com/obsidiansystems/nix-thunk/commit/49d27a85dd39cd9413c99958c67e596756a502b5.patch";
-      sha256 = "1p1n0123yrbdqyfk4kx3gq6bdv65l1bxgbsg51ckcwclg54xp2p5";
-    })
-    (fetchpatch {
-      url = "https://github.com/obsidiansystems/nix-thunk/commit/512867c651977265d5d8f456b538f7a364ec8a8b.patch";
-      sha256 = "121yg26y4g28k8xv7y1j6c3pxm17vsjn3vi62kkc8g928c47yd02";
-    })
-  ] super.nix-thunk;
+  # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
+  cli-extras = doJailbreak super.cli-extras;
+
+  # https://github.com/obsidiansystems/cli-git/pull/7 turned into a flat patch
+  cli-git = lib.pipe super.cli-git [
+    (appendPatch (fetchpatch {
+      url = "https://github.com/obsidiansystems/cli-git/commit/be378a97e2f46522174231b77c952f759df3fad6.patch";
+      sha256 = "sha256-6RrhqkKpnb+FTHxccHNx6pdC7ClfqcJ2eoo+W7h+JUo=";
+      excludes = [ ".github/**" ];
+    }))
+    doJailbreak
+    (addBuildTool pkgs.git)
+  ];
+
+  # Need https://github.com/obsidiansystems/cli-nix/pull/5 and more
+  cli-nix = addBuildTools [
+    pkgs.nix
+    pkgs.nix-prefetch-git
+  ] (doJailbreak super.cli-nix);
+
+  # https://github.com/obsidiansystems/nix-thunk/pull/51/
+  nix-thunk = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/nix-thunk/commit/c3dc3e799e8ce7756330f98b9f73f59c4b7a5502.patch";
+    sha256 = "sha256-C1ii1FXiCPFfw5NzyQZ0cEG6kIYGohVsnHycpYEJ24Q=";
+  }) (doJailbreak super.nix-thunk);
 
   # list `modbus` in librarySystemDepends, correct to `libmodbus`
   libmodbus = doJailbreak (addExtraLibrary pkgs.libmodbus super.libmodbus);
@@ -2087,9 +2095,14 @@ self: super: {
 
   ginger = doJailbreak super.ginger;
 
-  # Too strict version bounds on cryptonite
-  # https://github.com/obsidiansystems/haveibeenpwned/issues/7
-  haveibeenpwned = doJailbreak super.haveibeenpwned;
+  # 2024-05-05 syntax changes: https://github.com/obsidiansystems/haveibeenpwned/pull/9
+  haveibeenpwned = appendPatch
+    (fetchpatch {
+      url = "https://github.com/obsidiansystems/haveibeenpwned/pull/9/commits/14c134eec7de12f755b2d4667727762a8a1a6476.patch";
+      sha256 = "sha256-fau5+b6tufJ+MscrLgbYvvBsekPe8R6QAy/4H31dcQ4";
+    })
+    (doJailbreak super.haveibeenpwned);
+
 
   # Too strict version bounds on ghc-events
   # https://github.com/mpickering/hs-speedscope/issues/16
@@ -2172,11 +2185,6 @@ self: super: {
             compiler: ${self.ghc.haskellCompilerName}
 
             core-packages:
-              # Hack: The following package is a core package of GHCJS. If we don't declare
-              # it, then hackage2nix will generate a Hackage database where all dependants
-              # of this library are marked as "broken".
-              - ghcjs-base-0
-
             EOF
 
             ghc-pkg list \
@@ -2599,8 +2607,30 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
-  dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
+  # 2025-05-05: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/13
+  dependent-monoidal-map = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/dependent-monoidal-map/commit/3f8be15fa9bd2796d1c917e9f0979b4d6c62cf91.patch";
+    hash = "sha256-QKDUh4jO8xZrThrkjTVNnkoVY+GejxOhpXOVA4+n1H8=";
+  }) super.dependent-monoidal-map;
+
+  # 2025-05-05: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/13
+  dependent-sum-aeson-orphans = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/9b4698154303a9865d7d68a2f01d280a8a39f108.patch";
+    hash = "sha256-Pzjl2yp01XsYWcyhpLnsuccg7bOACgv+RpafauUox8c=";
+  }) super.dependent-sum-aeson-orphans;
+
+  # https://github.com/obsidiansystems/dependent-sum/pull/73
+  dependent-sum-template = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/dependent-sum/commit/619727ba1792e39a68d23c62e75a923672e87a54.patch";
+    hash = "sha256-SyD1/KrX1KUjrR82fvI+BRcqLC2Q3AbvSeKNrdGstjg=";
+    relative = "dependent-sum-template";
+  }) super.dependent-sum-template;
+
+  aeson-gadt-th = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/aeson-gadt-th/commit/8f6922a6440019dece637d73d70766c473bcd6c0.patch";
+    hash = "sha256-564DhfiubwNV8nAj8L5DzsWn4MdzqqaYYNmOSPUa7ys=";
+    excludes = [ ".github/**" ];
+  }) super.aeson-gadt-th;
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
@@ -2617,11 +2647,26 @@ self: super: {
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;
 
-  # Raise version bounds for hspec
+  # Raise version bounds: https://github.com/well-typed/lens-sop/pull/4
+  lens-sop = appendPatches [
+    (fetchpatch {
+      url = "https://github.com/well-typed/lens-sop/commit/d8657f27c12191a7c0a91701c0fcd9a590e0090e.patch";
+      sha256 = "sha256-9ODfbOb6Bs3EVTY9b7cUvkNmqzzZPWUmgmlAneaN3Tw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/well-typed/lens-sop/commit/b7ecffdeb836d19373871659e2f8cd24da6f7312.patch";
+      sha256 = "sha256-hDUQ2fW9Qyom65YvtW9bsbz7XtueRmdsAbAB42D+gu4=";
+    })
+  ] super.lens-sop;
+
+  # Raise version bounds: https://github.com/kosmikus/records-sop/pull/15
   records-sop = appendPatch (fetchpatch {
-    url = "https://github.com/kosmikus/records-sop/pull/11/commits/d88831388ab3041190130fec3cdd679a4217b3c7.patch";
-    sha256 = "sha256-O+v/OxvqnlWX3HaDvDIBZnJ+Og3xs/SJqI3gaouU3ZI=";
+    url = "https://github.com/kosmikus/records-sop/commit/fb149f453a816ff14d0cb20b3ea56b80ff49d9f1.patch";
+    sha256 = "sha256-iHiF4EWL/GjJFnr/6aR+yMZKLMLAZK+gsgSxG8YaeDI=";
   }) super.records-sop;
+
+  # Need https://github.com/well-typed/large-records/pull/151
+  large-generics = doJailbreak super.large-generics;
 
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial = appendPatch (fetchpatch {
@@ -2935,7 +2980,7 @@ self: super: {
 
   # Requires a newer zlib version than stackage provides
   futhark = super.futhark.override {
-    zlib = self.zlib_0_7_0_0;
+    zlib = self.zlib_0_7_1_0;
   };
 
   # Tests rely on (missing) submodule
@@ -2988,6 +3033,14 @@ self: super: {
 
   # 2024-03-25: HSH broken because of the unix-2.8.0.0 breaking change
   HSH = appendPatches [./patches/HSH-unix-openFd.patch] super.HSH;
+
+  # Support unix < 2.8 to build in older ghc than 9.6
+  linux-namespaces = appendPatch
+    (fetchpatch {
+      url = "https://github.com/redneb/hs-linux-namespaces/commit/f4a3546541bb6c7172fdd03e177a961da60e3951.patch";
+      sha256 = "sha256-6Qv7NWIbzR3ktMGFogw5597bIqPH7Z4hoFvvBQAoquY=";
+    })
+    super.linux-namespaces;
 
   inherit
     (let
@@ -3047,4 +3100,11 @@ self: super: {
 
   # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
   currencies = doJailbreak super.currencies;
+
+  # https://github.com/awakesecurity/proto3-wire/pull/104
+  proto3-wire = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/awakesecurity/proto3-wire/commit/c1cadeb5fca2e82c5b28e2811c01f5b37eb21ed8.patch";
+    hash = "sha256-tFOWpjGmZANC7H82QapZ36raaNWuZ6F3BgjxnfTXpMs=";
+  }) super.proto3-wire;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
