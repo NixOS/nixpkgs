@@ -20278,6 +20278,7 @@ with pkgs;
   ccrtp = callPackage ../development/libraries/ccrtp { };
 
   cctag = callPackage ../development/libraries/cctag {
+    stdenv = clangStdenv;
     tbb = tbb_2021_11;
   };
 
