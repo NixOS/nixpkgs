@@ -7,11 +7,13 @@
 , icu
 , swig
 , pcre
-, opencascade-occt
+, opencascade-occt_7_6
 , opencollada
 , libxml2
 }:
-
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 buildPythonPackage rec {
   pname = "ifcopenshell";
   version = "240306";
