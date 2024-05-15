@@ -2,6 +2,8 @@
   stdenvNoCC,
   lib,
   fetchurl,
+  testers,
+  upsun
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -41,6 +43,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit (finalAttrs) version;
+      package = upsun;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/platformsh/cli";
