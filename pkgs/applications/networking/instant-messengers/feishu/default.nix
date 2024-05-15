@@ -62,39 +62,19 @@
 , commandLineArgs ? ""
 }:
 
-stdenv.mkDerivation rec {
-  version = "6.9.20";
-  pname = "feishu";
-  packageHash = "6085d1c4"; # A hash value used in the download url
-
-  src = fetchurl {
-    url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
-    hash = "sha256-kg5j/vWaCBUjnF983kk0ZMJ+inF5z5ctED9+ITuIn94=";
+let
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/7e382fc2/Feishu-linux_x64-7.15.13.deb";
+      sha256 = "sha256-CyQmQKfyYcWqpty5LxTNqm73AVnPdm7biBwICkbBEco=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/4c8c2fbf/Feishu-linux_arm64-7.15.13.deb";
+      sha256 = "sha256-nxtu5xOafZ1tlN/f0+5VF2I6ISfHmPJTztOI+AQwp9c=";
+    };
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeShellWrapper
-    dpkg
-  ];
-
-  buildInputs = [
-    gtk3
-
-    # for autopatchelf
-    alsa-lib
-    cups
-    curl
-    libXdamage
-    libXtst
-    libdrm
-    libgcrypt
-    libpulseaudio
-    libxshmfence
-    mesa
-    nspr
-    nss
-  ];
+  supportedPlatforms = [ "x86_64-linux" "aarch64-linux" ];
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -149,6 +129,36 @@ stdenv.mkDerivation rec {
     wayland
     xdg-utils
   ];
+in
+stdenv.mkDerivation {
+  version = "7.15.13";
+  pname = "feishu";
+
+  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeShellWrapper
+    dpkg
+  ];
+
+  buildInputs = [
+    gtk3
+
+    # for autopatchelf
+    alsa-lib
+    cups
+    curl
+    libXdamage
+    libXtst
+    libdrm
+    libgcrypt
+    libpulseaudio
+    libxshmfence
+    mesa
+    nspr
+    nss
+  ];
 
   dontUnpack = true;
   installPhase = ''
@@ -194,7 +204,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.feishu.cn/en/";
     downloadPage = "https://www.feishu.cn/en/#en_home_download_block";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = supportedPlatforms;
     maintainers = with maintainers; [ billhuang ];
   };
 }
