@@ -7,7 +7,7 @@ callPackage ./base.nix {
   buildInputs = [ glib libao libmirage ];
   extraDrvParams.postInstall = ''
     mkdir -p $out/share/dbus-1/services
-    cp -R ../$pname-$version/service-example $out/share/cdemu
+    cp -R ../service-example $out/share/cdemu
     substitute \
       $out/share/cdemu/net.sf.cdemu.CDEmuDaemon.service \
       $out/share/dbus-1/services/net.sf.cdemu.CDEmuDaemon.service \

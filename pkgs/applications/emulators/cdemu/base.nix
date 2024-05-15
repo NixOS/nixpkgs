@@ -11,14 +11,6 @@ stdenv.mkDerivation ( {
     inherit hash;
   };
   nativeBuildInputs = nativeBuildInputs ++ [ pkg-config cmake ];
-  setSourceRoot = ''
-    mkdir build
-    cd build
-    sourceRoot="`pwd`"
-  '';
-  configurePhase = ''
-    cmake ../${pname}-${version} -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_RPATH=ON
-  '';
   meta = with lib; {
     description = "A suite of tools for emulating optical drives and discs";
     longDescription = ''
