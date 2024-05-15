@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Gameboy sound player";
     license = licenses.gpl1Plus;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }
