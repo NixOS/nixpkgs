@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://rigaux.org/hexedit.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
     mainProgram = "hexedit";
   };
 }
