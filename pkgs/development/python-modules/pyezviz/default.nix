@@ -6,15 +6,16 @@
 , pycryptodome
 , pythonOlder
 , requests
+, setuptools
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "pyezviz";
   version = "0.2.2.4";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "baqs";
@@ -23,7 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-ngQu9g0qvJ3zDaTdGqJDGRoMhnGYdp5jHDoPiuXOwGs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     paho-mqtt
     pandas
     pycryptodome
@@ -40,10 +45,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface for for Ezviz cameras";
-    mainProgram = "pyezviz";
     homepage = "https://github.com/baqs/pyEzviz/";
     changelog = "https://github.com/BaQs/pyEzviz/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pyezviz";
   };
 }
