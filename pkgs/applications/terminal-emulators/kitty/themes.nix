@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/kovidgoyal/kitty-themes";
     description = "Themes for the kitty terminal emulator";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
 }
