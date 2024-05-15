@@ -41,6 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       emilytrau
       Enzime
+      donteatoreo
     ];
     platforms = platforms.darwin;
   };
