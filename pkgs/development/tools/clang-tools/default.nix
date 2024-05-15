@@ -1,11 +1,16 @@
-{ lib, stdenv, llvmPackages, enableLibcxx ? false }:
-# enableLibcxx will use the c++ headers from clang instead of gcc.
-# This shouldn't have any effect on platforms that use clang as the default compiler already.
+{
+  lib,
+  stdenv,
+  llvmPackages,
+  # enableLibcxx will use the c++ headers from clang instead of gcc.
+  # This shouldn't have any effect on platforms that use clang as the default compiler already.
+  enableLibcxx ? false,
+}:
 
 let
   unwrapped = llvmPackages.clang-unwrapped;
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit unwrapped;
 
   pname = "clang-tools";
