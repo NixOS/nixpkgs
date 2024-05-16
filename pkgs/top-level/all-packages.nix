@@ -24565,8 +24565,6 @@ with pkgs;
 
   swiftclient = with python3Packages; toPythonApplication python-swiftclient;
 
-  sword = callPackage ../development/libraries/sword { };
-
   biblesync = callPackage ../development/libraries/biblesync { };
 
   szip = callPackage ../development/libraries/szip { };
