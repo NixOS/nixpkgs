@@ -39037,9 +39037,7 @@ with pkgs;
 
   nix-melt = callPackage ../tools/nix/nix-melt { };
 
-  nixos-option = callPackage ../tools/nix/nixos-option {
-    nix = nixVersions.nix_2_18;
-  };
+  nixos-option = callPackage ../tools/nix/nixos-option { };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
