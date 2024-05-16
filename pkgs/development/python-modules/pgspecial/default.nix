@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o4I5zZYfrDPObaNcRm11istvlCkBWY19905bgv5vVjY=";
+    hash = "sha256-8EGeGzt4+zpy/jtUb2eIpxIJFTLVmf51k7X27lWoj4c=";
   };
 
   propagatedBuildInputs = [
