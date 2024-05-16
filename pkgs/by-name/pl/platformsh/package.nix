@@ -13,20 +13,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src =
     {
       x86_64-darwin = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platformsh-cli_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-ABnfxLMtY8E5KqJkrtIlPB4ML7CSFvjizCabv7i7SbU=";
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
+        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
       };
       aarch64-darwin = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platformsh-cli_${finalAttrs.version}_darwin_all.tar.gz";
-        hash = "sha256-ABnfxLMtY8E5KqJkrtIlPB4ML7CSFvjizCabv7i7SbU=";
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
+        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
       };
       x86_64-linux = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platformsh-cli_${finalAttrs.version}_linux_amd64.tar.gz";
-        hash = "sha256-ABnfxLMtY8E5KqJkrtIlPB4ML7CSFvjizCabv7i7SbU=";
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_amd64.tar.gz";
+        hash = "sha256-JP0RCqNQ8V4sFP3645MW+Pd9QfPFRAuTbVPIK6WD6PQ=";
       };
       aarch64-linux = fetchurl {
-        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platformsh-cli_${finalAttrs.version}_linux_arm64.tar.gz";
-        hash = "sha256-ABnfxLMtY8E5KqJkrtIlPB4ML7CSFvjizCabv7i7SbU=";
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_arm64.tar.gz";
+        hash = "sha256-vpk093kpGAmMevd4SVr3KSIjUXUqt3yWDZFHOVxu9rw=";
       };
     }
     .${stdenvNoCC.system}
