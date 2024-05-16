@@ -7,6 +7,7 @@
   nix-update-script,
   makeWrapper,
   bash,
+  substituteAll,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
@@ -23,6 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-gpui5FVRw3NKyx0AB/4kqdolrl5vkDudPOgjHc/IE4U=";
   };
+
+  patches = [
+    # Use nix store's bash instead of sh. `@bash@/bin/sh` is used, since haredo expects a posix shell.
+    (substituteAll {
+      src = ./001-use-nix-store-sh.patch;
+      inherit bash;
+    })
+  ];
 
   nativeBuildInputs = [
     hare
@@ -64,11 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./bootstrap.sh install
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/haredo \
-      --prefix PATH : "${lib.makeBinPath [ bash ]}"
   '';
 
   setupHook = ./setup-hook.sh;
