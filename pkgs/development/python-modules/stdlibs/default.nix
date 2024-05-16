@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "stdlibs";
   version = "2024.5.15";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-DthHvL5x3HVwACLnxeyuoC0hb8OokabODircEY9eEhE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     flit-core
   ];
 
