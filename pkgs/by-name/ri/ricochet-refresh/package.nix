@@ -3,13 +3,13 @@
 , fetchFromGitHub
 , qt5
 , openssl
-, protobuf3_20  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+, protobuf_21  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
 , pkg-config
 , cmake
 }:
 
 let
-  protobuf = protobuf3_20;
+  protobuf = protobuf_21;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
