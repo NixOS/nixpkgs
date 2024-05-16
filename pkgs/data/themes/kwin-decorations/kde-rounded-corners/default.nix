@@ -3,8 +3,9 @@
 , cmake
 , extra-cmake-modules
 , wrapQtAppsHook
+, qtbase
 , kwin
-, kdelibs4support
+, kcmutils
 , libepoxy
 , libxcb
 , lib
@@ -21,13 +22,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-g7gNFv4/ighfxYz/VXF5KvcoT6t4lT5soDLlV3oAKvc=";
   };
 
-  postConfigure = ''
-    substituteInPlace cmake_install.cmake \
-      --replace "${kdelibs4support}" "$out"
-  '';
-
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ kwin kdelibs4support libepoxy libxcb ];
+  buildInputs = [ kcmutils kwin libepoxy libxcb qtbase ];
 
   meta = with lib; {
     description = "Rounds the corners of your windows";
