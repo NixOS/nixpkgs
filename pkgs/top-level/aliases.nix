@@ -970,6 +970,8 @@ mapAliases ({
   pdf2xml = throw "'pdf2xml' was removed: abandoned for years."; # Added 2023-10-22
   peach = asouldocs; # Added 2022-08-28
   pentablet-driver = xp-pen-g430-driver; # Added 2022-06-23
+  percona-server_8_0 = percona-server_lts; # Added 2024-05-07
+  percona-xtrabackup_8_0 = percona-xtrabackup_lts; # Added 2024-05-07
   perldevel = throw "'perldevel' has been dropped due to lack of updates in nixpkgs and lack of consistent support for devel versions by 'perl-cross' releases, use 'perl' instead";
   perldevelPackages = perldevel;
   pgadmin = pgadmin4;
@@ -1412,7 +1414,7 @@ mapAliases ({
   inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_17;
+  llvmPackages_latest = llvmPackages_18;
   llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_git.tools;
