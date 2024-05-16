@@ -1,4 +1,4 @@
-{ lib, stdenv, patchelf, makeWrapper, fetchurl
+{ lib, stdenv, patchelf, makeWrapper, fetchurl, writeScript
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, nss, nspr
@@ -64,11 +64,11 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "google-chrome";
-  version = "124.0.6367.201";
+  version = "125.0.6422.60";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-    hash = "sha256-RvQdpDmWRcsASh1b8M0Zg+AvZprE5qhi14shfo0WlfE=";
+    hash = "sha256-Q0QMPthJLVquJp7fm6QN+lDb0quZsT7hv6KRXfdBMl4=";
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
@@ -141,6 +141,18 @@ in stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = writeScript "update-google-chrome.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+      set -euo pipefail
+      url="https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/stable/versions/all/releases"
+      response="$(curl --silent --fail $url)"
+      version="$(jq ".releases[0].version" --raw-output <<< $response)"
+      update-source-version ${finalAttrs.pname} $version --ignore-same-hash
+    '';
+  };
 
   meta = {
     description = "A freeware web browser developed by Google";
