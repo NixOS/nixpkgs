@@ -2006,7 +2006,8 @@
   };
 
   windows-nvim = super.windows-nvim.overrideAttrs {
-    dependencies = with self; [ luaPackages.middleclass animation-nvim ];
+    dependencies = with self; [ middleclass animation-nvim ];
+    nvimRequireCheck = "windows";
   };
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
