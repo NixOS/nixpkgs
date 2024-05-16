@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, click
-, configobj
-, fetchPypi
-, psycopg
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  click,
+  configobj,
+  fetchPypi,
+  psycopg,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-8EGeGzt4+zpy/jtUb2eIpxIJFTLVmf51k7X27lWoj4c=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
