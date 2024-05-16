@@ -5,30 +5,33 @@
 , openssl
 , pkg-config
 , Security
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "twm";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
-    repo = pname;
+    repo = "twm";
     rev = "v${version}";
-    sha256 = "sha256-gvo5+lZNe5QOHNI4nrPbCR65D+VFf/anmLVdu5RXJiY=";
+    hash = "sha256-1hRGcvUGHO5ENgI3tdT46736ODN8QZ6vg+Y1y2XeuAA=";
   };
 
-  cargoHash = "sha256-5+1B+SbrIrswGjtNLlwbtLEhARMZNs75DFK8wQI2O0M=";
+  cargoHash = "sha256-iJB+7+1tFT/tKvXlxaaW3QJHjWNZmCVIEXwtrSei/Do=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with lib; {
-    description = "A customizable workspace manager for tmux";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
-    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    changelog = "https://github.com/vinnymeller/twm/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers =  [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
 }
