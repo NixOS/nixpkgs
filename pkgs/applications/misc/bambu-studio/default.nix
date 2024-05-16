@@ -34,7 +34,7 @@
   mesa,
   mpfr,
   nlopt,
-  opencascade-occt,
+  opencascade-occt_7_6,
   openvdb,
   pcre,
   qhull,
@@ -47,6 +47,7 @@
   withSystemd ? stdenv.isLinux,
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
       # Disable noisy debug dialogs

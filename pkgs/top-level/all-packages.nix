@@ -23610,6 +23610,17 @@ with pkgs;
 
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
+  opencascade-occt_7_6 = opencascade-occt.overrideAttrs rec {
+    pname = "opencascade-occt";
+    version = "7.6.2";
+    commit = "V${builtins.replaceStrings ["."] ["_"] version}";
+    src = fetchurl {
+      name = "occt-${commit}.tar.gz";
+      url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
+      hash = "sha256-n3KFrN/mN1SVXfuhEUAQ1fJzrCvhiclxfEIouyj9Z18=";
+    };
+  };
+
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
   opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
