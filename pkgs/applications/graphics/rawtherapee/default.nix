@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , pixman
 , libpthreadstubs
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isDarwin [
     makeWrapper
   ];

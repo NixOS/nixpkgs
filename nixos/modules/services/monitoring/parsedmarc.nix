@@ -301,7 +301,7 @@ in
               description = ''
                 The addresses to send outgoing mail to.
               '';
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
+              apply = x: if x == [] || x == null then null else lib.concatStringsSep "," x;
             };
           };
 
@@ -438,7 +438,7 @@ in
             ];
         dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
-          options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
+          options.path = "${pkgs.parsedmarc.dashboard}";
         }];
       };
     };
@@ -446,7 +446,7 @@ in
     services.parsedmarc.settings = lib.mkMerge [
       (lib.mkIf cfg.provision.elasticsearch {
         elasticsearch = {
-          hosts = [ "localhost:9200" ];
+          hosts = [ "http://localhost:9200" ];
           ssl = false;
         };
       })
@@ -530,7 +530,7 @@ in
             MemoryDenyWriteExecute = true;
             LockPersonality = true;
             SystemCallArchitectures = "native";
-            ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
+            ExecStart = "${lib.getExe pkgs.parsedmarc} -c /run/parsedmarc/parsedmarc.ini";
           };
         };
 

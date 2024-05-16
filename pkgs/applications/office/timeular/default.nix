@@ -1,16 +1,15 @@
 { lib
 , fetchurl
 , appimageTools
-, libsecret
 }:
 
 let
-  version = "6.7.5";
+  version = "6.7.8";
   pname = "timeular";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    hash = "sha256-b/I34f8fGgPr4+fZJ+2cb+Xi/AvotxNHYg7IaLTByPk=";
+    hash = "sha256-nMvbr2PQBWyrhY3mv/4wsdWPhNx5hLFaAp0Ey3nvp7g=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -19,12 +18,9 @@ let
 in appimageTools.wrapType2 rec {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
     install -m 444 -D ${appimageContents}/timeular.png $out/share/icons/hicolor/512x512/apps/timeular.png
     substituteInPlace $out/share/applications/timeular.desktop \

@@ -9,9 +9,8 @@
 
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.7";
-
-  format = "pyproject";
+  version = "0.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -19,10 +18,10 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-DQEVWYOgiGSP3WlmZzEweyRa0UY7fxjjpbued+5EH5I=";
+    hash = "sha256-C+dC+mNquDuj6RfJpiEbeuGZOIXcgSrTB4XM21reBPs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 

@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     broken = kernel.kernelOlder "4.19";
-    changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${version}";
+    changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${finalAttrs.version}";
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
     license = with licenses; [ lgpl21Only gpl2Only ];

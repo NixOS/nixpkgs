@@ -9,13 +9,14 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , setuptools-scm
 , yamllint
 }:
 
 buildPythonPackage rec {
   pname = "glean-parser";
-  version = "13.0.1";
+  version = "14.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
-    hash = "sha256-/urUy+xpMO04pI31uunrTuSGu0Am3fLzIGuF+AJ50ec=";
+    hash = "sha256-bYqUNkB4/0W/+0+1G6/Ur5znDD5IlKFIc4gVNA0vAOg=";
   };
 
   postPatch = ''
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     jinja2
     jsonschema
     pyyaml
+    setuptools
     yamllint
   ];
 

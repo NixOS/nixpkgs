@@ -1,16 +1,22 @@
-{ lib, stdenv, fetchzip, makeWrapper, openjdk21, openjfx21, jvmFlags ? [ ] }:
-let jdk = openjdk21.override { enableJavaFX = true; };
-in stdenv.mkDerivation (finalAttrs: {
+{ lib, stdenv, fetchzip, makeWrapper, openjdk22, openjfx22, jvmFlags ? [ ] }:
+let
+  openjfx = openjfx22;
+  jdk = openjdk22.override {
+    enableJavaFX = true;
+    inherit openjfx;
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "moneydance";
-  version = "2023.3_5064";
+  version = "2024.1_5118";
 
   src = fetchzip {
-    url = "https://infinitekind.com/stabledl/${finalAttrs.version}/moneydance-linux.tar.gz";
-    hash = "sha256-jHr1V/gV1seenw2Q0/G405lTiabEYEsOS8p/XyByrtM=";
+    url = "https://infinitekind.com/stabledl/2024_5118/moneydance-linux.tar.gz";
+    hash = "sha256-wwSb3CuhuXB4I9jq+TpLPbd1k9UzqQbAaZkGKgi+nns=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk openjfx21 ];
+  buildInputs = [ jdk openjfx ];
 
   # Note the double escaping in the call to makeWrapper. The escapeShellArgs
   # call quotes each element of the flags list as a word[1] and returns a
@@ -43,6 +49,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://infinitekind.com/moneydance";
+    changelog = "https://infinitekind.com/stabledl/2024_5118/changelog.txt";
     description = "An easy to use and full-featured personal finance app that doesn't compromise your privacy";
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.unfree;

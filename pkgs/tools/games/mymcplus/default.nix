@@ -1,7 +1,7 @@
 { lib
 , fetchFromSourcehut
 , pythonPackages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with pythonPackages; [

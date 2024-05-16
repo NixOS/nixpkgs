@@ -77,6 +77,7 @@ mkDerivation rec {
       --replace '/opt/resp_app' "${placeholder "out"}" \
       --replace 'target.path = $$LINUX_INSTALL_PATH' 'target.path = $$LINUX_INSTALL_PATH/bin' \
       --replace '/usr/' "$out/"
+    rm -r 3rdparty/snappy
   '';
 
   qmakeFlags = [

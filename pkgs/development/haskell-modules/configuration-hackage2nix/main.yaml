@@ -28,16 +28,17 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  # Needs to be pinned to match jsaddle from Stackage LTS (9.8.*)
-  - jsaddle-dom < 0.9.9.0
-  - jsaddle-webkit2gtk < 0.9.9.0
+  - hie-bios == 0.13.1
+  # 2024-05-10: need to match hlegder from stackage
+  - hledger-ui < 1.33
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal == 3.6.*                      # used for packages needing newer Cabal on ghc 8.10 and 9.0
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.2 and 9.0
-  - Cabal-syntax == 3.10.*              # newest version required for cabal-install and other packages
+  - Cabal-syntax == 3.10.*              # version required for cabal-install and other packages
+  - Cabal == 3.10.*                     # version required for cabal-install and other packages
   - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - aeson < 2                           # required by pantry-0.5.2
@@ -46,7 +47,6 @@ extra-packages:
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
-  - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - brick == 0.70.*                     # 2022-08-13: needed by taskell
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
@@ -69,6 +69,7 @@ extra-packages:
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
+  - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
@@ -112,6 +113,8 @@ extra-packages:
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
   - ShellCheck == 0.9.0                 # 2024-03-21: pinned by haskell-ci
+  - versions < 6                        # 2024-04-22: required by spago-0.21
+  - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
 
 package-maintainers:
   abbradar:
@@ -252,22 +255,22 @@ package-maintainers:
   libjared:
     - sensei
   maralorn:
+    - bluefin
     - cabal-fmt
-    - clay
     - eventlog2html
+    - falsify
     - generic-optics
     - ghc-debug-brick
     - ghc-debug-stub
     - ghcid
     - graphql-client
     - haskell-language-server
-    - hedgehog
     - hledger
     - hledger-ui
     - hledger-web
     - hlint
-    - hmatrix
     - hspec-discover
+    - jsaddle-warp
     - matrix-client
     - optics
     - pandoc
@@ -276,9 +279,9 @@ package-maintainers:
     - postgresql-simple
     - purebred-email
     - reflex-dom
-    - releaser
     - replace-megaparsec
     - req
+    - say
     - shake-bench
     - shh
     - shh-extras
@@ -286,7 +289,9 @@ package-maintainers:
     - stm-containers
     - streamly
     - streamly-bytestring
+    - string-interpolate
     - taskwarrior
+    - tasty
     - threadscope
     - tz
     - weeder
@@ -733,6 +738,7 @@ supported-platforms:
   htune:                                        [ platforms.linux ] # depends on alsa-pcm
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
+  jsaddle-wkwebview:                            [ platforms.darwin ]
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-frp-banana:                              [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-geometry:                                [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)

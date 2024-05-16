@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "0.21.7";
+  version = "0.21.8";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZitwO/XfNrlTFNepQ5Wyk1A7cwlNm6+26nPHdZ8Wh3c=";
+    sha256 = "sha256-GpGYCGXSCQhFEPDUnHaOdz0LZ0jjRcCRnRCyOrulDVs=";
   };
 
-  cargoHash = "sha256-mfSVjm0s/tLjjygwu8TuKn92mFM3Ui6TEHkIzS0eEOA=";
+  cargoHash = "sha256-eCIoUUWHpFk+O5ipswwiQxf1H1ygkj07Sjyj4L8Ui6I=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
   env = lib.optionalAttrs (stdenv.isx86_64 && stdenv.isDarwin) {
@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://xplr.dev";
     changelog = "https://github.com/sayanarijit/xplr/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sayanarijit suryasr007 thehedgeh0g mimame figsoda ];
+    maintainers = with maintainers; [ sayanarijit suryasr007 pyrox0 mimame figsoda ];
   };
 }

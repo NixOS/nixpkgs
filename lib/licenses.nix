@@ -632,6 +632,11 @@ in mkLicense lset) ({
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
+  icu = {
+    spdxId = "ICU";
+    fullName = "ICU";
+  };
+
   ijg = {
     spdxId = "IJG";
     fullName = "Independent JPEG Group License";
@@ -1166,6 +1171,11 @@ in mkLicense lset) ({
     redistributable = true;
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+  };
+
+  unicode-30 = {
+    spdxId = "Unicode-3.0";
+    fullName = "Unicode License v3";
   };
 
   unicode-dfs-2015 = {

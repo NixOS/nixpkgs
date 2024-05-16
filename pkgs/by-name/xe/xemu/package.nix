@@ -23,19 +23,19 @@
 , stdenv
 , vte
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.120";
+  version = "0.7.121";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FFxYp53LLDOPZ1Inr70oyQXhNjJO23G+gNmXd/lvrYs=";
+    hash = "sha256-VcztVzG/IN9N0SVKj6BipyqnhxXC2nTTuMjKMtFKzGw=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ (with python3Packages; [
     python
     pyyaml

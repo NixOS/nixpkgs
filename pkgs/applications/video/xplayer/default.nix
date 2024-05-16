@@ -21,7 +21,7 @@
 , libxplayer-plparser
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , yelp-tools }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     autoconf-archive
     gettext
     gtk-doc

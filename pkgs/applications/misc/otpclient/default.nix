@@ -4,7 +4,7 @@
 , cmake
 , pkg-config
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , jansson
 , libgcrypt
 , libzip
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

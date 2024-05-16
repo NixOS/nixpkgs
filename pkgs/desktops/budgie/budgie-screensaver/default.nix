@@ -13,7 +13,7 @@
 , ninja
 , pkg-config
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

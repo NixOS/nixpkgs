@@ -1,4 +1,5 @@
 { stdenv
+, stdenvNoCC
 , lib
 , makeWrapper
 , fetchurl
@@ -17,16 +18,53 @@
 , hwi
 , imagemagick
 , gzip
+, gnupg
 }:
 
 let
   pname = "sparrow";
-  version = "1.8.4";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "0w6z84w9spwfpqrf5m9bcq30xqp94c27jw3qzxfdyisp8n22xvd8";
+    sha256 = "sha256-b1OIizSMTOtLM3/RFiBJPSbkj/C0d0s5ggcUwjCdBBo=";
+
+    # nativeBuildInputs, downloadToTemp, and postFetch are used to verify the signed upstream package.
+    # The signature is not a self-contained file. Instead the SHA256 of the package is added to a manifest file.
+    # The manifest file is signed by the owner of the public key, Craig Raw.
+    # Thus to verify the signed package, the manifest is verified with the public key,
+    # and then the package is verified against the manifest.
+    # The public key is obtained from https://keybase.io/craigraw/pgp_keys.asc
+    # and is included in this repo to provide reproducibility.
+    nativeBuildInputs = [ gnupg ];
+    downloadToTemp = true;
+
+    postFetch = ''
+      pushd $(mktemp -d)
+      export GNUPGHOME=$PWD/gnupg
+      mkdir -m 700 -p $GNUPGHOME
+      ln -s ${manifest} ./manifest.txt
+      ln -s ${manifestSignature} ./manifest.txt.asc
+      ln -s $downloadedFile ./${pname}-${version}-x86_64.tar.gz
+      gpg --import ${publicKey}
+      gpg --verify manifest.txt.asc manifest.txt
+      sha256sum -c --ignore-missing manifest.txt
+      popd
+      mv $downloadedFile $out
+    '';
   };
+
+  manifest = fetchurl {
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
+    sha256 = "sha256-2IGhP9Xsli9d0zTzPliJH/tE5TXei1vjVngtjL9vA48=";
+  };
+
+  manifestSignature = fetchurl {
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
+    sha256 = "sha256-FSR9Z+27J/u1MYIR+LrL+pqCP6q4GfVYtRZ0WA9AaKM=";
+  };
+
+  publicKey = ./publickey.asc;
 
   launcher = writeScript "sparrow" ''
     #! ${bash}/bin/bash
@@ -74,7 +112,7 @@ let
     exec ${tor}/bin/tor "$@"
   '';
 
-  jdk-modules = stdenv.mkDerivation {
+  jdk-modules = stdenvNoCC.mkDerivation {
     name = "jdk-modules";
     nativeBuildInputs = [ openjdk ];
     dontUnpack = true;
@@ -95,7 +133,7 @@ let
     '';
   };
 
-  sparrow-modules = stdenv.mkDerivation {
+  sparrow-modules = stdenvNoCC.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
     nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
@@ -150,7 +188,6 @@ let
       # with one from Nixpkgs.
       gzip -c ${torWrapper}  > tor.gz
       cp tor.gz modules/kmp.tor.binary.linuxx64/kmptor/linux/x64/tor.gz
-      find modules
     '';
 
     installPhase = ''
@@ -162,7 +199,7 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit version src;
   pname = "sparrow-unwrapped";
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
@@ -180,7 +217,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  sparrow-icons = stdenv.mkDerivation {
+  sparrow-icons = stdenvNoCC.mkDerivation {
     inherit version src;
     pname = "sparrow-icons";
     nativeBuildInputs = [ imagemagick ];
@@ -211,8 +248,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability.";

@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

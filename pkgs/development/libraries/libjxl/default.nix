@@ -18,6 +18,7 @@
 , doxygen
 , python3
 , lcms2
+, enablePlugins ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
 
 let
@@ -26,7 +27,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.9.1";
+  version = "0.10.2";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    hash = "sha256-n5KNbbw6NQRROEM7Cojla/igRCFNawUq7nfhzJlMlPI=";
+    hash = "sha256-Ip/5fbzt6OfIrHJajnxEe14ppvX1hJ1FSJUBEE/h5YQ=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -106,7 +107,7 @@ stdenv.mkDerivation rec {
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
-
+  ] ++ lib.optionals enablePlugins [
     # Enable plugins, such as:
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
@@ -122,7 +123,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString enablePlugins ''
     GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
     GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
       gdk-pixbuf-query-loaders --update-cache

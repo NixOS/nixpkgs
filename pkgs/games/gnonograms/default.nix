@@ -9,7 +9,7 @@
 , appstream
 , python3
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , pantheon
 , libgee
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

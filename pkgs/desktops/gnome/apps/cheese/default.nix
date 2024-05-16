@@ -2,7 +2,7 @@
 , stdenv
 , gettext
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome-video-effects
 , libcanberra-gtk3
 , pkg-config
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # for glib-compile-schemas
   ];
 
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Cheese";
+    homepage = "https://gitlab.gnome.org/GNOME/cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     mainProgram = "cheese";
     maintainers = teams.gnome.members;

@@ -113,6 +113,14 @@
         - pkgs/applications/editors/jupyter-kernels/**/*
         - pkgs/applications/editors/jupyter/**/*
 
+"6.topic: k3s":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - nixos/modules/services/cluster/k3s/**/*
+        - nixos/tests/k3s/**/*
+        - pkgs/applications/networking/cluster/k3s/**/*
+
 "6.topic: kernel":
   - any:
     - changed-files:
@@ -369,3 +377,8 @@
     - changed-files:
       - any-glob-to-any-file:
         - nixos/modules/**/*
+"8.has: maintainer-list (update)":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - maintainers/maintainer-list.nix

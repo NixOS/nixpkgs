@@ -1,37 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libuuid
-, libsodium
-, keyutils
-, liburcu
-, zlib
-, libaio
-, zstd
-, lz4
-, attr
-, udev
-, nixosTests
-, fuse3
-, cargo
-, rustc
-, rustPlatform
-, makeWrapper
-, writeScript
-, python3
-, fuseSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libuuid,
+  libsodium,
+  keyutils,
+  liburcu,
+  zlib,
+  libaio,
+  zstd,
+  lz4,
+  attr,
+  udev,
+  nixosTests,
+  fuse3,
+  cargo,
+  rustc,
+  rustPlatform,
+  makeWrapper,
+  nix-update-script,
+  python3,
+  fuseSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.4.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+KqTiIp9dIJWG2KvgvPwXC7p754XfgvKHjvwjCdbvCs=";
+    hash = "sha256-nHT18bADESDBHoo9P+J3gGc092hRYs2vaWupgqlkvaA=";
   };
 
   nativeBuildInputs = [
@@ -42,14 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
   ];
-
-  cargoRoot = "rust-src";
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bindgen-0.64.0" = "sha256-GNG8as33HLRYJGYe0nw6qBzq86aHiGonyynEM7gaEE4=";
-    };
-  };
 
   buildInputs = [
     libaio
@@ -65,20 +59,33 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ] ++ lib.optional fuseSupport fuse3;
 
-  # FIXME: Try enabling this once the default linux kernel is at least 6.7
-  doCheck = false; # needs bcachefs module loaded on builder
-  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    src = finalAttrs.src;
+    hash = "sha256-RsRz/nb8L+pL1U4l6RnvqeDFddPvcBFH4wdV7G60pxA=";
+  };
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
-    "BCACHEFS_FUSE=${toString fuseSupport}"
-  ];
+  ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+
+  # FIXME: Try enabling this once the default linux kernel is at least 6.7
+  doCheck = false; # needs bcachefs module loaded on builder
+
+  patches = [
+    # code refactoring of bcachefs-tools broke reading passphrases from stdin (vs. terminal)
+    # upstream issue https://github.com/koverstreet/bcachefs-tools/issues/261
+    (fetchpatch {
+    url = "https://github.com/koverstreet/bcachefs-tools/commit/38b0cb721d2a35f5a4af429bc7bd367461f2fa26.patch";
+    hash = "sha256-/9reye+Qoa+EMkS+wfdX+KwDeLHHJ/S+Qm7sWl0MtqM=";
+  })
+];
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
   '';
+  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
   # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
   installFlags = [
@@ -97,27 +104,20 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
 
-    updateScript = writeScript "update-bcachefs-tools-and-cargo-lock.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl jq common-updater-scripts
-      res="$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-        -sL "https://api.github.com/repos/${finalAttrs.src.owner}/${finalAttrs.src.repo}/tags?per_page=1")"
-
-      version="$(echo $res | jq '.[0].name | split("v") | .[1]' --raw-output)"
-      update-source-version ${finalAttrs.pname} "$version" --ignore-same-hash
-
-      curl "https://raw.githubusercontent.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/v$version/rust-src/Cargo.lock" > \
-        "$(git rev-parse --show-toplevel)/pkgs/tools/filesystems/bcachefs-tools/Cargo.lock"
-    '';
+    updateScript = nix-update-script {};
   };
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak Madouura ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
+      davidak
+      johnrtitor
+      Madouura
+    ];
+    platforms = lib.platforms.linux;
   };
 })

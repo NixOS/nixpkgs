@@ -16,7 +16,7 @@
 , mate-desktop
 , pulseaudioSupport ? stdenv.config.pulseaudio or true
 , libpulseaudio
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

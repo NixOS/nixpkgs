@@ -88,7 +88,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
+    binning = callPackage ../development/ocaml-modules/binning { };
+
     biocaml = janeStreet_0_15.biocaml;
+
+    biotk = janeStreet_0_15.biotk;
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -819,26 +823,24 @@ let
         cfstream = self.cfstream.override { inherit core_kernel; };
       };
 
+      biotk = let
+        angstrom = self.angstrom.override { inherit ppx_let; };
+      in callPackage ../development/ocaml-modules/biotk {
+        angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
+        ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
+        uri = self.uri.override { inherit angstrom; };
+        vg = self.vg.override { htmlcBackend = false; };
+      };
+
       phylogenetics = let
         angstrom = self.angstrom.override { inherit ppx_let; };
       in callPackage ../development/ocaml-modules/phylogenetics {
-        inherit biocaml;
         ppx_deriving = self.ppx_deriving.override { inherit (jsDeps) ppxlib; };
         angstrom-unix = self.angstrom-unix.override { inherit angstrom; };
       };
 
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
     })).overrideScope liftJaneStreet;
-
-    janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
-      self = self.janeStreet_0_9_0;
-      super = self // {
-        janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {
-          defaultVersion = "0.9.0";
-        };
-      };
-      inherit (pkgs) stdenv lib openssl;
-    };
 
     javalib = callPackage ../development/ocaml-modules/javalib { };
 
@@ -1182,7 +1184,6 @@ let
 
     msat = callPackage ../development/ocaml-modules/msat { };
 
-    mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
@@ -1192,6 +1193,8 @@ let
     ### N ###
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
+
+    ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
 
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
@@ -1383,7 +1386,7 @@ let
       inherit (pkgs) unzip;
     };
 
-    opium = callPackage ../development/ocaml-modules/opium { mtime = mtime_1; };
+    opium = callPackage ../development/ocaml-modules/opium { };
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -1725,6 +1728,8 @@ let
     stog_asy = callPackage ../applications/misc/stog/asy.nix { };
     stog_markdown = callPackage ../applications/misc/stog/markdown.nix { };
 
+    streaming = callPackage ../development/ocaml-modules/streaming { };
+
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
     syslog = callPackage ../development/ocaml-modules/syslog { };
@@ -2005,7 +2010,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_5_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.2.nix { });
 
-  ocamlPackages_latest = ocamlPackages_5_1;
+  ocamlPackages_latest = ocamlPackages_5_2;
 
   ocamlPackages = ocamlPackages_5_1;
 

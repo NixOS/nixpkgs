@@ -5,7 +5,7 @@
 , ninja
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , glib
 , openssl
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ninja
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

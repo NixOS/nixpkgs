@@ -3,7 +3,7 @@
 
 , cmake
 , extra-cmake-modules
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , gst_all_1
 , kconfig
@@ -29,7 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

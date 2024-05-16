@@ -15,7 +15,7 @@
 , hicolor-icon-theme
 , mate-desktop
 , mate-screensaver
-, wrapGAppsHook
+, wrapGAppsHook3
 , fetchpatch
 , mateUpdateScript
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     xtrans
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

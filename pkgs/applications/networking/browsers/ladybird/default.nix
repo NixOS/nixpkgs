@@ -11,6 +11,7 @@
 , cmake
 , ninja
 , libxcrypt
+, python3
 , qt6Packages
 , nixosTests
 , AppKit
@@ -103,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = with qt6Packages; [
     cmake
     ninja
+    python3
     wrapQtAppsHook
   ];
 

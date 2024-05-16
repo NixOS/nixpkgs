@@ -7,7 +7,7 @@
 , vala
 , glib
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , libsoup
 , json-glib
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     vala
     glib
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

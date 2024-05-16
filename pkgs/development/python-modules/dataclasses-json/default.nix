@@ -1,42 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, marshmallow-enum
-, poetry-core
-, poetry-dynamic-versioning
-, pytestCheckHook
-, pythonOlder
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  marshmallow,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  pythonOlder,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.6.4";
-  format = "pyproject";
+  version = "0.6.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";
-    repo = pname;
+    repo = "dataclasses-json";
     rev = "refs/tags/v${version}";
-    hash = "sha256-izNDvljUWw60joi5WfCfoqL5SDM8Jz5Pz+lI/RP35n8=";
+    hash = "sha256-JpZwRln7QC0SO/+8xFxc6xrC+ZBFSHVQ9NJscAO+Lf8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-inspect
-    marshmallow-enum
+    marshmallow
   ];
 
   nativeCheckInputs = [
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     "tests/test_annotations.py"
   ];
 
-  pythonImportsCheck = [
-    "dataclasses_json"
-  ];
+  pythonImportsCheck = [ "dataclasses_json" ];
 
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";

@@ -42,7 +42,7 @@
 , spandsp3
 , speexdsp
 , SystemConfiguration
-, wrapGAppsHook
+, wrapGAppsHook3
 , zlib
 , zstd
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     python3
   ] ++ lib.optionals withQt [
     qt6.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

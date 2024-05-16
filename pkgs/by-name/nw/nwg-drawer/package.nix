@@ -6,7 +6,7 @@
 , gtk-layer-shell
 , gtk3
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 
@@ -29,7 +29,7 @@ buildGoModule {
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

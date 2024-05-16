@@ -2,7 +2,9 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
+, llvmPackages
 , pytest7CheckHook
 , setuptools
 , numpy
@@ -20,21 +22,25 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.27.0";
+  version = "0.30.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "accelerate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7rnI8UXyAql8fLMKoSRrWzVw5CnyYVE2o6dJOzSgWxw=";
+    hash = "sha256-E20pI5BrcTrMYrhriuOUl5/liSaQQy6eqRyCoauwb9Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  buildInputs = [
+    llvmPackages.openmp
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     packaging
     psutil
@@ -71,11 +77,20 @@ buildPythonPackage rec {
     "test_remote_code"
     "test_transformers_model"
 
+    # nondeterministic, tests GC behaviour by thresholding global ram usage
+    "test_free_memory_dereferences_prepared_components"
+
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # RuntimeError: Dynamo is not supported on Python 3.12+
+    "test_convert_to_fp32"
+    "test_send_to_device_compiles"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
+    # TypeError: unsupported operand type(s) for /: 'NoneType' and 'int' (it seems cpuinfo doesn't work here)
+    "test_mpi_multicpu_config_cmd"
   ] ++ lib.optionals (!config.cudaSupport) [
     # requires ptxas from cudatoolkit, which is unfree
     "test_dynamo_extract_model"
@@ -95,6 +110,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "accelerate"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     homepage = "https://huggingface.co/docs/accelerate";

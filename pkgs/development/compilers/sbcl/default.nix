@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, clisp, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
+{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -6,37 +6,31 @@
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
-, coreCompression ? lib.versionAtLeast version "2.2.6"
-, markRegionGC ? lib.versionAtLeast version "2.4.0"
+, coreCompression ? true
+, markRegionGC ? true
 , version
-  # Set this to a lisp binary to use a custom bootstrap lisp compiler for
-  # SBCL. Leave as null to use the default. This is useful for local development
-  # of SBCL, because you can use your existing stock SBCL as a boostrap. On Hydra
+  # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
+  # Leave as null to use the default.  This is useful for local development of
+  # SBCL, because you can use your existing stock SBCL as a boostrap.  On Hydra
   # of course we can’t do that because SBCL hasn’t been built yet, so we use
-  # CLISP, but that’s much slower.
+  # ECL but that’s much slower.
 , bootstrapLisp ? null
 }:
 
 let
   versionMap = {
-    "2.4.2" = {
-      sha256 = "sha256-/APLUtEqr+h1nmMoRQogG73fibFwcaToPznoC0Pd7w8=";
-    };
     "2.4.3" = {
       sha256 = "sha256-icmq35K4KtPHSj1PFYoDiJPeoOTzlNyvyWNYPDC3w/I=";
     };
+    "2.4.4" = {
+      sha256 = "sha256-ipMmJ7Px2OlhjxzcIl7csAJFaARpfiyH0UBoN2ShBtU=";
+    };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
-  # bootstrapping. Ideally these are to be avoided.  If CLISP (or any other
+  # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
   # non-binary-distributed Lisp) can run on any of these systems, that entry
   # should be removed from this list.
   bootstrapBinaries = rec {
-    # This build segfaults using CLISP.
-    x86_64-darwin = {
-      version = "2.2.9";
-      system = "x86-64-darwin";
-      sha256 = "sha256-b1BLkoLIOELAYBYA9eBmMgm1OxMxJewzNP96C9ADfKY=";
-    };
     i686-linux = {
       version = "1.2.7";
       system = "x86-linux";
@@ -67,7 +61,7 @@ let
     then bootstrapLisp
     else if (builtins.hasAttr stdenv.hostPlatform.system bootstrapBinaries)
     then "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-    else "${clisp}/bin/clisp -E UTF-8 --silent -norc";
+    else "${lib.getExe ecl} --norc";
 
 in
 
@@ -118,6 +112,15 @@ stdenv.mkDerivation (self: rec {
     # Heisentest, sometimes fails on ofBorg, would rather just disable it than
     # have it block a release.
     "futex-wait.test.sh"
+  ];
+  patches = [
+    # Support the NIX_SBCL_DYNAMIC_SPACE_SIZE envvar. Upstream SBCL didn’t want
+    # to include this (see
+    # "https://sourceforge.net/p/sbcl/mailman/sbcl-devel/thread/2cf20df7-01d0-44f2-8551-0df01fe55f1a%400brg.net/"),
+    # but for Nix envvars are sufficiently useful that it’s worth maintaining
+    # this functionality downstream.
+    ./dynamic-space-size-envvar-feature.patch
+    ./dynamic-space-size-envvar-tests.patch
   ];
   postPatch = lib.optionalString (self.disabledTestFiles != [ ]) ''
     (cd tests ; rm -f ${lib.concatStringsSep " " self.disabledTestFiles})
@@ -173,15 +176,8 @@ stdenv.mkDerivation (self: rec {
     "--arch=arm64"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (lib.versionOlder self.version "2.1.10") [
-    # Workaround build failure on -fno-common toolchains like upstream
-    # clang-13. Without the change build fails as:
-    #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
-    # Should be fixed past 2.1.10 release.
-    "-fcommon"
-  ]
-    # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ]);
+  # Fails to find `O_LARGEFILE` otherwise.
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   buildPhase = ''
     runHook preBuild
@@ -241,6 +237,7 @@ stdenv.mkDerivation (self: rec {
     platforms = attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
+      "x86_64-darwin"
       "x86_64-linux"
       "aarch64-darwin"
       "aarch64-linux"

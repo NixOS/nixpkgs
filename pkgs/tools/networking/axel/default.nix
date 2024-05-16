@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/axel-download-accelerator/axel";
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "axel";
   };
 }

@@ -15,7 +15,7 @@
 , disableDocs ? false
 , CoreFoundation
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     (lib.optionalString (stdenv.cc.isGNU && ! stdenv.isDarwin) "-lgcc_s")
   ];
 
-  nativeBuildInputs = [ cacert wrapGAppsHook ];
+  nativeBuildInputs = [ cacert wrapGAppsHook3 ];
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ncurses ]
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];

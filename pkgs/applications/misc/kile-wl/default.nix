@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kile-wl";
-  version = "unstable-2023-07-23";
+  version = "2.1-unstable-2023-07-23";
 
   src = fetchFromGitLab {
     owner = "snakedye";
@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://gitlab.com/snakedye/kile.git";
+    tagPrefix = "v";
   };
 
   cargoLock = {

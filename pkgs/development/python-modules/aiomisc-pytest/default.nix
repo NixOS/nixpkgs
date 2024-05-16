@@ -1,16 +1,17 @@
-{ lib
-, aiomisc
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pytest
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  aiomisc,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pytest,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc-pytest";
-  version = "1.1.2";
+  version = "1.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,29 +19,20 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "aiomisc_pytest";
     inherit version;
-    hash = "sha256-Zja0cNFrn6mUFlZOtzAtBJ/Gn27akD59qX6p88ytD6w=";
+    hash = "sha256-4mWP77R3CoX+XhoT6BbxQtxpINpdmeozjYUsegNfMyU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [
-    "pytest"
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  buildInputs = [
-    pytest
-  ];
+  pythonRelaxDeps = [ "pytest" ];
 
-  propagatedBuildInputs = [
-    aiomisc
-  ];
+  buildInputs = [ pytest ];
 
-  pythonImportsCheck = [
-    "aiomisc_pytest"
-  ];
+  dependencies = [ aiomisc ];
+
+  pythonImportsCheck = [ "aiomisc_pytest" ];
 
   # Module has no tests
   doCheck = false;

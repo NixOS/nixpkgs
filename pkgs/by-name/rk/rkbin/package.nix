@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/rockchip-linux/rkbin";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ thefossguy ];
-    platforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.all;
   };
 }

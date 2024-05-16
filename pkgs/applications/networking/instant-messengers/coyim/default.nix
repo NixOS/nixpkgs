@@ -7,7 +7,7 @@
 , gdk-pixbuf
 , glib
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 }:
 
@@ -24,7 +24,7 @@ buildGoPackage rec {
     sha256 = "sha256-PmB6POaHKEXzIAaz3lAbUOhtVOzrj5oXRk90giYo6SI=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
   buildInputs = [ glib cairo gdk-pixbuf gtk3 gnome.adwaita-icon-theme ];
 

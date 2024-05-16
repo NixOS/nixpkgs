@@ -1,11 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
-
   cfg = config.services.prometheus.exporters.nats;
-
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 7777;

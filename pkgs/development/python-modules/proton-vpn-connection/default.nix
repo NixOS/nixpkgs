@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-connection";
-  version = "0.11.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-connection";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RuLnc/olI8S09WFG126N2xZgW4gf+DDpRstcelqMhs4=";
+    hash = "sha256-Ze/te0G0tDzyZPGVVqvuJlZoHWJqJ36LnHO+Cy5nxx8=";
   };
 
   nativeBuildInputs = [

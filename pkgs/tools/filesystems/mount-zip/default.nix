@@ -1,19 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, fuse, boost, gcc, icu, libzip, pandoc
-, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+  boost,
+  icu,
+  libzip,
+  pandoc,
+  pkg-config,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mount-zip";
-  version = "1.0.13";
+  version = "1.0.14";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mount-zip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/iPq/v7ap5livYR5tA90JiaGxQfR9VG+FONECeCFdOQ=";
+    hash = "sha256-S2snseC9JAjYRberL2/CyRQTcZQ8GtGQNU3WuTqSRl4=";
   };
 
-  nativeBuildInputs = [ boost gcc icu pandoc pkg-config ];
-  buildInputs = [ fuse libzip ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    pandoc
+    pkg-config
+  ];
+
+  buildInputs = [
+    boost
+    fuse
+    icu
+    libzip
+  ];
 
   makeFlags = [ "prefix=$(out)" ];
 

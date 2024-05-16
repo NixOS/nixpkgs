@@ -569,13 +569,17 @@ with self;
     propagatedBuildInputs = [ base ppx_jane ];
   };
 
-  ocaml-compiler-libs = janePackage {
+  ocaml-compiler-libs = janePackage ({
     pname = "ocaml-compiler-libs";
-    version = "0.12.4";
-    hash = "00if2f7j9d8igdkj4rck3p74y17j6b233l91mq02drzrxj199qjv";
     minimalOCamlVersion = "4.04.1";
     meta.description = "OCaml compiler libraries repackaged";
-  };
+  } // (if lib.versionAtLeast ocaml.version "5.2" then {
+    version = "0.17.0";
+    hash = "sha256-QaC6BWrpFblra6X1+TrlK+J3vZxLvLJZ2b0427DiQzM=";
+  } else {
+    version = "0.12.4";
+    hash = "00if2f7j9d8igdkj4rck3p74y17j6b233l91mq02drzrxj199qjv";
+  }));
 
   ocaml-embed-file = janePackage {
     pname = "ocaml-embed-file";
@@ -698,6 +702,13 @@ with self;
     propagatedBuildInputs = [ ppxlib base ];
   };
 
+  ppx_conv_func = janePackage {
+    pname = "ppx_conv_func";
+    hash = "sha256-HPHSZHdR9ll+7EbWc36shTdRPFYB0lkApidk+XL3clI=";
+    meta.description = "Part of the Jane Street's PPX rewriters collection";
+    propagatedBuildInputs = [ ppxlib base ];
+  };
+
   ppx_custom_printf = janePackage {
     pname = "ppx_custom_printf";
     hash = "sha256-V30ijRgcma/rwysPxNAFnuJIb7XFrfi7mfjJxN+rSak=";
@@ -710,6 +721,13 @@ with self;
     hash = "sha256-spT/dJW8YJtG4pOku9r6VVlBAMwGakTrr1euiABeqsU=";
     meta.description = "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [ async async_unix core_kernel core_unix ppxlib js_of_ocaml js_of_ocaml-ppx sedlex virtual_dom ];
+  };
+
+  ppx_csv_conv = janePackage {
+    pname = "ppx_csv_conv";
+    hash = "sha256-RdPcDPLzoSf45Zeon3f4HcEvlwB6Q6sAINX3LHmjmj8=";
+    meta.description = "Generate functions to read/write records in csv format";
+    propagatedBuildInputs = [ csvfields ppx_conv_func ];
   };
 
   ppx_demo = janePackage {

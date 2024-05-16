@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchzip, jdk17, testers, wrapGAppsHook, igv }:
+{ lib, stdenv, fetchzip, jdk17, testers, wrapGAppsHook3, igv }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
-  version = "2.17.3";
+  version = "2.17.4";
   src = fetchzip {
     url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor version}/IGV_${version}.zip";
-    sha256 = "sha256-SGqkWBv4nol0+lnGN7wBHJvndcIqZ5+Wt1wAcXA42cU=";
+    sha256 = "sha256-LF/rwm/XlLHAJjiAlQVTmx5l+5Np2b5rPjoCdN/qERU=";
   };
 
   installPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/igv
     chmod +x $out/bin/igvtools
   '';
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   passthru.tests.version = testers.testVersion {
     package = igv;

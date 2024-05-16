@@ -1,17 +1,17 @@
 { lib, buildPythonPackage, fetchPypi
 , pytest, pytest-cov, pytest-xdist
-, six, numpy, scipy, pyyaml, h5py
+, six, numpy, scipy, pyyaml, h5py, optree
 , keras-applications, keras-preprocessing
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.0.5";
+  version = "3.2.1";
   format = "wheel";
 
   src = fetchPypi {
     inherit format pname version;
-    hash = "sha256-SgIvLpfqWj2xLtgJ/8t84e+NNP6urFIxXshVPe0tz5c=";
+    hash = "sha256-C+HomwQeaXvlYthCLsuVjuVIGs/AiZEyAJJsVh0ligM=";
     python = "py3";
     dist = "py3";
   };

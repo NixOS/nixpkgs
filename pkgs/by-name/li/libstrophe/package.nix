@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://strophe.im/libstrophe/";
     license = with licenses; [ gpl3Only mit ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ devhell flosse ];
   };
 }

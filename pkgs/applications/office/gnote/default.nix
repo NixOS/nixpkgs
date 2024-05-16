@@ -5,6 +5,7 @@
 , gettext
 , gtkmm4
 , itstool
+, libadwaita
 , libsecret
 , libuuid
 , libxml2
@@ -18,15 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "45.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-nuwn+MsKENL9uRSkUei4QYwmDni/BzYHgaeKXkGM+UE=";
+    hash = "sha256-ht9YoVlbIVN0aRq0S/wWE7Sf28p3CEI6PVZY3NOgFe0=";
   };
 
   buildInputs = [
     gtkmm4
+    libadwaita
     libsecret
     libuuid
     libxml2
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gnote";
+    homepage = "https://gitlab.gnome.org/GNOME/gnote";
     description = "A note taking application";
     mainProgram = "gnote";
     maintainers = with maintainers; [ jfvillablanca ];

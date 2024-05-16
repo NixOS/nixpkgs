@@ -15,13 +15,13 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.0.2";
+  version = "11.0.3";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-Q5nolgqBG2LFVoEeEtzEPTt/cAHubPlRIFt3SYX9z1Y=";
+    hash = "sha256-Id595aKYHP1R3Zw9sV1oL32nAUAr7D/K4wn6Zs7q3Jo=";
   };
 
   gradle = gradle_7;
@@ -71,6 +71,7 @@ HERE
 
     nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
+      runHook preBuild
       export HOME="$NIX_BUILD_TOP/home"
       mkdir -p "$HOME"
       export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
@@ -81,13 +82,16 @@ HERE
 
       # Then, fetch the maven dependencies.
       gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} resolveDependencies
+      runHook postBuild
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
+      runHook preInstall
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/maven/$x/$3/$4/$5" #e' \
         | sh
       cp -r dependencies $out/dependencies
+      runHook postInstall
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -108,6 +112,7 @@ in stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
     export HOME="$NIX_BUILD_TOP/home"
     mkdir -p "$HOME"
     export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
@@ -117,9 +122,11 @@ in stdenv.mkDerivation {
     sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
 
     gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "${pkg_path}" "$out/share/applications"
 
     ZIP=build/dist/$(ls build/dist)
@@ -138,6 +145,7 @@ in stdenv.mkDerivation {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
     done;
+    runHook postInstall
   '';
 
   postFixup = ''

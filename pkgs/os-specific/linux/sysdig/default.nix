@@ -3,11 +3,11 @@
 , protobuf, grpc, yaml-cpp, nlohmann_json, re2, zstd, uthash }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/0.36.0/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "0.15.1";
-  libsHash = "sha256-CsKa5ybRj7Mjb71xNwd8FtDprOMfpJMrm3mvkeqZE3o=";
+  # Compare with https://github.com/draios/sysdig/blob/0.37.0/cmake/modules/falcosecurity-libs.cmake
+  libsRev = "0.16.0";
+  libsHash = "sha256-aduO2pLj91tRdZ1dW1F1JFEg//SopialXWPd6Oav/u8=";
 
-  # Compare with https://github.com/falcosecurity/libs/blob/0.15.1/cmake/modules/valijson.cmake
+  # Compare with https://github.com/falcosecurity/libs/blob/0.16.0/cmake/modules/valijson.cmake
   valijson = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
@@ -15,22 +15,24 @@ let
     hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.36.0/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.37.0/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
-    rev = "7.0.0+driver";
-    hash = "sha256-kXqvfM7HbGh2wEGaO4KBkFDW+m5gpOShJZKJLu9McKk=";
+    rev = "7.1.0+driver";
+    hash = "sha256-FIlnJsNgofGo4HETEEpW28wpC3U9z5AZprwFR5AgFfA=";
   };
-in stdenv.mkDerivation rec {
+
+  version = "0.37.0";
+in stdenv.mkDerivation {
   pname = "sysdig";
-  version = "0.36.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-EQnmtxByTsSawQPFmTe2pBMcv5rFaNtST+2KXZSFuoo=";
+    hash = "sha256-vEkwh+iSXlIraDzy9+ujr0ijNWX7oB7ZQi7H+jYi688=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
@@ -73,12 +75,6 @@ in stdenv.mkDerivation rec {
     cp -r ${driver} driver-src
     chmod -R +w driver-src
 
-    # Hacky but needed until https://github.com/draios/sysdig/issues/2077 is resolved for kernel >= 6.8 as strlcpy got removed and build fails
-    ${lib.optionalString
-    (kernel != null && lib.versionAtLeast kernel.version "6.8") ''
-      substituteInPlace libs/driver/ppm_events.c driver-src/driver/ppm_events.c --replace-fail "strlcpy" "strscpy"
-    ''}
-
     cmakeFlagsArray+=(
       "-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs"
       "-DDRIVER_SOURCE_DIR=$(pwd)/driver-src/driver"
@@ -98,8 +94,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   env.NIX_CFLAGS_COMPILE =
-    # needed since luajit-2.1.0-beta3
-    "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i)) " +
     # fix compiler warnings been treated as errors
     "-Wno-error";
 
@@ -138,13 +132,13 @@ in stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description =
       "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
-    license = with licenses; [ asl20 gpl2 mit ];
-    maintainers = [ maintainers.raskin ];
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
-    broken = kernel != null && ((versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
+    license = with lib.licenses; [ asl20 gpl2 mit ];
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    broken = kernel != null && ((lib.versionOlder kernel.version "4.14") || kernel.isHardened || kernel.isZen);
     homepage = "https://sysdig.com/opensource/";
     downloadPage = "https://github.com/draios/sysdig/releases";
   };

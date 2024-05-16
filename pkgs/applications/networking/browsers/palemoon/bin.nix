@@ -13,14 +13,14 @@
 , libXt
 , libpulseaudio
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeScript
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "33.0.2";
+  version = "33.1.0";
 
   src = finalAttrs.passthru.sources."gtk${if withGTK3 then "3" else "2"}";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -158,11 +158,11 @@ stdenv.mkDerivation (finalAttrs: {
     in {
       gtk3 = fetchzip {
         urls = urlRegionVariants "gtk3";
-        hash = "sha256-Kahnwlj9PIWB24lvH6h9cZK459NW2Vo2g6ckuv0Ax48=";
+        hash = "sha256-qjztSvNL7KNFG3sszgk5qH77do0HFQ8YTrgjFi2ZM00=";
       };
       gtk2 = fetchzip {
         urls = urlRegionVariants "gtk2";
-        hash = "sha256-XOiLGmU8O96clUpnp/OkzXmWR1PJ2AdzbVFj6adbcvY=";
+        hash = "sha256-q4zAmnCN9SHGb8PthjAx7d5FKq/oAQ8c0R+U1SWqjAA=";
       };
     };
 
@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${finalAttrs.version}_Release";
     license = [
       licenses.mpl20
       {

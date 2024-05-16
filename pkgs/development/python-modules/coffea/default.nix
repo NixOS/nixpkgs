@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , hatchling
 , hatch-vcs
+, aiohttp
 , awkward
 , cachetools
 , cloudpickle
@@ -21,6 +22,7 @@
 , packaging
 , pandas
 , pyarrow
+, requests
 , scipy
 , toml
 , tqdm
@@ -32,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.2.2";
+  version = "2024.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,20 +43,16 @@ buildPythonPackage rec {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GdoVb9YtlUlrSx7TWWrdHOqOJJ4M+kJspOllv6HgFXk=";
+    hash = "sha256-FHE7/VL0mnf0eBPzCsrr8ISr7OmfFvI9xuV0CPa7JdU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numba>=0.58.1" "numba"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     awkward
     cachetools
     cloudpickle
@@ -72,6 +70,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pyarrow
+    requests
     scipy
     toml
     tqdm
@@ -87,6 +86,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "coffea"
   ];
+
+  disabledTests = [
+    # Requires internet access
+    # https://github.com/CoffeaTeam/coffea/issues/1094
+    "test_lumimask"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoconf
 , automake
 , binutils
@@ -27,15 +26,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.21.100.1";
+  version = "2.23.100.2";
   # Version as used in the Git tag
-  versionTag = "2.21";
+  versionTag = "2.23";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-Yo2G0H0XUI2p9W7lDRLkFHw2t8X1220brGohQJ0r2WY=";
+    hash = "sha256-i+fE6xKiuljG8LY8TIHgrW15DVpdp46bZdNo/BjgT/I=";
     fetchSubmodules = true;
   };
 
@@ -46,39 +45,28 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    # Fix missing pthread_compat.h, see https://github.com/intel/linux-sgx/pull/784
-    (fetchpatch {
-      url = "https://github.com/intel/linux-sgx/commit/254b58f922a6bd49c308a4f47f05f525305bd760.patch";
-      sha256 = "sha256-sHU++K7NJ+PdITx3y0PwstA9MVh10rj2vrLn01N9F4w=";
-    })
+    # There's a `make preparation` step that downloads some prebuilt binaries
+    # and applies some patches to the in-repo git submodules. This patch removes
+    # the parts that download things, since we can't do that inside the sandbox.
+    ./disable-downloads.patch
+
+    # This patch disable mtime in bundled zip file for reproducible builds.
+    #
+    # Context: The `aesm_service` binary depends on a vendored library called
+    # `CppMicroServices`. At build time, this lib creates and then bundles
+    # service resources into a zip file and then embeds this zip into the
+    # binary. Without changes, the `aesm_service` will be different after every
+    # build because the embedded zip file contents have different modified times.
+    ./cppmicroservices-no-mtime.patch
   ];
 
-  # There's a `make preparation` step that downloads some prebuilt binaries and
-  # applies some patches to the in-repo git submodules. We can't just run it,
-  # since it downloads things, so this step just extracts the patching steps.
   postPatch = ''
     patchShebangs linux/installer/bin/build-installpkg.sh \
       linux/installer/common/sdk/createTarball.sh \
       linux/installer/common/sdk/install.sh \
       external/sgx-emm/create_symlink.sh
 
-    echo "Running 'make preparation' but without download steps"
-
-    # Seems to download something. Build currently uses ipp-crypto and not
-    # sgxssl so probably not an issue.
-    # $ ./external/dcap_source/QuoteVerification/prepare_sgxssl.sh nobuild
-
-    pushd external/openmp/openmp_code
-      git apply ../0001-Enable-OpenMP-in-SGX.patch >/dev/null 2>&1 \
-        || git apply ../0001-Enable-OpenMP-in-SGX.patch --check -R
-    popd
-
-    pushd external/protobuf/protobuf_code
-      git apply ../sgx_protobuf.patch >/dev/null 2>&1 \
-        || git apply ../sgx_protobuf.patch --check -R
-    popd
-
-    ./external/sgx-emm/create_symlink.sh
+    make preparation
   '';
 
   # We need `cmake` as a build input but don't use it to kick off the build phase
@@ -300,7 +288,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with maintainers; [ sbellem arturcygan veehaitch ];
+    maintainers = with maintainers; [ phlip9 sbellem arturcygan veehaitch ];
     platforms = [ "x86_64-linux" ];
     license = with licenses; [ bsd3 ];
   };

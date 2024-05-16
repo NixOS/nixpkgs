@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-register";
+
   preConfigure = ''
     sed -i 's, -std=gnu99,,g' configure
     sed -i 's,malloc.h,stdlib.h,g' src-ILU/ilur/ilur.c

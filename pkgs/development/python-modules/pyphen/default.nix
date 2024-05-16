@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WWyLO+HBpwQRul9lF9nM/jCDx1iuK5SkXycHNG2OZvo=";
+    hash = "sha256-pDBiPeysU9w2kSQSUyY8uja53XpE/9JoC3Bq82jNovI=";
   };
 
   nativeBuildInputs = [

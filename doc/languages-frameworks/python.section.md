@@ -878,7 +878,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1013,7 +1012,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1134,7 +1132,6 @@ buildPythonPackage rec {
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with lib.licenses; [ bsd2 bsd3 ];
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```
@@ -1494,7 +1491,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }
 ```

@@ -1,24 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, makeWrapper
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hjson";
   version = "3.0.2";
-  format = "setuptools";
+  pyproject = true;
 
-  # N.B. pypi src tarball does not have tests
+  disabled = pythonOlder "3.5";
+
   src = fetchFromGitHub {
     owner = "hjson";
     repo = "hjson-py";
-    rev = "v${version}";
-    sha256 = "1jc7j790rcqnhbrfj4lhnz3f6768dc55aij840wmx16jylfqpc2n";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VrCLHfXShF45IEhGVQpryBzjxreQEunyghazDNKRh8k=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [ makeWrapper ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "hjson" ];
 
@@ -29,11 +38,17 @@ buildPythonPackage rec {
       --prefix PATH : ${lib.makeBinPath [ python ]}
   '';
 
+  disabledTestPaths = [
+    # AttributeError:  b'/build/source/hjson/tool.py:14: Deprecati[151 chars]ools' != b''
+    "hjson/tests/test_tool.py"
+  ];
+
   meta = with lib; {
     description = "A user interface for JSON";
-    mainProgram = "hjson";
     homepage = "https://github.com/hjson/hjson-py";
+    changelog = "https://github.com/hjson/hjson-py/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bhipple ];
+    mainProgram = "hjson";
   };
 }

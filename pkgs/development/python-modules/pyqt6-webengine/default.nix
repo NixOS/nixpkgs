@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-webengine";
-  version = "6.6.0";
+  version = "6.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt6_WebEngine";
     inherit version;
-    hash = "sha256-1QuYTD+F5AnmkrFWEychUi1OjPm2wl4M+Sfuot+zlIc=";
+    hash = "sha256-aO3HrbbZ4nX13pVogeecyg1x+tQ5q+qhDYI7/1rFUAE=";
   };
 
   # fix include path and increase verbosity

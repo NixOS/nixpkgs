@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub
-, python3Packages, wrapGAppsHook, gobject-introspection
+, python3Packages, wrapGAppsHook3, gobject-introspection
 , gtk-layer-shell, pango, gdk-pixbuf, atk
 # Extra packages called by various internal nwg-panel modules
 , hyprland         # hyprctl
@@ -16,24 +16,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.9.27";
+  version = "0.9.31";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GCaqFqoZ7lfyE3VD3Dgz8jVt9TtUq3XVzVeI6g3SO5E=";
+    hash = "sha256-g3O+jWLwMBNfk0vAi/wq/YnGTAIscDJH2QV7bequyNU=";
   };
 
   # No tests
   doCheck = false;
 
-  # Because of wrapGAppsHook
+  # Because of wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
 
   buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango playerctl ];
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
   propagatedBuildInputs = (with python3Packages;
     [ i3ipc netifaces psutil pybluez pygobject3 requests dasbus setuptools ])
     # Run-time GTK dependency required by the Tray module

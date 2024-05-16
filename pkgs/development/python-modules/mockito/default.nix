@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kaste/mockito-python";
     changelog = "https://github.com/kaste/mockito-python/blob/${version}/CHANGES.txt";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

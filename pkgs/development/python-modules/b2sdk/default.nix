@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.0.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0/UC4O19oO8SpboiPIhvkWBA8XHpc279fl377MooK54=";
+    hash = "sha256-ENEAynUd66sjS+/Qoy9qyffPpSvxdnY1Nwdi+JTE96I=";
   };
 
   build-system = [ pdm-backend ];
@@ -60,6 +60,9 @@ buildPythonPackage rec {
     # requires aws s3 auth
     "test/integration/test_download.py"
     "test/integration/test_upload.py"
+
+    # Requires backblaze auth
+    "test/integration/test_bucket.py"
   ];
 
   disabledTests = [

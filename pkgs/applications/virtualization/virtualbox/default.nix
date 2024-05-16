@@ -5,6 +5,7 @@
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
 , linuxPackages
+, nixosTests
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -23,6 +24,9 @@
 
 # See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
 assert enableKvm -> !enableHardening;
+
+# The web services use Java infrastructure.
+assert enableWebService -> javaBindings;
 
 with lib;
 
@@ -118,11 +122,11 @@ in stdenv.mkDerivation {
      # we don't take any chances and only apply it if people actually want to use KVM support.
   ++ optional enableKvm (fetchpatch
     (let
-      patchVersion = "20240325";
+      patchVersion = "20240502";
     in {
       name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
       url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
-      hash = "sha256-D1ua8X5Iyw/I89PtskiGdnGr4NhdFtI93ThltiOcu8w=";
+      hash = "sha256-KokIrrAoJutHzPg6e5YAJgDGs+nQoVjapmyn9kG5tV0=";
     }))
   ++ [
     ./qt-dependency-paths.patch
@@ -251,7 +255,7 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
-    ln -s "${virtualboxGuestAdditionsIso}/VBoxGuestAdditions_${version}.iso" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+    ln -s "${virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''
@@ -265,6 +269,7 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit extensionPack; # for inclusion in profile to prevent gc
+    tests = nixosTests.virtualbox;
     updateScript = ./update.sh;
   };
 

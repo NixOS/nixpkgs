@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "45.2";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
-    sha256 = "7jL2OHotGK2/96lWaJvHR4ZrSocS1zeQwAKr6uTMqq8=";
+    hash = "sha256-xbpQcA2nephvAGC+7az8AX5+yCKD8qY4SEKggHvEVT8=";
   };
 
   patches = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromSourcehut
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , cmake
 , meson
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     cmake
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

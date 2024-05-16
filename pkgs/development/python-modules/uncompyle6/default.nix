@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
+, pythonOlder
 , spark-parser
 , xdis
 , nose
@@ -12,18 +12,22 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.9.0";
+  version = "3.9.1";
   format = "setuptools";
-  disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HmqQLeYOpcP30q9+J0UAa05Lm97eiIoH+EQcmTjy7n0=";
+    hash = "sha256-xFHDjrPFzINOuLip5uCwzzIm5NlNCP0nbdA/6RWO2yc=";
   };
 
-  nativeCheckInputs = [ nose pytest hypothesis six ];
   propagatedBuildInputs = [ spark-parser xdis ];
 
+  nativeCheckInputs = [ nose pytest hypothesis six ];
+
+  # Tests attempt to decompile bytecode of the python version
+  # that is running the tests - this does not work for versions
+  # above 3.8, but they decompile older bytecode fine
+  doCheck = pythonOlder "3.9";
   # six import errors (yet it is supplied...)
   checkPhase = ''
     runHook preCheck

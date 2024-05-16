@@ -9,6 +9,7 @@
 , openssl
 , pkg-config
 , protobuf
+, python3
 , qrencode
 , qt6
 , readline
@@ -21,19 +22,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
-  version = "2.6.5";
+  version = "2.6.7";
 
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
     rev = finalAttrs.version;
-    hash = "sha256-HvjcjiVXTK9mZOvh91iCMf/cZ9BMlPxXjgFKYWolJ74=";
+    hash = "sha256-zXNpNhBOtDvuuxzZ8o2XDLqNSi/XK4I6eYAfWuiCgRI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     qt6.wrapQtAppsHook
   ];
 

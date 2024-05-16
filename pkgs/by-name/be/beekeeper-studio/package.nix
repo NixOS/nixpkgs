@@ -7,7 +7,7 @@
 
 let
   pname = "beekeeper-studio";
-  version = "4.1.13";
+  version = "4.3.1";
 
   plat = {
     aarch64-linux = "-arm64";
@@ -15,8 +15,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   hash = {
-    aarch64-linux = "sha256-8gcxYQ6ZvYC42V/vShFgalJtm8SGZRwtUfwUF9ZirBo=";
-    x86_64-linux = "sha256-Yfpm6//hhYVKX3YipzmFj3NgEsL2h3eW+9yC0yYiDgk=";
+    aarch64-linux = "sha256-7ZjyzWeu19zUX1u8t0hMu8F+1LN5/CtEotLNe/5rwPM=";
+    x86_64-linux = "sha256-vhKvOPPo/a9gwQ8FsC28dStQHI8SYzEbhdEW4elD7bU=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
@@ -30,7 +30,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

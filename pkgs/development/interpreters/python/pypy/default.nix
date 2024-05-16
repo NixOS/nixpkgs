@@ -42,7 +42,7 @@ let
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
-  pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
+  pythonForPypy = python.withPackages (ppkgs: [ ]);
 
 in with passthru; stdenv.mkDerivation rec {
   inherit pname version;

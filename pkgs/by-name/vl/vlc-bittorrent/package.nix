@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vlc-bittorrent";
-  version = "2.15.0";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "johang";

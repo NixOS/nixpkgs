@@ -24,7 +24,7 @@
 , libvlc
 , libGL
 , mbedtls
-, wrapGAppsHook
+, wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
 , swig4
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     addOpenGLRunpath
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ]
   ++ optional scriptingSupport swig4;
@@ -198,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ eclairevoyant jb55 MP2E materus fpletz ];
+    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

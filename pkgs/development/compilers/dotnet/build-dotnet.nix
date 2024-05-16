@@ -25,6 +25,8 @@ assert if type == "sdk" then packages != null else true;
 , writeShellScript
 , mkNugetDeps
 , callPackage
+, dotnetCorePackages
+, xmlstarlet
 }:
 
 let
@@ -44,6 +46,11 @@ let
 
   mkCommon = callPackage ./common.nix {};
 
+  targetRid = dotnetCorePackages.systemToDotnetRid stdenv.targetPlatform.system;
+
+  sigtool = callPackage ./sigtool.nix {};
+  signAppHost = callPackage ./sign-apphost.nix {};
+
 in
 mkCommon type rec {
   inherit pname version;
@@ -51,7 +58,11 @@ mkCommon type rec {
   # Some of these dependencies are `dlopen()`ed.
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook
+  ++ lib.optionals (type == "sdk" && stdenv.isDarwin) [
+    xmlstarlet
+    sigtool
+  ];
 
   buildInputs = [
     stdenv.cc.cc
@@ -67,6 +78,16 @@ mkCommon type rec {
   );
 
   sourceRoot = ".";
+
+  postPatch = if type == "sdk" && stdenv.isDarwin then ''
+    xmlstarlet ed \
+      --inplace \
+      -s //_:Project -t elem -n Import \
+      -i \$prev -t attr -n Project -v "${signAppHost}" \
+      sdk/*/Sdks/Microsoft.NET.Sdk/targets/Microsoft.NET.Sdk.targets
+
+    codesign --remove-signature packs/Microsoft.NETCore.App.Host.osx-*/*/runtimes/osx-*/native/{apphost,singlefilehost}
+  '' else null;
 
   dontPatchELF = true;
   noDumpEnvVars = true;
@@ -88,21 +109,29 @@ mkCommon type rec {
 
   # Tell autoPatchelf about runtime dependencies.
   # (postFixup phase is run before autoPatchelfHook.)
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.targetPlatform.isLinux ''
     patchelf \
       --add-needed libicui18n.so \
       --add-needed libicuuc.so \
       $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
     patchelf \
       --add-needed libssl.so \
       $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+      $out/packs/Microsoft.NETCore.App.Host.${targetRid}/*/runtimes/${targetRid}/native/*host
+  '';
+
+  # fixes: Could not load ICU data. UErrorCode: 2
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/icu"))
+    (allow file-read* (subpath "/private/var/db/mds/system"))
+    (allow mach-lookup (global-name "com.apple.SecurityServer")
+                       (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
   passthru = {

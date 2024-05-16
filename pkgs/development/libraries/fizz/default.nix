@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C++14 implementation of the TLS-1.3 standard";
     homepage = "https://github.com/facebookincubator/fizz";
-    changelog = "https://github.com/facebookincubator/fizz/releases/tag/v${version}";
+    changelog = "https://github.com/facebookincubator/fizz/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pierreis kylesferrazza ];

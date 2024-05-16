@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "clickgen";
-  version = "2.2.1";
+  version = "2.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "ful1e5";
     repo = "clickgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vn30N2BoqqoFjGjWD0KQIuuPoypocIK+R0FI09KwDog=";
+    hash = "sha256-Lsb0FvJohwsXofpcq7OgWfhl/3qVxAqY0wdvum6ywSQ=";
   };
 
   propagatedBuildInputs = [

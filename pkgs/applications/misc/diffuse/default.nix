@@ -3,7 +3,7 @@
 , meson
 , ninja
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , pango
 , gdk-pixbuf
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     gettext

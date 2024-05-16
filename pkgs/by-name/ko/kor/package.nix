@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kor";
-  version = "0.3.7";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "yonahd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wjq4IkF3agmculIH+WfBAGd0ciJBX9aj4EsmUvje9Aw=";
+    hash = "sha256-OZSec1S583jVGqSET0y4WhKxWf9CyLKuhEwu39Zg9vE=";
   };
 
-  vendorHash = "sha256-UN3Zf8eo6kMNNzkGsnqyDVMgE2QXRn4wg+XULu/uBGE=";
+  vendorHash = "sha256-4XcmaW4H+IgZZx3PuG0aimqSG1eUnRtcbebKXuencnQ=";
 
   preCheck = ''
     HOME=$(mktemp -d)

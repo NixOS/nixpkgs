@@ -26,7 +26,7 @@
 # Testing
 , gtest
 # Fixup
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 makeWrapper ];
 
   buildInputs = [
     curl

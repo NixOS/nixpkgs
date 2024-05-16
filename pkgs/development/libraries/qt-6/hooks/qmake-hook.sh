@@ -18,12 +18,6 @@ qmakePrePhase() {
         "NIX_OUTPUT_PLUGIN=${!outputBin}/${qtPluginPrefix:?}"
     )
 
-    if [ -n "@debug@" ]; then
-        qmakeFlags+=("CONFIG+=debug")
-    else
-        qmakeFlags+=("CONFIG+=release")
-    fi
-
     qmakeFlags+=("${qmakeFlags_orig[@]}")
 }
 prePhases+=" qmakePrePhase"

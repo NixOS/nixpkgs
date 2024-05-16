@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "2.58.0";
+  version = "2.60.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-2KLjPzxtHeuH0/+Sge1wTmGimOiaTWr8EI+xkFBrPD0=";
+    hash = "sha256-rQwjcp6MsqhP+o+Hpvt4CFC4ygqsIaRIQOxWKca5Hq8=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -39,8 +39,8 @@ let
     , url
     , sha256
     , description
-    }: python3.pkgs.buildPythonPackage {
-      inherit pname version;
+    , ...
+    }@args: python3.pkgs.buildPythonPackage ({
       format = "wheel";
       src = fetchurl { inherit url sha256; };
       meta = with lib; {
@@ -51,9 +51,11 @@ let
         license = lib.licenses.mit;
         sourceProvenance = [ sourceTypes.fromSource ];
       };
-    };
+    } // (removeAttrs args [ "url" "sha256" "description" ]));
 
-  extensions = callPackages ./extensions-generated.nix { inherit mkAzExtension; };
+  extensions =
+    callPackages ./extensions-generated.nix { inherit mkAzExtension; }
+    // callPackages ./extensions-manual.nix { inherit mkAzExtension; };
 
   extensionDir = stdenvNoCC.mkDerivation {
     name = "azure-cli-extensions";
@@ -227,6 +229,10 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
     wcwidth
     websocket-client
     xmltodict
+  ] ++ lib.optionals (!withImmutableConfig) [
+    # pip is required to install extensions locally, but it's not needed if
+    # we're using the default immutable configuration.
+    pip
   ];
 
   postInstall = ''
@@ -352,6 +358,18 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
       command-line tool to connect to Azure and execute administrative
       commands on Azure resources. It allows the execution of commands
       through a terminal using interactive command-line prompts or a script.
+
+      `azure-cli` has extension support. For example, to install the `aks-preview` extension, use
+
+      ```nix
+      environment.systemPackages = [
+        (azure-cli.withExtensions [ azure-cli.extensions.aks-preview ])
+      ];
+      ```
+
+      To make the `azure-cli` immutable and prevent clashes in case `azure-cli` is also installed via other package managers,
+      some configuration files were moved into the derivation. This can be disabled by overriding `withImmutableConfig = false`
+      when building `azure-cli`.
     '';
     changelog = "https://github.com/MicrosoftDocs/azure-docs-cli/blob/main/docs-ref-conceptual/release-notes-azure-cli.md";
     sourceProvenance = [ sourceTypes.fromSource ];

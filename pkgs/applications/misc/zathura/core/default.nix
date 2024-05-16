@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, wrapGAppsHook, pkg-config, gitUpdater
+{ lib, stdenv, fetchFromGitLab, meson, ninja, wrapGAppsHook3, pkg-config, gitUpdater
 , appstream-glib, json-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     meson ninja pkg-config desktop-file-utils python3.pythonOnBuildForHost.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 appstream-glib
+    gettext wrapGAppsHook3 libxml2 appstream-glib
   ];
 
   buildInputs = [

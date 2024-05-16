@@ -26,7 +26,7 @@
 , enableGTK3 ? false
 , gtkmm3
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableQt5 ? false
 , enableQt6 ? false
 , qt5
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ]
-  ++ optionals enableGTK3 [ wrapGAppsHook ]
+  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
   ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
   ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
   ;

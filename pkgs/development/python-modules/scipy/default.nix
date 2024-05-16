@@ -25,6 +25,9 @@
 , xsimd
 , blas
 , lapack
+
+# Reverse dependency
+, sage
 }:
 
 let
@@ -193,6 +196,7 @@ in buildPythonPackage {
     # Pass it the names of the datasets to update their hashes
     ++ (builtins.attrNames datasetsHashes)
     ;
+    tests = { inherit sage; };
   };
 
   SCIPY_USE_G77_ABI_WRAPPER = 1;
@@ -203,6 +207,6 @@ in buildPythonPackage {
     downloadPage = "https://github.com/scipy/scipy";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh doronbehar ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

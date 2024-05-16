@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-program-openai";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_program_openai";
     inherit version;
-    hash = "sha256-wzqi0odq0P8fmip1XU59SRckCEfQF057LQuEdEmbtwA=";
+    hash = "sha256-xqSYDF6oJgiLKLTe4zZ+2yAiHm0F6w4FAZBJGQEx13I=";
   };
 
   pythonRelaxDeps = [
@@ -28,6 +28,9 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 

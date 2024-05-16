@@ -11,22 +11,27 @@
 , pythonOlder
 , pyzmq
 , qtpy
+, setuptools
 , traitlets
 }:
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.5.1";
-  format = "setuptools";
+  version = "5.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oOgGxpUduUkGKOTfgMrslmm2UUnHukD5vwM8AlpbVrw=";
+    hash = "sha256-a1+xEnSyl0Y3Bq+E3LvVySJzsfYZ5tJdCIdLCohRaYk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ipykernel
     ipython-genutils
     jupyter-core
@@ -54,7 +59,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-qtconsole";
     homepage = "https://qtconsole.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
     platforms = platforms.unix;
   };
 }

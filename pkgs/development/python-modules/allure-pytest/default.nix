@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "allure-pytest";
-  version = "2.13.2";
+  version = "2.13.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IiQxWejsgc4rUlS0ATgCGYghsbQvEY9p1KKJOWYHx7M=";
+    hash = "sha256-DvjheQxEqYjba4PE1PXpFFHixMjqEGAd+ohSjSOvz24=";
   };
 
   nativeBuildInputs = [

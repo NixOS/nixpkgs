@@ -8,7 +8,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "wayland-proxy-virtwl";
-  version = "unstable-2024-04-08";
+  version = "0-unstable-2024-04-08";
 
   src = fetchFromGitHub {
     owner = "talex5";

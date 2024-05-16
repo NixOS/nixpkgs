@@ -21,24 +21,24 @@ let
   pyStrokeVer = "20121124";
   pyStroke = fetchurl {
     url = "http://download.fcitx-im.org/data/py_stroke-${pyStrokeVer}.tar.gz";
-    sha256 = "0j72ckmza5d671n2zg0psg7z9iils4gyxz7jgkk54fd4pyljiccf";
+    hash = "sha256-jrEoqb+kOVLmfPL87h/RNMb0z9MXvC9sOKYV9etk4kg=";
   };
   pyTableVer = "20121124";
   pyTable = fetchurl {
     url = "http://download.fcitx-im.org/data/py_table-${pyTableVer}.tar.gz";
-    sha256 = "011cg7wssssm6hm564cwkrrnck2zj5rxi7p9z5akvhg6gp4nl522";
+    hash = "sha256-QhRqyX3mwT1V+eme2HORX0xmc56cEVMqNFVrrfl5LAQ=";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OqVoXZ8SIO8KRs3ehxul9Ug4sV47cxVCbLCBh6/8EoE=";
+    hash = "sha256-7BgwMKssP9H8hryH+6p3g66ocZQcMvAysQrxZrLI+9I=";
   };
 
   nativeBuildInputs = [

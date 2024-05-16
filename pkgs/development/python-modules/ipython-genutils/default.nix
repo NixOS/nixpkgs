@@ -44,6 +44,5 @@ buildPythonPackage rec {
     description = "Vestigial utilities from IPython";
     homepage = "https://ipython.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

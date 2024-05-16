@@ -1,31 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, docutils
-, rich
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  docutils,
+  rich,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rich-rst";
-  version = "1.2.0";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wasi-master";
-    repo = pname;
+    repo = "rich-rst";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jFPboZ5/T2I6EuyVM+45lrLWen8Kqf94gWXS1WDf1qU=";
+    hash = "sha256-A3SPbu1N5X55c32S8z8UPpmniJT+mdqfb1+zQEJMA5k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [ setuptools ];
+
+  dependencies = [
+    docutils
+    rich
   ];
 
-  propagatedBuildInputs = [ docutils rich ];
-
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rich_rst" ];
 

@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A library that provides GObject bindings for libudev";
-    homepage = "https://wiki.gnome.org/Projects/libgudev";
+    homepage = "https://gitlab.gnome.org/GNOME/libgudev";
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;

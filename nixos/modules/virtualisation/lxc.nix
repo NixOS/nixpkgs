@@ -32,6 +32,7 @@ in
             {manpage}`lxc.system.conf(5)`.
           '';
       };
+    package = lib.mkPackageOption pkgs "lxc" { };
 
     defaultConfig =
       lib.mkOption {
@@ -57,19 +58,19 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.lxc ];
+    environment.systemPackages = [ cfg.package ];
     environment.etc."lxc/lxc.conf".text = cfg.systemConfig;
     environment.etc."lxc/lxc-usernet".text = cfg.usernetConfig;
     environment.etc."lxc/default.conf".text = cfg.defaultConfig;
     systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
 
-    security.apparmor.packages = [ pkgs.lxc ];
+    security.apparmor.packages = [ cfg.package ];
     security.apparmor.policies = {
       "bin.lxc-start".profile = ''
-        include ${pkgs.lxc}/etc/apparmor.d/usr.bin.lxc-start
+        include ${cfg.package}/etc/apparmor.d/usr.bin.lxc-start
       '';
       "lxc-containers".profile = ''
-        include ${pkgs.lxc}/etc/apparmor.d/lxc-containers
+        include ${cfg.package}/etc/apparmor.d/lxc-containers
       '';
     };
   };

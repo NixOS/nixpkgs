@@ -71,7 +71,11 @@ let
       "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
     ]);
 
-    postPatch = (if lib.versionOlder release_version "13" then ''
+    postPatch = ''
+      # Make sure clang passes the correct location of libLTO to ld64
+      substituteInPlace lib/Driver/ToolChains/Darwin.cpp \
+        --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
+    '' + (if lib.versionOlder release_version "13" then ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
              lib/Driver/ToolChains/*.cpp

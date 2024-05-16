@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , libGL, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, gdk-pixbuf, librsvg
@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = let
+    inherit (lib.strings) mesonEnable mesonOption;
+
     # The "sd-bus-provider" meson option does not include a "none" option,
     # but it is silently ignored iff "-Dtray=disabled".  We use "basu"
     # (which is not in nixpkgs) instead of "none" to alert us if this
@@ -67,15 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
     # assert trayEnabled -> systemdSupport && dbusSupport;
 
     sd-bus-provider =  if systemdSupport then "libsystemd" else "basu";
-    in
-    [ "-Dsd-bus-provider=${sd-bus-provider}" ]
-    ++ lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled"
-    ++ lib.optional (!finalAttrs.trayEnabled)    "-Dtray=disabled"
-  ;
+    in [
+      (mesonOption "sd-bus-provider" sd-bus-provider)
+      (mesonEnable "xwayland" finalAttrs.enableXWayland)
+      (mesonEnable "tray" finalAttrs.trayEnabled)
+    ];
 
   passthru.tests.basic = nixosTests.sway;
 
-  meta = with lib; {
+  meta = {
     description = "An i3-compatible tiling Wayland compositor";
     longDescription = ''
       Sway is a tiling Wayland compositor and a drop-in replacement for the i3
@@ -87,10 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
       using only the keyboard.
     '';
     homepage    = "https://swaywm.org";
-    changelog   = "https://github.com/swaywm/sway/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    changelog   = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ primeos synthetica ];
     mainProgram = "sway";
   };
 })

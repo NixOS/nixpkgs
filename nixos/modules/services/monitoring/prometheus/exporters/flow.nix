@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.flow;
+  inherit (lib)
+    mkOption
+    types
+    literalExpression
+    concatStringsSep
+    optionalString
+    ;
 in {
   port = 9590;
   extraOpts = {

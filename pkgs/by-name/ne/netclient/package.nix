@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "netclient";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${version}";
-    hash = "sha256-Wglh6tcpanEmXwoRKdAot/l4RS+EbIIHI1etQ9ic7BI=";
+    hash = "sha256-oS0DqrlOyab0MS7qSEquEIixcOYnlGuCYtCBmfEURm0=";
   };
 
-  vendorHash = "sha256-or/0z+RiOkZ2qgEqXNI/LafN+eWAzvLuSZta/QNUI3g=";
+  vendorHash = "sha256-09pRwsB2ycB/MK3isXZLBZDpga95SHYkNPjWWYtUuoU=";
 
   buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional stdenv.isLinux libX11;

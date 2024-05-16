@@ -44,8 +44,6 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mv bin/session-desktop-${version} bin/session-desktop
-
     mkdir -p $out/
     cp -r bin $out/bin
 

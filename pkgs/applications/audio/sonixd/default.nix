@@ -16,8 +16,6 @@ appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
@@ -33,4 +31,3 @@ appimageTools.wrapType2 rec {
     mainProgram = "sonixd";
   };
 }
-

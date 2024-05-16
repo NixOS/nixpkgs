@@ -65,6 +65,6 @@ useStdenv.mkDerivation {
     homepage = "https://codeberg.org/ngn/k";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.sternenseemann ];
-    platforms = [ "x86_64-linux" "x86_64-freebsd13" ];
+    platforms = [ "x86_64-linux" "x86_64-freebsd" ];
   };
 }

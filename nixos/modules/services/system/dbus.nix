@@ -39,7 +39,7 @@ in
 
       implementation = mkOption {
         type = types.enum [ "dbus" "broker" ];
-        default = "broker";
+        default = "dbus";
         description = ''
           The implementation to use for the message bus defined by the D-Bus specification.
           Can be either the classic dbus daemon or dbus-broker, which aims to provide high
@@ -147,6 +147,10 @@ in
       };
 
       systemd.services.dbus = {
+        aliases = [
+          # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus-broker.service"
+        ];
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [
@@ -158,6 +162,10 @@ in
       };
 
       systemd.user.services.dbus = {
+        aliases = [
+          # hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
+          "dbus-broker.service"
+        ];
         # Don't restart dbus-daemon. Bad things tend to happen if we do.
         reloadIfChanged = true;
         restartTriggers = [
@@ -184,6 +192,8 @@ in
       # https://github.com/NixOS/nixpkgs/issues/108643
       systemd.services.dbus-broker = {
         aliases = [
+          # allow other services to just depend on dbus,
+          # but also a hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
           "dbus.service"
         ];
         unitConfig = {
@@ -203,6 +213,8 @@ in
 
       systemd.user.services.dbus-broker = {
         aliases = [
+          # allow other services to just depend on dbus,
+          # but also a hack aiding to prevent dbus from restarting when switching from dbus-broker back to dbus
           "dbus.service"
         ];
         # Don't restart dbus. Bad things tend to happen if we do.

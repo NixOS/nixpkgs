@@ -6,14 +6,24 @@
 , makeFontsConf
 , perl
 , python3
-, sphinx
 , which
+, fetchpatch
 }:
 
 stdenv.mkDerivation {
   pname = "linux-kernel-latest-htmldocs";
 
   inherit (linux_latest) version src;
+
+  patches = [
+    # docutils 0.21 has removed nodes.reprunicode
+    # fixes the `AttributeError` thrown when building docs.
+    (fetchpatch {
+      name = "docutils_fix.patch";
+      url = "https://lore.kernel.org/linux-doc/faf5fa45-2a9d-4573-9d2e-3930bdc1ed65@gmail.com/raw";
+      hash = "sha256-JuV1B/8iDysbH0tl+wr/rdXvoC34uUq25ejMFmD0hio=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs \
@@ -48,11 +58,11 @@ stdenv.mkDerivation {
     cp -r Documentation/* $out/share/doc/linux-doc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel html documentation";
     homepage = "https://www.kernel.org/doc/htmldocs/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     inherit (linux_latest.meta) license;
-    maintainers = with maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

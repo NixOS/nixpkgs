@@ -24,11 +24,12 @@
 , mailsuite
 , msgraph-core
 , nixosTests
+, opensearch-py
 , publicsuffixlist
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , tqdm
-, urllib3
 , xmltodict
 }:
 
@@ -40,24 +41,24 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.8.0";
+  version = "8.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tK/cxOw50awcDAGRDTQ+Nxb9aJl2+zLZHuJq88xNmXM=";
+    hash = "sha256-OBxiaXB8NKNMviRI19rYYJxpnfnaEL3zSPmYB4urIug=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch" \
-      --replace "elasticsearch-dsl==7.4.0" "elasticsearch-dsl"
-  '';
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "elasticsearch"
+    "elasticsearch-dsl"
   ];
 
   propagatedBuildInputs = [
@@ -84,8 +85,8 @@ buildPythonPackage rec {
     publicsuffixlist
     requests
     tqdm
-    urllib3
     xmltodict
+    opensearch-py
   ];
 
   # no tests on PyPI, no tags on GitHub
@@ -108,5 +109,7 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ talyz ];
     mainProgram = "parsedmarc";
+    # https://github.com/domainaware/parsedmarc/issues/464
+    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }

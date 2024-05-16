@@ -6,7 +6,7 @@
 , intltool
 , shared-mime-info
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , libarchive
 , libxml2
 , xapp
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     pkg-config

@@ -31,12 +31,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.0.2";
+  version = "3.0.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-giwD9LeZIEJQp+6Ese3cQGZTlTM5c9+53uv+Ql/vy30=";
+    hash = "sha256-zrJ7CvOCPqJzeSik2Z0SWgYXW4USxEXL2anOIA73aEI=";
   };
 
   nativeBuildInputs = [

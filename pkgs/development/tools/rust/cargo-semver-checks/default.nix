@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5+UE1Ka2pciuNrkrPDCJMp12+IUbgq7k3cKSP5pahw4=";
+    hash = "sha256-iumHMVDlgwjjQsn0aoSJUPoOKmLztD47b7he2nJhins=";
   };
 
-  cargoHash = "sha256-GuajrFdPlgneL95eWT3n2MdzfsbuID/pI9ED8TlVOCo=";
+  cargoHash = "sha256-/mrVrbPHi4lo2iu/IWwDYIjqWZYNkm/4lWpRMLKBNpA=";
 
   nativeBuildInputs = [
     cmake

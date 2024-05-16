@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "converseen";
-  version = "0.12.2.2";
+  version = "0.12.2.3";
 
   src = fetchFromGitHub {
     owner = "Faster3ck";
     repo = "Converseen";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-nAX5o+rqQCwBTizqwLPewmhlYQbxlPj158U+v3Z08fQ=";
+    hash = "sha256-ISXEEJHE7C1gqEmhIAPuu8ibrh0Cvh7EyRKsFeDuLDE=";
   };
 
   strictDeps = true;

@@ -70,5 +70,5 @@ buildPythonPackage {
     # sympy
   ];
 
-  meta = onnxruntime.meta // { maintainers = with lib.maintainers; [ fridh ]; };
+  meta = onnxruntime.meta;
 }

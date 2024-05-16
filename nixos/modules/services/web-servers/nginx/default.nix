@@ -142,7 +142,11 @@ let
       default_type application/octet-stream;
   '';
 
-  configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
+  configFile = (
+      if cfg.validateConfigFile
+      then pkgs.writers.writeNginxConfig
+      else pkgs.writeText
+    ) "nginx.conf" ''
     pid /run/nginx/nginx.pid;
     error_log ${cfg.logError};
     daemon off;
@@ -352,7 +356,8 @@ let
 
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
-        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null))
+        acmeName = if vhost.useACMEHost != null then vhost.useACMEHost else vhost.serverName;
+        acmeLocation = optionalString ((vhost.enableACME || vhost.useACMEHost != null) && config.security.acme.certs.${acmeName}.dnsProvider == null)
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
@@ -829,7 +834,7 @@ in
       sslCiphers = mkOption {
         type = types.nullOr types.str;
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
-        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
+        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305";
         description = "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
@@ -1081,6 +1086,9 @@ in
         '';
         description = "Declarative vhost config";
       };
+      validateConfigFile = lib.mkEnableOption ''
+        Validate configuration with pkgs.writeNginxConfig.
+      '' // { default = true; };
     };
   };
 

@@ -93,7 +93,6 @@ let
 
   windowsCommon = recursiveUpdate gnuCommon {
     boehmgc = nativePlatforms;
-    guile_1_8 = nativePlatforms;
     libffi = nativePlatforms;
     libtool = nativePlatforms;
     libunistring = nativePlatforms;

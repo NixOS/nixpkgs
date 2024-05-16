@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   pname = "rtaudio";
   version = "5.2.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "thestk";
     repo = "rtaudio";

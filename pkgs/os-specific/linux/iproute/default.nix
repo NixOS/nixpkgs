@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  configureFlags = [
+    "--color" "auto"
+  ];
+
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
@@ -46,7 +50,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables elfutils libmnl ];
+  buildInputs = [ db iptables libmnl ]
+    # needed to uploaded bpf programs
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
   enableParallelBuilding = true;
 

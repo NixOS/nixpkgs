@@ -115,6 +115,9 @@ buildPythonPackage rec {
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure = ''
+    # Ensure that the build process uses the requested number of cores
+    export MAX_JOBS="$NIX_BUILD_CORES"
+
     # Upstream's setup.py tries to write cache somewhere in ~/
     export HOME=$(mktemp -d)
 
@@ -186,7 +189,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/openai/triton";
-    platforms = lib.platforms.unix;
+    platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge Madouura ];
   };

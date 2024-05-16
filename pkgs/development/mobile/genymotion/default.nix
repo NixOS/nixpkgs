@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
       patchInterpreter "$1"
       wrapProgram "$out/libexec/genymotion/$1" \
         --set "LD_LIBRARY_PATH" "${libPath}" \
-        --unset "QML2_IMPORT_PATH"
+        --unset "QML2_IMPORT_PATH" \
+        --unset "QT_PLUGIN_PATH"
     }
 
     patchTool() {
@@ -77,8 +78,8 @@ stdenv.mkDerivation rec {
 
     patchExecutable genymotion
     patchExecutable player
-    patchExecutable qemu/x86_64/bin/qemu-img
-    patchExecutable qemu/x86_64/bin/qemu-system-x86_64
+    patchInterpreter qemu/x86_64/bin/qemu-img
+    patchInterpreter qemu/x86_64/bin/qemu-system-x86_64
 
     patchTool adb
     patchTool aapt

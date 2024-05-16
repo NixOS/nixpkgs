@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/swsnr/git-gone";
     changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "git-gone";
   };
 }

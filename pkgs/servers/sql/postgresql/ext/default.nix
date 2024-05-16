@@ -99,8 +99,6 @@ self: super: {
 
     pg_uuidv7 = super.callPackage ./pg_uuidv7.nix { };
 
-    promscale_extension = super.callPackage ./promscale_extension.nix { };
-
     repmgr = super.callPackage ./repmgr.nix { };
 
     rum = super.callPackage ./rum.nix { };

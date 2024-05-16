@@ -54,7 +54,7 @@
 , qtmultimedia
 , qtsvg
 , telephony-service
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , xwayland
 }:
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     glib # populates GSETTINGS_SCHEMAS_PATH
     pkg-config
-    wrapGAppsHook # XDG_DATA_DIRS wrapper flags for schemas
+    wrapGAppsHook3 # XDG_DATA_DIRS wrapper flags for schemas
     wrapQtAppsHook
   ];
 

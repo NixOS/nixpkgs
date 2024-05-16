@@ -29,6 +29,9 @@
 , notebook
 , qtconsole
 
+# Reverse dependency
+, sage
+
 # Test dependencies
 , pickleshare
 , pytest-asyncio
@@ -106,12 +109,14 @@ buildPythonPackage rec {
     "test_clipboard_get"
   ];
 
+  passthru.tests = { inherit sage; };
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     downloadPage = "https://github.com/ipython/ipython/";
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor fridh ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

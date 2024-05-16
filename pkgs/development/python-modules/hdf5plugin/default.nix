@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-MnqY1PyGzo31H696J9CekiA2rJrUYzUMDC3UJMZaFLA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     h5py
   ];
 

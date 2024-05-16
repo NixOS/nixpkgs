@@ -17,6 +17,9 @@
   "batime@martin.zurowietz.de" = "battery-time";
   "batterytime@typeof.pw" = "battery-time-2";
 
+  "power-profile-indicator@laux.wtf" = "power-profile-indicator";
+  "power-profile@fthx" = "power-profile-indicator-2";
+
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
   # Make sure to move them up once they are updated

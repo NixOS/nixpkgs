@@ -11,20 +11,25 @@ let
 
   configFile = format.generate "pretalx.cfg" cfg.settings;
 
-  extras = cfg.package.optional-dependencies.redis
-    ++ lib.optionals (cfg.settings.database.backend == "mysql") cfg.package.optional-dependencies.mysql
-    ++ lib.optionals (cfg.settings.database.backend == "postgresql") cfg.package.optional-dependencies.postgres;
+  finalPackage = cfg.package.override {
+    inherit (cfg) plugins;
+  };
 
-  pythonEnv = cfg.package.python.buildEnv.override {
-    extraLibs = [ (cfg.package.python.pkgs.toPythonModule cfg.package) ]
-      ++ (with cfg.package.python.pkgs; [ gunicorn ]
-      ++ lib.optional cfg.celery.enable celery) ++ extras;
+  pythonEnv = finalPackage.python.buildEnv.override {
+    extraLibs = with finalPackage.python.pkgs; [
+      (toPythonModule finalPackage)
+      gunicorn
+    ]
+    ++ finalPackage.optional-dependencies.redis
+    ++ lib.optionals cfg.celery.enable [ celery ]
+    ++ lib.optionals (cfg.settings.database.backend == "mysql") finalPackage.optional-dependencies.mysql
+    ++ lib.optionals (cfg.settings.database.backend == "postgresql") finalPackage.optional-dependencies.postgres;
   };
 in
 
 {
   meta = with lib; {
-    maintainers = teams.c3d2.members;
+    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
   };
 
   options.services.pretalx = {
@@ -42,6 +47,20 @@ in
       type = lib.types.str;
       default = "pretalx";
       description = "User under which pretalx should run.";
+    };
+
+    plugins = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = [];
+      example = lib.literalExpression ''
+        with config.services.pretalx.package.plugins; [
+          pages
+          youtube
+        ];
+      '';
+      description = ''
+        Pretalx plugins to install into the Python environment.
+      '';
     };
 
     gunicorn.extraArgs = lib.mkOption {
@@ -286,16 +305,16 @@ in
         virtualHosts.${cfg.nginx.domain} = {
           # https://docs.pretalx.org/administrator/installation.html#step-7-ssl
           extraConfig = ''
-            more_set_headers Referrer-Policy same-origin;
-            more_set_headers X-Content-Type-Options nosniff;
+            more_set_headers "Referrer-Policy: same-origin";
+            more_set_headers "X-Content-Type-Options: nosniff";
           '';
           locations = {
             "/".proxyPass = "http://pretalx";
             "/media/" = {
-              alias = "${cfg.settings.filesystem.data}/data/media/";
+              alias = "${cfg.settings.filesystem.data}/media/";
               extraConfig = ''
                 access_log off;
-                more_set_headers Content-Disposition 'attachment; filename="$1"';
+                more_set_headers 'Content-Disposition: attachment; filename="$1"';
                 expires 7d;
               '';
             };
@@ -329,10 +348,47 @@ in
         serviceConfig = {
           User = "pretalx";
           Group = "pretalx";
-          StateDirectory = [ "pretalx" "pretalx/media" ];
+          StateDirectory = [
+            "pretalx"
+            "pretalx/media"
+          ];
+          StateDirectoryMode = "0750";
           LogsDirectory = "pretalx";
           WorkingDirectory = cfg.settings.filesystem.data;
           SupplementaryGroups = [ "redis-pretalx" ];
+          AmbientCapabilities = "";
+          CapabilityBoundingSet = [ "" ];
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          ProcSubset = "pid";
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "@chown"
+          ];
+          UMask = "0027";
         };
       };
     in {
@@ -395,6 +451,8 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
       });
+
+      nginx.serviceConfig.SupplementaryGroups = lib.mkIf cfg.nginx.enable [ "pretalx" ];
     };
 
     systemd.sockets.pretalx-web.socketConfig = {
@@ -403,11 +461,9 @@ in
     };
 
     users = {
-      groups."${cfg.group}" = {};
-      users."${cfg.user}" = {
+      groups.${cfg.group} = {};
+      users.${cfg.user} = {
         isSystemUser = true;
-        createHome = true;
-        home = cfg.settings.filesystem.data;
         inherit (cfg) group;
       };
     };

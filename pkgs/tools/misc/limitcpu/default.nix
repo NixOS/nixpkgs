@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://limitcpu.sourceforge.net/";
     description = "A tool to throttle the CPU usage of programs";
     platforms = with platforms; linux ++ freebsd;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [maintainers.rycee];
     mainProgram = "cpulimit";
   };

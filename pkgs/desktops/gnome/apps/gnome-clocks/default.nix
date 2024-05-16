@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-clocks";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-clocks/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "/I60/ZUw8eZB3ADuIIbufTVKegCwoNFyLjBdXJqrkbU=";
+    hash = "sha256-6qPFeM3O+XVOZotWJnCbc/NSZxAjX0tyB20v9JpPmcc=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Clocks";
+    homepage = "https://apps.gnome.org/Clocks/";
     description = "Clock application designed for GNOME 3";
     mainProgram = "gnome-clocks";
     maintainers = teams.gnome.members;

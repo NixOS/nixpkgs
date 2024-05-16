@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
+    maintainers = with maintainers; [ dtzWill fpletz ];
   };
 }

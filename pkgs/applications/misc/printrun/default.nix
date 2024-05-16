@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook }:
+{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
   '';
 
-  nativeBuildInputs = [ glib wrapGAppsHook ];
+  nativeBuildInputs = [ glib wrapGAppsHook3 ];
 
   propagatedBuildInputs = with python3Packages; [
     appdirs cython dbus-python numpy six wxpython psutil pyglet pyopengl pyserial cffi cairosvg lxml

@@ -20,7 +20,7 @@
 , openssl
 , perlPackages
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , xxd
 
 # Netsurf-specific dependencies
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     xxd
   ]
-  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook;
+  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook3;
 
   buildInputs = [
     check

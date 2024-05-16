@@ -59,7 +59,6 @@
 , python3
 , qemu
 , R
-, radare2
 , sng
 , sqlite
 , squashfsTools
@@ -76,14 +75,32 @@
 , writeScript
 }:
 
+let
+  python = python3.override {
+    packageOverrides = final: prev: {
+      # version 4 or newer would log the followng error but tests currently don't fail because radare2 is disabled
+      # ValueError: argument TNULL is not a TLSH hex string
+      tlsh = prev.tlsh.overridePythonAttrs ({ src, ... }: let
+        version = "3.19.1";
+      in {
+        inherit version;
+        src = src.override {
+          rev = version;
+          hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
+        };
+      });
+    };
+  };
+in
+
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
-python3.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "263";
+  version = "266";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-tKGPit8rPn/fMdEWP3cC93qakU5d7mBeRiKNQT3DBJ4=";
+    hash = "sha256-whEFBUFl8yFsZOtOWHbDm6Tx6i6UJYmQ5Fz7svLqGgs=";
   };
 
   outputs = [
@@ -124,6 +141,11 @@ python3.pkgs.buildPythonApplication rec {
   # docx2txt <- makes tests broken:
   # > FAILED tests/comparators/test_docx.py::test_diff - IndexError: list index out of range
   # > FAILED tests/comparators/test_docx.py::test_compare_non_existing - AssertionError
+  # radare2
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_ghidra_diff - IndexError: list index out of range
+  # > FAILED tests/comparators/test_elf_decompiler.py::test_radare2_diff - AssertionError
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_ghidra_diff - assert 0 == 1
+  # > FAILED tests/comparators/test_macho_decompiler.py::test_radare2_diff - AssertionError
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
@@ -160,7 +182,7 @@ python3.pkgs.buildPythonApplication rec {
     zip
     zstd
   ]
-  ++ (with python3.pkgs; [
+  ++ (with python.pkgs; [
     argcomplete
     debian
     defusedxml
@@ -168,7 +190,7 @@ python3.pkgs.buildPythonApplication rec {
     jsondiff
     libarchive-c
     progressbar33
-    pypdf2
+    pypdf
     python-magic
     pyxattr
     rpm
@@ -203,19 +225,19 @@ python3.pkgs.buildPythonApplication rec {
       procyon
       qemu
       R
-      radare2
       tcpdump
       ubootTools
       wabt
       xmlbeans
     ]
-    ++ (with python3.pkgs; [
+    ++ (with python.pkgs; [
       androguard
       binwalk
       guestfs
       h5py
       pdfminer-six
-      # docx2txt, breaks the tests.
+      r2pipe
+      # docx2txt, nixpkgs packages another project named the same, which does not work
     ])
     # oggvideotools is broken on Darwin, please put it back when it will be fixed?
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
@@ -223,7 +245,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ gnumeric ]
   ));
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
   ] ++ pythonPath;
 
@@ -260,13 +282,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_libmix_differences"
   ];
 
-  disabledTestPaths = [
-    # fails due to https://github.com/NixOS/nixpkgs/issues/256896
-    # should be removed once that issue is resolved in coreboot or diffoscope
-    "tests/comparators/test_cbfs.py"
-  ]
-  # Flaky tests on Darwin
-  ++ lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , makePythonPath
@@ -17,19 +18,20 @@
 , pyro5
 , requests
 , rich
+, rubicon-objc
 , setuptools
 , survey
 , typing-extensions
 , watchdog
+, xattr
 , pytestCheckHook
 , nixosTests
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.8.0";
-  format = "pyproject";
+  version = "1.9.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,10 +39,14 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YYbdd0GLVKE7+Oi0mpQjqhFdjdlquk/XnIg5WrtKcfI=";
+    hash = "sha256-h7RDaCVICi3wl6/b1s01cINhFirDOpOXoxTPZIBH3jE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     click
     desktop-notifier
     dbus-python
@@ -58,25 +64,23 @@ buildPythonPackage rec {
     survey
     typing-extensions
     watchdog
+    xattr
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rubicon-objc
   ];
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
+    "--prefix PYTHONPATH : ${makePythonPath dependencies}"
     "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    # https://github.com/samschott/maestral/commit/2c50d2ddb49a845ea97bd6b0f68c45d723fb304c
-    # Allow the use of survey >= 5
-    # Remove after new maestral release along with pythonRelaxDepsHook
-    "survey"
-  ];
+  # ModuleNotFoundError: No module named '_watchdog_fsevents'
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -95,6 +99,21 @@ buildPythonPackage rec {
     "test_cased_path_candidates"
     # AssertionError
     "test_locking_multiprocess"
+    # OSError: [Errno 95] Operation not supported
+    "test_move_preserves_xattrs"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # maetral daemon does not start but worked in real environment
+    "test_catching_non_ignored_events"
+    "test_connection"
+    "test_event_handler"
+    "test_fs_ignore_tree_creation"
+    "test_lifecycle"
+    "test_notify_level"
+    "test_notify_snooze"
+    "test_receiving_events"
+    "test_remote_exceptions"
+    "test_start_already_running"
+    "test_stop"
   ];
 
   pythonImportsCheck = [
@@ -109,7 +128,6 @@ buildPythonPackage rec {
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg sfrijters ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ natsukium peterhoeg sfrijters ];
   };
 }

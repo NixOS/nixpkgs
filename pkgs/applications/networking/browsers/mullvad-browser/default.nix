@@ -5,7 +5,7 @@
 , copyDesktopItems
 , makeWrapper
 , writeText
-, wrapGAppsHook
+, wrapGAppsHook3
 , autoPatchelfHook
 , callPackage
 
@@ -90,7 +90,7 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.14";
+  version = "13.0.15";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -102,7 +102,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-z7fZtq+jnoAi6G8RNahGtP1LXeOXU/2wYz5ha2ddAeM=";
+      hash = "sha256-TypPevAkp1G7GPzBTRUv3N4UJydAqfllNekTsYfiisQ=";
     };
   };
 
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook3 autoPatchelfHook ];
   buildInputs = [
     gtk3
     alsa-lib
@@ -208,8 +208,8 @@ stdenv.mkDerivation rec {
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
     FONTCONFIG_FILE=$MB_IN_STORE/fontconfig/fonts.conf
-    sed -i "$FONTCONFIG_FILE" \
-      -e "s,<dir>fonts</dir>,<dir>$MB_IN_STORE/fonts</dir>,"
+    substituteInPlace "$FONTCONFIG_FILE" \
+      --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$MB_IN_STORE/fonts</dir>"
 
     mkdir -p $out/bin
 

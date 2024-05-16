@@ -4,7 +4,7 @@
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , xrandr
 }:
 
@@ -28,7 +28,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   buildInputs = [ docutils gsettings-desktop-schemas gtk3 ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
   meta = with lib; {

@@ -18,8 +18,6 @@
       nodePackages
       nodePackages_latest
       platformioPackages
-      quicklispPackagesClisp
-      quicklispPackagesSBCL
       rPackages
       roundcubePlugins
       sourceHanPackages

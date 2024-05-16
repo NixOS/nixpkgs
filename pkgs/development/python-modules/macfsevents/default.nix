@@ -27,7 +27,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/malthe/macfsevents";
     changelog = "https://github.com/malthe/macfsevents/blob/${version}/CHANGES.rst";
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.darwin;
   };
 }

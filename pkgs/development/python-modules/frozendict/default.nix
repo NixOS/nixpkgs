@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
@@ -8,8 +9,8 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.4.2";
-  format = "setuptools";
+  version = "2.4.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SXUPzFDVw8+CmD/Jxm/EB70UBdOmauQs69hNr0l3l90=";
+    hash = "sha256-TgXhffUvx74fU2SgDV04R1yS9xGbiP/ksQ+3KGT5bdQ=";
   };
 
   # build C version if it exists
@@ -31,6 +32,10 @@ buildPythonPackage rec {
       export FROZENDICT_PURE_PY=1
     fi
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

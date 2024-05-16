@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     mainProgram = "doomseeker";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.MP2E ];
+    maintainers = [ ];
   };
 }

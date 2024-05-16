@@ -11,7 +11,6 @@ let
     };
     "osx-10.12.6" = {
       xnu           = "3789.70.16";
-      libiconv      = "50";
       Libnotify     = "165.20.1";
       objc4         = "709.1";
       dyld          = "433.5";
@@ -38,7 +37,6 @@ let
       dtrace        = "168";
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
-      libiconv      = "44";
       Libnotify     = "150.40.1";
       objc4         = "680";
       eap8021x      = "222.40.1";
@@ -272,7 +270,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "sha256-jfAEk0OLrJa9AIZVikIoHomd+l+4rCfc320Xh50qK5M=" {};
-    libiconv        = applePackage "libiconv"          "osx-10.12.6"     "sha256-ZzPFkchK3EU95UQUVVrR0t8iilhi/VnIkjjtP6KT2oI=" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "sha256-6F7wiwerv4nz/xXHtp1qCHSaFzZgzcRN+jbmXA5oWOQ=" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es=" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};

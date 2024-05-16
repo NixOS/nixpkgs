@@ -3,7 +3,10 @@
 , fetchFromGitHub
 , asciidoc
 , libcap
+, pkg-config
+, systemdLibs
 , installShellFiles
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -20,25 +23,32 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     asciidoc
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
     libcap.dev
+    systemdLibs.dev
   ];
 
-  buildFlags = [
-    "isolate"
-    "isolate.1"
+  patches = [
+    ./take-config-file-from-env.patch
   ];
 
   installPhase = ''
     runHook preInstall
 
     install -Dm755 ./isolate $out/bin/isolate
+    install -Dm755 ./isolate-cg-keeper $out/bin/isolate-cg-keeper
+    install -Dm755 ./isolate-check-environment $out/bin/isolate-check-environment
     installManPage isolate.1
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    isolate = nixosTests.isolate;
+  };
 
   meta = {
     description = "Sandbox for securely executing untrusted programs";

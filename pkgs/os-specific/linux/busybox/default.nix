@@ -167,6 +167,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
-    priority = 10;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

@@ -10,11 +10,13 @@
 , stdenv
 , darwin
 , nix-update-script
-, rocksdb
+, nixosTests
+, rocksdb_8_3
 }:
 
 let
   version = "0.6.0";
+  rocksdb = rocksdb_8_3;
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -59,7 +61,10 @@ rustPlatform.buildRustPackage {
   # Tests require reading to /etc/resolv.conf
   doCheck = false;
 
-  passthru.update-script = nix-update-script { };
+  passthru = {
+    update-script = nix-update-script { };
+    tests.stalwart-mail = nixosTests.stalwart-mail;
+  };
 
   meta = with lib; {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";

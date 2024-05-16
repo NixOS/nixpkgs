@@ -111,8 +111,8 @@ let
       let
         westonIni = (pkgs.formats.ini { }).generate "weston.ini" {
           libinput = {
-            enable-tap = xcfg.libinput.mouse.tapping;
-            left-handed = xcfg.libinput.mouse.leftHanded;
+            enable-tap = config.services.libinput.mouse.tapping;
+            left-handed = config.services.libinput.mouse.leftHanded;
           };
           keyboard = {
             keymap_model = xcfg.xkb.model;

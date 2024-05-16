@@ -13,21 +13,21 @@
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "3.0.5";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PQ7qJCNfXGNF2RK6pHwf0U1DXgv2j2uQ64Nv/qh8f8s=";
+    hash = "sha256-vc1NAbcQQxjpXnjZvTsnebzMc/LoMwBveDHBxBbhnEo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     voluptuous

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "chatterino2";
-  version = "2.4.6";
+  version = "2.5.1";
   src = fetchFromGitHub {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CQviw5Fw6v5EwjCldAQoJfAIZMWKBfBzUIQZEgW34k0=";
+    sha256 = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];

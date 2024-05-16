@@ -17,7 +17,7 @@ let
 in
 {
   meta.doc = ./castopod.md;
-  meta.maintainers = with lib.maintainers; [ alexoundos misuzu ];
+  meta.maintainers = with lib.maintainers; [ alexoundos ];
 
   options.services = {
     castopod = {

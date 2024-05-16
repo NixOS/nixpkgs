@@ -3,37 +3,39 @@
 , cython
 , fetchPypi
 , numpy
-, oldest-supported-numpy
 , packaging
 , pandas
 , patsy
-, pythonAtLeast
 , pythonOlder
 , scipy
 , setuptools
 , setuptools-scm
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.1";
+  version = "0.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ImDv3B74nznGcKC9gVGx0IQ1Z3gbyv7GzaBTTrR6lPY=";
+    hash = "sha256-iQVQFHrTqBzaJPC6GlxAIa3BYBCAvQDhka581v7s1q0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1,<3" "numpy"
+  '';
 
   build-system = [
     cython
-    oldest-supported-numpy
+    numpy
     scipy
     setuptools
     setuptools-scm
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    numpy
   ];
 
   dependencies = [
@@ -56,6 +58,7 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    # Fails at build time
+    broken = stdenv.isDarwin;
   };
 }

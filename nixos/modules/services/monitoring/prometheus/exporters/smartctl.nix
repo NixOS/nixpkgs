@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.smartctl;
+  inherit (lib) mkOption types literalExpression;
   args = lib.escapeShellArgs ([
     "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
     "--smartctl.path=${pkgs.smartmontools}/bin/smartctl"

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , ibus
 , glib
 , gobject-introspection
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     gettext
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   # Upstream builds Python packages as a part of a non-python

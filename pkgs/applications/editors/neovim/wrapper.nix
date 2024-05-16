@@ -83,8 +83,12 @@ let
       ;
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
+
+    pname = "neovim";
+    version = lib.getVersion neovim-unwrapped;
   in {
-      name = "neovim-${lib.getVersion neovim-unwrapped}${extraName}";
+      name = "${pname}-${version}${extraName}";
+      inherit pname version;
 
       __structuredAttrs = true;
       dontUnpack = true;

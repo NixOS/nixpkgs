@@ -8,7 +8,7 @@
 , intltool
 , python3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     glibcLocales
     gobject-introspection
   ];

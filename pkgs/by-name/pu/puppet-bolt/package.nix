@@ -7,7 +7,7 @@
   testers,
 }:
 
-bundlerApp {
+(bundlerApp {
   pname = "bolt";
 
   gemdir = ./.;
@@ -42,4 +42,6 @@ bundlerApp {
     maintainers = with lib.maintainers; [ uvnikita anthonyroussel ];
     platforms = lib.platforms.unix;
   };
-}
+}).overrideAttrs (old: {
+  name = "puppet-bolt-${(import ./gemset.nix).bolt.version}";
+})

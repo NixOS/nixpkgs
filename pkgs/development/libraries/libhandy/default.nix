@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BbSXIpBz/1V/ELMm4HTFBm+HQ6MC1IIKuXvLXNLasIc=";
+    hash = "sha256-BbSXIpBz/1V/ELMm4HTFBm+HQ6MC1IIKuXvLXNLasIc=";
   };
 
   depsBuildBuild = [

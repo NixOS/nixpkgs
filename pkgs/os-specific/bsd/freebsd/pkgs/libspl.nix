@@ -3,19 +3,20 @@
 mkDerivation {
   path = "cddl/lib/libspl";
   extraPaths = [
-    "sys/contrib/openzfs/lib/libspl"
-    "sys/contrib/openzfs/include"
-
     "cddl/compat/opensolaris/include"
+    "sys/contrib/openzfs/include"
+    "sys/contrib/openzfs/lib/libspl"
     "sys/contrib/openzfs/module/icp/include"
-    "sys/modules/zfs"
+    "sys/modules/zfs/zfs_config.h"
   ];
-  # nativeBuildInputs = [
-  #   bsdSetupHook freebsdSetupHook
-  #   makeMinimal install mandoc groff
 
-  #   flex byacc file2c
-  # ];
-  # buildInputs = compatIfNeeded ++ [ libnv libsbuf ];
-  meta.license = lib.licenses.cddl;
+  # Without a prefix it will try to put object files in nonexistant directories
+  preBuild = ''
+    export MAKEOBJDIRPREFIX=$TMP/obj
+  '';
+
+  meta = with lib; {
+    platform = platforms.freebsd;
+    license = licenses.cddl;
+  };
 }

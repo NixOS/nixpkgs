@@ -18,23 +18,14 @@
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.38";
+  version = "1.5.41";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LR1evkn2m6FNBmJnUUJubesxIPeHG6RDgLFBHDuxe38=";
+    hash = "sha256-akjxv9Qot2lGntZxkxfFqz65VboL1qduykfjyEg1Ivg=";
   };
-
-  patches = [
-    # fix scalene_config import. remove on next update
-    (fetchpatch {
-      name = "scalene_config-import-fix.patch";
-      url = "https://github.com/plasma-umass/scalene/commit/cd437be11f600ac0925ce77efa516e6d83934200.patch";
-      hash = "sha256-YjFh+mu5jyIJYUQFhmGqLXhec6lgQAdj4tWxij3NkwU=";
-    })
-  ];
 
   nativeBuildInputs = [
     cython
@@ -59,14 +50,6 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     numpy
-  ];
-
-  disabledTestPaths = [
-    # remove on next update
-    # Failing Darwin-specific tests that were subsequently removed from the source repo.
-    "tests/test_coverup_35.py"
-    "tests/test_coverup_42.py"
-    "tests/test_coverup_43.py"
   ];
 
   # remove scalene directory to prevent pytest import confusion

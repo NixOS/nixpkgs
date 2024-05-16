@@ -72,18 +72,27 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "2674";
+  version = "2843";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-5Vc9DkXD83X22xRxZ2laCxrAZe2RdsL6FwR2tC/YGU0=";
+    hash = "sha256-wT/E4osmhZUSSW73DoNTs5BMTa1yU4E2mDpwiS0pEQc=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C "$out" rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   postPatch = ''
     substituteInPlace ./ggml-metal.m \
-      --replace '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+      --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+
+    substituteInPlace ./scripts/build-info.cmake \
+      --replace-fail 'set(BUILD_NUMBER 0)' 'set(BUILD_NUMBER ${finalAttrs.version})' \
+      --replace-fail 'set(BUILD_COMMIT "unknown")' "set(BUILD_COMMIT \"$(cat COMMIT)\")"
   '';
 
   nativeBuildInputs = [ cmake ninja pkg-config git ]

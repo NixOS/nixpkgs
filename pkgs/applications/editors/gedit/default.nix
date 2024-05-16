@@ -9,13 +9,13 @@
 , gtk3
 , gtk-mac-integration
 , glib
-, tepl
 , libgedit-amtk
 , libgedit-gtksourceview
+, libgedit-tepl
 , libpeas
 , libxml2
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk-doc
 , gobject-introspection
 , docbook-xsl-nons
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "46.2";
+  version = "47.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
-    sha256 = "wIZkErrRR+us4tKC/8u1oOmjBLIP1VZAvuIcgebVAe8=";
+    sha256 = "+kpZfjTHbUrJFDG1rm4ZHJbGsK8XAuCJmrNRme36G/o=";
   };
 
   patches = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     python3
     python3Packages.wrapPython
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk-doc
     gobject-introspection
     docbook-xsl-nons
@@ -65,13 +65,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    tepl
     glib
     gsettings-desktop-schemas
     gspell
     gtk3
     libgedit-amtk
     libgedit-gtksourceview
+    libgedit-tepl
     libpeas
   ] ++ lib.optionals stdenv.isDarwin [
     gtk-mac-integration

@@ -8,21 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     rev = "refs/tags/${version}";
-    hash = "sha256-tb0nIBj/5nb0WbkceL7Rt1Rs0Qjy5/2leSOofF4zhTY=";
+    hash = "sha256-AL5YkdITO9CPFYzMGQwHbuFZrMDUvF1yTt2XTotoymM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "topiary-core-0.3.0" = "sha256-2oVdtBcH1hF+p3PixBOljHXvGX2YCoRzA/vlBDvN7fE=";
-      "topiary-queries-0.3.0" = "sha256-1leQLRohX0iDiOOO96ETM2L3yOElW8OwR5IcrsoxfOo=";
-      "tree-sitter-nickel-0.1.0" = "sha256-HyHdameEgET5UXKMgw7EJvZsJxToc9Qz26XHvc5qmU0=";
+      "topiary-core-0.3.0" = "sha256-KWfgbVFV2zbCuNNFp9yeSgAa0Cc7cT090KK2J1ynfKg=";
+      "tree-sitter-nickel-0.1.0" = "sha256-WuY6X1mnXdjiy4joIcY8voK2sqICFf0GvudulZ9lwqg=";
     };
   };
 

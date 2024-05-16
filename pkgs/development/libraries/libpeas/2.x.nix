@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.0.1";
+  version = "2.0.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ndwdUfOGY9pN9SFjBRt7LOo6JCz67p9afhQPB4TIqnc=";
+    hash = "sha256-8w3/7WPKL0BHe0DhccCjH4DZFCW6Hh5HMg7mQlSA7MM=";
   };
 
   patches = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A GObject-based plugins engine";
-    homepage = "https://wiki.gnome.org/Projects/Libpeas";
+    homepage = "https://gitlab.gnome.org/GNOME/libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, php
-, openssl
-, hiredis
-, zstd
-, lz4
-, autoPatchelfHook
-, writeShellScript
-, curl
-, common-updater-scripts
+{
+  stdenv,
+  lib,
+  fetchurl,
+  php,
+  openssl,
+  hiredis,
+  zstd,
+  lz4,
+  autoPatchelfHook,
+  writeShellScript,
+  curl,
+  common-updater-scripts,
 }:
 
 let
@@ -53,11 +54,19 @@ let
     };
   };
 
-  makeSource = { system, phpMajor }: fetchurl {
-    url = "https://builds.r2.relay.so/v${version}/relay-v${version}-php"
-      + phpMajor + "-" + hashes.${system}.platform + ".tar.gz";
-    sha256 = hashes.${system}.hash.${phpMajor} or (throw "Unsupported PHP version for relay ${phpMajor} on ${system}");
-  };
+  makeSource =
+    { system, phpMajor }:
+    fetchurl {
+      url =
+        "https://builds.r2.relay.so/v${version}/relay-v${version}-php"
+        + phpMajor
+        + "-"
+        + hashes.${system}.platform
+        + ".tar.gz";
+      sha256 =
+        hashes.${system}.hash.${phpMajor}
+          or (throw "Unsupported PHP version for relay ${phpMajor} on ${system}");
+    };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit version;
@@ -68,50 +77,65 @@ stdenv.mkDerivation (finalAttrs: {
     system = stdenv.hostPlatform.system;
     phpMajor = lib.versions.majorMinor php.version;
   };
-  nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook ];
   buildInputs = lib.optionals (!stdenv.isDarwin) [
     openssl
     zstd
     lz4
   ];
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib/php/extensions
-    cp relay-pkg.so $out/lib/php/extensions/relay.so
-    chmod +w $out/lib/php/extensions/relay.so
-  '' + (if stdenv.isDarwin then
-    let
-      args = lib.strings.concatMapStrings
-        (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}")
-        (with lib.attrsets; [
-          (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-          (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-          (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-          (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-          (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-          (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-        ]);
-    in
-    # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+  installPhase =
     ''
-      install_name_tool${args} $out/lib/php/extensions/relay.so
-    ''
-  else
-    "") + ''
-    # Random UUID that's required by the extension. Can be anything, but must be different from default.
-    sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
-    chmod -w $out/lib/php/extensions/relay.so
+      runHook preInstall
 
-    runHook postInstall
-  '';
+      mkdir -p $out/lib/php/extensions
+      cp relay-pkg.so $out/lib/php/extensions/relay.so
+      chmod +w $out/lib/php/extensions/relay.so
+    ''
+    + (
+      if stdenv.isDarwin then
+        let
+          args =
+            lib.strings.concatMapStrings
+              (
+                v:
+                " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
+              )
+              (
+                with lib.attrsets;
+                [
+                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
+                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
+                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
+                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
+                  (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
+                  (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
+                ]
+              );
+        in
+        # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+        ''
+          install_name_tool${args} $out/lib/php/extensions/relay.so
+        ''
+      else
+        ""
+    )
+    + ''
+      # Random UUID that's required by the extension. Can be anything, but must be different from default.
+      sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
+      chmod -w $out/lib/php/extensions/relay.so
+
+      runHook postInstall
+    '';
 
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
-      export PATH="$PATH:${lib.makeBinPath [ curl common-updater-scripts ]}"
+      export PATH="$PATH:${
+        lib.makeBinPath [
+          curl
+          common-updater-scripts
+        ]
+      }"
       NEW_VERSION=$(curl --silent https://builds.r2.relay.so/meta/builds | tail -n1 | cut -c2-)
 
       if [[ "${version}" = "$NEW_VERSION" ]]; then
@@ -129,23 +153,22 @@ stdenv.mkDerivation (finalAttrs: {
     updateables =
       builtins.listToAttrs
         # Collect all leaf attributes (containing hashes).
-        (lib.collect
-          (attrs: attrs ? name)
-          # create an attr containing
-          (lib.mapAttrsRecursive
+        (
+          lib.collect (attrs: attrs ? name)
+            # create an attr containing
             (
-              path: _value:
-                lib.nameValuePair
-                  (builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path))
-                  (finalAttrs.finalPackage.overrideAttrs (attrs: {
+              lib.mapAttrsRecursive (
+                path: _value:
+                lib.nameValuePair (builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path)) (
+                  finalAttrs.finalPackage.overrideAttrs (attrs: {
                     src = makeSource {
                       system = builtins.head path;
                       phpMajor = builtins.head (builtins.tail (builtins.tail path));
                     };
-                  }))
+                  })
+                )
+              ) (lib.filterAttrsRecursive (name: _value: name != "platform") hashes)
             )
-            (lib.filterAttrsRecursive (name: _value: name != "platform") hashes)
-          )
         );
   };
 
@@ -155,7 +178,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://relay.so/";
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ tillkruss ostrolucky ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      tillkruss
+      ostrolucky
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

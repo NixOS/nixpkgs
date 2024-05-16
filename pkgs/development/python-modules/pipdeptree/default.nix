@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, diff-cover
-, graphviz
-, hatchling
-, hatch-vcs
-, pytest-mock
-, pytestCheckHook
-, pip
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  diff-cover,
+  graphviz,
+  hatchling,
+  hatch-vcs,
+  packaging,
+  pytest-mock,
+  pytestCheckHook,
+  pip,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.16.2";
+  version = "2.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-g0O0ndHd2ehBUmHwb0HoWgCGSsqbjmlPFOd6KrkUv2Y=";
+    hash = "sha256-Mng5YUM2+T3OFrr4uGVvq5mP0aq10r21pp46tw6lLno=";
   };
 
   build-system = [
@@ -33,12 +35,11 @@ buildPythonPackage rec {
 
   dependencies = [
     pip
+    packaging
   ];
 
   passthru.optional-dependencies = {
-    graphviz = [
-      graphviz
-    ];
+    graphviz = [ graphviz ];
   };
 
   nativeCheckInputs = [
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     virtualenv
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pipdeptree"
-  ];
+  pythonImportsCheck = [ "pipdeptree" ];
 
   disabledTests = [
     # Don't run console tests
@@ -59,10 +58,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line utility to show dependency tree of packages";
-    mainProgram = "pipdeptree";
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ charlesbaynham ];
+    mainProgram = "pipdeptree";
   };
 }

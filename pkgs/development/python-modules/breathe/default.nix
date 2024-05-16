@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, defusedxml
 , docutils
 , fetchFromGitHub
 , fetchpatch
@@ -38,6 +39,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    defusedxml
   ];
 
   pythonImportsCheck = [

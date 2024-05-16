@@ -39,7 +39,7 @@ gccStdenv.mkDerivation rec {
     description = "A command line program which draws, removes, and repairs ASCII art boxes";
     mainProgram = "boxes";
     homepage = "https://boxes.thomasjensen.com";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ waiting-for-dev ];
     platforms = platforms.unix;
   };

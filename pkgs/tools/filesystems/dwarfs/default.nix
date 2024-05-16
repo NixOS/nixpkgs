@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     description = "A fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ keksbg ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

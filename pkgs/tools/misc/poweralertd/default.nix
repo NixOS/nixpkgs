@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "poweralertd";
-  version = "0.2.0";
+  version = "0.3.0";
 
   outputs = [ "out" "man" ];
 
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     owner = "~kennylevinsen";
     repo = "poweralertd";
     rev = version;
-    sha256 = "19rw9q4pcqw56nmzjfglfikzx5wwjl4n08awwdhg0jy1k0bm3dvp";
+    hash = "sha256-WzqThv3Vu8R+g6Bn8EfesRk18rchCvw/UMPwbn9YC80=";
   };
 
   postPatch = ''
-    substituteInPlace meson.build --replace "systemd.get_pkgconfig_variable('systemduserunitdir')" "'${placeholder "out"}/lib/systemd/user'"
+    substituteInPlace meson.build --replace-fail "systemd.get_pkgconfig_variable('systemduserunitdir')" "'${placeholder "out"}/lib/systemd/user'"
   '';
 
   buildInputs = [

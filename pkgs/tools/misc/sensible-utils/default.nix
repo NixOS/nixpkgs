@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://salsa.debian.org/debian/sensible-utils";
     changelog = "https://salsa.debian.org/debian/sensible-utils/-/tags";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pbek ];
     platforms = platforms.unix;
   };

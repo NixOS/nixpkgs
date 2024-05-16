@@ -25,14 +25,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
-  version = "2.8.0"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.8.2"; # N.B: if you change this, check if overrides are still up-to-date
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
-    hash = "sha256-RcqvI+jR7TiNAzq8F6VGVhyj6MxnmsjQKh0CiZvLY9Q=";
+    hash = "sha256-fsFYcfbLeYV6tpOGgNrFmYjcUAmdsx5zwUbvcctwFVs=";
   };
 
   nativeBuildInputs = with python.pkgs; [

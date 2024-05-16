@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.97.0";
+  version = "0.100.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-0zTEaSylZEU7mCCrMf9aV8V0MMD4Au4y0zacWSLcujg=";
+    hash = "sha256-GDRxOfuAlztJhuYXZKmDpQ6M4ZW3+bNevMjqCHRuyVY=";
   };
   # there is a nested go.mod
   sourceRoot = "${src.name}/cmd/otelcorecol";
-  vendorHash = "sha256-/8WxTtTTuwdPP/4Bix8d9nkR/w6MDKLyumv4KBx5VqU=";
+  vendorHash = "sha256-wVJyu4+dYXLSkopfSLkKPkwnUCGyUeagQtOjuvNxF6A=";
 
   nativeBuildInputs = [ installShellFiles ];
 

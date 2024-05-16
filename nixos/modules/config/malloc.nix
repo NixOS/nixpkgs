@@ -9,8 +9,23 @@ let
     graphene-hardened = {
       libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc.so";
       description = ''
-        An allocator designed to mitigate memory corruption attacks, such as
-        those caused by use-after-free bugs.
+        Hardened memory allocator coming from GrapheneOS project.
+        The default configuration template has all normal optional security
+        features enabled and is quite aggressive in terms of sacrificing
+        performance and memory usage for security.
+      '';
+    };
+
+    graphene-hardened-light = {
+      libPath = "${pkgs.graphene-hardened-malloc}/lib/libhardened_malloc-light.so";
+      description = ''
+        Hardened memory allocator coming from GrapheneOS project.
+        The light configuration template disables the slab quarantines,
+        write after free check, slot randomization and raises the guard
+        slab interval from 1 to 8 but leaves zero-on-free and slab canaries enabled.
+        The light configuration has solid performance and memory usage while still
+        being far more secure than mainstream allocators with much better security
+        properties.
       '';
     };
 

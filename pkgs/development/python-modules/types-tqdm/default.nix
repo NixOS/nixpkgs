@@ -7,17 +7,17 @@
 
 buildPythonPackage rec {
   pname = "types-tqdm";
-  version = "4.66.0.20240106";
+  version = "4.66.0.20240417";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-es9KreW6097XbrgpeD+ZYbHCGHlI6qbdGuhkTf+VqTg=";
+    hash = "sha256-Ftzp71IuqNQOT1uNhN2KEWbu/BPO7np+FYvw8aFCGjE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 

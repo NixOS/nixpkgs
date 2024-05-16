@@ -9,7 +9,7 @@
 , exiftool
 , ffmpeg
 , mailcap
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , gobject-introspection
 , librsvg
@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -1,15 +1,16 @@
-{ lib
-, darwin
-, fetchurl
-, fetchpatch
-, openssl
-, stdenv
-, vlc
+{
+  lib,
+  darwin,
+  fetchpatch,
+  fetchurl,
+  openssl,
+  stdenv,
+  vlc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.03.08";
+  version = "2024.05.05";
 
   src = fetchurl {
     urls = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-wWUC4EbxxfK+OxXiyNbNMGObVMZOqb+8jTG078pnDeU=";
+    hash = "sha256-jGT1jg5pa4bwIcxUy7/svIhU2HCxx2TNMkWvBfN33nM=";
   };
 
   patches = [
@@ -53,18 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
       config.linux
   ''
   # condition from icu/base.nix
-  + lib.optionalString (stdenv.hostPlatform.libc == "glibc"
-                        || stdenv.hostPlatform.libc == "musl") ''
+  + lib.optionalString (lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ]) ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
   '';
 
   configurePhase = let
-    platform = if stdenv.isLinux
-               then "linux"
-               else if stdenv.isDarwin
-               then "macosx-catalina"
-               else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    platform =
+      if stdenv.isLinux then
+        "linux"
+      else if stdenv.isDarwin then
+        "macosx-catalina"
+      else
+        throw "Unsupported platform: ${stdenv.hostPlatform.system}";
   in ''
     runHook preConfigure
 
@@ -75,7 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
   ];
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   enableParallelBuilding = true;
 

@@ -20,7 +20,7 @@ mkDerivation rec {
     mainProgram = "tipp10";
     homepage = "https://gitlab.com/tipp10/tipp10";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
     platforms = platforms.all;
   };
 }

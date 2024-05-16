@@ -1,9 +1,9 @@
-{ supportedSystems, nixpkgs, pkgs, nix }:
+{ supportedSystems, nixpkgs, pkgs }:
 
 pkgs.runCommand "nixpkgs-release-checks"
   {
     src = nixpkgs;
-    buildInputs = [ nix ];
+    buildInputs = [ pkgs.nix ];
     requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~10G RAM; see #227945
   }
   ''

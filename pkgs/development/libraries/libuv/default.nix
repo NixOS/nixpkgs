@@ -11,7 +11,7 @@
 , bind
 , cmake
 , knot-resolver
-, lispPackages
+, sbclPackages
 , luajitPackages
 , mosquitto
 , neovim
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     inherit bind cmake knot-resolver mosquitto neovim nodejs;
-    inherit (lispPackages) cl-libuv;
+    inherit (sbclPackages) cl-libuv;
     luajit-libluv = luajitPackages.libluv;
     luajit-luv = luajitPackages.luv;
     ocaml-luv = ocamlPackages.luv;
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };

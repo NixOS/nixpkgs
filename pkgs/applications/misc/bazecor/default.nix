@@ -28,17 +28,13 @@ appimageTools.wrapAppImage rec {
   # taken from
   # https://github.com/Dygmalab/Bazecor/blob/v1.3.11/src/main/utils/udev.ts#L6
 
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
-    p.glib
-  ];
+  extraPkgs = pkgs: [ pkgs.glib ];
 
   # Also expose the udev rules here, so it can be used as:
   #   services.udev.packages = [ pkgs.bazecor ];
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    mv $out/bin/bazecor-* $out/bin/bazecor
-
     install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/Bazecor.desktop \
       --replace 'Exec=Bazecor' 'Exec=bazecor'

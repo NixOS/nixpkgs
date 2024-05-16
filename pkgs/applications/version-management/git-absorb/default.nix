@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ tomfitzhenry ];
     mainProgram = "git-absorb";
   };
 }

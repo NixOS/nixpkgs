@@ -1,45 +1,47 @@
-{ lib
-, stdenv
-, meson
-, ninja
-, fetchFromGitHub
-, fetchFromGitLab
-, re2c
-, gperf
-, gawk
-, pkg-config
-, boost182
-, fmt
-, luajit_openresty
-, ncurses
-, serd
-, sord
-, libcap
-, liburing
-, openssl
-, cereal
-, cmake
-, asciidoctor
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  re2c,
+  gperf,
+  gawk,
+  pkg-config,
+  boost182,
+  fmt,
+  luajit_openresty,
+  ncurses,
+  serd,
+  sord,
+  libcap,
+  liburing,
+  openssl,
+  cereal,
+  cmake,
+  asciidoctor,
+  makeWrapper,
 }:
 
 let
   trial-protocol-wrap = fetchFromGitHub {
-      owner = "breese";
-      repo = "trial.protocol";
-      rev = "79149f604a49b8dfec57857ca28aaf508069b669";
-      name = "trial-protocol";
-      hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
+    owner = "breese";
+    repo = "trial.protocol";
+    rev = "79149f604a49b8dfec57857ca28aaf508069b669";
+    name = "trial-protocol";
+    hash = "sha256-Xd8bX3z9PZWU17N9R95HXdj6qo9at5FBL/+PTVaJgkw=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "emilua";
-  version = "0.6.0";
+  version = "0.7.3";
 
   src = fetchFromGitLab {
-      owner = "emilua";
-      repo = "emilua";
-      rev = "v${version}";
-      hash = "sha256-cW2b+jUQT60hCCirBzxZltzA7KvBihnzWNPkKDID6kU=";
+    owner = "emilua";
+    repo = "emilua";
+    rev = "v${version}";
+    hash = "sha256-j8ohhqHjSBgc4Xk9PcQNrbADmsz4VH2zCv+UNqiCv4I=";
   };
 
   buildInputs = [
@@ -64,6 +66,7 @@ stdenv.mkDerivation rec {
     meson
     cmake
     ninja
+    makeWrapper
   ];
 
   dontUseCmakeConfigure = true;
@@ -90,7 +93,17 @@ stdenv.mkDerivation rec {
     cp "packagefiles/trial.protocol/meson.build" "trial-protocol/"
     popd
 
-    substituteInPlace src/emilua_gperf.awk  --replace '#!/usr/bin/env -S gawk --file' '#!${gawk}/bin/gawk -f'
+    patchShebangs src/emilua_gperf.awk --interpreter '${lib.getExe gawk} -f'
+  '';
+
+  doCheck = true;
+
+  # Skipped test: libpsx
+  # Known issue with no-new-privs disabled in the Nix build environment.
+  checkPhase = ''
+    runHook preCheck
+    meson test --print-errorlogs --no-suite libpsx
+    runHook postCheck
   '';
 
   meta = with lib; {

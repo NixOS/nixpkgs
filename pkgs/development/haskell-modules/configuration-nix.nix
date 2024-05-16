@@ -444,7 +444,7 @@ self: super: builtins.intersectAttrs super {
   leksah = dontCheck (overrideCabal (drv: {
     executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
       gnome.adwaita-icon-theme # Fix error: Icon 'window-close' not present in theme ...
-      wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      wrapGAppsHook3           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
       gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ]);
     postPatch = (drv.postPatch or "") + ''
@@ -719,14 +719,63 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = overrideCabal (drv: {
-    # This is an instance of https://github.com/NixOS/nix/pull/1085
-    # Fails with:
-    #   gpg: can't connect to the agent: File name too long
-    postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
-      substituteInPlace Test.hs \
-        --replace ', testCase "crypto" test_crypto' ""
-    '' + (drv.postPatch or "");
+  git-annex = let
+    # Executables git-annex needs at runtime. git-annex detects these at configure
+    # time and expects to be able to execute them. This means that cross-compiling
+    # git-annex is not possible and strictDeps must be false (runtimeExecDeps go
+    # into executableSystemDepends/buildInputs).
+    runtimeExecDeps = [
+      pkgs.bup
+      pkgs.curl
+      pkgs.git
+      pkgs.gnupg
+      pkgs.lsof
+      pkgs.openssh
+      pkgs.perl
+      pkgs.rsync
+      pkgs.wget
+      pkgs.which
+    ];
+  in
+  overrideCabal (drv: {
+    executableSystemDepends = runtimeExecDeps;
+    enableSharedExecutables = false;
+
+    preConfigure = drv.preConfigure or "" + ''
+      export HOME=$TEMPDIR
+      patchShebangs .
+    '';
+
+    # git-annex ships its test suite as part of the final executable instead of
+    # using a Cabal test suite.
+    checkPhase = ''
+      runHook preCheck
+
+      # Setup PATH for the actual tests
+      ln -sf dist/build/git-annex/git-annex git-annex
+      ln -sf git-annex git-annex-shell
+      PATH+=":$PWD"
+
+      echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+
+      # Doesn't use Cabal's test mechanism
+      git-annex test $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+
+      runHook postCheck
+    '';
+
+    # Use default installPhase of pkgs/stdenv/generic/setup.sh. We need to set
+    # the environment variables it uses via the preInstall hook since the Haskell
+    # generic builder doesn't accept them as arguments.
+    preInstall = drv.preInstall or "" + ''
+      installTargets="install"
+      installFlagsArray+=(
+        "BUILDER=:"
+        "PREFIX="
+        "DESTDIR=$out"
+      )
+    '';
+    installPhase = null;
 
     # Ensure git-annex uses the exact same coreutils it saw at build-time.
     # This is especially important on Darwin but also in Linux environments
@@ -744,13 +793,6 @@ self: super: builtins.intersectAttrs super {
     # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
-
-    # Install man pages which is no longer done by Setup.hs
-    # TODO(@sternenseemann): figure out why install-desktops wants to create /usr
-    # and run that, too.
-    postInstall = drv.postInstall or "" + ''
-      make install-mans "DESTDIR=$out" PREFIX=
-    '';
   }) (super.git-annex.override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
@@ -807,8 +849,12 @@ self: super: builtins.intersectAttrs super {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.11/purescript-docs-search";
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
-
-      spagoDocs = overrideCabal (drv: {
+    in
+    lib.pipe (super.spago.override {
+      versions = self.versions_5_0_5;
+      fsnotify = self.fsnotify_0_3_0_1;
+    }) [
+      (overrideCabal (drv: {
         postUnpack = (drv.postUnpack or "") + ''
           # Spago includes the following two files directly into the binary
           # with Template Haskell.  They are fetched at build-time from the
@@ -833,21 +879,17 @@ self: super: builtins.intersectAttrs super {
             "$sourceRoot/templates/docs-search-app-0.0.11.js" \
             "$sourceRoot/templates/purescript-docs-search-0.0.11"
         '';
-      }) super.spago;
-
-      spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
-        # spago is not yet updated for aeson 2.0
-        aeson = hfinal.aeson_1_5_6_0;
-        # bower-json 1.1.0.0 only supports aeson 2.0, so we pull in the older version here.
-        bower-json = hprev.bower-json_1_0_0_1;
-      });
+      }))
 
       # Tests require network access.
-      spagoWithoutChecks = dontCheck spagoOldAeson;
-    in
-    # spago doesn't currently build with ghc92.  Top-level spago is pulled from
-    # ghc90 and explicitly marked unbroken.
-    markBroken spagoWithoutChecks;
+      dontCheck
+
+      # Overly strict upper bound on text
+      doJailbreak
+
+      # Generate shell completion for spago
+      (self.generateOptparseApplicativeCompletions [ "spago" ])
+    ];
 
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
@@ -1335,4 +1377,6 @@ self: super: builtins.intersectAttrs super {
   pvar = dontCheck super.pvar;
 
   kmonad = enableSeparateBinOutput super.kmonad;
+
+  xmobar = enableSeparateBinOutput super.xmobar;
 }

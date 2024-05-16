@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/BYU-PRISM/GEKKO";
     changelog = "https://github.com/BYU-PRISM/GEKKO/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ayes-web ];
+    maintainers = with maintainers; [ BatteredBunny ];
   };
 }

@@ -19,11 +19,10 @@
 , symlinkJoin
 , substituteAll
 , extraPackages ? [ ]
-, runc
 , crun
-, gvisor
-, youki
+, runc
 , conmon
+, extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
 , slirp4netns
 , fuse-overlayfs
 , util-linux
@@ -59,24 +58,26 @@ let
       netavark
       slirp4netns
       passt
-    ];
+      conmon
+      crun
+    ] ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-8Swqwyzu/WI9mG21bLF81Kk4kS2Ltg0GV9G3EcG/FnU=";
+    hash = "sha256-PA7mKHPzPDFdwKXAHvHnDvHF+mTmm59jkoeUeiCP6vE=";
   };
 
   patches = [
     (substituteAll {
       src = ./hardcode-paths.patch;
-      inherit crun runc gvisor youki conmon;
+      bin_path = helpersBin;
     })
 
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
@@ -161,7 +162,7 @@ buildGoModule rec {
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     mainProgram = "podman";
   };
 }

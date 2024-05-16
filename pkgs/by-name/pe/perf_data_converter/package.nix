@@ -28,7 +28,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-IauQ4zEn9YHppLgW+4XjPv4N5IZlEkp//tE/Dy7k28s=";
+    sha256 = "sha256-Qm6Ng9cXvKx043P7qyNHyyMvdGK9aNarX1ZKeCp3mgY=";
   };
 
   nativeBuildInputs = [ jdk ];

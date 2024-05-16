@@ -9,7 +9,7 @@
 , gtk3
 , python-linux-procfs
 , python-ethtool
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     glib.dev
     gobject-introspection
     gtk3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [ pygobject3 python-linux-procfs python-ethtool ];

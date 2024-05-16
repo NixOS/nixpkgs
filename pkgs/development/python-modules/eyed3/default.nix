@@ -28,13 +28,6 @@ buildPythonPackage rec {
     six
   ];
 
-  postInstall = ''
-    for prog in "$out/bin/"*; do
-      wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH" \
-                          --prefix PATH : ${python}/bin
-    done
-  '';
-
   meta = with lib; {
     description = "A Python module and command line program for processing ID3 tags";
     mainProgram = "eyeD3";

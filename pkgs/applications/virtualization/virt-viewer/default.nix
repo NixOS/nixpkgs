@@ -30,7 +30,7 @@
 , spice-protocol
 , spiceSupport ? true
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     shared-mime-info
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -20,19 +20,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-lkGIQIMWfg71UOkT/TST8O6hD0IfslENj6oFPevUGl4=";
+    hash = "sha256-YuYowUw5ecPa78bhT72zY2b99wn68mO3vVkop8hnb8M=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-bWan2DCyMvEC8ZQPwM+XpuOGkOZ/RdDV+LmRCN8UAuc=";
+      "smithay-0.3.0" = "sha256-1ANERwRG7Uwe1gSm6zQnEMQlpRrGSFP8mp6JItzjz0k=";
     };
   };
 

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, intltool, pkg-config, gtk3, fetchFromGitHub
-, autoreconfHook, wrapGAppsHook }:
+, autoreconfHook, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   version = "unstable-2022-02-14";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ly2w9jmRlprm/PnyC0LYjrxBVK+J0DLiSpzuTUMZpWA=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook intltool ];
+  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook3 intltool ];
   buildInputs = [ gtk3 ];
 
   meta = with lib; {

@@ -11,7 +11,7 @@
 , steam-run
 , unzip
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

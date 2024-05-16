@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Small ncurses-based file browser forked from noice";
     homepage = "https://github.com/jarun/nnn";
-    changelog = "https://github.com/jarun/nnn/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ Br1ght0ne ];

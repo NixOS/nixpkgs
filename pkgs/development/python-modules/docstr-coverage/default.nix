@@ -8,7 +8,7 @@
 , pytest-mock
 }:
 let
-  version = "2.3.1";
+  version = "2.3.2";
 in
 buildPythonPackage {
   pname = "docstr-coverage";
@@ -18,7 +18,7 @@ buildPythonPackage {
     owner = "HunterMcGushion";
     repo = "docstr_coverage";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QmQE6KZ2NdXKQun+uletxYPktWvfkrj6NPAVl/mmpAY=";
+    hash = "sha256-k1ny4fWS+CmgLNWPlYPsscjei2UZ6h8QJrZSay5abck=";
   };
 
   propagatedBuildInputs = [ click pyyaml tqdm ];

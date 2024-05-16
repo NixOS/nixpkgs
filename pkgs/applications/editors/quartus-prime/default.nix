@@ -3,6 +3,7 @@
 , withQuesta ? true
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; }
+, extraProfile ? ""
 }:
 
 let
@@ -16,7 +17,8 @@ let
   };
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSEnv rec {
-  name = "quartus-prime-lite"; # wrapped
+  pname = "quartus-prime-lite"; # wrapped
+  inherit (unwrapped) version;
 
   targetPkgs = pkgs: with pkgs; [
     (runCommand "ld-lsb-compat" {} (''
@@ -79,7 +81,7 @@ in buildFHSEnv rec {
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/${name}
+    wrapper=$out/bin/${pname}
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
@@ -92,7 +94,7 @@ in buildFHSEnv rec {
                 echo "export NIXPKGS_IS_QUESTA_WRAPPER=1" >> "$wrapped"
                 ;;
         esac
-        echo "$wrapper $prog \"\$@\"" >> "$wrapped"
+        echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
     cd $out
@@ -114,7 +116,7 @@ in buildFHSEnv rec {
     if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
         export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
     fi
-  '';
+  '' + extraProfile;
 
   # Run the wrappers directly, instead of going via bash.
   runScript = "";
@@ -159,4 +161,6 @@ in buildFHSEnv rec {
       '';
     };
   };
+
+  inherit (unwrapped) meta;
 }

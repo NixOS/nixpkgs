@@ -490,18 +490,18 @@ in {
 
       targets.initrd.aliases = ["default.target"];
       units =
-           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-        // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
-        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
-        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
-        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
+           mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    v)) cfg.paths
+        // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit v)) cfg.services
+        // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   v)) cfg.slices
+        // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  v)) cfg.sockets
+        // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  v)) cfg.targets
+        // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   v)) cfg.timers
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
-                         in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
+                         in nameValuePair "${n}.mount" (mountToUnit v)) cfg.mounts)
         // listToAttrs (map
                      (v: let n = escapeSystemdPath v.where;
-                         in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+                         in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
       # make sure all the /dev nodes are set up
       services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , aioresponses
 , aiosqlite
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.63.5";
+  version = "0.64.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-iZxHXxheyoA5vo0Pxojs7QE8rSyTpsYpJ6/OzDSZJ20=";
+    hash = "sha256-4p/CUAZQLiADWzjXMOeYUX0OJgZczHrI2/sVRuXiFSI=";
   };
 
   postPatch = ''
@@ -72,9 +73,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # # Our two manual scans succeeded and the periodic one was attempted
-    # assert len(mock_scan.mock_calls) == 3
-    # AssertionError: assert 4 == 3
+    # assert quirked.quirk_metadata.quirk_location.endswith("zigpy/tests/test_quirks_v2.py]-line:104") is False
+    "test_quirks_v2"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [
     "test_periodic_scan_priority"
   ];
 

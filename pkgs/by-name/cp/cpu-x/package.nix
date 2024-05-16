@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
-, libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper
+, libcpuid, pciutils, procps, wrapGAppsHook3, nasm, makeWrapper
 , opencl-headers, ocl-icd
 , vulkan-headers, vulkan-loader, glfw
 , libXdmcp, pcre, util-linux
@@ -16,16 +16,16 @@
 
 stdenv.mkDerivation rec {
   pname = "cpu-x";
-  version = "5.0.3";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "X0rg";
     repo = "CPU-X";
     rev = "v${version}";
-    sha256 = "sha256-iaqqBeoack41D07Bbr0Fo1JXfF2ksXbqS5V5Ymt6Qvg=";
+    sha256 = "sha256-8jJP0gxH3B6qLrhKNa4P9ZfSjxaXTeBB1+UuadflLQo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 nasm makeWrapper ];
   buildInputs = [
     gtk3 ncurses libcpuid pciutils procps
     vulkan-headers vulkan-loader glfw

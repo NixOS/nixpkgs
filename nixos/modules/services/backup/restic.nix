@@ -11,7 +11,7 @@ in
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ config, name, ... }: {
+    type = types.attrsOf (types.submodule ({ name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
@@ -206,12 +206,19 @@ in
           ];
         };
 
+        runCheck = mkOption {
+          type = types.bool;
+          default = (builtins.length config.services.restic.backups.${name}.checkOpts > 0);
+          defaultText = literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+          description = "Whether to run the `check` command with the provided `checkOpts` options.";
+          example = true;
+        };
+
         checkOpts = mkOption {
           type = types.listOf types.str;
           default = [ ];
           description = ''
-            A list of options for 'restic check', which is run after
-            pruning.
+            A list of options for 'restic check'.
           '';
           example = [
             "--with-cache"
@@ -298,7 +305,9 @@ in
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
+            ];
+            checkCmd = optionals backup.runCheck [
+                (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -331,7 +340,7 @@ in
             serviceConfig = {
               Type = "oneshot";
               ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
-                ++ pruneCmd;
+                ++ pruneCmd ++ checkCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";

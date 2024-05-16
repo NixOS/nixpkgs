@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config pcre
+#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config pcre gnugrep
 git_url='https://github.com/iv-org/invidious.git'
 git_branch='master'
 git_dir='/var/tmp/invidious.git'
@@ -26,7 +26,6 @@ json_set() {
     jq --arg x "$2" "$1 = \$x" < 'versions.json' | sponge 'versions.json'
 }
 
-old_rev=$(json_get '.invidious.rev')
 old_version=$(json_get '.invidious.version')
 today=$(LANG=C date -u +'%Y-%m-%d')
 
@@ -37,38 +36,35 @@ if [ ! -d "$git_dir" ]; then
 fi
 git -C "$git_dir" fetch origin --tags "$git_branch"
 
-# use latest commit before today, we should not call the version *today*
-# because there might still be commits coming
-# use the day of the latest commit we picked as version
-new_rev=$(git -C "$git_dir" log -n 1 --format='format:%H' --before="${today}T00:00:00Z" "origin/$git_branch")
-new_tag=$(git -C "$git_dir" describe --tags --abbrev=0 "$new_rev")
-new_version="$new_tag-unstable-$(TZ=UTC git -C "$git_dir" log -n 1 --date='format-local:%Y-%m-%d' --format='%cd' "$new_rev")"
-info "latest commit before $today: $new_rev"
+new_tag="$(git -C "$git_dir" ls-remote --tags --sort=committerdate origin | head -n1 | grep -Po '(?<=refs/tags/).*')"
+new_version="${new_tag#v}"
 
-if [ "$new_rev" = "$old_rev" ]; then
+if [ "$new_version" = "$old_version" ]; then
     info "$pkg is up-to-date."
     exit
 fi
 
+commit="$(git -C "$git_dir" rev-list "$new_tag" --max-count=1 --abbrev-commit)"
+date="$(git -C "$git_dir" log -1 --format=%cd --date=format:%Y.%m.%d)"
+json_set '.invidious.date' "$date"
+json_set '.invidious.commit' "$commit"
 json_set '.invidious.version' "$new_version"
-json_set '.invidious.rev' "$new_rev"
+
 new_hash=$(nix-prefetch -I 'nixpkgs=../../..' "$pkg")
 json_set '.invidious.hash' "$new_hash"
-commit_msg="$pkg: $old_version -> $new_version"
 
 # fetch video.js dependencies
 info "Running scripts/fetch-player-dependencies.cr..."
-git -C "$git_dir" reset --hard "$new_rev"
+git -C "$git_dir" reset --hard "$new_tag"
 (cd "$git_dir" && crystal run scripts/fetch-player-dependencies.cr -- --minified)
 rm -f "$git_dir/assets/videojs/.gitignore"
 videojs_new_hash=$(nix-hash --type sha256 --sri "$git_dir/assets/videojs")
 json_set '.videojs.hash' "$videojs_new_hash"
 
-if git -C "$git_dir" diff-tree --quiet "${old_rev}..${new_rev}" -- 'shard.lock'; then
-    info "shard.lock did not change since $old_rev."
+if git -C "$git_dir" diff-tree --quiet "v${old_version}..${new_tag}" -- 'shard.lock'; then
+    info "shard.lock did not change since v$old_version."
 else
     info "Updating shards.nix..."
-    crystal2nix -- "$git_dir/shard.lock"  # argv's index seems broken
+    (cd "$git_dir" && crystal2nix)
+    mv "$git_dir/shards.nix" .
 fi
-
-git commit --verbose --message "$commit_msg" -- versions.json shards.nix

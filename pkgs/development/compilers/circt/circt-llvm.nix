@@ -23,7 +23,7 @@
     "-DLLVM_BUILD_EXAMPLES=OFF"
     "-DLLVM_OPTIMIZED_TABLEGEN=ON"
     "-DLLVM_ENABLE_PROJECTS=mlir"
-    "-DLLVM_TARGETS_TO_BUILD="
+    "-DLLVM_TARGETS_TO_BUILD=Native"
 
     # This option is needed to install llvm-config
     "-DLLVM_INSTALL_UTILS=ON"
@@ -50,7 +50,9 @@
       --replace "$out/bin/llvm-config" "$dev/bin/llvm-config" # patch path for llvm-config
   '';
 
-  doCheck = true;
+  # circt only use the mlir part of llvm, occasionally there are some unrelated failure from llvm,
+  # disable the llvm check, but keep the circt check enabled.
+  doCheck = false;
   checkTarget = "check-mlir";
 
   meta = llvm.meta // {

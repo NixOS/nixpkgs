@@ -19,7 +19,7 @@
 , zeitgeist
 , libcloudproviders
 , libgit2-glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , systemd
 }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -1,9 +1,8 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.shelly;
+  inherit (lib) mkOption types;
 in
 {
   port = 9784;

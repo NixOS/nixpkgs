@@ -6,6 +6,7 @@
 , gflanguages
 , glyphslib
 , pytestCheckHook
+, pyyaml
 , requests
 , setuptools
 , setuptools-scm
@@ -14,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "glyphsets";
-  version = "0.6.14";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lMRgchadgKyfFLw6ZF1sJAKBAK75zmw77L34MW9p7TI=";
+    hash = "sha256-fa+W1IGIZcn1P1xNKm1Yb/TOuf4QdDVnIvlDkOLOcLY=";
   };
 
   dependencies = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
     fonttools
     gflanguages
     glyphslib
+    pyyaml
     requests
     setuptools
     unicodedata2

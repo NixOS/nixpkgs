@@ -1,4 +1,4 @@
-{ metaFetch, mkCoqDerivation, coq, lib, glib, gnome, wrapGAppsHook,
+{ metaFetch, mkCoqDerivation, coq, lib, glib, gnome, wrapGAppsHook3,
   version ? null }:
 
 let ocamlPackages = coq.ocamlPackages;
@@ -21,7 +21,7 @@ ocamlPackages.buildDunePackage {
   src = "${fetched.src}/language-server";
   nativeBuildInputs = [ coq ];
   buildInputs =
-    [ coq glib gnome.adwaita-icon-theme wrapGAppsHook ] ++
+    [ coq glib gnome.adwaita-icon-theme wrapGAppsHook3 ] ++
     (with ocamlPackages; [ findlib
       lablgtk3-sourceview3 yojson zarith ppx_inline_test
       ppx_assert ppx_sexp_conv ppx_deriving ppx_import sexplib

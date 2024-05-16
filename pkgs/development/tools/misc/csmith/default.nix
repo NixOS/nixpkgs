@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 makeWrapper ];
   buildInputs = [ libbsd ] ++ (with perlPackages; [ perl SysCPU ]);
 
+  CXXFLAGS = "-std=c++98";
+
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
       --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \

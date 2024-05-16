@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  opencc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencc";
@@ -11,7 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-N7nazA0xoQ2ewOGDiJg1vBBYMdF1/qiCfNjG5CFFbuk=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs =
+    [
+      cmake
+      python3
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      opencc # opencc_dict
+    ];
 
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";

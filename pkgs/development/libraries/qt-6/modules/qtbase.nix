@@ -92,21 +92,16 @@
   # options
 , libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
-, debug ? false
-, developerBuild ? false
 , qttranslations ? null
 }:
 
 let
-  debugSymbols = debug || developerBuild;
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
 
   inherit src version;
-
-  debug = debugSymbols;
 
   propagatedBuildInputs = [
     libxml2
@@ -195,7 +190,6 @@ stdenv.mkDerivation rec {
     CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional developerBuild gdb
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
@@ -265,8 +259,6 @@ stdenv.mkDerivation rec {
     # FIXME: not sure why this isn't added automatically?
     patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
   '';
-
-  dontStrip = debugSymbols;
 
   dontWrapQtApps = true;
 

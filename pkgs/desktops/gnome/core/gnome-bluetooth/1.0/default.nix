@@ -12,7 +12,7 @@
 , udev
 , itstool
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook3
 , libnotify
 , libcanberra-gtk3
 , gobject-introspection
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     gtk-doc
     docbook-xsl-nons

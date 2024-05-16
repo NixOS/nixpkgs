@@ -1,17 +1,29 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "awslimitchecker";
   version = "12.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jantman";
     repo = "awslimitchecker";
-    rev = version;
-    sha256 = "1p6n4kziyl6sfq7vgga9v88ddwh3sgnfb1m1cx6q25n0wyl7phgv";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+8F7qOfAFoFNZ6GG5ezTA/LWENpJvbcPdtpQH/8k1tw=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  patches = [
+    # Fix the version lookup to use only the hardcoded version in the source package
+    ./version.patch
+  ];
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     boto3
     botocore
     pytz
@@ -19,25 +31,13 @@ python3Packages.buildPythonApplication rec {
     versionfinder
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     onetimepass
-    pytestCheckHook
     pyotp
+    mock
+    (pytestCheckHook.override { pytest = pytest_7; })
     testfixtures
-  ];
-
-  patches = [
-    # Fix the version lookup to use only the hardcoded version in the source package
-    ./version.patch
-  ];
-
-  pytestFlagsArray = [
-    "awslimitchecker/tests"
-
-    # Upstream did not adapt to pytest 8 yet.
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
   ];
 
   disabledTestPaths = [
@@ -53,11 +53,11 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "awslimitchecker.checker" ];
 
   meta = with lib; {
+    description = "A script and python package to check your AWS service limits and usage via boto3";
     homepage = "http://awslimitchecker.readthedocs.org";
     changelog = "https://github.com/jantman/awslimitchecker/blob/${version}/CHANGES.rst";
-    description = "A script and python package to check your AWS service limits and usage via boto3";
-    mainProgram = "awslimitchecker";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ zakame ];
+    mainProgram = "awslimitchecker";
   };
 }

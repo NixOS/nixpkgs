@@ -9,11 +9,11 @@
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.2.3.20090";
+  version = "2.3.1.31116";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    sha256 = "sha256-SqxQF5pG61CySsDzdZ1P2C9cCe/B145D0S+T4NByif8=";
+    sha256 = "sha256-mrTeUp9DBSO1S6Nxx077lqtY847CiCBCCi/vboZ8ADs=";
     stripRoot = false;
   };
 
@@ -35,7 +35,6 @@ let
   appimage = appimageTools.wrapAppImage {
     inherit pname version;
     src = appimageContents;
-    extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.targetPkgs pkgs);
   };
 in
 stdenv.mkDerivation {
@@ -47,7 +46,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} \
+    makeWrapper ${appimage}/bin/${pname} $out/bin/${pname} \
       --append-flags "--update-failed" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
 

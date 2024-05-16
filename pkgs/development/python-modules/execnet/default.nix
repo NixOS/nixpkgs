@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "2.0.2";
+  version = "2.1.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zFm8RCN0L9ca0icSLrDdRNtR77PcQJW0WsmgjHcAlq8=";
+    hash = "sha256-UYm1LGEhwk/q4ogWarQbMlScfiNIZSc2VAuebn1OcuM=";
   };
 
   postPatch = ''

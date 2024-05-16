@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, pkgs }:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "plexamp";
@@ -16,11 +16,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
-
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
     install -m 444 -D ${appimageContents}/plexamp.png \
       $out/share/icons/hicolor/512x512/apps/plexamp.png

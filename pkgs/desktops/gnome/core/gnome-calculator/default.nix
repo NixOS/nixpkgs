@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, appstream
 , meson
 , ninja
 , vala
@@ -24,14 +25,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "45.0.2";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "fcvzI4SJcXHL5Ug+xmTZlOXnVekSrh35EWJPA8kIZ8I=";
+    hash = "sha256-LTZ1CnOJAIYSLPPwyD5oUXiRWFYVFlMG+hWWqRhmgkc=";
   };
 
   nativeBuildInputs = [
+    appstream
     meson
     ninja
     pkg-config
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Calculator";
+    homepage = "https://apps.gnome.org/Calculator/";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;

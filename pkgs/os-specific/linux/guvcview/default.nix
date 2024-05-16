@@ -21,7 +21,7 @@
 # can be turned off if used as a library
 , useGtk ? true
 , gtk3 ? null
-, wrapGAppsHook ? null
+, wrapGAppsHook3 ? null
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
   ]
-    ++ lib.optionals (useGtk) [ wrapGAppsHook ]
+    ++ lib.optionals (useGtk) [ wrapGAppsHook3 ]
     ++ lib.optionals (useQt) [ wrapQtAppsHook ]
   ;
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytm";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "izar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-R/MDz6lCvUxtn6IJ8STHlWzkSjnUJziO+oPnaYhrr7U=";
+    sha256 = "sha256-MseV1ucDCzSM36zx04g9v5euDX0t74KqUSB4+brHzt8=";
   };
 
   propagatedBuildInputs = [ pydal graphviz pandoc plantuml ];

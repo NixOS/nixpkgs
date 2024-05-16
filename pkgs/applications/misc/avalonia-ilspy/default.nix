@@ -15,7 +15,6 @@
 , makeDesktopItem
 , copyDesktopItems
 , icoutils
-, autoPatchelfHook
 , bintools
 , fixDarwinDylibNames
 , autoSignDarwinBinariesHook
@@ -40,8 +39,7 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     icoutils
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ bintools fixDarwinDylibNames ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ bintools fixDarwinDylibNames ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ];
 
   buildInputs = [

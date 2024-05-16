@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , help2man
 , glib-networking
 , gst_all_1
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     help2man
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3

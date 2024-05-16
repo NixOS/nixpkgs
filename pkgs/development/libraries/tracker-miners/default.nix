@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.6.2";
+  version = "3.7.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Ctci89Uywh11fPSI+UKWBnnqj0V5Je+pdlbtTJ6bpP8=";
+    hash = "sha256-608rKIoMvp5hSHHLAEgnRGHP4cuEZ6yBexAtOHPby6U=";
   };
 
   nativeBuildInputs = [
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://gitlab.gnome.org/GNOME/tracker-miners";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

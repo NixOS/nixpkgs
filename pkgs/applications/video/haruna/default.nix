@@ -1,6 +1,6 @@
 { lib
+, stdenv
 , fetchFromGitLab
-, mkKdeDerivation
 , breeze-icons
 , breeze
 , cmake
@@ -15,7 +15,7 @@
 , kirigami
 , kxmlgui
 , kdoctools
-, mpv
+, mpvqt
 , pkg-config
 , wrapQtAppsHook
 , qqc2-desktop-style
@@ -23,15 +23,15 @@
 , yt-dlp
 }:
 
-mkKdeDerivation rec {
+stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-L/mTFPJPHl8A6FqkWUwICh+Yl4uIE5KnTkZVnC4kCZ8=";
+    hash = "sha256-403ZqllSSaOdTS1GSf8EIQk9gHOxMsWogbK9qh+MhpY=";
     domain = "invent.kde.org";
   };
 
@@ -56,7 +56,7 @@ mkKdeDerivation rec {
     kirigami
     kxmlgui
     kdoctools
-    mpv
+    mpvqt
     qtbase
   ];
 

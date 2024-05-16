@@ -21,6 +21,4 @@ index cd889ff18..e2cd6468e 100644
 +        }
 +
 +        load_module_dir (extensiondir);
- 
-         eel_debug_call_at_shutdown (free_module_objects);
      }

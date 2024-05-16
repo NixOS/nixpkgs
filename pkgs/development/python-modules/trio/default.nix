@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , stdenv
 
@@ -37,26 +37,23 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/6CadKa/gbhPhhOQn7C+ruhHV0UBg6ei4LR7RVwMrF0=";
+  src = fetchFromGitHub {
+    owner = "python-trio";
+    repo = "trio";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JQ493U4WINOG6ob4IzfNQt5Lgs3DmEM2BDwbae7Bvsw=";
   };
 
-  postPatch = ''
-    substituteInPlace src/trio/_tests/test_subprocess.py \
-      --replace "/bin/sleep" "${coreutils}/bin/sleep"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     idna
     outcome
@@ -103,11 +100,8 @@ buildPythonPackage rec {
     "src/trio/_tests/tools/test_gen_exports.py"
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-  ];
-
   meta = {
+    changelog = "https://github.com/python-trio/trio/blob/v${version}/docs/source/history.rst";
     description = "An async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [ mit asl20 ];

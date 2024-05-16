@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tootik";
-  version = "0.10.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "tootik";
     rev = version;
-    hash = "sha256-5rv+hkIBRu5uIUYsy7drJvcAHwL9tY8qD/dTj1mbarQ=";
+    hash = "sha256-aAIyEUeIZvDbWfUcfcETGrB3Md8GqRB8hvRBUtMU5Zs=";
   };
 
-  vendorHash = "sha256-Lsc8nK4I1gZEW7RbEapHr3IJ6wTATLElX3XfNX1LwvM=";
+  vendorHash = "sha256-kAnGMNBWqH37QETnn2ncp7qOaCSx6Xd4HCFhCehh/kU=";
 
   nativeBuildInputs = [ openssl ];
 

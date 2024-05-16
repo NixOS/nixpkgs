@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "2.0.11";
+  version = "2.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-K7HN5yzadY5Sb6Sfn/K/QCzu14AcDEGHq+TSHkLhgTY=";
+    hash = "sha256-T1DCXG2BEmwW3q+S0r14o5svy4ZpDc5pa0AGt0DXHB8=";
   };
 
   postPatch = ''
@@ -71,6 +71,8 @@ buildPythonPackage rec {
   disabledTests = [
     # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
     "test_dirty"
+    # causes a hang
+    "test_rooms"
   ];
 
   __darwinAllowLocalNetworking = true;

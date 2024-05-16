@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
         --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
-    ${lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    ${lib.optionalString stdenv.isDarwin ''
       substituteInPlace build/config/compiler/BUILD.gn \
         --replace "-Wl,-fatal_warnings" ""
     ''}
@@ -143,7 +143,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${llvmCcAndBintools}"''
   ++ lib.optional stdenv.isDarwin ''use_lld=false'';
 
-  env.NIX_CFLAGS_COMPILE = "-O2";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-O2"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=enum-constexpr-conversion"
+  ]);
   FORCE_MAC_SDK_MIN = stdenv.hostPlatform.sdkVer or "10.12";
 
   nativeBuildInputs = [

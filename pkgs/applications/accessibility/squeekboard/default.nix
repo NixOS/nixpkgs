@@ -17,14 +17,14 @@
 , rustPlatform
 , rustc
 , feedbackd
-, wrapGAppsHook
+, wrapGAppsHook3
 , fetchpatch
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.22.0";
+  version = "1.38.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -32,22 +32,14 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Rk6LOCZ5bhoo5ORAIIYWENrKUIVypd8bnKjyyBSbUYg=";
+    hash = "sha256-ZVSnLH2wLPcOHkU2pO0BgIdGmULMNiacIYMRmhN+bZ8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    cargoUpdateHook = ''
-      cat Cargo.toml.in Cargo.deps.newer > Cargo.toml
-      cp Cargo.lock.newer Cargo.lock
-    '';
     name = "${pname}-${version}";
-    hash = "sha256-DygWra4R/w8KzkFzIVm4+ePpUpjiYGaDx2NQm6o+tWQ=";
+    hash = "sha256-tcn1tRuRlHVTYvc8T/ePfCEPNjih6B9lo/hdX+WwitQ=";
   };
-
-  mesonFlags = [
-    "-Dnewer=true"
-  ];
 
   nativeBuildInputs = [
     meson
@@ -55,7 +47,7 @@ stdenv.mkDerivation rec {
     pkg-config
     glib
     wayland
-    wrapGAppsHook
+    wrapGAppsHook3
     rustPlatform.cargoSetupHook
     cargo
     rustc

@@ -1,7 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , p7zip
 , parted
 , grub2
@@ -27,7 +27,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [

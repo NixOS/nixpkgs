@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , freetype-py
 , imageio
 , networkx
@@ -19,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pyrender";
   version = "0.1.45";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -45,12 +46,16 @@ buildPythonPackage rec {
   # the commit does not apply as a patch when cherry picked, hence the substituteInPlace
   postPatch = ''
     substituteInPlace tests/unit/test_meshes.py \
-      --replace \
+      --replace-fail \
         "bm = trimesh.load('tests/data/WaterBottle.glb').dump()[0]" \
         'bm = trimesh.load("tests/data/WaterBottle.glb").geometry["WaterBottle"]'
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  dependencies = [
     freetype-py
     imageio
     networkx

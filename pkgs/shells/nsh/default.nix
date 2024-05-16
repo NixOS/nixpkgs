@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
     license = [ licenses.cc0 /* or */ licenses.mit ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ cafkafk ];
   };
 
   passthru = {

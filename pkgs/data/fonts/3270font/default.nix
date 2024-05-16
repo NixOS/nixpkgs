@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/rbanffy/3270font";
     changelog = "https://github.com/rbanffy/3270font/blob/v${version}/CHANGELOG.md";
     license = [ licenses.bsd3 licenses.ofl ];
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

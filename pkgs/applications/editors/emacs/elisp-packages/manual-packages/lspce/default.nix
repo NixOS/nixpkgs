@@ -22,7 +22,7 @@ let
     homepage = "https://github.com/zbelial/lspce";
     description = "LSP Client for Emacs implemented as a module using rust";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.marsam ];
+    maintainers = [ ];
     inherit (emacs.meta) platforms;
   };
 

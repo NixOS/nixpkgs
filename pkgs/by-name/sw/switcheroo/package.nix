@@ -18,19 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switcheroo";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Switcheroo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hopN2ynksaYoNYjXrh7plmhfmGYyqqK75GOtbsE95ZY=";
+    hash = "sha256-AwecOA8HWGimhQyCEG3Z3hhwa9RVWssykUXsdvqqs9U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
     name = "switcheroo-${finalAttrs.version}";
-    hash = "sha256-wN6MsiOgYFgzDzdGei0ptRbG+h+xMJiFfzCcg6Xtryw=";
+    hash = "sha256-fpI4ue30DhkeWAolyeots+LkaRyaIPhYmIqRmx08i2s=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     changelog = "https://gitlab.com/adhami3310/Switcheroo/-/releases/v${finalAttrs.version}";
     description = "An app for converting images between different formats";
-    homepage = "https://gitlab.com/adhami3310/Switcheroo";
+    homepage = "https://apps.gnome.org/Converter/";
     license = licenses.gpl3Plus;
     mainProgram = "switcheroo";
     maintainers = with maintainers; [ michaelgrahamevans ];

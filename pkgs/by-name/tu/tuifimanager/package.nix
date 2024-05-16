@@ -1,34 +1,65 @@
-{ lib
+{ stdenv
+, lib
 , python3
 , fetchFromGitHub
+, kdePackages
+, gnome
+, qt6
+, makeWrapper
+, x11Support ? stdenv.isLinux
+# pypinput is marked as broken for darwin
+, pynputSupport ? stdenv.isLinux
+# Experimental Drag & Drop support requires x11 & pyinput suport
+, hasDndSupport ? x11Support && pynputSupport
+, enableDragAndDrop ? false
 }:
+
+lib.throwIf (enableDragAndDrop && !hasDndSupport)
+  "Drag and drop support is only available for linux with xorg."
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "3.3.5";
+  version = "4.0.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
-    rev = "refs/tags/v.${version}";
-    hash = "sha256-O4cAHFurgF6QzpeAMoipX2/JywU1drZOTw/Ob9Pa8WQ=";
+    rev = "v.${version}";
+    hash = "sha256-pppPlpPA1UYjUCKvGCjUo9jFNyOOkk6aF7/v5sXIptI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "Send2Trash == 1.8.0" "Send2Trash >= 1.8.0"
-  '';
 
   nativeBuildInputs = [
     python3.pkgs.setuptools
     python3.pkgs.setuptools-scm
-  ];
+  ] ++ (lib.optionals enableDragAndDrop [
+    qt6.wrapQtAppsHook
+    makeWrapper
+  ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
-    send2trash
-    unicurses
-  ];
+  propagatedBuildInputs = [
+    python3.pkgs.send2trash
+    python3.pkgs.unicurses
+  ] ++ (lib.optionals enableDragAndDrop [
+    python3.pkgs.pynput
+    python3.pkgs.pyside6
+    python3.pkgs.requests
+    python3.pkgs.xlib
+    kdePackages.qtbase
+    kdePackages.qt6gtk2
+  ]);
+
+  postFixup = let
+    # fix missing 'adwaita' warning missing with ncurses tui
+    # see: https://github.com/NixOS/nixpkgs/issues/60918
+    theme = gnome.gnome-themes-extra;
+  in
+    lib.optionalString enableDragAndDrop ''
+      wrapProgram $out/bin/tuifi \
+        --prefix GTK_PATH : "${theme}/lib/gtk-2.0" \
+        --set tuifi_synth_dnd True
+    '';
+
   pythonImportsCheck = [ "TUIFIManager" ];
 
   meta = with lib; {
@@ -39,7 +70,6 @@ python3.pkgs.buildPythonApplication rec {
       attempt to get more attention to the Uni-Curses project.
     '';
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
-    changelog = "https://github.com/GiorgosXou/TUIFIManager/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ michaelBelsanti sigmanificient ];
     mainProgram = "tuifi";

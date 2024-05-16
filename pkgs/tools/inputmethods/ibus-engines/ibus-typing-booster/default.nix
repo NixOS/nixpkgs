@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkg-config, gtk3, m17n_lib
-, wrapGAppsHook, gobject-introspection
+, wrapGAppsHook3, gobject-introspection
 }:
 
 let
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-CZqtjiBTvnTvTf1AUd0IWINSQo4iOaJkBFT2YFsqTvI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 gobject-introspection ];
   buildInputs = [ python ibus gtk3 m17n_lib ];
 
   preFixup = ''

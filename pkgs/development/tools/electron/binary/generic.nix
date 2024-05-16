@@ -3,7 +3,7 @@
 , libXScrnSaver
 , makeWrapper
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , unzip
@@ -112,7 +112,7 @@ let
     nativeBuildInputs = [
       unzip
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
     dontUnpack = true;

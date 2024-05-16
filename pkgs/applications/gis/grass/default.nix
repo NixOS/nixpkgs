@@ -3,7 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , bison
 , blas
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
 
     bison
     flex

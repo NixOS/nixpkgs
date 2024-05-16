@@ -16,7 +16,7 @@ let
       sqlalchemy = prev.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = fetchPypi {
-          inherit (oldAttrs) pname;
+          pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
@@ -157,6 +157,7 @@ py.pkgs.buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
     maintainers = teams.wdz.members;
+    broken = true; # last successful build 2023-10-21
   };
 }
 

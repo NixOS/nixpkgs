@@ -5,7 +5,7 @@
 , gnome-flashback
 , xorg
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , panelModulePackages ? [ ]
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = selectedPanelModulePackages ++

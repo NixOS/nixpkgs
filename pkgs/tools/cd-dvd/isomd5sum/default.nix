@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rhinstaller/isomd5sum";
     description = "Utilities for working with md5sum implanted in ISO images";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ knl ];
   };
 }

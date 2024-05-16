@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "2.1.3";
+  version = "2.2.0";
 
   disabled = pythonOlder "3.7";
 
@@ -25,14 +25,14 @@ buildPythonPackage rec {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
     rev = "v${version}";
-    hash = "sha256-K2pflwHpzuYDMNUB7YQu6NX21O0aOwRChBgjdiwFQ+Y=";
+    hash = "sha256-Njd+sc35jlA96iVf2uuVN2BK92ctwUDfBAUfpgqtPs0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     icalendar
     pytz
     python-dateutil

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "relatorio";
-  version = "0.10.1";
+  version = "0.10.2";
 
   disabled = pythonOlder "3.5";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0c72302d50d5dfa433ddab191672eec1dde1c6ed26330a378b720e5a3012e23";
+    sha256 = "sha256-zgCOmcR9FWj0lpi78U0G1CKR5kyNyr541HusIrBpF/Q=";
   };
 
   propagatedBuildInputs = [

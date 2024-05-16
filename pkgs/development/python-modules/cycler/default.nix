@@ -36,6 +36,5 @@ buildPythonPackage rec {
     description = "Composable style cycles";
     homepage = "https://github.com/matplotlib/cycler";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

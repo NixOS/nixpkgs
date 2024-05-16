@@ -1,18 +1,19 @@
-{ lib
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.31.0";
+  version = "0.31.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,32 +22,26 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "govee-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g4tOu4nrJx1DVk2KLfF6HIEM7vTkfBg2fd7R1j+Xwrk=";
+    hash = "sha256-aWSf80WmVopkvqCzQKHEw9McrfepZcN+fhrUP90gf5U=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=govee_ble --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=govee_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "govee_ble"
-  ];
+  pythonImportsCheck = [ "govee_ble" ];
 
   meta = with lib; {
     description = "Library for Govee BLE devices";

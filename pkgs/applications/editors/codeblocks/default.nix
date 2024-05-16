@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, file, zip, wxGTK32, gtk3
-, contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook
+, contribPlugins ? false, hunspell, gamin, boost, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1idaksw1vacmm83krxh5zlb12kad3dkz9ixh70glw1gaibib7vhm";
   };
 
-  nativeBuildInputs = [ pkg-config file zip wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config file zip wrapGAppsHook3 ];
   buildInputs = [ wxGTK32 gtk3 ]
     ++ lib.optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;

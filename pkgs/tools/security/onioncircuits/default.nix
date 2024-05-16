@@ -5,7 +5,7 @@
 , gobject-introspection
 , intltool
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.distutils-extra
   ];
 

@@ -48,10 +48,7 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiPkgs = null; # no 32bit needed
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${pname}-${version},${pname}}
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/notesnook.desktop \

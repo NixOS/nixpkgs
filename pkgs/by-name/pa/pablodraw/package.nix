@@ -2,7 +2,7 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, wrapGAppsHook
+, wrapGAppsHook3
 , copyDesktopItems
 , gtk3
 , libnotify
@@ -35,7 +35,7 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  nativeBuildInputs = [ wrapGAppsHook copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
 
   runtimeDeps = [ gtk3 libnotify ];
 

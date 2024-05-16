@@ -207,7 +207,7 @@ Latitude series) can be enabled as follows:
 
 ```nix
 {
-  services.xserver.libinput.enable = true;
+  services.libinput.enable = true;
 }
 ```
 
@@ -216,7 +216,7 @@ For instance, the following disables tap-to-click behavior:
 
 ```nix
 {
-  services.xserver.libinput.touchpad.tapping = false;
+  services.libinput.touchpad.tapping = false;
 }
 ```
 

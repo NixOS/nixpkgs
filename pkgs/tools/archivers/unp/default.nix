@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Command line tool for unpacking archives easily";
     homepage = "https://packages.qa.debian.org/u/unp.html";
-    license = with licenses; [ gpl2 ];
+    license = with licenses; [ gpl2Only ];
     maintainers = [ maintainers.timor ];
     platforms = platforms.all;
   };

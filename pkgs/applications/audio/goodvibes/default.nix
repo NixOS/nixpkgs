@@ -10,7 +10,7 @@
 , libsoup
 , keybinder3
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook3
 , appstream-glib
 , desktop-file-utils
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     appstream-glib
     desktop-file-utils
   ];

@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     pyvcd
   ] ++

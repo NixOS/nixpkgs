@@ -40,6 +40,6 @@ buildDunePackage rec {
     homepage = "https://github.com/leostera/riot";
     changelog = "https://github.com/leostera/riot/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marsam ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

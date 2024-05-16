@@ -24,7 +24,7 @@
 , libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
 , cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
-, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
+, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook3, atk
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
 , cargo, rustc, rustPlatform
@@ -50,7 +50,7 @@ in
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook atk ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 atk ];
   };
 
   bundler = attrs:
@@ -230,13 +230,13 @@ in
   gdk_pixbuf2 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gdk-pixbuf ];
   };
 
   gdk3 = attrs: {
     nativeBuildInputs = [ pkg-config bundler rake ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gdk-pixbuf cairo ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gdk-pixbuf cairo ];
   };
 
   gpgme = attrs: {
@@ -395,7 +395,7 @@ in
   gobject-introspection = attrs: {
     nativeBuildInputs = [ pkg-config pcre2 ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 glib ];
   };
 
   gollum = attrs: {
@@ -586,7 +586,7 @@ in
     ];
   };
 
-  nokogiri = attrs: {
+  nokogiri = attrs: ({
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-lib=${zlib.out}/lib"
@@ -601,7 +601,9 @@ in
       "--with-iconv-dir=${libiconv}"
       "--with-opt-include=${libiconv}/include"
     ];
-  };
+  } // lib.optionalAttrs stdenv.isDarwin {
+    buildInputs = [ libxml2 ];
+  });
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
@@ -633,7 +635,7 @@ in
     ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ libdatrie libthai ]
       ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
-    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook gtk2 ];
+    propagatedBuildInputs = [ gobject-introspection wrapGAppsHook3 gtk2 ];
   };
 
   patron = attrs: {

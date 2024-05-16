@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gobject-introspection, makeWrapper, wrapGAppsHook
+, gobject-introspection, makeWrapper, wrapGAppsHook3
 , gtk3, gst_all_1, python3
 , gettext, gnome, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk
 , iconTheme ? gnome.adwaita-icon-theme
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gobject-introspection
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals documentationSupport [
     help2man
     python3.pkgs.sphinx

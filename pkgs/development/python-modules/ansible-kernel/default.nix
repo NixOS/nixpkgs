@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , writeText
+, setuptools
 , ipywidgets
 , six
 , docopt
@@ -25,14 +26,16 @@ in
 buildPythonPackage rec {
   pname = "ansible-kernel";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-UJjm9FpmXSznXtaIR2rVv5YJS/H83FvRkNz09vwoe0c=";
   };
 
-  propagatedBuildInputs = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
 
   postPatch = ''
    # remove when merged

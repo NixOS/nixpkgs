@@ -13,7 +13,7 @@
 , pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, pipewire
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, SDL2, SDL2_image
 , jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook3
 , vncSupport ? !nixosTestRunner && !toolsOnly, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner && !toolsOnly, libcacard
 , spiceSupport ? true && !nixosTestRunner && !toolsOnly, spice, spice-protocol
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.2.2";
+  version = "8.2.4";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hHNGwbgsGlSyw49u29hVSe3rF0MLfU09oSYg4pYrxPM=";
+    hash = "sha256-7PVTf+q5JkG5nXSC9VHyGV06W9NKzvnVK/v/NTpgc5c=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
     python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
   ]
-    ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 

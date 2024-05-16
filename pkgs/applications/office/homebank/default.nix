@@ -1,15 +1,15 @@
-{ fetchurl, lib, stdenv, gtk, pkg-config, libofx, intltool, wrapGAppsHook
+{ fetchurl, lib, stdenv, gtk, pkg-config, libofx, intltool, wrapGAppsHook3
 , libsoup_3, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "homebank";
-  version = "5.7.4";
+  version = "5.8";
   src = fetchurl {
     url = "https://www.gethomebank.org/public/sources/homebank-${version}.tar.gz";
-    hash = "sha256-Qs5xRsh16gyjyTORtqm/RxTbRiHGP0oJTcxviYW7VOQ=";
+    hash = "sha256-tgjcz4znnw++5lBoJDWtHKpRFENfM0xBpyhGf8nAACw=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
   buildInputs = [ gtk libofx libsoup_3 gnome.adwaita-icon-theme];
 
   meta = with lib; {

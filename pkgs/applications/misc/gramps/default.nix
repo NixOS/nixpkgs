@@ -7,7 +7,7 @@
 , gexiv2
 , pango
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
   # Optional packages:
 , enableOSM ? true
@@ -44,7 +44,7 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     gettext
     gobject-introspection

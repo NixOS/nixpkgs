@@ -25,6 +25,7 @@
 , libsoup
 , libsoup_3
 , json-glib
+, avahi
 , systemd
 , dbus
 , writeText
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
-  version = "3.6.0";
+  version = "3.7.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Ulks/hm6/9FtvkdHW+fadQ29C2Mz/XrLYPqp2lvEDfI=";
+    hash = "sha256-3ryqKR5Gr63Bz2olHxfvsCRAqki/9kPXjGESOAfc4A8=";
   };
 
   strictDeps = true;
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
     libuuid
     json-glib
+    avahi
     libstemmer
     dbus
   ] ++ lib.optionals stdenv.isLinux [
@@ -171,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
     mainProgram = "tracker3";
     maintainers = teams.gnome.members;

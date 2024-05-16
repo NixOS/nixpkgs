@@ -1,7 +1,7 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 let
-  version = "1.64.0";
+  version = "1.66.0";
 in
 buildGoModule {
   pname = "tailscale-nginx-auth";
@@ -11,9 +11,9 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-qBZoiqhBMBNbeytDBH+sOxxsVjOcH6vnSgIufx+Op04=";
+    hash = "sha256-ZI9/YlVHbdvEwD0YHWfUhciU2x4wp4GzTanwDvuIpz4=";
   };
-  vendorHash = "sha256-pYeHqYd2cCOVQlD1r2lh//KC+732H0lj1fPDBr+W8qA=";
+  vendorHash = "sha256-Hd77xy8stw0Y6sfk3/ItqRIbM/349M/4uf0iNy1xJGw=";
 
   CGO_ENABLED = 0;
 
@@ -38,6 +38,6 @@ buildGoModule {
     description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy.";
     license = licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
-    maintainers = with maintainers; [ danderson phaer ];
+    maintainers = with maintainers; [ phaer ];
   };
 }

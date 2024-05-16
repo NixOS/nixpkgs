@@ -3,6 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "rmview";
   version = "3.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bordaigorl";
@@ -11,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-V26zmu8cQkLs0IMR7eFO8x34McnT3xYyzlZfntApYkk=";
   };
 
-  nativeBuildInputs = with python3Packages; [ pyqt5 wrapQtAppsHook ];
+  nativeBuildInputs = with python3Packages; [ pyqt5 setuptools wrapQtAppsHook ];
   propagatedBuildInputs = with python3Packages; [ pyqt5 paramiko twisted pyjwt pyopenssl service-identity sshtunnel ];
 
   preBuild = ''

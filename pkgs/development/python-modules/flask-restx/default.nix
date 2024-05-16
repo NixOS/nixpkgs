@@ -83,6 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-restx/flask-restx";
     changelog = "https://github.com/python-restx/flask-restx/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

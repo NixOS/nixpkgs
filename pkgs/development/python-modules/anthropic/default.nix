@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, anyio
-, distro
-, dirty-equals
-, httpx
-, google-auth
-, sniffio
-, pydantic
-, pytest-asyncio
-, respx
-, tokenizers
-, typing-extensions
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  dirty-equals,
+  distro,
+  fetchFromGitHub,
+  google-auth,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  httpx,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
+  sniffio,
+  tokenizers,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.19.1";
+  version = "0.25.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,14 +30,15 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D9asbwZ9puOuIK6w7cWJ2HmC3JYjamUZPOxVKWq+Va4=";
+    hash = "sha256-CBe5rzO2+m1AGfDbAqxCzZ+Rm1Er4e0JuxtFRzgHV/Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     distro
     httpx
@@ -56,13 +59,21 @@ buildPythonPackage rec {
     respx
   ];
 
+  pythonImportsCheck = [ "anthropic" ];
+
+  disabledTests = [
+    # Test require network access
+    "test_copy_build_request"
+  ];
+
   disabledTestPaths = [
-    # require network access
+    # Test require network access
     "tests/api_resources"
   ];
 
-  pythonImportsCheck = [
-    "anthropic"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {

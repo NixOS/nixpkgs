@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchzip
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , dbus
 , fontconfig
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GQeYR232zoHLIt1AzznD7rp6u4zMiAdj1+0OfXfT6AQ=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   sourceRoot = ".";
 

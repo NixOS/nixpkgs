@@ -19,7 +19,7 @@ buildPythonPackage rec {
   disabled = isPy27;
 
   src = fetchPypi {
-    pname = "Mesa";
+    pname = "mesa";
     inherit version;
     hash = "sha256-5og3ACS2r36BEGWfqtw6WG6yJwNF5p3M9K25sSmHosM=";
   };
@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "An agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;
     maintainers = [ maintainers.dpaetzel ];
+    broken = true; # missing dependencies
   };
 }

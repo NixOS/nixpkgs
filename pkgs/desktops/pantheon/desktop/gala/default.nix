@@ -20,7 +20,7 @@
 , mesa
 , mutter
 , gnome-settings-daemon
-, wrapGAppsHook
+, wrapGAppsHook3
 , gexiv2
 , systemd
 }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

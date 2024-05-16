@@ -4,6 +4,7 @@
 , buildPythonPackage
 , cargo
 , datasets
+, huggingface-hub
 , fetchFromGitHub
 , fetchurl
 , libiconv
@@ -11,6 +12,7 @@
 , openssl
 , pkg-config
 , pytestCheckHook
+, python
 , pythonOlder
 , requests
 , rustPlatform
@@ -80,6 +82,7 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/bindings/python";
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -105,6 +108,7 @@ buildPythonPackage rec {
 
   dependencies = [
     numpy
+    huggingface-hub
   ];
 
   nativeCheckInputs = [

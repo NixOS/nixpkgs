@@ -25,7 +25,7 @@ buildPythonPackage rec {
     # 2. default to extension autoload & autoinstall disabled
     substituteInPlace setup.py \
       --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
-      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" ""
+      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "pass"
   '';
 
   env = {
@@ -33,8 +33,6 @@ buildPythonPackage rec {
     DUCKDB_BUILD_UNITY = 1;
     OVERRIDE_GIT_DESCRIBE="v${version}-0-g${rev}";
   };
-
-  dontPretendSetuptoolsSCMVersion = true;
 
   nativeBuildInputs = [
     pybind11
@@ -70,6 +68,9 @@ buildPythonPackage rec {
   disabledTests = [
     # tries to make http request
     "test_install_non_existent_extension"
+
+    # test is flaky https://github.com/duckdb/duckdb/issues/11961
+    "test_fetchmany"
 
     # https://github.com/duckdb/duckdb/issues/10702
     # tests are racy and interrupt can be delivered before or after target point

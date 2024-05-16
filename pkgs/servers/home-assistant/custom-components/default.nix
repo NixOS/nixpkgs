@@ -32,6 +32,8 @@
 
   moonraker = callPackage ./moonraker {};
 
+  ntfy = callPackage ./ntfy {};
+
   omnik_inverter = callPackage ./omnik_inverter {};
 
   prometheus_sensor = callPackage ./prometheus_sensor {};
@@ -41,6 +43,8 @@
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
+  tuya_local = callPackage ./tuya_local {};
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 

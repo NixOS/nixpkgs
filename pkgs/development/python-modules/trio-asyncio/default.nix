@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 , greenlet
 , trio
@@ -14,27 +14,28 @@
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "trio_asyncio";
-    inherit version;
-    hash = "sha256-msSKQ8vhZxtBIh7HNq4M2qc0yKOErGNiCWLBXXse3WQ=";
+  src = fetchFromGitHub {
+    owner = "python-trio";
+    repo = "trio-asyncio";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-634fcYAn5J1WW71J/USAMkJaZI8JmKoQneQEhz2gYFc=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
+      --replace-fail '"pytest-runner"' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     greenlet
     trio
     outcome
@@ -43,16 +44,14 @@ buildPythonPackage rec {
     exceptiongroup
   ];
 
-  # RuntimeWarning: Can't run the Python asyncio tests because they're not installed. On a Debian/Ubuntu system, you might need to install the libpython3.11-testsuite package.
-  doCheck = false;
+  pytestFlagsArray = [
+    # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
+    "-W" "ignore::RuntimeWarning"
+  ];
 
   nativeCheckInputs = [
     pytest-trio
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    "tests/python" # tries to import internal API test.test_asyncio
   ];
 
   pythonImportsCheck = [

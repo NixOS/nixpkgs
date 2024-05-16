@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PostgreSQL bindings for H3, a hierarchical hexagonal geospatial indexing system";
     homepage = "https://github.com/zachasme/h3-pg";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     inherit (postgresql.meta) platforms;
   };
 })

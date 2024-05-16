@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, installShellFiles
 , setuptools
 , setuptools-scm
 , wheel
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
+    installShellFiles
     setuptools
     setuptools-scm
     wheel
@@ -62,8 +64,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $man/share/man/man1/
-    ${docutils}/bin/rst2man.py doc/rst2pdf.rst $man/share/man/man1/rst2pdf.1
+    ${lib.getExe' docutils "rst2man"} doc/rst2pdf.rst rst2pdf.1
+    installManPage rst2pdf.1
   '';
 
   meta = with lib; {
@@ -72,6 +74,6 @@ buildPythonPackage rec {
     homepage = "https://rst2pdf.org/";
     changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

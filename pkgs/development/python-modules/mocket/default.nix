@@ -35,12 +35,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.12.4";
+  version = "3.12.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O+IRX59Z4D188XEmiSCT8H3sg1jhtaboHS3QINEnE0s=";
+    hash = "sha256-6yWo7SBlVldK+AxUBnQOXjQBxz9HbIC+Ch977xiZxek=";
   };
 
   nativeBuildInputs = [

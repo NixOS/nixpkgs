@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.2";
+  version = "5.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,15 +28,15 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dq362pevqgLx5KwZ19zQ6aOn5NCyiqynPCF7YdI6tkw=";
+    hash = "sha256-ptfT31eUNSpVaZfXAyRcIc2T2p82rXmzUyySSVbI9lI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
     cramjam
     numpy
@@ -76,6 +76,7 @@ buildPythonPackage rec {
     "test_http_size"
     "test_http_size_port"
     "test_issue_1054_filename_colons"
+    "test_multiple_page_lists"
     "test_no_multipart"
     "test_open_fsspec_github"
     "test_open_fsspec_http"
@@ -83,6 +84,7 @@ buildPythonPackage rec {
     "test_pickle_roundtrip_http"
     "test_split_ranges_if_large_file_in_http"
     # Cyclic dependency with dask-awkward
+    "test_dask_duplicated_keys"
     "test_decompression_executor_for_dask"
   ];
 

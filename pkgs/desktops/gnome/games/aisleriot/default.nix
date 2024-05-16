@@ -5,7 +5,7 @@
 , pkg-config
 , itstool
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , librsvg
 , libxml2
@@ -13,27 +13,25 @@
 , guile
 , libcanberra-gtk3
 , ninja
-, appstream-glib
 , yelp-tools
 }:
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.30";
+  version = "3.22.32";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "aisleriot";
     rev = version;
-    sha256 = "sha256-Fj5v2h6xDqf+PPxduxGr3vTy+eZ3aIv0u/ThrheYLGQ=";
+    sha256 = "sha256-+U/EsKTZjWa05DbILWAxqIpMcZ0DP0l4LIYxM2wCFdM=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
-    appstream-glib
     pkg-config
     itstool
     libxml2
@@ -65,7 +63,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Aisleriot";
+    homepage = "https://gitlab.gnome.org/GNOME/aisleriot";
     description = "A collection of patience games written in guile scheme";
     mainProgram = "sol";
     maintainers = teams.gnome.members;

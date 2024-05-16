@@ -1,9 +1,14 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
   cfg = config.services.prometheus.exporters.junos-czerwonk;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    mkIf
+    concatStringsSep
+    ;
 
   configFile = if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configurationFile);
 

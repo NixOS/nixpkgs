@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crunchy-cli";
-  version = "3.4.3";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "crunchy-labs";
     repo = "crunchy-cli";
     rev = "v${version}";
-    hash = "sha256-/7zJbmMPoHEpcsDPe1eVenxGenPCU6CcHE8nTBTHil8=";
+    hash = "sha256-SlTdyEeqQ9lCrFFTDtMhP0Kvm+3gxiUS+ZB5LvNWSZU=";
   };
 
   cargoLock = {

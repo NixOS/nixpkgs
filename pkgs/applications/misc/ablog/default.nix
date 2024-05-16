@@ -5,12 +5,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ablog";
-  version = "0.11.6";
+  version = "0.11.8";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fV4W4AaiqyruIz3OQ7/lGkMPMKmyiFa+fdU2QeeQCvs=";
+    hash = "sha256-PpNBfa4g14l8gm9+PxOFc2NDey031D7Ohutx2OGUeak=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

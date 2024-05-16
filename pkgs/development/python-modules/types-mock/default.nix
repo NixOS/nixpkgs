@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "types-mock";
-  version = "5.1.0.20240311";
+  version = "5.1.0.20240425";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dHJ5eYbYMBb5b95/c1d9EpsM2KjQt4NIenvjMNV7pDE=";
+    hash = "sha256-UoGmRdcugn1wBD48wUT+M7HAA9sIT3idwgOqkOgSpaQ=";
   };
 
   nativeBuildInputs = [

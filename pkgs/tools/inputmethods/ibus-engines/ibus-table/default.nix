@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, docbook2x, pkg-config
 , gtk3, dconf, gobject-introspection
-, ibus, python3, wrapGAppsHook }:
+, ibus, python3, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     docbook2x
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postUnpack = ''

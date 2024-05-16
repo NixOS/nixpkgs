@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pydeck";
-  version = "0.8.0";
+  version = "0.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B+3egz98/O9nSRJDURlap9zSRmPUkJ/XiY29C2+8Aew=";
+    hash = "sha256-90R1rmN5UdY/LuWDJnV/jU+c2fKkV89ClQcVAD4stgU=";
   };
 
   # upstream has an invalid pyproject.toml

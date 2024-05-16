@@ -38,6 +38,7 @@ in {
       store.blob.path = mkDefault "${dataDir}/data/blobs";
       storage.data = mkDefault "db";
       storage.fts = mkDefault "db";
+      storage.lookup = mkDefault "db";
       storage.blob = mkDefault "blob";
       resolver.type = mkDefault "system";
       resolver.public-suffix = mkDefault ["https://publicsuffix.org/list/public_suffix_list.dat"];

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-quick-stats";
-  version = "2.5.4";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     repo = "git-quick-stats";
     owner = "arzzen";
     rev = version;
-    sha256 = "sha256-dbi48rq3ijPa45xtTi6kAly/IwkX4aK1P9hmcPNQEqM=";
+    sha256 = "sha256-7riA3yYw2D8+x/wzzbv0RF+zHCtqVC1ZpVANZp9x2AQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

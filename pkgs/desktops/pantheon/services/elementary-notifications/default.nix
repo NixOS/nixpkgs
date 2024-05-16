@@ -12,7 +12,7 @@
 , libgee
 , libhandy
 , libcanberra-gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
   ];
+
+  postPatch = ''
+    # https://github.com/elementary/notifications/issues/222
+    substituteInPlace src/FdoActionGroup.vala \
+      --replace-fail "out VariantType" "out unowned VariantType"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

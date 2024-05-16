@@ -15,7 +15,6 @@ let
       in
       self.lib.nameValuePair attrName (import path {
         inherit jitSupport self;
-        thisAttr = attrName;
       })
     ) versions;
 

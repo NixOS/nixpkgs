@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openquantumsafe.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ maintainers.sigmanificient ];
   };
 }

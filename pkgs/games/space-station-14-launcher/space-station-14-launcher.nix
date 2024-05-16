@@ -2,7 +2,7 @@
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
@@ -73,7 +73,7 @@ buildDotnetModule rec {
     "-nologo"
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook iconConvTools copyDesktopItems ];
+  nativeBuildInputs = [ wrapGAppsHook3 iconConvTools copyDesktopItems ];
 
   runtimeDeps = [
     # Required by the game.
@@ -137,7 +137,7 @@ buildDotnetModule rec {
     description = "Launcher for Space Station 14, a multiplayer game about paranoia and disaster";
     homepage = "https://spacestation14.io";
     license = licenses.mit;
-    maintainers = [ maintainers.zumorica ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
   };

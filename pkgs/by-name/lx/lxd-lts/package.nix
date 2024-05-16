@@ -141,7 +141,7 @@ symlinkJoin {
   '';
 
   passthru = {
-    inherit (lxd-unwrapped-lts) tests ui;
+    inherit (lxd-unwrapped-lts) tests;
   };
 
   inherit (lxd-unwrapped-lts) meta pname version;

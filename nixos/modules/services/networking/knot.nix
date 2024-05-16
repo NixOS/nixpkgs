@@ -226,7 +226,7 @@ in {
       };
 
       settings = mkOption {
-        type = types.submodule { freeformType = types.attrs; };
+        type = (pkgs.formats.yaml {}).type;
         default = {};
         description = ''
           Extra configuration as nix values.

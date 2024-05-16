@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.6.2";
+  version = "5.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t1E8LeqIaJkfrX74iZiQ68+LGZubRGHDwR160670gg0=";
+    hash = "sha256-5vCuJ1HC0zOpYOCAfAYRSU6xJFYxoWeWWsvBAFCUVdM=";
   };
 
   postPatch = ''

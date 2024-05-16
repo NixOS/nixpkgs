@@ -1,51 +1,53 @@
-{ stdenv
-, lib
-, openexr
-, jemalloc
-, c-blosc
-, binutils
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook
-, boost179
-, cereal
-, cgal_5
-, curl
-, dbus
-, eigen
-, expat
-, gcc-unwrapped
-, glew
-, glfw
-, glib
-, glib-networking
-, gmp
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gtest
-, gtk3
-, hicolor-icon-theme
-, ilmbase
-, libpng
-, mesa
-, mpfr
-, nlopt
-, opencascade-occt
-, openvdb
-, pcre
-, qhull
-, systemd
-, tbb_2021_11
-, webkitgtk
-, wxGTK31
-, xorg
-, fetchpatch
-, withSystemd ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  openexr,
+  jemalloc,
+  c-blosc,
+  binutils,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  boost179,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  gcc-unwrapped,
+  glew,
+  glfw,
+  glib,
+  glib-networking,
+  gmp,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-plugins-good,
+  gtest,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mesa,
+  mpfr,
+  nlopt,
+  opencascade-occt_7_6,
+  openvdb,
+  pcre,
+  qhull,
+  systemd,
+  tbb_2021_11,
+  webkitgtk,
+  wxGTK31,
+  xorg,
+  fetchpatch,
+  withSystemd ? stdenv.isLinux,
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
       # Disable noisy debug dialogs
@@ -53,7 +55,14 @@ let
     ];
   });
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_11 jemalloc c-blosc ilmbase ];
+    buildInputs = [
+      openexr
+      boost179
+      tbb_2021_11
+      jemalloc
+      c-blosc
+      ilmbase
+    ];
   });
 in
 stdenv.mkDerivation rec {
@@ -70,7 +79,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -106,9 +115,7 @@ stdenv.mkDerivation rec {
     webkitgtk
     wxGTK31'
     xorg.libX11
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ checkInputs;
+  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -169,11 +176,8 @@ stdenv.mkDerivation rec {
   # needed to prevent collisions between the LICENSE.txt files of
   # bambu-studio and orca-slicer.
   postInstall = ''
-    mkdir -p $out/share/doc
-    mv $out/LICENSE.txt $out/share/doc/LICENSE.txt
-    if [ -f $out/README.md ]; then
-      mv $out/README.md $out/share/doc/README.md
-    fi
+    mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
+    mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
   meta = with lib; {

@@ -5,6 +5,9 @@
 , isPyPy
 , setuptools
 , pytestCheckHook
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -28,6 +31,8 @@ buildPythonPackage rec {
       gmpy2
     ];
   };
+
+  passthru.tests = { inherit sage; };
 
   nativeCheckInputs = [
     pytestCheckHook

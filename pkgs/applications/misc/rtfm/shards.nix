@@ -6,18 +6,18 @@
   };
   fzy = {
     url = "https://github.com/hugopl/fzy.git";
-    rev = "v0.5.5";
-    sha256 = "1zk95m43ymx9ilwr6iw9l44nkmp4sas28ib0dkr07hkhgrkw68sv";
+    rev = "6c2395bcdea1889969d0d08c16163c276fe4e473";
+    sha256 = "0vpradafkwckfsq7wqrgkpsli7bfmgc27d38q06l1jzq0z0j92rw";
   };
-  gio = {
-    url = "https://github.com/hugopl/gio.cr.git";
-    rev = "v0.2.1";
-    sha256 = "0vl5lpvhhdi9pvyl12smag0i3dwj1jjz1zzilc8ai0wjrnbnwlxs";
+  gi-crystal = {
+    url = "https://github.com/hugopl/gi-crystal.git";
+    rev = "v0.22.2";
+    sha256 = "0bpa1f8iaf97z2kbgjc7nc8km7nd7bppiwna319lm2hvm8m5pw15";
   };
   gtk4 = {
     url = "https://github.com/hugopl/gtk4.cr.git";
-    rev = "v0.16.0";
-    sha256 = "1bnnfy07246vwbjfwhziv2yw1g52pzhhrr25660fp3qcnw8q513w";
+    rev = "v0.16.1";
+    sha256 = "1cqkbh072y70l8g0p040vf50k920p32ry1larnwn9mqabd74jwaj";
   };
   harfbuzz = {
     url = "https://github.com/hugopl/harfbuzz.cr.git";
@@ -31,8 +31,8 @@
   };
   pango = {
     url = "https://github.com/hugopl/pango.cr.git";
-    rev = "v0.3.0";
-    sha256 = "1dg5bcbq11zww4xh68dq4ivnsz89yqsnxz81ggp4j9c9d6dhx0m4";
+    rev = "v0.3.1";
+    sha256 = "0xlf127flimnll875mcq92q7xsi975rrgdpcpmnrwllhdhfx9qmv";
   };
   sqlite3 = {
     url = "https://github.com/crystal-lang/crystal-sqlite3.git";

@@ -10,7 +10,7 @@
 , librsvg
 , polkit
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , mate-desktop
 , mateUpdateScript
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -112,7 +112,7 @@ in pythonpkgs.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace mealie/__init__.py \
-      --replace-fail '__version__ = ' '__version__ = "${version}" #'
+      --replace-fail '__version__ = ' '__version__ = "v${version}" #'
   '';
 
   postInstall = let

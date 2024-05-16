@@ -2,16 +2,16 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
-  version = "4.0.0";
-  rulesRev = "r1905950";
+  version = "4.0.1";
+  rulesRev = "r1916528";
 
   src = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
-    hash = "sha256-5aoXBQowvHK6qGr9xgSMrepNHsLsxh14dxegWbgxnog=";
+    hash = "sha256-l3XtdVnoPsPmwD7bK+j/x/FcxAX7E+hcFI6wvxkXIag=";
   };
   defaultRulesSrc = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-rules-${version}.${rulesRev}.tgz";
-    hash = "sha256-rk/7uRfrx/76ckD8W7UVHdpmP45AWRYa18m0Lu0brG0=";
+    hash = "sha256-OB6t/H5RPl9zU4m3gXPeWvRx89Bv5quPEpY0pmRLS/Q=";
   };
 
   patches = [

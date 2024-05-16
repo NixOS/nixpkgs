@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     mainProgram = "dnsmasq";
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ eelco fpletz globin ];

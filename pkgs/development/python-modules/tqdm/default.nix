@@ -42,9 +42,8 @@ buildPythonPackage rec {
     numpy
     rich
     tkinter
-  ] ++
-    # pandas is not supported on i686 or risc-v
-    lib.optional (!stdenv.isi686 && !stdenv.hostPlatform.isRiscV) pandas;
+    pandas
+  ];
 
   pytestFlagsArray = [
     "-W" "ignore::FutureWarning"
@@ -67,6 +66,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fridh ];
   };
 }

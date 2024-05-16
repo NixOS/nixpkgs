@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation {
   pname = "openxcom";
-  version = "1.0.0.2023.08.12";
+  version = "1.0.0.2024.02.28";
 
   src = fetchFromGitHub {
     owner = "OpenXcom";
     repo = "OpenXcom";
-    rev = "bd632cc8569a57fdc3b68ce53f6ea850422ec5ac";
-    hash = "sha256-ouYZ4rAEluqeP+ZUrbEZwCpXCw0cZLWsf1GbIE3jaTc=";
+    rev = "e2c5a1b45c33957ce7e206207c5fb752c1e79ae1";
+    hash = "sha256-2G2dSvoDdacdYsXS51h3aGLCCjbHwcvD4CNnQIH/J6A=";
   };
 
   nativeBuildInputs = [

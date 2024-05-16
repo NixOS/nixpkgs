@@ -238,7 +238,7 @@ in {
     services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
-    services.xserver.libinput.enable = mkDefault true;
+    services.libinput.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [
@@ -284,6 +284,15 @@ in {
       };
       kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
       kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };
+    };
+
+    security.wrappers = {
+      kwin_wayland = {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_sys_nice+ep";
+        source = "${lib.getBin pkgs.kdePackages.kwin}/bin/kwin_wayland";
+      };
     };
 
     programs.dconf.enable = true;

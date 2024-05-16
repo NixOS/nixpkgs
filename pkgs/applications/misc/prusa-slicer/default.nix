@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , boost
 , cereal
 , cgal
@@ -23,7 +23,7 @@
 , mpfr
 , nanosvg
 , nlopt
-, opencascade-occt
+, opencascade-occt_7_6
 , openvdb
 , pcre
 , qhull
@@ -37,6 +37,7 @@
 , wxGTK-override ? null
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hydra-cli";
     homepage = "https://github.com/nlewo/hydra-cli";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ gilligan lewo ];
+    maintainers = with maintainers; [ lewo ];
   };
 }

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       target and provides a way to access the internal rshim registers.
     '';
     homepage = "https://github.com/Mellanox/rshim-user-space";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nikstur ];
   };

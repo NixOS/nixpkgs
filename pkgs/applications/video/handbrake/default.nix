@@ -73,7 +73,7 @@
 , desktop-file-utils
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , intltool
 , glib
 , gtk3
@@ -220,7 +220,7 @@ let
       pkg-config
       python3
     ]
-    ++ optionals useGtk [ desktop-file-utils intltool meson ninja wrapGAppsHook ];
+    ++ optionals useGtk [ desktop-file-utils intltool meson ninja wrapGAppsHook3 ];
 
     buildInputs = [
       a52dec

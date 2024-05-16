@@ -1,40 +1,39 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, grpc-interceptor
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sqlparse
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  grpc-interceptor,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sqlparse,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "3.44.0";
+  version = "3.45.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NTzAsG/UVn2BxPwUxE/ZnXqkCA9LwhmDRoq3LdstLIo=";
+    hash = "sha256-MKtW6krGqnQ3hCmPgh4N5lRAGTe0DGDMegpUUoSpG0M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     google-api-core
     google-cloud-core
@@ -46,9 +45,7 @@ buildPythonPackage rec {
   ] ++ google-api-core.optional-dependencies.grpc;
 
   passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [

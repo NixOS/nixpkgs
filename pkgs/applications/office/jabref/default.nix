@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 , copyDesktopItems
 , unzip
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     jdk
     gradle
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     unzip
   ];

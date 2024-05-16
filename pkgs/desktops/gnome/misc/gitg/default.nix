@@ -7,7 +7,7 @@
 , glib
 , gpgme
 , json-glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , libpeas
 , bash
 , gobject-introspection
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gitg";
+    homepage = "https://gitlab.gnome.org/GNOME/gitg";
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
     maintainers = with maintainers; [ domenkozar Luflosi ];

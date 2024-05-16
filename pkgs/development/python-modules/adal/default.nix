@@ -6,12 +6,13 @@
 , pytestCheckHook
 , python-dateutil
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "adal";
   version = "1.2.7";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AzureAD";
@@ -24,7 +25,11 @@ buildPythonPackage rec {
     sed -i '/cryptography/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     pyjwt
     python-dateutil
     requests

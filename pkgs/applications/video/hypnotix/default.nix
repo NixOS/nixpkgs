@@ -8,7 +8,7 @@
 , gobject-introspection
 , mpv
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , yt-dlp
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

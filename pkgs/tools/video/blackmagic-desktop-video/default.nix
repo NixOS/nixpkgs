@@ -93,8 +93,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # i know this is ugly, but it's the cleanest way i found to tell the DesktopVideoHelper where to find its own library
-  appendRunpaths = [ "$ORIGIN/../lib" ];
+  # need to tell the DesktopVideoHelper where to find its own library
+  appendRunpaths = [ "${placeholder "out"}/lib" ];
 
   meta = with lib; {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";

@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.1.34";
+  version = "0.1.44";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = version;
-    hash = "sha256-B0UvQM1A1DRPb59HcLMNZo4r86lF4fcI+R8/fLWHkHM=";
+    hash = "sha256-dmUnngHMj9WSDsr8es3eX9y2e8mmNcQFJ0QHi5YQT0U=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
-      "pubgrub-0.2.1" = "sha256-sqC7R2mtqymYFULDW0wSbM/MKCZc8rP7Yy/gaQpjYEI=";
+      "pubgrub-0.2.1" = "sha256-mAPyo2R996ymzCt6TAX2G7xU1C3vDGjYF0z7R8lI1yg=";
     };
   };
 
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "uv";
   };
 }

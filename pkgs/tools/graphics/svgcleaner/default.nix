@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     description = "Clean and optimize SVG files from unnecessary data";
     homepage = "https://github.com/RazrFalcon/SVGCleaner";
     changelog = "https://github.com/RazrFalcon/svgcleaner/releases";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ yuu ];
     mainProgram = "svgcleaner";
   };

@@ -21,7 +21,7 @@
 , libgdata
 , dbus
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 , gtk-doc
 , docbook-xsl-nons
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     appstream-glib
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43

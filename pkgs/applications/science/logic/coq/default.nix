@@ -11,7 +11,7 @@
 , ocamlPackages_4_14
 , ncurses
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
-, glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
+, glib, gnome, wrapGAppsHook3, makeDesktopItem, copyDesktopItems
 , csdp ? null
 , version, coq-version ? null
 }@args:
@@ -147,7 +147,7 @@ self = stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ]
     ++ ocamlNativeBuildInputs
     ++ optional buildIde copyDesktopItems
-    ++ optional (buildIde && coqAtLeast "8.10") wrapGAppsHook
+    ++ optional (buildIde && coqAtLeast "8.10") wrapGAppsHook3
     ++ optional (!coqAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ]
     ++ optionals buildIde

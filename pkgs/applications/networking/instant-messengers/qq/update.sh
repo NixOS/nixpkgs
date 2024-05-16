@@ -9,8 +9,7 @@ payload=$(curl https://im.qq.com/rainbow/linuxQQDownload | grep -oP "var params=
 amd64_url=$(jq -r .x64DownloadUrl.deb <<< "$payload")
 arm64_url=$(jq -r .armDownloadUrl.deb <<< "$payload")
 
-urlhash=$(grep -oP "(?<=QQNT/)[a-f0-9]+(?=/linuxqq)" <<< "$amd64_url")
-version=$(grep -oP "(?<=/linuxqq_).*(?=_amd64.deb)" <<< "$amd64_url")
+version=$(grep -oP "(?<=/QQ_).*(?=_[0-9]{6})" <<< "$amd64_url")
 
 amd64_hash=$(nix-prefetch-url $amd64_url)
 arm64_hash=$(nix-prefetch-url $arm64_url)
@@ -24,7 +23,8 @@ cat >sources.nix <<EOF
 # Last updated: $(date +%F)
 {
   version = "$version";
-  urlhash = "$urlhash";
+  amd64_url = "$amd64_url";
+  arm64_url = "$arm64_url";
   arm64_hash = "$arm64_hash";
   amd64_hash = "$amd64_hash";
 }

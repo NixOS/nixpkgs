@@ -15,6 +15,7 @@
   pyyaml,
   rich,
   setuptools,
+  stdenv,
   termcolor,
   torch,
   yapf,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.10.3";
+  version = "0.10.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "open-mmlab";
     repo = "mmengine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fKtPDdeKB3vX2mD+Tsicq8KOkPDSACzKK1XLyugdPQ4=";
+    hash = "sha256-+YDtYHp3BwKvzhmHC6hAZ3Qtc9uRZMo/TpWqdpm2hn0=";
   };
 
   build-system = [ setuptools ];
@@ -99,16 +100,12 @@ buildPythonPackage rec {
     "test_close"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
   meta = with lib; {
     description = "Library for training deep learning models based on PyTorch";
     homepage = "https://github.com/open-mmlab/mmengine";
     changelog = "https://github.com/open-mmlab/mmengine/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ rxiao ];
+    broken = stdenv.isDarwin || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

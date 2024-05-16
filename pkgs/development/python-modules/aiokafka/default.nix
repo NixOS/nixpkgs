@@ -9,6 +9,7 @@
 , packaging
 , python-snappy
 , pythonOlder
+, setuptools
 , zlib
 , zstandard
 }:
@@ -16,32 +17,33 @@
 buildPythonPackage rec {
   pname = "aiokafka";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiokafka";
     rev = "refs/tags/v${version}";
     hash = "sha256-G9Q77nWUUW+hG/wm9z/S8gea4U1wHZdj7WdK2LsKBos=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
+    setuptools
   ];
 
   buildInputs = [
     zlib
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     kafka-python
     packaging
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     snappy = [
       python-snappy
     ];

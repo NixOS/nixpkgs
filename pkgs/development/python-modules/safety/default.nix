@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.0.1";
+  version = "3.2.0";
 
   disabled = pythonOlder "3.7";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HyAA8DZS86C/xn+P0emLxXI8y3bhXLG91oVFw9gD3wE=";
+    hash = "sha256-i9XKtfPYphzg6m6Y8mfBAG0FYJfEXGRP7nr+/31ZScE=";
   };
 
   postPatch = ''
@@ -89,7 +89,11 @@ buildPythonPackage rec {
     "test_check_live_cached"
     "test_get_packages_licenses_without_api_key"
     "test_validate_with_policy_file_using_invalid_keyword"
+    "test_validate_with_basic_policy_file"
   ];
+
+  # ImportError: cannot import name 'get_command_for' from partially initialized module 'safety.cli_util' (most likely due to a circular import)
+  disabledTestPaths = [ "tests/alerts/test_utils.py" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

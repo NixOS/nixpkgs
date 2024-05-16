@@ -21,20 +21,20 @@ in
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.124.10";
+  version = "0.126.2";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-NbM8Uev2qIIS6WriP7QnVUumF29rZSOCavouPkPmYpE=";
+    hash = "sha256-jeOlBHCPn+k+rXADm0hcGqg+7qn8FOJKnCfSwZazRl8=";
   };
 
-  vendorHash = "sha256-PZWMqv3R4Dq4cLtGNuvHCQ/GiYvlKJfSKEmBn0JYnb8=";
+  vendorHash = "sha256-jJOxFkoVBT1NrnhntHPa2/irjHD09zKbtNDQoyelJp4=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-FWnRZ/NI49QZj8Uv6IbHc8IPAh3F5u4S6hY64B8+Uvk=";
+    hash = "sha256-KW2aVK3Ui5sGBcNhTsNXUr9HyHcm0iJxxzBUjrNWrqw=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +78,7 @@ buildGoModule rec {
     # requires network access
     rm meter/template_test.go
     rm charger/template_test.go
+    rm tariff/template_test.go
   '';
 
   passthru = {

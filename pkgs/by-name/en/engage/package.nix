@@ -1,7 +1,7 @@
 { lib
 , installShellFiles
 , rustPlatform
-, fetchgit
+, fetchFromGitLab
 }:
 
 let
@@ -11,9 +11,10 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
-  # fetchFromGitLab doesn't work on GitLab's end for unknown reasons
-  src = fetchgit {
-    url = "https://or.computer.surgery/charles/${pname}";
+  src = fetchFromGitLab {
+    domain = "gitlab.computer.surgery";
+    owner = "charles";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
   };
@@ -39,8 +40,8 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "A task runner with DAG-based parallelism";
     mainProgram = "engage";
-    homepage = "https://or.computer.surgery/charles/engage";
-    changelog = "https://or.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
+    homepage = "https://gitlab.computer.surgery/charles/engage";
+    changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 mit ];
     maintainers = with lib.maintainers; [ CobaltCause ];
   };

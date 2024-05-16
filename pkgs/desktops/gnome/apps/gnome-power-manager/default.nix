@@ -10,7 +10,7 @@
 , upower
 , python3
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
 
     # needed by meson_post_install.sh

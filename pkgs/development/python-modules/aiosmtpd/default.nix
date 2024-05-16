@@ -6,22 +6,27 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";
   version = "1.4.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
+    repo = "aiosmtpd";
     rev = "refs/tags/v${version}";
     hash = "sha256-8nQ4BVSLYgZHRGkbujy/olV/+GABlkDhe5wef3hyQpQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     atpublic
@@ -53,6 +58,7 @@ buildPythonPackage rec {
     description = "Asyncio based SMTP server";
     mainProgram = "aiosmtpd";
     homepage = "https://aiosmtpd.readthedocs.io/";
+    changelog = "https://github.com/aio-libs/aiosmtpd/releases/tag/v${version}";
     longDescription = ''
       This is a server for SMTP and related protocols, similar in utility to the
       standard library's smtpd.py module.

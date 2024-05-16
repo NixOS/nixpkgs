@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec-xrootd";
-  version = "0.2.4";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "CoffeaTeam";
     repo = "fsspec-xrootd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8TT+49SF/3i2OMIDcDD0AXEn0J9UkNX2q/SBkfoMXso=";
+    hash = "sha256-fhamfMWlsiiqfU9c9XDfLEEkRbMAqm74rc2bGF3fRaM=";
   };
 
   nativeBuildInputs = [

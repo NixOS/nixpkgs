@@ -1,13 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
+
+# build-system
+, setuptools
+
+# dependencies
 , django
+
+# tests
 , factory-boy
 , mock
 , pip
 , pygments
-, pytest-django
 , pytestCheckHook
+, pytest-django
 , shortuuid
 , vobject
 , werkzeug
@@ -16,7 +24,11 @@
 buildPythonPackage rec {
   pname = "django-extensions";
   version = "3.2.3";
-  format = "setuptools";
+  pyproject = true;
+
+  # https://github.com/django-extensions/django-extensions/issues/1831
+  # Requires asyncore, which was dropped in 3.12
+  disabled = pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -30,7 +42,11 @@ buildPythonPackage rec {
       --replace "--cov=django_extensions --cov-report html --cov-report term" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     django
   ];
 

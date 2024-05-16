@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Project management tool for the GNOME desktop";
     mainProgram = "planner";
-    homepage = "https://wiki.gnome.org/Apps/Planner";
+    homepage = "https://gitlab.gnome.org/World/planner";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ amiloradovsky ];
     platforms = lib.platforms.unix;

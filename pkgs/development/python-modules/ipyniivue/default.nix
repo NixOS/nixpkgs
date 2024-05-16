@@ -3,21 +3,21 @@
 , fetchPypi
 , pythonOlder
 , hatchling
-, hatch-jupyter-builder
+, hatch-vcs
 , anywidget
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ipyniivue";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CvMSUvPyXxPexs0/0sa/xt65RFWtvmYZwGSMIQGvLkc=";
+    hash = "sha256-C0mYkguN4ZfxSLqETH3dUwXeoNcicrmAgp6e9IIT43s=";
   };
 
   # We do not need the build hooks, because we do not need to
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
-    hatch-jupyter-builder
+    hatch-vcs
   ];
 
   dependencies = [ anywidget ];

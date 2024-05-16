@@ -7,7 +7,7 @@
 , json_c
 , libpulseaudio
 , wayland
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config wrapGAppsHook
+    meson ninja pkg-config wrapGAppsHook3
   ];
 
   buildInputs = [

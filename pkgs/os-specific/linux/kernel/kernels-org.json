@@ -1,34 +1,38 @@
 {
     "testing": {
-        "version": "6.9-rc4",
-        "hash": "sha256:11wpak03nv9cg00jiyfrk21p7mzka553ih2c2dxr0ridig6mj8b3"
+        "version": "6.9-rc6",
+        "hash": "sha256:075l5vhk8zmwln4jks7gr5n5k67s65qvs07l2rpbc7a75fdp6c14"
     },
     "6.1": {
-        "version": "6.1.87",
-        "hash": "sha256:092iv5w5d6kwgiyzs7zajmhdxc1w03sinvvr1dwy9bp8f9mg2ypw"
+        "version": "6.1.90",
+        "hash": "sha256:07cfg0chssvpc4mqls3aln6s4lqjp6k4x2n63wndmkjgfqpdg8w3"
     },
     "5.15": {
-        "version": "5.15.156",
-        "hash": "sha256:0y3p7sqr8hsn0v9ybqlcmn1z150zc13yckgrymb10sck9k8na14z"
+        "version": "5.15.158",
+        "hash": "sha256:1inmdpif3qf1blmvjj4i7y42bylvhv0wyj3b0apq12zxlj1iq1zr"
     },
     "5.10": {
-        "version": "5.10.215",
-        "hash": "sha256:1af6h86flx96pszg006agpak2f9dkk2jqaazfykd7aafqdcs3747"
+        "version": "5.10.216",
+        "hash": "sha256:0lg1zfb9y4ps86q85mlnyalb3s90zix003z62jb9bw139f65h473"
     },
     "5.4": {
-        "version": "5.4.274",
-        "hash": "sha256:1m4yyyv48mfkzhqms88dv1jf39zsfp88az5zpqynmm1wlhhv9iza"
+        "version": "5.4.275",
+        "hash": "sha256:0k1hyknx854k8z27j4rq1gcp8l0xc0bspmrhc41a033gjilb1lns"
     },
     "4.19": {
-        "version": "4.19.312",
-        "hash": "sha256:0jppa4p73pssd7m3jpc7i6rgnj9gawjcgk4wmqyy87ijzrgzm553"
+        "version": "4.19.313",
+        "hash": "sha256:1j1r4mrdh1ray468jr5i8d2afiswb653bhq0ck8bcdw4rwp5w558"
     },
     "6.6": {
-        "version": "6.6.28",
-        "hash": "sha256:151kdpp25fcl5qki138jxl90h9iyk5rk0kp2xamadnz72gnid1w1"
+        "version": "6.6.30",
+        "hash": "sha256:1ilwmgpgvddwkd9nx5999cb6z18scjyq7jklid26k1hg7f35nsmn"
     },
     "6.8": {
-        "version": "6.8.7",
-        "hash": "sha256:1bigq9my88d9xh647hgsy8gzval7p06hhacpxaqb71sfmwgil799"
+        "version": "6.8.9",
+        "hash": "sha256:1dn9bgmf03bdfbmgq98d043702g808rjikxs2i9yia57iqiz21gr"
+    },
+    "6.9": {
+        "version": "6.9",
+        "hash": "sha256:0jc14s7z2581qgd82lww25p7c4w72scpf49z8ll3wylwk3xh3yi4"
     }
 }

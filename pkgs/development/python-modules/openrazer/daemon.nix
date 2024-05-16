@@ -10,7 +10,7 @@
 , pyudev
 , setproctitle
 , setuptools
-, wrapGAppsHook
+, wrapGAppsHook3
 , notify2
 }:
 

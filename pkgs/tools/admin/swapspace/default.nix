@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Tookmund/Swapspace";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ misuzu Luflosi ];
+    maintainers = with maintainers; [ Luflosi ];
     mainProgram = "swapspace";
   };
 }

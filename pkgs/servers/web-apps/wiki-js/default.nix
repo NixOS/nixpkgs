@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lib, nixosTests, jq, moreutils }:
+{ stdenv, fetchurl, lib, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.301";
+  version = "2.5.302";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-E1XXq4xzExOqBHjgvfVnZ9z8qH1/99ku53KYwQYe7kM=";
+    sha256 = "sha256-hz6pfiObVgoVAkYx0Js6Dc310mNMC9QT2D+sNqsl4LA=";
   };
 
   sourceRoot = ".";

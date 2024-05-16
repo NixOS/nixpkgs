@@ -4,7 +4,7 @@
 , fetchpatch
 , pkg-config
 , autoreconfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , boost
 , cairo
@@ -116,7 +116,7 @@ stdenv.mkDerivation {
     autoreconfHook
     gettext
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     ETL

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , substituteAll
@@ -14,14 +15,13 @@
 , numba
 , numpy
 , openai-triton
-, scipy
 , tiktoken
 , torch
 , tqdm
-, transformers
 
 # tests
 , pytestCheckHook
+, scipy
 }:
 
 buildPythonPackage rec {
@@ -51,12 +51,11 @@ buildPythonPackage rec {
     more-itertools
     numba
     numpy
-    openai-triton
-    scipy
     tiktoken
     torch
     tqdm
-    transformers
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [
+    openai-triton
   ];
 
   preCheck = ''
@@ -65,6 +64,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    scipy
   ];
 
   disabledTests = [

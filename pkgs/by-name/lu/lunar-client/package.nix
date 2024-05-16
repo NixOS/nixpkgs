@@ -6,17 +6,16 @@
 
 appimageTools.wrapType2 rec {
   pname = "lunar-client";
-  version = "3.2.4";
+  version = "3.2.7";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-KaQvjtSzQzebzPrcFBntCqP6fRbenH9tQo4LYO1TwDoJ7pAeZ8D4kSMRaRfFV0CPZ/pDnKECYdKXAuaujOpw8g==";
+    hash = "sha512-dziL9lnpsiJ2BV+jNOhVMvZtYY/K4chyiZB5/fMCw9/4/3Boe/DO7s2steEOhxEsPqUcWaf1Sjs6DFSX/CHUqw==";
   };
 
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      mv $out/bin/{lunar-client-*,lunar-client}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/lunar-client \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

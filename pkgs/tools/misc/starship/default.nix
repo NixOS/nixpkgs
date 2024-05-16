@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.18.2";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     rev = "v${version}";
-    hash = "sha256-84FyKhSP2EZZkQJRhNPTYs2BYppylk50GiIck8pN3l4=";
+    hash = "sha256-3IO9hHuhzJsCHU/6BA5ylEKQI2ik6ZiRul/iO/vzii4=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     cp docs/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoHash = "sha256-Fu8KfWHCQUPSiT1aMSS0Il/S02YXdEqKMA2nsliUu8E=";
+  cargoHash = "sha256-zX04gX40dFYsK+R6gafHNtDevzrWiGufMwrGfhqYVG0=";
 
   nativeCheckInputs = [ git ];
 
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ danth davidtwco Br1ght0ne Frostman marsam ];
+    maintainers = with maintainers; [ danth davidtwco Br1ght0ne Frostman ];
     mainProgram = "starship";
   };
 }

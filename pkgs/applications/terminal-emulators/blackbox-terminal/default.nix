@@ -72,6 +72,9 @@ stdenv.mkDerivation rec {
         rev = "3c8f66be867aca6656e4109ce880b6ea7431b895";
         hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
       };
+      postPatch = (old.postPatch or "") + ''
+        patchShebangs src/box_drawing_generate.sh
+      '';
     } // lib.optionalAttrs sixelSupport {
       buildInputs = old.buildInputs ++ [ libsixel ];
       mesonFlags = old.mesonFlags ++ [ "-Dsixel=true" ];

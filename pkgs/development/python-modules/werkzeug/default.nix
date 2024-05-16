@@ -3,7 +3,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, fetchpatch2
 
 # build-system
 , flit-core
@@ -29,23 +28,15 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UH6BHs6nKxikBJR63tSzOQ4duPgmtJTXZVDvRbs7Hcw=";
+    hash = "sha256-45tkWmrJKCJYjns5ppLngockzq4LDXAu+WcB+Q5wEo0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "werkzeug-pytest8-compat.patch";
-      url = "https://github.com/pallets/werkzeug/commit/4e5bdca7f8227d10cae828f8064fb98190ace4aa.patch";
-      hash = "sha256-lVknzvC+HIM6TagpyIOhnb+7tx0UXuGw0tINjsujISI=";
-    })
-  ];
 
   nativeBuildInputs = [
     flit-core

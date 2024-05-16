@@ -17,7 +17,7 @@
 , libgweather
 , glib-networking
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , shared-mime-info
 , libical
@@ -44,11 +44,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.50.4";
+  version = "3.52.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-4PlVyhTfsbLhaC/PoYFqA8EUuBYZmPls+daBpqOEJpg=";
+    hash = "sha256-aNrtER2t42GMpwjss8q0zZO6UC9a6dXnlwc8OhPinek=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Evolution";
+    homepage = "https://gitlab.gnome.org/GNOME/evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
     mainProgram = "evolution";
     maintainers = teams.gnome.members;

@@ -18,13 +18,12 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
-
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
+    substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
   '';
 
-  extraPkgs = pkgs: with pkgs; [ libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   meta = with lib; {
     description = "Open-source electronics prototyping platform";

@@ -21,6 +21,6 @@ buildGoModule rec {
     mainProgram = "storrent";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

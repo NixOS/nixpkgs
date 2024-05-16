@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       tree.
     '';
     homepage = "https://bcache.evilpiepirate.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

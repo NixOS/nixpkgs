@@ -4,21 +4,23 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, defusedxml
 , setuptools
 , sphinx
+, typing-extensions
 , unidecode
 }:
 
 buildPythonPackage rec {
   pname = "uqbar";
-  version = "0.7.3";
+  version = "0.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9KQmLCsIiHcdiAu4GeEu+wa3lGwEZOO+oHWuhFNosR0=";
+    hash = "sha256-q4p+ki5wA/gYGWnt2tzCiEakk4fBl9P96ONz2ZxlCCg=";
   };
 
   postPatch = ''
@@ -38,6 +40,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    defusedxml
+    typing-extensions
   ];
 
   disabledTests = [

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fmtoy";
-  version = "0.0.0-unstable-2023-05-21";
+  version = "0-unstable-2024-04-18";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "fmtoy";
-    rev = "2b54180d8edd0de90e2af01bf9ff303bc916e893";
-    hash = "sha256-qoMw4P+QEw4Q/wKBvFPh+WxkmOW6qH9FuFFkO2ZRrMc=";
+    rev = "aca005c770724f21c8a91dc6a482738871e78c9f";
+    hash = "sha256-vrd7Eg3Bh8ll2yCfD1rAJpotEe+Zq+JuF4VMhiYsbDw=";
   };
 
   postPatch = ''

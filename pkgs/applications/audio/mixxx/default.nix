@@ -52,6 +52,7 @@
 , upower
 , vamp-plugin-sdk
 , wavpack
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
@@ -65,7 +66,9 @@ mkDerivation rec {
     hash = "sha256-JSWUzerm7D6AKq6g/9eRrt3EE2movRdM+VLUg07sLHo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     chromaprint
@@ -118,9 +121,9 @@ mkDerivation rec {
     wavpack
   ];
 
-  qtWrapperArgs = [
-    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-  ];
+  preFixup=''
+    qtWrapperArgs+=(--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive ''${gappsWrapperArgs[@]})
+  '';
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall

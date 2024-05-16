@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.27.1";
+  version = "0.29.0";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "uvicorn";
     rev = "refs/tags/${version}";
-    hash = "sha256-p0iPQE66RJfd811x6cnv7m3yvD/L9v7evBXlaIQSE0M=";
+    hash = "sha256-D0FdZxaDB+9N/7p73GF8qw0UwbXTQrKc1WOgy9UltxA=";
   };
 
   outputs = [
@@ -34,9 +34,9 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     h11
   ] ++ lib.optionals (pythonOlder "3.11") [

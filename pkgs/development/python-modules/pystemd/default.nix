@@ -25,12 +25,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  nativeCheckInputs = [ lxml mock psutil pytest ];
+  propagatedBuildInputs = [ lxml psutil ];
+
+  nativeCheckInputs = [ mock pytest ];
 
   checkPhase = "pytest tests";
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = ''
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way

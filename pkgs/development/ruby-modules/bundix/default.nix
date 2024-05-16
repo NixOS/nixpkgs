@@ -43,7 +43,7 @@ buildRubyGem rec {
     '';
     homepage = "https://github.com/nix-community/bundix";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ manveru marsam zimbatm ];
+    maintainers = with lib.maintainers; [ manveru zimbatm ];
     platforms = lib.platforms.all;
   };
 }

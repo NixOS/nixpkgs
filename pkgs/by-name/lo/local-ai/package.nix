@@ -3,9 +3,10 @@
 , stdenv
 , lib
 , addDriverRunpath
-, fetchpatch
 , fetchFromGitHub
 , protobuf
+, protoc-gen-go
+, protoc-gen-go-grpc
 , grpc
 , openssl
 , llama-cpp
@@ -61,8 +62,8 @@ let
 
   inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
 
-  go-llama-ggml = effectiveStdenv.mkDerivation {
-    name = "go-llama-ggml";
+  go-llama = effectiveStdenv.mkDerivation {
+    name = "go-llama";
     src = fetchFromGitHub {
       owner = "go-skynet";
       repo = "go-llama.cpp";
@@ -98,8 +99,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "1b67731e184e27a465b8c5476061294a4af668ea";
-      hash = "sha256-0WWbsklpW6HhFRkvWpYh8Lhi8VIansS/zmyIKNQRkIs=";
+      rev = "c12452c7aec8a02264afc00196a13caa591a13ac";
+      hash = "sha256-Kji8dlz7OfhPeNXnYgBHzpGGMhCsRLJ9d+EFf77Q6Co=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -252,8 +253,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "8f253ef3af1c62c04316ba4afa7145fc4d701a8c";
-      hash = "sha256-yHHjhpQIn99A/hqFwAb7TfTf4Q9KnKat93zyXS70bT8=";
+      rev = "73d13ad19a8c9c4da4f405088a85169b1a171e66";
+      hash = "sha256-7g/J3a3behGgcJXy9ryAYXxgOYnsRMlGmux13re28AY=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
@@ -303,8 +304,8 @@ let
     src = fetchFromGitHub {
       owner = "mudler";
       repo = "go-stable-diffusion";
-      rev = "362df9da29f882dbf09ade61972d16a1f53c3485";
-      hash = "sha256-A5KvMZOviPsIpPHxM8cacT+qE2x1iFJAbPsRs4sLijY=";
+      rev = "4a3cd6aeae6f66ee57eae9a0075f8c58c3a6a38f";
+      hash = "sha256-KXUvMP6cDyWib4rG0RmVRm3pgrdsfKXaH3k0v5/mTe8=";
       fetchSubmodules = true;
     };
     buildFlags = [ "libstablediffusion.a" ];
@@ -340,8 +341,8 @@ let
     src = fetchFromGitHub {
       owner = "M0Rf30";
       repo = "go-tiny-dream";
-      rev = "22a12a4bc0ac5455856f28f3b771331a551a4293";
-      hash = "sha256-DAVHD6E0OKHf4C2ldoI0Mm7813DIrmWFONUhSCQPCfc=";
+      rev = "c04fa463ace9d9a6464313aa5f9cd0f953b6c057";
+      hash = "sha256-uow3vbAI4F/fTGjYOKOLqTpKq7NgGYSZhGlEhn7h6s0=";
       fetchSubmodules = true;
     };
     postUnpack = ''
@@ -371,18 +372,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.12.4";
+  version = "2.15.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-piu2B6u4ZfxiOd9SXrE7jiiiwL2SM8EqXo2s5qeKRl0=";
+    hash = "sha256-AjNgfZjVxlw0LtPbUTbJuLcUfqJdPzn6vOmUDz/v7Jc=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-8Hu1y/PK21twnB7D22ltslFFzRrsB8d1R2hkgIFB/XY=";
+    vendorHash = "sha256-+ZPZkOpaTsKrL2HDOEtAr8sT6uqTiQXo/XS+MBNZq5E=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -392,21 +393,23 @@ let
       in
       ''
         sed -i Makefile \
-          -e 's;git clone.*go-llama-ggml$;${cp} ${go-llama-ggml} sources/go-llama-ggml;' \
+          -e 's;git clone.*go-llama\.cpp$;${cp} ${go-llama} sources/go-llama\.cpp;' \
           -e 's;git clone.*gpt4all$;${cp} ${gpt4all} sources/gpt4all;' \
           -e 's;git clone.*go-piper$;${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper;' \
-          -e 's;git clone.*go-rwkv$;${cp} ${go-rwkv} sources/go-rwkv;' \
+          -e 's;git clone.*go-rwkv\.cpp$;${cp} ${go-rwkv} sources/go-rwkv\.cpp;' \
           -e 's;git clone.*whisper\.cpp$;${cp} ${whisper-cpp.src} sources/whisper\.cpp;' \
-          -e 's;git clone.*go-bert$;${cp} ${go-bert} sources/go-bert;' \
+          -e 's;git clone.*go-bert\.cpp$;${cp} ${go-bert} sources/go-bert\.cpp;' \
           -e 's;git clone.*diffusion$;${cp} ${if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src} sources/go-stable-diffusion;' \
           -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
           -e 's, && git checkout.*,,g' \
           -e '/mod download/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-/ d' \
+      '';
 
-        ${cp} ${llama-cpp-grpc}/bin/*grpc-server backend/cpp/llama/grpc-server
-        echo "grpc-server:" > backend/cpp/llama/Makefile
-      ''
-    ;
+    postConfigure = ''
+      mkdir -p backend-assets/grpc
+      cp ${llama-cpp-grpc}/bin/*grpc-server backend-assets/grpc/llama-cpp
+    '';
 
     buildInputs = [ ]
       ++ lib.optionals with_cublas [ libcublas ]
@@ -415,14 +418,19 @@ let
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
       ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [ makeWrapper ]
-      ++ lib.optionals with_cublas [ cuda_nvcc ];
+    nativeBuildInputs = [
+      protobuf
+      protoc-gen-go
+      protoc-gen-go-grpc
+      makeWrapper
+    ]
+    ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
     modBuildPhase = ''
       mkdir sources
-      make prepare-sources
+      make prepare-sources protogen-go
       go mod tidy -v
     '';
 
@@ -486,7 +494,7 @@ let
 
     passthru.local-packages = {
       inherit
-        go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
+        go-tiny-dream go-rwkv go-bert go-llama gpt4all go-piper
         llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn espeak-ng' piper-phonemize
         piper-tts';
     };
@@ -498,6 +506,7 @@ let
     };
 
     passthru.tests = callPackages ./tests.nix { inherit self; };
+    passthru.lib = callPackages ./lib.nix { };
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";

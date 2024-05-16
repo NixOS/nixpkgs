@@ -33,7 +33,7 @@
   portaudio,
   stdenv,
   which,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   wxGTK,
   zlib,
   # Boolean guard flags
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     wxGTK
   ];
 

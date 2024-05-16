@@ -10,23 +10,32 @@
 , brotli
 , fonttools
 , pypng
+, pcffont
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.15";
+  version = "0.0.24";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pixel_font_builder";
     inherit version;
-    hash = "sha256-2QnbnJk3onwxmjZ6aUgXFGsx6GtqJDV9Bgs3p5Czvns=";
+    hash = "sha256-hBlTTIPx4TRgeXapVnSaKPUwseR3uYT0gcgKLGmmSZI=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "fonttools"
+  ];
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  build-system = [
     hatch-vcs
     hatchling
   ];
@@ -36,10 +45,11 @@ buildPythonPackage rec {
     pypng
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bdffont
     brotli
     fonttools
+    pcffont
   ];
 
   passthru.updateScript = nix-update-script { };
