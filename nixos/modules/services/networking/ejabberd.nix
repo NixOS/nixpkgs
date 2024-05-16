@@ -1,6 +1,10 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-
   cfg = config.services.ejabberd;
 
   ctlcfg = pkgs.writeText "ejabberdctl.cfg" ''
@@ -8,18 +12,18 @@ let
     ${cfg.ctlConfig}
   '';
 
-  ectl = ''${cfg.package}/bin/ejabberdctl ${lib.optionalString (cfg.configFile != null) "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+  settingsFormat = pkgs.formats.yaml { };
+  configFile = settingsFormat.generate "config.yaml" cfg.settings;
+
+  ectl = ''${cfg.package}/bin/ejabberdctl --config "${cfg.configFile}" --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
   dumps = lib.escapeShellArgs cfg.loadDumps;
-
-in {
-
+in
+{
   ###### interface
 
   options = {
-
     services.ejabberd = {
-
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -54,8 +58,20 @@ in {
 
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        description = "Configuration file for ejabberd in YAML format";
-        default = null;
+        description = ''
+          **Deprecated**, please use [](#opt-services.ejabberd.settings) instead.
+
+          Configuration file for ejabberd in YAML format
+        '';
+        default = configFile;
+        defaultText = "generated from `settings.ejabberd.settings`";
+      };
+
+      settings = lib.mkOption {
+        description = ''
+          Configuration for ejabberd. Refer to <https://docs.ejabberd.im/admin/configuration/> for details.
+        '';
+        type = settingsFormat.type;
       };
 
       ctlConfig = lib.mkOption {
@@ -66,7 +82,7 @@ in {
 
       loadDumps = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [];
+        default = [ ];
         description = "Configuration dumps that should be loaded on the first startup";
         example = lib.literalExpression "[ ./myejabberd.dump ]";
       };
@@ -77,13 +93,15 @@ in {
         description = "Add ImageMagick to server's path; allows for image thumbnailing";
       };
     };
-
   };
-
 
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf (cfg.configFile != configFile) [
+      "The option `services.ejabberd.configFile` has been deprecated. Please use `services.ejabberd.settings` instead."
+    ];
+
     environment.systemPackages = [ cfg.package ];
 
     users.users = lib.optionalAttrs (cfg.user == "ejabberd") {
@@ -103,7 +121,10 @@ in {
       description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = [ pkgs.findutils pkgs.coreutils ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
+      path = [
+        pkgs.findutils
+        pkgs.coreutils
+      ] ++ lib.optional cfg.imagemagick pkgs.imagemagick;
 
       serviceConfig = {
         User = cfg.user;
@@ -148,8 +169,6 @@ in {
       "d '${cfg.spoolDir}' 0700 ${cfg.user} ${cfg.group} -"
     ];
 
-    security.pam.services.ejabberd = {};
-
+    security.pam.services.ejabberd = { };
   };
-
 }
