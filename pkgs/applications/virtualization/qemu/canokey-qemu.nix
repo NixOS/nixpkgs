@@ -23,6 +23,17 @@ stdenv.mkDerivation rec {
       --replace "COMMAND git describe --always --tags --long --abbrev=8 --dirty >>" "COMMAND echo '$rev' >>"
   '';
 
+  preConfigure = ''
+    cmakeFlagsArray+=(
+      -DCMAKE_C_FLAGS=${lib.escapeShellArg ([
+        "-Wno-error=unused-but-set-parameter"
+        "-Wno-error=unused-but-set-variable"
+      ] ++ lib.optionals stdenv.cc.isClang [
+        "-Wno-error=documentation"
+      ])}
+    )
+  '';
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
