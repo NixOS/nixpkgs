@@ -12,7 +12,8 @@
 let inherit (callPackage ./generic.nix args) src version library_deps;
 in
 
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23")
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23"
+          || lib.versionAtLeast ocaml.version "5.2" && !lib.versionAtLeast version "0.26.2")
   "ocamlformat ${version} is not available for OCaml ${ocaml.version}"
 
 buildDunePackage {

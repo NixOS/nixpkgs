@@ -1841,8 +1841,6 @@ with pkgs;
 
   goflow = callPackage ../tools/networking/goflow { };
 
-  goflow2 = callPackage ../tools/networking/goflow2 { };
-
   gofu = callPackage ../applications/misc/gofu { };
 
   godspeed = callPackage ../tools/networking/godspeed { };
@@ -2492,8 +2490,6 @@ with pkgs;
   gitnuro = callPackage ../applications/version-management/gitnuro { };
 
   gitnr = callPackage ../applications/version-management/gitnr { };
-
-  gitprompt-rs = callPackage ../applications/version-management/gitprompt-rs/default.nix { };
 
   gitsign = callPackage ../applications/version-management/gitsign { };
 
@@ -11648,17 +11644,10 @@ with pkgs;
 
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
-  percona-server_8_0 = callPackage ../servers/sql/percona-server/8.0.x.nix {
-    inherit (darwin) cctools developer_cmds DarwinTools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost177; # Configure checks for specific version.
-    icu = icu69;
-    protobuf = protobuf_21;
-  };
-  percona-xtrabackup = percona-xtrabackup_8_0;
-  percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
-    boost = boost177;
-  };
+  inherit (import ../servers/sql/percona-server pkgs) percona-server_lts percona-server_innovation;
+  percona-server = percona-server_lts;
+  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_lts percona-xtrabackup_innovation;
+  percona-xtrabackup = percona-xtrabackup_lts;
 
   pick = callPackage ../tools/misc/pick { };
 
@@ -16485,7 +16474,7 @@ with pkgs;
     ocamlformat # latest version
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
     ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1
-    ocamlformat_0_26_0 ocamlformat_0_26_1;
+    ocamlformat_0_26_0 ocamlformat_0_26_1 ocamlformat_0_26_2;
 
   inherit (ocamlPackages) odig;
 
@@ -25665,8 +25654,6 @@ with pkgs;
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
   inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
-
-  flashmq = callPackage ../servers/mqtt/flashmq { };
 
   freeradius = callPackage ../servers/freeradius { };
 

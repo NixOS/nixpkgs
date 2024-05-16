@@ -280,7 +280,7 @@ in {
   };
 
   config = {
-    boot.binfmt.registrations = builtins.listToAttrs (map (system: assert system != pkgs.system; {
+    boot.binfmt.registrations = builtins.listToAttrs (map (system: assert system != pkgs.stdenv.hostPlatform.system; {
       name = system;
       value = { config, ... }: let
         interpreter = getEmulator system;

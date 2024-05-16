@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, python
 
 # build-system
 , setuptools
@@ -56,7 +57,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ] ++ pyjwt.optional-dependencies.crypto;
 
-  preBuild = "python -m django compilemessages";
+  preBuild = "${python.interpreter} -m django compilemessages";
 
   passthru.optional-dependencies = {
     saml = [

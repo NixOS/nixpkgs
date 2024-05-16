@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "yifeikong";
     repo = "curl_cffi";
-    rev = "v${version}";
-    hash = "sha256-VeBh5wp/VEMDGR2YK06w34hBv9qHIyA+EiZHrhEhAGw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bNBpZAIdfub2osByo827RBw/gouCmNt8uVN0y1KdcUk=";
   };
 
   patches = [
