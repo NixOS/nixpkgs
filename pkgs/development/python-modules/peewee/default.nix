@@ -11,21 +11,26 @@
 , withPostgres ? false
 , psycopg2
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "peewee";
   version = "3.17.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
-    repo = pname;
+    repo = "peewee";
     rev = "refs/tags/${version}";
     hash = "sha256-2SrqWPyeDBKOweLu7bEcDIAqCCtnKv0VBdzfpaA22ow=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   buildInputs = [
     sqlite
@@ -57,9 +62,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python ORM with support for various database implementation";
-    mainProgram = "pwiz.py";
     homepage = "http://peewee-orm.com";
+    changelog = "https://github.com/coleifer/peewee/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "pwiz.py";
   };
 }
