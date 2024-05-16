@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, click
-, cve
-, fetchFromGitHub
-, jsonschema
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, testers
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cve,
+  fetchFromGitHub,
+  jsonschema,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace-fail '"collective.checkdocs",' ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -41,13 +40,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "cvelib"
-  ];
+  pythonImportsCheck = [ "cvelib" ];
 
   passthru.tests.version = testers.testVersion { package = cve; };
 
