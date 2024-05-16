@@ -193,6 +193,8 @@ in {
 
     composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
 
+    cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
+
     deployer = callPackage ../development/php-packages/deployer { };
 
     grumphp = callPackage ../development/php-packages/grumphp { };
