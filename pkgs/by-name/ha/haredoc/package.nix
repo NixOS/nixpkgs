@@ -3,10 +3,8 @@
   stdenv,
   scdoc,
   hare,
+  hareHook,
 }:
-let
-  arch = stdenv.hostPlatform.uname.processor;
-in
 stdenv.mkDerivation {
   pname = "haredoc";
   outputs = [
@@ -17,22 +15,17 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     scdoc
-    hare
+    hareHook
   ];
 
   strictDeps = true;
 
   enableParallelBuilding = true;
 
-  preBuild = ''
-    HARECACHE="$(mktemp -d)"
-    export HARECACHE
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    hare build -qR -a ${arch} -o haredoc ./cmd/haredoc
+    hare build -o haredoc ./cmd/haredoc
     scdoc <docs/haredoc.1.scd >haredoc.1
     scdoc <docs/haredoc.5.scd >haredoc.5
 
@@ -55,6 +48,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onemoresuza ];
     mainProgram = "haredoc";
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 }
