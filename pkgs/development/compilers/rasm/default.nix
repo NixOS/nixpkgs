@@ -1,22 +1,18 @@
-{ lib, stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "rasm";
-  version = "0.117";
+  version = "2.2.3";
 
-  src = fetchurl {
-    url = "http://www.roudoudou.com/export/cpc/rasm/${pname}_v0117_src.zip";
-    sha256 = "1hwily4cfays59qm7qd1ax48i7cpbxhs5l9mfpyn7m2lxsfqrl3z";
+  src = fetchFromGitHub {
+    owner = "EdouardBERGE";
+    repo = "rasm";
+    rev = "v${version}";
+    hash = "sha256-cG/RZqZRS5uuXlQo7hylCEfbXXLBa68NXsr1iQCjhNc=";
   };
 
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ unzip ];
-
-  buildPhase = ''
-      # according to official documentation
-      ${stdenv.cc.targetPrefix}cc rasm_v*.c -O2 -lm -o rasm
-  '';
+  # by default the EXEC variable contains `rasm.exe`
+  makeFlags = [ "EXEC=rasm" ];
 
   installPhase = ''
     install -Dt $out/bin rasm
