@@ -4,8 +4,9 @@
 , crystal
 , wrapGAppsHook4
 , desktopToDarwinBundle
-, gi-crystal
 , gobject-introspection
+, gnome
+, python3
 , libadwaita
 , openssl
 , libxml2
@@ -16,6 +17,7 @@
 , crystal2nix
 , writeShellScript
 }:
+
 crystal.buildCrystalPackage rec {
   pname = "Collision";
   version = "3.8.0";
@@ -26,17 +28,35 @@ crystal.buildCrystalPackage rec {
     rev = "v${version}";
     hash = "sha256-Bo/u0UYM/N7tLqdCs2OU5pdj2s9LXPooSR1PCGk9dSc=";
   };
-  patches = [ ./make.patch ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'gtk-update-icon-cache $(PREFIX)/share/icons/hicolor' 'true'
+  '';
+
   shardsFile = ./shards.nix;
+  copyShardDeps = true;
+
+  preBuild = ''
+    cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug
+    cd ../.. && mkdir bin/ && cp lib/gi-crystal/bin/gi-crystal bin/
+  '';
 
   # Crystal compiler has a strange issue with OpenSSL. The project will not compile due to
   # main_module:(.text+0x6f0): undefined reference to `SSL_library_init'
   # There is an explanation for this https://danilafe.com/blog/crystal_nix_revisited/
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
 
-  nativeBuildInputs = [ wrapGAppsHook4 pkg-config gobject-introspection gi-crystal ]
+  nativeBuildInputs = [ wrapGAppsHook4 pkg-config gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
-  buildInputs = [ libadwaita openssl libxml2 ];
+
+  buildInputs = [
+    libadwaita
+    openssl
+    libxml2
+    gnome.nautilus-python
+    python3.pkgs.pygobject3
+  ];
 
   buildTargets = ["bindings" "build"];
 
@@ -44,6 +64,10 @@ crystal.buildCrystalPackage rec {
   doInstallCheck = false;
 
   installTargets = ["desktop" "install"];
+
+  postInstall = ''
+      install -Dm555 ./nautilus-extension/collision-extension.py -t $out/share/nautilus-python/extensions
+  '';
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
