@@ -8,6 +8,7 @@
   runCommand,
   textlint,
   textlint-rule-alex,
+  textlint-rule-diacritics,
   textlint-rule-max-comma,
   textlint-rule-preset-ja-technical-writing,
   textlint-rule-write-good,
@@ -98,6 +99,7 @@ buildNpmPackage rec {
     tests = lib.mergeAttrsList (
       map (package: package.tests) [
         textlint-rule-alex
+        textlint-rule-diacritics
         textlint-rule-max-comma
         textlint-rule-preset-ja-technical-writing
         textlint-rule-write-good
