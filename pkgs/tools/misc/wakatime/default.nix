@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, wakatime }:
+{ lib, buildGo122Module, fetchFromGitHub, testers, wakatime }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "wakatime";
-  version = "1.73.0";
+  version = "1.90.0";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     rev = "v${version}";
-    hash = "sha256-EUZgYRsQRqtp0yiqNYex+ILSZwGEdO4BhciEgUVdui4=";
+    hash = "sha256-A2YrDrXmMR4BJUOYuo3h3Pa5HqyYSoDr/qdH54INU3w=";
   };
 
-  vendorHash = "sha256-SlYYrlRDBvhNm2BxemK9HzzsqM/RGH/sDQXpoGEY8rw=";
+  vendorHash = "sha256-pejrUFcv9c4ZAE3Cuw7uytc1T2pr7SOZNJ/Wr8K+fas=";
 
   ldflags = [
     "-s"
@@ -28,6 +28,7 @@ buildGoModule rec {
         "TestSendHeartbeats_ExtraHeartbeats"
         "TestSendHeartbeats_IsUnsavedEntity"
         "TestSendHeartbeats_NonExistingExtraHeartbeatsEntity"
+        "TestFileExperts_Err(Auth|Api|BadRequest)"
 
         # Flaky tests
         "TestLoadParams_ApiKey_FromVault_Err_Darwin"
