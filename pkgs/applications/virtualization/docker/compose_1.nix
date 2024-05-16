@@ -4,7 +4,7 @@
 , pyyaml, colorama, docopt
 , dockerpty, docker, jsonschema, requests
 , six, texttable, websocket-client, cached-property
-, enum34, functools32, paramiko, distro, python-dotenv
+, enum34, paramiko, distro, python-dotenv
 }:
 
 buildPythonApplication rec {
@@ -25,8 +25,7 @@ buildPythonApplication rec {
     jsonschema requests six texttable websocket-client
     docopt cached-property paramiko distro python-dotenv
   ]
-  ++ lib.optional (pythonOlder "3.4") enum34
-  ++ lib.optional (pythonOlder "3.2") functools32;
+  ++ lib.optional (pythonOlder "3.4") enum34;
 
   postPatch = ''
     # Remove upper bound on requires, see also
