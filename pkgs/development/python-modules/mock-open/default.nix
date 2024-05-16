@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "mock-open";
@@ -12,8 +12,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0qlz4y8jqxsnmqg03yp9f87rmnjrvmxm5qvm6n1218gm9k5dixbm";
   };
-
-  propagatedBuildInputs = lib.optional (pythonOlder "3.3") mock;
 
   meta = with lib; {
     homepage = "https://github.com/nivbend/mock-open";
