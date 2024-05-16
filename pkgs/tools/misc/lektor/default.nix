@@ -30,7 +30,11 @@ python.pkgs.buildPythonApplication rec {
     owner = "lektor";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-USwHSUXpk4XM5ySTXnYc5FqqkTaf8PoxQTeRnWOvbxk=";
+    # fix for case-insensitive filesystems
+    postFetch = ''
+      rm -f $out/tests/demo-project/content/icc-profile-test/{LICENSE,license}.txt
+    '';
+    hash = "sha256-y0/fYuiIB/O5tsYKjzOPnCafOIZCn4Z5OITPMcnHd/M=";
   };
 
   npmDeps = fetchNpmDeps {
