@@ -5,6 +5,10 @@ let
 
   common = import ./common.nix;
 
+  # Collect facts to be injected inside the documentation markdown files.
+  # For now, we do the injection before running *nixos-render-docs* as a bash prefix of `buildPhase`.
+  inherit (import ./doc-support/facts { inherit pkgs; }) substituteFactsInPlacePrefix;
+
   lib-docs = import ./doc-support/lib-function-docs.nix {
     inherit pkgs nixpkgs;
     libsets = [
@@ -105,7 +109,7 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
-  buildPhase = ''
+  buildPhase = substituteFactsInPlacePrefix + "\n" + ''
     cat \
       ./functions/library.md.in \
       ${lib-docs}/index.md \
