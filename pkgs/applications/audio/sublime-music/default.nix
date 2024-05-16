@@ -17,20 +17,14 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
   version = "0.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sublime-music";
-    repo = pname;
+    repo = "sublime-music";
     rev = "refs/tags/v${version}";
     hash = "sha256-FPzeFqDOcaiariz7qJwz6P3Wd+ZDxNP57uj+ptMtEyM=";
   };
-
-  nativeBuildInputs = [
-    python3.pkgs.flit-core
-    gobject-introspection
-    wrapGAppsHook3
-  ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
@@ -39,6 +33,15 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
     sed -i "s/python-mpv/mpv/g" pyproject.toml
   '';
+
+  build-system = with python3.pkgs; [
+    flit-core
+  ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
 
   buildInputs = [
     gtk3
@@ -91,10 +94,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
-    mainProgram = "sublime-music";
     homepage = "https://sublimemusic.app/";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ albakham sumnerevans ];
+    mainProgram = "sublime-music";
   };
 }
