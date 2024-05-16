@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  hare,
+  hareHook,
   hareThirdParty,
   fetchFromSourcehut,
 }:
@@ -17,13 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Q7xylsLVd/sp57kv6WzC7QHGN1xOsm7YEsYCbY/zi1Q=";
   };
 
-  nativeBuildInputs = [ hare ];
+  nativeBuildInputs = [ hareHook ];
   propagatedBuildInputs = [ hareThirdParty.hare-compress ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
@@ -32,6 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PNG implementation for Hare";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ starzation ];
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })
