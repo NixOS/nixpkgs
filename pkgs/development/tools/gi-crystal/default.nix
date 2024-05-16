@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , crystal
 , gobject-introspection
+, gitUpdater
 }:
 crystal.buildCrystalPackage rec {
   pname = "gi-crystal";
@@ -32,6 +33,11 @@ crystal.buildCrystalPackage rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
+
 
   meta = with lib; {
     description = "GI Crystal is a binding generator used to generate Crystal bindings for GObject based libraries using GObject Introspection.";
