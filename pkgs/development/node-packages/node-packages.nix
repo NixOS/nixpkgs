@@ -93269,42 +93269,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-write-good = nodeEnv.buildNodePackage {
-    name = "textlint-rule-write-good";
-    packageName = "textlint-rule-write-good";
-    version = "2.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-write-good/-/textlint-rule-write-good-2.0.0.tgz";
-      sha512 = "yvOJavJD+PgyUzvsoLDDzDtgCVBva/HNhEvsFnYVugrWz0qy2hr+/4B4wkzjro4wfPbwz20GQe5h13N4DeUEeA==";
-    };
-    dependencies = [
-      sources."@textlint/ast-node-types-13.4.1"
-      sources."@types/unist-2.0.10"
-      sources."adverb-where-0.2.6"
-      sources."boundary-2.0.0"
-      sources."commander-2.20.3"
-      sources."e-prime-0.10.4"
-      sources."no-cliches-0.3.6"
-      sources."passive-voice-0.1.0"
-      sources."structured-source-4.0.0"
-      sources."textlint-rule-helper-2.3.1"
-      sources."too-wordy-0.3.6"
-      sources."unist-util-is-4.1.0"
-      sources."unist-util-visit-2.0.3"
-      sources."unist-util-visit-parents-3.1.1"
-      sources."weasel-words-0.1.1"
-      sources."write-good-1.0.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "textlint rule to check your English style with write good";
-      homepage = "https://github.com/textlint-rule/textlint-rule-write-good";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   thelounge-plugin-closepms = nodeEnv.buildNodePackage {
     name = "thelounge-plugin-closepms";
     packageName = "thelounge-plugin-closepms";

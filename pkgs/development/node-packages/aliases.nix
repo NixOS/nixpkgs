@@ -140,6 +140,7 @@ mapAliases {
   inherit (pkgs) textlint; # Added 2024-05-13
   inherit (pkgs) textlint-rule-alex; # Added 2024-05-16
   inherit (pkgs) textlint-rule-max-comma; # Added 2024-05-15
+  inherit (pkgs) textlint-rule-write-good; # Added 2024-05-16
   thelounge = pkgs.thelounge; # Added 2023-05-22
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   inherit (pkgs) titanium; # added 2023-08-17
