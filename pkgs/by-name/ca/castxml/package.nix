@@ -1,10 +1,11 @@
 {
+  lib,
   cmake,
   fetchFromGitHub,
-  lib,
   libffi,
   libxml2,
   llvmPackages,
+  ninja,
   python3,
   stdenv,
   zlib,
@@ -30,11 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     (lib.getDev llvm)
-  ]
-  ++ lib.optionals (withManual || withHTML) [
-    sphinx
-  ];
+  ] ++ lib.optionals (withManual || withHTML) [ sphinx ];
 
   buildInputs = [
     libclang
@@ -43,8 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  propagatedBuildInputs = [
-    libclang
+  outputs = [
+    "out"
+    "doc"
+    "man"
   ];
 
   cmakeFlags = [
