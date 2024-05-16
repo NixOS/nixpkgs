@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/oxidecomputer/typify";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ david-r-cox ];
+    broken = true;
   };
 }
