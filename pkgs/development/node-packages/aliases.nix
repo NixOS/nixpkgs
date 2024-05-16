@@ -138,6 +138,7 @@ mapAliases {
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
   inherit (pkgs) textlint; # Added 2024-05-13
+  inherit (pkgs) textlint-rule-alex; # Added 2024-05-16
   inherit (pkgs) textlint-rule-max-comma; # Added 2024-05-15
   thelounge = pkgs.thelounge; # Added 2023-05-22
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
