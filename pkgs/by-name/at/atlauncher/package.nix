@@ -6,8 +6,15 @@
 , makeWrapper
 , stdenv
 
+, gamemodeSupport ? stdenv.isLinux
+, textToSpeechSupport ? stdenv.isLinux
+, additionalLibs ? [ ]
+
 , # dependencies
-  libglvnd
+  flite
+, gamemode
+, libglvnd
+, libpulseaudio
 , udev
 , xorg
 }:
@@ -30,23 +37,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      runtimeLibraries = [
+        libglvnd
+        libpulseaudio
+        udev
+        xorg.libXxf86vm
+      ]
+      ++ lib.optional gamemodeSupport gamemode.lib
+      ++ lib.optional textToSpeechSupport flite
+      ++ additionalLibs;
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/bin $out/share/java
-    cp $src $out/share/java/ATLauncher.jar
+      mkdir -p $out/bin $out/share/java
+      cp $src $out/share/java/ATLauncher.jar
 
-    makeWrapper ${jre}/bin/java $out/bin/atlauncher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd udev xorg.libXxf86vm ]}" \
-      --add-flags "-jar $out/share/java/ATLauncher.jar" \
-      --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
-      --add-flags "--no-launcher-update"
+      makeWrapper ${jre}/bin/java $out/bin/atlauncher \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibraries}" \
+        --add-flags "-jar $out/share/java/ATLauncher.jar" \
+        --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
+        --add-flags "--no-launcher-update"
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp $ICON $out/share/icons/hicolor/scalable/apps/atlauncher.svg
+      mkdir -p $out/share/icons/hicolor/scalable/apps
+      cp $ICON $out/share/icons/hicolor/scalable/apps/atlauncher.svg
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   desktopItems = [
     (makeDesktopItem {
