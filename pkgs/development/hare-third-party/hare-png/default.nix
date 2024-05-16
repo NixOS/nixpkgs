@@ -1,8 +1,14 @@
-{ lib, stdenv, hare, hareThirdParty, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  hare,
+  hareThirdParty,
+  fetchFromSourcehut,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-png";
-  version = "unstable-2023-09-09";
+  version = "0-unstable-2023-09-09";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -26,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PNG implementation for Hare";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ starzation ];
-
     inherit (hare.meta) platforms badPlatforms;
   };
 })
