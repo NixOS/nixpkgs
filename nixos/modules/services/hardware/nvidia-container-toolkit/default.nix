@@ -37,6 +37,16 @@
         '';
       };
 
+      nvidia-driver-path = lib.mkOption {
+        type = with lib.types; nullOr path;
+        default = null;
+        description = ''
+          Custom NVidia driver path for systems not using NixOS to setup NVidia drivers.
+
+          On WSL for example, it should be set to /usr/lib/wsl.
+        '';
+      };
+
       mounts = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule mountType);
         default = [];
@@ -103,7 +113,11 @@
            containerPath = "/usr/local/nvidia/lib64"; }])
     ]);
 
-    systemd.services.nvidia-container-toolkit-cdi-generator = lib.mkIf config.hardware.nvidia-container-toolkit.enable {
+    systemd.services.nvidia-container-toolkit-cdi-generator = let
+      nvidia-driver = if config.hardware.nvidia-container-toolkit.nvidia-driver-path == null
+        then config.hardware.nvidia.package
+        else config.hardware.nvidia-container-toolkit.nvidia-driver-path;
+    in lib.mkIf config.hardware.nvidia-container-toolkit.enable {
       description = "Container Device Interface (CDI) for Nvidia generator";
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
@@ -114,7 +128,7 @@
           let
             script = pkgs.callPackage ./cdi-generate.nix {
               inherit (config.hardware.nvidia-container-toolkit) mounts;
-              nvidia-driver = config.hardware.nvidia.package;
+              inherit nvidia-driver;
             };
           in
           lib.getExe script;

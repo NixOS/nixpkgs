@@ -17,10 +17,13 @@
     (mount:
       ["${lib.getExe jq} '${jqAddMountExpression} ${builtins.toJSON (mkMount mount)}'"])
     mounts;
+  ldLibraryPathExport = if builtins.isString nvidia-driver then "export LD_LIBRARY_PATH=${nvidia-driver}/lib" else "";
 in
 writeScriptBin "nvidia-cdi-generator"
 ''
 #! ${runtimeShell}
+
+${ldLibraryPathExport}
 
 function cdiGenerate {
   ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"} cdi generate \
