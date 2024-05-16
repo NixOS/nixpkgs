@@ -442,6 +442,10 @@
     dependencies = with self; [ completion-nvim nvim-treesitter ];
   };
 
+  CopilotChat-nvim = super.CopilotChat-nvim.overrideAttrs {
+    dependencies = with self; [ copilot-lua plenary-nvim ];
+  };
+
   copilot-vim = super.copilot-vim.overrideAttrs {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/agent.vim \
