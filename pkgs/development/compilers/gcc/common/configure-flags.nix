@@ -256,6 +256,9 @@ let
       #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
       "--disable-werror"
     ]
+    ++ lib.optionals (targetPlatform.config == "riscv32-unknown-linux-uclibc") [
+      "--disable-tls"
+    ]
   ;
 
 in configureFlags
