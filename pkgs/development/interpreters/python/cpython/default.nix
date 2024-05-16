@@ -13,7 +13,6 @@
 
 # runtime dependencies
 , bzip2
-, deterministic-uname
 , expat
 , libffi
 , libxcrypt
@@ -162,8 +161,6 @@ let
     pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
-  ] ++ optionals stdenv.hostPlatform.isFreeBSD [
-    deterministic-uname
   ];
 
   buildInputs = lib.filter (p: p != null) ([
@@ -478,8 +475,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   optionalString enableNoSemanticInterposition ''
     export CFLAGS_NODIST="-fno-semantic-interposition"
   '' + optionalString (stdenv.buildPlatform.isFreeBSD && stdenv.hostPlatform.isFreeBSD) ''
-    sed -E -i -e 's/uname -p/uname -m/g' -e 's/uname -r/echo/g' config.guess
-    sed -E -i -e 's/uname -p/uname -m/g' -e 's/uname -r/echo/g' configure
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
   '';
 
   setupHook = python-setup-hook sitePackages;
