@@ -5,6 +5,17 @@ let
 in
 {
   options = with lib.types; {
+
+    security.shadow.enable = lib.mkEnableOption "" // {
+      default = true;
+      description = ''
+        Enable the shadow authentication suite, which provides critical programs such as su, login, passwd.
+
+        Note: This is currently experimental. Only disable this if you're
+        confident that you can recover your system if it breaks.
+      '';
+    };
+
     security.loginDefs = {
       package = lib.mkPackageOption pkgs "shadow" { };
 
@@ -138,101 +149,111 @@ in
 
   ###### implementation
 
-  config = {
-    assertions = [
-      {
-        assertion = cfg.settings.SYS_UID_MIN <= cfg.settings.SYS_UID_MAX;
-        message = "SYS_UID_MIN must be less than or equal to SYS_UID_MAX";
-      }
-      {
-        assertion = cfg.settings.UID_MIN <= cfg.settings.UID_MAX;
-        message = "UID_MIN must be less than or equal to UID_MAX";
-      }
-      {
-        assertion = cfg.settings.SYS_GID_MIN <= cfg.settings.SYS_GID_MAX;
-        message = "SYS_GID_MIN must be less than or equal to SYS_GID_MAX";
-      }
-      {
-        assertion = cfg.settings.GID_MIN <= cfg.settings.GID_MAX;
-        message = "GID_MIN must be less than or equal to GID_MAX";
-      }
-    ];
+  config = lib.mkMerge [
+    {
+      assertions = [
+        {
+          assertion = config.security.shadow.enable || config.services.greetd.enable;
+          message = "You must enable at least one VT login method, either security.shadow.enable or services.greetd.enable";
+        }
+      ];
+    }
+    (lib.mkIf config.security.shadow.enable {
+      assertions = [
+        {
+          assertion = cfg.settings.SYS_UID_MIN <= cfg.settings.SYS_UID_MAX;
+          message = "SYS_UID_MIN must be less than or equal to SYS_UID_MAX";
+        }
+        {
+          assertion = cfg.settings.UID_MIN <= cfg.settings.UID_MAX;
+          message = "UID_MIN must be less than or equal to UID_MAX";
+        }
+        {
+          assertion = cfg.settings.SYS_GID_MIN <= cfg.settings.SYS_GID_MAX;
+          message = "SYS_GID_MIN must be less than or equal to SYS_GID_MAX";
+        }
+        {
+          assertion = cfg.settings.GID_MIN <= cfg.settings.GID_MAX;
+          message = "GID_MIN must be less than or equal to GID_MAX";
+        }
+      ];
 
-    security.loginDefs.settings.CHFN_RESTRICT =
-      lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
+      security.loginDefs.settings.CHFN_RESTRICT =
+        lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
 
-    environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
-      ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
-      ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
+      environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
+                                   ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
+                                   ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
-    environment.etc =
-      # Create custom toKeyValue generator
-      # see https://man7.org/linux/man-pages/man5/login.defs.5.html for config specification
-      let
-        toKeyValue = lib.generators.toKeyValue {
-          mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
-        };
-      in
-      {
-        # /etc/login.defs: global configuration for pwdutils.
-        # You cannot login without it!
-        "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
+      environment.etc =
+        # Create custom toKeyValue generator
+        # see https://man7.org/linux/man-pages/man5/login.defs.5.html for config specification
+        let
+          toKeyValue = lib.generators.toKeyValue {
+            mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+          };
+        in
+          {
+            # /etc/login.defs: global configuration for pwdutils.
+            # You cannot login without it!
+            "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
 
-        # /etc/default/useradd: configuration for useradd.
-        "default/useradd".source = pkgs.writeText "useradd" ''
+            # /etc/default/useradd: configuration for useradd.
+            "default/useradd".source = pkgs.writeText "useradd" ''
           GROUP=100
           HOME=/home
           SHELL=${utils.toShellPath config.users.defaultUserShell}
         '';
-      };
+          };
 
-    security.pam.services = {
-      chsh = { rootOK = true; };
-      chfn = { rootOK = true; };
-      su = {
-        rootOK = true;
-        forwardXAuth = true;
-        logFailures = true;
-      };
-      passwd = { };
-      # Note: useradd, groupadd etc. aren't setuid root, so it
-      # doesn't really matter what the PAM config says as long as it
-      # lets root in.
-      useradd.rootOK = true;
-      usermod.rootOK = true;
-      userdel.rootOK = true;
-      groupadd.rootOK = true;
-      groupmod.rootOK = true;
-      groupmems.rootOK = true;
-      groupdel.rootOK = true;
-      login = {
-        startSession = true;
-        allowNullPassword = true;
-        showMotd = true;
-        updateWtmp = true;
-      };
-      chpasswd = { rootOK = true; };
-    };
-
-    security.wrappers =
-      let
-        mkSetuidRoot = source: {
-          setuid = true;
-          owner = "root";
-          group = "root";
-          inherit source;
+      security.pam.services = {
+        chsh = { rootOK = true; };
+        chfn = { rootOK = true; };
+        su = {
+          rootOK = true;
+          forwardXAuth = true;
+          logFailures = true;
         };
-      in
-      {
-        su = mkSetuidRoot "${cfg.package.su}/bin/su";
-        sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
-        newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
-        newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
-        newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
-      }
-      // lib.optionalAttrs config.users.mutableUsers {
-        chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
-        passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
+        passwd = { };
+        # Note: useradd, groupadd etc. aren't setuid root, so it
+        # doesn't really matter what the PAM config says as long as it
+        # lets root in.
+        useradd.rootOK = true;
+        usermod.rootOK = true;
+        userdel.rootOK = true;
+        groupadd.rootOK = true;
+        groupmod.rootOK = true;
+        groupmems.rootOK = true;
+        groupdel.rootOK = true;
+        login = {
+          startSession = true;
+          allowNullPassword = true;
+          showMotd = true;
+          updateWtmp = true;
+        };
+        chpasswd = { rootOK = true; };
       };
-  };
+
+      security.wrappers =
+        let
+          mkSetuidRoot = source: {
+            setuid = true;
+            owner = "root";
+            group = "root";
+            inherit source;
+          };
+        in
+          {
+            su = mkSetuidRoot "${cfg.package.su}/bin/su";
+            sg = mkSetuidRoot "${cfg.package.out}/bin/sg";
+            newgrp = mkSetuidRoot "${cfg.package.out}/bin/newgrp";
+            newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
+            newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
+          }
+          // lib.optionalAttrs config.users.mutableUsers {
+            chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
+            passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
+          };
+    })
+  ];
 }
