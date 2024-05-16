@@ -69,16 +69,17 @@ let
     ARCH_LITTLE_ENDIAN y
     UCLIBC_HAS_FPU n
   '' + lib.optionalString (stdenv.targetPlatform.config == "riscv32-unknown-linux-uclibc") ''
+    ARCH_HAS_NO_SHARED n
     ARCH_USE_MMU n
-    TARGET_riscv32 y
-    UCLIBC_USE_TIME64 y
-    UCLIBC_HAS_LINUXTHREADS y
+    DOPIC y
     HAS_NO_THREADS n
+    HAVE_LDSO y
+    TARGET_riscv32 y
+    UCLIBC_HAS_LINUXTHREADS y
     UCLIBC_HAS_THREADS y
     UCLIBC_HAS_UTMPX y
-    ARCH_HAS_NO_SHARED n
-    HAVE_LDSO y
-    DOPIC y
+    UCLIBC_SUSV3_LEGACY y
+    UCLIBC_USE_TIME64 y
   '';
   # UCLIBC_HAS_UTMPX is needed by busybox
 in
