@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.roudoudou.com/rasm/";
+    homepage = "http://rasm.wikidot.com/english-index:home";
     description = "Z80 assembler";
     mainProgram = "rasm";
     # use -n option to display all licenses
