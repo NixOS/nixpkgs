@@ -1,12 +1,18 @@
 {
   lib,
-  python3Packages,
+  buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "libgravatar";
   version = "1.0.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pabluk";
@@ -15,15 +21,16 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-rJv/jfdT+JldxR0kKtXQLOI5wXQYSQRWJnqwExwWjTA=";
   };
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "libgravatar" ];
 
   meta = with lib; {
-    homepage = "https://github.com/pabluk/libgravatar";
     description = "A library that provides a Python 3 interface for the Gravatar API";
+    homepage = "https://github.com/pabluk/libgravatar";
+    changelog = "https://github.com/pabluk/libgravatar/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ gador ];
   };
