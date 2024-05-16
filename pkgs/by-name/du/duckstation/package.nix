@@ -2,12 +2,14 @@
 , stdenv
 , fetchFromGitHub
 , SDL2
+, callPackage
 , cmake
 , cubeb
 , curl
 , extra-cmake-modules
 , libXrandr
 , libbacktrace
+, libwebp
 , makeWrapper
 , ninja
 , pkg-config
@@ -18,6 +20,7 @@
 }:
 
 let
+  shaderc-patched = callPackage ./shaderc-patched.nix { };
   inherit (qt6)
     qtbase
     qtsvg
@@ -28,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "0.1-6292";
+  version = "0.1-6658";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "0bc42c38aab49030118f507c9783de047769148b";
-    hash = "sha256-8OavixSwEWihFY2fEdsepR1lqWlTH+//xZRKwb7lFCQ=";
+    rev = "4e0c417add264226b3db065c1466791f0591a1b5";
+    hash = "sha256-fN0bcjqjMmK3qVLlrYmR2VgjK0BjdK4nUj8vNYdFC3I=";
   };
 
   patches = [
@@ -45,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./002-hardcode-vars.diff;
       gitHash = finalAttrs.src.rev;
       gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g0bc42c38";
-      gitDate = "2024-02-06T22:47:47+09:00";
+      gitTag = "${finalAttrs.version}-g4e0c417a";
+      gitDate = "2024-04-16T12:49:54+10:00";
     })
   ];
 
@@ -64,9 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libXrandr
     libbacktrace
+    libwebp
     qtbase
     qtsvg
     qtwayland
+    shaderc-patched
     wayland
   ]
   ++ cubeb.passthru.backendLibs;
