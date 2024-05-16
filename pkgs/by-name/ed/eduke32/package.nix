@@ -187,7 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://eduke32.com";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
-      mikroskeem
+      qubitnano
       sander
     ];
     platforms = lib.platforms.all;
