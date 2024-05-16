@@ -13,13 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ chez chez-srfi ];
 
-  buildPhase = ''
-    make PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
-
-  installPhase = ''
-    make install PREFIX=$out CHEZ=${chez}/bin/scheme
-  '';
+  makeFlags = [ "CHEZ=${lib.getExe chez}" ];
 
   doCheck = false;
 
