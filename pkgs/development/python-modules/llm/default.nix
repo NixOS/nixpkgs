@@ -12,7 +12,7 @@
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.13.1";
+    version = "0.14";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ let
       owner = "simonw";
       repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-Nq6pduzl8IK+nA3pctst/W4ux7+P6mBFTEHMF+vtBQw=";
+      hash = "sha256-CgGVFUsntVkF0zORAtYQQMAeGtIwBbj9hE0Ei1OCGq4=";
     };
 
     patches = [
