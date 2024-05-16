@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.0.1";
+  version = "0.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_text_splitters";
     inherit version;
-    hash = "sha256-rEWfqYeZ9RF61UJakzCyGWEyHjC8GaKi+fdh3a3WKqE=";
+    hash = "sha256-rIkn3AugjrpwL2lhye19986tjeGan3EBqyteo0IBs8E=";
   };
 
   nativeBuildInputs = [
