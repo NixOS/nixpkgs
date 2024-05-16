@@ -374,6 +374,7 @@ stdenv.mkDerivation (finalAttrs: {
       });
       buildbot-integration = nixosTests.buildbot;
     } // tests.fetchgit;
+    updateScript = ./update.sh;
   };
 
   meta = {
