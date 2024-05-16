@@ -2,16 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "csfml";
-  version = "2.5.2";
+  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";
     rev   = version;
-    sha256 = "sha256-A5C/4SnxUX7mW1wkPWJWX3dwMhrJ79DkBuZ7UYzTOqE=";
+    hash = "sha256-wwDHuyh4zMi0XCjIK7dUWiscPA+r8zLEvomuul6nlyQ=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];
-  cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
+  cmakeFlags = [
+    "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/"
+    "-DCSFML_PKGCONFIG_INSTALL_PREFIX=share/pkgconfig"
+  ];
 
   meta = with lib; {
     homepage = "https://www.sfml-dev.org/";
