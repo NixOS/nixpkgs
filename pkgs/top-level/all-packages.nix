@@ -8170,8 +8170,6 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
-  fusuma = callPackage ../tools/inputmethods/fusuma { };
-
   fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
 
   inherit (fdbPackages)
