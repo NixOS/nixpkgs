@@ -2,29 +2,45 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
   bison,
   flex,
   readline,
+  ncurses,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "cdecl";
-  version = "16.3";
+stdenv.mkDerivation {
+  pname = "cdecl-blocks";
+  version = "2.5-unstable-2024-05-07";
 
   src = fetchFromGitHub {
-    owner = "paul-j-lucas";
-    repo = "cdecl";
-    rev = "refs/tags/cdecl-${finalAttrs.version}";
-    hash = "sha256-4rysv/iLohx2y7WEaP4BG7lT1tm4FfU0NWcxI4gvUsg=";
+    owner = "ridiculousfish";
+    repo = "cdecl-blocks";
+    rev = "1e6e1596771183d9bb90bcf152d6bc2055219a7e";
+    hash = "sha256-5XuiYkFe+QvVBRIXRieKoE0zbISMvU1iLgEfkw6GnlE=";
   };
 
-  strictDeps = true;
-  preConfigure = "./bootstrap";
+  patches = [
+    ./cdecl-2.5-lex.patch
+    # when `USE_READLINE` is enabled, this option will not be present
+    ./test_remove_interactive_line.patch
+  ];
 
-  nativeBuildInputs = [ autoconf automake bison flex ];
-  buildInputs = [ readline ];
+  prePatch = ''
+    substituteInPlace cdecl.c \
+      --replace 'getline' 'cdecl_getline'
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
+
+  buildInputs = [
+    readline
+    ncurses
+  ];
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -41,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC=${lib.getExe stdenv.cc}"
     "PREFIX=${placeholder "out"}"
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/man1"
@@ -55,14 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin;
   '';
 
-  outputs = [ "out" "man" ];
-
   meta = {
-    description = "Composing and deciphering C (or C++) declarations or casts, aka ''gibberish.''";
-    homepage = "https://github.com/paul-j-lucas/cdecl";
-    license = lib.licenses.gpl3Only;
+    description = "Translator English -- C/C++ declarations";
+    homepage = "https://cdecl.org";
+    license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.unix;
     mainProgram = "cdecl";
   };
-})
+}
