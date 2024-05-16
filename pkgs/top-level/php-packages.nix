@@ -191,6 +191,8 @@ in {
 
     composer = callPackage ../development/php-packages/composer { };
 
+    composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
+
     deployer = callPackage ../development/php-packages/deployer { };
 
     grumphp = callPackage ../development/php-packages/grumphp { };
