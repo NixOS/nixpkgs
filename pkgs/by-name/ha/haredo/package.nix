@@ -1,17 +1,21 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, hare
-, scdoc
-, nix-update-script
-, makeWrapper
-, bash
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  hare,
+  scdoc,
+  nix-update-script,
+  makeWrapper,
+  bash,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
   version = "1.0.5";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromSourcehut {
     owner = "~autumnull";
@@ -64,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/haredo \
-      --prefix PATH : "${lib.makeBinPath [bash]}"
+      --prefix PATH : "${lib.makeBinPath [ bash ]}"
   '';
 
   setupHook = ./setup-hook.sh;
