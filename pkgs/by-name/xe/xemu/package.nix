@@ -2,7 +2,6 @@
   lib,
   SDL2,
   SDL2_image,
-  copyDesktopItems,
   fetchFromGitHub,
   gettext,
   glib,
@@ -13,7 +12,6 @@
   libpcap,
   libsamplerate,
   libslirp,
-  makeDesktopItem,
   mesa,
   meson,
   ninja,
@@ -41,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [
-      copyDesktopItems
+      SDL2
       meson
       ninja
       perl
@@ -71,12 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     vte
   ];
 
-  separateDebugInfo = true;
-
-  dontUseMesonConfigure = true;
-
-  setOutputFlags = false;
-
   configureFlags = [
     "--disable-strip"
     "--meson=meson"
@@ -86,14 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "qemu-system-i386" ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "xemu";
-      desktopName = "xemu";
-      exec = "xemu";
-      icon = "xemu";
-    })
-  ];
+  separateDebugInfo = true;
+
+  dontUseMesonConfigure = true;
+
+  setOutputFlags = false;
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs .
@@ -140,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
     ])
     + "\n"
     + ''
+      install -Dm644 -T ../ui/xemu.desktop $out/share/applications/xemu.desktop
+
       runHook postInstall
     '';
 
@@ -158,3 +151,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+# TODO: investigate failure when using __structuredAttrs
