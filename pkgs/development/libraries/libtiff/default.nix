@@ -12,6 +12,7 @@
 , libjpeg
 , xz
 , zlib
+, zstd
 
   # for passthru.tests
 , libgeotiff
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     lerc
+    zstd
   ];
 
   # TODO: opengl support (bogus configure detection)
