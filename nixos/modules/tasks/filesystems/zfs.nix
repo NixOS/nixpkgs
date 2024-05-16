@@ -869,6 +869,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "simple";
+          IOSchedulingClass = "idle";
         };
         script = ''
           ${cfgZfs.package}/bin/zpool scrub -w ${
