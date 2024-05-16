@@ -86,6 +86,7 @@
 , "concurrently"
 , "conventional-changelog-cli"
 , "cpy-cli"
+, "create-cljs-project"
 , "create-cycle-app"
 , "create-react-native-app"
 , "cspell"
