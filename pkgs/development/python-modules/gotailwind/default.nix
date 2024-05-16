@@ -34,15 +34,15 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
@@ -71,10 +71,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Modul to communicate with Tailwind garage door openers";
-    mainProgram = "tailwind";
     homepage = "https://github.com/frenck/python-gotailwind";
     changelog = "https://github.com/frenck/python-gotailwind/releases/tag/v$version";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tailwind";
   };
 }
