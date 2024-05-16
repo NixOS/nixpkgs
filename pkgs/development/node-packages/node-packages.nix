@@ -92987,28 +92987,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-diacritics = nodeEnv.buildNodePackage {
-    name = "textlint-rule-diacritics";
-    packageName = "textlint-rule-diacritics";
-    version = "1.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-diacritics/-/textlint-rule-diacritics-1.0.0.tgz";
-      sha512 = "hhJvDZzhV+sKD7walPQ4VmWkBw5o1T/lFLRsoDsAJF+LYhD89R5/L4yFVtxFRUkP9VZ5cvoUIPkYjZvkPEawTA==";
-    };
-    dependencies = [
-      sources."match-casing-1.0.3"
-      sources."strip-json-comments-3.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Textlint rule to check correct usage of diacritics";
-      homepage = "https://github.com/sapegin/textlint-rule-diacritics";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   textlint-rule-en-max-word-count = nodeEnv.buildNodePackage {
     name = "textlint-rule-en-max-word-count";
     packageName = "textlint-rule-en-max-word-count";
