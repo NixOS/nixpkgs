@@ -10,6 +10,11 @@
 , openssl
 , libxml2
 , pkg-config
+, gitUpdater
+, _experimental-update-script-combinators
+, runCommand
+, crystal2nix
+, writeShellScript
 }:
 crystal.buildCrystalPackage rec {
   pname = "Collision";
@@ -39,6 +44,18 @@ crystal.buildCrystalPackage rec {
   doInstallCheck = false;
 
   installTargets = ["desktop" "install"];
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "collision.shardLock" ./shard.lock)
+      { command = [ (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}") ./. ]; supportedFeatures = [ "silent" ]; }
+      { command = [ "rm" ./shard.lock ]; supportedFeatures = [ "silent" ]; }
+    ];
+    shardLock = runCommand "shard.lock" { inherit src; } ''
+      cp $src/shard.lock $out
+    '';
+  };
 
   meta = with lib; {
     description = "Check hashes for your files";
