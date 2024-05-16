@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -14,16 +15,12 @@ buildPythonPackage rec {
     hash = "sha256-zq5xJ/Da/kr13Q7PmO4T6ddZUe+WO1xam36pLg1x8Nc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ujson-stubs"
-  ];
+  pythonImportsCheck = [ "ujson-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for ujson";
