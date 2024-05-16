@@ -10,6 +10,7 @@
   textlint-rule-alex,
   textlint-rule-max-comma,
   textlint-rule-preset-ja-technical-writing,
+  textlint-rule-write-good,
 }:
 
 buildNpmPackage rec {
@@ -99,6 +100,7 @@ buildNpmPackage rec {
         textlint-rule-alex
         textlint-rule-max-comma
         textlint-rule-preset-ja-technical-writing
+        textlint-rule-write-good
       ]
     );
   };
