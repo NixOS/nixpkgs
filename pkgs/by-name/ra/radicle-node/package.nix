@@ -10,15 +10,15 @@
 , darwin
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0-rc.8";
+  version = "1.0.0-rc.9";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-F2n7ui0EgXK8fT76M14RVhXXGeRYub+VpH+puDUJ1pQ=";
+    hash = "sha256-GFltwKc6madTJWPTeAeslmFffHtixR0Dxd+3hAnHvz0=";
   };
-  cargoHash = "sha256-+QthR5M3qAxC42TPnR5iylfpuWnsSmg68SuCbhmkCvw=";
+  cargoHash = "sha256-UM9eDWyeewWPq3+z0JWqdAsCxx6EqytuYMwLXDHOC64=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
   nativeCheckInputs = [ git ];
