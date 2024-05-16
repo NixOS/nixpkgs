@@ -24,11 +24,15 @@ in
 
   config = {
     # TODO: Added in 24.05, remove before 24.11
-    assertions = [
-      {
-        assertion = cfg.screenrc != null -> cfg.enable;
-        message = "`programs.screen.screenrc` has been configured, but `programs.screen.enable` is not true";
-      }
+    warnings = [
+      (lib.mkIf (cfg.screenrc != null && !cfg.enable)
+        ''
+          `programs.screen.screenrc` has been configured, but `programs.screen.enable` is not true.
+
+          This would have the effect of creating `/etc/screenrc` before 24.05,
+          but it now needs to be explicitly enabled via `programs.screen.screenrc`
+        ''
+      )
     ];
   } // lib.mkIf cfg.enable {
     environment.etc.screenrc = {
