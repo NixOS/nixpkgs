@@ -9675,6 +9675,8 @@ self: super: with self; {
 
   pins = callPackage ../development/python-modules/pins { };
 
+  pipetools = callPackage ../development/python-modules/pipetools { };
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
