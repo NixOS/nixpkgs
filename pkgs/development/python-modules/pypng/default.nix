@@ -1,20 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchFromGitLab
 , pytestCheckHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.0.21";
-  format = "pyproject";
+  version = "0.20220715.0";
+  pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
     rev = "refs/tags/${pname}-${version}";
-    hash = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
+    hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
   };
 
   nativeBuildInputs = [
