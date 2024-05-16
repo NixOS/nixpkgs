@@ -6,6 +6,7 @@
 , yarn
 , makeBinaryWrapper
 , nodejs
+, bash
 , python3
 , nixosTests
 }:
@@ -90,7 +91,8 @@ in stdenv.mkDerivation {
     for bin in $out/bin/*; do
       wrapProgram $bin \
         --set NODE_ENV production \
-        --set NODE_PATH "$out/node_modules"
+        --set NODE_PATH "$out/node_modules" \
+        --set PATH "$PATH:${nodejs}/bin:${bash}/bin"
     done
     makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
       --add-flags $out/app.js \
