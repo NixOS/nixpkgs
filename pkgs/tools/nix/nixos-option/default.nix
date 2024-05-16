@@ -1,43 +1,73 @@
 {
   lib,
-  stdenv,
-  boost,
-  meson,
-  ninja,
-  pkg-config,
+  makeWrapper,
+  stdenvNoCC,
   installShellFiles,
+  shellcheck,
   nix,
-  nixosTests,
+  jq,
+  man-db,
+  coreutils,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "nixos-option";
 
-  src = ./.;
-
-  postInstall = ''
-    installManPage ../nixos-option.8
-  '';
-
-  strictDeps = true;
+  src = ./nixos-option.sh;
 
   nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
     installShellFiles
-  ];
-  buildInputs = [
-    boost
-    nix
+    makeWrapper
+    shellcheck
   ];
 
-  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
+  env = {
+    nixosOptionNix = "${./nixos-option.nix}";
+    nixosOptionManpage = "${placeholder "out"}/share/man";
+  };
 
-  meta = with lib; {
-    license = licenses.lgpl2Plus;
+  dontUnpack = true;
+  dontConfigure = true;
+  dontPatch = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm555 $src $out/bin/nixos-option
+    substituteAllInPlace $out/bin/nixos-option
+    installManPage ${./nixos-option.8}
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    shellcheck $out/bin/nixos-option
+    runHook postInstallCheck
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/nixos-option \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          nix
+          jq
+          man-db
+          coreutils
+        ]
+      }
+  '';
+
+  meta = {
+    description = "Evaluate NixOS configuration and return the properties of given option";
+    license = lib.licenses.mit;
     mainProgram = "nixos-option";
-    maintainers = [ ];
-    inherit (nix.meta) platforms;
+    maintainers = with lib.maintainers; [
+      FireyFly
+      azuwis
+      aleksana
+    ];
   };
 }
