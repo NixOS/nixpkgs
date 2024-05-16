@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.2.4";
+  version = "6.2.8";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "refs/tags/et-v${version}";
-    hash = "sha256-9W9Pz0VrFU+HNpf98I3CLrn8+kpjjNLOUK8gGcDJcI8=";
+    hash = "sha256-7LhCP7zARpigsDJmA7y/ZIgN06l8aCszXryzPoa4aL0=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
+    mkdir -p ../external_imported/Catch2/single_include/catch2
     cp ${catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
   '';
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://eternalterminal.dev/";
     changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dezgeg ];
+    maintainers = with maintainers; [ dezgeg jshort ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
