@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , mock
-, pythonOlder
 , repeated-test
 , setuptools-scm
 , sphinx
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "sigtools";
   version = "4.0.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,4 +1,4 @@
-{ lib, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
+{ lib, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
 
 buildPythonPackage rec {
   pname = "hcs-utils";
@@ -20,8 +20,6 @@ buildPythonPackage rec {
 
   buildInputs = [ six glibcLocales ];
   nativeCheckInputs = [ pytest ];
-
-  disabled = pythonOlder "3.4";
 
   meta = with lib; {
     description = "Library collecting some useful snippets";
