@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, gitUpdater
-, hare
-, hareThirdParty
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  gitUpdater,
+  hare,
+  hareThirdParty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'hare test' 'hare test $(HAREFLAGS)'
   '';
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Finite State Machine structured as a tree";
