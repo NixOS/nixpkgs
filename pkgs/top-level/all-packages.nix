@@ -2491,8 +2491,6 @@ with pkgs;
 
   gitnr = callPackage ../applications/version-management/gitnr { };
 
-  gitprompt-rs = callPackage ../applications/version-management/gitprompt-rs/default.nix { };
-
   gitsign = callPackage ../applications/version-management/gitsign { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
