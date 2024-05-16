@@ -4,7 +4,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
 
   switchboardPlugs = [
-    switchboard-plug-a11y
     switchboard-plug-about
     switchboard-plug-applications
     switchboard-plug-bluetooth
@@ -171,8 +170,6 @@ lib.makeScope pkgs.newScope (self: with self; {
     plugs = null;
   };
 
-  switchboard-plug-a11y = callPackage ./apps/switchboard-plugs/a11y { };
-
   switchboard-plug-about = callPackage ./apps/switchboard-plugs/about { };
 
   switchboard-plug-applications = callPackage ./apps/switchboard-plugs/applications { };
@@ -246,4 +243,5 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 
+  switchboard-plug-a11y = throw "pantheon.switchboard-plug-a11y has been removed, abandoned by upstream"; # added 2024-05-16
 }
