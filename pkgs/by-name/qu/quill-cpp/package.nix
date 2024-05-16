@@ -25,9 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/odygrd/quill";
     license = licenses.mit;
     maintainers = [ maintainers.vaci ];
-    sourceProvenance = [
-      sourceTypes.fromSource
-    ];
   };
 }
 
