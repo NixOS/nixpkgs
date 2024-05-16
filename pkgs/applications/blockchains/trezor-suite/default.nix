@@ -19,7 +19,7 @@ let
   src = fetchurl {
     url = "https://github.com/trezor/${pname}/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
     hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/latest/download/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-EPpnEgE9euHGSo7CFMJg7hF3p5LqPc3zPxDQsNzyOI2lNv90vydtEmOm1fORj0MXbQsGLLS1nSzMH3vI6O9WmA==";
+      aarch64-linux = "sha512-U3Az5MtsHup+aNO6lVHeAXRAnNLUbQkL5qMTpYZTaLgiZEFQCUigBJXNPaiUiHA1rJAsFh6wpv20iRMcqRr9gA==";
       x86_64-linux  = "sha512-9Gz0T9/GpTEzZDNk8tV7dg4QvQIB4IoEcOLIjrig6kmlaUoPwwoWFuJP0BH5WW2AhOZ+CEWBP6zFD7uw6VVDnA==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
