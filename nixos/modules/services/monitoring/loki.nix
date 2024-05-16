@@ -101,7 +101,7 @@ in {
                else cfg.configFile;
         validateConfig = file:
         pkgs.runCommand "validate-loki-conf" {
-          nativeBuildInputs = [ pkgs.grafana-loki ];
+          nativeBuildInputs = [ cfg.package ];
         } ''
             loki -verify-config -config.file "${file}"
             ln -s "${file}" "$out"
