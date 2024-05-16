@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  hare,
+  hareHook,
   harec,
   fetchFromSourcehut,
 }:
@@ -17,12 +17,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sz8xPBZaUFye3HH4lkRnH52ye451e6seZXN/qvg87jE=";
   };
 
-  nativeBuildInputs = [ hare ];
+  nativeBuildInputs = [ hareHook ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
