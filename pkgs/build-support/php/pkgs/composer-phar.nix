@@ -1,6 +1,5 @@
 {
   _7zz,
-  cacert,
   curl,
   fetchurl,
   git,
@@ -37,7 +36,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --prefix PATH : ${
         lib.makeBinPath [
           _7zz
-          cacert
           curl
           git
           unzip
