@@ -14,6 +14,11 @@ let
         getty = {
           greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
         };
+        openssh = {
+          enable = true;
+          settings.PasswordAuthentication = false;
+          settings.KbdInteractiveAuthentication = false;
+        };
       };
       boot = {
         loader = {
@@ -30,9 +35,9 @@ let
         makeUsbBootable = true;
       };
       environment = {
-        systemPackages = [
-          pkgs.nyancat
-        ];
+        systemPackages = with pkgs; [
+          prometheus grafana 
+        ]
       };
       networking = {
         hostName = "xnode";
@@ -44,13 +49,6 @@ let
             password = "xnode";
             openssh.authorizedKeys.keys = [ sshPubKey ]; # Inject a key from environment or through --args
           };
-        };
-      };
-      services = {
-        openssh = {
-          enable = true;
-          settings.PasswordAuthentication = false;
-          settings.KbdInteractiveAuthentication = false;
         };
       };
     };
