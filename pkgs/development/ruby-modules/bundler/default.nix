@@ -4,8 +4,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "2.5.9";
-  source.sha256 = "sha256-4rYTJb41m85U6w/tiEBO/mfl4fgAPTSiIYQeO3Za7AY=";
+  version = "2.5.10";
+  source.sha256 = "sha256-eta+7Y+kmnmlkgKfdz8kkrn075FtinLO5OLRBOW2+q0=";
   dontPatchShebangs = true;
 
   postFixup = ''
