@@ -1,8 +1,14 @@
-{ lib, stdenv, hare, harec, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  hare,
+  harec,
+  fetchFromSourcehut,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-compress";
-  version = "unstable-2023-11-01";
+  version = "0-unstable-2023-11-01";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -25,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Compression algorithms for Hare";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ starzation ];
-
     inherit (harec.meta) platforms badPlatforms;
   };
 })
