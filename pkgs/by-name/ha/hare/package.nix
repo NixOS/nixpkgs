@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  binutils-unwrapped,
   harec,
-  makeWrapper,
   qbe,
   gitUpdater,
   scdoc,
@@ -34,7 +32,9 @@ assert
   '';
 
 let
+  buildArch = stdenv.buildPlatform.uname.processor;
   arch = stdenv.hostPlatform.uname.processor;
+  platform = lib.toLower stdenv.hostPlatform.uname.system;
   qbePlatform =
     {
       x86_64 = "amd64_sysv";
@@ -42,32 +42,38 @@ let
       riscv64 = "rv64";
     }
     .${arch};
-  platform = lib.toLower stdenv.hostPlatform.uname.system;
   embeddedOnBinaryTools =
     let
-      genToolsFromToolchain =
+      genPaths =
         toolchain:
         let
-          crossTargetPrefix = toolchain.stdenv.cc.targetPrefix;
-          toolchainArch = toolchain.stdenv.hostPlatform.uname.processor;
-          absOrRelPath =
-            toolDrv: toolBasename:
-            if arch == toolchainArch then
-              toolBasename
-            else
-              lib.getExe' toolDrv "${crossTargetPrefix}${toolBasename}";
+          inherit (toolchain.stdenv.cc) targetPrefix;
+          inherit (toolchain.stdenv.targetPlatform.uname) processor;
         in
         {
-          "ld" = absOrRelPath toolchain.buildPackages.binutils "ld";
-          "as" = absOrRelPath toolchain.buildPackages.binutils "as";
-          "cc" = absOrRelPath toolchain.stdenv.cc "cc";
+          "${processor}" = {
+            "ld" = lib.getExe' toolchain.buildPackages.binutils "${targetPrefix}ld";
+            "as" = lib.getExe' toolchain.buildPackages.binutils "${targetPrefix}as";
+            "cc" = lib.getExe' toolchain.stdenv.cc "${targetPrefix}cc";
+          };
         };
     in
-    {
-      x86_64 = genToolsFromToolchain x86_64PkgsCrossToolchain;
-      aarch64 = genToolsFromToolchain aarch64PkgsCrossToolchain;
-      riscv64 = genToolsFromToolchain riscv64PkgsCrossToolchain;
-    };
+    builtins.foldl' (acc: elem: acc // (genPaths elem)) { } [
+      x86_64PkgsCrossToolchain
+      aarch64PkgsCrossToolchain
+      riscv64PkgsCrossToolchain
+    ];
+  crossCompMakeFlags = builtins.filter (x: !(lib.hasPrefix (lib.toUpper buildArch) x)) [
+    "RISCV64_AS=${embeddedOnBinaryTools.riscv64.as}"
+    "RISCV64_CC=${embeddedOnBinaryTools.riscv64.cc}"
+    "RISCV64_LD=${embeddedOnBinaryTools.riscv64.ld}"
+    "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
+    "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
+    "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
+    "X86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
+    "X86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
+    "X86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
@@ -99,6 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
+    # Hardcode harec and qbe.
+    (substituteAll {
+      src = ./003-hardcode-qbe-and-harec.patch;
+      harec = lib.getExe harec;
+      qbe = lib.getExe qbe;
+    })
     # Display toolchains when using `hare version -v`.
     (fetchpatch {
       url = "https://git.sr.ht/~sircmpwn/hare/commit/e35f2284774436f422e06f0e8d290b173ced1677.patch";
@@ -108,42 +120,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     harec
-    makeWrapper
     qbe
     scdoc
   ];
 
-  buildInputs = [
-    binutils-unwrapped
+  # Needed for build frameworks like `haredo`, which set the HAREC and QBE env vars to `harec` and
+  # `qbe` respectively.
+  propagatedBuildInputs = [
     harec
     qbe
-    tzdata
   ];
 
-  makeFlags =
-    [
-      "HARECACHE=.harecache"
-      "PREFIX=${builtins.placeholder "out"}"
-      "ARCH=${arch}"
-      "VERSION=${finalAttrs.version}-nixpkgs"
-      "QBEFLAGS=-t${qbePlatform}"
-      "AS=${stdenv.cc.targetPrefix}as"
-      "LD=${stdenv.cc.targetPrefix}ld"
-      # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
-      # not follow the FHS.
-      "HAREPATH=$(SRCDIR)/hare/stdlib"
-    ]
-    ++ lib.optionals enableCrossCompilation [
-      "RISCV64_AS=${embeddedOnBinaryTools.riscv64.as}"
-      "RISCV64_CC=${embeddedOnBinaryTools.riscv64.cc}"
-      "RISCV64_LD=${embeddedOnBinaryTools.riscv64.ld}"
-      "AARCH64_AS=${embeddedOnBinaryTools.aarch64.as}"
-      "AARCH64_CC=${embeddedOnBinaryTools.aarch64.cc}"
-      "AARCH64_LD=${embeddedOnBinaryTools.aarch64.ld}"
-      "X86_64_AS=${embeddedOnBinaryTools.x86_64.as}"
-      "X86_64_CC=${embeddedOnBinaryTools.x86_64.cc}"
-      "X86_64_LD=${embeddedOnBinaryTools.x86_64.ld}"
-    ];
+  buildInputs = [
+    harec
+    qbe
+  ];
+
+  makeFlags = [
+    "HARECACHE=.harecache"
+    "PREFIX=${builtins.placeholder "out"}"
+    "ARCH=${arch}"
+    "VERSION=${finalAttrs.version}-nixpkgs"
+    "QBEFLAGS=-t${qbePlatform}"
+    "AS=${stdenv.cc.targetPrefix}as"
+    "LD=${stdenv.cc.targetPrefix}ld"
+    "${lib.toUpper buildArch}_AS=${embeddedOnBinaryTools.${buildArch}.as}"
+    "${lib.toUpper buildArch}_CC=${embeddedOnBinaryTools.${buildArch}.cc}"
+    "${lib.toUpper buildArch}_LD=${embeddedOnBinaryTools.${buildArch}.ld}"
+    # Strip the variable of an empty $(SRCDIR)/hare/third-party, since nix does
+    # not follow the FHS.
+    "HAREPATH=$(SRCDIR)/hare/stdlib"
+  ] ++ lib.optionals enableCrossCompilation crossCompMakeFlags;
 
   enableParallelBuilding = true;
 
@@ -156,17 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postConfigure = ''
     ln -s configs/${platform}.mk config.mk
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/hare \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          binutils-unwrapped
-          harec
-          qbe
-        ]
-      }
   '';
 
   setupHook = ./setup-hook.sh;
