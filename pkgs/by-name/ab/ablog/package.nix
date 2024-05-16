@@ -1,6 +1,7 @@
 { lib
 , python3
-, fetchPypi
+, fetchFromGitHub
+, gitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -8,9 +9,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.11.8";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PpNBfa4g14l8gm9+PxOFc2NDey031D7Ohutx2OGUeak=";
+  src = fetchFromGitHub {
+    owner = "sunpy";
+    repo = "ablog";
+    rev = "v${version}";
+    hash = "sha256-t3Vxw1IJoHuGqHv/0S4IoHwjWbtR6knXCBg4d0cM3lw=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -31,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    defusedxml
   ];
 
   pytestFlagsArray = [
@@ -38,6 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     "--rootdir" "src/ablog"
     "-W" "ignore::sphinx.deprecation.RemovedInSphinx90Warning" # Ignore ImportError
   ];
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "ABlog for blogging with Sphinx";
