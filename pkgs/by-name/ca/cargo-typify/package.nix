@@ -1,4 +1,4 @@
-{ lib, rustfmt, rustPlatform, fetchFromGitHub }:
+{ lib, rustfmt, rustPlatform, fetchFromGitHub, gitUpdater }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-typify";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
     # cargo-typify depends on rustfmt-wrapper, which requires RUSTFMT:
     export RUSTFMT="${lib.getExe rustfmt}"
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "JSON Schema to Rust type converter";
