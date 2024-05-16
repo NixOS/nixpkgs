@@ -93,6 +93,7 @@ let
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
         else if final.isFreeBSD             then "fblibc"
+        else if final.isOpenBSD             then "oblibc"
         else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"
         else if final.isGhcjs               then null

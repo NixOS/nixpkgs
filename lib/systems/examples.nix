@@ -342,6 +342,11 @@ rec {
     useLLVM = true;
   };
 
+  x86_64-openbsd = {
+    config = "x86_64-unknown-openbsd";
+    useLLVM = true;
+  };
+
   #
   # WASM
   #
