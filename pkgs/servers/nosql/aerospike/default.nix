@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aerospike-server";
-  version = "7.0.0.9";
+  version = "7.1.0.0";
 
   src = fetchFromGitHub {
     owner = "aerospike";
     repo = "aerospike-server";
     rev = version;
-    hash = "sha256-3ZVSaq76oG8NEe2SNyVGg+iDZ9RXyjFEIsgoemmuaPQ=";
+    hash = "sha256-QifZDjmveokTkEIkMF1ozcR5x4mW/JWuSzD+rtU4B1c=";
     fetchSubmodules = true;
   };
 
