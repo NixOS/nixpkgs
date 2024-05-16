@@ -16837,6 +16837,8 @@ self: super: with self; {
 
   wavinsentio = callPackage ../development/python-modules/wavinsentio { };
 
+  waybackpy = callPackage ../development/python-modules/waybackpy {};
+
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
   wcag-contrast-ratio = callPackage ../development/python-modules/wcag-contrast-ratio { };
