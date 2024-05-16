@@ -380,6 +380,7 @@ in {
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
+  greetd-no-shadow = handleTest ./greetd-no-shadow.nix {};
   grocy = handleTest ./grocy.nix {};
   grow-partition = runTest ./grow-partition.nix;
   grub = handleTest ./grub.nix {};
