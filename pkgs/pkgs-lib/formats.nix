@@ -43,6 +43,8 @@ rec {
 
   hocon = (import ./formats/hocon/default.nix { inherit lib pkgs; }).format;
 
+  php = (import ./formats/php/default.nix { inherit lib pkgs; }).format;
+
   json = {}: {
 
     type = with lib.types; let
