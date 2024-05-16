@@ -7,6 +7,7 @@
   makeWrapper,
   runCommand,
   textlint,
+  textlint-rule-alex,
   textlint-rule-max-comma,
   textlint-rule-preset-ja-technical-writing,
 }:
@@ -95,6 +96,7 @@ buildNpmPackage rec {
 
     tests = lib.mergeAttrsList (
       map (package: package.tests) [
+        textlint-rule-alex
         textlint-rule-max-comma
         textlint-rule-preset-ja-technical-writing
       ]
