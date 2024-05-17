@@ -20,11 +20,11 @@ python3.pkgs.buildPythonApplication rec {
       --replace '= "^' '= ">='
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     click
     colorama
     prettytable
@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Sigma command line interface";
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     changelog = "https://github.com/SigmaHQ/sigma-cli/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Plus ];
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fab ];
     mainProgram = "sigma";
   };
