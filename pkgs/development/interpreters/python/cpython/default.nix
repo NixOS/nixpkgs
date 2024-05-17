@@ -450,7 +450,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "LDFLAGS=-static"
   ];
 
-  preConfigure = optionalString (pythonOlder "3.12") ''
+  preConfigure = ''
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
+    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
+  '' + optionalString (pythonOlder "3.12") ''
     # Improve purity
     for path in /usr /sw /opt /pkg; do
       substituteInPlace ./setup.py --replace-warn $path /no-such-path
@@ -474,9 +477,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
   optionalString enableNoSemanticInterposition ''
     export CFLAGS_NODIST="-fno-semantic-interposition"
-  '' + optionalString (stdenv.buildPlatform.isFreeBSD && stdenv.hostPlatform.isFreeBSD) ''
-    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' config.guess
-    sed -E -i -e 's/uname -r/echo/g' -e 's/uname -n/echo nixpkgs/g' configure
   '';
 
   setupHook = python-setup-hook sitePackages;
