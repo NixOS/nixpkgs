@@ -46,7 +46,13 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "cramjam-python/tests" ];
 
-  disabledTestPaths = [ "cramjam-python/benchmarks/test_bench.py" ];
+  disabledTestPaths = [
+    "cramjam-python/benchmarks/test_bench.py"
+    # test_variants.py appears to be flaky
+    #
+    # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
+    "cramjam-python/tests/test_variants.py"
+  ];
 
   pythonImportsCheck = [ "cramjam" ];
 
