@@ -24773,6 +24773,8 @@ with pkgs;
 
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
+  vesktop = callPackage ../by-name/ve/vesktop/package.nix { pnpm = pnpm_8; };
+
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
   };
