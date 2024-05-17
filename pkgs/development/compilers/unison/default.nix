@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
     mainProgram = "ucm";
-    maintainers = [ maintainers.virusdave ];
+    maintainers = with maintainers; [ ceedubs sellout virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

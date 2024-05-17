@@ -1,36 +1,46 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , boto3
 , botocore
+, buildPythonPackage
 , dateparser
+, fetchFromGitHub
 , matplotlib
 , numpy
 , pandas
 , poetry-core
 , prometheus-api-client
-, pydantic_1
+, pydantic
+, pythonRelaxDepsHook
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "prometrix";
-  version = "unstable-2024-02-20";
-  format = "pyproject";
+  version = "0.1.18-unstable-2024-04-30";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "robusta-dev";
     repo = "prometrix";
-    rev = "ab2dad2192ed3df91c1a25446a4f54b8f2f6742f";
-    hash = "sha256-/72Qkd2BojYgiQi5rq7dVsEje7M0aQQXhenvIM7lSy4=";
+    # https://github.com/robusta-dev/prometrix/issues/19
+    rev = "35128847d46016b88455e0a98f0eeec08d042107";
+    hash = "sha256-g8ZqgL9ETVwpKLMQS7s7A4GpSGfaFEDLOr8JBvFl2C4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'pydantic = "^1.8.1"' 'pydantic = "*"'
-  '';
+  pythonRelaxDeps = [
+    "pydantic"
+    "urllib3"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    poetry-core
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     boto3
     botocore
     dateparser
@@ -38,13 +48,13 @@ buildPythonPackage rec {
     numpy
     pandas
     prometheus-api-client
-    pydantic_1
+    pydantic
     requests
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  # Fixture is missing
+  # https://github.com/robusta-dev/prometrix/issues/9
+  doCheck = false;
 
   pythonImportsCheck = [
     "prometrix"
@@ -56,7 +66,11 @@ buildPythonPackage rec {
       This Python package provides a unified Prometheus client that can be used
       to connect to and query various types of Prometheus instances.
     '';
+    homepage = "https://github.com/robusta-dev/prometrix";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
+    # prometheus-api-client 0.5.5 is not working
+    # https://github.com/robusta-dev/prometrix/issues/14
+    broken = versionAtLeast prometheus-api-client.version "0.5.3";
   };
 }

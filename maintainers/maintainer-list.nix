@@ -21710,6 +21710,12 @@
     github = "wegank";
     githubId = 9713184;
   };
+  weitzj = {
+    name = "Jan Weitz";
+    email = "nixpkgs@janweitz.de";
+    github = "weitzj";
+    githubId = 829277;
+  };
   welteki = {
     email = "welteki@pm.me";
     github = "welteki";
