@@ -93078,36 +93078,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-terminology = nodeEnv.buildNodePackage {
-    name = "textlint-rule-terminology";
-    packageName = "textlint-rule-terminology";
-    version = "4.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-terminology/-/textlint-rule-terminology-4.0.1.tgz";
-      sha512 = "wKiVhc2B9HP2MFU4x7ZDx+oM5u43ETpKWTLHKvdhPRZ0+davi4M8mFmkZVovDIMO7igsGjixikcvFmnCMg3kmQ==";
-    };
-    dependencies = [
-      sources."@textlint/ast-node-types-13.4.1"
-      sources."@types/unist-2.0.10"
-      sources."boundary-2.0.0"
-      sources."lodash-4.17.21"
-      sources."strip-json-comments-3.1.1"
-      sources."structured-source-4.0.0"
-      sources."textlint-rule-helper-2.3.1"
-      sources."unist-util-is-4.1.0"
-      sources."unist-util-visit-2.0.3"
-      sources."unist-util-visit-parents-3.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "TextLint rule to check correct terms spelling";
-      homepage = "https://github.com/sapegin/textlint-rule-terminology";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   textlint-rule-unexpanded-acronym = nodeEnv.buildNodePackage {
     name = "textlint-rule-unexpanded-acronym";
     packageName = "textlint-rule-unexpanded-acronym";
