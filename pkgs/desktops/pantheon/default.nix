@@ -38,10 +38,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = lib.teams.pantheon.members;
 
-  mutter = pkgs.gnome.mutter43;
+  # We will likely stay on 46 when GNOME 47 happens.
+  mutter = pkgs.gnome.mutter;
 
-  # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon43;
+  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
