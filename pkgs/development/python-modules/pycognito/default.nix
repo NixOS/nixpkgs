@@ -1,17 +1,18 @@
-{ lib
-, boto3
-, buildPythonPackage
-, envs
-, fetchFromGitHub
-, freezegun
-, mock
-, moto
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  envs,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  moto,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,17 +29,14 @@ buildPythonPackage rec {
     hash = "sha256-U23fFLru4j6GnWMcYtsCW9BVJkVcCoefPH6oMijYGew=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     boto3
     envs
     pyjwt
     requests
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     freezegun
@@ -46,8 +44,7 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     requests-mock
-  ]
-  ++ moto.optional-dependencies.cognitoidp;
+  ] ++ moto.optional-dependencies.cognitoidp;
 
   pytestFlagsArray = [ "tests.py" ];
 
