@@ -21,14 +21,14 @@
   libXcursor,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";
   version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "SFML";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-R+ULgaKSPadcPNW4D2/jlxMKHc1L9e4FprgqLRuyZk4=";
   };
 
@@ -77,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
-}
+})
