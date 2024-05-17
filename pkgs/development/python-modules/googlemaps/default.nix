@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pytest-cov
 , pytestCheckHook
-, pythonOlder
 , requests
 , responses
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "googlemaps";
   version = "4.10.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "googlemaps";

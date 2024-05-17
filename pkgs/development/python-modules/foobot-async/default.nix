@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , aiohttp
 , async-timeout
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "foobot-async";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "foobot_async";

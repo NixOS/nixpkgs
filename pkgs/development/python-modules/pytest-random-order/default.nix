@@ -5,7 +5,6 @@
 , pytest
 , pytest-xdist
 , pytestCheckHook
-, pythonOlder
 , setuptools
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-random-order";
   version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

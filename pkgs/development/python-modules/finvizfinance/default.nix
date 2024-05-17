@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , beautifulsoup4
 , datetime
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "finvizfinance";
   version = "0.14.7";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "lit26";

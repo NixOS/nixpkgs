@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , python-json-logger
 , jsonschema
 , ruamel-yaml
@@ -11,7 +10,6 @@
 buildPythonPackage rec {
   pname = "jupyter_telemetry";
   version = "0.1.0";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

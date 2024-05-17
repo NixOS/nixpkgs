@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , python
 , pygments
-, pythonOlder
 , wavedrom
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "markdown2";
   version = "2.4.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   # PyPI does not contain tests, so using GitHub instead.
   src = fetchFromGitHub {

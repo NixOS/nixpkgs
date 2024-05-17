@@ -1,10 +1,8 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, typing
 , pytestCheckHook
 , pythonAtLeast
-, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -17,8 +15,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-gOfHC6dUeBE7SsWItpUHHIxW3wzhPM5SuGW1U8P7DD0=";
   };
-
-  propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
 
   # make the testsuite run with pytest, so we can disable individual tests
   nativeCheckInputs = [

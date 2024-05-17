@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 
 # build-system
 , setuptools
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "gunicorn";
   version = "21.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "benoitc";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-tado";
   version = "0.17.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";

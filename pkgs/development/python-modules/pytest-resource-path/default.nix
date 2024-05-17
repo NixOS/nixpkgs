@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , colorama
 , pytest
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "pytest-resource-path";
   version = "1.3.0";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";

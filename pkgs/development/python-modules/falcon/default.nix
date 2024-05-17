@@ -31,7 +31,6 @@ buildPythonPackage rec {
   pname = "falcon";
   version = "3.1.3";
   format = "pyproject";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "falconry";

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , requests
 }:
 
@@ -9,7 +8,6 @@ buildPythonPackage rec {
   pname = "pymitv";
   version = "1.5.0";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

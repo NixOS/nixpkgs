@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , mock
-, pythonOlder
 , setuptools
 }:
 
@@ -10,9 +9,6 @@ buildPythonPackage rec {
   pname = "coverage";
   version = "7.4.4";
   pyproject = true;
-
-  # uses f strings
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

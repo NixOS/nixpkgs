@@ -1,6 +1,5 @@
 { lib
 , pythonOlder
-, pythonAtLeast
 , asynctest
 , buildPythonPackage
 , docutils
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "aioimaplib";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bamthomas";

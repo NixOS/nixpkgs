@@ -4,7 +4,6 @@
 , fetchPypi
 , fetchpatch
 , installShellFiles
-, pythonOlder
 , setuptools-scm
 , writeScript
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   version = "2.38.0";
   docs_version = "01ead411966a83dfcfb35f9d2e8a9f7f215eaa65";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

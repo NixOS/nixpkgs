@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 
 # build-system
 , pbr
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "aioresponses";
   version = "0.7.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

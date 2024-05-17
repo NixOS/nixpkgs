@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , tqdm
 , spacy
 }:
@@ -10,7 +9,6 @@ buildPythonPackage rec {
   pname = "pysbd";
   version = "0.3.4";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   # provides no sdist on pypi
   src = fetchFromGitHub {

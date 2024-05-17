@@ -3,14 +3,12 @@
 , fetchPypi
 , pyhamcrest
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "base58";
   version = "2.1.1";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

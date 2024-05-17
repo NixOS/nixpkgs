@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pythonOlder
 , numpy
 , scipy
 , matplotlib
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "synergy";
   version = "0.5.1";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
 
   # Pypi does not contain unit tests
   src = fetchFromGitHub {

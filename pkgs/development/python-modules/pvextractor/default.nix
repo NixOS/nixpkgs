@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , astropy
 , qtpy
 , pyqt6
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "pvextractor";
   version = "0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";

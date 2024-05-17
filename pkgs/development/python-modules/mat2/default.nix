@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , pytestCheckHook
-, pythonOlder
 , fetchFromGitLab
 , substituteAll
 , bubblewrap
@@ -24,8 +23,6 @@
 buildPythonPackage rec {
   pname = "mat2";
   version = "0.13.4";
-
-  disabled = pythonOlder "3.5";
 
   format = "setuptools";
 

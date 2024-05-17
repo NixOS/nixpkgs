@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # No tests in sdist
-
-  disabled = pythonOlder "3.5";
 
   meta = {
     description = "Mortgage calculator";

@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
@@ -11,7 +10,6 @@
 buildPythonPackage rec {
   pname = "tinydb";
   version = "4.8.0";
-  disabled = pythonOlder "3.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
