@@ -58,6 +58,38 @@ buildNpmPackage rec {
         makeWrapper ${textlint}/bin/textlint $out/bin/textlint \
           --set NODE_PATH ${lib.makeSearchPath "lib/node_modules" ps}
       '';
+
+    testPackages =
+      {
+        rule,
+        testFile,
+        pname ? rule.pname,
+        plugin ? null,
+      }:
+      let
+        ruleName = lib.removePrefix "textlint-rule-" rule.pname;
+        isPreset = lib.hasPrefix "preset-" ruleName;
+        ruleName' = lib.removePrefix "preset-" ruleName;
+        pluginName = lib.removePrefix "textlint-plugin-" plugin.pname;
+        args =
+          "${testFile} ${if isPreset then "--preset" else "--rule"} ${ruleName'}"
+          + lib.optionalString (plugin != null) " --plugin ${pluginName}";
+      in
+      {
+        "${pname}-test" =
+          runCommand "${pname}-test"
+            {
+              nativeBuildInputs = [
+                (textlint.withPackages [
+                  rule
+                  plugin
+                ])
+              ];
+            }
+            ''
+              grep ${ruleName'} <(textlint ${args}) > $out
+            '';
+      };
   };
 
   meta = {
