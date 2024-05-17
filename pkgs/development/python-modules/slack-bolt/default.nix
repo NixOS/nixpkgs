@@ -8,6 +8,7 @@
 , falcon
 , fastapi
 , fetchFromGitHub
+, fetchpatch
 , flask
 , flask-sockets
 , gunicorn
@@ -49,6 +50,15 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py --replace "pytest-runner==5.2" ""
   '';
+
+  patches = [
+    # moto >=5 support, https://github.com/slackapi/bolt-python/pull/1046
+    (fetchpatch {
+      name = "moto-support.patch";
+      url = "https://github.com/slackapi/bolt-python/commit/69c2015ef49773de111f184dca9668aefac9e7c0.patch";
+      hash = "sha256-KW7KPeOqanV4n1UOv4DCadplJsqsPY+ju4ry0IvUqpA=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
