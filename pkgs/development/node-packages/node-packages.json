@@ -224,7 +224,6 @@
 , "textlint-rule-common-misspellings"
 , "textlint-rule-no-start-duplicated-conjunction"
 , "textlint-rule-period-in-list-item"
-, "textlint-rule-unexpanded-acronym"
 , "thelounge-plugin-closepms"
 , "thelounge-plugin-giphy"
 , "thelounge-plugin-shortcuts"
