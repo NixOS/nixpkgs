@@ -6,15 +6,17 @@
   sfml,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csfml";
   version = "2.6.0";
+
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "CSFML";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-wwDHuyh4zMi0XCjIK7dUWiscPA+r8zLEvomuul6nlyQ=";
   };
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];
   cmakeFlags = [
@@ -34,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jpdoyle ];
     platforms = lib.platforms.linux;
   };
-}
+})
