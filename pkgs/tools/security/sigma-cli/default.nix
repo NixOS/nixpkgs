@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,9 +21,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace '= "^' '= ">='
   '';
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
   dependencies = with python3.pkgs; [
     click
@@ -39,9 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     pysigma-pipeline-windows
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   disabledTests = [
     "test_plugin_list"
@@ -61,9 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_exclude"
   ];
 
-  pythonImportsCheck = [
-    "sigma.cli"
-  ];
+  pythonImportsCheck = [ "sigma.cli" ];
 
   meta = with lib; {
     description = "Sigma command line interface";
