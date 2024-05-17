@@ -23,13 +23,6 @@
 , libxkbcommon
 , wayland # for the "wayland" --with-gui option
 , SDL2 # for the "sdl" --with-gui option
-# List of typing engines, the default list enables compiling all of the
-# available ones, as recorded on release 3.9.3
-, enableTypeEngines ? {
-  xcore = false; # Considered legacy
-  xft = enableX11;
-  cairo = true;
-}
 , libX11
 , libXft
 , cairo
@@ -47,8 +40,6 @@
   registobmp = true;
   mlfc = true;
 }
-# Whether to enable the X window system
-, enableX11 ? stdenv.isLinux
 # Most of the input methods and other build features are enabled by default,
 # the following attribute set can be used to disable some of them. It's parsed
 # when we set `configureFlags`. If you find other configure Flags that require
@@ -89,6 +80,7 @@ let
   };
   inherit (eval) config;
   enableGuis = config.gui;
+  enableTypeEngines = config.typeEngines;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
   version = "3.9.3";
@@ -166,7 +158,7 @@ in stdenv.mkDerivation (finalAttrs: {
     (withFeaturesList "type-engines" enableTypeEngines)
     (withFeaturesList "tools" enableTools)
     (withFeaturesList "gui" enableGuis)
-    (lib.withFeature enableX11 "x")
+    (lib.withFeature config.x11 "x")
   ] ++ lib.optionals (gtk != null) [
     "--with-gtk=${lib.versions.major gtk.version}.0"
   ] ++ (lib.mapAttrsToList (n: v: lib.enableFeature v n) enableFeatures) ++ [

@@ -22,6 +22,14 @@
     # Whether to enable the X window system
     x11 = lib.mkOption { default = stdenv.isLinux; };
 
+    typeEngines = {
+      # List of typing engines, the default list enables compiling all of the
+      # available ones, as recorded on release 3.9.3
+        xcore = lib.mkOption { default = false; }; # Considered legacy
+        xft = lib.mkOption { default = config.x11; };
+        cairo = lib.mkOption { default = true; };
+    };
+
     desktopBinary = lib.mkOption {
       default =
         # Configure the Exec directive in the generated .desktop file
