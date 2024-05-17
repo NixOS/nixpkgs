@@ -1,34 +1,35 @@
-{ lib
-, aiohttp
-, bottle
-, buildPythonPackage
-, chalice
-, cherrypy
-, django
-, docker
-, falcon
-, fastapi
-, fetchFromGitHub
-, fetchpatch
-, flask
-, flask-sockets
-, gunicorn
-, moto
-, numpy
-, pyramid
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, sanic
-, setuptools
-, sanic-testing
-, slack-sdk
-, starlette
-, tornado
-, uvicorn
-, websocket-client
-, websockets
-, werkzeug
+{
+  lib,
+  aiohttp,
+  bottle,
+  buildPythonPackage,
+  chalice,
+  cherrypy,
+  django,
+  docker,
+  falcon,
+  fastapi,
+  fetchFromGitHub,
+  fetchpatch,
+  flask,
+  flask-sockets,
+  gunicorn,
+  moto,
+  numpy,
+  pyramid,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sanic,
+  setuptools,
+  sanic-testing,
+  slack-sdk,
+  starlette,
+  tornado,
+  uvicorn,
+  websocket-client,
+  websockets,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -59,13 +60,9 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    slack-sdk
-  ];
+  dependencies = [ slack-sdk ];
 
   passthru.optional-dependencies = {
     async = [
