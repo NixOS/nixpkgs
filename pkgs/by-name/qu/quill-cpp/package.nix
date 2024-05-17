@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/odygrd/quill";
     license = licenses.mit;
     maintainers = [ maintainers.vaci ];
+    platforms = platforms.all;
   };
 }
 
