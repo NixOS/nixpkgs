@@ -93100,36 +93100,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-stop-words = nodeEnv.buildNodePackage {
-    name = "textlint-rule-stop-words";
-    packageName = "textlint-rule-stop-words";
-    version = "4.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-stop-words/-/textlint-rule-stop-words-4.0.0.tgz";
-      sha512 = "vP99cbTyapn+Hviom2doO3pJtjlhKlZvlHTf21zoB22CxJx2w3S7Ie169neB5U4Xsei+NodHf5tnwT933mO19A==";
-    };
-    dependencies = [
-      sources."@textlint/ast-node-types-13.4.1"
-      sources."@types/unist-2.0.10"
-      sources."boundary-2.0.0"
-      sources."lodash-4.17.21"
-      sources."split-lines-2.1.0"
-      sources."structured-source-4.0.0"
-      sources."textlint-rule-helper-2.3.1"
-      sources."unist-util-is-4.1.0"
-      sources."unist-util-visit-2.0.3"
-      sources."unist-util-visit-parents-3.1.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Textlint rule to find filler words, buzzwords and chiches";
-      homepage = "https://github.com/sapegin/textlint-rule-stop-words";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   textlint-rule-terminology = nodeEnv.buildNodePackage {
     name = "textlint-rule-terminology";
     packageName = "textlint-rule-terminology";

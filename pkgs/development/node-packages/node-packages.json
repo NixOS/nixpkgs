@@ -226,7 +226,6 @@
 , "textlint-rule-en-max-word-count"
 , "textlint-rule-no-start-duplicated-conjunction"
 , "textlint-rule-period-in-list-item"
-, "textlint-rule-stop-words"
 , "textlint-rule-terminology"
 , "textlint-rule-unexpanded-acronym"
 , "thelounge-plugin-closepms"

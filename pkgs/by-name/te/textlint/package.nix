@@ -11,6 +11,7 @@
   textlint-rule-diacritics,
   textlint-rule-max-comma,
   textlint-rule-preset-ja-technical-writing,
+  textlint-rule-stop-words,
   textlint-rule-write-good,
 }:
 
@@ -102,6 +103,7 @@ buildNpmPackage rec {
         textlint-rule-diacritics
         textlint-rule-max-comma
         textlint-rule-preset-ja-technical-writing
+        textlint-rule-stop-words
         textlint-rule-write-good
       ]
     );
