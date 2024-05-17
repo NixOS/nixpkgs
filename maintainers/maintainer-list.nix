@@ -4211,6 +4211,11 @@
     githubId = 111202;
     name = "Henry Bubert";
   };
+  cryptoluks = {
+    github = "cryptoluks";
+    githubId = 9020527;
+    name = "cryptoluks";
+  };
   CrystalGamma = {
     email = "nixos@crystalgamma.de";
     github = "CrystalGamma";
