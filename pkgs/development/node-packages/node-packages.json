@@ -222,7 +222,6 @@
 , "tern"
 , "textlint-rule-abbr-within-parentheses"
 , "textlint-rule-common-misspellings"
-, "textlint-rule-en-max-word-count"
 , "textlint-rule-no-start-duplicated-conjunction"
 , "textlint-rule-period-in-list-item"
 , "textlint-rule-unexpanded-acronym"

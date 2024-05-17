@@ -92965,52 +92965,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-en-max-word-count = nodeEnv.buildNodePackage {
-    name = "textlint-rule-en-max-word-count";
-    packageName = "textlint-rule-en-max-word-count";
-    version = "2.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-en-max-word-count/-/textlint-rule-en-max-word-count-2.0.1.tgz";
-      sha512 = "gZMxUU+/O8QIchBQoo50QryknmMKahb2vBj89wVvk+Dhvp70nAJKSkpt2vjZVYBWCxpIKysQlwheBjrFZWpkfg==";
-    };
-    dependencies = [
-      sources."@textlint/ast-node-types-13.4.1"
-      sources."@types/unist-2.0.10"
-      sources."bail-1.0.5"
-      sources."boundary-2.0.0"
-      sources."ccount-1.1.0"
-      sources."comma-separated-tokens-1.0.8"
-      sources."extend-3.0.2"
-      sources."hast-util-from-parse5-5.0.3"
-      sources."hast-util-parse-selector-2.2.5"
-      sources."hastscript-5.1.2"
-      sources."is-buffer-2.0.5"
-      sources."is-plain-obj-2.1.0"
-      sources."parse5-5.1.1"
-      sources."property-information-5.6.0"
-      sources."rehype-parse-6.0.2"
-      sources."sentence-splitter-4.4.1"
-      sources."space-separated-tokens-1.1.5"
-      sources."structured-source-4.0.0"
-      sources."textlint-util-to-string-3.3.4"
-      sources."trough-1.0.5"
-      sources."unified-8.4.2"
-      sources."unist-util-stringify-position-2.0.3"
-      sources."vfile-4.2.1"
-      sources."vfile-message-2.0.4"
-      sources."web-namespaces-1.1.4"
-      sources."xtend-4.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "textlint rule that specify the maximum word count of a sentence.";
-      homepage = "https://github.com/textlint-rule/textlint-rule-en-max-word-count";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   textlint-rule-no-start-duplicated-conjunction = nodeEnv.buildNodePackage {
     name = "textlint-rule-no-start-duplicated-conjunction";
     packageName = "textlint-rule-no-start-duplicated-conjunction";

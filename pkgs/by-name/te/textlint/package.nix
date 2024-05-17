@@ -10,6 +10,7 @@
   textlint-plugin-latex2e,
   textlint-rule-alex,
   textlint-rule-diacritics,
+  textlint-rule-en-max-word-count,
   textlint-rule-max-comma,
   textlint-rule-preset-ja-technical-writing,
   textlint-rule-stop-words,
@@ -104,6 +105,7 @@ buildNpmPackage rec {
         textlint-plugin-latex2e
         textlint-rule-alex
         textlint-rule-diacritics
+        textlint-rule-en-max-word-count
         textlint-rule-max-comma
         textlint-rule-preset-ja-technical-writing
         textlint-rule-stop-words
