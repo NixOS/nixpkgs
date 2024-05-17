@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libX11
-, freetype
-, libjpeg
-, openal
-, flac
-, libvorbis
-, glew
-, libXrandr
-, libXrender
-, udev
-, xcbutilimage
-, IOKit
-, Foundation
-, AppKit
-, OpenAL
-, libXcursor
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libX11,
+  freetype,
+  libjpeg,
+  openal,
+  flac,
+  libvorbis,
+  glew,
+  libXrandr,
+  libXrender,
+  udev,
+  xcbutilimage,
+  IOKit,
+  Foundation,
+  AppKit,
+  OpenAL,
+  libXcursor,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,10 +33,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ freetype libjpeg openal flac libvorbis glew ]
+  buildInputs =
+    [
+      freetype
+      libjpeg
+      openal
+      flac
+      libvorbis
+      glew
+    ]
     ++ lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXrandr libXrender xcbutilimage  libXcursor ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit Foundation AppKit OpenAL ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libX11
+      libXrandr
+      libXrender
+      xcbutilimage
+      libXcursor
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      IOKit
+      Foundation
+      AppKit
+      OpenAL
+    ];
 
   cmakeFlags = [
     "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
@@ -45,7 +65,7 @@ stdenv.mkDerivation rec {
     "-DSFML_PKGCONFIG_INSTALL_PREFIX=share/pkgconfig"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''
@@ -53,8 +73,8 @@ stdenv.mkDerivation rec {
       It provides access to windowing, graphics, audio and network.
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
-    license = licenses.zlib;
-    maintainers = [ maintainers.astsmtl ];
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.unix;
   };
 }
