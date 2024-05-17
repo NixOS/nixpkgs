@@ -11,7 +11,6 @@
 , enableUnfree ? false
 
   # For tests
-, _7zz
 , testers
 }:
 
@@ -115,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
-      package = _7zz;
+      package = finalAttrs.finalPackage;
       command = "7zz --help";
     };
   };
