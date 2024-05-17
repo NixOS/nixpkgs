@@ -12,6 +12,7 @@
   textlint-rule-diacritics,
   textlint-rule-en-max-word-count,
   textlint-rule-max-comma,
+  textlint-rule-period-in-list-item,
   textlint-rule-preset-ja-technical-writing,
   textlint-rule-stop-words,
   textlint-rule-terminology,
@@ -108,6 +109,7 @@ buildNpmPackage rec {
         textlint-rule-diacritics
         textlint-rule-en-max-word-count
         textlint-rule-max-comma
+        textlint-rule-period-in-list-item
         textlint-rule-preset-ja-technical-writing
         textlint-rule-stop-words
         textlint-rule-terminology
