@@ -3,30 +3,36 @@
 , buildPythonPackage
 , envs
 , fetchFromGitHub
-, isPy27
 , freezegun
 , mock
 , moto
 , pyjwt
 , pytestCheckHook
+, pythonOlder
 , requests
 , requests-mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pycognito";
   version = "2024.5.1";
-  format = "setuptools";
-  disabled = isPy27;
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
-    repo = pname;
+    repo = "pycognito";
     rev = "refs/tags/${version}";
     hash = "sha256-U23fFLru4j6GnWMcYtsCW9BVJkVcCoefPH6oMijYGew=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     boto3
     envs
     pyjwt
@@ -43,15 +49,10 @@ buildPythonPackage rec {
   ]
   ++ moto.optional-dependencies.cognitoidp;
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'python-jose[cryptography]' 'python-jose'
-  '';
-
   pytestFlagsArray = [ "tests.py" ];
 
   disabledTests = [
-    # requires network access
+    # Test requires network access
     "test_srp_requests_http_auth"
   ];
 
@@ -60,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python class to integrate Boto3's Cognito client so it is easy to login users. With SRP support";
     homepage = "https://github.com/pvizeli/pycognito";
+    changelog = "https://github.com/NabuCasa/pycognito/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mic92 ];
   };
