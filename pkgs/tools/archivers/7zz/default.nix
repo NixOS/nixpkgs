@@ -120,18 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line archiver utility";
     homepage = "https://7-zip.org";
-    license = with licenses;
+    license = with lib.licenses;
       # 7zip code is largely lgpl2Plus
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
       [ lgpl2Plus /* and */ bsd3 ] ++
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
-    maintainers = with maintainers; [ anna328p eclairevoyant jk peterhoeg ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ anna328p eclairevoyant jk peterhoeg ];
+    platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
   };
 })
