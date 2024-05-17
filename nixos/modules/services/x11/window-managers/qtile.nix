@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.xserver.windowManager.qtile;
-  pyEnv = pkgs.python3.withPackages (p: [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p));
 in
 
 {
@@ -48,13 +47,24 @@ in
           ];
         '';
       };
+
+    finalPackage = mkOption {
+      type = types.package;
+      visible = false;
+      readOnly = true;
+      description = "The resulting Qtile package, bundled with extra packages";
+    };
   };
 
   config = mkIf cfg.enable {
+    services.xserver.windowManager.qtile.finalPackage = pkgs.python3.withPackages (p:
+      [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p)
+    );
+
     services.xserver.windowManager.session = [{
       name = "qtile";
       start = ''
-        ${pyEnv}/bin/qtile start -b ${cfg.backend} \
+        ${cfg.finalPackage}/bin/qtile start -b ${cfg.backend} \
         ${optionalString (cfg.configFile != null)
         "--config \"${cfg.configFile}\""} &
         waitPID=$!

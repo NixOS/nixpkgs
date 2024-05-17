@@ -433,22 +433,22 @@ self: super: {
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
-    version = "1.7";
+    version = "1.7.3";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7";
-      sha256 = "sha256-d9BohugsKajvjNgt+VyXHuDdLOFKr9mhwpdUNkpIP3s=";
+      rev = "v1.7.3";
+      sha256 = "sha256-BBhOFK4OuCD7ilNrdfeAILBR2snxl29gBk58szZ4460=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;
   cachix = (overrideCabal (drv: {
-    version = "1.7";
+    version = "1.7.3";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7";
-      sha256 = "sha256-d9BohugsKajvjNgt+VyXHuDdLOFKr9mhwpdUNkpIP3s=";
+      rev = "v1.7.3";
+      sha256 = "sha256-BBhOFK4OuCD7ilNrdfeAILBR2snxl29gBk58szZ4460=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
   }) (lib.pipe

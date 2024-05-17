@@ -7622,8 +7622,6 @@ with pkgs;
 
   tracker = callPackage ../development/libraries/tracker { };
 
-  tracker-miners = callPackage ../development/libraries/tracker-miners { };
-
   tracy = callPackage ../development/tools/tracy { };
 
   trivy = callPackage ../tools/admin/trivy { };
@@ -31995,8 +31993,10 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk21.override { enableJavaFX = true; };
-    gradle = gradle_8;
+    jdk = jdk.override {
+      enableJavaFX = true;
+      openjfx = openjfx22.override { withWebKit = true; };
+    };
   };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
