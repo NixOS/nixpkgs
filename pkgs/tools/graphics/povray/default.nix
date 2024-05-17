@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "povray";
-  version = "3.8.0-x.10064738";
+  version = "3.8.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "POV-Ray";
     repo = "povray";
     rev = "v${version}";
-    sha256 = "0hy5a3q5092szk2x3s9lpn1zkszgq9bp15rxzdncxlvnanyzsasf";
+    sha256 = "sha256-BsWalXzEnymiRbBfE/gsNyWgAqzbxEzO/EQiJpbwoKs=";
   };
 
   nativeBuildInputs = [ automake autoconf ];
