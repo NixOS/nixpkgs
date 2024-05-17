@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
@@ -7,6 +8,8 @@
   pythonOlder,
   quil,
   rustPlatform,
+  darwin,
+  libiconv,
   syrupy,
 }:
 
@@ -39,6 +42,12 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ quil ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+    libiconv
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

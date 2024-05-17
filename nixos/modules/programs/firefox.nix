@@ -287,7 +287,7 @@ in
         (_: value: { Value = value; Status = cfg.preferencesStatus; })
         cfg.preferences);
       ExtensionSettings = builtins.listToAttrs (builtins.map
-        (lang: builtins.nameValuePair
+        (lang: lib.attrsets.nameValuePair
           "langpack-${lang}@firefox.mozilla.org"
           {
             installation_mode = "normal_installed";

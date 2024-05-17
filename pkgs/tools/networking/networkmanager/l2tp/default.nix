@@ -22,13 +22,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
   pname = "NetworkManager-l2tp";
-  version = "1.20.14";
+  version = "1.20.16";
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
     repo = "network-manager-l2tp";
     rev = version;
-    hash = "sha256-PTDr2M88ZC3Y92zsz/GiSxavd8MdfC9lwxep0+Wjgjk=";
+    hash = "sha256-78TOx3UnAF02UfZ7cWhPKv9bhJCq5UmAMrwd5xUnVrg=";
   };
 
   patches = [

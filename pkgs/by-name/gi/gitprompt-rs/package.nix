@@ -4,13 +4,16 @@
   rustPlatform,
   git,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "gitprompt-rs";
+let
   version = "0.3.0";
+in
+rustPlatform.buildRustPackage {
+  pname = "gitprompt-rs";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "9ary";
-    repo = pname;
+    repo = "gitprompt-rs";
     rev = version;
     hash = "sha256-BqI3LbG7I/0wjzJaP8bxRwTM56joLqVaQCmAydX5vQM=";
   };
@@ -22,11 +25,14 @@ rustPlatform.buildRustPackage rec {
       --replace 'Command::new("git")' 'Command::new("${git}/bin/git")'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple Git prompt";
     homepage = "https://github.com/9ary/gitprompt-rs";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ isabelroses cafkafk ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
+      isabelroses
+      cafkafk
+    ];
     mainProgram = "gitprompt-rs";
   };
 }

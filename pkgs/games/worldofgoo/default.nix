@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
   sourceRoot = pname;
-  phases = [ "unpackPhase installPhase" ];
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
     libogg libvorbis ];
