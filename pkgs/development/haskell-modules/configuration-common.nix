@@ -2997,7 +2997,7 @@ self: super: {
   }) super.kmonad;
 
   ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_8_2_20240223;
+    ghc-lib-parser = self.ghc-lib-parser_9_10_1_20240511;
   });
 
   # 2024-03-17: broken
