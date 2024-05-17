@@ -18,11 +18,12 @@ let
     src = fetchFromGitHub {
       owner = "Openmesh-Network";
       repo = "core";
-      rev = "v${version}";
-      sha256 = "1v23liwbdljbib4rkvfbd3bj0qf4js5p36krqwwiav11vq0ac9a8"; # Unfinished commit
+      rev = "f7eaee0cf13824b4fc0f7f4dccdd6d31db5b5728";
+      sha256 = "050rp4qyy12m7vqhlf7m08srxcrxc6d67l64clral9fc11rfg064"; # Unfinished commit
     };
     
-    vendorHash = lib.fakeHash;
+    #vendorHash = lib.fakeHash;
+    vendorHash = "sha256-DlbPQgYo/pjTAbI1Fxi7atPxRUtWu5rF2tRtCP/XYTs=";
 
     outputs = [ "out" ] ++ bins;
 
