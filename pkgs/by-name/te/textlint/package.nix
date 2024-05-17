@@ -7,6 +7,7 @@
   makeWrapper,
   runCommand,
   textlint,
+  textlint-plugin-latex2e,
   textlint-rule-alex,
   textlint-rule-diacritics,
   textlint-rule-max-comma,
@@ -99,6 +100,7 @@ buildNpmPackage rec {
 
     tests = lib.mergeAttrsList (
       map (package: package.tests) [
+        textlint-plugin-latex2e
         textlint-rule-alex
         textlint-rule-diacritics
         textlint-rule-max-comma
