@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, gtk-doc, pkg-config
+, zlib, shadow
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng
 , libxcrypt
@@ -18,7 +19,11 @@
 , memstreamHook
 , gitUpdater
 }:
-
+let
+  # Temporarily avoid applying the patches on systems where already we have binaries
+  # (in particular x86_64-linux and aarch64-linux) as the package is a huge rebuild there.
+  avoidRebuild = stdenv.isLinux && stdenv.is64bit;
+in
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
   version = "2.40.1";
@@ -30,6 +35,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+  ] ++ lib.optionals (!avoidRebuild) [
+    # Backports of patches that hopefully fix an intermittent parallel
+    # build failure.
+    (fetchpatch {
+      name = "pam_lastlog2:-drop-duplicate-assignment-pam_lastlog2_la_LDFLAGS.patch";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=290748729dc3edf9ea1c680c8954441a5e367a44";
+      hash = "sha256-Hi+SrT8UovZyCWf6Jc7s3dc6YLyfOfgqohOEnc7aJq4=";
+    })
+    (fetchpatch {
+      name = "libuuid:-drop-duplicate-assignment-liuuid_la_LDFLAGS";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=597e8b246ae31366514ead6cca240a09fe5e1528";
+      hash = "sha256-QCx3MD/57x2tV1SlJ79EYyxafhaEH4UC+Dt24DA6P8I=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -80,6 +98,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ]
+    ++ lib.optionals (!avoidRebuild) [ autoreconfHook gtk-doc ]
     ++ lib.optionals translateManpages [ po4a ];
 
   buildInputs = [ zlib libxcrypt sqlite ]
