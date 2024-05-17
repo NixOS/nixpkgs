@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-4V/2UOgGWgL+tFJO/k90bCDjWSVyIpxw3nYi9NU/OxA=";
   };
 
+  patches = [
+    ./canokey-qemu-memcpy.patch
+  ];
+
   postPatch = ''
     substituteInPlace canokey-core/CMakeLists.txt \
       --replace "COMMAND git describe --always --tags --long --abbrev=8 --dirty >>" "COMMAND echo '$rev' >>"
