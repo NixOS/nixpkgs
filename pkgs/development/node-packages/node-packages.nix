@@ -93010,28 +93010,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-period-in-list-item = nodeEnv.buildNodePackage {
-    name = "textlint-rule-period-in-list-item";
-    packageName = "textlint-rule-period-in-list-item";
-    version = "1.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-period-in-list-item/-/textlint-rule-period-in-list-item-1.0.1.tgz";
-      sha512 = "dNPa4WzePcgsz8A+CxFGQgKNZCEvjjwMCu3DFcpYB4eKuhcSISEiS/mvEO42oGAALJluYdYVZxN3yMD6XzkLBA==";
-    };
-    dependencies = [
-      sources."check-ends-with-period-3.0.2"
-      sources."emoji-regex-10.3.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "textlint rule that check with or without period in list item.";
-      homepage = "https://github.com/textlint-rule/textlint-rule-period-in-list-item";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   thelounge-plugin-closepms = nodeEnv.buildNodePackage {
     name = "thelounge-plugin-closepms";
     packageName = "thelounge-plugin-closepms";

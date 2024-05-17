@@ -143,6 +143,7 @@ mapAliases {
   inherit (pkgs) textlint-rule-diacritics; # Added 2024-05-16
   inherit (pkgs) textlint-rule-en-max-word-count; # Added 2024-05-17
   inherit (pkgs) textlint-rule-max-comma; # Added 2024-05-15
+  inherit (pkgs) textlint-rule-period-in-list-item; # Added 2024-05-17
   inherit (pkgs) textlint-rule-stop-words; # Added 2024-05-17
   inherit (pkgs) textlint-rule-terminology; # Added 2024-05-17
   inherit (pkgs) textlint-rule-unexpanded-acronym; # Added 2024-05-17

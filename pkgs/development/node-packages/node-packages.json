@@ -223,7 +223,6 @@
 , "textlint-rule-abbr-within-parentheses"
 , "textlint-rule-common-misspellings"
 , "textlint-rule-no-start-duplicated-conjunction"
-, "textlint-rule-period-in-list-item"
 , "thelounge-plugin-closepms"
 , "thelounge-plugin-giphy"
 , "thelounge-plugin-shortcuts"
