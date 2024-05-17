@@ -18,9 +18,9 @@
 }:
 
 let
-  version = "3.5.5";
+  version = "3.5.8";
   icon = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
+    url = "https://github.com/HMCL-dev/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
     hash = "sha256-MWp78rP4b39Scz5/gpsjwaJhSu+K9q3S2B2cD/V31MA=";
   };
 in
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
+    url = "https://github.com/HMCL-dev/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
     hash = "sha256-bXZF38pd8I8cReuDNrZzDj1hp1Crk+P26JNiikUCg4g=";
   };
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hmcl";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ bot-wxt1221 ];
     inherit (jre.meta) platforms;
   };
 })
