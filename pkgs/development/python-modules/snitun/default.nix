@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, setuptools
+, aiohttp
 , async-timeout
 , attrs
 , buildPythonPackage
@@ -10,6 +10,7 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "0.39.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
@@ -26,11 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-jewDQqvLUh/066BSEADXkCvjLFRnodKtUPKfvi0KUpI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     async-timeout
     attrs
     cryptography
@@ -73,9 +75,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "snitun" ];
 
   meta = with lib; {
+    description = "SNI proxy with TCP multiplexer";
     changelog = "https://github.com/NabuCasa/snitun/releases/tag/${version}";
     homepage = "https://github.com/nabucasa/snitun";
-    description = "SNI proxy with TCP multiplexer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
     platforms = platforms.linux;
