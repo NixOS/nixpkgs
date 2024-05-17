@@ -36254,8 +36254,6 @@ with pkgs;
 
   ballerburg = callPackage ../games/ballerburg { } ;
 
-  blockattack = callPackage ../games/blockattack { } ;
-
   colobot = callPackage ../games/colobot { };
 
   corsix-th = callPackage ../games/corsix-th { };
