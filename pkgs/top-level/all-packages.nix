@@ -193,7 +193,6 @@ with pkgs;
       pythonInterpreter = "${python3.withPackages (ps: [ ps.pyelftools ])}/bin/python";
       autoPatchelfScript = ../build-support/setup-hooks/auto-patchelf.py;
     };
-    meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
   tomato-c = callPackage ../applications/misc/tomato-c { };
@@ -1163,7 +1162,6 @@ with pkgs;
               gmpSupport = false;
               aclSupport = false;
               attrSupport = false;
-              autoreconfHook = null;
             };
             inherit perl;
           };
@@ -17037,8 +17035,7 @@ with pkgs;
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    noLibc = !self.nativeLibc && (self.libc == null);
-    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? man) && (cc ? man));
+    noLibc = (self.libc == null);
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
@@ -17059,8 +17056,7 @@ with pkgs;
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? man) && (bintools ? man));
-    noLibc = !self.nativeLibc && (self.libc == null);
+    noLibc = (self.libc == null);
 
     inherit bintools libc;
     inherit (darwin) postLinkSignHook signingUtils;
@@ -22530,13 +22526,7 @@ with pkgs;
     if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" "fblibc" ]
       then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
           then libcCross
-        else if stdenv.cc.nativeLibc
-          then {
-            pname = "libc-${stdenv.hostPlatform.system}";
-            version = "native";
-            dev = stdenv.cc.nativePrefix;
-          }
-        else stdenv.cc.libc)
+        else  stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
       then libiconv-darwin
     else libiconvReal;
