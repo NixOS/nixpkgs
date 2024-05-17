@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , ffmpeg-headless
+, nixosTests
 , substituteAll
 , providers ? [ ]
 }:
@@ -100,6 +101,7 @@ python.pkgs.buildPythonApplication rec {
       providerPackages
       providerNames
     ;
+    tests = nixosTests.music-assistant;
   };
 
   meta = with lib; {
