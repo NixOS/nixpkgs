@@ -1,49 +1,27 @@
 { lib
 , stdenv
 , python3
-, fetchPypi
 , fetchFromGitHub
 , wrapQtAppsHook
 , qtbase
 , qtwayland
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pynitrokey = super.pynitrokey.overridePythonAttrs (old: rec {
-        version = "0.4.45";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-iY4ThrmXP7pEjTYYU4lePVAbuJGTdHX3iKswXzuf7W8=";
-        };
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.9";
+  disabled = python3.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-MiyfmsrKZRoe7YMEjR1LHPesfJh6+dcSydoEAgrALJ8=";
+    hash = "sha256-BSq3ezNt6btQUO1hMVw9bN3VCyUOUhfRFJcHDGkIm6Q=";
   };
 
-  # https://github.com/Nitrokey/nitrokey-app2/issues/152
-  #
-  # pythonRelaxDepsHook does not work here, because it runs in postBuild and
-  # only modifies the dependencies in the built distribution.
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'pynitrokey = "' 'pynitrokey = ">='
-  '';
-
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
     wrapQtAppsHook
   ];
@@ -52,7 +30,7 @@ in python.pkgs.buildPythonApplication rec {
     qtwayland
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pynitrokey
     pyudev
     pyside6
