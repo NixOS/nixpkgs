@@ -4,9 +4,11 @@
   lib,
   unstableGitUpdater,
 }:
+
 stdenvNoCC.mkDerivation {
   pname = "plymouth-matrix-theme";
   version = "0.1.0-unstable-19-02-2017";
+
   src = fetchFromGitHub {
     owner = "storax";
     repo = "plymouth-matrix-theme";
@@ -14,17 +16,19 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-JmMmpw1By5U6OTaSPnJOZZxrieSnXivMmdt/JPazjpI=";
   };
 
-  dontBuild = true;
-
   postPatch = ''
     # Remove not needed files
     rm README.rst LICENSE Makefile
   '';
 
+  dontBuild = true;
+
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/plymouth/themes/matrix
     cp * $out/share/plymouth/themes/matrix
     find $out/share/plymouth/themes/ -name \*.plymouth -exec sed -i "s@\/usr\/@$out\/@" {} \;
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater;
