@@ -14,10 +14,7 @@
   libXrender,
   udev,
   xcbutilimage,
-  IOKit,
-  Foundation,
-  AppKit,
-  OpenAL,
+  darwin,
   libXcursor,
 }:
 
@@ -50,12 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
       xcbutilimage
       libXcursor
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      IOKit
-      Foundation
-      AppKit
-      OpenAL
-    ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        IOKit
+        Foundation
+        AppKit
+        OpenAL
+      ]
+    );
 
   cmakeFlags = [
     "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
