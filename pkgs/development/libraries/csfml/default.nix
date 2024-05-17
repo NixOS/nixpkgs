@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  sfml,
+}:
 
 stdenv.mkDerivation rec {
   pname = "csfml";
   version = "2.6.0";
   src = fetchFromGitHub {
     owner = "SFML";
-    repo  = "CSFML";
-    rev   = version;
+    repo = "CSFML";
+    rev = version;
     hash = "sha256-wwDHuyh4zMi0XCjIK7dUWiscPA+r8zLEvomuul6nlyQ=";
   };
   nativeBuildInputs = [ cmake ];
@@ -16,7 +22,7 @@ stdenv.mkDerivation rec {
     "-DCSFML_PKGCONFIG_INSTALL_PREFIX=share/pkgconfig"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''
@@ -24,8 +30,8 @@ stdenv.mkDerivation rec {
       It provides access to windowing, graphics, audio and network.
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
-    license = licenses.zlib;
-    maintainers = [ maintainers.jpdoyle ];
-    platforms = platforms.linux;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ jpdoyle ];
+    platforms = lib.platforms.linux;
   };
 }
