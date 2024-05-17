@@ -11,7 +11,8 @@
 , libpng
 , libjpeg
 , libtiff
-, SDL
+, pkg-config
+, SDL2
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,8 +26,23 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-BsWalXzEnymiRbBfE/gsNyWgAqzbxEzO/EQiJpbwoKs=";
   };
 
-  nativeBuildInputs = [ automake autoconf ];
-  buildInputs = [ boost zlib libX11 libICE libSM libpng libjpeg libtiff SDL ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    pkg-config
+  ];
+
+  buildInputs = [
+    boost
+    libX11
+    libICE
+    libSM
+    libpng
+    libjpeg
+    libtiff
+    SDL2
+    zlib
+  ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
