@@ -92927,51 +92927,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-no-start-duplicated-conjunction = nodeEnv.buildNodePackage {
-    name = "textlint-rule-no-start-duplicated-conjunction";
-    packageName = "textlint-rule-no-start-duplicated-conjunction";
-    version = "2.0.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-no-start-duplicated-conjunction/-/textlint-rule-no-start-duplicated-conjunction-2.0.2.tgz";
-      sha512 = "HydBbkWjnMn4KrnlpnusY1BGjIG+64UySxRCvRphUAIiuJL2nbkdrIIiOjwfQhllKUa7Sf33bs6RAcbEWjZVfg==";
-    };
-    dependencies = [
-      sources."@textlint/ast-node-types-4.4.3"
-      sources."@types/unist-2.0.10"
-      sources."boundary-1.0.1"
-      sources."buffer-from-1.1.2"
-      sources."concat-stream-2.0.0"
-      sources."inherits-2.0.4"
-      sources."object-assign-4.1.1"
-      sources."object_values-0.1.2"
-      sources."readable-stream-3.6.2"
-      sources."safe-buffer-5.2.1"
-      sources."sentence-splitter-3.2.3"
-      sources."string_decoder-1.3.0"
-      sources."structured-source-3.0.2"
-      (sources."textlint-rule-helper-2.3.1" // {
-        dependencies = [
-          sources."@textlint/ast-node-types-13.4.1"
-          sources."boundary-2.0.0"
-          sources."structured-source-4.0.0"
-        ];
-      })
-      sources."typedarray-0.0.6"
-      sources."unist-util-is-4.1.0"
-      sources."unist-util-visit-2.0.3"
-      sources."unist-util-visit-parents-3.1.1"
-      sources."util-deprecate-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "textlint rule that check no start with duplicated conjunction.";
-      homepage = "https://github.com/textlint-rule/textlint-rule-no-start-duplicated-conjunction";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   thelounge-plugin-closepms = nodeEnv.buildNodePackage {
     name = "thelounge-plugin-closepms";
     packageName = "thelounge-plugin-closepms";
