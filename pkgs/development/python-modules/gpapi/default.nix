@@ -2,7 +2,6 @@
 , cryptography
 , fetchPypi
 , lib
-, pythonOlder
 , protobuf
 , pycryptodome
 , requests
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   version = "0.4.4";
   format = "setuptools";
   pname = "gpapi";
-  disabled = pythonOlder "3.3"; # uses shutil.which(), added in 3.3
 
   src = fetchPypi {
     inherit version pname;

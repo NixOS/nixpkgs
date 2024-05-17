@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , pytestCheckHook
 }:
@@ -9,7 +8,6 @@ buildPythonPackage rec {
   pname = "anyascii";
   version = "0.3.2";
   format = "setuptools";
-  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;

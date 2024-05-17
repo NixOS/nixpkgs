@@ -22,7 +22,7 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.5.0";
+  version = "4.6.0";
 
   disabledTests = [
     "test_http_chunked_response"
@@ -42,7 +42,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZGTE1be+S/4Tbhw6Px+9qMgkNTZgoDn6lnAJhNvVYuA=";
+    hash = "sha256-gJm4TzxtIjvkpOlbN82MPbY0JmDdiwlEMGGxZvTR+Po=";
   };
 
   postPatch = ''
