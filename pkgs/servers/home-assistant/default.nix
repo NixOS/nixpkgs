@@ -289,6 +289,17 @@ let
         doCheck = false; # no tests
       });
 
+      # Can probably be removed with 2024.6.0
+      plugwise = super.plugwise.overridePythonAttrs rec {
+        version = "0.37.3";
+        src = fetchFromGitHub {
+          owner = "plugwise";
+          repo = "python-plugwise";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-aQz0p+DNi1XVoFwdFjc3RjpHqA2kGf4pU1QS6m271gU=";
+        };
+      };
+
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
