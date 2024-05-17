@@ -26,13 +26,13 @@
   wrapQtAppsHook,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
   version = "2.21.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-XBvKSgMuWgMuV+is2G028UNQ4hID7tKiHFuMdPOZcsI=";
   };
@@ -40,7 +40,7 @@ let
 
   netfilterGoModules =
     (buildGoModule {
-      inherit
+      inherit (finalAttrs)
         pname
         version
         src
@@ -51,31 +51,23 @@ let
     }).goModules;
 
   extensionBridgeDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    name = "${pname}-${version}-extension-bridge";
+    inherit (finalAttrs) src patches;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-extension-bridge";
     preBuild = "cd extension/bridge";
     hash = "sha256-1BXlp9AC9oQo/UzCtgNWVv8Er2ERoDLKdlTYXLzodMQ=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    name = "${pname}-${version}-signature";
+    inherit (finalAttrs) src patches;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-signature";
     preBuild = "cd signature";
     hash = "sha256-GtkDkeFdPsLuTpZh5UqIhFMpzW3HMkbz7npryOQkkGw=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    name = "${pname}-${version}-qtglean";
+    inherit (finalAttrs) src patches;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-qtglean";
     preBuild = "cd qtglean";
     hash = "sha256-HFmRcfxCcc83IPPIovbf3jNftp0olKQ6RzV8vPpCYAM=";
   };
-in
-stdenv.mkDerivation {
-  inherit
-    pname
-    version
-    src
-    patches
-    ;
 
   buildInputs = [
     libcap
@@ -106,17 +98,17 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     pushd source/extension/bridge
-    cargoDeps='${extensionBridgeDeps}' cargoSetupPostUnpackHook
+    cargoDeps='${finalAttrs.extensionBridgeDeps}' cargoSetupPostUnpackHook
     extensionBridgeDepsCopy="$cargoDepsCopy"
     popd
 
     pushd source/signature
-    cargoDeps='${signatureDeps}' cargoSetupPostUnpackHook
+    cargoDeps='${finalAttrs.signatureDeps}' cargoSetupPostUnpackHook
     signatureDepsCopy="$cargoDepsCopy"
     popd
 
     pushd source/qtglean
-    cargoDeps='${qtgleanDeps}' cargoSetupPostUnpackHook
+    cargoDeps='${finalAttrs.qtgleanDeps}' cargoSetupPostUnpackHook
     qtgleanDepsCopy="$cargoDepsCopy"
     popd
   '';
@@ -131,7 +123,7 @@ stdenv.mkDerivation {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${netfilterGoModules}' linux/netfilter/vendor
+    ln -s '${finalAttrs.netfilterGoModules}' linux/netfilter/vendor
 
     pushd extension/bridge
     cargoDepsCopy="$extensionBridgeDepsCopy" cargoSetupPostPatchHook
@@ -170,4 +162,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;
   };
-}
+})
