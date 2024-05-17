@@ -86,7 +86,11 @@ in {
 
     dontFixCmake = true;
 
-    inherit lua treesitter-parsers;
+    inherit lua;
+    treesitter-parsers = treesitter-parsers //
+      { markdown = treesitter-parsers.markdown // { location = "tree-sitter-markdown"; }; } //
+      { markdown-inline = treesitter-parsers.markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; }
+      ;
 
     buildInputs = [
       gperf
@@ -169,11 +173,13 @@ in {
     '' + ''
       mkdir -p $out/lib/nvim/parser
     '' + lib.concatStrings (lib.mapAttrsToList
-      (language: src: ''
+      (language: grammar: ''
         ln -s \
           ${tree-sitter.buildGrammar {
-            inherit language src;
+            inherit (grammar) src;
             version = "neovim-${finalAttrs.version}";
+            language = grammar.language or language;
+            location = grammar.location or null;
           }}/parser \
           $out/lib/nvim/parser/${language}.so
       '')

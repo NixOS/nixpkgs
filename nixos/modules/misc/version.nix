@@ -135,7 +135,7 @@ in
       };
 
       version = lib.mkOption {
-        type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
+        type = types.nullOr (types.strMatching "^[a-z0-9._-~^]+$");
         default = null;
         description = ''
           Image version.
