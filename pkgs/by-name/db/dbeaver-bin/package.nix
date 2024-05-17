@@ -30,9 +30,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/usr/share/dbeaver $out/bin
-    cp -r * $out/usr/share/dbeaver
-    ln -s $out/usr/share/dbeaver/dbeaver $out/bin/dbeaver
+    mkdir -p $out/opt/dbeaver $out/bin
+    cp -r * $out/opt/dbeaver
+    ln -s $out/opt/dbeaver/dbeaver $out/bin/dbeaver
     runHook postInstall
   '';
 
