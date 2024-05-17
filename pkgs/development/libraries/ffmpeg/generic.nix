@@ -33,8 +33,6 @@
 , fetchpatch2
 
   # Feature flags
-, withAlsa ? withHeadlessDeps && stdenv.isLinux # Alsa in/output supporT
-, withAom ? withFullDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
@@ -321,6 +319,8 @@
  *  Testing
  */
 , testers
+
+, configuration ? { }
 }:
 
 /* Maintainer notes:
@@ -338,6 +338,18 @@
 
 let
   inherit (lib) optional optionals optionalString enableFeature versionOlder versionAtLeast;
+  eval = lib.evalModules {
+    modules = [
+      ./options.nix
+      configuration
+      {
+        _module.args = {
+          inherit stdenv;
+        };
+      }
+    ];
+  };
+  inherit (eval) config;
 in
 
 
@@ -531,8 +543,8 @@ stdenv.mkDerivation (finalAttrs: {
     /*
      *  External libraries
      */
-    (enableFeature withAlsa "alsa")
-    (enableFeature withAom "libaom")
+    (enableFeature config.alsa "alsa")
+    (enableFeature config.aom "libaom")
     (enableFeature withAppKit "appkit")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
@@ -682,8 +694,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCudaLLVM [ clang ];
 
   buildInputs = []
-  ++ optionals withAlsa [ alsa-lib ]
-  ++ optionals withAom [ libaom ]
+  ++ optionals config.alsa [ alsa-lib ]
+  ++ optionals config.aom [ libaom ]
   ++ optionals withAppKit [ AppKit ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
