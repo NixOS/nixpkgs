@@ -99,6 +99,8 @@ self: super: {
 
     pg_uuidv7 = super.callPackage ./pg_uuidv7.nix { };
 
+    pgx_ulid = super.callPackage ./pgx_ulid.nix { };
+
     repmgr = super.callPackage ./repmgr.nix { };
 
     rum = super.callPackage ./rum.nix { };
