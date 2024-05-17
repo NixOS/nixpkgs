@@ -15,6 +15,7 @@
   textlint-rule-preset-ja-technical-writing,
   textlint-rule-stop-words,
   textlint-rule-terminology,
+  textlint-rule-unexpanded-acronym,
   textlint-rule-write-good,
 }:
 
@@ -110,6 +111,7 @@ buildNpmPackage rec {
         textlint-rule-preset-ja-technical-writing
         textlint-rule-stop-words
         textlint-rule-terminology
+        textlint-rule-unexpanded-acronym
         textlint-rule-write-good
       ]
     );
