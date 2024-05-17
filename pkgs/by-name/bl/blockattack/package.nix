@@ -8,6 +8,7 @@
 , fetchFromGitHub
 , gettext
 , gitUpdater
+, ninja
 , physfs
 , pkg-config
 , stdenv
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     SDL2
     cmake
+    ninja
     pkg-config
     gettext
     zip
