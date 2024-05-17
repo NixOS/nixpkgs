@@ -139,6 +139,7 @@ mapAliases {
   inherit (pkgs) terser; # Added 2023-08-31
   inherit (pkgs) textlint; # Added 2024-05-13
   textlint-plugin-latex = throw "textlint-plugin-latex was removed because it is unmaintained for years. Please use textlint-plugin-latex2e instead."; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-abbr-within-parentheses; # Added 2024-05-17
   inherit (pkgs) textlint-rule-alex; # Added 2024-05-16
   inherit (pkgs) textlint-rule-diacritics; # Added 2024-05-16
   inherit (pkgs) textlint-rule-en-max-word-count; # Added 2024-05-17

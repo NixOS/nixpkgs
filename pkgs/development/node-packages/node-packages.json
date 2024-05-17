@@ -220,7 +220,6 @@
 , "tailwindcss"
 , "teck-programmer"
 , "tern"
-, "textlint-rule-abbr-within-parentheses"
 , "textlint-rule-common-misspellings"
 , "textlint-rule-no-start-duplicated-conjunction"
 , "thelounge-plugin-closepms"

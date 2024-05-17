@@ -92902,44 +92902,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-abbr-within-parentheses = nodeEnv.buildNodePackage {
-    name = "textlint-rule-abbr-within-parentheses";
-    packageName = "textlint-rule-abbr-within-parentheses";
-    version = "1.0.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-abbr-within-parentheses/-/textlint-rule-abbr-within-parentheses-1.0.2.tgz";
-      sha512 = "GcAtxXttLsZfN75tSCo3V8/RTlglvhnn7McNTgI0uS4ADr67RoD64bSVIs4p/nY3sMNsf1taPjKnhZIQLuVjZg==";
-    };
-    dependencies = [
-      sources."call-bind-1.0.7"
-      sources."define-data-property-1.1.4"
-      sources."define-properties-1.2.1"
-      sources."es-define-property-1.0.0"
-      sources."es-errors-1.3.0"
-      sources."function-bind-1.1.2"
-      sources."functions-have-names-1.2.3"
-      sources."get-intrinsic-1.2.4"
-      sources."gopd-1.0.1"
-      sources."has-property-descriptors-1.0.2"
-      sources."has-proto-1.0.3"
-      sources."has-symbols-1.0.3"
-      sources."hasown-2.0.2"
-      sources."match-index-1.0.3"
-      sources."object-keys-1.1.1"
-      sources."regexp.prototype.flags-1.5.2"
-      sources."set-function-length-1.2.2"
-      sources."set-function-name-2.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "textlint rule check that abbreviations within parentheses.";
-      homepage = "https://github.com/azu/textlint-rule-abbr-within-parentheses";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   textlint-rule-common-misspellings = nodeEnv.buildNodePackage {
     name = "textlint-rule-common-misspellings";
     packageName = "textlint-rule-common-misspellings";
