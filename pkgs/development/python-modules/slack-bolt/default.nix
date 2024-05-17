@@ -1,4 +1,5 @@
-{ aiohttp
+{ lib
+, aiohttp
 , bottle
 , buildPythonPackage
 , chalice
@@ -12,7 +13,6 @@
 , flask
 , flask-sockets
 , gunicorn
-, lib
 , moto
 , numpy
 , pyramid
@@ -45,10 +45,9 @@ buildPythonPackage rec {
     hash = "sha256-UwVStemFVA4hgqnSpCKpQGwLYG+p5z7MwFXXnIhrvNk=";
   };
 
-  # The packaged pytest-runner version is too new as of 2023-07-27. It's not really needed anyway. Unfortunately,
-  # pythonRelaxDepsHook doesn't work on setup_requires packages.
   postPatch = ''
-    substituteInPlace setup.py --replace "pytest-runner==5.2" ""
+    substituteInPlace setup.py \
+      --replace-fail "pytest-runner==5.2" ""
   '';
 
   patches = [
@@ -60,11 +59,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     slack-sdk
   ];
 
@@ -101,7 +100,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  # Work around "Read-only file system: '/homeless-shelter'" errors
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
