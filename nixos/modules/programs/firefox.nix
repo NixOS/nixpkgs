@@ -81,6 +81,30 @@ in
       ];
     };
 
+    finalPackage = lib.mkOption {
+      description = "Final package (read-only)";
+      type = lib.types.package;
+      readOnly = true;
+      default = cfg.package.override (old: {
+        extraPrefsFiles =
+          old.extraPrefsFiles or [ ]
+          ++ cfg.autoConfigFiles
+          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+        nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or { }) // cfg.wrapperConfig;
+      });
+      defaultText = lib.literalExpression ''
+        cfg.package.override (old: {
+          extraPrefsFiles =
+            old.extraPrefsFiles or [ ]
+            ++ cfg.autoConfigFiles
+            ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
+          cfg = (old.cfg or { }) // cfg.wrapperConfig;
+        });
+      '';
+    };
+
     wrapperConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -88,7 +112,7 @@ in
     };
 
     policies = lib.mkOption {
-      type = policyFormat.type;
+      inherit (policyFormat) type;
       default = { };
       description = ''
         Group policies to install.
@@ -144,7 +168,7 @@ in
     languagePacks = lib.mkOption {
       # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
       type = lib.types.listOf (
-        lib.types.enum ([
+        lib.types.enum [
           "ach"
           "af"
           "an"
@@ -248,7 +272,7 @@ in
           "xh"
           "zh-CN"
           "zh-TW"
-        ])
+        ]
       );
       default = [ ];
       description = ''
@@ -280,7 +304,7 @@ in
       '';
     };
 
-    nativeMessagingHosts = ({
+    nativeMessagingHosts = {
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
@@ -288,7 +312,7 @@ in
           Additional packages containing native messaging hosts that should be made available to Firefox extensions.
         '';
       };
-    }) // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
+    } // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
   };
 
   config =
@@ -307,44 +331,34 @@ in
       );
       programs.firefox.nativeMessagingHosts.packages = forEachEnabledNmh (_: v: v.package);
 
-      environment.systemPackages = [
-        (cfg.package.override (old: {
-          extraPrefsFiles =
-            old.extraPrefsFiles or [ ]
-            ++ cfg.autoConfigFiles
-            ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
-          cfg = (old.cfg or { }) // cfg.wrapperConfig;
-        }))
-      ];
+      environment.systemPackages = [ cfg.finalPackage ];
 
       environment.etc =
         let
           policiesJSON = policyFormat.generate "firefox-policies.json" { inherit (cfg) policies; };
         in
         lib.mkIf (cfg.policies != { }) {
-          "firefox/policies/policies.json".source = "${policiesJSON}";
-        };
+          "firefox/policies/policies.json".source = policiesJSON;
 
-      # Preferences are converted into a policy
-      programs.firefox.policies = {
-        DisableAppUpdate = true;
-        Preferences = (
-          builtins.mapAttrs (_: value: {
-            Value = value;
-            Status = cfg.preferencesStatus;
-          }) cfg.preferences
-        );
-        ExtensionSettings = builtins.listToAttrs (
-          builtins.map (
-            lang:
-            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-              installation_mode = "normal_installed";
-              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-            }
-          ) cfg.languagePacks
-        );
-      };
+          # Preferences are converted into a policy
+          programs.firefox.policies = {
+            DisableAppUpdate = true;
+            Preferences = builtins.mapAttrs (_: value: {
+              Value = value;
+              Status = cfg.preferencesStatus;
+            }) cfg.preferences;
+            ExtensionSettings = builtins.listToAttrs (
+              builtins.map (
+                lang:
+                lib.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
+                  installation_mode = "normal_installed";
+                  install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+                }
+              ) cfg.languagePacks
+            );
+          };
+
+        };
     };
 
   meta.maintainers = with lib.maintainers; [
