@@ -182,6 +182,30 @@ in rec {
   in if errors == [] then true
      else trace (concatStringsSep "\n" errors) false;
 
+  checkUnitConfigWithLegacyKey = legacyKey: group: checks: attrs:
+    let
+      dump = lib.generators.toPretty { }
+        (lib.generators.withRecursion { depthLimit = 2; throwOnDepthLimit = false; } attrs);
+      attrs' =
+        if legacyKey == null
+          then attrs
+        else if ! attrs?${legacyKey}
+          then attrs
+        else if removeAttrs attrs [ legacyKey ] == {}
+          then attrs.${legacyKey}
+        else throw ''
+          The declaration
+
+          ${dump}
+
+          must not mix unit options with the legacy key '${legacyKey}'.
+
+          This can be fixed by moving all settings from within ${legacyKey}
+          one level up.
+        '';
+    in
+    checkUnitConfig group checks attrs';
+
   toOption = x:
     if x == true then "true"
     else if x == false then "false"

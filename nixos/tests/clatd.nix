@@ -59,7 +59,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "100.64.0.2/24"
           ];
           routes = [
-            { routeConfig = { Destination = "192.0.2.0/24"; Gateway = "100.64.0.1"; }; }
+            { Destination = "192.0.2.0/24"; Gateway = "100.64.0.1"; }
           ];
         };
       };
@@ -149,7 +149,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "2001:db8::2/64"
           ];
           routes = [
-            { routeConfig = { Destination = "::/0"; Gateway = "2001:db8::1"; }; }
+            { Destination = "::/0"; Gateway = "2001:db8::1"; }
           ];
         };
       };
