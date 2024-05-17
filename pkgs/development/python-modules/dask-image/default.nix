@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
