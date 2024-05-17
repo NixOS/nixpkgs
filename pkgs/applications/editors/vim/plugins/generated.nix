@@ -17335,5 +17335,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  compiler-nvim = buildVimPlugin {
+    pname = "compiler-nvim";
+    version = "2024-04-26";
+    src = fetchFromGitHub {
+      owner = "Zeioth";
+      repo = "compiler.nvim";
+      rev = "cb14acd32ba9ea09d01bbe3493aefdc59b68965c";
+      sha256 = "sha256-YZyT5B0nk9LxaEA5ntuKPs7yf/Ix7zs3f6N3UOc9AIU=";
+    };
+    meta.homepage = "https://github.com/Zeioth/compiler.nvim/";
+  };
+
 
 }
