@@ -5,8 +5,6 @@
 , numpy
 , pytestCheckHook
 , pykka
-, enum34
-, pythonOlder
 , pythonAtLeast
 }:
 
@@ -32,8 +30,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
   ];
 
   nativeCheckInputs = [

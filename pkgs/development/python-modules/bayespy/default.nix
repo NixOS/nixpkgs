@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   numpy,
   scipy,
@@ -15,10 +14,6 @@ buildPythonPackage rec {
   pname = "bayespy";
   version = "0.6.1";
   pyproject = true;
-
-  # Python 2 not supported and not some old Python 3 because MPL doesn't support
-  # them properly.
-  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "bayespy";
