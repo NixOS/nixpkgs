@@ -8,6 +8,7 @@
   runCommand,
   textlint,
   textlint-plugin-latex2e,
+  textlint-rule-abbr-within-parentheses,
   textlint-rule-alex,
   textlint-rule-diacritics,
   textlint-rule-en-max-word-count,
@@ -105,6 +106,7 @@ buildNpmPackage rec {
     tests = lib.mergeAttrsList (
       map (package: package.tests) [
         textlint-plugin-latex2e
+        textlint-rule-abbr-within-parentheses
         textlint-rule-alex
         textlint-rule-diacritics
         textlint-rule-en-max-word-count
