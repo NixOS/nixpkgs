@@ -47,12 +47,20 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
+  postPatch = ''
+    substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
+    substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
+  '';
+
   postInstall = ''
     installManPage crates/typst-cli/artifacts/*.1
     installShellCompletion \
       crates/typst-cli/artifacts/typst.{bash,fish} \
       --zsh crates/typst-cli/artifacts/_typst
   '';
+
+  cargoTestFlags = [ "--workspace" ];
 
   passthru.updateScript = nix-update-script { };
 
