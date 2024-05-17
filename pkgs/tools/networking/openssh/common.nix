@@ -33,6 +33,7 @@
 , withPAM ? stdenv.hostPlatform.isLinux
 , dsaKeysSupport ? false
 , linkOpenssl ? true
+, isNixos ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation {
@@ -76,6 +77,12 @@ stdenv.mkDerivation {
     # to use: `configure' wants `gcc', but `make' wants `ld'.
     unset LD
   '';
+
+  env = lib.optionalAttrs isNixos {
+    # openssh calls passwd to allow the user to reset an expired password, but nixos
+    # doesn't ship it at /usr/bin/passwd.
+    PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
+  };
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
