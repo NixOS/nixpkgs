@@ -14,14 +14,14 @@
 , SDL
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "povray";
   version = "3.8.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "POV-Ray";
     repo = "povray";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-BsWalXzEnymiRbBfE/gsNyWgAqzbxEzO/EQiJpbwoKs=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "povray";
   };
-}
+})
