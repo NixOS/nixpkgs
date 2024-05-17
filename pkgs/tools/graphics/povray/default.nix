@@ -55,7 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" "--with-x" ];
+  configureFlags = [
+    "COMPILED_BY=NixOS"
+    "--with-boost-thread=boost_thread"
+    "--with-x"
+  ];
 
   enableParallelBuilding = true;
 
