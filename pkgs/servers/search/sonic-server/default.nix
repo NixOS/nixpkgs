@@ -21,8 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-9XSRb5RB82L72RzRWPJ45AJahkRnLwAL7lI2QFqbeko=";
 
-  # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  doCheck = false;
+  checkFlags = [
+    "--skip=store::fst::tests::it_acquires_graph"
+    "--skip=store::fst::tests::it_janitors_graph"
+    "--skip=store::fst::tests::it_proceeds_primitives"
+    "--skip=store::kv::tests::it_acquires_database"
+    "--skip=store::kv::tests::it_janitors_database"
+    "--skip=store::kv::tests::it_proceeds_actions"
+    "--skip=store::kv::tests::it_proceeds_primitives"
+  ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
