@@ -269,6 +269,7 @@ in stdenv'.mkDerivation (finalAttrs: {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
+    broken = stdenv.isDarwin; # Yet another SDK incompatibility...
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
