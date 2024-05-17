@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "The unified tool for managing your Platform.sh services from the command line.";
+    description = "The unified tool for managing your Platform.sh services from the command line";
     homepage = "https://github.com/platformsh/cli";
     license = lib.licenses.mit;
     mainProgram = "platform";
