@@ -16,6 +16,7 @@
 , python3
 , sqlite
 , zlib
+, jq
 }:
 let
   py3 = python3.withPackages (p: [ p.mako ]);
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown protobuf py3 unzip which ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
-  buildInputs = [ gmp libsodium sqlite zlib ];
+  buildInputs = [ gmp libsodium sqlite zlib jq ];
 
   # this causes some python trouble on a darwin host so we skip this step.
   # also we have to tell libwally-core to use sed instead of gsed.
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
       tools/generate-wire.py \
       tools/update-mocks.sh \
       tools/mockup.sh \
+      tools/fromschema.py \
       devtools/sql-rewrite.py
   '' else ''
     substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
