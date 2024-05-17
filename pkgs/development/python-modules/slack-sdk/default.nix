@@ -38,11 +38,11 @@ buildPythonPackage rec {
       --replace-fail ', "pytest-runner"' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiodns
     aiohttp
     boto3
