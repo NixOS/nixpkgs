@@ -7,6 +7,7 @@
 , xz
 , stdenv
 , darwin
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -52,6 +53,8 @@ rustPlatform.buildRustPackage rec {
       crates/typst-cli/artifacts/typst.{bash,fish} \
       --zsh crates/typst-cli/artifacts/_typst
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
