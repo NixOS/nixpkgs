@@ -20,17 +20,6 @@
 , gtk ? gtk3
 # List of gui libraries to use. According to `./configure --help` ran on
 # release 3.9.3, options are: (xlib|win32|fb|quartz|console|wayland|sdl2|beos)
-, enableGuis ? {
-  xlib = enableX11;
-  # From some reason, upstream's ./configure script disables compilation of the
-  # external tool `mlconfig` if `enableGuis.fb == true`. This behavior is not
-  # documentd in `./configure --help`, and it is reported here:
-  # https://github.com/arakiken/mlterm/issues/73
-  fb = false;
-  quartz = stdenv.isDarwin;
-  wayland = stdenv.isLinux;
-  sdl2 = true;
-}
 , libxkbcommon
 , wayland # for the "wayland" --with-gui option
 , SDL2 # for the "sdl" --with-gui option
@@ -74,17 +63,8 @@
   # Open Type layout support, (substituting glyphs with opentype fonts)
   otl = true;
 }
-# Configure the Exec directive in the generated .desktop file
-, desktopBinary ? (
-  if enableGuis.xlib then
-    "mlterm"
-  else if enableGuis.wayland then
-    "mlterm-wl"
-  else if enableGuis.sdl2 then
-    "mlterm-sdl2"
-  else
-    throw "mlterm: couldn't figure out what desktopBinary to use."
-  )
+
+, configuration ? { }
 }:
 
 let
@@ -96,6 +76,19 @@ let
   in
     lib.withFeatureAs (commaSepList != "") featureName commaSepList
   ;
+  eval = lib.evalModules {
+    modules = [
+      ./options.nix
+      configuration
+      {
+        _module.args = {
+          inherit stdenv;
+        };
+      }
+    ];
+  };
+  inherit (eval) config;
+  enableGuis = config.gui;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
   version = "3.9.3";
@@ -193,7 +186,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   desktopItem = makeDesktopItem {
     name = "mlterm";
-    exec = "${desktopBinary} %U";
+    exec = "${config.desktopBinary} %U";
     icon = "mlterm";
     type = "Application";
     comment = "Multi Lingual TERMinal emulator";
