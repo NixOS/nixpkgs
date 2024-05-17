@@ -6050,10 +6050,6 @@ with pkgs;
 
   pcp = callPackage ../tools/misc/pcp { };
 
-  persepolis = python3Packages.callPackage ../tools/networking/persepolis {
-    wrapQtAppsHook = qt5.wrapQtAppsHook;
-  };
-
   pev = callPackage ../development/tools/analysis/pev { };
 
   phd2 = callPackage ../applications/science/astronomy/phd2 { };
