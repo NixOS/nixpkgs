@@ -24306,8 +24306,6 @@ with pkgs;
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_4; };
 
-  csfml = callPackage ../development/libraries/csfml { };
-
   shapelib = callPackage ../development/libraries/shapelib { };
 
   sharness = callPackage ../development/libraries/sharness { };
