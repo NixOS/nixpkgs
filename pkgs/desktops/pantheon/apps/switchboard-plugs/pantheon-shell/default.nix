@@ -7,31 +7,28 @@
 , pkg-config
 , vala
 , glib
+, libadwaita
 , libgee
-, libhandy
-, granite
+, granite7
 , gexiv2
 , gnome-settings-daemon
 , elementary-settings-daemon
-, gtk3
-, gnome-desktop
+, gtk4
 , gala
 , wingpanel
-, elementary-dock
 , switchboard
 , gettext
-, bamf
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "6.5.0";
+  version = "6.5.0-unstable-2024-05-09";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-iq1QXC6eQ2w5j9RCxhTc0dApMfiDGcVuj8nocEFLFNk=";
+    rev = "ed9e8f6a341fdc07546bd7f129cad242d78135d5";
+    sha256 = "sha256-mCOrkobKwf85997WUgi3B1MyFEgdA4oeReFx+HfmbO4=";
   };
 
   nativeBuildInputs = [
@@ -43,18 +40,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
-    elementary-dock
     elementary-settings-daemon
     gnome-settings-daemon
     gala
     gexiv2
     glib
-    gnome-desktop
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
     switchboard
     wingpanel
   ];
