@@ -1569,7 +1569,6 @@ broken-packages:
   - ethereum-analyzer-deps # failure in job https://hydra.nixos.org/build/252732846 at 2024-03-16
   - ethereum-rlp # failure in job https://hydra.nixos.org/build/233236392 at 2023-09-02
   - eurofxref # failure in job https://hydra.nixos.org/build/233230942 at 2023-09-02
-  - evdev # failure in job https://hydra.nixos.org/build/236692293 at 2023-10-04
   - eve-cli # failure in job https://hydra.nixos.org/build/233254555 at 2023-09-02
   - eved # failure in job https://hydra.nixos.org/build/233194319 at 2023-09-02
   - eve # failure in job https://hydra.nixos.org/build/252715362 at 2024-03-16
