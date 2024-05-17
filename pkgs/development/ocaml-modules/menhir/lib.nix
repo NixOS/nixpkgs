@@ -3,7 +3,6 @@
 buildDunePackage rec {
   pname = "menhirLib";
   version = "20231231";
-  
   minimalOCamlVersion = "4.03";
 
   src = fetchFromGitLab {
