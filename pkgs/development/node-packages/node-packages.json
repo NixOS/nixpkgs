@@ -220,7 +220,6 @@
 , "tailwindcss"
 , "teck-programmer"
 , "tern"
-, "textlint-plugin-latex"
 , "textlint-rule-abbr-within-parentheses"
 , "textlint-rule-common-misspellings"
 , "textlint-rule-en-max-word-count"

@@ -92902,28 +92902,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-plugin-latex = nodeEnv.buildNodePackage {
-    name = "textlint-plugin-latex";
-    packageName = "textlint-plugin-latex";
-    version = "1.0.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-plugin-latex/-/textlint-plugin-latex-1.0.4.tgz";
-      sha512 = "ILjivll38Ry+R13ZYG8gGEjPxUP712MSZZIIqm7cV7iUIzysvKQyyf5hYHiNZD/+ijVzlje8RiB49IbvQ7K7mw==";
-    };
-    dependencies = [
-      sources."@textlint/ast-node-types-4.4.3"
-      sources."txt-to-ast-3.0.3"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Latex plugin for [textlint](https://github.com/textlint/textlint &#34;textlint&#34;).";
-      homepage = "https://github.com/elzup/textlint-plugin-latex";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   textlint-rule-abbr-within-parentheses = nodeEnv.buildNodePackage {
     name = "textlint-rule-abbr-within-parentheses";
     packageName = "textlint-rule-abbr-within-parentheses";
