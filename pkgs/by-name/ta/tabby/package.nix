@@ -32,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.11.0";
+  version = "0.11.1";
 
 
   availableAccelerations = flatten [
@@ -78,7 +78,7 @@ let
   # to use a specific device type as it is relying on llama-cpp only being
   # built to use one type of device.
   #
-  # See: https://github.com/TabbyML/tabby/blob/v0.11.0/crates/llama-cpp-bindings/include/engine.h#L20
+  # See: https://github.com/TabbyML/tabby/blob/v0.11.1/crates/llama-cpp-bindings/include/engine.h#L20
   #
   llamaccpPackage = llama-cpp.override {
     rocmSupport = enableRocm;
@@ -108,7 +108,7 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     rev = "v${version}";
-    hash = "sha256-7PHCvI2/QSFVs6SAXrx8rohU5Wu8QRaqsI1CimnUGQY=";
+    hash = "sha256-OgAE526aW3mVqf6fVmBmL5/B4gH9B54QLEITQk9Kgsg=";
     fetchSubmodules = true;
   };
 

@@ -14,34 +14,37 @@
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
-  version = "1.1.2";
-  format = "pyproject";
+  version = "1.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "basilfx";
-    repo = pname;
+    repo = "aiobiketrax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-71gPdA1snPJCR0Pmcaki55Ukf5xtUjuZ+xX8VvspKC4=";
+    hash = "sha256-6hSSPanagYKZxoyU8mp/1bWRcpJJkhNw3Rh82ogKGr4=";
   };
 
   postPatch = ''
     # https://github.com/basilfx/aiobiketrax/pull/63
     substituteInPlace aiobiketrax/api.py \
-      --replace "auth0.v3" "auth0"
+      --replace-fail "auth0.v3" "auth0"
   '';
 
   pythonRelaxDeps = [
     "auth0-python"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     auth0-python
     python-dateutil

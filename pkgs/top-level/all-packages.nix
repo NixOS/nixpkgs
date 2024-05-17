@@ -8170,8 +8170,6 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
-  fusuma = callPackage ../tools/inputmethods/fusuma { };
-
   fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
 
   inherit (fdbPackages)
@@ -14199,8 +14197,6 @@ with pkgs;
   };
 
   wakapi = callPackage ../tools/misc/wakapi { };
-
-  wakatime = callPackage ../tools/misc/wakatime { };
 
   wambo = callPackage ../development/tools/wambo { };
 
@@ -34851,7 +34847,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
+  tipp10 = qt6.callPackage ../applications/misc/tipp10 { };
 
   tkrev = callPackage ../applications/version-management/tkrev { };
 
