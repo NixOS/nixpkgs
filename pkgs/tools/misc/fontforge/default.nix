@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = [ maintainers.erictapen ];
+    mainProgram = "fontforge";
   };
 }
