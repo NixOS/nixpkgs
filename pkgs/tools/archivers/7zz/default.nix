@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "23.01";
+  version = "24.05";
 
   src = fetchurl {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-F1ybQsyReF2NBR/3eMZySvxVEntpwq2VUlRCHp/5nZs=";
-      unfree = "sha256-NWBxAHNg5aGCTZkEmT6LJIC1G1cOjJ+vfA9Y6+S/n3Q=";
+      free = "sha256-yYq3IEV2GeDWwW6KrdpgK2/QOsmDcBpIZvbk6VKZETY=";
+      unfree = "sha256-Y/NBz4C40ofG6UVRmz2g+nVVPIVXKkcbf6bmj5qQt5A=";
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
@@ -55,8 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-cross-mingw-build.patch
-    # remove unneeded semicolons related to -Wextra-semi-stmt, caused by upstream
-    ./fix-empty-expr-stmt.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
