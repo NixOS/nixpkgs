@@ -98,14 +98,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
   separateDebugInfo = true;
 
-  # autoreconfHook is due to patch, normally only needed for cygwin
   nativeBuildInputs = [
-    autoreconfHook
     perl
     xz.bin
   ]
   ++ optionals stdenv.hostPlatform.isCygwin [
     # due to patch
+    autoreconfHook
     texinfo
   ];
 
