@@ -11,9 +11,9 @@ cargoCheckHook() {
     fi
 
     if [[ -z ${dontUseCargoParallelTests-} ]]; then
-        threads=$NIX_BUILD_CORES
+        export RUST_TEST_THREADS=$NIX_BUILD_CORES
     else
-        threads=1
+        export RUST_TEST_THREADS=1
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then
@@ -36,7 +36,6 @@ cargoCheckHook() {
         cargo test \
               -j $NIX_BUILD_CORES \
               ${argstr} -- \
-              --test-threads=${threads} \
               ${checkFlags} \
               ${checkFlagsArray+"${checkFlagsArray[@]}"}
     )
