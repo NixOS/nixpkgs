@@ -1,11 +1,15 @@
 { lib
 , stdenvNoCC
 , fetchurl
+, makeWrapper
+, openjdk17
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
   version = "24.0.4";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   src =
     let
@@ -32,7 +36,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/opt/dbeaver $out/bin
     cp -r * $out/opt/dbeaver
-    ln -s $out/opt/dbeaver/dbeaver $out/bin/dbeaver
+    makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
+      --prefix PATH : "${openjdk17}/bin" \
+      --set JAVA_HOME "${openjdk17.home}"
     runHook postInstall
   '';
 
