@@ -1,53 +1,91 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gcc10,
-  cmake,
-  boost179,
-  icu,
-  swig,
-  pcre,
-  opencascade-occt_7_6,
-  opencollada,
-  libxml2,
+# TODO format with nixpkgs (comma position ?)
+{ lib
+, stdenv
+, testers
+, buildPythonPackage
+, fetchFromGitHub
+, gcc10
+, cmake
+, cgal
+, boost179
+, gmp
+, icu
+, swig
+, mpfr
+, pcre
+, opencascade-occt_7_6
+, opencollada
+, libxml2
+, hdf5
+, zlib
+, libaec
+, python3
+# python deps
+, setuptools
+, mathutils
+, shapely
+, numpy
+, isodate
+, python-dateutil
+, lark
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
 in
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "240306";
+  version = "0.7.0";
   format = "other";
 
   src = fetchFromGitHub {
-    owner = "IfcOpenShell";
-    repo = "IfcOpenShell";
-    rev = "refs/tags/blenderbim-${version}";
+    owner  = "IfcOpenShell";
+    repo   = "IfcOpenShell";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     sha256 = "sha256-DtA8KeWipPfOnztKG/lrgLZeOCUG3nWR9oW7OST7koc=";
   };
 
-  nativeBuildInputs = [
-    gcc10
-    cmake
-  ];
+  nativeBuildInputs = [ gcc10 cmake setuptools ];
+  pythonImportsCheck = [ "ifcopenshell" ];
 
   buildInputs = [
+    # ifcopenshell needs stdc++
+    stdenv.cc.cc.lib
     boost179
+    cgal
+    gmp
     icu
+    mpfr
     pcre
     libxml2
+    hdf5
+    opencascade-occt
+    python3
+    libaec
+  ];
+
+  dependencies = [
+    mathutils
+    shapely
+    numpy
+    isodate
+    python-dateutil
+    lark
   ];
 
   preConfigure = ''
     cd cmake
   '';
 
-  PYTHONUSERBASE = ".";
+  postInstall = ''
+    echo Installing pyproject.toml
+    cp -v $src/src/ifcopenshell-python/pyproject.toml $out/lib/python3.11/site-packages/ifcopenshell/pyproject.toml
+  '';
+
+  PYTHONUSERBASE=".";
   cmakeFlags = [
     "-DUSERSPACE_PYTHON_PREFIX=ON"
+    "-DBUILD_IFCPYTHON=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     "-DOCC_LIBRARY_DIR=${opencascade-occt}/lib"
     "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"
@@ -55,6 +93,12 @@ buildPythonPackage rec {
     "-DSWIG_EXECUTABLE=${swig}/bin/swig"
     "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
     "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DGMP_LIBRARY_DIR=${gmp.out}/lib/"
+    "-DMPFR_LIBRARY_DIR=${mpfr.out}/lib/"
+    # HDF5 support is currently not optional, see https://github.com/IfcOpenShell/IfcOpenShell/issues/1815
+    "-DHDF5_SUPPORT=ON"
+    "-DHDF5_INCLUDE_DIR=${hdf5.dev}/include/"
+    "-DHDF5_LIBRARIES=${hdf5.out}/lib/libhdf5_cpp.so;${hdf5.out}/lib/libhdf5.so;${zlib.out}/lib/libz.so;${libaec.out}/lib/libaec.so;" # /usr/lib64/libsz.so;"
   ];
 
   meta = with lib; {
@@ -64,4 +108,10 @@ buildPythonPackage rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ fehnomenal ];
   };
+
+  # passthru.tests.version = testers.testVersion {
+  #   package = ifcopenshell;
+  #   command = "IfcConvert --version";
+  #   version = version;
+  # };
 }
