@@ -11,7 +11,7 @@ buildDunePackage rec {
     owner = "fpottier";
     repo = "menhir";
     rev = version;
-    sha256 = "sha256-veB0ORHp6jdRwCyDDAfc7a7ov8sOeHUmiELdOFf/QYk=";
+    hash = "sha256-veB0ORHp6jdRwCyDDAfc7a7ov8sOeHUmiELdOFf/QYk=";
   };
 
   meta = with lib; {
