@@ -5,7 +5,6 @@
 , substituteAll
 , meson
 , ninja
-, python3
 , pkg-config
 , vala
 , granite
@@ -14,8 +13,6 @@
 , gtk3
 , gnome-menus
 , json-glib
-, elementary-dock
-, bamf
 , switchboard-with-plugs
 , libsoup
 , wingpanel
@@ -26,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.11.1";
+  version = "2.11.1-unstable-2024-05-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "applications-menu";
-    rev = version;
-    sha256 = "sha256-WlRrEkX0DGIHYWvUc9G4BbvofzWJwqkiJaJFwQ43GPE=";
+    rev = "9e0c8f1148265da299a302269c8d28ccc28dfe3a";
+    sha256 = "sha256-pecZoE/XCxuBmRJAXIoy7W+YKPuVO5yRnQWtW+Eimpg=";
   };
 
   patches = [
@@ -47,13 +44,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
   buildInputs = [
-    bamf
-    elementary-dock
     granite
     gtk3
     json-glib
@@ -74,11 +68,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   doCheck = true;
 
