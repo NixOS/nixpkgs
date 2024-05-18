@@ -20,9 +20,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [
-    segger-jlink
-  ];
+  extraPkgs = pkgs: [ pkgs.segger-jlink ];
 
   extraInstallCommands = ''
     install -Dm444 ${appimageContents}/nrfconnect.desktop -t $out/share/applications

@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +37,8 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "--lib"
   ];
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "Extremely fast CSS parser, transformer, and minifier written in Rust";

@@ -269,14 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    meson test --print-errorlogs
-
-    runHook postCheck
-  '';
-
   postCheck = ''
     rm $out/lib/libgobject-${librarySuffix}
     rm $out/lib/libgio-${librarySuffix}

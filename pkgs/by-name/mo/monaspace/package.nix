@@ -5,12 +5,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
-  version = "1.100";
+  version = "1.101";
 
   src = fetchzip {
     url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-PNeWDWYSd/oAviwyvwiQSLeATGqGIFYZWjKp+trT5x4=";
+    hash = "sha256-o5s4XBuwqA4sJ5KhEn5oYttBj4ojekr/LO6Ww9oQRGw=";
   };
 
   outputs = [ "out" "woff" ];

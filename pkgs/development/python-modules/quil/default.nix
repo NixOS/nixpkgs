@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -7,6 +8,7 @@
   numpy,
   pytestCheckHook,
   syrupy,
+  libiconv
 }:
 
 buildPythonPackage rec {
@@ -39,6 +41,8 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   dependencies = [ numpy ];
 

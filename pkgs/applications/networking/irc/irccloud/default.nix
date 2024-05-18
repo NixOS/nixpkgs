@@ -16,7 +16,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ at-spi2-core ];
+  extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop

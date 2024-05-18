@@ -1,4 +1,4 @@
-{ pkgs, buildEnv, runCommand, lib, stdenv, binlore }:
+{ pkgs, buildEnv, runCommand, lib, stdenv, freebsd, binlore }:
 
 # These are some unix tools that are commonly included in the /usr/bin
 # and /usr/sbin directory under more normal distributions. Along with
@@ -61,6 +61,7 @@ let
     arp = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.arp;
     };
     col = {
       linux = pkgs.util-linux;
@@ -86,6 +87,7 @@ let
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
+      freebsd = pkgs.freebsd.getent;
     };
     getopt = {
       linux = pkgs.util-linux;
@@ -94,6 +96,7 @@ let
     fdisk = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = pkgs.freebsd.fdisk;
     };
     fsck = {
       linux = pkgs.util-linux;
@@ -106,10 +109,12 @@ let
     hostname = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.shell_cmds;
+      freebsd = pkgs.freebsd.bin;
     };
     ifconfig = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.ifconfig;
     };
     killall = {
       linux = pkgs.psmisc;
@@ -118,6 +123,7 @@ let
     locale = {
       linux = pkgs.glibc;
       darwin = pkgs.darwin.adv_cmds;
+      freebsd = pkgs.freebsd.locale;
       # technically just targeting glibc version
       # no obvious exec in manpage
       lore = ''
@@ -134,6 +140,7 @@ let
     mount = {
       linux = pkgs.util-linux;
       darwin = pkgs.darwin.diskdev_cmds;
+      freebsd = freebsd.mount;
       # technically just targeting the darwin version; binlore already
       # ids the util-linux copy as 'cannot'
       # no obvious exec in manpage args; I think binlore flags 'can'
@@ -145,14 +152,17 @@ let
     netstat = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.netstat;
     };
     ping = {
       linux = pkgs.iputils;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = freebsd.ping;
     };
     ps = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.ps;
+      freebsd = pkgs.freebsd.bin;
       # technically just targeting procps ps (which ids as can)
       # but I don't see obvious exec in args; have yet to look
       # for underlying cause in source
@@ -167,6 +177,7 @@ let
     route = {
       linux = pkgs.nettools;
       darwin = pkgs.darwin.network_cmds;
+      freebsd = pkgs.freebsd.route;
     };
     script = {
       linux = pkgs.util-linux;
@@ -175,10 +186,12 @@ let
     sysctl = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.system_cmds;
+      freebsd = pkgs.freebsd.sysctl;
     };
     top = {
       linux = pkgs.procps;
       darwin = pkgs.darwin.top;
+      freebsd = pkgs.freebsd.top;
       # technically just targeting procps top; haven't needed this in
       # any scripts so far, but overriding it for consistency with ps
       # override above and in procps. (procps also overrides 'free',
@@ -202,8 +215,9 @@ let
       linux = pkgs.procps;
 
       # watch is the only command from procps that builds currently on
-      # Darwin. Unfortunately no other implementations exist currently!
+      # Darwin/FreeBSD. Unfortunately no other implementations exist currently!
       darwin = pkgs.callPackage ../os-specific/linux/procps-ng {};
+      freebsd = pkgs.callPackage ../os-specific/linux/procps-ng {};
     };
     write = {
       linux = pkgs.util-linux;
@@ -212,6 +226,7 @@ let
     xxd = {
       linux = pkgs.vim.xxd;
       darwin = pkgs.vim.xxd;
+      freebsd = pkgs.vim.xxd;
     };
   };
 

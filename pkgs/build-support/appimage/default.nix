@@ -40,7 +40,7 @@ rec {
 
   wrapAppImage = args@{
     src,
-    extraPkgs,
+    extraPkgs ? pkgs: [ ],
     meta ? {},
     ...
   }: buildFHSEnv

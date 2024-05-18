@@ -66,6 +66,7 @@ buildPythonPackage rec {
       takes away some of the drudgery of maintaining your code.
     '';
     license = lib.licenses.asl20;
+    mainProgram = "yapf";
     maintainers = with lib.maintainers; [ AndersonTorres siddharthist ];
   };
 }

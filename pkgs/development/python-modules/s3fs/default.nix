@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , aiobotocore
 , aiohttp
 , buildPythonPackage
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
     changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";

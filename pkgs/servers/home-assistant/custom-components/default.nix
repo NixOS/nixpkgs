@@ -26,6 +26,8 @@
 
   localtuya = callPackage ./localtuya {};
 
+  midea_ac_lan = callPackage ./midea_ac_lan {};
+
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
 
   miele = callPackage ./miele {};
@@ -43,6 +45,8 @@
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
+  tuya_local = callPackage ./tuya_local {};
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
 

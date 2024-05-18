@@ -1,16 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  gitUpdater,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alt-tab-macos";
-  version = "6.68.0";
+  version = "6.69.0";
 
   src = fetchurl {
     url = "https://github.com/lwouis/alt-tab-macos/releases/download/v${finalAttrs.version}/AltTab-${finalAttrs.version}.zip";
-    hash = "sha256-NjDq5Uq771xRHeTipqwTrlz9vBCSsnV34A0482tcZuE=";
+    hash = "sha256-v0HeucpDGdnK0p9zoYUbEBoHzRMlcJBEIIS1vQZ00A0=";
   };
 
   sourceRoot = ".";
@@ -26,12 +28,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/lwouis/alt-tab-macos";
+    rev-prefix = "v";
+  };
+
+  meta = {
     description = "Windows alt-tab on macOS";
     homepage = "https://alt-tab-macos.netlify.app";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      emilytrau
+      Enzime
+    ];
+    platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
-    platforms = platforms.darwin;
   };
 })

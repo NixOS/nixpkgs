@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "19.27.0";
+  version = "19.29.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-gnK4cu44aSVai48z7U4AlgiulCwNQU/LgN5XJKIYDv8=";
+    hash = "sha256-vn3P9upO6d0jpZzrG77/xkhfn4NINnBZ3YymlRdoONw=";
   };
 
-  vendorHash = "sha256-YKl6Euk4907SeIy8BZL7aF2b0AsvknZ7CU8n49GNLz0=";
+  vendorHash = "sha256-mZNhsvEI1AbsAhoK7AuNgrQvYlkGrrpPVuv3R5nssC4=";
 
   sourceRoot = "${src.name}/src";
 

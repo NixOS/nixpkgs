@@ -13,8 +13,6 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 in
 appimageTools.wrapType2 rec {
 
@@ -24,8 +22,8 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.at-spi2-atk p.at-spi2-core ];
+  extraPkgs = pkgs: [ pkgs.at-spi2-atk pkgs.at-spi2-core ];
+
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/1024x1024/apps/notable.png \

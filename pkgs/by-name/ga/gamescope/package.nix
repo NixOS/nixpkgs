@@ -44,14 +44,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.13";
+  version = "3.14.15";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oBOD4kGrZaiAoK1vmr9FB9igMnraNpm0+mHqezHwC78=";
+    hash = "sha256-K7Sz5HWelHZoc6gPFBDfymjn8P7mWNX6FuyaL4t6qeI=";
   };
 
   patches = [

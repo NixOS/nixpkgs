@@ -31,7 +31,7 @@
 buildPythonPackage rec {
   pname = "maestral";
   version = "1.9.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -42,7 +42,11 @@ buildPythonPackage rec {
     hash = "sha256-h7RDaCVICi3wl6/b1s01cINhFirDOpOXoxTPZIBH3jE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     click
     desktop-notifier
     dbus-python
@@ -67,7 +71,7 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
+    "--prefix PYTHONPATH : ${makePythonPath dependencies}"
     "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 

@@ -1,5 +1,4 @@
-{ lib, appimageTools, fetchurl, makeDesktopItem
-}:
+{ lib, appimageTools, fetchurl, makeDesktopItem }:
 
 let
   pname = "MyCrypto";
@@ -24,11 +23,8 @@ let
     categories = [ "Finance" ];
   };
 
-in appimageTools.wrapType2 rec {
+in appimageTools.wrapType2 {
   inherit pname version src;
-
-  multiArch = false; # no p32bit needed
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''
     mkdir -p $out/share

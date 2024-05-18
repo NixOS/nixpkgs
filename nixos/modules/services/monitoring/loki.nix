@@ -99,9 +99,16 @@ in {
         conf = if cfg.configFile == null
                then prettyJSON cfg.configuration
                else cfg.configFile;
+        validateConfig = file:
+        pkgs.runCommand "validate-loki-conf" {
+          nativeBuildInputs = [ cfg.package ];
+        } ''
+            loki -verify-config -config.file "${file}"
+            ln -s "${file}" "$out"
+          '';
       in
       {
-        ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/loki --config.file=${validateConfig conf} ${escapeShellArgs cfg.extraFlags}";
         User = cfg.user;
         Restart = "always";
         PrivateTmp = true;

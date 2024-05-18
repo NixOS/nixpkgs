@@ -18,19 +18,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
   };
 
-  patches = [
-    # https://github.com/colobot/colobot/pull/1559
-    # gcc13 fixes. remove on next update
-    (fetchpatch {
-      name = "gcc13-fixes.patch";
-      url = "https://github.com/colobot/colobot/commit/d47e26586325ec11425cef5c95fc206dc103dbe2.patch";
-      hash = "sha256-2DmLkyoyiZSW0yeZDSSWFjCEJos25jPHZQi1yuJGFko=";
-      excludes = [
-        "src/object/task/taskgoto.h"
-      ];
-    })
-  ];
-
   nativeBuildInputs = [ cmake xmlstarlet doxygen python3 ];
   buildInputs = [ boost SDL2 SDL2_image SDL2_ttf libpng glew gettext libsndfile libvorbis libogg physfs openal ];
 

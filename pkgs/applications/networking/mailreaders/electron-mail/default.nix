@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl, libsecret }:
+{ appimageTools, lib, fetchurl }:
 
 let
   pname = "electron-mail";
@@ -20,9 +20,9 @@ in appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-    libappindicator-gtk3
+  extraPkgs = pkgs: [
+    pkgs.libsecret
+    pkgs.libappindicator-gtk3
   ];
 
   meta = with lib; {

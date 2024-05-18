@@ -316,6 +316,13 @@ self: super: ({
 
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
+
+  # cabal lib set as unbuildable in linux so callCabal2nix generates a dummy derivation
+  jsaddle-wkwebview = overrideCabal (drv: {
+    libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
+    libraryHaskellDepends = with self; [ aeson data-default jsaddle ];
+  }) super.jsaddle-wkwebview;
+
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87

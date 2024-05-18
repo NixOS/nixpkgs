@@ -6,6 +6,7 @@
 , blas
 , lapack
 , mpi
+, fftw
 , scalapack
 , libxc
 , libvdwxc
@@ -89,9 +90,9 @@ in buildPythonPackage rec {
   # execute `rsh` as a side-effect.
   nativeBuildInputs = [ which inetutils ];
 
-  buildInputs = [ blas scalapack libxc libvdwxc ];
+  buildInputs = [ blas scalapack libxc libvdwxc fftw ];
 
-  propagatedBuildInputs = [ ase scipy numpy mpi pyyaml ];
+  propagatedBuildInputs = [ ase scipy numpy (lib.getBin mpi) pyyaml ];
 
   patches = [ ./SetupPath.patch ];
 

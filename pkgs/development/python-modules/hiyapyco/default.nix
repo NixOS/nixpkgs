@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "hiyapyco";
-  version = "0.5.5";
+  version = "0.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zerwes";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    hash = "sha256-LuENNwVB/1GyPLsfMRwHjz87c7+3/7U82m1MnHfRHdU=";
+    hash = "sha256-WBSOjOX4naa0XDTnO593EAvtz5EjVPWCbiZaPXdx0e4=";
   };
 
   nativeBuildInputs = [

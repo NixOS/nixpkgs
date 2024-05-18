@@ -2,17 +2,18 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "ananicy-rules-cachyos";
-  version = "unstable-2024-05-04";
+  version = "0-unstable-2024-05-10";
 
   src = fetchFromGitHub {
     owner = "CachyOS";
     repo = "ananicy-rules";
-    rev = "5276c6dd11966dcf6f9588c6148949837abb8200";
-    hash = "sha256-we2kdQb5rSJldP0HxBLAR5czTc3aayWElp5vAfmQ4ag=";
+    rev = "1826cf45201770e20fea2e7bebfc2a5001074703";
+    hash = "sha256-9Uth0OvV5NXHZxOCQDMmb0VdXpi8dSMdN9StnJa8n90=";
   };
 
   dontConfigure = true;
@@ -25,6 +26,10 @@ stdenvNoCC.mkDerivation {
     cp -r * $out/etc/ananicy.d
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = {
     homepage = "https://github.com/CachyOS/ananicy-rules";

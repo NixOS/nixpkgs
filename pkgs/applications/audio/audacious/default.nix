@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString (audacious-plugins != null) ''
     ln -s ${audacious-plugins}/lib/audacious $out/lib
+    ln -s ${audacious-plugins}/share/audacious/Skins $out/share/audacious/
   '';
 
   meta = with lib; {

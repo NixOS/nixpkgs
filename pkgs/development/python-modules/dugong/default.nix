@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonAtLeast
 , pytestCheckHook
 }:
 
@@ -10,7 +9,6 @@ buildPythonPackage rec {
   pname = "dugong";
   version = "3.8.1";
   format = "setuptools";
-  disabled = pythonOlder "3.3";
 
   src = fetchFromGitHub {
     owner = "python-dugong";

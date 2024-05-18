@@ -442,6 +442,10 @@
     dependencies = with self; [ completion-nvim nvim-treesitter ];
   };
 
+  CopilotChat-nvim = super.CopilotChat-nvim.overrideAttrs {
+    dependencies = with self; [ copilot-lua plenary-nvim ];
+  };
+
   copilot-vim = super.copilot-vim.overrideAttrs {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/agent.vim \
@@ -837,6 +841,10 @@
 
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
+  };
+
+  luasnip = super.luasnip.overrideAttrs {
+    dependencies = with self; [ luaPackages.jsregexp ];
   };
 
   magma-nvim-goose = buildVimPlugin {

@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-
-, pythonOlder
-
 , setuptools
 }:
 
@@ -11,8 +8,6 @@ buildPythonPackage rec {
   pname = "hurry-filesize";
   version = "0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     pname = "hurry.filesize";

@@ -1,10 +1,8 @@
 { buildPythonPackage
 , lib
-, pythonOlder
 , fetchPypi
 , setuptools
 , six
-, enum34
 }:
 
 buildPythonPackage rec {
@@ -23,8 +21,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
   ];
 
   # checks use bazel; should be revisited

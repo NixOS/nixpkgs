@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+
 , lxml
 , pyproj
 , pytestCheckHook
@@ -10,12 +11,11 @@
 , pytz
 , pyyaml
 , requests
-, python
 }:
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.30.0";
+  version = "0.31.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = "refs/tags/${version}";
-    hash = "sha256-miKAgZBiqZ6+0qDvlf8+VZ6omH5hlImO0E7AVK7FuD0=";
+    rev = version;
+    hash = "sha256-vjJsLavVOqTTrVtYbtA0G+nl0HanKeGtzNFFj92Frw8=";
   };
 
   postPatch = ''

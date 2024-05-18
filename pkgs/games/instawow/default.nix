@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "instawow";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "layday";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-eHydxQxqHKTBrhiPl8coMNYYr7gNfKF4Tf8clbiq2HE=";
+    sha256 = "sha256-U4Y+P+fSyqxT0oHJXn2gwxPOJtnYBwaq9ca+FvGBUkA=";
   };
 
   extras = [ ];  # Disable GUI, most dependencies are not packaged.

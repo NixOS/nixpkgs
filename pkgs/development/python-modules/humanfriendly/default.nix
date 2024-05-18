@@ -1,8 +1,6 @@
 { lib
-, pythonOlder
 , buildPythonPackage
 , fetchPypi
-, monotonic
 }:
 
 buildPythonPackage rec {
@@ -14,8 +12,6 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc";
   };
-
-  propagatedBuildInputs = lib.optional (pythonOlder "3.3") monotonic;
 
   # humanfriendly tests depends on coloredlogs which itself depends on
   # humanfriendly. This lead to infinite recursion when trying to

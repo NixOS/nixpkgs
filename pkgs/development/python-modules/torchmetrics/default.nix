@@ -21,7 +21,7 @@
 
 let
   pname = "torchmetrics";
-  version = "1.4.0";
+  version = "1.4.0.post0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -33,7 +33,7 @@ buildPythonPackage {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5ANEpUdd5eyzBhhAEHrvHNHMOQuXhkkKuL1t3dJLhdE=";
+    hash = "sha256-tQqlLfdk8rSJqwR3rC7kqnM+pLFYZSPHfI7RmIi2Iq4=";
   };
 
   dependencies = [

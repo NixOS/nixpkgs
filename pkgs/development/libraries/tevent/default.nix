@@ -10,6 +10,7 @@
 , docbook_xml_dtd_42
 , which
 , wafHook
+, buildPackages
 , libxcrypt
 }:
 
@@ -52,6 +53,9 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.

@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub
 , pytestCheckHook, mock, pytest-cov, coverage
-, future, futures ? null, ujson}:
+, future, ujson}:
 
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
@@ -22,8 +22,7 @@ buildPythonPackage rec {
     pytestCheckHook mock pytest-cov coverage
   ];
 
-  propagatedBuildInputs = [ future ujson ]
-    ++ lib.optional (pythonOlder "3.2") futures;
+  propagatedBuildInputs = [ future ujson ];
 
   meta = with lib; {
     homepage = "https://github.com/palantir/python-jsonrpc-server";

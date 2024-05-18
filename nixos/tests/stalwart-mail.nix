@@ -40,12 +40,14 @@ in import ./make-test-python.nix ({ lib, ... }: {
           };
         };
 
-        session.auth.mechanisms = [ "PLAIN" ];
-        session.auth.directory = "in-memory";
-        storage.directory = "in-memory";  # shared with imap
+        resolver.public-suffix = [ ];  # do not fetch from web in sandbox
 
-        session.rcpt.directory = "in-memory";
-        queue.outbound.next-hop = [ "local" ];
+        session.auth.mechanisms = "[plain]";
+        session.auth.directory = "'in-memory'";
+        storage.directory = "in-memory";
+
+        session.rcpt.directory = "'in-memory'";
+        queue.outbound.next-hop = "'local'";
 
         directory."in-memory" = {
           type = "memory";

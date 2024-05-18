@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
     ++ lib.optional withLdap "--with-ldap"
     ++ lib.optional withVerto "--with-system-verto"
-    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
+    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
          "ac_cv_func_regcomp=yes"

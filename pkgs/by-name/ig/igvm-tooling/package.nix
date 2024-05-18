@@ -35,6 +35,14 @@ python3.pkgs.buildPythonApplication rec {
       sha256 = "sha256-hNfkclxaYViy66TPHqLV3mqD7wqBuBN9MnMLaDOeRNM=";
       stripLen = 1;
     })
+    # allow for determinist id block signing
+    # remove once https://github.com/microsoft/igvm-tooling/pull/55 is merged
+    (fetchpatch {
+      name = "0003-add-deterministic-id-block-signature-mode.patch";
+      url = "https://github.com/microsoft/igvm-tooling/commit/03ad7825ade76ac25e308bb85f92e89b732e0bf1.patch";
+      sha256 = "sha256-Y7DFr0KgGtY8KOt6fLWd32sTaig/zHFe7n83+Yb9ls8=";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''

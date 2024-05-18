@@ -3,14 +3,11 @@
 , fetchPypi
 , pyserial
 , pyudev
-, pythonOlder
 }:
 
 buildPythonApplication rec {
   pname = "rshell";
   version = "0.0.32";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

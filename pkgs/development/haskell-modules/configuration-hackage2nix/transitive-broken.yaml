@@ -633,12 +633,11 @@ dont-distribute-packages:
  - bdcs-api
  - beam-automigrate
  - beam-postgres
- - beam-sqlite
  - beam-th
  - bearriver
  - beautifHOL
  - bech32-th
- - beeminder-api
+ - bech32-th_1_1_6
  - bein
  - belka
  - bff
@@ -875,8 +874,6 @@ dont-distribute-packages:
  - cleff-plugin
  - cless
  - cleveland
- - cli-git
- - cli-nix
  - click-clack
  - clickhouse-haskell
  - clifford
@@ -1476,7 +1473,6 @@ dont-distribute-packages:
  - funion
  - funnyprint
  - funsat
- - fused-effects-squeal
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -1487,9 +1483,6 @@ dont-distribute-packages:
  - galois-fft
  - galois-field
  - gamma
- - gargoyle-postgresql
- - gargoyle-postgresql-connect
- - gargoyle-postgresql-nix
  - gbs-downloader
  - gbu
  - gdax
@@ -1918,7 +1911,6 @@ dont-distribute-packages:
  - haskanoid
  - haskdeep
  - haskeem
- - haskell-abci
  - haskell-admin
  - haskell-admin-health
  - haskell-admin-managed-functions
@@ -2430,7 +2422,6 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
- - json-sop
  - json-spec-elm
  - json-spec-elm-servant
  - json-spec-openapi
@@ -2539,7 +2530,6 @@ dont-distribute-packages:
  - language-qux
  - language-spelling
  - large-anon
- - large-records
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -2661,6 +2651,7 @@ dont-distribute-packages:
  - lol-typing
  - loli
  - longshot
+ - looksee
  - looksee-trip
  - loop-effin
  - lorentz
@@ -2751,6 +2742,7 @@ dont-distribute-packages:
  - metar-http
  - metronome
  - micro-gateway
+ - microdns
  - microformats2-types
  - midimory
  - mighttpd
@@ -2940,7 +2932,6 @@ dont-distribute-packages:
  - ngx-export-tools-extra
  - nikepub
  - nirum
- - nix-thunk
  - nkjp
  - nlp-scores-scripts
  - nom
@@ -3229,6 +3220,8 @@ dont-distribute-packages:
  - process-qq
  - process-streaming
  - procrastinating-structure
+ - prodapi-proxy
+ - prodapi-userauth
  - producer
  - product
  - prof2dot
@@ -3372,7 +3365,6 @@ dont-distribute-packages:
  - reflex-backend-wai
  - reflex-dom-colonnade
  - reflex-dynamic-containers
- - reflex-gadt-api
  - reflex-gloss-scene
  - reflex-libtelnet
  - reflex-localize
@@ -3671,7 +3663,6 @@ dont-distribute-packages:
  - si-clock
  - sibe
  - sigma-ij
- - signable
  - signals
  - signature
  - silvi
@@ -3781,6 +3772,7 @@ dont-distribute-packages:
  - sproxy
  - sproxy-web
  - sproxy2
+ - sq
  - sql-simple-mysql
  - sql-simple-pool
  - sql-simple-postgresql
@@ -3788,9 +3780,6 @@ dont-distribute-packages:
  - sqlcli-odbc
  - sqlite-simple-interpolate
  - sqlite-simple-typed
- - squeal-postgresql
- - squeal-postgresql-ltree
- - squeal-postgresql-uuid-ossp
  - squeeze
  - sr-extra
  - srt-dhall
@@ -4100,8 +4089,6 @@ dont-distribute-packages:
  - unitym-servant
  - unitym-yesod
  - universal
- - universe
- - universe-dependent-sum
  - universe-th
  - unix-fcntl
  - unpacked-these
@@ -4164,14 +4151,12 @@ dont-distribute-packages:
  - verifiable-expressions
  - verismith
  - versioning-servant
- - vessel
  - vflow-types
  - vformat-aeson
  - vformat-time
  - vfr-waypoints
  - vigilance
  - vimeta
- - vinyl-generics
  - vinyl-operational
  - vision
  - visual-graphrewrite

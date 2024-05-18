@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchzip
 , mkDerivation
 , stdenv
 , Cocoa
@@ -23,18 +22,18 @@
 , qtwebengine
 , qtx11extras
 , jellyfin-web
-, withDbus ? stdenv.isLinux, dbus
+, withDbus ? stdenv.isLinux
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-97/9UYXOsg8v7QoRqo5rh0UGhjjS85K9OvUwtlG249c=";
+    sha256 = "sha256-XeDyNSQpnTgV6u1vT69DEfbFHvBu1LNhvsQmKvUYq2o=";
   };
 
   patches = [

@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "queuelib";
-  version = "1.6.2";
+  version = "1.7.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b207267f2642a8699a1f806045c56eb7ad1a85a10c0e249884580d139c2fcd2";
+    sha256 = "sha256-KFUWIJbPAjBRCJCzVDeeocD/GdEF0xR9NJ0kM7siKwg=";
   };
 
   buildInputs = [ pytest ];

@@ -54,7 +54,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.40.2";
+  version = "4.41.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -63,14 +63,14 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GMoHWJAfQJ3y1DPs9+geNdzD72rwMVEG0GLPYEvbo/E=";
+    hash = "sha256-FUYQeEksjDasFvQraycNFAx3cLHfDdPpgZssqN8OIJw=";
   };
 
   build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filelock
     huggingface-hub
     numpy

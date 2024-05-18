@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 
 # build-system
 , flit-core
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "willow";
   version = "1.8.0";
   format = "pyproject";
-
-  disabled = pythonOlder "2.7";
 
   src = fetchFromGitHub {
     owner = "wagtail";

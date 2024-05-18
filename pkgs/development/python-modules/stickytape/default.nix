@@ -1,18 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
-, pytestCheckHook
-, pythonOlder
-, spur
 }:
 
 buildPythonPackage rec {
   pname = "stickytape";
   version = "0.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";

@@ -5,6 +5,7 @@
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
 , linuxPackages
+, nixosTests
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -268,6 +269,7 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit extensionPack; # for inclusion in profile to prevent gc
+    tests = nixosTests.virtualbox;
     updateScript = ./update.sh;
   };
 

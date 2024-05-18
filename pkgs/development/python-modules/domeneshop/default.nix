@@ -1,12 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , setuptools
 , urllib3
-, pyopenssl
-, cryptography
-, idna
 , certifi
 }:
 
@@ -14,8 +10,6 @@ buildPythonPackage rec {
   pname = "domeneshop";
   version = "0.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

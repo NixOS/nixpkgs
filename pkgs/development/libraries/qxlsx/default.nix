@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qxlsx";
-  version = "1.4.7";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
     rev = "v${version}";
-    hash = "sha256-E3x2IUPMRmPSTRN01sXJ0PZaN7iBzatr2vwan2sZxf0=";
+    hash = "sha256-mMhe4yztU9I/zJFbj/0GNiIoSy7U4rQ1Y3mDvvHNKXk=";
   };
 
   nativeBuildInputs = [ cmake ];

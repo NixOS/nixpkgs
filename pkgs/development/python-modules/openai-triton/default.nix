@@ -189,7 +189,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/openai/triton";
-    platforms = lib.platforms.unix;
+    platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge Madouura ];
   };
