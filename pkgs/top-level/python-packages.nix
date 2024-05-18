@@ -13283,6 +13283,8 @@ self: super: with self; {
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 
+  rio-tiler = callPackage ../development/python-modules/rio-tiler { };
+
   rioxarray = callPackage ../development/python-modules/rioxarray { };
 
   ripe-atlas-cousteau = callPackage ../development/python-modules/ripe-atlas-cousteau { };
