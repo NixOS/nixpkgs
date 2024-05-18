@@ -125,5 +125,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ chvp ];
     platforms = subtractLists platforms.i686 platforms.linux;
+    mainProgram = "0ad";
   };
 }

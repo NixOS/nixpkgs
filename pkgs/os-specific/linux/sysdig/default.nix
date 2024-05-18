@@ -3,7 +3,7 @@
 , protobuf, grpc, yaml-cpp, nlohmann_json, re2, zstd, uthash }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/0.37.0/cmake/modules/falcosecurity-libs.cmake
+  # Compare with https://github.com/draios/sysdig/blob/0.37.1/cmake/modules/falcosecurity-libs.cmake
   libsRev = "0.16.0";
   libsHash = "sha256-aduO2pLj91tRdZ1dW1F1JFEg//SopialXWPd6Oav/u8=";
 
@@ -15,7 +15,7 @@ let
     hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.37.0/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.37.1/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
@@ -23,7 +23,7 @@ let
     hash = "sha256-FIlnJsNgofGo4HETEEpW28wpC3U9z5AZprwFR5AgFfA=";
   };
 
-  version = "0.37.0";
+  version = "0.37.1";
 in stdenv.mkDerivation {
   pname = "sysdig";
   inherit version;
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-vEkwh+iSXlIraDzy9+ujr0ijNWX7oB7ZQi7H+jYi688=";
+    hash = "sha256-V1rvQ6ZznL9UiUFW2lyW6gvdoGttOd5kgT2KPQCjmvQ=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
