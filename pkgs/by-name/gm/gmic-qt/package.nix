@@ -20,9 +20,11 @@
   nix-update,
   openexr,
   pkg-config,
+  runtimeShell,
   stdenv,
-  writeShellScript,
+  substituteAll,
   zlib,
+  # Configurable options
   variant ? "standalone",
 }:
 
@@ -112,31 +114,18 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cimg gmic;
     };
 
-    updateScript = writeShellScript "gmic-qt-update-script" ''
-      set -euo pipefail
-
-      export PATH="${
-        lib.makeBinPath [
-          coreutils
-          curl
-          gnugrep
-          gnused
-          nix-update
-        ]
-      }:$PATH"
-
-      latestVersion=$(curl 'https://gmic.eu/files/source/' \
-                       | grep -E 'gmic_[^"]+\.tar\.gz' \
-                       | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' \
-                       | sort --numeric-sort --reverse | head -n1)
-
-      if [[ '${finalAttrs.version}' = "$latestVersion" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-
-      nix-update --version "$latestVersion"
-    '';
+    updateScript = substituteAll {
+      src = ./update-script.sh;
+      inherit runtimeShell;
+      inherit (finalAttrs) version;
+      pathTools = lib.makeBinPath [
+        coreutils
+        curl
+        gnugrep
+        gnused
+        nix-update
+      ];
+    };
   };
 
   meta = {
