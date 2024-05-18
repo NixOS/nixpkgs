@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "plymouth-matrix-theme";
-  version = "0.1.0-unstable-19-02-2017";
+  version = "0.1.0-unstable-2017-02-19";
 
   src = fetchFromGitHub {
     owner = "storax";
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater;
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Plymouth boot theme inspired by Matrix";
