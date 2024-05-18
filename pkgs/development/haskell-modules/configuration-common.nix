@@ -3098,6 +3098,12 @@ self: super: {
     tasty-quickcheck = super.tasty-quickcheck_0_10_3;
   });
 
+  # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
+  commutative-semigroups = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/commutative-semigroups/commit/e031495dd24ae73ffb808eca34e993f5df8e8d76.patch";
+    hash = "sha256-d7AwvGGUJlh/sOXaAbfQLCay6+JyNInb73TTGKkBDz8=";
+  }) super.commutative-semigroups;
+
   # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
   currencies = doJailbreak super.currencies;
 
