@@ -1,31 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mortgage";
   version = "1.0.5";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version pname;
-    sha256 = "18fcb356c631e9cc27fa7019f6ff6021707e34b9ce3a3b7dc815661288709921";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jlumbroso";
+    repo = "mortgage";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UwSEKfMQqxpcF+7TF/+qD6l8gEO/qDCUklpZz1Nt/Ok=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  doCheck = false; # No tests in sdist
+  pythonImportsCheck = [
+    "mortgage"
+  ];
 
-  disabled = pythonOlder "3.5";
-
-  meta = {
+  meta = with lib; {
     description = "Mortgage calculator";
-    license = lib.licenses.mit;
+    homepage = "https://github.com/jlumbroso/mortgage";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }
