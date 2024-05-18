@@ -844,11 +844,11 @@
         "src": {
             "owner": "libretro",
             "repo": "tic-80",
-            "rev": "bd6ce86174fc7c9d7d3a86263acf3a7de1b62c11",
+            "rev": "6412f72d0f4725c153ce3d245729b829e713542e",
             "hash": "sha256-RFp8sTSRwD+cgW3EYk3nBeY+zVKgZVQI5mjtfe2a64Q=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2022-06-11"
+        "version": "unstable-2024-05-13"
     },
     "vba-m": {
         "fetcher": "fetchFromGitHub",
