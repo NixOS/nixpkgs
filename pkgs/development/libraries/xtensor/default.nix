@@ -32,7 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck )
+    # Always build the tests, even if not running them, because testing whether
+    # they can be built is a test in itself.
+    (lib.cmakeBool "BUILD_TESTS" true)
     (lib.cmakeBool "XTENSOR_ENABLE_ASSERT" enableAssertions)
     (lib.cmakeBool "XTENSOR_CHECK_DIMENSION" enableBoundChecks)
   ];
