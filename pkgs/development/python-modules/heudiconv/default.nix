@@ -62,6 +62,11 @@ buildPythonPackage rec {
     "heudiconv"
   ];
 
+  disabledTests = [
+    # No such file or directory
+    "test_bvals_are_zero"
+  ];
+
   meta = with lib; {
     description = "Flexible DICOM converter for organizing imaging data";
     homepage = "https://heudiconv.readthedocs.io";
