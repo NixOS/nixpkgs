@@ -81,8 +81,6 @@ python3.pkgs.buildPythonApplication rec {
     libxcrypt
   ];
 
-  propagatedNativeBuildInputs = lib.optionals stdenv.isFreeBSD [ buildPackages.freebsd.ldd ];
-
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
@@ -130,9 +128,6 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isFreeBSD [
     # pch doesn't work quite right on FreeBSD, I think
     ''test cases/common/13 pch''
-    # tests hardcode lib instead of libdata, which FreeBSD uses
-    ''test cases/common/44 pkgconfig-gen''
-    ''test cases/common/230 external project''
   ]))
   ++ [
     ''HOME="$TMPDIR" python ./run_project_tests.py''
