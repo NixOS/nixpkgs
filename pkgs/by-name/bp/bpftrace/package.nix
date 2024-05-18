@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     mainProgram = "bpftrace";
     license     = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice martinetd mfrw ];
+    platforms   = platforms.linux;
   };
 }
