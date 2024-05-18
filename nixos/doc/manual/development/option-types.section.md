@@ -334,7 +334,7 @@ Composed types are types that take a type as parameter. `listOf
     the line `The option <option path> is defined multiple times.` and before
     a list of definition locations.
 
-`types.attrTag` *`{ attr1 = t1; attr2 = t2; ... }`*
+`types.attrTag` *`{ attr1 = opt1; attr2 = opt2; ... }`*
 
 :   An attribute set containing one attribute, whose name must be picked from
     the attribute set (`attr1`, etc) and whose value must be of the accompanying
