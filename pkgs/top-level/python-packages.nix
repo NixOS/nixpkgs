@@ -6879,6 +6879,8 @@ self: super: with self; {
     inherit (self) python libxml2;
   })).py;
 
+  libyaz0 = callPackage ../development/python-modules/libyaz0 { };
+
   liccheck = callPackage ../development/python-modules/liccheck { };
 
   license-expression = callPackage ../development/python-modules/license-expression { };
