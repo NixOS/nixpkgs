@@ -2897,7 +2897,6 @@ broken-packages:
   - hts # failure in job https://hydra.nixos.org/build/233256407 at 2023-09-02
   - htsn # failure in job https://hydra.nixos.org/build/233197004 at 2023-09-02
   - htssets # failure in job https://hydra.nixos.org/build/233195420 at 2023-09-02
-  - http2-client # failure in job https://hydra.nixos.org/build/233214193 at 2023-09-02
   - http2-grpc-types # failure in job https://hydra.nixos.org/build/233197769 at 2023-09-02
   - http2-tls # failure in job https://hydra.nixos.org/build/233227095 at 2023-09-02
   - http-attoparsec # failure in job https://hydra.nixos.org/build/233233534 at 2023-09-02
