@@ -26677,8 +26677,6 @@ with pkgs;
 
   zookeeper = callPackage ../servers/zookeeper { };
 
-  solid-server = callPackage ../servers/solid-server { };
-
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
 
   xqilla = callPackage ../development/tools/xqilla { };
