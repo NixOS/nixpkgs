@@ -4,7 +4,7 @@ let
   cfg = config.security.loginDefs;
 in
 {
-  options = with lib.types; {
+  options = {
 
     security.shadow.enable = lib.mkEnableOption "" // {
       default = true;
@@ -23,7 +23,7 @@ in
         description = ''
           Use chfn SUID to allow non-root users to change their account GECOS information.
         '';
-        type = nullOr str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
       };
 
@@ -33,7 +33,7 @@ in
           the site-specific configuration for the shadow password suite.
           See login.defs(5) man page for available options.
         '';
-        type = submodule {
+        type = lib.types.submodule {
           freeformType = (pkgs.formats.keyValue { }).type;
           /* There are three different sources for user/group id ranges, each of which gets
              used by different programs:
@@ -48,62 +48,62 @@ in
             DEFAULT_HOME = lib.mkOption {
               description = "Indicate if login is allowed if we can't cd to the home directory.";
               default = "yes";
-              type = enum [ "yes" "no" ];
+              type = lib.types.enum [ "yes" "no" ];
             };
 
             ENCRYPT_METHOD = lib.mkOption {
               description = "This defines the system default encryption algorithm for encrypting passwords.";
               # The default crypt() method, keep in sync with the PAM default
               default = "YESCRYPT";
-              type = enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
+              type = lib.types.enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
             };
 
             SYS_UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 400;
-              type = int;
+              type = lib.types.int;
             };
 
             SYS_UID_MAX = lib.mkOption {
               description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 999;
-              type = int;
+              type = lib.types.int;
             };
 
             UID_MIN = lib.mkOption {
               description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 1000;
-              type = int;
+              type = lib.types.int;
             };
 
             UID_MAX = lib.mkOption {
               description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 29999;
-              type = int;
+              type = lib.types.int;
             };
 
             SYS_GID_MIN = lib.mkOption {
               description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 400;
-              type = int;
+              type = lib.types.int;
             };
 
             SYS_GID_MAX = lib.mkOption {
               description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 999;
-              type = int;
+              type = lib.types.int;
             };
 
             GID_MIN = lib.mkOption {
               description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 1000;
-              type = int;
+              type = lib.types.int;
             };
 
             GID_MAX = lib.mkOption {
               description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 29999;
-              type = int;
+              type = lib.types.int;
             };
 
             TTYGROUP = lib.mkOption {
@@ -111,7 +111,7 @@ in
                 The terminal permissions: the login tty will be owned by the TTYGROUP group,
                 and the permissions will be set to TTYPERM'';
               default = "tty";
-              type = str;
+              type = lib.types.str;
             };
 
             TTYPERM = lib.mkOption {
@@ -119,14 +119,14 @@ in
                 The terminal permissions: the login tty will be owned by the TTYGROUP group,
                 and the permissions will be set to TTYPERM'';
               default = "0620";
-              type = str;
+              type = lib.types.str;
             };
 
             # Ensure privacy for newly created home directories.
             UMASK = lib.mkOption {
               description = "The file mode creation mask is initialized to this value.";
               default = "077";
-              type = str;
+              type = lib.types.str;
             };
           };
         };
@@ -143,7 +143,7 @@ in
         used outside the store (in particular in /etc/passwd).
       '';
       example = lib.literalExpression "pkgs.zsh";
-      type = either path shellPackage;
+      type = lib.types.either lib.types.path lib.types.shellPackage;
     };
   };
 
@@ -178,12 +178,11 @@ in
         }
       ];
 
-      security.loginDefs.settings.CHFN_RESTRICT =
-        lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
+      security.loginDefs.settings.CHFN_RESTRICT = lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
 
       environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
-                                   ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
-                                   ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
+        ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
+        ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
       environment.etc =
         # Create custom toKeyValue generator
@@ -192,23 +191,22 @@ in
           toKeyValue = lib.generators.toKeyValue {
             mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
           };
-        in
-          {
-            # /etc/login.defs: global configuration for pwdutils.
-            # You cannot login without it!
-            "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
+        in {
+          # /etc/login.defs: global configuration for pwdutils.
+          # You cannot login without it!
+          "login.defs".source = pkgs.writeText "login.defs" (toKeyValue cfg.settings);
 
-            # /etc/default/useradd: configuration for useradd.
-            "default/useradd".source = pkgs.writeText "useradd" ''
-          GROUP=100
-          HOME=/home
-          SHELL=${utils.toShellPath config.users.defaultUserShell}
-        '';
-          };
+          # /etc/default/useradd: configuration for useradd.
+          "default/useradd".source = pkgs.writeText "useradd" ''
+            GROUP=100
+            HOME=/home
+            SHELL=${utils.toShellPath config.users.defaultUserShell}
+          '';
+        };
 
       security.pam.services = {
-        chsh = { rootOK = true; };
-        chfn = { rootOK = true; };
+        chsh.rootOK = true;
+        chfn.rootOK = true;
         su = {
           rootOK = true;
           forwardXAuth = true;
@@ -231,7 +229,7 @@ in
           showMotd = true;
           updateWtmp = true;
         };
-        chpasswd = { rootOK = true; };
+        chpasswd.rootOK = true;
       };
 
       security.wrappers =
