@@ -32,11 +32,17 @@ buildPythonPackage rec {
     hash = "sha256-Rc4/S8BrYoLdn7eHDBaoUt1Qy+h0TMAN5ixCAuRmfPU=";
   };
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  dontUseCmakeConfigure = true;
+
   postPatch = ''
-    substituteInPlace pyproject.toml --replace '"conan~=2.0.16",' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"conan~=2.0.16",' "" \
+      --replace-fail '"pybind11~=2.11.1",' '"pybind11",'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
     pybind11
@@ -44,12 +50,14 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
+
   buildInputs = [
     charls
     eigen
     fmt
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     numpy
     pillow
     pathspec
@@ -57,14 +65,10 @@ buildPythonPackage rec {
   ];
 
   pypaBuildFlags = [ "-C" "cmake.args='--preset=sysdeps'" ];
-  dontUseCmakeConfigure = true;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
-  # prevent importing from build during test collection:
+  # Prevent importing from build during test collection:
   preCheck = ''rm -rf pillow_jpls'';
 
   pythonImportsCheck = [
@@ -74,6 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A JPEG-LS plugin for the Python Pillow library";
     homepage = "https://github.com/planetmarshall/pillow-jpls";
+    changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
