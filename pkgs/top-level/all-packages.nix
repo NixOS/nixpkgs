@@ -27817,7 +27817,9 @@ with pkgs;
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
-  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel { };
+  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   setools = callPackage ../os-specific/linux/setools { };
 
@@ -33462,8 +33464,6 @@ with pkgs;
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
     openexr = openexr_3;
   };
-
-  openjump = callPackage ../applications/misc/openjump { };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
