@@ -38,6 +38,8 @@ buildPythonPackage rec {
   disabledTests = [
     # incompatible with flask 2.3
     "test_redirect_location_is_https_for_secure_server"
+    # Timeout on Hydra
+    "test_dont_crash_on_handshake_timeout"
   ];
 
   __darwinAllowLocalNetworking = true;
