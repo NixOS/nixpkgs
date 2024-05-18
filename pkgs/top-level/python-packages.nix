@@ -7667,6 +7667,8 @@ self: super: with self; {
 
   more-properties = callPackage ../development/python-modules/more-properties { };
 
+  morecantile = callPackage ../development/python-modules/morecantile { };
+
   moreorless = callPackage ../development/python-modules/moreorless { };
 
   moretools = callPackage ../development/python-modules/moretools { };
