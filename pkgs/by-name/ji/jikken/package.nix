@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+      IOKit
+      Security
+      SystemConfiguration
+    ]);
 
   passthru.updateScript = nix-update-script { };
 
