@@ -75,7 +75,7 @@ in {
         kio # provides helper service + a bunch of other stuff
         kio-admin # managing files as admin
         kio-extras # stuff for MTP, AFC, etc
-        kio-fuse # fuse interaction
+        kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
         kwallet # provides helper service
@@ -97,13 +97,12 @@ in {
         kwrited # wall message proxy, not to be confused with kwrite
         baloo # system indexer
         milou # search engine atop baloo
-        ffmpegthumbs # video thumbnailer
         kdegraphics-thumbnailers # pdf etc thumbnailer
         polkit-kde-agent-1 # polkit auth ui
         plasma-desktop
         plasma-workspace
         drkonqi # crash handler
-        kde-inotify-survey # handles running out of inodes
+        kde-inotify-survey # warns the user on low inotifywatch limits
 
         # Application integration
         libplasma # provides Kirigami platform theme
@@ -147,6 +146,7 @@ in {
         dolphin
         dolphin-plugins
         spectacle
+        ffmpegthumbs
       ];
     in
       requiredPackages
