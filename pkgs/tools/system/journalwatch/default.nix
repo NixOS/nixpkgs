@@ -1,9 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, systemd, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, systemd, pytest }:
 
 buildPythonPackage rec {
   pname = "journalwatch";
   version = "1.1.0";
-  disabled = pythonOlder "3.3";
 
   src = fetchFromGitHub {
     owner = "The-Compiler";

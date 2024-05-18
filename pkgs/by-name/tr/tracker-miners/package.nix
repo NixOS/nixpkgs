@@ -45,13 +45,13 @@
 , e2fsprogs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracker-miners";
-  version = "3.7.2";
+  version = "3.7.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-608rKIoMvp5hSHHLAEgnRGHP4cuEZ6yBexAtOHPby6U=";
+    url = "mirror://gnome/sources/tracker-miners/${lib.versions.majorMinor finalAttrs.version}/tracker-miners-${finalAttrs.version}.tar.xz";
+    hash = "sha256-50OIFUtcGXtLfuQvDc6MX7vd1NNhCT74jU+zA+M9pf4=";
   };
 
   nativeBuildInputs = [
@@ -130,15 +130,15 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "tracker-miners";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/tracker-miners";
     description = "Desktop-neutral user information store, search tool and indexer";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

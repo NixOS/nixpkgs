@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-mockery";
-  version = "2.43.0";
+  version = "2.43.1";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
-    sha256 = "sha256-R3J6TZO28x0I6vHjm5X7nMiJBhHuMIYdfp7IUNtu4Do=";
+    sha256 = "sha256-q4N8tAWlJ+P30KvOnt3AdO9Lee2Mg8mCBUXfT+i4m10=";
   };
 
   preCheck = ''
