@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , future
-, fetchFromGitHub
+, fetchPypi
 , setuptools-scm
 , pythonOlder
 }:
@@ -13,11 +13,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "erocarrera";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-lD8GpNl+cVNYTZUKFRF1/2kDwEbn/ekRBNBTYuFmFW0=";
+  # DON'T fetch from github, the repo is >60 MB due to test artifacts, which we cannot use
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-guYRQASz1pEcd8OVPjg4ZUsEURuLZuhYPbcMZZmAF9w=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     future
   ];
 
-  # Test data encrypted
+  # Test data contains properitary executables and malware, and is therefore encrypted
   doCheck = false;
 
   pythonImportsCheck = [
