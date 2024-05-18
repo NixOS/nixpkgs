@@ -7,28 +7,28 @@
   python3,
   fetchPypi,
   imagemagick,
-  feh,
+  swww, #feh
   ...
 }:
 
 python3.pkgs.buildPythonPackage rec {
-  pname = "pywal";
-  version = "3.3.0";
+  pname = "pywal16";
+  version = "3.5.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1drha9kshidw908k7h3gd9ws2bl64ms7bjcsa83pwb3hqa9bkspg";
+    sha256 = "sha256-Jr4yJqbFVqQHoOgKIWyEM4b7sacFIEvhxakcS5ozM+I=";
   };
 
   patches = [
-    ./feh.patch
+    # ./feh.patch
     ./convert.patch
   ];
 
+    # substituteInPlace pywal/wallpaper.py --subst-var-by feh "${feh}/bin/feh"
   postPatch = ''
     substituteInPlace pywal/backends/wal.py --subst-var-by convert "${imagemagick}/bin/convert"
-    substituteInPlace pywal/wallpaper.py --subst-var-by feh "${feh}/bin/feh"
   '';
 
   preCheck = ''
