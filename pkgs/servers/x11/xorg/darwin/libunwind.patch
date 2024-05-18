@@ -1,0 +1,53 @@
+diff -ur a/os/backtrace.c b/os/backtrace.c
+--- a/os/backtrace.c	2024-04-12 13:17:00.000000000 -0400
++++ b/os/backtrace.c	2024-05-17 21:02:02.049859348 -0400
+@@ -40,6 +40,40 @@
+ #endif
+ #include <dlfcn.h>
+ 
++static const char* unw_strerror(int error_code)
++{
++    switch (error_code) {
++    case UNW_ESUCCESS:
++        return "no error";
++    case UNW_EUNSPEC:
++        return "unspecified (general) error";
++    case UNW_ENOMEM:
++        return "out of memory";
++    case UNW_EBADREG:
++        return "bad register number";
++    case UNW_EREADONLYREG:
++        return "attempt to write read-only register";
++    case UNW_ESTOPUNWIND:
++        return "stop unwinding";
++    case UNW_EINVALIDIP:
++        return "invalid IP";
++    case UNW_EBADFRAME:
++        return "bad frame";
++    case UNW_EINVAL:
++        return "unsupported operation or bad value";
++    case UNW_EBADVERSION:
++        return "unwind info has unsupported version";
++    case UNW_ENOINFO:
++        return "no unwind info found";
++#if defined(_LIBUNWIND_TARGET_AARCH64) && !defined(_LIBUNWIND_IS_NATIVE_ONLY)
++    case UNW_ECROSSRASIGNING:
++        return "cross unwind with return address signing";
++#endif
++    default:
++        return "unknown error occurred";
++    }
++}
++
+ void
+ xorg_backtrace(void)
+ {
+@@ -53,7 +87,7 @@
+     const char *filename;
+     Dl_info dlinfo;
+ 
+-    pip.unwind_info = NULL;
++    pip.unwind_info = 0;
+     ret = unw_getcontext(&context);
+     if (ret) {
+         ErrorFSigSafe("unw_getcontext failed: %s [%d]\n", unw_strerror(ret),

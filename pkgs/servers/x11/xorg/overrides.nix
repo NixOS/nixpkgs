@@ -864,6 +864,8 @@ self: super:
           })
           ./darwin/bundle_main.patch
           ./darwin/stub.patch
+          # Fixes incompatibility with LLVM libunwind
+          ./darwin/libunwind.patch
         ];
 
         postPatch = attrs.postPatch + ''
