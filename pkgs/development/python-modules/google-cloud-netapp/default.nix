@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.9";
+  version = "0.3.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Vohliy9W+fkY4YmSIvw6WiWVlLBk+Fo9CvZG/VKeU1o=";
+    hash = "sha256-Bau1Xqb+lmG6aCoWm93mtfOII7CbnnaeZ5vmLp6n0Zs=";
   };
 
   build-system = [
