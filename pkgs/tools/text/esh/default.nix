@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # file 5.41-5.43 but regressed in 5.44+
   # see https://bugs.astron.com/view.php?id=276
   # "can" verdict because of `-s SHELL` arg
-  passthru.lore = (binlore.synthesize esh ''
+  passthru.binlore = (binlore.synthesize esh ''
     execer can bin/esh
   '');
 

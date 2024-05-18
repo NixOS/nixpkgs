@@ -54,7 +54,7 @@ substitute {
   # nixos-rebuild can’t execute its arguments
   # (but it can run ssh with the with the options stored in $NIX_SSHOPTS,
   # and ssh can execute its arguments...)
-  passthru.lore = (binlore.synthesize nixos-rebuild ''
+  passthru.binlore = (binlore.synthesize nixos-rebuild ''
     execer cannot bin/nixos-rebuild
   '');
 

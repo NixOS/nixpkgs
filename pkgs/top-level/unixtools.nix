@@ -30,8 +30,8 @@ let
         priority = 10;
         platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
       };
-      passthru = { inherit provider; } // lib.optionalAttrs (builtins.hasAttr "lore" providers) {
-        lore = (binlore.synthesize (getBin bins.${cmd}) providers.lore);
+      passthru = { inherit provider; } // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
+        binlore = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
       };
       preferLocalBuild = true;
     } ''
@@ -79,7 +79,7 @@ let
               else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
       # I don't see any obvious arg exec in the doc/manpage
-      lore = ''
+      binlore = ''
         execer cannot bin/getconf
       '';
     };
@@ -126,7 +126,7 @@ let
       freebsd = pkgs.freebsd.locale;
       # technically just targeting glibc version
       # no obvious exec in manpage
-      lore = ''
+      binlore = ''
         execer cannot bin/locale
       '';
     };
@@ -145,7 +145,7 @@ let
       # ids the util-linux copy as 'cannot'
       # no obvious exec in manpage args; I think binlore flags 'can'
       # on the code to run `mount_<filesystem>` variants
-      lore = ''
+      binlore = ''
         execer cannot bin/mount
       '';
     };
@@ -166,7 +166,7 @@ let
       # technically just targeting procps ps (which ids as can)
       # but I don't see obvious exec in args; have yet to look
       # for underlying cause in source
-      lore = ''
+      binlore = ''
         execer cannot bin/ps
       '';
     };
@@ -196,7 +196,7 @@ let
       # any scripts so far, but overriding it for consistency with ps
       # override above and in procps. (procps also overrides 'free',
       # but it isn't included here.)
-      lore = ''
+      binlore = ''
         execer cannot bin/top
       '';
     };

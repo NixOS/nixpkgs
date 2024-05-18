@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   # bsdtar is detected as "cannot" because its exec is internal to
   # calls it makes into libarchive itself. If binlore gains support
   # for detecting another layer down into libraries, this can be cut.
-  passthru.lore = (binlore.synthesize finalAttrs.finalPackage ''
+  passthru.binlore = (binlore.synthesize finalAttrs.finalPackage ''
     execer can bin/bsdtar
   '');
 })

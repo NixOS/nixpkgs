@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   # no obvious exec in documented arguments; haven't trawled source
   # to figure out what exec binlore hits on
-  passthru.lore = (binlore.synthesize procps ''
+  passthru.binlore = (binlore.synthesize procps ''
     execer cannot bin/{ps,top,free}
   '');
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ e2fsprogs openldap ];
 
-  passthru.lore = (binlore.synthesize linuxquota ''
+  passthru.binlore = (binlore.synthesize linuxquota ''
     execer cannot bin/quota
   '');
 

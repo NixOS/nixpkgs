@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Happy to have someone help nail this down in either direction!
   # The "capability" is 'iprog', and I could only find 1 real example:
   # https://invisible-island.net/ncurses/terminfo.ti.html#tic-linux-s
-  passthru.lore = (binlore.synthesize ncurses ''
+  passthru.binlore = (binlore.synthesize ncurses ''
     execer cannot bin/{reset,tput,tset}
   '');
 

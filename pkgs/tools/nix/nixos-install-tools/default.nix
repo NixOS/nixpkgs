@@ -66,7 +66,7 @@ in
 
   # no documented flags show signs of exec; skim of source suggests
   # it's just --help execing man
-  passthru.lore = (binlore.synthesize nixos-install-tools ''
+  passthru.binlore = (binlore.synthesize nixos-install-tools ''
     execer cannot bin/nixos-generate-config
   '');
 }).overrideAttrs {

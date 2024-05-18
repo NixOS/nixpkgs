@@ -96,10 +96,10 @@ in rec {
 
     This produces lore for the derivation (via lore.callback) and
     appends any lore that the derivation itself wrote to nix-support
-    or which was overridden in drv.lore (passthru).
+    or which was overridden in drv.binlore (passthru).
 
     Since the last entry wins, the effective priority is:
-    drv.lore > $drv/nix-support > lore generated here by callback
+    drv.binlore > $drv/nix-support > lore generated here by callback
   */
   make = lore: drv: runCommand "${drv.name}-binlore" {
       drv = drv;
@@ -109,15 +109,15 @@ in rec {
 
     ${lore.callback lore drv}
     '' +
-    # append lore from package's $out and drv.lore (last entry wins)
+    # append lore from package's $out and drv.binlore (last entry wins)
     ''
     for lore_type in ${builtins.toString lore.types}; do
       if [[ -f "${drv}/nix-support/$lore_type" ]]; then
         cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
       fi
-      '' + lib.optionalString (builtins.hasAttr "lore" drv) ''
-      if [[ -f "${drv.lore}/$lore_type" ]]; then
-        cat "${drv.lore}/$lore_type" >> "$out/$lore_type"
+      '' + lib.optionalString (builtins.hasAttr "binlore" drv) ''
+      if [[ -f "${drv.binlore}/$lore_type" ]]; then
+        cat "${drv.binlore}/$lore_type" >> "$out/$lore_type"
       fi
       '' + ''
     done
@@ -128,7 +128,11 @@ in rec {
   /*
     Utility function for creating override lore for drv.
 
-    In the normal case, we attach this lore to `drv.passthru.lore`.
+    In the normal case, we attach this lore to `drv.passthru.binlore`.
+
+    > *Note*: We can reconsider the passthru attr name if someone adds
+    > a new lore provider. We settled on `.binlore` for now to make it
+    > easier for people to figure out what this is for.
 
     The lore argument should be a Shell script (string) that generates
     the necessary lore. You can use arbitrary Shell, but this function
@@ -144,7 +148,7 @@ in rec {
 
     Here's a very general example of both functions:
 
-    passthru.lore = (binlore.synthesize finalAttrs.finalPackage ''
+    passthru.binlore = (binlore.synthesize finalAttrs.finalPackage ''
       execer can bin/hello bin/{a,b,c}
       wrapper bin/hello bin/.hello-wrapped
     '');
@@ -154,7 +158,7 @@ in rec {
     being both explicit and (somewhat) efficient:
 
     passthru = {} // optionalAttrs (singleBinary != false) {
-      lore = (binlore.synthesize coreutils ''
+      binlore = (binlore.synthesize coreutils ''
         execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
         execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
       '');
