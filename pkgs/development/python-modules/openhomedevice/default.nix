@@ -6,23 +6,28 @@
 , lxml
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "openhomedevice";
   version = "2.2";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bazwilliams";
-    repo = pname;
+    repo = "openhomedevice";
     rev = "refs/tags/${version}";
     hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     async-upnp-client
     lxml
   ];
