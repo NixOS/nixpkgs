@@ -14,13 +14,12 @@
 , pythonOlder
 , setuptools
 , versioningit
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "heudiconv";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -31,22 +30,21 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "versioningit ~=" "versioningit >="
+      --replace-fail "versioningit ~=" "versioningit >="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
-  propagatedBuildInputs = [
-    nibabel
-    pydicom
-    nipype
+  dependencies = [
     dcmstack
     etelemetry
     filelock
+    nibabel
+    nipype
+    pydicom
   ];
 
   nativeCheckInputs = [
@@ -65,8 +63,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
+    homepage = "https://heudiconv.readthedocs.io";
     changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
