@@ -631,10 +631,10 @@
         "src": {
             "owner": "libretro",
             "repo": "pcsx_rearmed",
-            "rev": "87a0a6318564fc171d0b576da8ea7e629aa229e7",
-            "hash": "sha256-quIvyfigl/4itSldj73HpZezeHQwVGlz/jQvwmmsDik="
+            "rev": "db02598e737b8d50cd347fe2ef13cb85ade051dd",
+            "hash": "sha256-BgqwKbmRXKIMfv8xPBH38wTMSVWvkFKOJCb0emZkx5Y="
         },
-        "version": "unstable-2024-04-22"
+        "version": "unstable-2024-05-17"
     },
     "picodrive": {
         "fetcher": "fetchFromGitHub",
