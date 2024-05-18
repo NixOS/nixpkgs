@@ -31,7 +31,9 @@ toPythonModule (stdenv.mkDerivation(finalAttrs: {
   ];
   doCheck = true;
   cmakeFlags = [
-    "-DBUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    # Always build the tests, even if not running them, because testing whether
+    # they can be built is a test in itself.
+    "-DBUILD_TESTS=ON"
   ];
 
   propagatedBuildInputs = [
