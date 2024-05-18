@@ -7,6 +7,7 @@
 , psycopg2
 , python
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
 , setuptools-scm
 , tablib
@@ -15,22 +16,30 @@
 buildPythonPackage rec {
   pname = "django-import-export";
   version = "4.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-import-export";
-    repo = pname;
+    repo = "django-import-export";
     rev = "refs/tags/${version}";
     hash = "sha256-ItJx9yJSy88/OvkpjGDWGBOMk5YlSquicSWi0tbKeWE=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [
+    "tablib"
+  ];
+
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     diff-match-patch
     django
     tablib
