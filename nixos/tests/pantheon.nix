@@ -83,10 +83,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_window("io.elementary.calendar")
 
     with subtest("Open system settings"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.switchboard >&2 &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.settings >&2 &'")
         # Wait for all plugins to be loaded before we check if the window is still there.
         machine.sleep(5)
-        machine.wait_for_window("io.elementary.switchboard")
+        machine.wait_for_window("io.elementary.settings")
 
     with subtest("Open elementary terminal"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal >&2 &'")
