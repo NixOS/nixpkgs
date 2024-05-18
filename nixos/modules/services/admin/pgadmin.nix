@@ -182,7 +182,8 @@ in
         LogsDirectory = "pgadmin";
         StateDirectory = "pgadmin";
         ExecStart = "${cfg.package}/bin/pgadmin4";
-        LoadCredential = [ "initial_password:${cfg.initialPasswordFile}" ] ++ optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
+        LoadCredential = [ "initial_password:${cfg.initialPasswordFile}" ]
+          ++ optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
       };
     };
 
