@@ -8,12 +8,13 @@
 , python
 , pythonOlder
 , pytz
+, setuptools-scm
 , tablib
 }:
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "3.3.8";
+  version = "4.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +23,12 @@ buildPythonPackage rec {
     owner = "django-import-export";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9BsaYLAkd6UvQxMtwk+pI7HyOWNU4rUmingkyemRCz4=";
+    hash = "sha256-ItJx9yJSy88/OvkpjGDWGBOMk5YlSquicSWi0tbKeWE=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     diff-match-patch
