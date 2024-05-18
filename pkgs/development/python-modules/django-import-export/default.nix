@@ -34,13 +34,37 @@ buildPythonPackage rec {
     diff-match-patch
     django
     tablib
-  ] ++ (with tablib.optional-dependencies; html ++ ods ++ xls ++ xlsx ++ yaml);
+  ];
+
+  passthru.optional-dependencies = {
+    all = [
+      tablib
+    ] ++ tablib.optional-dependencies.all;
+    cli = [
+      tablib
+    ] ++ tablib.optional-dependencies.cli;
+    ods = [
+      tablib
+    ] ++ tablib.optional-dependencies.ods;
+    pandas = [
+      tablib
+    ] ++ tablib.optional-dependencies.pandas;
+    xls = [
+      tablib
+    ] ++ tablib.optional-dependencies.xls;
+    xlsx = [
+      tablib
+    ] ++ tablib.optional-dependencies.xlsx;
+    yaml = [
+      tablib
+    ] ++ tablib.optional-dependencies.yaml;
+  };
 
   nativeCheckInputs = [
     chardet
     psycopg2
     pytz
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   checkPhase = ''
     runHook preCheck
