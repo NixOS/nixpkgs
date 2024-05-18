@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "summarytools";
-  version = "0.2.3";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # no version tags in GitHub repo
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wsDf9IXCMQe0cVfQQuRVwMhxkhhUxbPu06yWZPLvgw4=";
+    hash = "sha256-m29ug+JZC4HgMIVopovA/dyR40Z1IcADOiDWKg9mzdc=";
   };
 
   nativeBuildInputs = [ setuptools ];
