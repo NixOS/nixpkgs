@@ -3,11 +3,11 @@
 # Please, feel free to maintain this (I don't know what I'm doing)
 
 
-{ lib, 
+{ lib,
   python3,
-  fetchPypi, 
-  imagemagick, 
-  feh, 
+  fetchPypi,
+  imagemagick,
+  feh,
   ...
 }:
 
