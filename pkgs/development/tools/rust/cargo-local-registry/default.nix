@@ -42,11 +42,6 @@ rustPlatform.buildRustPackage rec {
   # tests require internet access
   doCheck = false;
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
   meta = with lib; {
     description = "A cargo subcommand to manage local registries";
     mainProgram = "cargo-local-registry";

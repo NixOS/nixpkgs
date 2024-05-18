@@ -100,12 +100,6 @@ buildPythonPackage rec {
     Security
   ];
 
-  # Cargo.lock is outdated
-  # TODO: remove at next release
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   dependencies = [
     numpy
     huggingface-hub
