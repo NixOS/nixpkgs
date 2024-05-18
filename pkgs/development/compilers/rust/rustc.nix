@@ -192,6 +192,12 @@ in stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src/etc
 
+    # rust-lld is the name rustup uses for its bundled lld, so that it
+    # doesn't conflict with any system lld.  This is not an
+    # appropriate default for Nixpkgs, where there is no rust-lld.
+    substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
+      --replace-quiet '"rust-lld"' '"lld"'
+
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Useful debugging parameter
