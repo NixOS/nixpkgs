@@ -24,11 +24,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   meta = with lib; {
     description = "A simple and adorable sysinfo utility written in Rust";
     homepage = "https://github.com/devraza/bunbun";
