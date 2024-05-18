@@ -13,24 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtensor";
-  version = "0.24.7";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
     rev = finalAttrs.version;
-    hash = "sha256-dVbpcBW+jK9nIl5efk5LdKdBm8CkaJWEZ0ZY7ZuApwk=";
+    hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
   };
-  patches = [
-    # Support for xsimd 11
-    (fetchpatch {
-      url = "https://github.com/xtensor-stack/xtensor/commit/77a650a8018e0be6fcc76bf66685ff352ae23ef1.patch";
-      hash = "sha256-vOdUzzsSK+lYcA7fZXWOTVV202GZC0DhkMMjzggnmWE=";
-    })
-    # A single test fails on Darwin, see:
-    # https://github.com/xtensor-stack/xtensor/issues/2718
-    ./remove-failing-test_xinfo.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,9 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     nlohmann_json
     xtl
-  ] ++ lib.optionals (!(stdenv.isAarch64 && stdenv.isLinux)) [
-    # xsimd support is broken on aarch64-linux, see:
-    # https://github.com/xtensor-stack/xsimd/issues/945
     xsimd
   ];
 
