@@ -107,7 +107,6 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = spsdk; };
 
   meta = with lib; {
-    broken = versionAtLeast cryptography.version "41.1";
     changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
