@@ -1,28 +1,29 @@
-{ lib
-, cimg
-, cmake
-, coreutils
-, curl
-, fetchzip
-, fftw
-, gimp
-, gimpPlugins
-, gmic
-, gnugrep
-, gnused
-, graphicsmagick
-, libjpeg
-, libpng
-, libsForQt5
-, libtiff
-, ninja
-, nix-update
-, openexr
-, pkg-config
-, stdenv
-, writeShellScript
-, zlib
-, variant ? "standalone"
+{
+  lib,
+  cimg,
+  cmake,
+  coreutils,
+  curl,
+  fetchzip,
+  fftw,
+  gimp,
+  gimpPlugins,
+  gmic,
+  gnugrep,
+  gnused,
+  graphicsmagick,
+  libjpeg,
+  libpng,
+  libsForQt5,
+  libtiff,
+  ninja,
+  nix-update,
+  openexr,
+  pkg-config,
+  stdenv,
+  writeShellScript,
+  zlib,
+  variant ? "standalone",
 }:
 
 let
@@ -36,20 +37,18 @@ let
     };
 
     standalone = {
-      extraDeps = []; # Just to keep uniformity and avoid test-for-null
+      extraDeps = [ ]; # Just to keep uniformity and avoid test-for-null
       description = "Versatile front-end to the image processing framework G'MIC";
     };
   };
-
 in
 
-assert lib.assertMsg
-  (builtins.hasAttr variant variants)
+assert lib.assertMsg (builtins.hasAttr variant variants)
   "gmic-qt variant \"${variant}\" is not supported. Please use one of ${lib.concatStringsSep ", " (builtins.attrNames variants)}.";
 
-assert lib.assertMsg
-  (builtins.all (d: d != null) variants.${variant}.extraDeps)
-  "gmic-qt variant \"${variant}\" is missing one of its dependencies.";
+assert lib.assertMsg (builtins.all (d: d != null)
+  variants.${variant}.extraDeps
+) "gmic-qt variant \"${variant}\" is missing one of its dependencies.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
@@ -69,20 +68,23 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    curl
-    fftw
-    gmic
-    graphicsmagick
-    libjpeg
-    libpng
-    libtiff
-    openexr
-    zlib
-  ] ++ (with libsForQt5; [
-    qtbase
-    qttools
-  ]) ++ variants.${variant}.extraDeps;
+  buildInputs =
+    [
+      curl
+      fftw
+      gmic
+      graphicsmagick
+      libjpeg
+      libpng
+      libtiff
+      openexr
+      zlib
+    ]
+    ++ (with libsForQt5; [
+      qtbase
+      qttools
+    ])
+    ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \
@@ -93,7 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
     (lib.cmakeBool "ENABLE_SYSTEM_GMIC" true)
-    (lib.cmakeFeature "GMIC_QT_HOST" (if variant == "standalone" then "none" else variant))
+    (lib.cmakeFeature "GMIC_QT_HOST" (
+      if variant == "standalone" then "none" else variant
+    ))
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''
@@ -111,7 +115,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = writeShellScript "gmic-qt-update-script" ''
       set -euo pipefail
 
-      export PATH="${lib.makeBinPath [ coreutils curl gnugrep gnused nix-update ]}:$PATH"
+      export PATH="${
+        lib.makeBinPath [
+          coreutils
+          curl
+          gnugrep
+          gnused
+          nix-update
+        ]
+      }:$PATH"
 
       latestVersion=$(curl 'https://gmic.eu/files/source/' \
                        | grep -E 'gmic_[^"]+\.tar\.gz' \
@@ -132,7 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gmic_qt";
-    maintainers = with lib.maintainers; [ AndersonTorres lilyinstarlight ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      lilyinstarlight
+    ];
     platforms = lib.platforms.unix;
   };
 })
