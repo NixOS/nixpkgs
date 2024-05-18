@@ -33467,8 +33467,6 @@ with pkgs;
     openexr = openexr_3;
   };
 
-  openjump = callPackage ../applications/misc/openjump { };
-
   open-music-kontrollers = lib.recurseIntoAttrs {
     eteroj = callPackage ../applications/audio/open-music-kontrollers/eteroj.nix { };
     jit = callPackage ../applications/audio/open-music-kontrollers/jit.nix { };
