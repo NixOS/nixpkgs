@@ -30,7 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
+    # Always build the tests, even if not running them, because testing whether
+    # they can be built is a test in itself.
+    "-DBUILD_TESTS=ON"
   ];
 
   doCheck = true;
