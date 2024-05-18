@@ -20597,6 +20597,12 @@
       fingerprint = "7944 74B7 D236 DAB9 C9EF  E7F9 5CCE 6F14 66D4 7C9E";
     }];
   };
+  toasteruwu = {
+    email = "Aki@ToasterUwU.com";
+    github = "ToasterUwU";
+    githubId = 43654377;
+    name = "Aki";
+  };
   tobiasBora = {
     email = "tobias.bora.list@gmail.com";
     github = "tobiasBora";
