@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "go-musicfox";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "go-musicfox";
     repo = "go-musicfox";
     rev = "v${version}";
-    hash = "sha256-11N3dykuEDKAryieNVaPfb3G7E/a4A7Znx9rBvFTHC4=";
+    hash = "sha256-pIfQ0ufn8W0opm+N6IPFBPWNxNWMOU7FudPtIFop51c=";
   };
 
   deleteVendor = true;
