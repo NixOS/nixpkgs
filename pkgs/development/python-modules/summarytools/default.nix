@@ -17,27 +17,34 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  # no version tags in GitHub repo
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-m29ug+JZC4HgMIVopovA/dyR40Z1IcADOiDWKg9mzdc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipython
     matplotlib
     numpy
     pandas
   ];
 
-  nativeCheckImports = [ pytestCheckHook ];
-  pythonImportsCheck = [ "summarytools" ];
+  nativeCheckImports = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "summarytools"
+  ];
 
   meta = with lib; {
     description = "Python port of the R summarytools package for summarizing dataframes";
     homepage = "https://github.com/6chaoran/jupyter-summarytools";
+    changelog = "https://github.com/6chaoran/jupyter-summarytools/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };
