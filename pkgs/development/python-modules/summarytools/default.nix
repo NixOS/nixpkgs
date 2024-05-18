@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, ipython
-, matplotlib
-, numpy
-, pandas
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  ipython,
+  matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-m29ug+JZC4HgMIVopovA/dyR40Z1IcADOiDWKg9mzdc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     ipython
@@ -33,13 +32,9 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckImports = [
-    pytestCheckHook
-  ];
+  nativeCheckImports = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "summarytools"
-  ];
+  pythonImportsCheck = [ "summarytools" ];
 
   meta = with lib; {
     description = "Python port of the R summarytools package for summarizing dataframes";
