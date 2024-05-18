@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools
-, unittestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  unittestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-c/P3usRD4Fo6tFwypyBIsMTybVPYFGLsSxQsdYHT/+g=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "isoweek"
-  ];
+  pythonImportsCheck = [ "isoweek" ];
 
   meta = with lib; {
     description = "Module work with ISO weeks";
@@ -38,4 +33,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mrmebelman ];
   };
 }
-
