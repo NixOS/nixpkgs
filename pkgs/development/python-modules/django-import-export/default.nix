@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, chardet
-, diff-match-patch
-, django
-, fetchFromGitHub
-, psycopg2
-, python
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, setuptools-scm
-, tablib
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  diff-match-patch,
+  django,
+  fetchFromGitHub,
+  psycopg2,
+  python,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  setuptools-scm,
+  tablib,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-ItJx9yJSy88/OvkpjGDWGBOMk5YlSquicSWi0tbKeWE=";
   };
 
-  pythonRelaxDeps = [
-    "tablib"
-  ];
+  pythonRelaxDeps = [ "tablib" ];
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     diff-match-patch
@@ -46,27 +41,13 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    all = [
-      tablib
-    ] ++ tablib.optional-dependencies.all;
-    cli = [
-      tablib
-    ] ++ tablib.optional-dependencies.cli;
-    ods = [
-      tablib
-    ] ++ tablib.optional-dependencies.ods;
-    pandas = [
-      tablib
-    ] ++ tablib.optional-dependencies.pandas;
-    xls = [
-      tablib
-    ] ++ tablib.optional-dependencies.xls;
-    xlsx = [
-      tablib
-    ] ++ tablib.optional-dependencies.xlsx;
-    yaml = [
-      tablib
-    ] ++ tablib.optional-dependencies.yaml;
+    all = [ tablib ] ++ tablib.optional-dependencies.all;
+    cli = [ tablib ] ++ tablib.optional-dependencies.cli;
+    ods = [ tablib ] ++ tablib.optional-dependencies.ods;
+    pandas = [ tablib ] ++ tablib.optional-dependencies.pandas;
+    xls = [ tablib ] ++ tablib.optional-dependencies.xls;
+    xlsx = [ tablib ] ++ tablib.optional-dependencies.xlsx;
+    yaml = [ tablib ] ++ tablib.optional-dependencies.yaml;
   };
 
   nativeCheckInputs = [
@@ -81,9 +62,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "import_export"
-  ];
+  pythonImportsCheck = [ "import_export" ];
 
   meta = with lib; {
     description = "Django application and library for importing and exporting data with admin integration";
