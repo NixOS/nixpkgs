@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "3.0.5";
+  version = "3.0.5-unstable-2024-05-31";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
+    rev = "aaba38e3e803d29a4ac9e78344a2b843ec9d7b65";
+    sha256 = "sha256-52te2GcogTMktnU5sc6nmf75k+69ZwTc23SZto6NPew=";
   };
 
   patches = [
