@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pytestCheckHook
 , setuptools
 , pythonOlder
@@ -17,6 +18,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Hap5uTJ5+IfRwjXlzFx54yZEVkE4zkaYmrD0ovyXDXw=";
   };
+
+  patches = [
+    # Removed depreciated imp and replaced with importlib, https://github.com/Knio/pynmea2/pull/164
+    (fetchpatch {
+      name = "remove-imp.patch";
+      url = "https://github.com/Knio/pynmea2/commit/c56717b5e859e978ad3b52b8f826faa5d50489f8.patch";
+      hash = "sha256-jeFyfukT+0NLNxvNCxL7TzL/8oKmKOam5ZUIvjdvN/Q=";
+    })
+  ];
 
   build-system = [
     setuptools
