@@ -13,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "pytest-postgresql";
-  version = "5.0.0";
-  format = "pyproject";
+  version = "6.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     owner = "ClearcodeHQ";
     repo = "pytest-postgresql";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uWKp9yxTdlswoDPMlhx+2mF1cdhFzhGYKGHdXPGlz+w=";
+    hash = "sha256-6D9QNcfq518ORQDYCH5G+LLJ7tVWPFwB6ylZR3LOZ5g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml  \
-      --replace "--cov" ""  \
-      --replace "--max-worker-restart=0" ""
+      --replace-fail "--cov" ""  \
+      --replace-fail "--max-worker-restart=0" ""
     sed -i 's#/usr/lib/postgresql/.*/bin/pg_ctl#${postgresql}/bin/pg_ctl#' pytest_postgresql/plugin.py
   '';
 
@@ -54,6 +54,7 @@ buildPythonPackage rec {
     # permissions issue running pg as Nixbld user
     "test_executor_init_with_password"
     # "ValueError: Pytest terminal summary report not found"
+    "test_postgres_loader_in_cli"
     "test_postgres_options_config_in_cli"
     "test_postgres_options_config_in_ini"
   ];
