@@ -6,22 +6,27 @@
 , async-timeout
 , aioresponses
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "foobot-async";
   version = "1.0.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "foobot_async";
     inherit version;
-    sha256 = "fa557a22de925139cb4a21034ffdbcd01d28bf166c0e680eaf84a99206327f40";
+    hash = "sha256-+lV6It6SUTnLSiEDT/280B0ovxZsDmgOr4SpkgYyf0A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
@@ -31,7 +36,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "foobot_async" ];
+  pythonImportsCheck = [
+    "foobot_async"
+  ];
 
   meta = with lib; {
     description = "API Client for Foobot Air Quality Monitoring devices";
