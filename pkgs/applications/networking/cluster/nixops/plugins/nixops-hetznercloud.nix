@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "nixops-hetznercloud";
-  version = "unstable-2023-02-19";
+  version = "0-unstable-2023-02-19";
   pyproject = true;
 
   src = fetchFromGitHub {
