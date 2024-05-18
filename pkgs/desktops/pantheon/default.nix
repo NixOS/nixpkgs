@@ -25,7 +25,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanelIndicators = [
     wingpanel-applications-menu
-    wingpanel-indicator-a11y
     wingpanel-indicator-bluetooth
     wingpanel-indicator-datetime
     wingpanel-indicator-keyboard
@@ -33,8 +32,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-nightlight
     wingpanel-indicator-notifications
     wingpanel-indicator-power
-    wingpanel-indicator-session
     wingpanel-indicator-sound
+    wingpanel-quick-settings
   ];
 
   maintainers = lib.teams.pantheon.members;
