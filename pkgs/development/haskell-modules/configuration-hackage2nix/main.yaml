@@ -28,9 +28,14 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  - hie-bios == 0.13.1
+  # 2024-05-18: Various overrides for hls compatibility
+  - lsp < 2.5
+  - lsp-types < 2.2
+  - lsp-test < 0.17.0.1
+  - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
   # 2024-05-10: need to match hlegder from stackage
   - hledger-ui < 1.33
+
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
