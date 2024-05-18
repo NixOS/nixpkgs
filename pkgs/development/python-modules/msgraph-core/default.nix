@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, python-dotenv
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, httpx
-, microsoft-kiota-abstractions
-, microsoft-kiota-authentication-azure
- ,microsoft-kiota-http
-, requests
-, azure-identity
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  python-dotenv,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  httpx,
+  microsoft-kiota-abstractions,
+  microsoft-kiota-authentication-azure,
+  microsoft-kiota-http,
+  requests,
+  azure-identity,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,6 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-
   src = fetchFromGitHub {
     owner = "microsoftgraph";
     repo = "msgraph-sdk-python-core";
@@ -29,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-bQW1piSypfj3YAfzuEk/AkrB1x0lrHoIDyZv+KeCYgE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     httpx
@@ -39,7 +37,6 @@ buildPythonPackage rec {
     microsoft-kiota-authentication-azure
     microsoft-kiota-http
     requests
-
   ];
 
   nativeCheckInputs = [
@@ -49,9 +46,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "msgraph_core"
-  ];
+  pythonImportsCheck = [ "msgraph_core" ];
 
   disabledTestPaths = [
     # client_id should be the id of a Microsoft Entra application
