@@ -162,6 +162,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-sound = callPackage ./desktop/wingpanel-indicators/sound { };
 
+  wingpanel-quick-settings = callPackage ./desktop/wingpanel-indicators/quick-settings { };
+
   #### SWITCHBOARD
 
   switchboard = callPackage ./apps/switchboard { };
