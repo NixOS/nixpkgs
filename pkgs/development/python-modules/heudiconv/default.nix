@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, datalad
-, dcm2niix
-, dcmstack
-, etelemetry
-, fetchPypi
-, filelock
-, git
-, nibabel
-, nipype
-, pydicom
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, versioningit
+{
+  lib,
+  buildPythonPackage,
+  datalad,
+  dcm2niix,
+  dcmstack,
+  etelemetry,
+  fetchPypi,
+  filelock,
+  git,
+  nibabel,
+  nipype,
+  pydicom,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  versioningit,
 }:
 
 buildPythonPackage rec {
@@ -58,9 +59,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "heudiconv"
-  ];
+  pythonImportsCheck = [ "heudiconv" ];
 
   disabledTests = [
     # No such file or directory
