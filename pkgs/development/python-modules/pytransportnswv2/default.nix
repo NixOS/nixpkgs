@@ -8,15 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pytransportnswv2";
-  version = "0.2.4";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "PyTransportNSWv2";
-    inherit version;
-    sha256 = "129rrqckqgfrwdx0b83dqphcv55cxs5i8jl1ascia7rpzjn109ah";
+    inherit pname version;
+    hash = "sha256-9bpIu+Uc6eFSEGeEfpVwfrhvLekR8qOd571qMnLTpVg=";
   };
 
   propagatedBuildInputs = [
