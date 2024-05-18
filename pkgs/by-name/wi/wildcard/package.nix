@@ -25,22 +25,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jOv0l1vnfDePWF7SAbsBFipPAONliPdc47xj79BJ+rc=";
   };
 
+  strictDeps = true;
+
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     hash = "sha256-RWEUS7WA/mKCjHLUvkdzsHGg9xQrEVGnvqncBTy1U8c=";
+    name = "wildcard-${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
     blueprint-compiler
     cargo
     desktop-file-utils
-    libadwaita
     meson
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    libadwaita
   ];
 
   meta = {
