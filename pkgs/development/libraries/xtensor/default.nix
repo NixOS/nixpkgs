@@ -31,12 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     xsimd
   ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
-    "-DBUILD_TESTS=${cmakeBool finalAttrs.finalPackage.doCheck}"
-    "-DXTENSOR_ENABLE_ASSERT=${cmakeBool enableAssertions}"
-    "-DXTENSOR_CHECK_DIMENSION=${cmakeBool enableBoundChecks}"
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck )
+    (lib.cmakeBool "XTENSOR_ENABLE_ASSERT" enableAssertions)
+    (lib.cmakeBool "XTENSOR_CHECK_DIMENSION" enableBoundChecks)
   ];
 
   doCheck = true;
