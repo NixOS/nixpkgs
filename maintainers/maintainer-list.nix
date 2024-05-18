@@ -2381,6 +2381,13 @@
     githubId = 164148;
     name = "Ben Darwin";
   };
+  bchmnn = {
+    email = "jacob.bachmann@posteo.de";
+    matrix = "@trilloyd:matrix.tu-berlin.de";
+    github = "bchmnn";
+    githubId = 34620799;
+    name = "Jacob Bachmann";
+  };
   bdd = {
     email = "bdd@mindcast.org";
     github = "bdd";

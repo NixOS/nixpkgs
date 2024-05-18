@@ -700,6 +700,8 @@ with pkgs;
 
   inspec = callPackage ../tools/misc/inspec { };
 
+  isisdl-ffmpeg = isisdl.override { withFFmpeg = true; };
+
   lshw-gui = lshw.override { withGUI = true; };
 
   kdePackages = callPackage ../kde { };
