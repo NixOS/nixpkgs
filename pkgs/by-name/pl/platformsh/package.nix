@@ -3,12 +3,15 @@
   lib,
   fetchurl,
   testers,
+  installShellFiles,
   platformsh
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "platformsh";
   version = "5.0.13";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   src =
     {
@@ -39,7 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 platformsh $out/bin/platformsh
+    install -Dm755 platform $out/bin/platform
+
+    installShellCompletion completion/bash/platform.bash \
+        completion/zsh/_platform
 
     runHook postInstall
   '';
