@@ -14071,6 +14071,11 @@
     githubId = 6295090;
     name = "Mats";
   };
+  mygithubblueberry = {
+    github = "MyGitHubBlueberry";
+    githubId = 105305430;
+    name = "Maksim Brozik";
+  };
   mynacol = {
     github = "Mynacol";
     githubId = 26695166;
