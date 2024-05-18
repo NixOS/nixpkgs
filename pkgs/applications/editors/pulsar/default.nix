@@ -34,13 +34,13 @@
 
 let
   pname = "pulsar";
-  version = "1.114.0";
+  version = "1.117.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-O//dowoMgQfS3hq088IKr5aJd5St9zpT/ypfuswnyv0=";
+    x86_64-linux.hash = "sha256-iDQV4wcb+TY5qv8X6UW6PumK9+i5cn705ZzCSx5VgMs=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-EzCTB1Ib9cTbslEdXPsS5gehHr1qd5v4iZgOqpxhUmA=";
+    aarch64-linux.hash = "sha256-NJc6CQA7ZCX70ui+QcVcLW2qxM05A93yqpiiW+YosGc=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -219,17 +219,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.mjs;
 
-  meta = with lib; {
+  meta = {
     description = "A Community-led Hyper-Hackable Text Editor";
     longDescription = ''
       A Community-led Hyper-Hackable Text Editor, Forked from Atom, built on Electron.
       Designed to be deeply customizable, but still approachable using the default configuration.
     '';
     homepage = "https://github.com/pulsar-edit/pulsar";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bryango ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bryango ];
     knownVulnerabilities = [
       "CVE-2023-5217"
       "CVE-2022-21718"
