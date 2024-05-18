@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-LZwAMLvQ+X6xkvnL+7LA/UmwDBGgapUtFHNJuV04F+Y=";
+    hash = "sha256-Vl/m9W2zJBnM9FJgCp7oIG8cj0eHQ2PXjh8aVRbEnDY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/gmic-qt";
