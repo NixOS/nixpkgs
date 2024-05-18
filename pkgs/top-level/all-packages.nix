@@ -40259,7 +40259,7 @@ with pkgs;
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
   veilid = callPackage ../tools/networking/veilid {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
   };
 
   vhs = callPackage ../applications/misc/vhs { };
