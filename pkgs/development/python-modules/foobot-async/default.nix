@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, aiohttp
-, async-timeout
-, aioresponses
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  aiohttp,
+  async-timeout,
+  aioresponses,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-+lV6It6SUTnLSiEDT/280B0ovxZsDmgOr4SpkgYyf0A=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "foobot_async"
-  ];
+  pythonImportsCheck = [ "foobot_async" ];
 
   meta = with lib; {
     description = "API Client for Foobot Air Quality Monitoring devices";
