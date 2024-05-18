@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , genshi
 , lxml
@@ -12,8 +11,6 @@
 buildPythonPackage rec {
   pname = "relatorio";
   version = "0.10.2";
-
-  disabled = pythonOlder "3.5";
 
   format = "setuptools";
 

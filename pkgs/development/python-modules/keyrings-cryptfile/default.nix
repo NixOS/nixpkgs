@@ -5,15 +5,12 @@
 , keyring
 , pycryptodome
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "keyrings-cryptfile";
   version = "1.3.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "keyrings.cryptfile";

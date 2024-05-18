@@ -3,10 +3,8 @@
 , fetchPypi
 , substituteAll
 , graphviz
-, python
 , pytestCheckHook
 , chardet
-, pythonOlder
 , pyparsing
 }:
 
@@ -14,8 +12,6 @@ buildPythonPackage rec {
   pname = "pydot";
   version = "2.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

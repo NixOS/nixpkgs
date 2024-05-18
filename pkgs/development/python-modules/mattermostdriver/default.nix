@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , websockets
 , requests
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "mattermostdriver";
   version = "7.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

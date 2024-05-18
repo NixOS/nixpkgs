@@ -12,7 +12,7 @@ buildPythonPackage rec {
   pname = "eth-hash";
   version = "0.5.2";
   format = "setuptools";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ethereum";

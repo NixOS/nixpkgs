@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , setuptools
 , wheel
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "dllogger";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

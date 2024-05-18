@@ -1,11 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "2.3.post0";
   pname = "crc32c";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ICRAR";

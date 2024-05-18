@@ -6,7 +6,6 @@
 , mock
 , pbr
 , pytestCheckHook
-, pythonOlder
 , setuptools
 , testtools
 }:
@@ -14,7 +13,6 @@
 buildPythonApplication rec {
   pname = "bashate";
   version = "2.1.1";
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

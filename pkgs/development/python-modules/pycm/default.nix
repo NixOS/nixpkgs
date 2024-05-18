@@ -4,7 +4,6 @@
 , matplotlib
 , numpy
 , pytestCheckHook
-, pythonOlder
 , seaborn
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pycm";
   version = "4.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";

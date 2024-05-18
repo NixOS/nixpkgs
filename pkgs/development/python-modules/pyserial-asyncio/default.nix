@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , pyserial
 }:
 
@@ -9,8 +8,6 @@ buildPythonPackage rec {
   pname = "pyserial-asyncio";
   version = "0.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

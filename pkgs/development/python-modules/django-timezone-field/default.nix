@@ -14,7 +14,8 @@
 buildPythonPackage rec {
   pname = "django-timezone-field";
   version = "5.1";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
+
   format = "pyproject";
 
   src = fetchFromGitHub {

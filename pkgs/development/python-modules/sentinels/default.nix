@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , setuptools
 , pytestCheckHook
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "sentinels";
   version = "1.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

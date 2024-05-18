@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , setuptools
 , pytestCheckHook
 }:
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "mmcif-pdbx";
   version = "2.0.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Electrostatics";

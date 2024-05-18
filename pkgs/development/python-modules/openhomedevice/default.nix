@@ -5,15 +5,12 @@
 , fetchFromGitHub
 , lxml
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "openhomedevice";
   version = "2.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bazwilliams";

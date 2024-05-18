@@ -3,7 +3,6 @@
 , fetchPypi
 , numpy
 , opencv4
-, pythonOlder
 , pythonRelaxDepsHook
 , scikit-learn
 , typing-extensions
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "qudida";
   version = "0.0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

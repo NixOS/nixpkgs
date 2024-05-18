@@ -6,7 +6,6 @@
 , pexpect
 , pyserial
 , pytestCheckHook
-, pythonOlder
 , setuptools
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "pygatt";
   version = "4.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "peplin";

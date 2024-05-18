@@ -3,7 +3,6 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
-, pythonOlder
 , curl
 , openssl
 , bottle
@@ -15,7 +14,7 @@ buildPythonPackage rec {
   pname = "pycurl";
   version = "7.45.3";
   format = "setuptools";
-  disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
+  disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;

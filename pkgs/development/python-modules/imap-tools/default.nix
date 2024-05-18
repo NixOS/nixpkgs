@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
 }:
@@ -8,8 +7,6 @@
 buildPythonPackage rec {
   pname = "imap-tools";
   version = "1.5.0";
-
-  disabled = pythonOlder "3.5";
 
   format = "setuptools";
 

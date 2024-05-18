@@ -7,8 +7,6 @@
 , matplotlib
 , ase
 , netcdf4
-, pytest
-, pythonOlder
 , cython
 , cmake
 }:
@@ -17,8 +15,6 @@ buildPythonPackage rec {
   pname = "boltztrap2";
   version = "24.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "BoltzTraP2";

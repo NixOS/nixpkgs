@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , numpy
 , decorator
 , imageio
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "moviepy";
   version = "1.0.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

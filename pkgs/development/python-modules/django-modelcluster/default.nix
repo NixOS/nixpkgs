@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 
 # dependencies
 , django
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "django-modelcluster";
   version = "6.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "wagtail";

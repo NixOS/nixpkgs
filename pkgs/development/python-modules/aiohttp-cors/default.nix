@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, typing ? null, aiohttp
-}:
+{ lib, buildPythonPackage, fetchPypi, aiohttp }:
 
 buildPythonPackage rec {
   pname = "aiohttp-cors";
@@ -12,10 +10,7 @@ buildPythonPackage rec {
     sha256 = "0pczn54bqd32v8zhfbjfybiza6xh1szwxy6as577dn8g23bwcfad";
   };
 
-  disabled = pythonOlder "3.5";
-
-  propagatedBuildInputs = [ aiohttp ]
-  ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs = [ aiohttp ];
 
   # Requires network access
   doCheck = false;

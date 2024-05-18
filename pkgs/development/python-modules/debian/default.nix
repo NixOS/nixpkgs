@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , chardet
 }:
@@ -9,8 +8,6 @@ buildPythonPackage rec {
   pname = "python-debian";
   version = "0.1.49";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

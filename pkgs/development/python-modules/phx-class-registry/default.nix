@@ -2,13 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "class-registry";
   version = "4.1.0";
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "todofixthis";

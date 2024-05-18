@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , fetchpatch
 , setuptools
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "pyrender";
   version = "0.1.45";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "mmatl";

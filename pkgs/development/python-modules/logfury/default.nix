@@ -3,7 +3,6 @@
 , fetchPypi
 , setuptools-scm
 , pytestCheckHook
-, pythonOlder
 , testfixtures
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "logfury";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

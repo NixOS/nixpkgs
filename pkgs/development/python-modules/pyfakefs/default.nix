@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 
 # build-system
 , setuptools
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pyfakefs";
   version = "5.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

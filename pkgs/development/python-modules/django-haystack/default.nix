@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 
 # build dependencies
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "django-haystack";
   version = "3.2.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;

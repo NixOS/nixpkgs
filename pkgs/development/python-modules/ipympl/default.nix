@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , ipykernel
 , ipython-genutils
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "ipympl";
   version = "0.9.4";
   format = "wheel";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version format;
