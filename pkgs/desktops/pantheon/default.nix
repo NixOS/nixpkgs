@@ -36,6 +36,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-power
     wingpanel-indicator-session
     wingpanel-indicator-sound
+    wingpanel-quick-settings
   ];
 
   maintainers = lib.teams.pantheon.members;
@@ -162,6 +163,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   wingpanel-indicator-session = callPackage ./desktop/wingpanel-indicators/session { };
 
   wingpanel-indicator-sound = callPackage ./desktop/wingpanel-indicators/sound { };
+
+  wingpanel-quick-settings = callPackage ./desktop/wingpanel-indicators/quick-settings { };
 
   #### SWITCHBOARD
 
