@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.info-zip.org";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ RossComputerGuy ];
     mainProgram = "zip";
   };
 }
