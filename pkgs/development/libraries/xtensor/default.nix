@@ -27,9 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     nlohmann_json
     xtl
-  ] ++ lib.optionals (!(stdenv.isAarch64 && stdenv.isLinux)) [
-    # xsimd support is broken on aarch64-linux, see:
-    # https://github.com/xtensor-stack/xsimd/issues/945
     xsimd
   ];
 
