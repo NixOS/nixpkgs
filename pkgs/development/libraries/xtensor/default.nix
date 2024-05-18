@@ -20,11 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
   };
-  patches = [
-    # A single test fails on Darwin, see:
-    # https://github.com/xtensor-stack/xtensor/issues/2718
-    ./remove-failing-test_xinfo.patch
-  ];
 
   nativeBuildInputs = [
     cmake
