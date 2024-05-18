@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nibabel
-, pydicom
-, pylibjpeg-libjpeg
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nibabel,
+  pydicom,
+  pylibjpeg-libjpeg,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-GVzih9H2m2ZGSuZMRuaDG78b95PI3j0WQw5M3l4KNCs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     nibabel
@@ -33,13 +32,9 @@ buildPythonPackage rec {
     pylibjpeg-libjpeg
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dcmstack"
-  ];
+  pythonImportsCheck = [ "dcmstack" ];
 
   disabledTestPaths = [
     # AttributeError: 'TestNitoolCli' object has no attribute 'out_dir'
