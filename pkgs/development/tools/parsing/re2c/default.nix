@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  doCheck = !stdenv.isFreeBSD;  # one test is flaky on FreeBSD. TODO: disable more granularly or fix
+  doCheck = true;
   enableParallelBuilding = true;
 
   preCheck = ''
