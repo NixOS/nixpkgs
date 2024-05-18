@@ -7,6 +7,7 @@
 , pkg-config
 , python3
 , vala
+, wrapGAppsHook3
 , gtk3
 , libgee
 , pantheon
@@ -14,18 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "1.1.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-E9YSRfh9bLAHn2y4p3aKwR5NOtexKokLWj3RwtDnLsQ=";
+    hash = "sha256-P3eM+xgsAMvqr2mIEjkQSjhxvQAwtSNItxAUcjO3ciY=";
   };
-
-  patches = [
-    ./fix-paths.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -33,6 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -42,12 +40,14 @@ stdenv.mkDerivation rec {
     elementary-files # settings schemas
     elementary-terminal # settings schemas
     granite
-    switchboard
   ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+
+    substituteInPlace src/Settings/ThemeSettings.vala \
+      --replace-fail "/usr/share/" "/run/current-system/sw/share/"
   '';
 
   passthru = {
@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Unofficial system settings panel for Pantheon";
+    description = "Unofficial system customization app for Pantheon";
     longDescription = ''
-      Unofficial system settings panel for Pantheon
+      Unofficial system customization app for Pantheon
       that lets you easily and safely customise your desktop's appearance.
-      Use programs.pantheon-tweaks.enable to add this to your switchboard.
     '';
     homepage = "https://github.com/pantheon-tweaks/pantheon-tweaks";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "pantheon-tweaks";
   };
 }
