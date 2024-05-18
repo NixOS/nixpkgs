@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchFromGitHub
-, imageio
-, imageio-ffmpeg
-, matplotlib
-, numpy
-, proglog
-, pytestCheckHook
-, pythonOlder
-, requests
-, scikit-image
-, scikit-learn
-, scipy
-, setuptools
-, tqdm
-, youtube-dl
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchFromGitHub,
+  imageio,
+  imageio-ffmpeg,
+  matplotlib,
+  numpy,
+  proglog,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  setuptools,
+  tqdm,
+  youtube-dl,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace-fail "decorator>=4.0.2,<5.0" "decorator>=4.0.2,<6.0"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     decorator
@@ -65,9 +64,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "moviepy"
-  ];
+  pythonImportsCheck = [ "moviepy" ];
 
   disabledTests = [
     "test_cuts1"
