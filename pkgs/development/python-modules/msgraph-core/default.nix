@@ -29,11 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-bQW1piSypfj3YAfzuEk/AkrB1x0lrHoIDyZv+KeCYgE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     microsoft-kiota-abstractions
     microsoft-kiota-authentication-azure
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Core component of the Microsoft Graph Python SDK";
     homepage = "https://github.com/microsoftgraph/msgraph-sdk-python-core";
+    changelog = "https://github.com/microsoftgraph/msgraph-sdk-python-core/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
