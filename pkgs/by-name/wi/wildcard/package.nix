@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
-    hash = "sha256-RWEUS7WA/mKCjHLUvkdzsHGg9xQrEVGnvqncBTy1U8c=";
+    hash = "sha256-8jNNCcZRoLyOHdaWmYTOGD7Nf7NkmJ1MIxBXLJGrm5Y=";
     name = "wildcard-${finalAttrs.version}";
   };
 
