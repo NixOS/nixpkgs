@@ -82,3 +82,5 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
+    # Timeout
+    "test_dont_crash_on_handshake_timeout"
