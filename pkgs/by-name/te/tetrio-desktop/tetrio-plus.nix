@@ -63,7 +63,7 @@ let
     ];
 
     buildPhase = ''
-      HOME=$(mktemp -d) RUSTFLAGS="-C linker=lld" wasm-pack build --target web --release
+      HOME=$(mktemp -d) wasm-pack build --target web --release
     '';
 
     installPhase = ''

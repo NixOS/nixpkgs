@@ -83,7 +83,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ];
 
     postBuild = ''
-      CC=clang CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER=lld cargo build \
+      CC=clang cargo build \
         --target wasm32-unknown-unknown \
         --release
 
