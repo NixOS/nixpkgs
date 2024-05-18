@@ -10046,6 +10046,8 @@ self: super: with self; {
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
+  pystac = callPackage ../development/python-modules/pystac { };
+
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
   pysuez = callPackage ../development/python-modules/pysuez { };
