@@ -27041,8 +27041,8 @@ with pkgs;
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
-  libuuid = if stdenv.isLinux then util-linuxMinimal
-    else if stdenv.isFreeBSD then e2fsprogs
+  libuuid = if stdenv.isLinux
+    then util-linuxMinimal
     else null;
 
   light = callPackage ../os-specific/linux/light { };
