@@ -1,19 +1,20 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools
-, formulaic
-, click
-, num2words
-, numpy
-, scipy
-, pandas
-, nibabel
-, bids-validator
-, sqlalchemy
-, pytestCheckHook
-, versioneer
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  formulaic,
+  click,
+  num2words,
+  numpy,
+  scipy,
+  pandas,
+  nibabel,
+  bids-validator,
+  sqlalchemy,
+  pytestCheckHook,
+  versioneer,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -49,13 +50,9 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  pythonImportsCheck = [
-    "bids"
-  ];
+  pythonImportsCheck = [ "bids" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Test looks for missing data
