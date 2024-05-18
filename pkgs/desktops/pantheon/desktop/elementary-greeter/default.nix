@@ -14,6 +14,7 @@
 , granite
 , libgee
 , libhandy
+, gnome-desktop
 , gnome-settings-daemon
 , mutter
 , elementary-icon-theme
@@ -24,18 +25,19 @@
 , gdk-pixbuf
 , dbus
 , accountsservice
+, wayland-scanner
 , wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
-    sha256 = "sha256-m/xuaMCAPoqhl/M547mdafBPBu3UhHmVmBIUKQoS5L8=";
+    sha256 = "sha256-fx3KHMF6UhIFXyJHQ4dKJnVidsNMBk7AvHzaF3ELH1k=";
   };
 
   patches = [
@@ -47,18 +49,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     desktop-file-utils
     meson
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook3
   ];
 
   buildInputs = [
     accountsservice
     elementary-icon-theme
+    gnome-desktop
     gnome-settings-daemon
     gdk-pixbuf
     granite
