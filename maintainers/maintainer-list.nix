@@ -18173,6 +18173,11 @@
     githubId = 893474;
     name = "Stefan Wiehler";
   };
+  Sepero = {
+    email = "sepero111@gmx.com";
+    github = "Sepero";
+    githubId = 1575546;
+  };
   sephi = {
     name = "Sylvain Fankhauser";
     email = "sephi@fhtagn.top";
