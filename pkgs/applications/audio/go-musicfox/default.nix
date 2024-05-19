@@ -2,8 +2,9 @@
 , buildGoModule
 , fetchFromGitHub
 , pkg-config
-, alsa-lib
 , flac
+, stdenv
+, alsa-lib
 , nix-update-script
 }:
 
@@ -35,8 +36,9 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    alsa-lib
     flac
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
   passthru.updateScript = nix-update-script { };
