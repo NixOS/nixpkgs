@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   makeDesktopItem,
   writeText,
   jdk17,
@@ -88,7 +88,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     jdk
     gradle
   ];
