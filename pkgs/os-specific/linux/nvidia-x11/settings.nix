@@ -43,6 +43,14 @@ let
 
     makeFlags = [
       "OUTPUTDIR=." # src/libXNVCtrl
+      "libXNVCtrl.a"
+      "libXNVCtrl.so"
+    ];
+
+    patches = [
+      # Patch the Makefile to also produce a shared library.
+      (if lib.versionOlder nvidia_x11.settingsVersion "400" then ./libxnvctrl-build-shared-3xx.patch
+      else ./libxnvctrl-build-shared.patch)
     ];
 
     installPhase = ''
@@ -52,6 +60,7 @@ let
       cp libXNVCtrl.a $out/lib
       cp NVCtrl.h     $out/include/NVCtrl
       cp NVCtrlLib.h  $out/include/NVCtrl
+      cp -P libXNVCtrl.so* $out/lib
     '';
   };
 
