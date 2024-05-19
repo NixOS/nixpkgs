@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
-  makeWrapper,
+  makeBinaryWrapper,
   coreutils,
   gawk,
   which,
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     unzip
   ];
 
