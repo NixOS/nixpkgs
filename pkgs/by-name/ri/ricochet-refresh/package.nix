@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.22";
+  version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     rev = "v${finalAttrs.version}-release";
-    hash = "sha256-xPOAtH+K3WTPjbDw4ZhwpO2+wUYe5JdqKdtfNKQbgSM=";
+    hash = "sha256-xz1cyNQgmXUIZc56OHwWZCGVNpp7CFFyCd0EvAas4zw=";
     fetchSubmodules = true;
   };
 
