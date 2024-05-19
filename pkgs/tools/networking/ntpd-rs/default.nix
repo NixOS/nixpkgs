@@ -1,8 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pandoc
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pandoc,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-iZuDNFy8c2UZUh3J11lEtfHlDFN+qPl4iZg+ps7AenE=";
 
-  nativeBuildInputs = [ pandoc installShellFiles ];
+  nativeBuildInputs = [
+    pandoc
+    installShellFiles
+  ];
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   postPatch = ''
     substituteInPlace utils/generate-man.sh \
@@ -40,18 +48,27 @@ rustPlatform.buildRustPackage rec {
     "--skip=hwtimestamp::tests::get_hwtimestamp"
   ];
 
-  postInstall = ''
-    install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service
-    installManPage docs/precompiled/man/{ntp.toml.5,ntp-ctl.8,ntp-daemon.8,ntp-metrics-exporter.8}
-  '';
+  postInstall =
+    lib.optionalString stdenv.isLinux ''
+      install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service
+    ''
+    + ''
+      installManPage docs/precompiled/man/{ntp.toml.5,ntp-ctl.8,ntp-daemon.8,ntp-metrics-exporter.8}
+    '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "A full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
     changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ fpletz ];
+    license = with lib.licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }
