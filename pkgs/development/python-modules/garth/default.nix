@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pdm-backend
-, pydantic
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pdm-backend,
+  pydantic,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-WuGeZ2EggyhbEDIbjg4ffIFaj2DyHi8Tvowhoi5k2Os=";
   };
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     pydantic
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "garth"
-  ];
+  pythonImportsCheck = [ "garth" ];
 
   disabledTests = [
     # Tests require network access
