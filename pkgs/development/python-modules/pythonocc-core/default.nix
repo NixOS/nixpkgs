@@ -19,13 +19,18 @@
 
 stdenv.mkDerivation rec {
   pname = "pythonocc-core";
-  version = "7.6.2";
+  # opencascade-occt was already updated to 7.8.1, and
+  # pythonocc-core should sync to that version, but
+  # pythonocc-core is not yet available, so we rely on
+  # a development snapshot until that is out:
+  version = "7.8.1-snapshot";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = "refs/tags/${version}";
-    hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
+    #rev = "refs/tags/${version}";
+    rev = "53b7e9dfa409a9673a40a48b57fcdaa6f08d1cb5";
+    hash = "sha256-fJt77lh1LeXypa3rGUM3jsi5uyupYfpHu2qbCbCsQD0=";
   };
 
   postPatch = ''
