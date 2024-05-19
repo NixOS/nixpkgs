@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gitlike-commands
-, paho-mqtt
-, poetry-core
-, pyaml
-, pydantic
-, pythonOlder
-, pythonRelaxDepsHook
-, thelogrus
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitlike-commands,
+  paho-mqtt,
+  poetry-core,
+  pyaml,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  thelogrus,
 }:
 
 buildPythonPackage rec {
@@ -25,17 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-vL4EzeU+8nUPyLR22MJtLhknWF4DWMo49EKvkIqIWhA=";
   };
 
-  pythonRelaxDeps = [
-    "pyaml"
-  ];
+  pythonRelaxDeps = [ "pyaml" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     gitlike-commands
@@ -48,9 +43,7 @@ buildPythonPackage rec {
   # Test require a running Mosquitto instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ha_mqtt_discoverable"
-  ];
+  pythonImportsCheck = [ "ha_mqtt_discoverable" ];
 
   meta = with lib; {
     description = "Python module to create MQTT entities that are automatically discovered by Home Assistant";
