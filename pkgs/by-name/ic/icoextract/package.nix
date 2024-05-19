@@ -1,19 +1,13 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchPypi,
-  pefile,
-  pillow,
-  pythonOlder,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "icoextract";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,9 +15,9 @@ buildPythonPackage rec {
     hash = "sha256-/UxnWNyRNtwI4Rxx97i5QyjeMrUr5Sq+TfLTmU0xWyc=";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
+  dependencies = with python3Packages; [
     pefile
     pillow
   ];
