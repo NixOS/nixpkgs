@@ -13,7 +13,7 @@
 
 let
   pname = "freeplane";
-  version = "1.11.8";
+  version = "1.11.14";
 
   jdk = jdk17;
   gradle = gradle_7;
@@ -22,7 +22,7 @@ let
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-Qh2V265FvQpqGKmPsiswnC5yECwIcNwMI3/Ka9sBqXE=";
+    hash = "sha256-zEQjB57iiKVQnH8VtynpEGKNAa2e+WpqnGt6fnv5Rjs=";
   };
 
   deps = stdenvNoCC.mkDerivation {
@@ -48,11 +48,9 @@ let
       find ./caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
-      # com/squareup/okio/okio/2.10.0/okio-jvm-2.10.0.jar expected to exist under name okio-2.10.0.jar
+      # com/squareup/okio/okio-jvm/x.y.z/okio-jvm-x.y.z.jar is expected to exist under com/squareup/okio/okio/x.y.z/okio-x.y.z.jar
       while IFS="" read -r -d "" path; do
-        dir=''${path%/*}; file=''${path##*/}; dest=''${file//-jvm-/-}
-        [[ -e $dir/$dest ]] && continue
-        ln -s "$dir/$file" "$dir/$dest"
+        ln -s "$path" ''${path//okio-jvm/okio}
       done < <(find "$out" -type f -name 'okio-jvm-*.jar' -print0)
       runHook postInstall
     '';
@@ -61,7 +59,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-2Zaw4FW12dThdr082dEB1EYkGwNiayz501wIPGXUfBw=";
+    outputHash = "sha256-mWQTe/hOWGwWtsUPCZ7gle2FtskcEmJwsGQZITEc/Uc=";
   };
 
   # Point to our local deps repo
