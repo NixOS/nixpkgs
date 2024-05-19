@@ -14,6 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
   };
+  patches = [
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://github.com/xtensor-stack/xsimd/issues/807
+    ./disable-test_error_gamma-test.patch
+  ];
 
   nativeBuildInputs = [
     cmake
