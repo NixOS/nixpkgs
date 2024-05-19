@@ -12,13 +12,13 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openjump";
   version = "2.2.1";
   revision = "r5222%5B94156e5%5D";
 
   src = fetchurl {
-    url = "mirror://sourceforge/jump-pilot/OpenJUMP/${version}/OpenJUMP-Portable-${version}-${revision}-PLUS.zip";
+    url = "mirror://sourceforge/jump-pilot/OpenJUMP/${finalAttrs.version}/OpenJUMP-Portable-${finalAttrs.version}-${finalAttrs.revision}-PLUS.zip";
     hash = "sha256-+/AMmD6NDPy+2Gq1Ji5i/QWGU7FOsU+kKsWoNXcx/VI=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = jre.meta.platforms;
     mainProgram = "OpenJump";
   };
-}
+})
