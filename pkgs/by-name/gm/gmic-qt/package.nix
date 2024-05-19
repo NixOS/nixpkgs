@@ -1,26 +1,22 @@
 { lib
 , cimg
 , cmake
-, coreutils
 , curl
-, fetchzip
+, fetchFromGitHub
 , fftw
 , gimp
 , gimpPlugins
 , gmic
-, gnugrep
-, gnused
 , graphicsmagick
 , libjpeg
 , libpng
 , libsForQt5
 , libtiff
 , ninja
-, nix-update
+, nix-update-script
 , openexr
 , pkg-config
 , stdenv
-, writeShellScript
 , zlib
 , variant ? "standalone"
 }:
@@ -53,14 +49,14 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.3.6";
+  version = "3.3.5";
 
-  src = fetchzip {
-    url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-LZwAMLvQ+X6xkvnL+7LA/UmwDBGgapUtFHNJuV04F+Y=";
+  src = fetchFromGitHub {
+    owner = "c-koi";
+    repo = "gmic-qt";
+    rev = "v.${finalAttrs.version}";
+    hash = "sha256-WApuIWqVgVJAM2WdfOiqoQ2U+9kIuq8fy6wvJ55KoIc=";
   };
-
-  sourceRoot = "${finalAttrs.src.name}/gmic-qt";
 
   nativeBuildInputs = [
     cmake
@@ -70,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cimg
     curl
     fftw
     gmic
@@ -88,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs \
       translations/filters/csv2ts.sh \
       translations/lrelease.sh
+
+    mkdir ../src
+    ln -s ${gmic.src}/src/gmic.cpp ../src/gmic.cpp
   '';
 
   cmakeFlags = [
@@ -108,23 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cimg gmic;
     };
 
-    updateScript = writeShellScript "gmic-qt-update-script" ''
-      set -euo pipefail
-
-      export PATH="${lib.makeBinPath [ coreutils curl gnugrep gnused nix-update ]}:$PATH"
-
-      latestVersion=$(curl 'https://gmic.eu/files/source/' \
-                       | grep -E 'gmic_[^"]+\.tar\.gz' \
-                       | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' \
-                       | sort --numeric-sort --reverse | head -n1)
-
-      if [[ '${finalAttrs.version}' = "$latestVersion" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-
-      nix-update --version "$latestVersion"
-    '';
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^v\\.(.*)" ];
+    };
   };
 
   meta = {
