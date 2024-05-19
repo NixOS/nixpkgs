@@ -24,8 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # TODO: build from source
   unpackPhase = ''
+    runHook preUnpack
     mkdir -p $out/opt
     unzip $src -d $out/opt
+    runHook postUnpack
   '';
 
   nativeBuildInputs = [
@@ -34,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook preInstall
     dir=$(echo $out/opt/OpenJUMP-*)
 
     chmod +x "$dir/bin/oj_linux.sh"
@@ -48,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
           findutils
         ]
       }
+    runHook postInstall
   '';
 
   meta = {
