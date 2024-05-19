@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = ".";
 
+  # Instead of double wrapping the binary, simply pass the `gappsWrapperArgs`
+  # to `makeWrapper` directly
+  dontWrapGApps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -67,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r usr/* $out
 
     wrapProgramShell $out/bin/figma-linux \
+      "''${gappsWrapperArgs[@]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
