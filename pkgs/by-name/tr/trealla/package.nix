@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
   libffi,
   openssl,
   readline,
@@ -68,8 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !valgrind.meta.broken;
 
   checkFlags = [ "test" ] ++ lib.optionals checkLeaks [ "leaks" ];
-
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     homepage = "https://trealla-prolog.github.io/trealla/";
