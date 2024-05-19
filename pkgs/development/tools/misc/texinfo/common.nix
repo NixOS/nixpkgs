@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib, gawk, libiconv
+, gnulib, gawk, freebsd, libiconv
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -63,7 +63,8 @@ stdenv.mkDerivation {
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];
 
-  nativeCheckInputs = [ procps ];
+  nativeCheckInputs = [ procps ]
+    ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
   doCheck = interactive
     && !stdenv.isDarwin

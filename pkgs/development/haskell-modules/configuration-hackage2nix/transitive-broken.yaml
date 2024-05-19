@@ -246,7 +246,6 @@ dont-distribute-packages:
  - KiCS-debugger
  - KiCS-prophecy
  - LDAPv3
- - LPFP
  - LPPaver
  - LambdaINet
  - LambdaPrettyQuote
@@ -403,7 +402,6 @@ dont-distribute-packages:
  - UTFTConverter
  - UrlDisp
  - ViennaRNA-extras
- - Vis
  - WEditorBrick
  - WEditorHyphen
  - WL500gPControl
@@ -467,6 +465,7 @@ dont-distribute-packages:
  - agda-snippets-hakyll
  - agentx
  - aip
+ - airgql
  - aivika-distributed
  - alg
  - algebra-checkers
@@ -533,6 +532,7 @@ dont-distribute-packages:
  - apotiki
  - approx-rand-test
  - arbor-monad-metric-datadog
+ - archive-libarchive
  - archive-tar-bytestring
  - archlinux-web
  - arduino-copilot
@@ -637,7 +637,6 @@ dont-distribute-packages:
  - bearriver
  - beautifHOL
  - bech32-th
- - bech32-th_1_1_6
  - bein
  - belka
  - bff
@@ -695,6 +694,7 @@ dont-distribute-packages:
  - blink1
  - blip
  - blogination
+ - bloohm
  - bloxorz
  - blubber
  - bluetile
@@ -1245,7 +1245,7 @@ dont-distribute-packages:
  - electrs-client
  - elerea-examples
  - eliminators
- - eliminators_0_9_4
+ - eliminators_0_9_5
  - elliptic-curve
  - elsa
  - ema-extra
@@ -2238,7 +2238,6 @@ dont-distribute-packages:
  - http-exchange
  - http-exchange-instantiations
  - http-response-decoder
- - http2-client-exe
  - http2-client-grpc
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
@@ -2266,6 +2265,7 @@ dont-distribute-packages:
  - hw-json-simple-cursor
  - hw-json-standard-cursor
  - hw-kafka-avro
+ - hw-polysemy
  - hw-uri
  - hworker-ses
  - hwormhole
@@ -2422,6 +2422,7 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
+ - json-sop
  - json-spec-elm
  - json-spec-elm-servant
  - json-spec-openapi
@@ -2549,7 +2550,6 @@ dont-distribute-packages:
  - ldapply
  - leaky
  - lean
- - learn-physics
  - learning-hmm
  - legion
  - legion-discovery
@@ -2567,6 +2567,7 @@ dont-distribute-packages:
  - lha
  - lhae
  - lhe
+ - libarchive
  - libconfig
  - libcspm
  - libgraph
@@ -3256,7 +3257,6 @@ dont-distribute-packages:
  - purescript-tsd-gen
  - pursuit-client
  - push-notify
- - push-notify-apn
  - push-notify-ccs
  - push-notify-general
  - puzzle-draw-cmdline
@@ -3615,7 +3615,6 @@ dont-distribute-packages:
  - servant-ekg
  - servant-examples
  - servant-haxl-client
- - servant-http2-client
  - servant-js
  - servant-jsonrpc-client
  - servant-jsonrpc-server
@@ -3906,6 +3905,8 @@ dont-distribute-packages:
  - target
  - task
  - task-distribution
+ - tasklite
+ - tasklite-core
  - tasty-bdd
  - tasty-groundhog-converters
  - tasty-integrate

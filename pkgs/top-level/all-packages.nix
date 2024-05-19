@@ -9361,8 +9361,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  stalwart-mail = callPackage ../servers/mail/stalwart { };
-
   jmespath = callPackage ../development/tools/jmespath { };
 
   juicefs = callPackage ../tools/filesystems/juicefs { };
@@ -15434,6 +15432,7 @@ with pkgs;
 
   flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
+  flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
   flutter316 = flutterPackages.v3_16;
   flutter313 = flutterPackages.v3_13;
@@ -24083,6 +24082,17 @@ with pkgs;
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
+  rocksdb_8_11 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "8.11.4";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
+    };
+  };
+
   rocksdb_8_3 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "8.3.2";
@@ -26563,6 +26573,23 @@ with pkgs;
   sslh = callPackage ../servers/sslh { };
 
   thttpd = callPackage ../servers/http/thttpd { };
+
+  stalwart-mail_0_6 = (stalwart-mail.override { rocksdb_8_11 = rocksdb_8_3; }).overrideAttrs (old: rec {
+    pname = "stalwart-mail_0_6";
+    version = "0.6.0";
+    src = fetchFromGitHub {
+      owner = "stalwartlabs";
+      repo = "mail-server";
+      rev = "v${version}";
+      hash = "sha256-OHwUWSUW6ovLQTxnuUrolQGhxbhp4YqKSH+ZTpe2WXc=";
+      fetchSubmodules = true;
+    };
+    cargoDeps = old.cargoDeps.overrideAttrs (_: {
+      inherit src;
+      name = "${pname}-${version}-vendor.tar.gz";
+      outputHash = "sha256-mW3OXQj6DcIMO1YlTG3G+a1ORRcuvp5/h7BU+b4QbnE=";
+    });
+  });
 
   static-web-server = callPackage ../servers/static-web-server { };
 
