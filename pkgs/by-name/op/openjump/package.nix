@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper
-, coreutils, gawk, which, gnugrep, findutils
-, jre
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  coreutils,
+  gawk,
+  which,
+  gnugrep,
+  findutils,
+  jre,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +28,10 @@ stdenv.mkDerivation rec {
     unzip $src -d $out/opt
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   installPhase = ''
     dir=$(echo $out/opt/OpenJUMP-*)
@@ -27,7 +39,15 @@ stdenv.mkDerivation rec {
     chmod +x "$dir/bin/oj_linux.sh"
     makeWrapper "$dir/bin/oj_linux.sh" $out/bin/OpenJump \
       --set JAVA_HOME ${jre} \
-      --set PATH ${lib.makeBinPath [ coreutils gawk which gnugrep findutils ]}
+      --set PATH ${
+        lib.makeBinPath [
+          coreutils
+          gawk
+          which
+          gnugrep
+          findutils
+        ]
+      }
   '';
 
   meta = {
