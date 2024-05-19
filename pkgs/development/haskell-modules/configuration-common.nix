@@ -24,7 +24,7 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_19_0;
+    process = self.process_1_6_20_0;
   }));
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -48,7 +48,7 @@ self: super: {
           # cabal-install, but we need to recompile process even if the correct
           # version is available to prevent inconsistent dependencies:
           # process depends on directory.
-          process = cself.process_1_6_19_0;
+          process = cself.process_1_6_20_0;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -220,16 +220,6 @@ self: super: {
   fused-effects-random = doJailbreak super.fused-effects-random;
   fused-effects-readline = doJailbreak super.fused-effects-readline;
 
-  # Allow scotty < 0.21
-  # For < 0.22 add https://github.com/taffybar/taffybar/commit/71fe820d892a85e49ad2f2843eac0a59e01f3fd4
-  taffybar = appendPatches [
-    (pkgs.fetchpatch {
-      name = "taffybar-scotty-0.20.patch";
-      url = "https://github.com/taffybar/taffybar/commit/dcc4184fa63295d51b6c6efb2f97f23b13170e66.patch";
-      sha256 = "0hsn0zxpc8icabdq48jlkfn2v07xfjy4l344fnq2pbdc5apcm0fy";
-    })
-  ] super.taffybar;
-
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
     url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
@@ -389,7 +379,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "sha256-tlEsBXfELnK9rU4LHSDNby/yym+guqXjsh2GA+L9aWA=";
+      sha256 = "sha256-adV7I1P0O/dqH1rEyf3c2Vp4GSiiHReJyqnkSOYQGT0=";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -557,6 +547,9 @@ self: super: {
   # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
   # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
   streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
+
+  # 2024-05-18: Upstream tests against a different pandoc version
+  pandoc-crossref = dontCheck super.pandoc-crossref;
 
   # base bound
   digit = doJailbreak super.digit;
@@ -2997,7 +2990,7 @@ self: super: {
   }) super.kmonad;
 
   ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
-    ghc-lib-parser = self.ghc-lib-parser_9_8_2_20240223;
+    ghc-lib-parser = self.ghc-lib-parser_9_10_1_20240511;
   });
 
   # 2024-03-17: broken
@@ -3101,6 +3094,12 @@ self: super: {
     tasty = super.tasty_1_5;
     tasty-quickcheck = super.tasty-quickcheck_0_10_3;
   });
+
+  # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
+  commutative-semigroups = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/commutative-semigroups/commit/e031495dd24ae73ffb808eca34e993f5df8e8d76.patch";
+    hash = "sha256-d7AwvGGUJlh/sOXaAbfQLCay6+JyNInb73TTGKkBDz8=";
+  }) super.commutative-semigroups;
 
   # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
   currencies = doJailbreak super.currencies;

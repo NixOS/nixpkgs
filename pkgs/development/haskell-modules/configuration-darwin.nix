@@ -317,11 +317,13 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
-  # cabal lib set as unbuildable in linux so callCabal2nix generates a dummy derivation
   jsaddle-wkwebview = overrideCabal (drv: {
     libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
-    libraryHaskellDepends = with self; [ aeson data-default jsaddle ];
+    libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps
   }) super.jsaddle-wkwebview;
+  reflex-dom = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ base bytestring jsaddle-wkwebview reflex reflex-dom-core text ]; # cabal2nix doesn't add darwin-only deps
+  }) super.reflex-dom;
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
