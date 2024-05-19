@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "garth";
-  version = "0.4.45";
+  version = "0.4.46";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dN4WQZ2FLkyqCGYFBICodHR7yBdrLvx4NE6OqB0SgZo=";
+    hash = "sha256-WuGeZ2EggyhbEDIbjg4ffIFaj2DyHi8Tvowhoi5k2Os=";
   };
 
   nativeBuildInputs = [
     pdm-backend
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pydantic
     requests
     requests-oauthlib
