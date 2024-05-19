@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.50.0";
+  version = "0.50.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    hash = "sha256-CYWVRtOQE067kYqWXCw/4mBf6v4yfPYWFb592Qtb37s=";
+    hash = "sha256-v08Go/vCsquE6l1SMmqg4LjM9OmjNX+jGKEZVg4cak0=";
   };
 
   nativeBuildInputs = [
