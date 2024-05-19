@@ -723,6 +723,7 @@ supported-platforms:
   dx9base:                                      [ platforms.windows ]
   dx9d3d:                                       [ platforms.windows ]
   dx9d3dx:                                      [ platforms.windows ]
+  erebos-tester:                                [ platforms.linux ] # depends on linux-namespaces
   evdev:                                        [ platforms.linux ]
   evdev-streamly:                               [ platforms.linux ]
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
