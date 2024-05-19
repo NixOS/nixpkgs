@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, substituteAll
 , just
 , pkg-config
 , wrapGAppsHook4
@@ -16,6 +15,8 @@
 , librclone
 , pango
 , rclone
+, Security
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,6 +48,15 @@ rustPlatform.buildRustPackage rec {
     sed -i "#/bin/celeste#d" justfile
   '';
 
+  # Workaround for the gettext-sys issue
+  # https://github.com/Koka/gettext-rs/issues/114
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.cc.isClang &&
+      lib.versionAtLeast stdenv.cc.version "16"
+    )
+    "-Wno-error=incompatible-function-pointer-types";
+
   # Cargo.lock is outdated
   preConfigure = ''
     cargo update --offline
@@ -71,6 +81,9 @@ rustPlatform.buildRustPackage rec {
     libadwaita
     librclone
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    Foundation
   ];
 
   preFixup = ''
