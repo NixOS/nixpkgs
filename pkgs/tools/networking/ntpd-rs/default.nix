@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
 , pandoc
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-iZuDNFy8c2UZUh3J11lEtfHlDFN+qPl4iZg+ps7AenE=";
 
+  buildInputs = lib.optionals stdenv.isDarwin ([
+    Security
+  ]);
   nativeBuildInputs = [ pandoc installShellFiles ];
 
   postPatch = ''
@@ -53,5 +58,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ fpletz ];
+    # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
