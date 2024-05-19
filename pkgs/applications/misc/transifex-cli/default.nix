@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "transifex-cli";
-  version = "1.6.12";
+  version = "1.6.13";
 
   src = fetchFromGitHub {
     owner = "transifex";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-k26z/eFXjNijoth/hWXPfCv4/z6row9DRc9SEtnnX1o=";
+    sha256 = "sha256-SVXrrpkz2veA1L5p88iGQxHAUtySiYge0ffY2HyVCr0=";
   };
 
   vendorHash = "sha256-rcimaHr3fFeHSjZXw1w23cKISCT+9t8SgtPnY/uYGAU=";
