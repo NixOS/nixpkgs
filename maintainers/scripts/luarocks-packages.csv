@@ -94,7 +94,7 @@ lua-utils.nvim,,,,,,mrcjkb
 lua-yajl,,,,,,pstn
 lua-iconv,,,,7.0.0,,
 luuid,,,,20120509-2,,
-luv,,,,1.44.2-1,,
+luv,,,,1.48.0-2,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 lyaml,,,,,,lblasc
 magick,,,,,5.1,donovanglover
