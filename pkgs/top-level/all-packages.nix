@@ -10841,7 +10841,7 @@ with pkgs;
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices SystemConfiguration;
   };
 
   networking-ts-cxx = callPackage ../development/libraries/networking-ts-cxx { };
@@ -32045,12 +32045,12 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo121Module;
     go = go_1_21;
-  }) k3s_1_26 k3s_1_27 k3s_1_28 k3s_1_29;
+  }) k3s_1_27 k3s_1_28 k3s_1_29;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo122Module;
     go = go_1_22;
   }) k3s_1_30;
-  k3s = k3s_1_29;
+  k3s = k3s_1_30;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 
