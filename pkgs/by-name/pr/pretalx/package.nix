@@ -96,6 +96,7 @@ python.pkgs.buildPythonApplication rec {
     "pillow"
     "python-dateutil"
     "reportlab"
+    "rules"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
