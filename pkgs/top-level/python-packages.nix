@@ -6943,6 +6943,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llmx = callPackage ../development/python-modules/llmx { };
+
   llvmlite = callPackage ../development/python-modules/llvmlite {
     # llvmlite always requires a specific version of llvm.
     llvm = pkgs.llvm_14;
