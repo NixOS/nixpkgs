@@ -57,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source Geographic Information System (GIS) written in the Java programming language";
     homepage = "http://www.openjump.org/";
-    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     license = lib.licenses.gpl2;
+    mainProgram = "OpenJump";
     maintainers = lib.teams.geospatial.members ++ [ lib.maintainers.marcweber ];
     platforms = jre.meta.platforms;
-    mainProgram = "OpenJump";
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 })
