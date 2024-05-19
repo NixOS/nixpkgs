@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
   makeWrapper,
@@ -25,7 +25,7 @@ let
     hash = "sha256-Qh2V265FvQpqGKmPsiswnC5yECwIcNwMI3/Ka9sBqXE=";
   };
 
-  deps = stdenv.mkDerivation {
+  deps = stdenvNoCC.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
 
@@ -84,7 +84,7 @@ let
     }
   '';
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   nativeBuildInputs = [
