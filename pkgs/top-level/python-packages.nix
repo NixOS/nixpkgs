@@ -15301,8 +15301,6 @@ self: super: with self; {
 
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
-  torchgpipe = callPackage ../development/python-modules/torchgpipe { };
-
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
 
   torchio = callPackage ../development/python-modules/torchio { };

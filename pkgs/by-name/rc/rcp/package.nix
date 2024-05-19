@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,6 +15,10 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-kVO2WMwB/Lv4fCcdXaWL/Gfmenky6uMNVrUwhWU9y7A=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    IOKit
+  ]);
 
   cargoHash = "sha256-Pa8YgFAT9nue/QLhHQm6PlTJU/myK60UcND5TthMOxc=";
 
@@ -30,5 +36,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     mainProgram = "rcp";
     maintainers = with maintainers; [ wykurz ];
+    # = note: Undefined symbols for architecture x86_64: "_utimensat"
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

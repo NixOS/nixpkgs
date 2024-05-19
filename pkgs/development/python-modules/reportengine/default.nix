@@ -49,5 +49,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/NNPDF/reportengine/";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ veprbl ];
+    # Incompatibility with ruamel >= 0.18
+    # https://github.com/NNPDF/reportengine/issues/60
+    broken = versionAtLeast ruamel-yaml.version "0.18";
   };
 }
