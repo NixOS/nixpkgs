@@ -532,6 +532,7 @@ dont-distribute-packages:
  - apotiki
  - approx-rand-test
  - arbor-monad-metric-datadog
+ - archive-libarchive
  - archive-tar-bytestring
  - archlinux-web
  - arduino-copilot
@@ -2421,6 +2422,7 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
+ - json-sop
  - json-spec-elm
  - json-spec-elm-servant
  - json-spec-openapi
@@ -2565,6 +2567,7 @@ dont-distribute-packages:
  - lha
  - lhae
  - lhe
+ - libarchive
  - libconfig
  - libcspm
  - libgraph
