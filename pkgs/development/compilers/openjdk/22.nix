@@ -34,6 +34,7 @@
 , openjdk22-bootstrap
 , ensureNewerSourcesForZipFilesHook
 , setJavaClassPath
+, hookLibJvm
   # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
   # which should be fixable, this is a no-rebuild workaround for GHC.
 , headless ? stdenv.targetPlatform.isGhcjs
@@ -67,7 +68,7 @@ let
       hash = "sha256-itjvIedPwJl/l3a2gIVpNMs1zkbrjioVqbCj1Z1nCJE=";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook hookLibJvm ];
     buildInputs = [
       cpio
       file
@@ -185,6 +186,8 @@ let
     buildFlags = [ "images" ];
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib
 
       mv build/*/images/jdk $out/lib/openjdk
@@ -210,6 +213,8 @@ let
       ''}
 
       ln -s $out/lib/openjdk/bin $out/bin
+
+      runHook postInstall
     '';
 
     preFixup = ''

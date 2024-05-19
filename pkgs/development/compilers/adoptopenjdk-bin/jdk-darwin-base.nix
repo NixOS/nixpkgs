@@ -4,6 +4,7 @@
 , lib, stdenv
 , fetchurl
 , setJavaClassPath
+, hookLibJvm
 }:
 
 assert (stdenv.isDarwin && stdenv.isx86_64);
@@ -19,10 +20,14 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     inherit (sourcePerArch.${cpuName}) url sha256;
   };
 
+  nativeBuildInputs = [ hookLibJvm ];
+
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
 
     mv $sourceRoot $out
@@ -47,6 +52,8 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
+
+    runHook postInstall
   '';
 
   # FIXME: use multiple outputs or return actual JRE package
