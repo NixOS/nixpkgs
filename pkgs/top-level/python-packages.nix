@@ -7275,6 +7275,8 @@ self: super: with self; {
 
   matplotlib-sixel = callPackage ../development/python-modules/matplotlib-sixel { };
 
+  matplotlib-venn = callPackage ../development/python-modules/matplotlib-venn { };
+
   matplotx = callPackage ../development/python-modules/matplotx { };
 
   matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
