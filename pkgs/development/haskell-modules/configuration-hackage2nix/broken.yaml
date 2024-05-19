@@ -1003,7 +1003,6 @@ broken-packages:
   - core-haskell # failure in job https://hydra.nixos.org/build/233222588 at 2023-09-02
   - corenlp-types # failure in job https://hydra.nixos.org/build/243808366 at 2024-01-01
   - core-warn # failure in job https://hydra.nixos.org/build/233204404 at 2023-09-02
-  - cornelis # failure in job https://hydra.nixos.org/build/259604220 at 2024-05-15
   - Coroutine # failure in job https://hydra.nixos.org/build/233211213 at 2023-09-02
   - coroutine-object # failure in job https://hydra.nixos.org/build/233220413 at 2023-09-02
   - couchdb-conduit # failure in job https://hydra.nixos.org/build/233227244 at 2023-09-02

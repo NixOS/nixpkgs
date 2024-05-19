@@ -3093,6 +3093,10 @@ self: super: {
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
+  # 2024-05-15: Hackage distribution is missing files needed for tests
+  # https://github.com/isovector/cornelis/issues/150
+  cornelis = dontCheck super.cornelis;
+
   cabal-gild = super.cabal-gild.overrideScope (self: super: {
     tasty = super.tasty_1_5;
     tasty-quickcheck = super.tasty-quickcheck_0_10_3;
