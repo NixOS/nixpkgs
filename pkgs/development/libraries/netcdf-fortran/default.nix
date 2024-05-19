@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
       CoreServices
       SystemConfiguration
     ];
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin ("-F${CoreServices}/Library/Frameworks -F${SystemConfiguration}/Library/Frameworks");
+  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
+    "-F${CoreServices}/Library/Frameworks"
+    "-F${SystemConfiguration}/Library/Frameworks"
+  ]);
   doCheck = true;
 
   FFLAGS = [ "-std=legacy" ];
