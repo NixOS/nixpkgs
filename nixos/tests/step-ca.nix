@@ -80,6 +80,15 @@ import ./make-test-python.nix ({ pkgs, ... }:
             };
           };
 
+        caclientcertbot =
+          { config, pkgs, ... }: {
+            security.pki.certificateFiles = [ "${test-certificates}/root_ca.crt" ];
+
+            networking.firewall.allowedTCPPorts = [ 80 443 ];
+
+            environment.systemPackages = [ pkgs.certbot pkgs.step-cli ];
+          };
+
         catester = { config, pkgs, ... }: {
           security.pki.certificateFiles = [ "${test-certificates}/root_ca.crt" ];
         };
@@ -96,5 +105,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
         caclientcaddy.wait_for_unit("caddy.service")
         catester.succeed("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
+
+        caclientcertbot.wait_until_succeeds("REQUESTS_CA_BUNDLE=${test-certificates}/root_ca.crt certbot certonly --agree-tos --email certbot@example.org -n --standalone -d caclientcertbot --server https://caserver:8443/acme/acme/directory")
+        caclientcertbot.wait_for_file("/etc/letsencrypt/live/caclientcertbot/fullchain.pem")
+        caclientcertbot.succeed("step certificate inspect /etc/letsencrypt/live/caclientcertbot/fullchain.pem | grep 'Issuer: CN=Example Intermediate CA 1'")
+        caclientcertbot.succeed("step certificate verify /etc/letsencrypt/live/caclientcertbot/fullchain.pem")
       '';
   })
