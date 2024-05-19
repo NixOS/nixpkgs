@@ -4,14 +4,14 @@
 
 
 { lib,
-  python3,
+  buildPythonPackage,
   fetchPypi,
   imagemagick,
   swww, #feh
   ...
 }:
 
-python3.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pywal16";
   version = "3.5.3";
   format = "setuptools";
