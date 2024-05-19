@@ -1,22 +1,23 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, distrobox
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  distrobox,
 }:
 
 buildGoModule rec {
   pname = "apx";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx";
     rev = "v${version}";
-    hash = "sha256-OLJrwibw9uX5ty7FRZ0q8zx0i1vQXRKK8reQsJFFxAI=";
+    hash = "sha256-X6nphUzJc/R3Egw09eRQbza1QebpLGsMIfV7BpLOXTc=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-hGi+M5RRUL2oyxFGVeR0sum93/CA+FGYy0m4vDmlXTc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,10 +25,10 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace config/apx.json \
-      --replace "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
-      --replace "/usr/share/apx" "$out/bin/apx"
+      --replace-fail "/usr/share/apx/distrobox/distrobox" "${distrobox}/bin/distrobox" \
+      --replace-fail "/usr/share/apx" "$out/bin/apx"
     substituteInPlace settings/config.go \
-      --replace "/usr/share/apx/" "$out/share/apx/"
+      --replace-fail "/usr/share/apx/" "$out/share/apx/"
   '';
 
   postInstall = ''
