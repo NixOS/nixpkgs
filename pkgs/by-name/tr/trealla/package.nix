@@ -5,6 +5,7 @@
   openssl,
   readline,
   stdenv,
+  testers,
   valgrind,
   xxd,
   # Boolean flags
@@ -67,6 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !valgrind.meta.broken;
 
   checkFlags = [ "test" ] ++ lib.optionals checkLeaks [ "leaks" ];
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = "v${finalAttrs.version}";
+      };
+    };
+  };
 
   meta = {
     homepage = "https://trealla-prolog.github.io/trealla/";
