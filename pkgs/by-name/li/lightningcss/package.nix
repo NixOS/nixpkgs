@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lightningcss";
-  version = "1.24.1";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HRuL7zwpN2e51+/Ltvif+eh+WBss/FtHCOlJfa/eVdE=";
+    hash = "sha256-0no2f4aIJ4f9kSXUdaqjS4ARmVgfV5wqP407WCFeD1g=";
   };
 
-  cargoHash = "sha256-HavdTNaLTGctePa890dy/jGlXZXXZu1QFeFJOpjOiME=";
+  cargoHash = "sha256-P/EP5bKDqGMBfZL+yyUXLjT9YwIpSCruFxkxIbpKIaQ=";
 
   patches = [
     # Backport fix for build error for lightningcss-napi
