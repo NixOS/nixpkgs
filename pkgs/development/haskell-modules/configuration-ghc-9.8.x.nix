@@ -54,7 +54,7 @@ self: super: {
   #
   th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20240511;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   ghc-lib = doDistribute self.ghc-lib_9_10_1_20240511;
   megaparsec = doDistribute self.megaparsec_9_6_1;
   # TODO: remove when aeson updates or launches a revision
