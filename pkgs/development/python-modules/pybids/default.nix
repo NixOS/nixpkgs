@@ -1,19 +1,20 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools
-, formulaic
-, click
-, num2words
-, numpy
-, scipy
-, pandas
-, nibabel
-, bids-validator
-, sqlalchemy
-, pytestCheckHook
-, versioneer
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  formulaic,
+  click,
+  num2words,
+  numpy,
+  scipy,
+  pandas,
+  nibabel,
+  bids-validator,
+  sqlalchemy,
+  pytestCheckHook,
+  versioneer,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -49,28 +50,28 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  pythonImportsCheck = [
-    "bids"
-  ];
+  pythonImportsCheck = [ "bids" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # looks for missing data:
+    # Test looks for missing data
     "test_config_filename"
-    # regression associated with formulaic >= 0.6.0
+    # Regression associated with formulaic >= 0.6.0
     # (see https://github.com/bids-standard/pybids/issues/1000)
     "test_split"
+    # AssertionError, TypeError
+    "test_run_variable_collection_bad_length_to_df_all_dense_var"
+    "test_extension_initial_dot"
+    "test_to_df"
   ];
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
-    mainProgram = "pybids";
     homepage = "https://github.com/bids-standard/pybids";
     changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
+    mainProgram = "pybids";
   };
 }

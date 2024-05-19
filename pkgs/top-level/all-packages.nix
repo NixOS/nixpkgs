@@ -2334,7 +2334,7 @@ with pkgs;
 
   git-credential-1password = callPackage ../applications/version-management/git-credential-1password { };
 
-  git-credential-keepassxc = callPackage ../applications/version-management/git-credential-keepassxc {
+  git-credential-keepassxc = darwin.apple_sdk_11_0.callPackage ../applications/version-management/git-credential-keepassxc {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
@@ -11187,7 +11187,7 @@ with pkgs;
 
   nylon = callPackage ../tools/networking/nylon { };
 
-  nym = callPackage ../applications/networking/nym {
+  nym = darwin.apple_sdk_11_0.callPackage ../applications/networking/nym {
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
@@ -40256,7 +40256,7 @@ with pkgs;
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
-  veilid = callPackage ../tools/networking/veilid {
+  veilid = darwin.apple_sdk_11_0.callPackage ../tools/networking/veilid {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
