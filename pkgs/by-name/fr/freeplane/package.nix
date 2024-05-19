@@ -1,12 +1,10 @@
 {
   stdenv,
   lib,
-  fetchpatch,
   fetchFromGitHub,
   makeWrapper,
   makeDesktopItem,
   writeText,
-  runtimeShell,
   jdk17,
   perl,
   gradle_7,
@@ -17,9 +15,6 @@ let
   pname = "freeplane";
   version = "1.11.8";
 
-  src_hash = "sha256-Qh2V265FvQpqGKmPsiswnC5yECwIcNwMI3/Ka9sBqXE=";
-  deps_outputHash = "sha256-2Zaw4FW12dThdr082dEB1EYkGwNiayz501wIPGXUfBw=";
-
   jdk = jdk17;
   gradle = gradle_7;
 
@@ -27,7 +22,7 @@ let
     owner = pname;
     repo = pname;
     rev = "release-${version}";
-    hash = src_hash;
+    hash = "sha256-Qh2V265FvQpqGKmPsiswnC5yECwIcNwMI3/Ka9sBqXE=";
   };
 
   deps = stdenv.mkDerivation {
@@ -41,12 +36,15 @@ let
     ];
 
     buildPhase = ''
+      runHook preBuild
       GRADLE_USER_HOME=$PWD gradle -Dorg.gradle.java.home=${jdk} --no-daemon build
+      runHook postBuild
     '';
 
     # Mavenize dependency paths
     # e.g. org.codehaus.groovy/groovy/2.4.0/{hash}/groovy-2.4.0.jar -> org/codehaus/groovy/groovy/2.4.0/groovy-2.4.0.jar
     installPhase = ''
+      runHook preInstall
       find ./caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
@@ -56,13 +54,14 @@ let
         [[ -e $dir/$dest ]] && continue
         ln -s "$dir/$file" "$dir/$dest"
       done < <(find "$out" -type f -name 'okio-jvm-*.jar' -print0)
+      runHook postInstall
     '';
     # otherwise the package with a namespace starting with info/... gets moved to share/info/...
     forceShare = [ "dummy" ];
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = deps_outputHash;
+    outputHash = "sha256-2Zaw4FW12dThdr082dEB1EYkGwNiayz501wIPGXUfBw=";
   };
 
   # Point to our local deps repo
@@ -85,7 +84,7 @@ let
     }
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -95,6 +94,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     mkdir -p freeplane/build
 
     GRADLE_USER_HOME=$PWD \
@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
       --no-daemon --offline --init-script ${gradleInit} \
       -x test \
       build
+    runHook postBuild
   '';
 
   desktopItems = [
@@ -111,7 +112,7 @@ stdenv.mkDerivation rec {
       genericName = "Mind-mapper";
       exec = "freeplane";
       icon = "freeplane";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       mimeTypes = [
         "application/x-freemind"
         "application/x-freeplane"
@@ -147,12 +148,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mind-mapping software";
     homepage = "https://freeplane.org/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chaduffy ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ chaduffy ];
     mainProgram = "freeplane";
   };
-}
+})
