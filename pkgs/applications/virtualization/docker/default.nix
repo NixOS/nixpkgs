@@ -120,7 +120,7 @@ rec {
       ];
 
       postPatch = ''
-        patchShebangs hack/make.sh hack/make/
+        patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
       '';
 
       buildPhase = ''
