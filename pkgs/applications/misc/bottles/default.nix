@@ -14,6 +14,7 @@
 , gtksourceview5
 , libadwaita
 , cabextract
+, icoextract
 , p7zip
 , xdpyinfo
 , imagemagick
@@ -75,9 +76,9 @@ python3Packages.buildPythonApplication rec {
     certifi
     idna
     orjson
-    icoextract
   ] ++ [
     cabextract
+    icoextract
     p7zip
     xdpyinfo
     imagemagick
