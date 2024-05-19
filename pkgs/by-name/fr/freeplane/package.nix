@@ -19,8 +19,8 @@ let
   gradle = gradle_7;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "freeplane";
+    repo = "freeplane";
     rev = "release-${version}";
     hash = "sha256-Qh2V265FvQpqGKmPsiswnC5yECwIcNwMI3/Ka9sBqXE=";
   };
