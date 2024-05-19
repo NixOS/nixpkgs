@@ -3379,7 +3379,6 @@ broken-packages:
   - language-sh # failure in job https://hydra.nixos.org/build/233249709 at 2023-09-02
   - language-sqlite # failure in job https://hydra.nixos.org/build/233248845 at 2023-09-02
   - language-sygus # failure in job https://hydra.nixos.org/build/233192608 at 2023-09-02
-  - language-thrift # failure in job https://hydra.nixos.org/build/252721081 at 2024-03-16
   - language-typescript # failure in job https://hydra.nixos.org/build/233247703 at 2023-09-02
   - language-webidl # failure in job https://hydra.nixos.org/build/233194656 at 2023-09-02
   - laop # failure in job https://hydra.nixos.org/build/233204106 at 2023-09-02
