@@ -118,5 +118,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage    = "https://iovisor.github.io/bcc/";
     license     = licenses.asl20;
     maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
+    platforms   = platforms.linux;
   };
 }

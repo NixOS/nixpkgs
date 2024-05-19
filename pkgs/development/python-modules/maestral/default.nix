@@ -24,6 +24,7 @@
 , typing-extensions
 , watchdog
 , xattr
+, fetchpatch
 , pytestCheckHook
 , nixosTests
 }:
@@ -67,6 +68,14 @@ buildPythonPackage rec {
     xattr
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     rubicon-objc
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "upgrade-dropbox-version-bounds";
+      url = "https://github.com/samschott/maestral/commit/8fd581fa503391534913afbc33a61132ff2e21ce.patch";
+      hash = "sha256-2Dke9iF/5Ptsf3CSRHUkjdFRrmdKY+L3sILRMyYrUH0=";
+    })
   ];
 
   makeWrapperArgs = [

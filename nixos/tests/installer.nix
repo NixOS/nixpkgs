@@ -974,6 +974,9 @@ in {
           "mount LABEL=nixos /mnt",
       )
     '';
+    extraConfig = optionalString systemdStage1 ''
+      boot.initrd.services.lvm.enable = true;
+    '';
   };
 
   # Boot off an encrypted root partition with the default LUKS header format
