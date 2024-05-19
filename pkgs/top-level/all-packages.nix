@@ -32047,7 +32047,7 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo121Module;
     go = go_1_21;
-  }) k3s_1_26 k3s_1_27 k3s_1_28 k3s_1_29;
+  }) k3s_1_27 k3s_1_28 k3s_1_29;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo122Module;
     go = go_1_22;
