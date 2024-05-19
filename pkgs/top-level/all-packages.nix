@@ -32052,7 +32052,7 @@ with pkgs;
     buildGoModule = buildGo122Module;
     go = go_1_22;
   }) k3s_1_30;
-  k3s = k3s_1_29;
+  k3s = k3s_1_30;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 
