@@ -35,9 +35,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.buildMavenPackage = callPackage ./build-package.nix {
-    maven = finalAttrs.finalPackage;
-  };
+  passthru =
+    let
+      makeOverridableMavenPackage = f: origArgs:
+        let
+          ff = f origArgs;
+          overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
+        in
+        if builtins.isAttrs ff then
+          (ff // {
+            overrideMavenAttrs = newArgs: makeOverridableMavenPackage f (overrideWith newArgs);
+          })
+        else if builtins.isFunction ff then {
+          overrideMavenAttrs = newArgs: makeOverridableMavenPackage f (overrideWith newArgs);
+          __functor = self: ff;
+        }
+        else ff;
+    in
+    {
+      buildMavenPackage = makeOverridableMavenPackage (callPackage ./build-package.nix {
+        maven = finalAttrs.finalPackage;
+      });
+    };
 
   meta = with lib; {
     mainProgram = "mvn";
