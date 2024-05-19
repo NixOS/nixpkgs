@@ -16269,7 +16269,7 @@ with pkgs;
       /**/ if platform.isDarwin then 16
       else if platform.isFreeBSD then 16
       else if platform.isAndroid then 12
-      else if platform.isLinux then 17
+      else if platform.isLinux then 18
       else if platform.isWasm then 16
       # For unknown systems, assume the latest version is required.
       else 17;
