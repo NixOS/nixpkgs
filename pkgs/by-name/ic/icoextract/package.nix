@@ -46,5 +46,6 @@ python3Packages.buildPythonPackage rec {
       bryanasdev000
       donovanglover
     ];
+    mainProgram = "icoextract";
   };
 }
