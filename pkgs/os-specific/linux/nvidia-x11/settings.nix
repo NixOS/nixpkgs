@@ -147,6 +147,6 @@ stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nvidia-settings";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar aidalgol ];
   };
 }
