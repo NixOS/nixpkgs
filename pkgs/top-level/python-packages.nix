@@ -13110,6 +13110,8 @@ self: super: with self; {
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
+  rabbitizer = callPackage ../development/python-modules/rabbitizer { };
+
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
   radicale-infcloud = callPackage ../development/python-modules/radicale-infcloud {
