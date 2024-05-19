@@ -2004,6 +2004,8 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
+  connectorx = callPackage ../development/python-modules/connectorx {};
+
   connio = callPackage ../development/python-modules/connio { };
 
   conway-polynomials = callPackage ../development/python-modules/conway-polynomials {};
