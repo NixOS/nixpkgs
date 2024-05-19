@@ -1,13 +1,12 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
   cimg,
   cmake,
   common-updater-scripts,
   coreutils,
   curl,
+  fetchFromGitHub,
+  fetchurl,
   fftw,
   gmic-qt,
   gnugrep,
@@ -21,7 +20,9 @@
   opencv,
   openexr,
   pkg-config,
-  writeShellScript,
+  runtimeShell,
+  stdenv,
+  substituteAll,
   zlib,
 }:
 
@@ -93,37 +94,19 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cimg gmic-qt;
     };
 
-    updateScript = writeShellScript "gmic-update-script" ''
-      set -o errexit
-      PATH=${
-        lib.makeBinPath [
-          common-updater-scripts
-          coreutils
-          curl
-          gnugrep
-          gnused
-          jq
-        ]
-      }
-
-      latestVersion=$(curl 'https://gmic.eu/files/source/' \
-                       | grep -E 'gmic_[^"]+\.tar\.gz' \
-                       | sed -E 's/.+<a href="gmic_([^"]+)\.tar\.gz".+/\1/g' \
-                       | sort --numeric-sort --reverse | head -n1)
-
-      if [[ "${finalAttrs.version}" = "$latestVersion" ]]; then
-          echo "The new version same as the old version."
-          exit 0
-      fi
-
-      for component in src gmic_stdlib; do
-          # The script will not perform an update when the version attribute is
-          # up to date from previous platform run; we need to clear it before
-          # each run
-          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
-          update-source-version "--source-key=$component" "gmic" $latestVersion
-      done
-    '';
+    updateScript = substituteAll {
+      src = ./update-script.sh;
+      inherit runtimeShell;
+      inherit (finalAttrs) version;
+      pathTools = lib.makeBinPath [
+        common-updater-scripts
+        coreutils
+        curl
+        gnugrep
+        gnused
+        jq
+      ];
+    };
   };
 
   meta = {
@@ -131,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open and full-featured framework for image processing";
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
-    maintainers = [
-      lib.maintainers.AndersonTorres
-      lib.maintainers.lilyinstarlight
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      lilyinstarlight
     ];
     platforms = lib.platforms.unix;
   };
