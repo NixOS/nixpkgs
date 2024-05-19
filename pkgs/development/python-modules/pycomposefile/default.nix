@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pycomposefile";
-  version = "0.0.30";
+  version = "0.0.31";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-GQopIO8F+G5iDz4NF2GTHCpXo4uqKHdHIzffacihylM=";
+    hash = "sha256-SYul81giQLUM1FdgfabKJyrbSu4xdoaWblcE87ZbBwg=";
   };
 
   nativeBuildInput = [
