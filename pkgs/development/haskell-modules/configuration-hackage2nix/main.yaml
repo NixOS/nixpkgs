@@ -259,6 +259,8 @@ package-maintainers:
     - Unique
   libjared:
     - sensei
+  malo:
+    - cornelis
   maralorn:
     - bluefin
     - cabal-fmt
@@ -327,6 +329,8 @@ package-maintainers:
     - titlecase
     - xmonad
     - xmonad-contrib
+  phijor:
+    - cornelis
   poscat:
     - hinit
   psibi:

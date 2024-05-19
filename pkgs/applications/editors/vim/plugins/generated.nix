@@ -2646,6 +2646,18 @@ final: prev:
     meta.homepage = "https://github.com/ms-jpq/coq_nvim/";
   };
 
+  cornelis = buildVimPlugin {
+    pname = "cornelis";
+    version = "2024-04-17";
+    src = fetchFromGitHub {
+      owner = "isovector";
+      repo = "cornelis";
+      rev = "c97b4817034a927dcadb22294cf97a88087a935f";
+      sha256 = "03wkq7jly9syv7kqsf66hdq8p7fqk6a240azcys9fsak797nbs1a";
+    };
+    meta.homepage = "https://github.com/isovector/cornelis/";
+  };
+
   cosco-vim = buildVimPlugin {
     pname = "cosco.vim";
     version = "2018-08-07";
