@@ -15,43 +15,41 @@ let
 in {
   meta.maintainers = [ lib.maintainers.Sepero ];
 
-  options = let
+  options.services.temp-throttle = let
     mkOption = lib.mkOption;
     nullOr = lib.types.nullOr;
     str = lib.types.str;
     int = lib.types.int;
   in {
-    services.temp-throttle = {
-      enable = lib.mkEnableOption "Whether to enable temp-throttle service";
-      package = lib.mkPackageOption pkgs "temp-throttle" { };
-      max_temp = mkOption {
-        type = int;
-        default = 80;
-        description = "Maximum desired temperature in Celcius";
-      };
-      interval = mkOption {
-        type = int;
-        default = 3;
-        description = "Seconds between checking temperature. Default 3";
-      };
-      temp_file = mkOption {
-        type = nullOr str;
-        default = null;
-        description =
-          "Force read CPU temperature from given file. Default auto detection";
-        example = "/sys/class/hwmon/hwmon1/device/temp1_input";
-      };
-      core = mkOption {
-        type = nullOr int;
-        default = null;
-        description =
-          "Force read frequency from given CPU Core. May be needed for big.little endian. Default 0";
-      };
-      log_file = mkOption {
-        type = nullOr str;
-        default = null;
-        description = "Log output to given file. Default stdout";
-      };
+    enable = lib.mkEnableOption "Whether to enable temp-throttle service";
+    package = lib.mkPackageOption pkgs "temp-throttle" { };
+    max_temp = mkOption {
+      type = int;
+      default = 80;
+      description = "Maximum desired temperature in Celcius";
+    };
+    interval = mkOption {
+      type = int;
+      default = 3;
+      description = "Seconds between checking temperature. Default 3";
+    };
+    temp_file = mkOption {
+      type = nullOr str;
+      default = null;
+      description =
+        "Force read CPU temperature from given file. Default auto detection";
+      example = "/sys/class/hwmon/hwmon1/device/temp1_input";
+    };
+    core = mkOption {
+      type = nullOr int;
+      default = null;
+      description =
+        "Force read frequency from given CPU Core. May be needed for big.little endian. Default 0";
+    };
+    log_file = mkOption {
+      type = nullOr str;
+      default = null;
+      description = "Log output to given file. Default stdout";
     };
   };
   config = lib.mkIf cfg.enable {
