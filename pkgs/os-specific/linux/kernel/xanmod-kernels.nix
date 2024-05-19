@@ -45,9 +45,6 @@ let
       HZ = freeform "250";
       HZ_250 = yes;
       HZ_1000 = no;
-
-      # Disable writeback throttling by default
-      BLK_WBT_MQ = lib.mkOverride 60 no;
     };
 
     extraMeta = {
