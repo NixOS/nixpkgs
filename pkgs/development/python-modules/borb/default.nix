@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, fonttools
-, lxml
-, matplotlib
-, pandas
-, pillow
-, python-barcode
-, pythonOlder
-, qrcode
-, pytestCheckHook
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  fonttools,
+  lxml,
+  matplotlib,
+  pandas,
+  pillow,
+  python-barcode,
+  pythonOlder,
+  qrcode,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-cpih7ijoT4dEdoFjh6qQcnzjWd2zusv4tNgPyrIghvg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cryptography
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "borb.pdf"
-  ];
+  pythonImportsCheck = [ "borb.pdf" ];
 
   disabledTests = [
     "test_code_files_are_small "
