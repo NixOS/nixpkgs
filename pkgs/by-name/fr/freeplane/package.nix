@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchpatch
-, fetchFromGitHub
-, makeWrapper
-, makeDesktopItem
-, writeText
-, runtimeShell
-, jdk17
-, perl
-, gradle_7
-, which
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  makeWrapper,
+  makeDesktopItem,
+  writeText,
+  runtimeShell,
+  jdk17,
+  perl,
+  gradle_7,
+  which,
 }:
 
 let
@@ -83,8 +84,8 @@ let
       }
     }
   '';
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -134,7 +135,12 @@ in stdenv.mkDerivation rec {
     makeWrapper $out/share/freeplane/freeplane.sh $out/bin/freeplane \
       --set FREEPLANE_BASE_DIR $out/share/freeplane \
       --set JAVA_HOME ${jdk} \
-      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jdk
+          which
+        ]
+      } \
       --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
       --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
 
