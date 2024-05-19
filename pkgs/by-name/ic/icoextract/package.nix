@@ -1,7 +1,7 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -11,10 +11,11 @@ python3Packages.buildPythonPackage rec {
 
   disabled = python3Packages.pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-/UxnWNyRNtwI4Rxx97i5QyjeMrUr5Sq+TfLTmU0xWyc=";
+  src = fetchFromGitHub {
+    owner = "jlu5";
+    repo = "icoextract";
+    rev = version;
+    hash = "sha256-McVG8966NCEpzc9biawLvUgbQUtterkIud/9GwOeltI=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -30,8 +31,10 @@ python3Packages.buildPythonPackage rec {
   pythonImportsCheck = [ "icoextract" ];
 
   postInstall = ''
-    mkdir -p $out/share/thumbnailers
-    substituteAll ${./exe-thumbnailer.thumbnailer} $out/share/thumbnailers/exe-thumbnailer.thumbnailer
+    substituteInPlace exe-thumbnailer.thumbnailer \
+      --replace Exec=exe-thumbnailer Exec=$out/bin/exe-thumbnailer
+
+    install -Dm644 exe-thumbnailer.thumbnailer $out/share/thumbnailers
   '';
 
   meta = with lib; {
