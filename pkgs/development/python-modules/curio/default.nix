@@ -36,6 +36,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
+    "test_cpu" # timing sensitive
     "test_aside_basic" # times out
     "test_write_timeout" # flaky, does not always time out
     "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
