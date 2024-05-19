@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "borb";
-  version = "2.1.22";
+  version = "2.1.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T+uSq/KF3p4zJJhQeompJIJ6BWhYFK9Ko9w0sZFtFhE=";
+    hash = "sha256-TJicWMqorCgfJmpujuM7jlq/BExwsXkOaO+/Ox2gR2A=";
   };
 
   propagatedBuildInputs = [
