@@ -36692,6 +36692,12 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
+  fjordlauncher-unwrapped = kdePackages.callPackage ../games/fjordlauncher {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  fjordlauncher = kdePackages.callPackage ../games/fjordlauncher/wrapper.nix { };
+
   jumpy = callPackage ../games/jumpy { };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
