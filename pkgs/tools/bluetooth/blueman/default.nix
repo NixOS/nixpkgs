@@ -46,6 +46,12 @@ in stdenv.mkDerivation rec {
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
+  # We avoid to double wrap original binaries, instead passing directly `gappsWrapperArgs`
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   postFixup = ''
     # This mimics ../../../development/interpreters/python/wrap.sh
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
