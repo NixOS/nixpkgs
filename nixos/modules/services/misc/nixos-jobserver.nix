@@ -40,7 +40,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    nix.sandboxPaths = [ "/jobserver=${tokenFile}?" ];
+    nix.sandboxPaths = [ "/build-support/jobserver=${tokenFile}?" ];
 
     systemd.services.nixos-jobserver = {
       wantedBy = [ "multi-user.target" ];

@@ -1032,8 +1032,8 @@ runInJobserver() {
     done
     shift
 
-    if [[ -n "$jscall" && -e /jobserver ]]; then
-        cmd=("$jscall" "${opts[@]}" /jobserver $NIX_BUILD_CORES "${cmd[@]}"
+    if [[ -n "$jscall" && -e /build-support/jobserver ]]; then
+        cmd=("$jscall" "${opts[@]}" /build-support/jobserver $NIX_BUILD_CORES "${cmd[@]}"
             ---- "${defArgs[@]}" ----)
         kind='with'
     else
