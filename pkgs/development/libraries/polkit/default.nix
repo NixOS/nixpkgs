@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
+
+    ./elogind.patch
   ];
 
   depsBuildBuild = [
