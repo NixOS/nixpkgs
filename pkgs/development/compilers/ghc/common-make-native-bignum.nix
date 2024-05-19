@@ -1,5 +1,8 @@
-# DO NOT port this expression to hadrian. It is not possible to build a GHC
-# cross compiler with 9.4.* and hadrian.
+{ version
+, sha256
+, url ? "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
+}:
+
 { lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
 
 # build-tools
@@ -17,7 +20,7 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || stdenv.targetPlatform.isAarch64)
+              || (lib.versionAtLeast version "9.2" && stdenv.targetPlatform.isAarch64))
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -173,19 +176,61 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.4.8";
   pname = "${targetPrefix}ghc${variantSuffix}";
+  inherit version;
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "0bf407eb67fe3e3c24b0f4c8dea8cb63e07f63ca0f76cf2058565143507ab85e";
+    inherit url sha256;
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
 
-  patches = [
+  # FIXME(@sternenseemann): This can be simplified a lot (causing a rebuild)
+  patches = (if lib.versions.majorMinor version == "9.0" then [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
+
+    # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
+    (fetchpatch {
+      name = "ghc-9.0.2-fcompact-unwind.patch";
+      # Note that the test suite is not packaged.
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
+      sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
+    })
+  ] else if lib.versions.majorMinor version == "9.2" then [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
     # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
     # Can be removed if the Cabal library included with ghc backports the linked fix
     (fetchpatch {
@@ -194,17 +239,45 @@ stdenv.mkDerivation (rec {
       extraPrefix = "libraries/Cabal/";
       sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
     })
+  ] else if lib.versions.majorMinor version == "9.4" then [
+    # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
+    # Can be removed if the Cabal library included with ghc backports the linked fix
+    (fetchpatch {
+      url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
+      stripLen = 1;
+      extraPrefix = "libraries/Cabal/";
+      sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
+    })
+  ]
+  ++ lib.optionals (version == "9.4.5") [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+  ]
+  ++ [
 
     # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
     ./docs-sphinx-7.patch
-  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+  ]
+  ++ lib.optionals (version == "9.4.6") [
+    # Work around a type not being defined when including Rts.h in bytestring's cbits
+    # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.
+    ./9.4.6-bytestring-posix-source.patch
+  ] else [ ])
+  ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
     #
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+    (if lib.versionAtLeast version "9.2"
+     then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+     else ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch)
   ];
 
   postPatch = "patchShebangs .";
@@ -239,10 +312,15 @@ stdenv.mkDerivation (rec {
   '' + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+  ''
+  + lib.optionalString (version == "9.0.2" || lib.versionAtLeast version "9.4") ''
+
   '' + ''
-
     echo -n "${buildMK}" > mk/build.mk
+  '' + lib.optionalString (lib.versionAtLeast version "9.4") ''
 
+  ''
+  + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
@@ -250,6 +328,7 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "9.2") ''
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
     export XATTR=${lib.getBin xattr}/bin/xattr
@@ -274,7 +353,7 @@ stdenv.mkDerivation (rec {
   ''
   # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
   # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
-  + ''
+  + lib.optionalString (lib.versions.majorMinor version == "9.4") ''
     substituteInPlace configure --replace \
       'MinBootGhcVersion="9.0"' \
       'MinBootGhcVersion="8.10"'
@@ -321,6 +400,10 @@ stdenv.mkDerivation (rec {
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals (stdenv.isDarwin && lib.versions.majorMinor version == "9.0") [
+    # TODO(@sternenseemann): backport addition of XATTR env var like
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
+    xattr
   ];
 
   # For building runtime libs

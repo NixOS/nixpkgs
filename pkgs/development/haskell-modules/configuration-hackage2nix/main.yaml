@@ -28,9 +28,14 @@ default-package-overrides:
   - gi-gdkx11 < 4
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  - hie-bios == 0.13.1
+  # 2024-05-18: Various overrides for hls compatibility
+  - lsp < 2.5
+  - lsp-types < 2.2
+  - lsp-test < 0.17.0.1
+  - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
   # 2024-05-10: need to match hlegder from stackage
   - hledger-ui < 1.33
+
 
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
@@ -61,7 +66,9 @@ extra-packages:
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
+  - ghc-lib-parser-ex == 9.8.*          # 2024-05-19: preserve for GHC 9.8
   - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
   - haddock == 2.23.*                   # required on GHC < 8.10.x
@@ -673,7 +680,6 @@ unsupported-platforms:
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
-  reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rsi-break:                                    [ platforms.darwin ] # depends on monomer
   rtlsdr:                                       [ platforms.darwin ]
@@ -723,6 +729,7 @@ supported-platforms:
   dx9base:                                      [ platforms.windows ]
   dx9d3d:                                       [ platforms.windows ]
   dx9d3dx:                                      [ platforms.windows ]
+  erebos-tester:                                [ platforms.linux ] # depends on linux-namespaces
   evdev:                                        [ platforms.linux ]
   evdev-streamly:                               [ platforms.linux ]
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
