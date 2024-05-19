@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,28 +16,18 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-rGRsB5kAtzI5KP4tMiQqLJQZs7z5k657V8Di0OzB6F8=";
   };
 
-  pythonRelaxDeps = [
-    "ha-mqtt-discoverable"
-  ];
+  pythonRelaxDeps = [ "ha-mqtt-discoverable" ];
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
-  dependencies = with python3.pkgs; [
-    ha-mqtt-discoverable
-  ];
+  dependencies = with python3.pkgs; [ ha-mqtt-discoverable ];
 
   # Project has no real tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ha_mqtt_discoverable_cli"
-  ];
+  pythonImportsCheck = [ "ha_mqtt_discoverable_cli" ];
 
   meta = with lib; {
     description = "CLI for creating Home Assistant compatible MQTT entities that will be automatically discovered";
