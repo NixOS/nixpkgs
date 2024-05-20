@@ -1,18 +1,19 @@
-{ lib
-, authlib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, mashumaro
-, orjson
-, pytest-asyncio
-, pytest-httpx
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, respx
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  mashumaro,
+  orjson,
+  pytest-asyncio,
+  pytest-httpx,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     sed -i '/addopts =/d' pyproject.toml
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     authlib
@@ -56,9 +53,7 @@ buildPythonPackage rec {
     respx
   ];
 
-  pythonImportsCheck = [
-    "pydiscovergy"
-  ];
+  pythonImportsCheck = [ "pydiscovergy" ];
 
   meta = with lib; {
     description = "Library for interacting with the Discovergy API";
