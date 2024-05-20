@@ -22,11 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-CqbZcEP1ianvRRpx527KBjQTjvGBzlSmoKY1Pe5MXRA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyjwt
     python-dateutil
     requests
