@@ -22,7 +22,7 @@
 let
   # Temporarily avoid applying the patches on systems where already we have binaries
   # (in particular x86_64-linux and aarch64-linux) as the package is a huge rebuild there.
-  avoidRebuild = stdenv.isLinux && stdenv.is64bit;
+  avoidRebuild = with stdenv.hostPlatform; isLinux && is64bit && !isStatic;
 in
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
