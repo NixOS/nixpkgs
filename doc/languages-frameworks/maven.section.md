@@ -79,6 +79,47 @@ jd-cli.overrideMavenAttrs(old: rec {
 });
 ```
 
+### Offline build {#maven-offline-build}
+
+The default behaviour of the `buildMavenPackage` does the following:
+
+1. Runs `mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}` in the
+   `fetchedMavenDeps` fixed output derivation.
+2. Runs `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
+   ${mvnParameters}` again in the main derivation.
+
+As a result, tests are run twice which also means that a failing test
+triggers a new build of the fixed output derivation which re-downloads all
+dependencies again. For bigger Maven projects, this might lead to a slow
+feedback cycle and wastes build time resources by executing the build twice.
+
+You can use `buildOffline = true` to change the behaviour of the
+`buildMavenPackage` function to the following:
+1. Runs `mvn de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
+   -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}`
+2. Runs `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
+   ${mvnParameters}` in the main derivation.
+
+As a result, all dependencies are downloaded in step 1 and the tests are
+executed in step 2. A failing test only triggers a rebuild of step 2 as it can
+reuse the dependencies of step 1 because they have not changed.
+
+::: {.warning}
+Test dependencies are not downloaded in step 1 and are therefore missing in
+step 2 which will most probably fail the build. The `go-offline` plugin cannot
+handle these so-called [dynamic dependencies](https://github.com/qaware/go-offline-maven-plugin?tab=readme-ov-file#dynamic-dependencies).
+In that case you must add these dynamic dependencies manually with:
+```nix
+maven.buildMavenPackage rec {
+  manualMvnArtifacts = [
+    # add dynamic test dependencies here
+    "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
+    "org.junit.platform:junit-platform-launcher:1.10.0"
+  ];
+};
+```
+:::
+
 ### Stable Maven plugins {#stable-maven-plugins}
 
 Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`. If your project does not override these versions, an upgrade of Maven will change the version of the used plugins, and therefore the derivation and hash.
