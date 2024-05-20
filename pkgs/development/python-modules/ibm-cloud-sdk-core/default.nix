@@ -5,6 +5,7 @@
   pyjwt,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   pythonOlder,
   requests,
   responses,
@@ -51,6 +52,10 @@ buildPythonPackage rec {
     "test_retry_config_external"
     # assertion error due to requests brotli support
     "test_http_client"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # Tests are blocking or failing
+    "test_abstract_class_instantiation"
+    "test_abstract_class_instantiation"
   ];
 
   disabledTestPaths = [
