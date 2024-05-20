@@ -51,6 +51,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "";
     homepage = "https://github.com/dask/dask-expr";

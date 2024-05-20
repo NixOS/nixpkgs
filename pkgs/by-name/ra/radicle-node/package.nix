@@ -10,15 +10,15 @@
 , darwin
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0-rc.8";
+  version = "1.0.0-rc.9";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-F2n7ui0EgXK8fT76M14RVhXXGeRYub+VpH+puDUJ1pQ=";
+    hash = "sha256-GFltwKc6madTJWPTeAeslmFffHtixR0Dxd+3hAnHvz0=";
   };
-  cargoHash = "sha256-+QthR5M3qAxC42TPnR5iylfpuWnsSmg68SuCbhmkCvw=";
+  cargoHash = "sha256-UM9eDWyeewWPq3+z0JWqdAsCxx6EqytuYMwLXDHOC64=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
   nativeCheckInputs = [ git ];
@@ -26,15 +26,16 @@
     darwin.apple_sdk.frameworks.Security
   ];
 
-  doCheck = with stdenv.hostPlatform; isx86_64 && isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
+    # Tests want to open many files.
+    ulimit -n 4096
   '';
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
-    "--skip=tests::e2e"
   ];
 
   postInstall = ''

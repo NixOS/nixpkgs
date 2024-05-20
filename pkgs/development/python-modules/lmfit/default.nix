@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "lmfit";
-  version = "1.3.0";
+  version = "1.3.1";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-foI668BSN8qA0z0mDO27peJhkMzsn69ZXmgUOQneDJM=";
+    hash = "sha256-vDhiRK29EO8aKixPnRez3vkFVSwKZK74VPCtRswwnMU=";
   };
 
   postPatch = ''

@@ -263,6 +263,9 @@ with lib.maintainers; {
 
   docs = {
     members = [ ];
+    githubTeams = [
+      "documentation-team"
+    ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
     enableFeatureFreezePing = true;
@@ -811,6 +814,7 @@ with lib.maintainers; {
       aanderse
       drupol
       ma27
+      patka
       talyz
     ];
     githubTeams = [

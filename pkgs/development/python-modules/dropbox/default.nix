@@ -6,15 +6,18 @@
 , requests
 , six
 , stone
+, urllib3
 , mock
 , pytest-mock
 , pytestCheckHook
 , sphinxHook
+, sphinx-rtd-theme
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.36.2";
+  version = "12.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +28,7 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d++lxsbwPxnz1JPguWkImHXB+GQpMa9Uo3JNIxIe2ok=";
+    hash = "sha256-0MDm6NB+0vkN8QRSHvuDYEyYhYQWQD4jsctyd5fLdwE=";
   };
 
   build-system = [
@@ -36,6 +39,7 @@ buildPythonPackage rec {
     requests
     six
     stone
+    urllib3
   ];
 
   nativeCheckInputs = [
@@ -46,7 +50,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner == 5.2.0'," ""
+      --replace "'pytest-runner==5.2.0'," ""
   '';
 
   doCheck = true;
@@ -55,7 +59,20 @@ buildPythonPackage rec {
     "dropbox"
   ];
 
-  nativeBuildInputs = [ sphinxHook ];
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    pythonRelaxDepsHook
+  ];
+
+  # Version 12.0.0 re-introduced Python 2 support and set some very restrictive version bounds
+  # https://github.com/dropbox/dropbox-sdk-python/commit/75596daf316b4a806f18057e2797a15bdf83cf6d
+  # This will be the last major version to support Python 2, so version bounds might be more reasonable again in the future.
+  pythonRelaxDeps = [
+    "requests"
+    "stone"
+    "urllib3"
+  ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
   disabledTests = [
@@ -77,6 +94,8 @@ buildPythonPackage rec {
     "test_as_user"
     "test_as_admin"
     "test_clone_when_team_linked"
+    "test_bad_pins"
+    "test_bad_pins_session"
   ];
 
   meta = with lib; {

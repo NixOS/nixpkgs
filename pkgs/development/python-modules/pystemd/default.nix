@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , lib
-, python
 , fetchPypi
 , systemd
 , lxml
@@ -18,8 +17,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
   };
-
-  disabled = python.pythonOlder "3.4";
 
   buildInputs = [ systemd ];
 

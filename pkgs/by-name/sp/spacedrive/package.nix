@@ -57,8 +57,7 @@ if stdenv.isDarwin then stdenv.mkDerivation
 else appimageTools.wrapType2 {
   inherit pname version src meta passthru;
 
-  extraPkgs = pkgs:
-    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
+  extraPkgs = pkgs: [ pkgs.libthai ];
 
   extraInstallCommands =
     let

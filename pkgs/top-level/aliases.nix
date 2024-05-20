@@ -231,12 +231,14 @@ mapAliases ({
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
+  cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
   ### D ###
 
   dagger = throw "'dagger' has been removed from nixpkgs, as the trademark policy of the upstream project is incompatible"; # Added 2023-10-16
   dart_stable = dart; # Added 2020-01-15
   dart-sass-embedded = throw "dart-sass-embedded has been removed from nixpkgs, as is now included in Dart Sass itself.";
   dat = nodePackages.dat;
+  dbeaver = throw "'dbeaver' has been renamed to/replaced by 'dbeaver-bin'"; # Added 2024-05-16
   deadcode = throw "'deadcode' has been removed, as upstream is abandoned since 2019-04-27. Use the official deadcode from 'gotools' package."; # Added 2023-12-28
   deadpixi-sam = deadpixi-sam-unstable;
 
@@ -248,6 +250,7 @@ mapAliases ({
   devserver = throw "'devserver' has been removed in favor of 'miniserve' or other alternatives"; # Added 2023-01-13
   dfeet = throw "'dfeet' has been removed because it is archived upstream. Please use 'd-spy' instead"; # Added 2024-03-07
   dhcp = throw "dhcp (ISC DHCP) has been removed from nixpkgs, because it reached its end of life"; # Added 2023-04-04
+  dibbler = throw "dibbler was removed because it is not maintained anymore"; # Added 2024-05-14
   dnnl = oneDNN; # Added 2020-04-22
   docker-machine = throw "'docker-machine' has been removed, because the upstream project was archived"; # Added 2023-12-27
   docker-machine-kvm = throw "'docker-machine-kvm' has been removed, because 'docker-machine' was archived upstream and removed"; # Added 2023-12-27
@@ -404,6 +407,7 @@ mapAliases ({
   ghostwriter = libsForQt5.kdeGear.ghostwriter; # Added 2023-03-18
   go-dependency-manager = throw "'go-dependency-manager' is unmaintained and the go community now uses 'go.mod' mostly instead"; # Added 2023-10-04
   gotktrix = throw "'gotktrix' has been removed, as it was broken and unmaintained"; # Added 2023-12-06
+  git-credential-1password = throw "'git-credential-1password' has been removed, as the upstream project is deleted."; # Added 2024-05-20
   git-subset = throw "'git-subset' has been removed in favor of 'git-filter-repo'"; # Added 2023-01-13
 
   gitAndTools = self // {
@@ -968,6 +972,8 @@ mapAliases ({
   pdf2xml = throw "'pdf2xml' was removed: abandoned for years."; # Added 2023-10-22
   peach = asouldocs; # Added 2022-08-28
   pentablet-driver = xp-pen-g430-driver; # Added 2022-06-23
+  percona-server_8_0 = percona-server_lts; # Added 2024-05-07
+  percona-xtrabackup_8_0 = percona-xtrabackup_lts; # Added 2024-05-07
   perldevel = throw "'perldevel' has been dropped due to lack of updates in nixpkgs and lack of consistent support for devel versions by 'perl-cross' releases, use 'perl' instead";
   perldevelPackages = perldevel;
   pgadmin = pgadmin4;
@@ -1410,7 +1416,7 @@ mapAliases ({
   inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_17;
+  llvmPackages_latest = llvmPackages_18;
   llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_git.tools;

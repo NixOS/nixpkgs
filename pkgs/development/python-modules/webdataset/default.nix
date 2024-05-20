@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "0.2.88";
+  version = "0.2.90";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
     rev = "refs/tags/${version}";
-    hash = "sha256-wsBOBUK4VIGMQXYdgbgsuSH4XYvxDsUv3rh0S5rvA6c=";
+    hash = "sha256-selj7XD7NS831lbPnx/4o46bNpsxuFdSEIIb4S2b7S0=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +67,10 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # pickling error
     "test_background_download"
+  ] ++ lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
+    "test_concurrent_access"
+    # fails to patch 'init_process_group' from torch.distributed
+    "TestDistributedChunkedSampler"
   ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
     # segfaults on aarch64-linux
     "test_webloader"

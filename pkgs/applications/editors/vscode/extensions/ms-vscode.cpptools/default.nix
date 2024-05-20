@@ -1,7 +1,6 @@
 {
   lib,
   vscode-utils,
-  fetchurl,
   writeScript,
   runtimeShell,
   jq,
@@ -43,11 +42,11 @@ let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   supported = {
     x86_64-linux = {
-      hash = "sha256-p8WFmkQKdzXF0FTWHabyeFMkwXa2RkDRM9SvvkBIOLY=";
+      hash = "sha256-arTBt3UWA5zoo0dL044Sx/NT1LUS76XfGIS96NOMvJk=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-HISE8/M9IpeI8iX0mmw9owExnpgiwpesE7YG/+QFYgc=";
+      hash = "sha256-oVuDxx117bVd/jDqn9KivTwR5T2X5UZMHk/nZ/e/IOg=";
       arch = "linux-arm64";
     };
   };
@@ -58,7 +57,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.20.2";
+    version = "1.20.5";
   };
 
   nativeBuildInputs = [
@@ -105,9 +104,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
-    maintainers = [
-      lib.maintainers.jraygauthier
-      lib.maintainers.stargate01
+    maintainers = with lib.maintainers; [
+      jraygauthier
+      stargate01
     ];
     platforms = [
       "x86_64-linux"

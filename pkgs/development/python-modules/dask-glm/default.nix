@@ -59,6 +59,8 @@ buildPythonPackage rec {
     "test_determinism_distributed"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Generalized Linear Models with Dask";
     homepage = "https://github.com/dask/dask-glm/";

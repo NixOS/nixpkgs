@@ -2,9 +2,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, python
 
 # build-system
 , setuptools
+
+# build-time dependencies
+, gettext
 
 # dependencies
 , django
@@ -41,6 +45,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    gettext
     setuptools
   ];
 
@@ -51,6 +56,8 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
   ] ++ pyjwt.optional-dependencies.crypto;
+
+  preBuild = "${python.interpreter} -m django compilemessages";
 
   passthru.optional-dependencies = {
     saml = [

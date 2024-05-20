@@ -466,7 +466,8 @@ in
       confFile = pkgs.writeText "keycloak.conf" (keycloakConfig filteredConfig);
       keycloakBuild = cfg.package.override {
         inherit confFile;
-        plugins = cfg.package.enabledPlugins ++ cfg.plugins;
+        plugins = cfg.package.enabledPlugins ++ cfg.plugins ++
+                  (with cfg.package.plugins; [quarkus-systemd-notify quarkus-systemd-notify-deployment]);
       };
     in
     mkIf cfg.enable
@@ -638,6 +639,8 @@ in
               RuntimeDirectory = "keycloak";
               RuntimeDirectoryMode = "0700";
               AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+              Type = "notify";  # Requires quarkus-systemd-notify plugin
+              NotifyAccess = "all";
             };
             script = ''
               set -o errexit -o pipefail -o nounset -o errtrace

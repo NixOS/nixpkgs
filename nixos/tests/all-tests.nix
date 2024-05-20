@@ -130,6 +130,7 @@ in {
   apparmor = handleTest ./apparmor.nix {};
   archi = handleTest ./archi.nix {};
   armagetronad = handleTest ./armagetronad.nix {};
+  artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   atuin = handleTest ./atuin.nix {};
@@ -144,6 +145,7 @@ in {
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
+  benchexec = handleTest ./benchexec.nix {};
   binary-cache = handleTest ./binary-cache.nix {};
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
@@ -204,6 +206,7 @@ in {
   code-server = handleTest ./code-server.nix {};
   coder = handleTest ./coder.nix {};
   collectd = handleTest ./collectd.nix {};
+  commafeed = handleTest ./commafeed.nix {};
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
   consul-template = handleTest ./consul-template.nix {};
@@ -243,6 +246,7 @@ in {
   deepin = handleTest ./deepin.nix {};
   deluge = handleTest ./deluge.nix {};
   dendrite = handleTest ./matrix/dendrite.nix {};
+  devpi-server = handleTest ./devpi-server.nix {};
   dex-oidc = handleTest ./dex-oidc.nix {};
   dhparams = handleTest ./dhparams.nix {};
   disable-installer-tools = handleTest ./disable-installer-tools.nix {};
@@ -586,7 +590,7 @@ in {
   mysql-backup = handleTest ./mysql/mysql-backup.nix {};
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
   n8n = handleTest ./n8n.nix {};
-  nagios = handleTest ./nagios.nix {};
+  nagios = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
@@ -872,7 +876,8 @@ in {
   swap-random-encryption = handleTest ./swap-random-encryption.nix {};
   sway = handleTest ./sway.nix {};
   swayfx = handleTest ./swayfx.nix {};
-  switchTest = handleTest ./switch-test.nix {};
+  switchTest = handleTest ./switch-test.nix { ng = false; };
+  switchTestNg = handleTest ./switch-test.nix { ng = true; };
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
   syncthing-no-settings = handleTest ./syncthing-no-settings.nix {};
@@ -1038,7 +1043,9 @@ in {
   xterm = handleTest ./xterm.nix {};
   xxh = handleTest ./xxh.nix {};
   yabar = handleTest ./yabar.nix {};
+  ydotool = handleTest ./ydotool.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  your_spotify = handleTest ./your_spotify.nix {};
   zammad = handleTest ./zammad.nix {};
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};

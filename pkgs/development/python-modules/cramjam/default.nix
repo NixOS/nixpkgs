@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, libiconv
-, hypothesis
-, numpy
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  libiconv,
+  hypothesis,
+  numpy,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cramjam";
-  version = "2.8.2";
+  version = "2.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "pyrus-cramjam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BO35s7qOW4+l968I9qn9L1m2BtgRFNYUNlA7W1sctT8=";
+    hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-YWXf+ZDJLq6VxI5sa9G63fCPz2377BVSTmPM0mQSu8M=";
+    hash = "sha256-Bp7EtyuLdLUfU3yvouNVE42klfqYt9QOwt+iGe521yI=";
   };
 
   buildAndTestSubdir = "cramjam-python";
@@ -43,17 +44,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "cramjam-python/tests"
-  ];
+  pytestFlagsArray = [ "cramjam-python/tests" ];
 
   disabledTestPaths = [
     "cramjam-python/benchmarks/test_bench.py"
+    # test_variants.py appears to be flaky
+    #
+    # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
+    "cramjam-python/tests/test_variants.py"
   ];
 
-  pythonImportsCheck = [
-    "cramjam"
-  ];
+  pythonImportsCheck = [ "cramjam" ];
 
   meta = with lib; {
     description = "Thin Python bindings to de/compression algorithms in Rust";
