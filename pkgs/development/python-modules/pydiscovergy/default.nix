@@ -5,6 +5,7 @@
 , httpx
 , mashumaro
 , orjson
+, pytest-asyncio
 , pytest-httpx
 , poetry-core
 , pytestCheckHook
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "pydiscovergy";
   version = "3.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -32,12 +33,15 @@ buildPythonPackage rec {
     sed -i '/addopts =/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     authlib
     httpx
     mashumaro
@@ -46,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-httpx
     pytestCheckHook
     respx
@@ -56,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Async Python 3 library for interacting with the Discovergy API";
+    description = "Library for interacting with the Discovergy API";
     homepage = "https://github.com/jpbede/pydiscovergy";
     changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
     license = licenses.mit;
