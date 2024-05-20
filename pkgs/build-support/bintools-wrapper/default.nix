@@ -429,7 +429,7 @@ stdenvNoCC.mkDerivation {
 
   meta =
     let bintools_ = optionalAttrs (bintools != null) bintools; in
-    (optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority" "outputsToInstall"])) //
+    (optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority"])) //
     { description =
         attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
