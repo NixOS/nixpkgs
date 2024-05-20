@@ -1,4 +1,4 @@
-{ lib, buildGo122Module, fetchFromGitHub, testers, flyctl, installShellFiles }:
+{ lib, buildGo122Module, fetchFromGitHub, testers, flyctl, installShellFiles, gitUpdater }:
 
 buildGo122Module rec {
   pname = "flyctl";
@@ -57,6 +57,14 @@ buildGo122Module rec {
       --zsh <($out/bin/flyctl completion zsh)
     ln -s $out/bin/flyctl $out/bin/fly
   '';
+
+  # Upstream tags every PR merged with release tags like
+  # v2024.5.20-pr3545.4. We ignore all revisions containing a '-'
+  # to skip these releases.
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "-";
+  };
 
   passthru.tests.version = testers.testVersion {
     package = flyctl;
