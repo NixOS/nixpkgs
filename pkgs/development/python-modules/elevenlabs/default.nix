@@ -17,7 +17,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = [
     httpx
     ipython
     pydantic
