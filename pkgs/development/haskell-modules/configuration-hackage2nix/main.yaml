@@ -64,6 +64,7 @@ extra-packages:
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
+  - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
   - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
