@@ -2188,6 +2188,8 @@ self: super: with self; {
 
   classify-imports = callPackage ../development/python-modules/classify-imports { };
 
+  cld2-cffi = callPackage ../development/python-modules/cld2-cffi { };
+
   cle = callPackage ../development/python-modules/cle { };
 
   clean-fid = callPackage ../development/python-modules/clean-fid { };
@@ -2493,6 +2495,8 @@ self: super: with self; {
   };
 
   courlan = callPackage ../development/python-modules/courlan { };
+
+  cov-core = callPackage ../development/python-modules/cov-core { };
 
   coverage = callPackage ../development/python-modules/coverage { };
 
@@ -2961,8 +2965,6 @@ self: super: with self; {
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
 
   detectron2 = callPackage ../development/python-modules/detectron2 { };
-
-  devgoldyutils = callPackage ../development/python-modules/devgoldyutils { };
 
   devialet = callPackage ../development/python-modules/devialet { };
 
@@ -3486,6 +3488,8 @@ self: super: with self; {
 
   docrep = callPackage ../development/python-modules/docrep { };
 
+  doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
+
   docutils = callPackage ../development/python-modules/docutils { };
 
   docx2python = callPackage ../development/python-modules/docx2python { };
@@ -3882,8 +3886,6 @@ self: super: with self; {
   esig = callPackage ../development/python-modules/esig { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
-
-  esper = callPackage ../development/python-modules/esper { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
@@ -5867,6 +5869,8 @@ self: super: with self; {
 
   ipdb = callPackage ../development/python-modules/ipdb { };
 
+  ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
+
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
   i-pi = callPackage ../development/python-modules/i-pi { };
@@ -6520,6 +6524,8 @@ self: super: with self; {
   lazr-uri = callPackage ../development/python-modules/lazr-uri { };
 
   lazy = callPackage ../development/python-modules/lazy { };
+
+  lazy-import = callPackage ../development/python-modules/lazy-import { };
 
   lazy-imports = callPackage ../development/python-modules/lazy-imports { };
 
@@ -7658,8 +7664,6 @@ self: super: with self; {
   monotonic = callPackage ../development/python-modules/monotonic { };
 
   monty = callPackage ../development/python-modules/monty { };
-
-  monzopy = callPackage ../development/python-modules/monzopy { };
 
   moonraker-api = callPackage ../development/python-modules/moonraker-api { };
 
@@ -8861,9 +8865,15 @@ self: super: with self; {
 
   nose3 = callPackage ../development/python-modules/nose3 { };
 
+  nose-cov = callPackage ../development/python-modules/nose-cov { };
+
+  nose-cprof = callPackage ../development/python-modules/nose-cprof { };
+
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
+
+  nosejs = callPackage ../development/python-modules/nosejs { };
 
   nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
 
@@ -10351,6 +10361,8 @@ self: super: with self; {
 
   prison = callPackage ../development/python-modules/prison { };
 
+  proboscis = callPackage ../development/python-modules/proboscis { };
+
   process-tests = callPackage ../development/python-modules/process-tests { };
 
   procmon-parser = callPackage ../development/python-modules/procmon-parser { };
@@ -11290,6 +11302,8 @@ self: super: with self; {
   pylsp-rope = callPackage ../development/python-modules/pylsp-rope { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
+
+  pylti = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
 
@@ -12480,7 +12494,6 @@ self: super: with self; {
     inherit (pkgs) fontconfig rapidjson;
     inherit (pkgs.xorg) libX11 libXi libXmu libXext;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-    opencascade-occt = pkgs.opencascade-occt_7_6;
   });
 
   python-olm = callPackage ../development/python-modules/python-olm { };
@@ -13860,6 +13873,8 @@ self: super: with self; {
   shodan = callPackage ../development/python-modules/shodan { };
 
   shortuuid = callPackage ../development/python-modules/shortuuid { };
+
+  shouldbe = callPackage ../development/python-modules/shouldbe { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
 

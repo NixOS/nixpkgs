@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "xmldiff";
-  version = "2.7.0";
+  version = "2.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wJELH4ADZt1+xikj5dBuiwahvZEgVpocJ/TyRGucaKI=";
+    hash = "sha256-GbAws/o30fC1xa2a2pBZiEw78sdRxd2PHrTtSc/j/GA=";
   };
 
   build-system = [

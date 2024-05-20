@@ -1,40 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  arrow,
-  delorean,
-  pendulum,
-  pynose,
-  pytestCheckHook,
-  pytz,
-  udatetime,
+{ lib, buildPythonPackage, fetchFromGitHub, udatetime, pytz, pendulum, nose
+, delorean, coveralls, arrow
 }:
 
 buildPythonPackage rec {
   pname = "pycron";
   version = "3.0.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kipe";
-    repo = "pycron";
+    repo = pname;
     rev = version;
-    hash = "sha256-+67yU2o31SdgnV3CtiEkLHDltQYgosnqxEuO51rGE4o=";
+    sha256 = "12hkqrdfg3jbqkmck8i00ssyaw1c4hhvdhjxkmh2gm9pd99z5bpv";
   };
 
-  build-system = [ setuptools ];
+  nativeCheckInputs = [ arrow coveralls delorean nose pendulum pytz udatetime ];
 
-  nativeCheckInputs = [
-    arrow
-    delorean
-    pendulum
-    pynose
-    pytestCheckHook
-    pytz
-    udatetime
-  ];
+  checkPhase = ''
+    nosetests
+  '';
 
   pythonImportsCheck = [ "pycron" ];
 

@@ -26,15 +26,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.24.100.3";
+  version = "2.23.100.2";
   # Version as used in the Git tag
-  versionTag = "2.24";
+  versionTag = "2.23";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-1urEdfMKNUqqyJ3wQ10+tvtlRuAKELpaCWIOzjCbYKw=";
+    hash = "sha256-i+fE6xKiuljG8LY8TIHgrW15DVpdp46bZdNo/BjgT/I=";
     fetchSubmodules = true;
   };
 
@@ -121,6 +121,8 @@ stdenv.mkDerivation rec {
 
       pushd 'external/ippcp_internal'
 
+      cp -r ${ipp-crypto-no_mitigation}/include/. inc/
+
       install -D -m a+rw ${ipp-crypto-no_mitigation}/lib/intel64/libippcp.a \
         lib/linux/intel64/no_mitigation/libippcp.a
       install -D -m a+rw ${ipp-crypto-cve_2020_0551_load}/lib/intel64/libippcp.a \
@@ -128,13 +130,8 @@ stdenv.mkDerivation rec {
       install -D -m a+rw ${ipp-crypto-cve_2020_0551_cf}/lib/intel64/libippcp.a \
         lib/linux/intel64/cve_2020_0551_cf/libippcp.a
 
-      cp -r ${ipp-crypto-no_mitigation}/include/* inc/
-
-      mkdir inc/ippcp
-      cp ${ipp-crypto-no_mitigation}/include/fips_cert.h inc/ippcp/
-
       rm inc/ippcp.h
-      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i ./inc/ippcp21u11.patch -o ./inc/ippcp.h
+      patch ${ipp-crypto-no_mitigation}/include/ippcp.h -i inc/ippcp21u7.patch -o inc/ippcp.h
 
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
@@ -288,11 +285,11 @@ stdenv.mkDerivation rec {
       '';
     };
 
-  meta = {
+  meta = with lib; {
     description = "Intel SGX SDK for Linux built with IPP Crypto Library";
     homepage = "https://github.com/intel/linux-sgx";
-    maintainers = with lib.maintainers; [ phlip9 sbellem arturcygan veehaitch ];
+    maintainers = with maintainers; [ phlip9 sbellem arturcygan veehaitch ];
     platforms = [ "x86_64-linux" ];
-    license = [ lib.licenses.bsd3 ];
+    license = with licenses; [ bsd3 ];
   };
 }

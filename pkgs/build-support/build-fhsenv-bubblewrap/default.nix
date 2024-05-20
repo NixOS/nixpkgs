@@ -196,10 +196,8 @@ let
     x11_args+=(--tmpfs /tmp/.X11-unix)
 
     # Try to guess X socket path. This doesn't cover _everything_, but it covers some things.
-    if [[ "$DISPLAY" == *:* ]]; then
-      # recover display number from $DISPLAY formatted [host]:num[.screen]
-      display_nr=''${DISPLAY/#*:} # strip host
-      display_nr=''${display_nr/%.*} # strip screen
+    if [[ "$DISPLAY" == :* ]]; then
+      display_nr=''${DISPLAY#?}
       local_socket=/tmp/.X11-unix/X$display_nr
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi

@@ -18,6 +18,7 @@
 , rustc
 , feedbackd
 , wrapGAppsHook3
+, fetchpatch
 , nixosTests
 }:
 

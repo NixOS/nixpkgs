@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication {
     coreutils
     netpbm
     python3Packages.colorama
-    python3Packages.junit-xml
     python3Packages.ptpython
     qemu_pkg
     socat

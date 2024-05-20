@@ -7,6 +7,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchPypi
+, fetchurl
 , minexr
 , opencv4
 , python3Packages

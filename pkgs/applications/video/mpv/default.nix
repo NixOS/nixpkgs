@@ -2,6 +2,7 @@
 , config
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , addOpenGLRunpath
 , bash
 , docutils

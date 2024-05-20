@@ -7452,6 +7452,15 @@
     github = "Gigahawk";
     githubId = 10356230;
   };
+  gigamonster = {
+    name = "Caleb Norton";
+    email = "n0603919@outlook.com";
+    github = "gigamonster256";
+    githubId = 19415285;
+    keys = [{
+      fingerprint = "483A 112B 3567 C4F0 DF89  74E1 D776 F570 2D7E 83AB";
+    }];
+  };
   gigglesquid = {
     email = "jack.connors@protonmail.com";
     github = "gigglesquid";
@@ -8583,12 +8592,6 @@
     github = "idontgetoutmuch";
     githubId = 1550265;
     name = "Dominic Steinitz";
-  };
-  ifd3f = {
-    github = "ifd3f";
-    githubId = 7308591;
-    email = "astrid@astrid.tech";
-    name = "ifd3f";
   };
   iFreilicht = {
     github = "iFreilicht";
@@ -10350,12 +10353,6 @@
     github = "k3a";
     githubId = 966992;
   };
-  k3yss = {
-    email = "rsi.dev17@gmail.com";
-    name = "Rishi Kumar";
-    github = "k3yss";
-    githubId = 96657880;
-  };
   k900 = {
     name = "Ilya K.";
     email = "me@0upti.me";
@@ -11153,12 +11150,6 @@
     github = "kuznetsss";
     githubId = 15742918;
     name = "Sergey Kuznetsov";
-  };
-  kvendingoldo = {
-    email = "kvendingoldo@gmail.com";
-    github = "kvendingoldo";
-    githubId = 11614750;
-    name = "Alexander Sharov";
   };
   kwohlfahrt = {
     email = "kai.wohlfahrt@gmail.com";
@@ -14502,12 +14493,6 @@
     githubId = 399535;
     name = "Niklas Hambüchen";
   };
-  nhnn = {
-    matrix = "@nhnn:nhnn.dev";
-    github = "thenhnn";
-    githubId = 162156666;
-    name = "nhnn";
-  };
   nhooyr = {
     email = "anmol@aubble.com";
     github = "nhooyr";
@@ -14755,12 +14740,6 @@
     github = "nmattia";
     githubId = 6930756;
     name = "Nicolas Mattia";
-  };
-  nmishin = {
-    email = "sanduku.default@gmail.com";
-    github = "Nmishin";
-    githubId = 4242897;
-    name = "Nikolai Mishin";
   };
   noaccos = {
     name = "Francesco Noacco";
@@ -17611,12 +17590,6 @@
     name = "J. L. Bowden";
     github = "rosehobgoblin";
     githubId = 84164410;
-  };
-  roshaen = {
-    name = "Roshan Kumar";
-    email = "roshaen09@gmail.com";
-    github = "roshaen";
-    githubId = 58213083;
   };
   rossabaker = {
     name = "Ross A. Baker";
@@ -21651,12 +21624,6 @@
     github = "vrinek";
     name = "Kostas Karachalios";
     githubId = 81346;
-  };
-  vringar = {
-    email = "git@zabka.it";
-    github = "vringar";
-    name = "Stefan Zabka";
-    githubId = 13276717;
   };
   vrthra = {
     email = "rahul@gopinath.org";

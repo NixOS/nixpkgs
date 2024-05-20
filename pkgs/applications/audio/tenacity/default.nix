@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitea
+, fetchpatch
 , cmake
 , wxGTK32
 , gtk3

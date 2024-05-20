@@ -3,6 +3,7 @@
 , autoconf
 , automake
 , fetchFromGitHub
+, fetchpatch
 , libpcap
 , ncurses
 , openssl

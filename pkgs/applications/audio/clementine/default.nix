@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , boost
 , cmake
 , chromaprint

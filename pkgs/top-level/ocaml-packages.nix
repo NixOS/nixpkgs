@@ -566,8 +566,7 @@ let
 
     gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-    gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
-    gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
+    gd4o = callPackage ../development/ocaml-modules/gd4o { };
 
     gen = callPackage ../development/ocaml-modules/gen { };
 

@@ -1,32 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hy,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hy
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "0.6.0";
-  pyproject = true;
+  version = "0.5.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hylang";
-    repo = "hyrule";
+    repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pmJhhOpNxVEUH8YwBUKSywYgYu43oLSmpWJM4HXGMiI=";
+    hash = "sha256-MARpQFEypTJ4KpojVRxcHYvo6e6Gvk4B6tnrViV6QmY=";
   };
 
-  build-system = [ setuptools ];
+  propagatedBuildInputs = [
+    hy
+  ];
 
-  propagatedBuildInputs = [ hy ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # Some tests depends on hy on PATH
   preCheck = "PATH=${hy}/bin:$PATH";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hyrule" ];
 
   meta = with lib; {
-    description = "Utility library for the Hy programming language";
+    description = "Hyrule is a utility library for the Hy programming language";
     homepage = "https://github.com/hylang/hyrule";
     changelog = "https://github.com/hylang/hylure/releases/tag/${version}";
     license = licenses.mit;

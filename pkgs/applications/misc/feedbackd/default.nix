@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch2
 , docbook-xsl-nons
 , docutils
 , gi-docgen

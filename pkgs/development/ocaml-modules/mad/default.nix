@@ -2,15 +2,13 @@
 
 buildDunePackage rec {
   pname = "mad";
-  version = "0.5.3";
-
-  minimalOCamlVersion = "4.06";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-mad";
     rev = "v${version}";
-    sha256 = "sha256-rSFzWyUYTrGL7GvVsY5qKdCXqY/XJQkuBerexG838jc=";
+    sha256 = "sha256-iJjANV2M68v3C3db1n9Y8V6yJKuDBDSjtMteamndN7U=";
   };
 
   buildInputs = [ dune-configurator ];

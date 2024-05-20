@@ -3,7 +3,9 @@
 , cached-property
 , click
 , fetchFromGitHub
+, fetchpatch
 , packaging
+, pydantic
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -19,10 +21,19 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "sarugaku";
-    repo = "pythonfinder";
+    repo = pname;
     rev = "refs/tags/${version}";
     hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
+
+  patches = [
+    # https://github.com/sarugaku/pythonfinder/issues/142
+    (fetchpatch {
+      name = "pydantic_2-compatibility.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/python-pythonfinder/-/raw/2.0.6-1/python-pythonfinder-2.0.6-pydantic2.patch";
+      hash = "sha256-mON1MeA+pj6VTB3zpBjF3LfB30wG0QH9nU4bD1djWwg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -35,6 +46,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
+    pydantic
   ] ++ lib.optionals (pythonOlder "3.8") [
     cached-property
   ];
@@ -53,6 +65,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "pythonfinder"
   ];
+
+  # these tests invoke git in a subprocess and
+  # for some reason git can't be found even if included in nativeCheckInputs
+  # disabledTests = [
+  #   "test_shims_are_kept"
+  #   "test_shims_are_removed"
+  # ];
 
   meta = with lib; {
     description = "Cross platform search tool for finding Python";

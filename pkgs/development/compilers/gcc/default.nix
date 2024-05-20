@@ -70,7 +70,6 @@ let
   version = gccVersions.fromMajorMinor majorMinorVersion;
 
   majorVersion = versions.major version;
-  atLeast14 = versionAtLeast version "14";
   atLeast13 = versionAtLeast version "13";
   atLeast12 = versionAtLeast version "12";
   atLeast11 = versionAtLeast version "11";
@@ -80,7 +79,6 @@ let
   atLeast7  = versionAtLeast version  "7";
   atLeast6  = versionAtLeast version  "6";
   atLeast49 = versionAtLeast version  "4.9";
-  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
@@ -129,7 +127,6 @@ let
         buildPackages
         cloog
         withoutTargetLibc
-        darwin
         disableBootstrap
         disableGdbPlugin
         enableLTO

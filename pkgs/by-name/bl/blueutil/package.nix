@@ -1,10 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  darwin,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, darwin
 }:
 
 let
@@ -12,13 +9,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueutil";
-  version = "2.10.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "toy";
     repo = "blueutil";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x2khx8Y0PolpMiyrBatT2aHHyacrQVU/02Z4Dz9fBtI=";
+    hash = "sha256-dxsgMwgBImMxMMD+atgGakX3J9YMO2g3Yjl5zOJ8PW0=";
   };
 
   buildInputs = [
@@ -37,13 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script { };
-  };
-
   meta = {
-    changelog = "https://github.com/toy/blueutil/blob/main/CHANGELOG.md";
     description = "CLI for bluetooth on OSX";
     homepage = "https://github.com/toy/blueutil";
     license = lib.licenses.mit;

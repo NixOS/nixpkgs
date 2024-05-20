@@ -1,6 +1,7 @@
 { mkDerivation
 , makeDesktopItem
 , python3
+, fetchurl
 , lib
 , pulseaudio
 }:

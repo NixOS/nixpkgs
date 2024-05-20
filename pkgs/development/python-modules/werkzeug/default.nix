@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.0.3";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CX5b/anwq6jaa4VFFG3vSB0Gqn0yZudEjizM9n3YvRg=";
+    hash = "sha256-45tkWmrJKCJYjns5ppLngockzq4LDXAu+WcB+Q5wEo0=";
   };
 
   nativeBuildInputs = [
@@ -63,8 +63,6 @@ buildPythonPackage rec {
     greenlet
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [ "werkzeug" ];
-
   disabledTests = lib.optionals stdenv.isDarwin [
     "test_get_machine_id"
   ];
@@ -84,8 +82,8 @@ buildPythonPackage rec {
     inherit moto sentry-sdk;
   };
 
-  meta = {
-    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${lib.replaceStrings [ "." ] [ "-" ] version}";
+  meta = with lib; {
+    changelog = "https://werkzeug.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "The comprehensive WSGI web application library";
     longDescription = ''
@@ -94,7 +92,7 @@ buildPythonPackage rec {
       applications and has become one of the most advanced WSGI
       utility libraries.
     '';
-    license = lib.licenses.bsd3;
-    maintainers = [ ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
+{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
 , defusedxml, future, ujson, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp

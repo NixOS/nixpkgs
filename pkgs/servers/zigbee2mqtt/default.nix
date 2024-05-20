@@ -1,11 +1,9 @@
 { lib
-, stdenv
 , buildNpmPackage
 , fetchFromGitHub
 , systemdMinimal
 , nixosTests
 , nix-update-script
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 }:
 
 buildNpmPackage rec {
@@ -21,11 +19,9 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-AjCeRU/Ew9UquqGPuJeGRC48kCi9uRZaI5Bam365Wwk=";
 
-  buildInputs = lib.optionals withSystemd [
+  buildInputs = [
     systemdMinimal
   ];
-
-  npmFlags = lib.optionals (!withSystemd) [ "--omit=optional" ];
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
   passthru.updateScript = nix-update-script { };
@@ -42,6 +38,7 @@ buildNpmPackage rec {
       In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
     '';
     maintainers = with maintainers; [ sweber hexa ];
+    platforms = platforms.linux;
     mainProgram = "zigbee2mqtt";
   };
 }

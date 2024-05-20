@@ -3,13 +3,13 @@
 , withEphemeris ? true
 , withMoonsEphemeris ? true
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "astrolog";
-  version = "7.70";
+  version = "7.30";
 
   src = fetchzip {
-    url = "https://www.astrolog.org/ftp/ast77src.zip";
-    hash = "sha256-rG7njEtnHwUDqWstj0bQxm2c9CbsOmWOCYs0FtiVoJE=";
+    url = "http://www.astrolog.org/ftp/ast73src.zip";
+    sha256 = "0nry4gxwy5aa99zzr8dlb6babpachsc3jjyk0vw82c7x3clbhl7l";
     stripRoot = false;
   };
 

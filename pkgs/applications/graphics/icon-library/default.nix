@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , wrapGAppsHook4
 , cargo
 , desktop-file-utils

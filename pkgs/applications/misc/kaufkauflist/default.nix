@@ -21,17 +21,17 @@ let
   };
 in buildNpmPackage rec {
   pname = "kaufkauflist";
-  version = "4.0.0";
+  version = "3.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = "kaufkauflist";
     rev = "v${version}";
-    hash = "sha256-x30K2dYxawfebdq//9OmCCG48w0V04tDTXpvRW7lfJI=";
+    hash = "sha256-kqDNA+BALVMrPZleyPxxCyls4VKBzY2MttzO51+Ixo8=";
   };
 
-  npmDepsHash = "sha256-E3AXFwiRvrE2Swt7BfSfAoU5mQplSaSJ4q56pVfoEkQ=";
+  npmDepsHash = "sha256-O2fcmC7Hj9JLStMukyt12aMgntjXT7Lv3vYJp3GqO24=";
 
   ESBUILD_BINARY_PATH = lib.getExe esbuild';
 

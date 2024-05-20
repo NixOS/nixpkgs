@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, lib
+{ stdenv, mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkg-config
 , libpthreadstubs, libxcb, libXdmcp
 , qtsvg, qttools, qtwebengine, qtx11extras

@@ -3,9 +3,8 @@
 , cmake
 , extra-cmake-modules
 , wrapQtAppsHook
-, qtbase
 , kwin
-, kcmutils
+, kdelibs4support
 , libepoxy
 , libxcb
 , lib
@@ -22,13 +21,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-g7gNFv4/ighfxYz/VXF5KvcoT6t4lT5soDLlV3oAKvc=";
   };
 
+  postConfigure = ''
+    substituteInPlace cmake_install.cmake \
+      --replace "${kdelibs4support}" "$out"
+  '';
+
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ kcmutils kwin libepoxy libxcb qtbase ];
+  buildInputs = [ kwin kdelibs4support libepoxy libxcb ];
 
   meta = with lib; {
     description = "Rounds the corners of your windows";
     homepage = "https://github.com/matinlotfali/KDE-Rounded-Corners";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ devusb ];
+    maintainers = with maintainers; [ ];
   };
 }

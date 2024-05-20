@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkg-config, cmake, wrapQtAppsHook
 , libzip, boost, fftw, qtbase, qtwayland, qtsvg, libusb1
-, python3, desktopToDarwinBundle
+, python3, fetchpatch, desktopToDarwinBundle
 }:
 
 stdenv.mkDerivation rec {

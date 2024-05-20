@@ -1,46 +1,51 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  buildPythonPackage,
-  setuptools,
-  eventlet,
-  fetchFromGitHub,
-  iana-etc,
-  libredirect,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  simple-websocket,
-  tornado,
-  websocket-client,
+{ lib
+, stdenv
+, aiohttp
+, buildPythonPackage
+, setuptools
+, eventlet
+, fetchFromGitHub
+, iana-etc
+, libredirect
+, mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, simple-websocket
+, tornado
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "4.9.1";
+  version = "4.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wn2qiVkL05GTopGJeghHe9i+wyOQZbEeYDmEIIbXDS0=";
+    hash = "sha256-FpPGIK5HVtTzDOpORo+WPhS1860P3dm1nJkvakpzsjE=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  dependencies = [ simple-websocket ];
+  propagatedBuildInputs = [
+    simple-websocket
+  ];
 
   passthru.optional-dependencies = {
     client = [
       requests
       websocket-client
     ];
-    asyncio_client = [ aiohttp ];
+    asyncio_client = [
+      aiohttp
+    ];
   };
 
   nativeCheckInputs = [
@@ -66,9 +71,13 @@ buildPythonPackage rec {
   '';
 
   # somehow effective log level does not change?
-  disabledTests = [ "test_logger" ];
+  disabledTests = [
+    "test_logger"
+  ];
 
-  pythonImportsCheck = [ "engineio" ];
+  pythonImportsCheck = [
+    "engineio"
+  ];
 
   meta = with lib; {
     description = "Python based Engine.IO client and server";

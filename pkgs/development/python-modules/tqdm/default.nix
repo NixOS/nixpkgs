@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , setuptools-scm
 , wheel
@@ -15,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.66.4";
+  version = "4.66.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5Nk2yd6HJ5KPO+YHlZDpfZq/6NOaWQvmeOtZGf/Bhrs=";
+    hash = "sha256-bNUs3w/vDg9UMpnPyW/skNe4p+iHRfQR7DPrRNXtNTE=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +30,9 @@ buildPythonPackage rec {
     setuptools-scm
     wheel
   ];
+
+  # https://github.com/tqdm/tqdm/issues/1537
+  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     pytestCheckHook

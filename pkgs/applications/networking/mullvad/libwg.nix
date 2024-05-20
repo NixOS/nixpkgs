@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , mullvad
+, fetchpatch
 }:
 buildGoModule {
   pname = "libwg";

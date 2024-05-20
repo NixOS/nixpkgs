@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , autoconf-archive

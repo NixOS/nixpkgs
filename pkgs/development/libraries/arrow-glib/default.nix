@@ -1,5 +1,6 @@
 { stdenv
 , arrow-cpp
+, fetchurl
 , glib
 , gobject-introspection
 , lib

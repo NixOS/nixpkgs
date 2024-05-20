@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
 , defaultGemConfig, buildRubyGem
 , gitlabEnterprise ? false, callPackage, yarn

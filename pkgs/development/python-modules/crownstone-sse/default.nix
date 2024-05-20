@@ -1,29 +1,26 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  certifi,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-sse";
-  version = "2.0.5";
-  pyproject = true;
+  version = "2.0.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "crownstone_sse";
-    inherit version;
-    hash = "sha256-RUqo68UAVGV+JmauKsGlp7dG8FzixHBDnr3eho/IQdY=";
+  src = fetchFromGitHub {
+    owner = "crownstone";
+    repo = "crownstone-lib-python-sse";
+    rev = version;
+    hash = "sha256-z/z8MmydHkHubwuX02gGbOcOEZ+FHX4i82vAK5gAl+c=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [
+  propagatedBuildInputs = [
     aiohttp
     certifi
   ];
@@ -31,11 +28,13 @@ buildPythonPackage rec {
   # Tests are only providing coverage
   doCheck = false;
 
-  pythonImportsCheck = [ "crownstone_sse" ];
+  pythonImportsCheck = [
+    "crownstone_sse"
+  ];
 
   meta = with lib; {
     description = "Python module for listening to Crownstone SSE events";
-    homepage = "https://github.com/Crownstone-Community/crownstone-lib-python-sse";
+    homepage = "https://github.com/crownstone/crownstone-lib-python-sse";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

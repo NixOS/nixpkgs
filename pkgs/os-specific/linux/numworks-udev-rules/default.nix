@@ -1,4 +1,4 @@
-{ lib, stdenv }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "numworks-udev-rules";

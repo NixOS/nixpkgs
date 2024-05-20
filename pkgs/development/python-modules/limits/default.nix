@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.12.0";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-EH2/75tcKuS11XKuo4lCQrFe4/XJZpcWhuGlSuhIk18=";
+    hash = "sha256-Ax0P9rYTPOrhtOw7FLElSNTGQ3WWCboM3FodTOGZWu8=";
   };
 
   postPatch = ''
@@ -93,14 +93,12 @@ buildPythonPackage rec {
     ];
   };
 
-  doCheck = pythonOlder "3.12"; # SystemError in protobuf
-
   nativeCheckInputs = [
     hiro
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "limits"

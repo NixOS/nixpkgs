@@ -1,6 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs
-, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess, libpciaccess
+, libpthreadstubs, libpciaccess
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 , gitUpdater
 }:
@@ -17,14 +16,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs ]
-    ++ lib.optional withIntel libpciaccess
+  buildInputs = [ libpthreadstubs libpciaccess ]
     ++ lib.optional withValgrind valgrind-light;
 
   mesonFlags = [
     "-Dinstall-test-programs=true"
     "-Dcairo-tests=disabled"
-    (lib.mesonEnable "intel" withIntel)
     (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "valgrind" withValgrind)
   ] ++ lib.optionals stdenv.hostPlatform.isAarch [

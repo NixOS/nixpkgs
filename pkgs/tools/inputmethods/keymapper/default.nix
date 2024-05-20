@@ -9,19 +9,17 @@
 , udev
 , wayland
 , libxkbcommon
-, gtk3
-, libappindicator
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
-  version = "4.3.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
     rev = finalAttrs.version;
-    hash = "sha256-QfISsRm0j/VoTmpDQes5XQooXHcmjqRD/WS/nvPDl00=";
+    hash = "sha256-a9CuLchSSfS4w3pZylzdiUr/llMsuU2qDR3mJrAupZk=";
   };
 
   # all the following must be in nativeBuildInputs
@@ -34,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libusb1
     libxkbcommon
-    gtk3
-    libappindicator
   ];
 
   meta = {

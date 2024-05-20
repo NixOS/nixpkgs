@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
     scitokens-cpp
   ];
 
-  env.CXXFLAGS = "-fpermissive";
 
   cmakeFlags = [ "-DSYSTEM_NAME=NixOS" "-DWITH_PYTHON_BINDINGS=false" ];
 

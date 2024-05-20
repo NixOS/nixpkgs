@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lnkparse3";
-  version = "1.5.0";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,16 +17,20 @@ buildPythonPackage rec {
     owner = "Matmaus";
     repo = "LnkParse3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oyULNRjC0pcVUOeTjjW3g3mB7KySYcwAS+/KwQEIkK4=";
+    hash = "sha256-aWMkLFbmikdj4mlAPpo0qrxfE8zgRcSV83aiws03XsQ=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  dependencies = [ pyyaml ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "LnkParse3" ];
+  pythonImportsCheck = [
+    "LnkParse3"
+  ];
 
   meta = with lib; {
     description = "Windows Shortcut file (LNK) parser";

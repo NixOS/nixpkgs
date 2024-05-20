@@ -7,18 +7,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "2.0.12";
+  version = "1.0.9";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-/55SK/5zBKXmucRQPoYt/8IHxisQlOxNEVMAZVMtCNI=";
+    hash = "sha256-dO0GzbMopX84AKOtJYYW6vojcs4kYcZ8LQ4tXEgUN7I=";
   };
 
-  cargoHash = "sha256-9U8Y0KaQHIfOZnCKbl94VvjS/7Qmi6UnKMDZDTXcye0=";
+  cargoHash = "sha256-RQnyVRHWrqnKcI3Jy593jDTydG1nGyrScsqSNyJTDJk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];
+
+  # tests are broken
+  doCheck = false;
 
   # enable nightly features
   RUSTC_BOOTSTRAP = true;

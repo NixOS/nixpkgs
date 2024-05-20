@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, IOKit, Foundation, OpenGL, cmake, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, SDL2, IOKit, Foundation, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bugdom";
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     Foundation
-    OpenGL
   ];
 
   nativeBuildInputs = [

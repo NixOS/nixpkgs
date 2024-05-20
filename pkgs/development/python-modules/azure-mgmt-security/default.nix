@@ -1,29 +1,30 @@
-{
-  lib,
-  azure-common,
-  azure-mgmt-core,
-  buildPythonPackage,
-  fetchPypi,
-  isodate,
-  pythonOlder,
-  setuptools,
+{ lib
+, azure-common
+, azure-mgmt-core
+, buildPythonPackage
+, fetchPypi
+, isodate
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-security";
-  version = "7.0.0";
+  version = "6.0.0";
   fpyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WRLu1+nTdY/cqNJuHcJrQZQ9xHAyCKEYQmbiwlLhrWY=";
+    hash = "sha256-zq/BhpiZBnEQvYMMXMmLybjzLY6oQMofaTsaX1Kl+LA=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
     isodate
@@ -39,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure Security Center Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/security/azure-mgmt-security";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-security_${version}/sdk/security/azure-mgmt-security/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

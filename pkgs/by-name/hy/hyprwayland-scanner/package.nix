@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwayland-scanner";
-  version = "0.3.8";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprwayland-scanner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/DwglRvj4XF4ECdNtrCIbthleszAZBwOiXG5A6r0K/c=";
+    hash = "sha256-BPc9FdIzQAmP1JnYGfr+3O30Yp1BywUvKUz57ZOZ39A=";
   };
 
   nativeBuildInputs = [

@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pyjwt,
-  pytestCheckHook,
-  python-dateutil,
-  pythonAtLeast,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyjwt
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, responses
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -24,9 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-CqbZcEP1ianvRRpx527KBjQTjvGBzlSmoKY1Pe5MXRA=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     pyjwt
     python-dateutil
     requests
@@ -52,10 +52,6 @@ buildPythonPackage rec {
     "test_retry_config_external"
     # assertion error due to requests brotli support
     "test_http_client"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # Tests are blocking or failing
-    "test_abstract_class_instantiation"
-    "test_abstract_class_instantiation"
   ];
 
   disabledTestPaths = [

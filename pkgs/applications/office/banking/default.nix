@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , fetchFromGitLab
 , python3
 , appstream-glib

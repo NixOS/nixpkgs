@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cairo, libxkbcommon
 , pango, fribidi, harfbuzz, pcre, pkg-config, scdoc
 , ncursesSupport ? true, ncurses
 , waylandSupport ? true, wayland, wayland-protocols, wayland-scanner

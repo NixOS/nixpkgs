@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchurl
 , callPackage
 , fetchpatch
 , cmake, pkg-config, dbus, makeWrapper

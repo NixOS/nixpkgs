@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vrc-get";
-  version = "1.8.1";
+  version = "1.8.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-j8B7g/w1Qtiuj099RlRLmrYTFiE7d2vVg/nTbaa8pRU=";
+    hash = "sha256-+xbHw1DpFmapjsFoUvxUqTok8TKMebMw3gYjO/rx/iU=";
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-WFGY5osZIEYeHQchvuE3ddeqh2wzfZNV+SGqW08zYDI=";
+  cargoHash = "sha256-iuLhDcii+wXDNUsUMo8lj4kfJve5RAz7FT5Pxs9yFPQ=";
 
   # Execute the resulting binary to generate shell completions, using emulation if necessary when cross-compiling.
   # If no emulator is available, then give up on generating shell completions

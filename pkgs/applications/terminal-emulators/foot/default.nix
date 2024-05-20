@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitea
 , fetchurl
+, fetchpatch
 , runCommand
 , fcft
 , freetype

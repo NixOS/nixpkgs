@@ -6,18 +6,8 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkOption
-    maintainers
-    ;
-  inherit (lib.types)
-    bool
-    port
-    str
-    submodule
-    ;
+  inherit (lib) mkEnableOption mkPackageOption mkOption maintainers;
+  inherit (lib.types) bool str;
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
 in
@@ -30,24 +20,11 @@ in
       package = mkPackageOption pkgs "navidrome" { };
 
       settings = mkOption {
-        type = submodule {
-          freeformType = settingsFormat.type;
-
-          options = {
-            Address = mkOption {
-              default = "127.0.0.1";
-              description = "Address to run Navidrome on.";
-              type = str;
-            };
-
-            Port = mkOption {
-              default = 4533;
-              description = "Port to run Navidrome on.";
-              type = port;
-            };
-          };
+        type = settingsFormat.type;
+        default = {
+          Address = "127.0.0.1";
+          Port = 4533;
         };
-        default = { };
         example = {
           MusicFolder = "/mnt/music";
         };
@@ -157,5 +134,5 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
-  meta.maintainers = with maintainers; [ nu-nu-ko ];
+    meta.maintainers = with maintainers; [ nu-nu-ko ];
 }

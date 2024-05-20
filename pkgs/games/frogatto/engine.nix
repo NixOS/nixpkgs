@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which
+{ lib, stdenv, fetchFromGitHub, fetchurl, which
 , boost, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf
 , glew, zlib, icu, pkg-config, cairo, libvpx, glm
 }:

@@ -1,26 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-}:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pyprof2calltree";
   version = "1.4.5";
-  pyproject = true;
+  format = "setuptools";
 
   # Fetch from GitHub because the PyPi packaged version does not
   # include all test files.
   src = fetchFromGitHub {
     owner = "pwaller";
     repo = "pyprof2calltree";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-PrIYpvcoD+zVIoOdcON41JmqzpA5FyRKhI7rqDV8cSo=";
+    rev = "v" + version;
+    sha256 = "0akighssiswfhi5285rrj37am6flg3ip17c34bayq3r8yyk1iciy";
   };
-
-  build-system = [
-    setuptools
-  ];
 
   meta = with lib; {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";

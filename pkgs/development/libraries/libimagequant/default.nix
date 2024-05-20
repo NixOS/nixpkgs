@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , rust
 , rustPlatform
 , cargo-c

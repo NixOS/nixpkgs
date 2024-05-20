@@ -8,6 +8,7 @@
   ninja,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   libpng,
   stdenv,
 }:

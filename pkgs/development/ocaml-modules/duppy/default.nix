@@ -1,19 +1,17 @@
-{ lib, buildDunePackage, fetchFromGitHub, re }:
+{ lib, buildDunePackage, fetchFromGitHub, ocaml_pcre }:
 
 buildDunePackage rec {
   pname = "duppy";
-  version = "0.9.4";
-
-  minimalOCamlVersion = "4.07";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-duppy";
     rev = "v${version}";
-    sha256 = "sha256-rVdfAMu26YgS/TZk2XPqaR6KTDLbh9Elkf8rjhSnNO4=";
+    sha256 = "sha256-5U/CNQ88Wi/AgJEoFeS9O0zTPiD9ysJNQohRVJdyH9w=";
   };
 
-  propagatedBuildInputs = [ re ];
+  propagatedBuildInputs = [ ocaml_pcre ];
 
   meta = with lib; {
     homepage = "https://github.com/savonet/ocaml-duppy";

@@ -7,6 +7,7 @@
 , glib
 , python3
 , help2man
+, systemd
 , bash-completion
 , bash
 , buildPackages
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    systemd
     bash-completion
     bash
   ];

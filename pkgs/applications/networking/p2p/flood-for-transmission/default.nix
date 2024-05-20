@@ -6,16 +6,18 @@
 
 buildNpmPackage rec {
   pname = "flood-for-transmission";
-  version = "2024-05-18T08-04-58";
+  version = "2024-02-10T19-10-27";
 
   src = fetchFromGitHub {
     owner = "johman10";
-    repo = "flood-for-transmission";
+    repo = pname;
     rev = version;
-    hash = "sha256-/vD53tFvCBOU9i/EfogjNjCEp6BBkR6eEKWnPhCUdJk=";
+    hash = "sha256-JhUBtjHWtfFwjOScDu+WtjE42yhWYPA6KD+kJsltbsY=";
   };
 
-  npmDepsHash = "sha256-BKr4Gm3bTFnxgv4HlPclr8+c6jDVPFFbGXvpk5t8/X4=";
+  npmDepsHash = "sha256-VHWM0vxFKucrmoJiwYpjw7QqhBQw9rPPQVIIevp6Wn0=";
+
+  npmInstallFlags = [ "--legacy-peer-deps" ];
 
   installPhase = ''
     runHook preInstall

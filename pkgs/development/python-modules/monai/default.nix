@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, pythonAtLeast
 , ninja
 , ignite
 , numpy
@@ -15,8 +14,7 @@ buildPythonPackage rec {
   pname = "monai";
   version = "1.3.0";
   format = "setuptools";
-  # upper bound due to use of `distutils`; remove after next release:
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";

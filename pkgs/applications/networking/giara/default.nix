@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitLab
+, fetchpatch
 , meson
 , gobject-introspection
 , pkg-config

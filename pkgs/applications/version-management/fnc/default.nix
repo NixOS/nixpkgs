@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenv, zlib, ncurses, libiconv }:
+{ lib, fetchurl, fetchpatch, stdenv, zlib, ncurses, libiconv }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnc";

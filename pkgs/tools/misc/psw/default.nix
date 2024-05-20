@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "psw";
-  version = "0.2.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "Wulfsta";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Rf6vpVgenTzb42/aGqItuxUodl61eNyUPlry7rgLPbI=";
+    sha256 = "1nwmps3zw99lrz6k1j14w4rcm7yj8vhf4cs9wjfc3c1zfjibz9iz";
   };
 
-  cargoHash = "sha256-+0eMhOteNK3QTnG0HB3/TYDFmPTztdQ0h3RKBTN0J/o=";
+  cargoSha256 = "1y2am1bz68q7d9bn4264al13fv2j6a87bwrd60ycx0qak9fczlmv";
 
   meta = with lib; {
     description = "A command line tool to write random bytes to stdout";

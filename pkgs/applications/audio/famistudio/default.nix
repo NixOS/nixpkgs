@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , buildDotnetModule
-, dotnetCorePackages
 , callPackage
 , fetchFromGitHub
 , ffmpeg
@@ -23,13 +22,13 @@ let
 in
 buildDotnetModule rec {
   pname = "famistudio";
-  version = "4.2.0";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     rev = "refs/tags/${version}";
-    hash = "sha256-ydEWLL05B86672j3MVo/90tgDHg8FJ2EZaesqrBZy4A=";
+    hash = "sha256-bryxhminkrTVe5qhGeMStZp3NTHBREXrsUlyQkfPkao=";
   };
 
   postPatch = let
@@ -86,8 +85,6 @@ buildDotnetModule rec {
 
   projectFile = "FamiStudio/${csprojName}.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   executables = [ "FamiStudio" ];
 
