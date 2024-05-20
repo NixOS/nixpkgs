@@ -18375,6 +18375,11 @@
     github = "sei40kr";
     githubId = 11665236;
   };
+  seineeloquenz = {
+    name = "Alexander Linder";
+    github = "SeineEloquenz";
+    githubId = 34923333;
+  };
   seirl = {
     name = "Antoine Pietri";
     email = "antoine.pietri1@gmail.com";
