@@ -95,63 +95,64 @@ let
       address = forEach (interfaceIps i)
         (ip: "${ip.address}/${toString ip.prefixLength}");
       routes = forEach (interfaceRoutes i)
-        (route:
+        (route: mkMerge [
           # Most of these route options have not been tested.
           # Please fix or report any mistakes you may find.
-          optionalAttrs (route.address != null && route.prefixLength != null) {
+          (mkIf (route.address != null && route.prefixLength != null) {
             Destination = "${route.address}/${toString route.prefixLength}";
-          } //
-          optionalAttrs (route.options ? fastopen_no_cookie) {
+          })
+          (mkIf (route.options ? fastopen_no_cookie) {
             FastOpenNoCookie = route.options.fastopen_no_cookie;
-          } //
-          optionalAttrs (route.via != null) {
+          })
+          (mkIf (route.via != null) {
             Gateway = route.via;
-          } //
-          optionalAttrs (route.type != null) {
+          })
+          (mkIf (route.type != null) {
             Type = route.type;
-          } //
-          optionalAttrs (route.options ? onlink) {
+          })
+          (mkIf (route.options ? onlink) {
             GatewayOnLink = true;
-          } //
-          optionalAttrs (route.options ? initrwnd) {
+          })
+          (mkIf (route.options ? initrwnd) {
             InitialAdvertisedReceiveWindow = route.options.initrwnd;
-          } //
-          optionalAttrs (route.options ? initcwnd) {
+          })
+          (mkIf (route.options ? initcwnd) {
             InitialCongestionWindow = route.options.initcwnd;
-          } //
-          optionalAttrs (route.options ? pref) {
+          })
+          (mkIf (route.options ? pref) {
             IPv6Preference = route.options.pref;
-          } //
-          optionalAttrs (route.options ? mtu) {
+          })
+          (mkIf (route.options ? mtu) {
             MTUBytes = route.options.mtu;
-          } //
-          optionalAttrs (route.options ? metric) {
+          })
+          (mkIf (route.options ? metric) {
             Metric = route.options.metric;
-          } //
-          optionalAttrs (route.options ? src) {
+          })
+          (mkIf (route.options ? src) {
             PreferredSource = route.options.src;
-          } //
-          optionalAttrs (route.options ? protocol) {
+          })
+          (mkIf (route.options ? protocol) {
             Protocol = route.options.protocol;
-          } //
-          optionalAttrs (route.options ? quickack) {
+          })
+          (mkIf (route.options ? quickack) {
             QuickAck = route.options.quickack;
-          } //
-          optionalAttrs (route.options ? scope) {
+          })
+          (mkIf (route.options ? scope) {
             Scope = route.options.scope;
-          } //
-          optionalAttrs (route.options ? from) {
+          })
+          (mkIf (route.options ? from) {
             Source = route.options.from;
-          } //
-          optionalAttrs (route.options ? table) {
+          })
+          (mkIf (route.options ? table) {
             Table = route.options.table;
-          } //
-          optionalAttrs (route.options ? advmss) {
+          })
+          (mkIf (route.options ? advmss) {
             TCPAdvertisedMaximumSegmentSize = route.options.advmss;
-          } //
-          optionalAttrs (route.options ? ttl-propagate) {
+          })
+          (mkIf (route.options ? ttl-propagate) {
             TTLPropagate = route.options.ttl-propagate == "enabled";
-          });
+          })
+        ]);
       networkConfig.IPv6PrivacyExtensions = "kernel";
       linkConfig = optionalAttrs (i.macAddress != null) {
         MACAddress = i.macAddress;
