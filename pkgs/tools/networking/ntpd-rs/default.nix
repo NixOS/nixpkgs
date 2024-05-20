@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
     mainProgram = "ntp-ctl";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz getchoo ];
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
