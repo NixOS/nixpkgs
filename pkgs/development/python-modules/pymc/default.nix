@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KJXQz7LES3AqLkq5FPnaECraYSM4vfuDyfRJSclz1RQ=";
+    hash = "sha256-9AqnJOm0yQOOoksg1lpI4EcduU5xDjnIplOzVJIwQFo=";
   };
 
   postPatch = ''
