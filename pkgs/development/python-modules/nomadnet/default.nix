@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxmf
-, pythonOlder
-, qrcode
-, rns
-, setuptools
-, urwid
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxmf,
+  pythonOlder,
+  qrcode,
+  rns,
+  setuptools,
+  urwid,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-Ut/YifODoiHCo3bhN8nV5ZPNIr70FM6MjlZCrUuNaFc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     rns
@@ -37,9 +36,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nomadnet"
-  ];
+  pythonImportsCheck = [ "nomadnet" ];
 
   meta = with lib; {
     description = "Off-grid, resilient mesh communication";
