@@ -98,6 +98,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             driver = Firefox(options=options, service=service)
             driver = Firefox(options=options)
             driver.implicitly_wait(30)
+            driver.set_page_load_timeout(60)
 
             # install ##########################################################
 
