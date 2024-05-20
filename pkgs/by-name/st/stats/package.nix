@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
-, writeShellApplication
-, curl
-, jq
-, common-updater-scripts
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
+  writeShellApplication,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -32,7 +33,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "stats-update-script";
-    runtimeInputs = [ curl jq common-updater-scripts ];
+    runtimeInputs = [
+      curl
+      jq
+      common-updater-scripts
+    ];
     text = ''
       set -euo pipefail
       url="$(curl --silent "https://api.github.com/repos/exelban/stats/tags?per_page=1")"
@@ -46,7 +51,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/exelban/stats";
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime donteatoreo ];
+    maintainers = with maintainers; [
+      emilytrau
+      Enzime
+      donteatoreo
+    ];
     platforms = platforms.darwin;
   };
 })
