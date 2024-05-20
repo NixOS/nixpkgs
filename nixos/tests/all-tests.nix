@@ -853,7 +853,7 @@ in
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
   logrotate = runTest ./logrotate.nix;
-  loki = runTest ./loki.nix;
+  loki = import ./loki { inherit runTest; };
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
   lxc = handleTest ./lxc { };
