@@ -1,11 +1,21 @@
 { lib
 , stdenvNoCC
 , fetchurl
+, makeWrapper
+, openjdk17
+, gnused
+, autoPatchelfHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
   version = "24.0.4";
+
+  nativeBuildInputs = [
+    makeWrapper
+    gnused
+    autoPatchelfHook
+  ];
 
   src =
     let
@@ -30,9 +40,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/usr/share/dbeaver $out/bin
-    cp -r * $out/usr/share/dbeaver
-    ln -s $out/usr/share/dbeaver/dbeaver $out/bin/dbeaver
+    mkdir -p $out/opt/dbeaver $out/bin
+    cp -r * $out/opt/dbeaver
+    makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
+      --prefix PATH : "${openjdk17}/bin" \
+      --set JAVA_HOME "${openjdk17.home}"
+
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png
+
+    mkdir -p $out/share/applications
+    ln -s $out/opt/dbeaver/dbeaver-ce.desktop $out/share/applications/dbeaver.desktop
+
+    substituteInPlace $out/opt/dbeaver/dbeaver-ce.desktop \
+      --replace-fail "/usr/share/dbeaver-ce/dbeaver.png" "dbeaver" \
+      --replace-fail "/usr/share/dbeaver-ce/dbeaver" "$out/bin/dbeaver"
+
+    sed -i '/^Path=/d' $out/share/applications/dbeaver.desktop
+
     runHook postInstall
   '';
 
