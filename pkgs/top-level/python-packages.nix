@@ -15066,8 +15066,6 @@ self: super: with self; {
 
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
 
-  theano-pymc = callPackage ../development/python-modules/theano-pymc { };
-
   thefuzz = callPackage ../development/python-modules/thefuzz { };
 
   thelogrus = callPackage ../development/python-modules/thelogrus { };
