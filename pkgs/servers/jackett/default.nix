@@ -44,5 +44,6 @@ buildDotnetModule rec {
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
+    mainProgram = "jackett";
   };
 }
