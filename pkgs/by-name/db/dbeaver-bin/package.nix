@@ -5,7 +5,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.0.4";
+  version = "24.0.5";
 
   src =
     let
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-linux = "linux.gtk.aarch64-nojdk.tar.gz";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-sRXfEXTZNHJqBIwHGvYJUoa20qH7KLjygGP7uoaxT1M=";
+        x86_64-linux = "sha256-q6VIr55hXn47kZrE2i6McEOfp2FBOvwB0CcUnRHFMZs=";
         aarch64-linux = "sha256-CQg2+p1P+Bg1uFM1PMTWtweS0TNElXTP7tI7D5WxixM=";
       };
     in
