@@ -5,6 +5,7 @@
 , installShellFiles
 , pandoc
 , Security
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,6 +50,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru = {
+    tests = {
+      nixos = lib.optionalAttrs stdenv.isLinux nixosTests.ntpd-rs;
+    };
+  };
 
   meta = with lib; {
     description = "A full-featured implementation of the Network Time Protocol";
