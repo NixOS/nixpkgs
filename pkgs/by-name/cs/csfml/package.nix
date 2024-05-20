@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ jpdoyle ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
