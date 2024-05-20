@@ -8,6 +8,7 @@
 , python-dotenv
 , pythonOlder
 , requests
+, setuptools
 , responses
 , websocket-client
 }:
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "ibm-watson";
   version = "8.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,7 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-r7A5i17KIy1pBrj01yeknfrOFjb5yZco8ZOc7tlFM7k=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ibm-cloud-sdk-core
     python-dateutil
     requests
