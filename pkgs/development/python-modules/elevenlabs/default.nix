@@ -13,8 +13,8 @@ buildPythonPackage rec {
     hash = "sha256-69AoablWAriVaHTdcnmBu0mtFrmjwvWQEZPYOCE2lKo=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  build-system = [
+    poetry-core
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
