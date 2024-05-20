@@ -10,7 +10,7 @@ in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = with pkgs.lib.maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 
   options.services.garage = {

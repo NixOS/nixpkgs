@@ -820,8 +820,6 @@ with pkgs;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 
-  ollama = callPackage ../tools/misc/ollama {  };
-
   ots = callPackage ../tools/security/ots {  };
 
   credential-detector = callPackage ../tools/security/credential-detector { };
@@ -1146,7 +1144,7 @@ with pkgs;
             fetchurl = stdenv.fetchurlBoot;
           };
         });
-        perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
+        perl = buildPackages.perl.override { inherit zlib; fetchurl = stdenv.fetchurlBoot; };
         openssl = buildPackages.openssl.override {
           fetchurl = stdenv.fetchurlBoot;
           buildPackages = {
@@ -1154,7 +1152,7 @@ with pkgs;
               fetchurl = stdenv.fetchurlBoot;
               inherit perl;
               xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
-              gmp = null;
+              gmpSupport = false;
               aclSupport = false;
               attrSupport = false;
             };
@@ -1973,7 +1971,9 @@ with pkgs;
 
   npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
 
-  ntpd-rs = callPackage ../tools/networking/ntpd-rs { };
+  ntpd-rs = darwin.apple_sdk_11_0.callPackage ../tools/networking/ntpd-rs {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
+  };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
@@ -7189,8 +7189,6 @@ with pkgs;
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
-  dbeaver = callPackage ../applications/misc/dbeaver { };
-
   dbench = callPackage ../development/tools/misc/dbench { };
 
   dclxvi = callPackage ../development/libraries/dclxvi { };
@@ -9360,8 +9358,6 @@ with pkgs;
   jless = callPackage ../development/tools/jless {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
-
-  stalwart-mail = callPackage ../servers/mail/stalwart { };
 
   jmespath = callPackage ../development/tools/jmespath { };
 
@@ -15436,6 +15432,7 @@ with pkgs;
 
   flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
+  flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
   flutter316 = flutterPackages.v3_16;
   flutter313 = flutterPackages.v3_13;
@@ -20443,9 +20440,7 @@ with pkgs;
 
   cypress = callPackage ../development/web/cypress { };
 
-  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
-  };
+  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
   cyrus-sasl-xoauth2 = callPackage ../development/libraries/cyrus-sasl-xoauth2 { };
 
@@ -22486,6 +22481,8 @@ with pkgs;
       lib.getBin stdenv.cc.libc
     else if stdenv.hostPlatform.isDarwin then
       lib.getBin libiconv
+    else if stdenv.hostPlatform.isFreeBSD then
+      lib.getBin freebsd.iconv
     else
       lib.getBin libiconvReal;
 
@@ -24084,6 +24081,17 @@ with pkgs;
   rlottie = callPackage ../development/libraries/rlottie { };
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
+
+  rocksdb_8_11 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "8.11.4";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-ZrU7G3xeimF3H2LRGBDHOq936u5pH/3nGecM4XEoWc8=";
+    };
+  };
 
   rocksdb_8_3 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
@@ -26566,6 +26574,23 @@ with pkgs;
 
   thttpd = callPackage ../servers/http/thttpd { };
 
+  stalwart-mail_0_6 = (stalwart-mail.override { rocksdb_8_11 = rocksdb_8_3; }).overrideAttrs (old: rec {
+    pname = "stalwart-mail_0_6";
+    version = "0.6.0";
+    src = fetchFromGitHub {
+      owner = "stalwartlabs";
+      repo = "mail-server";
+      rev = "v${version}";
+      hash = "sha256-OHwUWSUW6ovLQTxnuUrolQGhxbhp4YqKSH+ZTpe2WXc=";
+      fetchSubmodules = true;
+    };
+    cargoDeps = old.cargoDeps.overrideAttrs (_: {
+      inherit src;
+      name = "${pname}-${version}-vendor.tar.gz";
+      outputHash = "sha256-mW3OXQj6DcIMO1YlTG3G+a1ORRcuvp5/h7BU+b4QbnE=";
+    });
+  });
+
   static-web-server = callPackage ../servers/static-web-server { };
 
   stone = callPackage ../servers/stone { };
@@ -27636,6 +27661,7 @@ with pkgs;
 
   odin = callPackage ../development/compilers/odin {
     inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
+    inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
   };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
@@ -31132,8 +31158,6 @@ with pkgs;
   };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
-
-  freeplane = callPackage ../applications/misc/freeplane { };
 
   freepv = callPackage ../applications/graphics/freepv { };
 

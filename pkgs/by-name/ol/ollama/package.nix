@@ -30,22 +30,24 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.31";
+  version = "0.1.38";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-Ip1zrhgGpeYo2zsN206/x+tcG/bmPJAq4zGatqsucaw=";
+    hash = "sha256-9HHR48gqETYVJgIaDH8s/yHTrDPEmHm80shpDNS+6hY=";
     fetchSubmodules = true;
   };
-  vendorHash = "sha256-Lj7CBvS51RqF63c01cOCgY7BCQeCKGu794qzb/S80C0=";
+  vendorHash = "sha256-zOQGhNcGNlQppTqZdPfx+y4fUrxH0NOUl38FN8J6ffE=";
   # ollama's patches of llama.cpp's example server
   # `ollama/llm/generate/gen_common.sh` -> "apply temporary patches until fix is upstream"
   # each update, these patches should be synchronized with the contents of `ollama/llm/patches/`
   llamacppPatches = [
+    (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
     (preparePatch "03-load_exception.diff" "sha256-1DfNahFYYxqlx4E4pwMKQpL+XR0bibYnDFGt6dCL4TM=")
-    (preparePatch "04-locale.diff" "sha256-r5nHiP6yN/rQObRu2FZIPBKpKP9yByyZ6sSI2SKj6Do=")
+    (preparePatch "04-metal.diff" "sha256-Ne8J9R8NndUosSK0qoMvFfKNwqV5xhhce1nSoYrZo7Y=")
+    (preparePatch "05-clip-fix.diff" "sha256-rCc3xNuJR11OkyiXuau8y46hb+KYk40ZqH1Llq+lqWc=")
   ];
 
   preparePatch = patch: hash: fetchpatch {
@@ -76,20 +78,21 @@ let
   enableCuda = shouldEnable "cuda" config.cudaSupport;
 
 
+  rocmLibs = [
+    rocmPackages.clr
+    rocmPackages.hipblas
+    (rocmPackages.rocblas.override { tensileSepArch = true; tensileLazyLib = true; })
+    rocmPackages.rocsolver
+    rocmPackages.rocsparse
+    rocmPackages.rocm-device-libs
+    rocmPackages.rocm-smi
+  ];
   rocmClang = linkFarm "rocm-clang" {
     llvm = rocmPackages.llvm.clang;
   };
   rocmPath = buildEnv {
     name = "rocm-path";
-    paths = [
-      rocmPackages.clr
-      rocmPackages.hipblas
-      rocmPackages.rocblas
-      rocmPackages.rocsolver
-      rocmPackages.rocsparse
-      rocmPackages.rocm-device-libs
-      rocmClang
-    ];
+    paths = rocmLibs ++ [ rocmClang ];
   };
 
   cudaToolkit = buildEnv {
@@ -103,7 +106,7 @@ let
   };
 
   runtimeLibs = lib.optionals enableRocm [
-    rocmPackages.rocm-smi
+    rocmPath
   ] ++ lib.optionals enableCuda [
     linuxPackages.nvidia_x11
   ];
@@ -143,14 +146,9 @@ goBuild ((lib.optionalAttrs enableRocm {
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
 
-  buildInputs = lib.optionals enableRocm [
-    rocmPackages.clr
-    rocmPackages.hipblas
-    rocmPackages.rocblas
-    rocmPackages.rocsolver
-    rocmPackages.rocsparse
-    libdrm
-  ] ++ lib.optionals enableCuda [
+  buildInputs = lib.optionals enableRocm
+    (rocmLibs ++ [ libdrm ])
+  ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
   ] ++ lib.optionals stdenv.isDarwin
     metalFrameworks;
@@ -161,10 +159,11 @@ goBuild ((lib.optionalAttrs enableRocm {
     # this also disables necessary patches contained in `ollama/llm/patches/`
     # those patches are added to `llamacppPatches`, and reapplied here in the patch phase
     ./disable-git.patch
+    # disable a check that unnecessarily exits compilation during rocm builds
+    # since `rocmPath` is in `LD_LIBRARY_PATH`, ollama uses rocm correctly
+    ./disable-lib-check.patch
   ] ++ llamacppPatches;
   postPatch = ''
-    # replace a hardcoded use of `g++` with `$CXX` so clang can be used on darwin
-    substituteInPlace llm/generate/gen_common.sh --replace-fail 'g++' '$CXX'
     # replace inaccurate version number with actual release version
     substituteInPlace version/version.go --replace-fail 0.0.0 '${version}'
   '';

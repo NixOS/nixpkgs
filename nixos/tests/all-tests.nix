@@ -130,6 +130,7 @@ in {
   apparmor = handleTest ./apparmor.nix {};
   archi = handleTest ./archi.nix {};
   armagetronad = handleTest ./armagetronad.nix {};
+  artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
   atuin = handleTest ./atuin.nix {};
@@ -205,6 +206,7 @@ in {
   code-server = handleTest ./code-server.nix {};
   coder = handleTest ./coder.nix {};
   collectd = handleTest ./collectd.nix {};
+  commafeed = handleTest ./commafeed.nix {};
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
   consul-template = handleTest ./consul-template.nix {};
