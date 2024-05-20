@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "scdl";
-  version = "2.7.7";
+  version = "2.7.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/QQb8xbi0rv5dU3WFr/hm2BuM/iDZ2OhrGjuqsQMqdk=";
+    sha256 = "sha256-RGgJvAElt7CgV71Etv/a7m907vLWNLB1eEKjlI1vKzg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
