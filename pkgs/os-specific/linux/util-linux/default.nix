@@ -26,28 +26,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.40.1";
+  version = if avoidRebuild then "2.40.1" else "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-WeZ2qlPMtEtsOfD/4BqPonSJHJG+8UdHUvrZJGHe8k8=";
+    hash = if avoidRebuild
+      then "sha256-WeZ2qlPMtEtsOfD/4BqPonSJHJG+8UdHUvrZJGHe8k8="
+      else "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
-  ] ++ lib.optionals (!avoidRebuild) [
-    # Backports of patches that hopefully fix an intermittent parallel
-    # build failure.
-    (fetchpatch {
-      name = "pam_lastlog2:-drop-duplicate-assignment-pam_lastlog2_la_LDFLAGS.patch";
-      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=290748729dc3edf9ea1c680c8954441a5e367a44";
-      hash = "sha256-Hi+SrT8UovZyCWf6Jc7s3dc6YLyfOfgqohOEnc7aJq4=";
-    })
-    (fetchpatch {
-      name = "libuuid:-drop-duplicate-assignment-liuuid_la_LDFLAGS";
-      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=597e8b246ae31366514ead6cca240a09fe5e1528";
-      hash = "sha256-QCx3MD/57x2tV1SlJ79EYyxafhaEH4UC+Dt24DA6P8I=";
-    })
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -98,7 +87,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ]
-    ++ lib.optionals (!avoidRebuild) [ autoreconfHook gtk-doc ]
     ++ lib.optionals translateManpages [ po4a ];
 
   buildInputs = [ zlib libxcrypt sqlite ]
