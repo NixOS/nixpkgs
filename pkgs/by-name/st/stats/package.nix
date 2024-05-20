@@ -3,10 +3,7 @@
   stdenvNoCC,
   fetchurl,
   undmg,
-  writeShellApplication,
-  curl,
-  jq,
-  common-updater-scripts,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,20 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "stats-update-script";
-    runtimeInputs = [
-      curl
-      jq
-      common-updater-scripts
-    ];
-    text = ''
-      set -euo pipefail
-      url="$(curl --silent "https://api.github.com/repos/exelban/stats/tags?per_page=1")"
-      version="$(echo "$url" | jq -r '.[0].name' | cut -c 2-)"
-      update-source-version stats "$version" --file=./pkgs/by-name/st/stats/package.nix
-    '';
-  });
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "macOS system monitor in your menu bar";
