@@ -9,20 +9,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ntpd-rs";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "pendulum-project";
     repo = "ntpd-rs";
     rev = "v${version}";
-    hash = "sha256-IoTuI0M+stZNUVpaVsf7JR7uHcamSSVDMJxJ+7n5ayA=";
+    hash = "sha256-0ykJruuyD1Z/QcmrogodNlMZp05ocXIo3wdygB/AnT0=";
   };
 
-  cargoHash = "sha256-iZuDNFy8c2UZUh3J11lEtfHlDFN+qPl4iZg+ps7AenE=";
+  cargoHash = "sha256-Badq3GYr7BoF8VNGGtKTT4/ksuds1zBcSxx5O3vLbzg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin ([
+  buildInputs = lib.optionals stdenv.isDarwin [
     Security
-  ]);
+  ];
   nativeBuildInputs = [ pandoc installShellFiles ];
 
   postPatch = ''
@@ -34,11 +34,9 @@ rustPlatform.buildRustPackage rec {
     source utils/generate-man.sh
   '';
 
-  doCheck = true;
-
   checkFlags = [
     # doesn't find the testca
-    "--skip=keyexchange::tests::key_exchange_roundtrip"
+    "--skip=daemon::keyexchange::tests"
     # seems flaky?
     "--skip=algorithm::kalman::peer::tests::test_offset_steering_and_measurements"
     # needs networking
