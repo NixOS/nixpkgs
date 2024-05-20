@@ -1,36 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools
 , pyyaml
-, twine
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pycomposefile";
   version = "0.0.31";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.gz";
     hash = "sha256-SYul81giQLUM1FdgfabKJyrbSu4xdoaWblcE87ZbBwg=";
   };
 
-  nativeBuildInput = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
-    twine
   ];
 
-  doCheck = false; # tests are broken
+  # Tests are broken
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pycomposefile"
+  ];
 
   meta = with lib; {
     description = "Python library for structured deserialization of Docker Compose files";
     homepage = "https://github.com/smurawski/pycomposefile";
+    changelog = "https://github.com/smurawski/pycomposefile/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ mdarocha ];
   };
