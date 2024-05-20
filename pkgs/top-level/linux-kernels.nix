@@ -683,7 +683,7 @@ in {
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_9;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
-    linux_rt_default = packages.linux_rt_5_4;
+    linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   } // { __attrsFailEvaluation = true; };
 
