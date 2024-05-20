@@ -35,12 +35,12 @@ buildPythonPackage rec {
     sed -i '/addopts =/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
     wcwidth
   ];
