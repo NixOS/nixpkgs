@@ -69,7 +69,7 @@ buildGo122Module rec {
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick ];
+    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick RaghavSood ];
     mainProgram = "flyctl";
   };
 }
