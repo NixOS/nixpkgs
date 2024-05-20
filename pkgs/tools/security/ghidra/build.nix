@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , lib
+, callPackage
 , gradle_7
 , perl
 , makeWrapper
@@ -10,6 +11,7 @@
 , icoutils
 , xcbuild
 , protobuf
+, ghidra-extensions
 }:
 
 let
@@ -17,14 +19,39 @@ let
   pname = "ghidra";
   version = "11.0.3";
 
+  releaseName = "NIX";
+  distroPrefix = "ghidra_${version}_${releaseName}";
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-Id595aKYHP1R3Zw9sV1oL32nAUAr7D/K4wn6Zs7q3Jo=";
+    hash = "sha256-IiLxaJvfJcK275FDZEsUCGp7haJjp8O2fUIoM4F9H30=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      # 1970-Jan-01
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/SOURCE_DATE_EPOCH
+      # 19700101
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/SOURCE_DATE_EPOCH_SHORT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   gradle = gradle_7;
+
+  patches = [
+    # Use our own protoc binary instead of the prebuilt one
+    ./0001-Use-protobuf-gradle-plugin.patch
+
+    # Override installation directory to allow loading extensions
+    ./0002-Load-nix-extensions.patch
+
+    # Remove build dates from output filenames for easier reference
+    ./0003-Remove-build-datestamp.patch
+  ];
 
   desktopItem = makeDesktopItem {
     name = "ghidra";
@@ -35,7 +62,25 @@ let
     categories = [ "Development" ];
   };
 
-  # postPatch scripts.
+  postPatch = ''
+    # Set name of release (eg. PUBLIC, DEV, etc.)
+    sed -i -e 's/application\.release\.name=.*/application.release.name=${releaseName}/' Ghidra/application.properties
+
+    # Set build date and git revision
+    echo "application.build.date=$(cat SOURCE_DATE_EPOCH)" >> Ghidra/application.properties
+    echo "application.build.date.short=$(cat SOURCE_DATE_EPOCH_SHORT)" >> Ghidra/application.properties
+    echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
+
+    # Tells ghidra to use our own protoc binary instead of the prebuilt one.
+    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+    protobuf {
+      protoc {
+        path = '${protobuf}/bin/protoc'
+      }
+    }
+    HERE
+  '';
+
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
     cat >>build.gradle <<HERE
@@ -64,9 +109,8 @@ HERE
   # Taken from mindustry derivation.
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit version src;
+    inherit version src patches;
 
-    patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
     postPatch = addResolveStep;
 
     nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
@@ -98,8 +142,8 @@ HERE
     outputHash = "sha256-nKfJiGoZlDEpbCmYVKNZXz2PYIosCd4nPFdy3MfprHc=";
   };
 
-in stdenv.mkDerivation {
-  inherit pname version src;
+in stdenv.mkDerivation (finalAttrs: {
+  inherit pname version src patches postPatch;
 
   nativeBuildInputs = [
     gradle unzip makeWrapper icoutils protobuf
@@ -107,9 +151,7 @@ in stdenv.mkDerivation {
 
   dontStrip = true;
 
-  patches = [
-    ./0001-Use-protobuf-gradle-plugin.patch
-  ];
+  __darwinAllowLocalNetworking = true;
 
   buildPhase = ''
     runHook preBuild
@@ -152,8 +194,16 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
     wrapProgram "${pkg_path}/support/launch.sh" \
+      --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
   '';
+
+  passthru = {
+    inherit releaseName distroPrefix;
+    inherit (ghidra-extensions.override { ghidra = finalAttrs.finalPackage; }) buildGhidraExtension buildGhidraScripts;
+
+    withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
@@ -165,8 +215,8 @@ in stdenv.mkDerivation {
       binaryBytecode  # deps
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ roblabla ];
+    maintainers = with maintainers; [ roblabla vringar ];
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 
-}
+})

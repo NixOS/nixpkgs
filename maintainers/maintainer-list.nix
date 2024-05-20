@@ -8584,6 +8584,12 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
+  ifd3f = {
+    github = "ifd3f";
+    githubId = 7308591;
+    email = "astrid@astrid.tech";
+    name = "ifd3f";
+  };
   iFreilicht = {
     github = "iFreilicht";
     githubId = 9742635;
@@ -10343,6 +10349,12 @@
     name = "Mario Hros";
     github = "k3a";
     githubId = 966992;
+  };
+  k3yss = {
+    email = "rsi.dev17@gmail.com";
+    name = "Rishi Kumar";
+    github = "k3yss";
+    githubId = 96657880;
   };
   k900 = {
     name = "Ilya K.";
@@ -17582,6 +17594,12 @@
     github = "rosehobgoblin";
     githubId = 84164410;
   };
+  roshaen = {
+    name = "Roshan Kumar";
+    email = "roshaen09@gmail.com";
+    github = "roshaen";
+    githubId = 58213083;
+  };
   rossabaker = {
     name = "Ross A. Baker";
     email = "ross@rossabaker.com";
@@ -21615,6 +21633,12 @@
     github = "vrinek";
     name = "Kostas Karachalios";
     githubId = 81346;
+  };
+  vringar = {
+    email = "git@zabka.it";
+    github = "vringar";
+    name = "Stefan Zabka";
+    githubId = 13276717;
   };
   vrthra = {
     email = "rahul@gopinath.org";

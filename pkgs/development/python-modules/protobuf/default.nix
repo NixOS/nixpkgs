@@ -104,6 +104,8 @@ buildPythonPackage {
     #   https://github.com/protocolbuffers/protobuf/commit/5abab0f47e81ac085f0b2d17ec3b3a3b252a11f1
     #
     "google/protobuf/internal/generator_test.py"
+  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "25") [
+    "minimal_test.py" # ModuleNotFoundError: No module named 'google3'
   ];
 
   pythonImportsCheck = [
@@ -122,6 +124,6 @@ buildPythonPackage {
     maintainers = with maintainers; [ knedlsepp ];
     # Tests are currently failing because backend is unavailable and causes tests to fail
     # Progress tracked in https://github.com/NixOS/nixpkgs/pull/264902
-    broken = lib.versionAtLeast protobuf.version "25";
+    broken = lib.versionAtLeast protobuf.version "26";
   };
 }
