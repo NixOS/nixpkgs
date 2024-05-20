@@ -36527,7 +36527,7 @@ with pkgs;
   btanks = callPackage ../games/btanks { };
 
   bugdom = callPackage ../games/bugdom {
-    inherit (darwin.apple_sdk.frameworks) IOKit Foundation;
+    inherit (darwin.apple_sdk.frameworks) IOKit Foundation OpenGL;
   };
 
   bzflag = callPackage ../games/bzflag {
