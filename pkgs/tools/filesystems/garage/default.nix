@@ -82,7 +82,7 @@ let
       changelog = "https://git.deuxfleurs.fr/Deuxfleurs/garage/releases/tag/v${version}";
       homepage = "https://garagehq.deuxfleurs.fr";
       license = lib.licenses.agpl3Only;
-      maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
+      maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s ];
       knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
       inherit broken;
       mainProgram = "garage";

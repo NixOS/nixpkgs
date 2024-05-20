@@ -4,6 +4,7 @@
 , makeBinaryWrapper
 , libiconv
 , MacOSX-SDK
+, Security
 , which
 }:
 
@@ -25,7 +26,10 @@ in stdenv.mkDerivation rec {
     makeBinaryWrapper which
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
