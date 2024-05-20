@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, jadx
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  jadx,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,9 +17,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-a7zOowvhV9H91RwNDImN2+ecixY8g3WUotlBQVdmLgA=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     jadx
@@ -29,9 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "apkleaks"
-  ];
+  pythonImportsCheck = [ "apkleaks" ];
 
   meta = with lib; {
     description = "Scanning APK file for URIs, endpoints and secrets";
