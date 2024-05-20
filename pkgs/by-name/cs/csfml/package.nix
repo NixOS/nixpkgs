@@ -19,10 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];
-  cmakeFlags = [
-    "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/"
-    "-DCSFML_PKGCONFIG_INSTALL_PREFIX=share/pkgconfig"
-  ];
+  cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
+  patches = [ ./pkgconfig.patch ];
 
   meta = {
     homepage = "https://www.sfml-dev.org/";
