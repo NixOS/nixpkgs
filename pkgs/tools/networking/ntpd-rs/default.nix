@@ -2,10 +2,12 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, ntpd-rs
 , installShellFiles
 , pandoc
 , Security
 , nixosTests
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,6 +56,10 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     tests = {
       nixos = lib.optionalAttrs stdenv.isLinux nixosTests.ntpd-rs;
+      version = testers.testVersion {
+        package = ntpd-rs;
+        inherit version;
+      };
     };
   };
 
