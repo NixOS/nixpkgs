@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pdm-backend
-, httpx
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pdm-backend,
+  httpx,
+  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-a35xQEdo7OOFlXk2vsTdVpEhqPRKFZRQzNnZw3c7ybA=";
   };
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
   optional-dependencies = {
     all = optional-dependencies.install ++ optional-dependencies.download;
-    download = [
-      httpx
-    ];
-    install = [
-      zstandard
-    ];
+    download = [ httpx ];
+    install = [ zstandard ];
   };
 
   pythonImportsCheck = [ "pbs_installer" ];
