@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchPypi
-, humanize
-, lxml
-, pythonOlder
-, requests
-, setuptools
-, slixmpp
-, websockets
+{
+  lib,
+  aiohttp,
+  bidict,
+  buildPythonPackage,
+  fetchPypi,
+  humanize,
+  lxml,
+  pythonOlder,
+  requests,
+  setuptools,
+  slixmpp,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-TAPuP0VFhKuWDzko/+Upq6GDGZJO9y6GuuV6GsSqi2I=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   # https://github.com/simbaja/gehome/issues/32
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gehomesdk"
-  ];
+  pythonImportsCheck = [ "gehomesdk" ];
 
   meta = with lib; {
     description = "Python SDK for GE smart appliances";
