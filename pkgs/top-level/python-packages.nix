@@ -3490,8 +3490,6 @@ self: super: with self; {
 
   docrep = callPackage ../development/python-modules/docrep { };
 
-  doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
-
   docutils = callPackage ../development/python-modules/docutils { };
 
   docx2python = callPackage ../development/python-modules/docx2python { };
