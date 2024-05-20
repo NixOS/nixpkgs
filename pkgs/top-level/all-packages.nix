@@ -41069,4 +41069,5 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+  nginx-rtmp = callPackage ../servers/nginx-rtmp { };
 }
