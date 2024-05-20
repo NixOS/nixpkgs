@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpack";
@@ -9,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0k590z96509k96zxmhv72gkwhrlf55jkmyqlzi72m61r7axhhh97";
   };
 
-  patches = [ ./build-fix.patch ./sendmail-via-execvp.diff ./CVE-2011-4919.patch ];
+  patches = [
+    ./build-fix.patch
+    ./sendmail-via-execvp.diff
+    ./CVE-2011-4919.patch
+  ];
 
   postPatch = ''
     for f in *.{c,man,pl,unix} ; do
