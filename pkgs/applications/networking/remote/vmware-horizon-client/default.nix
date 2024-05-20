@@ -54,6 +54,9 @@ let
       # Deleting the bundled library is the simplest way to force it to use our version.
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
+      # This bundled version of libpng causes browser issues, and would prevent web-based sign-on.
+      rm "$out/lib/vmware/libpng16.so.16"
+
       # This opensc library is required to support smartcard authentication during the
       # initial connection to Horizon.
       mkdir $out/lib/vmware/view/pkcs11
