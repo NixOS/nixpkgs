@@ -30,16 +30,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "macOS system monitor in your menu bar";
     homepage = "https://github.com/exelban/stats";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       emilytrau
       Enzime
       donteatoreo
     ];
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 })
