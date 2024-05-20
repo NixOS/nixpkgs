@@ -3777,6 +3777,8 @@ self: super: with self; {
 
   elevate = callPackage ../development/python-modules/elevate { };
 
+  elevenlabs = callPackage ../development/python-modules/elevenlabs { };
+
   eliot = callPackage ../development/python-modules/eliot { };
 
   eliqonline = callPackage ../development/python-modules/eliqonline { };
