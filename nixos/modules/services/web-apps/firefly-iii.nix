@@ -3,8 +3,8 @@
 let
   inherit (lib) optionalString mkDefault mkIf mkOption mkEnableOption literalExpression;
   inherit (lib.types) nullOr attrsOf oneOf str int bool path package enum submodule;
-  inherit (lib.strings) concatMapStringsSep removePrefix toShellVars removeSuffix hasSuffix;
-  inherit (lib.attrsets) attrValues genAttrs filterAttrs mapAttrs' nameValuePair;
+  inherit (lib.strings) concatLines removePrefix toShellVars removeSuffix hasSuffix;
+  inherit (lib.attrsets) mapAttrsToList attrValues genAttrs filterAttrs mapAttrs' nameValuePair;
   inherit (builtins) isInt isString toString typeOf;
 
   cfg = config.services.firefly-iii;
@@ -21,18 +21,10 @@ let
     (filterAttrs (n: v: hasSuffix "_FILE" n) cfg.settings);
   env-nonfile-values = filterAttrs (n: v: ! hasSuffix "_FILE" n) cfg.settings;
 
-  envfile = pkgs.writeText "firefly-iii-env" ''
-    ${toShellVars env-file-values}
-    ${toShellVars env-nonfile-values}
-  '';
-
   fileenv-func = ''
-    cp --no-preserve=mode ${envfile} /tmp/firefly-iii-env
-    ${concatMapStringsSep "\n"
-      (n: "${pkgs.replace-secret}/bin/replace-secret ${n} ${n} /tmp/firefly-iii-env")
-      (attrValues env-file-values)}
     set -a
-    . /tmp/firefly-iii-env
+    ${toShellVars env-nonfile-values}
+    ${concatLines (mapAttrsToList (n: v: "${n}=\"$(< ${v})\"") env-file-values)}
     set +a
   '';
 
@@ -41,15 +33,13 @@ let
 
     ${optionalString (cfg.settings.DB_CONNECTION == "sqlite")
       "touch ${cfg.dataDir}/storage/database/database.sqlite"}
-    ${artisan} migrate --seed --no-interaction --force
-    ${artisan} firefly-iii:decrypt-all
+    ${artisan} package:discover
     ${artisan} firefly-iii:upgrade-database
-    ${artisan} firefly-iii:correct-database
-    ${artisan} firefly-iii:report-integrity
     ${artisan} firefly-iii:laravel-passport-keys
     ${artisan} cache:clear
-
-    mv /tmp/firefly-iii-env /run/phpfpm/firefly-iii-env
+    ${artisan} view:cache
+    ${artisan} route:cache
+    ${artisan} config:cache
   '';
 
   commonServiceConfig = {
@@ -146,6 +136,7 @@ in {
 
     virtualHost = mkOption {
       type = str;
+      default = "localhost";
       description = ''
         The hostname at which you wish firefly-iii to be served. If you have
         enabled nginx using `services.firefly-iii.enableNginx` then this will
@@ -170,14 +161,15 @@ in {
     };
 
     settings = mkOption {
+      default = {};
       description = ''
         Options for firefly-iii configuration. Refer to
         <https://github.com/firefly-iii/firefly-iii/blob/main/.env.example> for
         details on supported values. All <option>_FILE values supported by
         upstream are supported here.
 
-        APP_URL will be set by `services.firefly-iii.virtualHost`, do not
-        redefine it here.
+        APP_URL will be the same as `services.firefly-iii.virtualHost` if the
+        former is unset in `services.firefly-iii.settings`.
       '';
       example = literalExpression ''
         {
@@ -192,7 +184,6 @@ in {
           DB_PASSWORD_FILE = "/var/secrets/firefly-iii-mysql-password.txt;
         }
       '';
-      default = {};
       type = submodule {
         freeformType = attrsOf (oneOf [str int bool]);
         options = {
@@ -216,15 +207,30 @@ in {
           };
           DB_PORT = mkOption {
             type = nullOr int;
-            default = if cfg.settings.DB_CONNECTION == "sqlite" then null
+            default = if cfg.settings.DB_CONNECTION == "pgsql" then 5432
                       else if cfg.settings.DB_CONNECTION == "mysql" then 3306
-                      else 5432;
+                      else null;
             defaultText = ''
               `null` if DB_CONNECTION is "sqlite", `3306` if "mysql", `5432` if "pgsql"
             '';
             description = ''
               The port your database is listening at. sqlite does not require
               this value to be filled.
+            '';
+          };
+          DB_HOST = mkOption {
+            type = str;
+            default = if cfg.settings.DB_CONNECTION == "pgsql" then "/run/postgresql"
+                      else "localhost";
+            defaultText = ''
+              "localhost" if DB_CONNECTION is "sqlite" or "mysql", "/run/postgresql" if "pgsql".
+            '';
+            description = ''
+              The machine which hosts your database. This is left at the
+              default value for "mysql" because we use the "DB_SOCKET" option
+              to connect to a unix socket instead. "pgsql" requires that the
+              unix socket location be specified here instead of at "DB_SOCKET".
+              This option does not affect "sqlite".
             '';
           };
           APP_KEY_FILE = mkOption {
@@ -235,18 +241,26 @@ in {
               /dev/urandom | base64)" > /path/to/key-file`.
             '';
           };
+          APP_URL = mkOption {
+            type = str;
+            default = if cfg.virtualHost == "localhost" then "http://${cfg.virtualHost}"
+                      else "https://${cfg.virtualHost}";
+            defaultText = ''
+              http(s)://''${config.services.firefly-iii.virtualHost}
+            '';
+            description = ''
+              The APP_URL used by firefly-iii internally. Please make sure this
+              URL matches the external URL of your Firefly III installation. It
+              is used to validate specific requests and to generate URLs in
+              emails.
+            '';
+          };
         };
       };
     };
   };
 
   config = mkIf cfg.enable {
-
-    services.firefly-iii = {
-      settings = {
-        APP_URL = cfg.virtualHost;
-      };
-    };
 
     services.phpfpm.pools.firefly-iii = {
       inherit user group;
@@ -262,29 +276,27 @@ in {
       } // cfg.poolConfig;
     };
 
-    systemd.services.phpfpm-firefly-iii.serviceConfig = {
-      EnvironmentFile = "/run/phpfpm/firefly-iii-env";
-      ExecStartPost = "${pkgs.coreutils}/bin/rm /run/phpfpm/firefly-iii-env";
-    };
-
     systemd.services.firefly-iii-setup = {
+      after = [ "postgresql.service" "mysql.service" ];
       requiredBy = [ "phpfpm-firefly-iii.service" ];
       before = [ "phpfpm-firefly-iii.service" ];
       serviceConfig = {
         ExecStart = firefly-iii-maintenance;
         RuntimeDirectory = "phpfpm";
         RuntimeDirectoryPreserve = true;
+        RemainAfterExit = true;
       } // commonServiceConfig;
       unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
+      restartTriggers = [ cfg.package ];
     };
 
     systemd.services.firefly-iii-cron = {
+      after = [ "firefly-iii-setup.service" "postgresql.service" "mysql.service" ];
+      wants = [ "firefly-iii-setup.service" ];
       description = "Daily Firefly III cron job";
-      script = ''
-        ${fileenv-func}
-        ${artisan} firefly-iii:cron
-      '';
-      serviceConfig = commonServiceConfig;
+      serviceConfig = {
+        ExecStart = "${artisan} firefly-iii:cron";
+      } // commonServiceConfig;
     };
 
     systemd.timers.firefly-iii-cron = {
@@ -295,6 +307,7 @@ in {
         Persistent = true;
       };
       wantedBy = [ "timers.target" ];
+      restartTriggers = [ cfg.package ];
     };
 
     services.nginx = mkIf cfg.enableNginx {
