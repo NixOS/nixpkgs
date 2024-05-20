@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.5";
+  version = "0.19.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-T2+76AVvXrads7AbjNAExV0i4doQ2xIUEwekVB2JXAo=";
+    hash = "sha256-oR03Qu93F+pcWywbdYgMKIAdohBNezlGz04ws3yGAxs=";
   };
 
   build-system = [

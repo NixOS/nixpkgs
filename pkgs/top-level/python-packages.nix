@@ -2966,6 +2966,8 @@ self: super: with self; {
 
   detectron2 = callPackage ../development/python-modules/detectron2 { };
 
+  devgoldyutils = callPackage ../development/python-modules/devgoldyutils { };
+
   devialet = callPackage ../development/python-modules/devialet { };
 
   devito = callPackage ../development/python-modules/devito { };

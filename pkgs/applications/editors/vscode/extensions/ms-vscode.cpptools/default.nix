@@ -1,7 +1,6 @@
 {
   lib,
   vscode-utils,
-  fetchurl,
   writeScript,
   runtimeShell,
   jq,

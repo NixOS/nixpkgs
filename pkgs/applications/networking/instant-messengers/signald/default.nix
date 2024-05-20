@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
+{ lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
 gradle, git, perl, makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 

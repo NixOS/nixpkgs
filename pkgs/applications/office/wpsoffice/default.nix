@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , dpkg
 , autoPatchelfHook
 , alsa-lib

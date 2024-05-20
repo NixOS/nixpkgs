@@ -8584,6 +8584,12 @@
     githubId = 1550265;
     name = "Dominic Steinitz";
   };
+  ifd3f = {
+    github = "ifd3f";
+    githubId = 7308591;
+    email = "astrid@astrid.tech";
+    name = "ifd3f";
+  };
   iFreilicht = {
     github = "iFreilicht";
     githubId = 9742635;
@@ -17581,6 +17587,12 @@
     name = "J. L. Bowden";
     github = "rosehobgoblin";
     githubId = 84164410;
+  };
+  roshaen = {
+    name = "Roshan Kumar";
+    email = "roshaen09@gmail.com";
+    github = "roshaen";
+    githubId = 58213083;
   };
   rossabaker = {
     name = "Ross A. Baker";

@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , callPackage
-, fetchurl
 , libeduvpn-common
 , selenium
 , setuptools
