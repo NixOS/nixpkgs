@@ -52,7 +52,7 @@ let
             sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
             versionData = self.sourceData.version;
             buildFreebsd = otherSplices.selfBuildHost;
-            patchesRoot = ./patches/${self.versionData.revision};
+            patchesRoot = ./patches + "/${self.versionData.revision}";
           }
           // extraArgs
         ) self;
