@@ -13412,6 +13412,8 @@ self: super: with self; {
 
   rova = callPackage ../development/python-modules/rova { };
 
+  rowan = callPackage ../development/python-modules/rowan { };
+
   rpcq = callPackage ../development/python-modules/rpcq { };
 
   rpdb = callPackage ../development/python-modules/rpdb { };
