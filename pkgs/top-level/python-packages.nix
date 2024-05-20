@@ -6527,8 +6527,6 @@ self: super: with self; {
 
   lazy = callPackage ../development/python-modules/lazy { };
 
-  lazy-import = callPackage ../development/python-modules/lazy-import { };
-
   lazy-imports = callPackage ../development/python-modules/lazy-imports { };
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
@@ -12496,6 +12494,7 @@ self: super: with self; {
     inherit (pkgs) fontconfig rapidjson;
     inherit (pkgs.xorg) libX11 libXi libXmu libXext;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+    opencascade-occt = pkgs.opencascade-occt_7_6;
   });
 
   python-olm = callPackage ../development/python-modules/python-olm { };
