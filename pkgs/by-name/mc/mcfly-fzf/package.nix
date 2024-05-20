@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly-fzf";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "bnprks";
     repo = "mcfly-fzf";
     rev = version;
-    hash = "sha256-3QxiG9MR0BCKRjA8ue/Yb/AZ5SwiSdjn6qaOxSAK0SI=";
+    hash = "sha256-ZdsbkN+/NLA0vor6/eEdAI7V5m5GEi+phcJQ89Jp4fk=";
   };
 
   postPatch = ''
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace shell/mcfly-fzf.fish --replace '(command -v mcfly-fzf)' '${placeholder "out"}/bin/mcfly-fzf'
   '';
 
-  cargoHash = "sha256-pR5Fni/8iJuaDyWKrOnSanO50hvFXh73Qlgmd4a3Ucs=";
+  cargoHash = "sha256-xMXM56ulfKAY2HwRTXTG9h3garxDeu+zthMKSve5seQ=";
 
   meta = with lib; {
     homepage = "https://github.com/bnprks/mcfly-fzf";
