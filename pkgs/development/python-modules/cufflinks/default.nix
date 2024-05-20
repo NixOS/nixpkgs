@@ -1,14 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, chart-studio
-, colorlover
-, ipython
-, ipywidgets
-, pytest
-, nose
-, numpy
-, pandas
-, six
-, statsmodels
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chart-studio,
+  colorlover,
+  ipython,
+  ipywidgets,
+  pytest,
+  nose,
+  numpy,
+  pandas,
+  six,
+  statsmodels,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +35,10 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  nativeCheckInputs = [ pytest nose ];
+  nativeCheckInputs = [
+    pytest
+    nose
+  ];
 
   # ignore tests which are incompatible with pandas>=1.0
   # https://github.com/santosjorge/cufflinks/issues/236
