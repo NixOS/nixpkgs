@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+import ../make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "loki";
