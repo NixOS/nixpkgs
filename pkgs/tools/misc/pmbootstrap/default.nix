@@ -1,9 +1,12 @@
-{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
+{ stdenv, lib, git, openssl, python3Packages, pytestCheckHook, ps
 , fetchPypi, fetchFromGitLab, sudo }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
   version = "2.3.1";
+  pythonproject = true;
+
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   src = fetchFromGitLab {
     owner = "postmarketos";
