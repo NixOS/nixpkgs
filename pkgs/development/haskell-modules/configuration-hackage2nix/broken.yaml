@@ -5795,7 +5795,6 @@ broken-packages:
   - supplemented # failure in job https://hydra.nixos.org/build/233237397 at 2023-09-02
   - supply-chain-core # failure in job https://hydra.nixos.org/build/252715612 at 2024-03-16
   - surjective # failure in job https://hydra.nixos.org/build/233242908 at 2023-09-02
-  - sv2v # failure in job https://hydra.nixos.org/build/233190750 at 2023-09-02
   - sv-core # failure in job https://hydra.nixos.org/build/233217245 at 2023-09-02
   - SVD2HS # failure in job https://hydra.nixos.org/build/233248575 at 2023-09-02
   - svfactor # failure in job https://hydra.nixos.org/build/233256743 at 2023-09-02
