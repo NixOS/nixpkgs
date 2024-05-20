@@ -10350,6 +10350,12 @@
     github = "k3a";
     githubId = 966992;
   };
+  k3yss = {
+    email = "rsi.dev17@gmail.com";
+    name = "Rishi Kumar";
+    github = "k3yss";
+    githubId = 96657880;
+  };
   k900 = {
     name = "Ilya K.";
     email = "me@0upti.me";
