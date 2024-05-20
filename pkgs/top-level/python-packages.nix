@@ -12760,6 +12760,8 @@ self: super: with self; {
 
   pywal = callPackage ../development/python-modules/pywal { };
 
+  pywal16 = callPackage ../development/python-modules/pywal16 { };
+
   pywatchman = callPackage ../development/python-modules/pywatchman { };
 
   pywaterkotte = callPackage ../development/python-modules/pywaterkotte { };
