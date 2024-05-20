@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,20 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-SYul81giQLUM1FdgfabKJyrbSu4xdoaWblcE87ZbBwg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pyyaml
-  ];
+  dependencies = [ pyyaml ];
 
   # Tests are broken
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pycomposefile"
-  ];
+  pythonImportsCheck = [ "pycomposefile" ];
 
   meta = with lib; {
     description = "Python library for structured deserialization of Docker Compose files";
