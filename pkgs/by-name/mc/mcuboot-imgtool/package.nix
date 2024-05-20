@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, python3Packages
-, nix-update-script
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,9 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [
     cbor2
