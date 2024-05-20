@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , nixosTests
 , stdenv
 , dotnetCorePackages
