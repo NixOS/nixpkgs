@@ -208,7 +208,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             text = ''
               out=/tmp/podcast.mp3
               sox -n -r 48000 -t wav - synth ${targetPodcastDuration} sine 440 `
-              `| lame --noreplaygain -cbr -q 9 -b 320 - $out
+              `| lame --noreplaygain --cbr -q 9 -b 320 - $out
               FILESIZE="$(stat -c%s $out)"
               [ "$FILESIZE" -gt 0 ]
               [ "$FILESIZE" -le "${toString targetPodcastSize}" ]
