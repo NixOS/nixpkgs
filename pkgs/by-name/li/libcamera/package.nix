@@ -114,5 +114,9 @@ stdenv.mkDerivation rec {
     homepage = "https://libcamera.org";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
+    badPlatforms = [
+      # Mandatory shared libraries.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

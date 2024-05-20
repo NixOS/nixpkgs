@@ -65,7 +65,7 @@
 , xorg
 , mysofaSupport ? true
 , libmysofa
-, ffadoSupport ? x11Support && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, ffadoSupport ? x11Support && lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
 , ffado
 , libselinux
 }:
