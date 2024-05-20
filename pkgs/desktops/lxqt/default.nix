@@ -30,10 +30,7 @@ let
     lxqt-sudo = callPackage ./lxqt-sudo {};
     lxqt-themes = callPackage ./lxqt-themes {};
     pavucontrol-qt = callPackage ./pavucontrol-qt {};
-    qtermwidget = callPackage ./qtermwidget {
-      lxqt-build-tools = lxqt-build-tools_0_13;
-      inherit (pkgs.libsForQt5) qtbase qttools;
-    };
+    qtermwidget = callPackage ./qtermwidget {};
 
     ### CORE 2
     lxqt-panel = callPackage ./lxqt-panel {};
