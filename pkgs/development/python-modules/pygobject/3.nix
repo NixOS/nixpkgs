@@ -11,6 +11,7 @@
 , meson
 , ninja
 , pythonOlder
+, runCommandLocal
 , gnome
 , python
 }:
@@ -48,9 +49,17 @@ buildPythonPackage rec {
     ncurses
   ];
 
+  depsBuildBuildPropagated = [
+    glib # TODO: Not sure why it works here, when the proper place is depsHostHostPropagated IMO.
+    gobject-introspection.setupHook
+  ];
+
+  depsHostHostPropagated = [
+    glib
+  ];
+
   propagatedBuildInputs = [
     pycairo
-    gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
 
   mesonFlags = [
