@@ -21,7 +21,7 @@ buildPythonPackage rec {
   version = "4.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
@@ -30,11 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-wn2qiVkL05GTopGJeghHe9i+wyOQZbEeYDmEIIbXDS0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     simple-websocket
   ];
 
