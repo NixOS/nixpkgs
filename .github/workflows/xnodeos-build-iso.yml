@@ -1,0 +1,25 @@
+---
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build XnodeOS ISO Image
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v22
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - run: make iso
+      - name: Archive ISO Image as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: XnodeOS-x86_64.iso
+          path: result/iso/nixos.iso
