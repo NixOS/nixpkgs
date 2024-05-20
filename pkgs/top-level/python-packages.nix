@@ -8873,8 +8873,6 @@ self: super: with self; {
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
 
-  nosejs = callPackage ../development/python-modules/nosejs { };
-
   nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
 
   nose-randomly = callPackage ../development/python-modules/nose-randomly { };
