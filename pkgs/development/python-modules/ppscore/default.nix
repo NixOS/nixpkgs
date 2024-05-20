@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonRelaxDepsHook,
   setuptools,
   pandas,
   pytestCheckHook,
@@ -23,7 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-gJStsL8fN17kvXO8EH/NHGIBelPknJzYw5WEvHsFooU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pandas
@@ -31,6 +35,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonRelaxDeps = [ "pandas" ];
 
   pythonImportsCheck = [ "ppscore" ];
 
