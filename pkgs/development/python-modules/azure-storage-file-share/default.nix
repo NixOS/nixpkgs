@@ -1,13 +1,14 @@
-{ lib
-, azure-core
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, isodate
-, msrest
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  msrest,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-QS+35sPCj29yKvmBlapZQHqqMjI6+hOkoB9i0Lh3TrM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     azure-core
@@ -34,9 +33,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    aio = [
-      azure-core
-    ] ++ azure-core.optional-dependencies.aio;
+    aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
   };
 
   # Tests require checkout from monorepo
