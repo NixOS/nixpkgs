@@ -259,6 +259,7 @@ mapAliases ({
   lazr_config = lazr-config; # added 2023-11-03
   lazr_delegates = lazr-delegates; # added 2023-11-03
   lazy_import = lazy-import; # added 2024-01-07
+  lazy-import = throw "lazy-import has been removed because it was unused."; # added 2024-05-20
   lazy_imports = lazy-imports; # added 2023-10-13
   ledger_agent = ledger-agent; # Added 2024-01-07
   lektor = throw "lektor has been promoted to a top-level attribute name: `pkgs.lektor`"; # added 2023-08-01
