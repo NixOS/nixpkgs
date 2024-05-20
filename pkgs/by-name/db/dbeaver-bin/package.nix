@@ -4,6 +4,7 @@
 , makeWrapper
 , openjdk17
 , gnused
+, autoPatchelfHook
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,6 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     gnused
+    autoPatchelfHook
   ];
 
   src =
