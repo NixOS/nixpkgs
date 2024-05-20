@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, tinycss2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
@@ -23,21 +24,13 @@ buildPythonPackage rec {
     sed -i '/^addopts/d' pyproject.toml
   '';
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  dependencies = [
-    tinycss2
-  ];
+  dependencies = [ tinycss2 ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "cssselect2"
-  ];
+  pythonImportsCheck = [ "cssselect2" ];
 
   meta = with lib; {
     description = "CSS selectors for Python ElementTree";
