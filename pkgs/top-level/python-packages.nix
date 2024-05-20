@@ -6527,8 +6527,6 @@ self: super: with self; {
 
   lazy = callPackage ../development/python-modules/lazy { };
 
-  lazy-import = callPackage ../development/python-modules/lazy-import { };
-
   lazy-imports = callPackage ../development/python-modules/lazy-imports { };
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
