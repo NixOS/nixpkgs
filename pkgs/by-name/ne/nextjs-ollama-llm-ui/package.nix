@@ -2,6 +2,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   inter,
+  nixosTests,
   lib,
   # This is a app can only be used in a browser and starts a web server only accessible at
   # localhost/127.0.0.1 from the local computer at the given port.
@@ -81,6 +82,12 @@ buildNpmPackage {
 
   doDist = false;
   #######################
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) nextjs-ollama-llm-ui;
+    };
+  };
 
   meta = {
     description = "Simple chat web interface for Ollama LLMs.";
