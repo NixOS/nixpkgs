@@ -51,6 +51,6 @@ buildPythonPackage rec {
       homepage = "https://github.com/eylles/pywal16";
       changelog = "https://github.com/eylles/pywal16/blob/${version}/CHANGELOG.md";
       license = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ MyGitHubBlueberry ]; /* i am affraid of maintaining this; I would love to change it "Fresheyeball", but idk if i am allowed to */
+      maintainers = with lib.maintainers; [ mygithubblueberry ]; /* i am affraid of maintaining this; I would love to change it "Fresheyeball", but idk if i am allowed to */
   };
 }
