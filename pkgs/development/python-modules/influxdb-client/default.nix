@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "influxdb-client";
   version = "1.43.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-CwSqJj9MslcvTzYGaDRygskSxbSh80uCJQM2tNz743k=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     certifi
     python-dateutil
     reactivex
