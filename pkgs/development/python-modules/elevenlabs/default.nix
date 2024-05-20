@@ -26,6 +26,9 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonImportsCheck = [
+    "elevenlabs"
+  ];
   meta = {
     description = "The official Python API for ElevenLabs Text to Speech.";
     homepage = "https://elevenlabs.io/docs/api-reference/getting-started";
