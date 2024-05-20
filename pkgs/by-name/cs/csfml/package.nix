@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "csfml";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "SFML";
     repo = "CSFML";
     rev = finalAttrs.version;
-    hash = "sha256-wwDHuyh4zMi0XCjIK7dUWiscPA+r8zLEvomuul6nlyQ=";
+    hash = "sha256-ECt0ySDpYWF0zuDBSnQzDwUm4Xj4z1+XSC55D6yivac=";
   };
 
   nativeBuildInputs = [ cmake ];
