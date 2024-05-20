@@ -50,15 +50,6 @@ in
       inherit wxSupport systemdSupport;
     };
 
-    erlang_27-rc3 = self.beamLib.callErlang ../development/interpreters/erlang/27-rc3.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      exdocSupport = true;
-      exdoc = self.packages.erlang_26.ex_doc;
-      inherit wxSupport systemdSupport;
-    };
-
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
