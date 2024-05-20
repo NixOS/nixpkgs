@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mcuboot-imgtool";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "imgtool";
-    hash = "sha256-elQSVeae7B8Sqjjc4fHU/iDYISZ3xoqbbsY0ypGgZhI=";
+    hash = "sha256-T3+831PETqqmImUEUQzLUvfvAMmXUDz5STSzMMlge2A=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -26,6 +26,7 @@ python3Packages.buildPythonApplication rec {
     click
     cryptography
     intelhex
+    pyyaml
   ];
 
   meta = with lib; {
