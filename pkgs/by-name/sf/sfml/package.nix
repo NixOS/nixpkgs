@@ -16,6 +16,7 @@
   xcbutilimage,
   darwin,
   libXcursor,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,7 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
     "-DSFML_BUILD_FRAMEWORKS=no"
     "-DSFML_USE_SYSTEM_DEPS=yes"
-    "-DSFML_PKGCONFIG_INSTALL_PREFIX=share/pkgconfig"
+  ];
+
+  patches = [
+    # Fix pkg-config
+    # See https://github.com/SFML/SFML/issues/2815
+    # Also, too much changes in CMakeLists.txt and changelog.md,
+    # so we patchin cmake ourself
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/SFML/SFML/pull/2835.patch";
+      hash = "sha256-kdOAXR9YPQllx64z9dgwCV+vy0cJvIsZZboZKFc4Q8Q=";
+      excludes = [ "changelog.md" "CMakeLists.txt" ];
+    })
+    ./CMakeLists.txt-pkgconfig.patch
   ];
 
   meta = {
