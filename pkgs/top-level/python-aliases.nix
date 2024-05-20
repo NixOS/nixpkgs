@@ -529,6 +529,9 @@ mapAliases ({
   Theano = theano; # added 2023-02-19
   TheanoWithCuda = theanoWithCuda; # added 2023-02-19
   TheanoWithoutCuda = theanoWithoutCuda; # added 2023-02-19
+  theano = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
+  theanoWithCuda = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
+  theanoWithoutCuda = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
   thumborPexif = throw "thumborPexif has been removed, because it was unused."; # added 2024-01-07
   torchgpipe = throw "torchgpipe has been removed, because it appears unmaintained and Pytorch now includes pipeline parallelism support"; # added 2024-05-18
   torrent_parser = torrent-parser; # added 2023-11-04
