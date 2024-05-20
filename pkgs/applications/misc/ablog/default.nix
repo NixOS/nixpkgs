@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     python-dateutil
     sphinx
     watchdog
+    defusedxml
   ];
 
   nativeCheckInputs = with python3.pkgs; [
