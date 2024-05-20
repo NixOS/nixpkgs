@@ -1,26 +1,13 @@
 diff --git a/scwx-qt/tools/generate_versions.py b/scwx-qt/tools/generate_versions.py
-index e7c470e..e6b8701 100644
+index e7c470e..dde3e4f 100644
 --- a/scwx-qt/tools/generate_versions.py
 +++ b/scwx-qt/tools/generate_versions.py
-@@ -74,16 +74,20 @@ def CollectVersionInfo(args):
+@@ -74,15 +74,8 @@ def CollectVersionInfo(args):
  
      versionInfo = VersionInfo()
  
 -    repo = git.Repo(args.gitRepo_, search_parent_directories = True)
-+    try:
-+      repo = git.Repo(args.gitRepo_, search_parent_directories = True)
-+
-+      commitString = str(repo.head.commit)[:10]
-+
-+      if not repo.is_dirty(submodules = False):
-+          copyrightYear = datetime.datetime.fromtimestamp(repo.head.commit.committed_date).year
-+      else:
-+          commitString  = commitString + "+dirty"
-+          copyrightYear = datetime.date.today().year
-+    except git.exc.InvalidGitRepositoryError as ex:
-+      commitString = "none"
-+      copyrightYear = datetime.date.today().year
- 
+-
 -    commitString = str(repo.head.commit)[:10]
 -    
 -    if not repo.is_dirty(submodules = False):
@@ -28,7 +15,8 @@ index e7c470e..e6b8701 100644
 -    else:
 -        commitString  = commitString + "+dirty"
 -        copyrightYear = datetime.date.today().year
--    
++    commitString = '@NIX_SRC_REV@'
++    copyrightYear = datetime.date.today().year
+     
      versionInfo.commitString_  = commitString
      versionInfo.copyrightYear_ = copyrightYear
-     versionInfo.versionString_ = args.version_

@@ -11,10 +11,11 @@
 , glew
 , geos
 , git
-, boost184
+, boost185
 , spdlog
 , libcpr
 , libpng
+, libSM
 , geographiclib
 , re2
 , gtest
@@ -29,20 +30,20 @@
 , python3
 , wrapQtAppsHook
 } : let
-  version = "0.4.3";
-in stdenv.mkDerivation {
-  name = "supercell-wx";
-  inherit version;
 
+  version = "0.4.4";
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
     rev = "refs/tags/v${version}-release";
-    sha256 = "sha256-HuOoE6uFs9UZpoBqwCnuSoSUi3Mw9T0UylMcjTgFluk=";
+    sha256 = "sha256-HghyRFLKboztQEOsvN2VaSxxcuPPu1GIakBNWRIWBOk=";
     fetchSubmodules = true;
-    deepClone = true;
-    leaveDotGit = true;
   };
+
+in stdenv.mkDerivation {
+  name = "supercell-wx";
+  inherit version;
+  inherit src;
 
   nativeBuildInputs = [
     cmake
@@ -52,6 +53,10 @@ in stdenv.mkDerivation {
     git
   ];
 
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=restrict"
+  '';
+
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CONFIGURATION_TYPES=Release"
@@ -60,23 +65,21 @@ in stdenv.mkDerivation {
     "-G Ninja"
   ];
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=restrict"
-  '';
-
   patches = [
     ./remove-conan.patch
     ./fix-cmake-find-packages.patch
     ./add-cstdint.patch
     ./fix-zoned-time.patch
     ./fix-git-versioning.patch
-    ./add-cstdint2.patch
     ./add-explicit-libpng.patch
+    ./fix-cmake-install.patch
   ];
 
   postPatch = ''
     substituteInPlace external/maplibre-native-qt/src/core/CMakeLists.txt \
       --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
+    substituteInPlace scwx-qt/tools/generate_versions.py \
+      --replace-fail "@NIX_SRC_REV@" "${src.rev}"
   '';
 
   buildInputs = [
@@ -88,13 +91,14 @@ in stdenv.mkDerivation {
     qtmultimedia
     qtpositioning
     qtimageformats
-    boost184
+    boost185
     tbb_2021_11
     glew
     geos
     spdlog
     libcpr
     libpng
+    libSM
     re2
     geographiclib
     gtest
