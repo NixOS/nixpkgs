@@ -164,8 +164,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # TODO: drop with 24.11
-    services.archisteamfarm.dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
+    services.archisteamfarm = {
+      # TODO: drop with 24.11
+      dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
+      settings.IPC = lib.mkIf (!cfg.web-ui.enable) false;
+    };
 
     users = {
       users.archisteamfarm = {
