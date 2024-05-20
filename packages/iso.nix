@@ -37,7 +37,7 @@ let
       environment = {
         systemPackages = with pkgs; [
           prometheus grafana 
-        ]
+        ];
       };
       networking = {
         hostName = "xnode";
@@ -49,13 +49,6 @@ let
             password = "xnode";
             openssh.authorizedKeys.keys = [ sshPubKey ]; # Inject a key from environment or through --args
           };
-        };
-      };
-      services = {
-        openssh = {
-          enable = true;
-          settings.PasswordAuthentication = false;
-          settings.KbdInteractiveAuthentication = false;
         };
       };
     };
