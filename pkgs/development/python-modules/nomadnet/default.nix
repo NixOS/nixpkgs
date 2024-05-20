@@ -23,11 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-Ut/YifODoiHCo3bhN8nV5ZPNIr70FM6MjlZCrUuNaFc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     rns
     lxmf
     urwid
@@ -43,10 +43,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Off-grid, resilient mesh communication";
-    mainProgram = "nomadnet";
     homepage = "https://github.com/markqvist/NomadNet";
     changelog = "https://github.com/markqvist/NomadNet/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "nomadnet";
   };
 }
