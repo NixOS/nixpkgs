@@ -24,6 +24,8 @@ stdenvNoCC.mkDerivation rec {
     install -m0644 zinit{,-side,-install,-autoload}.zsh "$outdir"
     install -m0755 share/git-process-output.zsh "$outdir"
 
+    installManPage doc/zinit.1
+
     # Zplugin autocompletion
     installShellCompletion --zsh _zinit
 
