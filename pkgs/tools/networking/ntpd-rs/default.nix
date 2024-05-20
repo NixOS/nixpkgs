@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, ntpd-rs
-, installShellFiles
-, pandoc
-, Security
-, nixosTests
-, testers
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  ntpd-rs,
+  installShellFiles,
+  pandoc,
+  Security,
+  nixosTests,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,14 +24,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Badq3GYr7BoF8VNGGtKTT4/ksuds1zBcSxx5O3vLbzg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    pandoc
+    installShellFiles
   ];
-  nativeBuildInputs = [ pandoc installShellFiles ];
 
   postPatch = ''
     substituteInPlace utils/generate-man.sh \
-      --replace 'utils/pandoc.sh' 'pandoc'
+      --replace-fail 'utils/pandoc.sh' 'pandoc'
   '';
 
   postBuild = ''
@@ -51,7 +53,10 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/precompiled/man/{ntp.toml.5,ntp-ctl.8,ntp-daemon.8,ntp-metrics-exporter.8}
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru = {
     tests = {
@@ -68,8 +73,14 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://tweedegolf.nl/en/pendulum";
     changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${version}/CHANGELOG.md";
     mainProgram = "ntp-ctl";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ fpletz getchoo ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+      fpletz
+      getchoo
+    ];
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
