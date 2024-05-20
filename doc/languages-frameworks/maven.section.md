@@ -49,6 +49,36 @@ This package calls `maven.buildMavenPackage` to do its work. The primary differe
 After setting `maven.buildMavenPackage`, we then do standard Java `.jar` installation by saving the `.jar` to `$out/share/java` and then making a wrapper which allows executing that file; see [](#sec-language-java) for additional generic information about packaging Java applications.
 :::
 
+### Overriding Maven package attributes {#maven-overriding-package-attributes}
+
+The `buildMavenPackage` function has a `overrideMavenAttrs` method that can be
+used to override the attributes of a maven package. In the following example we
+want to use an older version of jd-cli and disable some flaky test:
+
+```nix
+jd-cli.overrideMavenAttrs(old: rec {
+  version = "1.2.0";
+  src = fetchFromGitHub {
+    owner = old.src.owner;
+    repo = old.src.repo;
+    rev = "${old.pname}-${version}";
+    # old source hash of 1.2.0 version
+    hash = "sha256-US7j6tQ6mh1libeHnQdFxPGoxHzbZHqehWSgCYynKx8=";
+  };
+
+  # tests can be disabled by prefixing it with !
+  # see the docs for more info: https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html#Multiple_Formats_in_One
+  mvnParameters = lib.escapeShellArgs [
+    "-Dsurefire.failIfNoSpecifiedTests=false"
+    "-Dtest=!JavaDecompilerTest#basicTest,
+    !JavaDecompilerTest#patternMatchingTest"
+  ];
+
+  # old mvnHash of 1.2.0 maven dependencies
+  mvnHash = "sha256-N9XC1pg6Y4sUiBWIQUf16QSXCuiAPpXEHGlgApviF4I=";
+});
+```
+
 ### Stable Maven plugins {#stable-maven-plugins}
 
 Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`. If your project does not override these versions, an upgrade of Maven will change the version of the used plugins, and therefore the derivation and hash.
