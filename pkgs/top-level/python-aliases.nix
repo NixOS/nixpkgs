@@ -93,7 +93,8 @@ mapAliases ({
   CommonMark = commonmark; # added 2023-02-1
   ConfigArgParse = configargparse; # added 2021-03-18
   coronavirus = throw "coronavirus was removed, because the source is not providing the data anymore."; # added 2023-05-04
-  covCore = cov-core; # added 2024-01-03
+  covCore = throw "covCore was renamed to cov-core and subsequently removed since it has ben unmaintained since 2014"; # added 2024-05-20
+  cov-core = throw "cov-core has been removed, it was archived and unmaintained since 2014"; # added 2024-05-20
   cozy = throw "cozy was removed because it was not actually https://pypi.org/project/Cozy/."; # added 2022-01-14
   cryptacular = throw "cryptacular was removed, because it was disabled on all python version since 3.6 and last updated in 2021"; # Added 2024-05-13
   cryptography_vectors = "cryptography_vectors is no longer exposed in python*Packages because it is used for testing cryptography only."; # Added 2022-03-23
@@ -142,6 +143,7 @@ mapAliases ({
   doctest-ignore-unicode = throw "doctest-ignore-unicode has been removed since it has been unmaintained for 11 years"; # added 2024-05-20
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
+  dyn = throw "dyn has been removed because it is no longer maintained"; # added 2024-05-20
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   EasyProcess = easyprocess; # added 2023-02-19
   email_validator = email-validator; # added 2022-06-22
@@ -302,6 +304,7 @@ mapAliases ({
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   ninja-python = ninja; # add 2022-08-03
+  nose-cov = throw "nose-cov has been removed, it was archived and unmaintained since 2012"; # added 2024-05-20
   nosejs = throw "nosejs has been removed since it has not been maintained for 15 years and there are no dependent packages"; # added 2024-05-21
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   nose-cprof = throw "nose-cprof has been removed since it has not been maintained for 7 years and there are no dependent packages"; # added 2024-05-21
@@ -361,6 +364,7 @@ mapAliases ({
   PyICU = pyicu; # Added 2022-12-22
   pyhs100 = throw "pyhs100 has been removed in favor of python-kasa."; # added 2024-01-05
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
+  pylti = throw "pylti has been removed becase it is unmaintained"; # added 2024-05-20
   PyLD = pyld; # added 2022-06-22
   pymaging = throw "pymaging has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04
   pymaging_png = throw "pymaging_png has been removed because it has not been maintained for 10 years and has been archived."; # added 2023-11-04

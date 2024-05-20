@@ -2494,8 +2494,6 @@ self: super: with self; {
 
   courlan = callPackage ../development/python-modules/courlan { };
 
-  cov-core = callPackage ../development/python-modules/cov-core { };
-
   coverage = callPackage ../development/python-modules/coverage { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
@@ -3657,8 +3655,6 @@ self: super: with self; {
   dvclive = callPackage ../development/python-modules/dvclive {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
-
-  dyn = callPackage ../development/python-modules/dyn { };
 
   dynalite-devices = callPackage ../development/python-modules/dynalite-devices { };
 
@@ -8861,8 +8857,6 @@ self: super: with self; {
 
   nose3 = callPackage ../development/python-modules/nose3 { };
 
-  nose-cov = callPackage ../development/python-modules/nose-cov { };
-
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
@@ -11292,8 +11286,6 @@ self: super: with self; {
   pylsp-rope = callPackage ../development/python-modules/pylsp-rope { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
-
-  pylti = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
 
