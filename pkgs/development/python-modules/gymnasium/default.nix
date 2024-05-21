@@ -10,7 +10,9 @@
 , farama-notifications
 , importlib-metadata
 , pythonOlder
+, dill
 , ffmpeg
+, flax
 , jax
 , jaxlib
 , matplotlib
@@ -25,19 +27,19 @@
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "0.29.1";
-  format = "pyproject";
+  version = "1.0.0a2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "gymnasium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L7fn9FaJzXwQhjDKwI9hlFpbPuQdwynU+Xjd8bbjxiw=";
+    hash = "sha256-gRr2/59TvsCzG2Ph8EF9DRwrIn7ELUKcENAT+zAyIII=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     farama-notifications
     gym-notices
@@ -49,7 +51,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gymnasium" ];
 
   nativeCheckInputs = [
+    dill
     ffmpeg
+    flax
     jax
     jaxlib
     matplotlib
@@ -68,20 +72,25 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   disabledTestPaths = [
-    # mujoco is required for those tests but the mujoco python bindings are not packaged in nixpkgs.
+    # Unpackaged mujoco-py (Openai's mujoco) is required for those tests.
     "tests/envs/mujoco/test_mujoco_custom_env.py"
+    "tests/envs/mujoco/test_mujoco_rendering.py"
+    "tests/envs/mujoco/test_mujoco_v5.py"
 
     # Those tests need to write on the filesystem which cause them to fail.
-    "tests/experimental/wrappers/test_record_video.py"
     "tests/utils/test_save_video.py"
     "tests/wrappers/test_record_video.py"
-    "tests/wrappers/test_video_recorder.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    "test_render_modes[Reacher-v4]"
+  ];
+
+  meta = {
     description = "A standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
     homepage = "https://github.com/Farama-Foundation/Gymnasium";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/Farama-Foundation/Gymnasium/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
