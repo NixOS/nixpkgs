@@ -41,6 +41,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     networking.useNetworkd = true;
     networking.useDHCP = false;
     systemd.network.networks."40-eth0".enable = false;
+
+    testing.initrdBackdoor = true;
+    boot.initrd = {
+      systemd.enable = true;
+      systemd.initrdBin = [ pkgs.iputils ];
+      network.enable = true;
+      services.resolved.enable = true;
+    };
   };
 
   testScript = { nodes, ... }: let
@@ -49,12 +57,19 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   in ''
     start_all()
     server.wait_for_unit("multi-user.target")
-    client.wait_for_unit("multi-user.target")
 
-    query = client.succeed("resolvectl query example.com")
-    assert "${address4}" in query
-    assert "${address6}" in query
-    client.succeed("ping -4 -c 1 example.com")
-    client.succeed("ping -6 -c 1 example.com")
+    def test_client():
+        query = client.succeed("resolvectl query example.com")
+        assert "${address4}" in query
+        assert "${address6}" in query
+        client.succeed("ping -4 -c 1 example.com")
+        client.succeed("ping -6 -c 1 example.com")
+
+    client.wait_for_unit("initrd.target")
+    test_client()
+    client.switch_root()
+
+    client.wait_for_unit("multi-user.target")
+    test_client()
   '';
 })
