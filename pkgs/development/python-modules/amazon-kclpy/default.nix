@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/awslabs/amazon-kinesis-client-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];
+    broken = true;
   };
 }
