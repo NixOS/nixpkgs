@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromSourcehut
-, fetchpatch
 , pkg-config
 , meson
 , ninja
