@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   # https://github.com/Beep6581/RawTherapee/issues/7074
   patches = [
     (fetchurl {
-      url = "https://github.com/termux-user-repository/tur/raw/c7b7648b5611cd1bc41a48a1ca6f3c4f71e253c5/tur/rawtherapee/0002-libjpeg-turbo-3.0.3.patch";
-      hash = "sha256-IaRMrwZd4KQTGjKd1S4su6b9E+Jt7Y0cZiDAkZ8dXHw=";
+      url = "https://github.com/Beep6581/RawTherapee/commit/6b9f45c69c1ddfc3607d3d9c1206dcf1def30295.diff";
+      hash = "sha256-3Rti9HV8N1ueUm5B9qxEZL7Lb9bBb+iy2AGKMpJ9YOM=";
     })
   ];
 
