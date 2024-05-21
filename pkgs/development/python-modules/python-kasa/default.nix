@@ -1,25 +1,26 @@
-{ lib
-, aiohttp
-, anyio
-, async-timeout
-, asyncclick
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, kasa-crypt
-, orjson
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  anyio,
+  async-timeout,
+  asyncclick,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  kasa-crypt,
+  orjson,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.6.2.1";
+  version = "0.7.0.dev0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,14 +29,12 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-iCqJY3qkA3ZVXTCfxvQoaZsaqGui8PwKGAmLXKZgLJs=";
+    hash = "sha256-O3HzYZZRcyi0auSkH/yc4bn/KXKOQfmGjMK0AndpSEI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     anyio
     async-timeout
@@ -58,25 +57,21 @@ buildPythonPackage rec {
     ];
   };
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTestPaths = [
     # Skip the examples tests
     "kasa/tests/test_readme_examples.py"
   ];
 
-  pythonImportsCheck = [
-    "kasa"
-  ];
+  pythonImportsCheck = [ "kasa" ];
 
   meta = with lib; {
     description = "Python API for TP-Link Kasa Smarthome products";
-    mainProgram = "kasa";
     homepage = "https://python-kasa.readthedocs.io/";
     changelog = "https://github.com/python-kasa/python-kasa/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kasa";
   };
 }
