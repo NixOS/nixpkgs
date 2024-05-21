@@ -45,6 +45,10 @@ in stdenv.mkDerivation {
   inherit version;
   inherit src;
 
+  meta = {
+    license = with lib.licenses; [ mit ];
+  };
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -58,11 +62,8 @@ in stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DCMAKE_CONFIGURATION_TYPES=Release"
-    "-DBUILD_SHARED_LIBS=ON"
     "-DMLN_QT_WITH_INTERNAL_SQLITE=ON"
-    "-G Ninja"
+    "-GNinja"
   ];
 
   patches = [
