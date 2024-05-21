@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     # Buffer overflow on Unicode characters in path names
     # https://bugzilla.redhat.com/show_bug.cgi?id=2165653
     ./buffer-overflow-on-utf8-rh-bug-2165653.patch
+    # Fixes forward declaration errors with timezone.c
+    ./fix-time.h-not-included.patch
   ] ++ lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
   buildInputs = lib.optional enableNLS libnatspec
