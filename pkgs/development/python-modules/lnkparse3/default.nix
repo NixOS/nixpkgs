@@ -3,12 +3,13 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, pyyaml
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "lnkparse3";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,11 +18,15 @@ buildPythonPackage rec {
     owner = "Matmaus";
     repo = "LnkParse3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aWMkLFbmikdj4mlAPpo0qrxfE8zgRcSV83aiws03XsQ=";
+    hash = "sha256-oyULNRjC0pcVUOeTjjW3g3mB7KySYcwAS+/KwQEIkK4=";
   };
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  propagatedBuildInputs = [
+    pyyaml
   ];
 
   nativeCheckInputs = [
