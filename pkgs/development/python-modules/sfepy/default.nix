@@ -16,6 +16,7 @@
 , pyvista
 , pytest
 , pythonOlder
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -76,5 +77,6 @@ buildPythonPackage rec {
     description = "Simple Finite Elements in Python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
+    broken = stdenv.isDarwin;
   };
 }
