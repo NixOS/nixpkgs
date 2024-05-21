@@ -47,6 +47,7 @@ in
             };
           };
         };
+        default = { };
         example = {
           MusicFolder = "/mnt/music";
         };
