@@ -54,6 +54,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
+
+    # Broken since ale-py v0.9.0 due to API change
+    # https://github.com/Farama-Foundation/Shimmy/issues/120
+    "tests/test_atari.py"
   ];
 
   preCheck = ''
