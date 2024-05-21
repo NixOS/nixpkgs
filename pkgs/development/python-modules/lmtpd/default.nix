@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-LGgl0v+h3gmUQEEadC9Y4bPo3uszRa3P1MLDjUuvYrM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "lmtpd"
-  ];
+  pythonImportsCheck = [ "lmtpd" ];
 
   meta = with lib; {
     description = "LMTP counterpart to smtpd in the Python standard library";
