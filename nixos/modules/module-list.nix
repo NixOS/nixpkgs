@@ -761,6 +761,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nix-optimise.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/nixos-needsreboot.nix
   ./services/misc/novacomd.nix
   ./services/misc/ntfy-sh.nix
   ./services/misc/nzbget.nix
