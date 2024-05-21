@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, autoreconfHook, flex }:
+{ lib, stdenv, fetchurl, ncurses, autoreconfHook, flex }:
 let rev = "b17ea39dc17e5514f33b3f5c34ede92bd16e208c";
 in stdenv.mkDerivation rec {
   pname = "mmh";

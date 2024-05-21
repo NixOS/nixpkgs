@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , nix
 , virt-viewer
-, fetchpatch
 , makeWrapper }:
 
 let

@@ -8,7 +8,6 @@
 , sslSupport ? true
 , openssl
 , nukeReferences
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
