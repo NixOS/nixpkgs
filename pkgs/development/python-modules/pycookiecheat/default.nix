@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pycookiecheat";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,13 +31,16 @@ buildPythonPackage rec {
     "keyring"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     cryptography
     keyring
   ];
