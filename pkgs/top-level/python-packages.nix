@@ -5867,8 +5867,6 @@ self: super: with self; {
 
   ipdb = callPackage ../development/python-modules/ipdb { };
 
-  ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
-
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
   i-pi = callPackage ../development/python-modules/i-pi { };
@@ -7661,6 +7659,8 @@ self: super: with self; {
 
   monty = callPackage ../development/python-modules/monty { };
 
+  monzopy = callPackage ../development/python-modules/monzopy { };
+
   moonraker-api = callPackage ../development/python-modules/moonraker-api { };
 
   mopeka-iot-ble = callPackage ../development/python-modules/mopeka-iot-ble { };
@@ -8862,8 +8862,6 @@ self: super: with self; {
   nose3 = callPackage ../development/python-modules/nose3 { };
 
   nose-cov = callPackage ../development/python-modules/nose-cov { };
-
-  nose-cprof = callPackage ../development/python-modules/nose-cprof { };
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 

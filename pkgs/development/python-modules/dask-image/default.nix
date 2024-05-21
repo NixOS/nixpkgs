@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2024.5.1";
+  version = "2024.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask-image";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BNjftLs/hle2EWkLBOT8r2nSOxKZzPixAE4fOfNSFIs=";
+    hash = "sha256-smoiGSY7ou4zPRf0+6bRoViZDwNFBIwq+Mk8Tc9vniM=";
   };
 
   build-system = [
