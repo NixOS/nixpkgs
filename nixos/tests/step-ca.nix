@@ -89,7 +89,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       ''
         catester.start()
         caserver.wait_for_unit("step-ca.service")
-        caserver.succeed("journalctl -o cat -u step-ca.service | grep '${pkgs.step-ca.version}'")
+        caserver.wait_until_succeeds("journalctl -o cat -u step-ca.service | grep '${pkgs.step-ca.version}'")
 
         caclient.wait_for_unit("acme-finished-caclient.target")
         catester.succeed("curl https://caclient/ | grep \"Welcome to nginx!\"")
