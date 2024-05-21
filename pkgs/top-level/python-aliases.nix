@@ -304,6 +304,7 @@ mapAliases ({
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   ninja-python = ninja; # add 2022-08-03
   nosejs = throw "nosejs has been removed since it has not been maintained for 15 years and there are no dependent packages"; # added 2024-05-21
+  nose-cov = throw "nose-cov has been removed, it was archived and unmaintained since 2012"; # added 2024-05-21
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   nose-cprof = throw "nose-cprof has been removed since it has not been maintained for 7 years and there are no dependent packages"; # added 2024-05-21
   nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; #added 2023-02-21
