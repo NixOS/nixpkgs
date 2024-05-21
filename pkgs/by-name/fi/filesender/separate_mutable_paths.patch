@@ -1,5 +1,5 @@
 diff --git a/classes/utils/Config.class.php b/classes/utils/Config.class.php
-index a4d819bc..3c2ed287 100644
+index a4d819bc..318defdf 100644
 --- a/classes/utils/Config.class.php
 +++ b/classes/utils/Config.class.php
 @@ -30,7 +30,7 @@
@@ -16,7 +16,7 @@ index a4d819bc..3c2ed287 100644
          
          // Check if main config exists
 -        $main_config_file = FILESENDER_BASE.'/config/config.php';
-+        $main_config_file = FILESENDER_CONFIG_DIR.'/config/config.php';
++        $main_config_file = FILESENDER_CONFIG_DIR.'/config.php';
          if (!file_exists($main_config_file)) {
              throw new ConfigFileMissingException($main_config_file);
          }
@@ -25,7 +25,7 @@ index a4d819bc..3c2ed287 100644
  
          // load password file if it is there
 -        $pass_config_file = FILESENDER_BASE.'/config/config-passwords.php';
-+        $pass_config_file = FILESENDER_CONFIG_DIR.'/config/config-passwords.php';
++        $pass_config_file = FILESENDER_CONFIG_DIR.'/config-passwords.php';
          if (file_exists($pass_config_file)) {
              $config = array();
              include_once($pass_config_file);
@@ -34,7 +34,7 @@ index a4d819bc..3c2ed287 100644
              }
              
 -            $config_file = FILESENDER_BASE.'/config/'.$virtualhost.'/config.php';
-+            $config_file = FILESENDER_CONFIG_DIR.'/config/'.$virtualhost.'/config.php';
++            $config_file = FILESENDER_CONFIG_DIR.$virtualhost.'/config.php';
              if (!file_exists($config_file)) {
                  throw new ConfigFileMissingException($config_file);
              } // Should exist even if empty
@@ -43,7 +43,7 @@ index a4d819bc..3c2ed287 100644
                          foreach ($regex_and_configs as $regex => $extra_config_name) {
                                  if (preg_match('`'.$regex.'`', $auth_attrs[$attr])) {
 -                                        $extra_config_file = FILESENDER_BASE.'/config/config-' . $extra_config_name . '.php';
-+                                        $extra_config_file = FILESENDER_CONFIG_DIR.'/config/config-' . $extra_config_name . '.php';
++                                        $extra_config_file = FILESENDER_CONFIG_DIR.'/config-' . $extra_config_name . '.php';
                                          if (file_exists($extra_config_file)) {
                                                  $config = array();
                                                  include_once($extra_config_file);
@@ -52,7 +52,7 @@ index a4d819bc..3c2ed287 100644
          $overrides_cfg = self::get('config_overrides');
          if ($overrides_cfg) {
 -            $overrides_file = FILESENDER_BASE.'/config/'.($virtualhost ? $virtualhost.'/' : '').'config_overrides.json';
-+            $overrides_file = FILESENDER_CONFIG_DIR.'/config/'.($virtualhost ? $virtualhost.'/' : '').'config_overrides.json';
++            $overrides_file = FILESENDER_CONFIG_DIR.($virtualhost ? $virtualhost.'/' : '').'config_overrides.json';
              
              $overrides = file_exists($overrides_file) ? json_decode(trim(file_get_contents($overrides_file))) : new StdClass();
              
@@ -61,7 +61,7 @@ index a4d819bc..3c2ed287 100644
      {
          $virtualhosts = array();
 -        foreach (scandir(FILESENDER_BASE.'/config') as $item) {
-+        foreach (scandir(FILESENDER_CONFIG_DIR.'/config') as $item) {
++        foreach (scandir(FILESENDER_CONFIG_DIR) as $item) {
              if (!preg_match('`^(.+)\.conf\.php$`', $item, $match)) {
                  continue;
              }
@@ -103,7 +103,7 @@ index 5c1e7f61..b1fb57e4 100644
 +if(!defined('FILESENDER_BASE') || !defined("FILESENDER_CONFIG_DIR")) die('Missing environment');
  
 -if(!file_exists(FILESENDER_BASE.'/config/config.php'))
-++if(!file_exists(FILESENDER_CONFIG_DIR.'/config.php'))
++if(!file_exists(FILESENDER_CONFIG_DIR.'/config.php'))
      die('Configuration file not found');
  
  ConfigValidator::addCheck('site_url', 'string');
