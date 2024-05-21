@@ -534,7 +534,12 @@ in {
 
         services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 
-        hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
+        hardware.firmware =
+          let
+            isOpen = cfg.open;
+            isNewUnfree = lib.versionAtLeast nvidia_x11.version "555";
+          in
+          lib.optional (isOpen || isNewUnfree) nvidia_x11.firmware;
 
         systemd.tmpfiles.rules = [
           # Remove the following log message:
