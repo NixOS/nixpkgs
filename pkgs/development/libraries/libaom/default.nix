@@ -47,9 +47,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTS=OFF"
   ] ++ lib.optionals enableVmaf [
     "-DCONFIG_TUNE_VMAF=1"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
-    "-DCONFIG_RUNTIME_CPU_DETECT=0"
   ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
     "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
   ] ++ lib.optionals stdenv.isAarch32 [

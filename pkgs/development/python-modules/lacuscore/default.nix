@@ -1,22 +1,23 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, defang
-, dnspython
-, fetchFromGitHub
-, playwrightcapture
-, poetry-core
-, pythonOlder
-, redis
-, requests
-, pythonRelaxDepsHook
-, sphinx
-, ua-parser
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  defang,
+  dnspython,
+  fetchFromGitHub,
+  playwrightcapture,
+  poetry-core,
+  pythonOlder,
+  redis,
+  requests,
+  pythonRelaxDepsHook,
+  sphinx,
+  ua-parser,
 }:
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,19 +26,19 @@ buildPythonPackage rec {
     owner = "ail-project";
     repo = "LacusCore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jfbDg74vHwOFvbOETPSaApFCpzw9Khu8PgGpsoAwSGc=";
+    hash = "sha256-wjkU9rZvR7fySeNvMizLYL3JwsfhicdtezWeuwMCHgM=";
   };
 
   pythonRelaxDeps = [
     "redis"
+    "requests"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     async-timeout
     defang
     dnspython
@@ -51,9 +52,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lacuscore"
-  ];
+  pythonImportsCheck = [ "lacuscore" ];
 
   meta = with lib; {
     description = "The modulable part of Lacus";

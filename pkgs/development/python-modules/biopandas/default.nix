@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, looseversion
-, mmtf-python
-, nose
-, numpy
-, pandas
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  looseversion,
+  mmtf-python,
+  numpy,
+  pandas,
+  pynose,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "biopandas";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BioPandas";
     repo = "biopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PRdemBo+bB2xJWmF2NylFTfNwEEo67i6XSaeDAFmQ/c=";
+    hash = "sha256-1c78baBBsDyvAWrNx5mZI/Q75wyXv0DAwAdWm3EwX/I=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "looseversion"
-  ];
+  pythonRelaxDeps = [ "looseversion" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     pandas
     mmtf-python
@@ -37,20 +38,20 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    nosetests
-
-    runHook postCheck
-  '';
-
-  pythonImportsCheck = [
-    "biopandas"
+  disabledTests = [
+    # require network access
+    "test_mmcif_pdb_conversion"
+    "test_fetch_pdb"
+    "test_write_mmtf_bp"
+    "test_write_mmtf"
+    "test_b_factor_shift"
   ];
+
+  pythonImportsCheck = [ "biopandas" ];
 
   meta = {
     description = "Working with molecular structures in pandas DataFrames";
