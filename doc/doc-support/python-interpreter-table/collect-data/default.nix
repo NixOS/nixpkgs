@@ -4,11 +4,14 @@ let
     attrNames
     filterAttrs
     foldlAttrs
+    mapAttrs'
     mapAttrsToList
     mergeAttrsList
+    nameValuePair
     zipAttrsWith
     ;
   inherit (lib.lists) sortOn map naturalSort;
+  inherit (lib.strings) hasInfix hasPrefix hasSuffix;
 
   isPythonInterpreterName = name: (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
   aliasFilterWithExcludes = excludeList: name:
@@ -22,10 +25,46 @@ let
     - `rustpython` lacks `pythonVersion` and `implementation`.
   */
   interpreterFilter = aliasFilterWithExcludes [];
-  interpreters = import ./interpreters.nix {
-    inherit lib;
-    inherit (pkgs) pythonInterpreters;
-  };
+  /* Collect Python interpreters from attrset `pkgs.pythonInterpreters`.
+
+  The return type is an attrset with the following shape:
+  ```
+  {
+    ${interpreterFieldValue} = {
+      interpreter = ${interpreterFieldValue};
+      attrname = ${attrname};
+    };
+    ....
+  }
+  ```
+
+  Example:
+
+  ```
+  {
+    "CPython 3.10" = { interpreter = "CPython 3.10"; attrname = "python310"; };
+    "PyPy 3.10" = { interpreter = "PyPy 3.10"; attrname = "pypy310"; };
+    ....
+  }
+  ```
+  */
+  interpreters =
+    let
+      interpreters' = filterAttrs
+        (name: _: interpreterFilter name)
+        pkgs.pythonInterpreters;
+    in
+    mapAttrs'
+    (name: value: let
+      interpreterFieldValue =
+        (import ./nix/interpreterFieldValue.nix { python = value; });
+    in nameValuePair
+      interpreterFieldValue
+      {
+        interpreter = interpreterFieldValue;
+        attrname = name;
+      })
+    interpreters';
   /* Look for aliases in the attrset `pkgs`.
 
   Two packages <attrname1> has and alias <attrname2> they return the same <table-fied-value> .
