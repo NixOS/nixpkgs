@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, gtk-doc, meson, ninja, pkg-config, python3
+{ lib, stdenv, fetchurl, gtk-doc, meson, ninja, pkg-config, python3
 , docbook_xsl, fontconfig, freetype, libpng, pixman, zlib
 , x11Support? !stdenv.isDarwin || true, libXext, libXrender
 , gobjectSupport ? true, glib
