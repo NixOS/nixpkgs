@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, pkg-config, allegro5, libGL, wrapGAppsHook3 }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, allegro5, libGL, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-circuit";

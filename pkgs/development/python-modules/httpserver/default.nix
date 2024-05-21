@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, docopt, pythonOlder }:
+{ lib, fetchPypi, buildPythonPackage, docopt }:
 
 buildPythonPackage rec {
   pname = "httpserver";
@@ -10,9 +10,6 @@ buildPythonPackage rec {
   # Tests pull in lots of other dependencies to emulate different web
   # drivers.
   doCheck = false;
-
-  # Because it uses asyncio
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

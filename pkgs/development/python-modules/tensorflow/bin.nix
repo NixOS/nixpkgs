@@ -31,6 +31,7 @@
 , astunparse
 , flatbuffers
 , h5py
+, llvmPackages
 , typing-extensions
 }:
 
@@ -51,12 +52,16 @@ in buildPythonPackage {
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-    platform = if stdenv.isDarwin then "mac" else "linux";
-    unit = if cudaSupport then "gpu" else "cpu";
-    key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl (packages.${key} or {});
+    platform = stdenv.system;
+    cuda = lib.optionalString cudaSupport "_gpu";
+    key = "${platform}_${pyVerNoDot}${cuda}";
+  in fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported system: ${stdenv.system}"));
 
-  propagatedBuildInputs = [
+  buildInputs = [
+    llvmPackages.openmp
+  ];
+
+  dependencies = [
     astunparse
     flatbuffers
     typing-extensions
@@ -81,7 +86,7 @@ in buildPythonPackage {
     h5py
   ] ++ lib.optional (!isPy3k) mock;
 
-  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  build-system = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -91,7 +96,6 @@ in buildPythonPackage {
 
     pushd dist
 
-    orig_name="$(echo ./*.whl)"
     wheel unpack --dest unpacked ./*.whl
     rm ./*.whl
     (
@@ -113,7 +117,6 @@ in buildPythonPackage {
         -e "s/Requires-Dist: numpy (.*)/Requires-Dist: numpy/"
     )
     wheel pack ./unpacked/tensorflow*
-    mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
 
     popd
   '';
@@ -168,6 +171,7 @@ in buildPythonPackage {
         "$out/${python.sitePackages}/tensorflow/python/saved_model"
         "$out/${python.sitePackages}/tensorflow/python/util"
         "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
+        "$out/${python.sitePackages}/tensorflow.libs/"
         "${rpath}"
       )
 
@@ -205,6 +209,10 @@ in buildPythonPackage {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.all;
+    # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
+    # ModuleNotFoundError: No module named 'distutils'
+    # https://github.com/tensorflow/tensorflow/issues/58073
+    broken = pythonAtLeast "3.12";
   };
 }

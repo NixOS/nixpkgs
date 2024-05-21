@@ -225,8 +225,10 @@ in
         # See <https://www.freedesktop.org/software/systemd/man/systemd.unit.html#Specifiers>
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
 
-        preStart = "${getExe pkgs.envsubst} -i ${config} -o \"$CONFIG\"";
-        script = "rosenpass exchange-config \"$CONFIG\"";
+        script = ''
+          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
+          rosenpass exchange-config "$CONFIG"
+        '';
       };
   };
 }

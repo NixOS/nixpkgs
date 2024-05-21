@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.0";
+  version = "0.3.1";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-6LZuWx0sC6bW0K7D0PR8hJlVW6i6NIzOOORdMu3Gk5U=";
+    hash = "sha256-H/908/TP2uzJD1yH4mCXHvorY+4kAhzEkWn6nZGsyBg=";
   };
 
   nativeBuildInputs = [

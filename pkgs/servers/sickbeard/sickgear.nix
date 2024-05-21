@@ -4,13 +4,13 @@ let
   pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 lxml ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "3.30.18";
+  version = "3.30.19";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    hash = "sha256-Xt4/bAK48A57n2Kl3LQICem8IR3pgsdgMjlP9qEVvBM=";
+    hash = "sha256-OC/BJ0wG6as1dt2dO9gUFD+FG85Vt2ehCoTcmh6iT7w=";
   };
 
   patches = [

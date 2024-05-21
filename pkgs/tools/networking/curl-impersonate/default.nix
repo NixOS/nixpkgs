@@ -6,16 +6,14 @@
 , buildGoModule
 , installShellFiles
 , symlinkJoin
+, buildPackages
 , zlib
 , sqlite
 , cmake
 , python3
 , ninja
 , perl
-# autoconf-2.71 fails on problematic configure:
-#   checking curl version... 7.84.0
-#   ./configure: line 6713: syntax error near unexpected token `;;'
-, autoconf269
+, autoconf
 , automake
 , libtool
 , darwin
@@ -41,13 +39,14 @@ let
     };
 
     patches = [
-      # Fix shebangs in the NSS build script
-      # (can't just patchShebangs since makefile unpacks it)
-      ./curl-impersonate-0.5.2-fix-shebangs.patch
+      # Fix shebangs and commands in the NSS build scripts
+      # (can't just patchShebangs or substituteInPlace since makefile unpacks it)
+      ./curl-impersonate-0.6.1-fix-command-paths.patch
 
       # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
       (fetchpatch {
-        url = "https://github.com/lwthiker/curl-impersonate/commit/e7b90a0d9c61b6954aca27d346750240e8b6644e.patch";
+        name = "curl-impersonate-patch-cve-2023-38545.patch";
+        url = "https://github.com/lwthiker/curl-impersonate/commit/e7b90a0d9c61b6954aca27d346750240e8b6644e.diff";
         hash = "sha256-jFrz4Q+MJGfNmwwzHhThado4c9hTd/+b/bfRsr3FW5k=";
       })
     ];
@@ -58,6 +57,10 @@ let
 
     strictDeps = true;
 
+    depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      buildPackages.stdenv.cc
+    ];
+
     nativeBuildInputs = lib.optionals stdenv.isDarwin [
       # Must come first so that it shadows the 'libtool' command but leaves 'libtoolize'
       darwin.cctools
@@ -65,10 +68,10 @@ let
       installShellFiles
       cmake
       python3
-      python3.pkgs.gyp
+      python3.pythonOnBuildForHost.pkgs.gyp
       ninja
       perl
-      autoconf269
+      autoconf
       automake
       libtool
       unzip
@@ -115,26 +118,26 @@ let
       # Patch all shebangs of installed scripts
       patchShebangs $out/bin
 
+      # Install headers
+      make -C curl-*/include install
+    '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       # Build and install completions for each curl binary
 
       # Patch in correct binary name and alias it to all scripts
       perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-${name} --shell zsh >$TMPDIR/curl-impersonate-${name}.zsh
       substituteInPlace $TMPDIR/curl-impersonate-${name}.zsh \
-        --replace \
+        --replace-fail \
           '#compdef curl' \
           "#compdef curl-impersonate-${name}$(find $out/bin -name 'curl_*' -printf ' %f=curl-impersonate-${name}')"
 
       perl curl-*/scripts/completion.pl --curl $out/bin/curl-impersonate-${name} --shell fish >$TMPDIR/curl-impersonate-${name}.fish
       substituteInPlace $TMPDIR/curl-impersonate-${name}.fish \
-        --replace \
+        --replace-fail \
           '--command curl' \
           "--command curl-impersonate-${name}$(find $out/bin -name 'curl_*' -printf ' --command %f')"
 
       # Install zsh and fish completions
       installShellCompletion $TMPDIR/curl-impersonate-${name}.{zsh,fish}
-
-      # Install headers
-      make -C curl-*/include install
     '';
 
     preFixup = let
@@ -142,9 +145,10 @@ let
     in ''
       # If libnssckbi.so is needed, link libnssckbi.so without needing nss in closure
       if grep -F nssckbi $out/lib/libcurl-impersonate-*${libext} &>/dev/null; then
-        # NOTE: "p11-kit-trust" always ends in ".so" even when on darwin
-        ln -s ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi${libext}
-        ${lib.optionalString stdenv.isLinux "patchelf --add-needed libnssckbi${libext} $out/lib/libcurl-impersonate-*${libext}"}
+        ln -s ${p11-kit}/lib/pkcs11/p11-kit-trust${libext} $out/lib/libnssckbi${libext}
+        ${lib.optionalString stdenv.hostPlatform.isElf ''
+          patchelf --add-needed libnssckbi${libext} $out/lib/libcurl-impersonate-*${libext}
+        ''}
       fi
     '';
 
@@ -171,13 +175,14 @@ let
       license = with licenses; [ curl mit ];
       maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];
       platforms = platforms.unix;
+      mainProgram = "curl-impersonate-${name}";
     };
   };
 in
 
 symlinkJoin rec {
   pname = "curl-impersonate";
-  inherit (passthru.curl-impersonate-ff) version meta;
+  inherit (passthru.curl-impersonate-chrome) version meta;
 
   name = "${pname}-${version}";
 
@@ -192,7 +197,7 @@ symlinkJoin rec {
 
     updateScript = ./update.sh;
 
-    inherit (passthru.curl-impersonate-ff) src;
+    inherit (passthru.curl-impersonate-chrome) src;
 
     tests = { inherit (nixosTests) curl-impersonate; };
   };

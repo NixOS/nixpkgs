@@ -1,35 +1,29 @@
 { lib
+, stdenv
 , python3
 , fetchPypi
-, rustPlatform
 , fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qtwayland
 }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      # https://github.com/nxp-mcuxpresso/spsdk/issues/64
-      cryptography = super.cryptography.overridePythonAttrs (old: rec {
-        version = "41.0.7";
+      pynitrokey = super.pynitrokey.overridePythonAttrs (old: rec {
+        version = "0.4.45";
         src = fetchPypi {
           inherit (old) pname;
           inherit version;
-          hash = "sha256-E/k86b6oAWwlOzSvxr1qdZk+XEBnLtVAWpyDLw1KALw=";
+          hash = "sha256-iY4ThrmXP7pEjTYYU4lePVAbuJGTdHX3iKswXzuf7W8=";
         };
-        cargoDeps = rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = "${old.pname}-${version}/${old.cargoRoot}";
-          name = "${old.pname}-${version}";
-          hash = "sha256-VeZhKisCPDRvmSjGNwCgJJeVj65BZ0Ge+yvXbZw86Rw=";
-        };
-        patches = [ ];
-        doCheck = false; # would require overriding cryptography-vectors
       });
     };
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.5";
+  version = "2.2.2";
   pyproject = true;
 
   disabled = python.pythonOlder "3.9";
@@ -38,7 +32,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-mR13zUgCdNS09EnpGLrnOnoIn3p6ZM/0fHKg0OUMWj4=";
+    hash = "sha256-MiyfmsrKZRoe7YMEjR1LHPesfJh6+dcSydoEAgrALJ8=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
@@ -51,6 +45,11 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     poetry-core
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [ qtbase ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   propagatedBuildInputs = with python.pkgs; [

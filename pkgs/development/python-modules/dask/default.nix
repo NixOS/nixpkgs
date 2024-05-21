@@ -39,7 +39,7 @@
 
 let self = buildPythonPackage rec {
   pname = "dask";
-  version = "2024.5.0";
+  version = "2024.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -48,15 +48,15 @@ let self = buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-2tkY02Inhpo8upTjhen//EvsZwd93roPCID215NOxwQ=";
+    hash = "sha256-FzvzmQa9kJAZw67HY+d+3uC6Bd246vp5QsyXepGnKH8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cloudpickle
     fsspec
@@ -185,12 +185,12 @@ let self = buildPythonPackage rec {
   };
 
 
-  meta = with lib; {
+  meta = {
     description = "Minimal task scheduling abstraction";
     mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }; in self

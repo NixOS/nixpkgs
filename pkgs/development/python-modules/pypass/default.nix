@@ -3,7 +3,6 @@
 , buildPythonPackage
 , click
 , colorama
-, enum34
 , fetchPypi
 , git
 , gnugrep
@@ -12,7 +11,6 @@
 , pbr
 , pexpect
 , pythonAtLeast
-, pythonOlder
 , substituteAll
 , tree
 , xclip
@@ -53,7 +51,7 @@ buildPythonPackage rec {
     click
     colorama
     pexpect
-  ] ++ lib.optional (pythonOlder "3.4") enum34;
+  ];
 
   nativeCheckInputs = [ nose ];
 

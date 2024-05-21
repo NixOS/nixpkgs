@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config
 , boost179, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi

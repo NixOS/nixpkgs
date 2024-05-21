@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-auditlog";
-  version = "2.2.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
-    repo = pname;
+    repo = "django-auditlog";
     rev = "v${version}";
-    hash = "sha256-QHSGqtpkOgltAg+RlG/Ik3DfEjtSWt45sqlD+Zw4Bh0=";
+    hash = "sha256-SJ4GJp/gVIxiLbdAj3ZS+weevqIDZCMQnW/pqc5liJU=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +46,11 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
+    # strip escape codes otherwise tests fail
+    # see https://github.com/jazzband/django-auditlog/issues/644
     TEST_DB_USER=$PGUSER \
     TEST_DB_HOST=$PGHOST \
-    ${python.interpreter} runtests.py
+    ${python.interpreter} runtests.py | cat
 
     runHook postCheck
   '';

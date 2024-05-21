@@ -20,17 +20,17 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.54";
+  version = "1.5.129";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FBla+KvUoUdCG0nM4falMJBq8NI75zqo/YSZy0bPFrE=";
+    hash = "sha256-kH2eFFxohvuuEP2p7bt8zOYbk3gF86X9y3sNdLYl/Qo=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-rE1YXDpiGnAUdmAaOHehyM38SPBqNvSRHhtXIUwRYVs=";
+  vendorHash = "sha256-VEayNWztJYeQoJHVJfAlmHD65PEho1TCttTfT0cbgUQ=";
 
   buildInputs = [
     alsa-lib
@@ -52,14 +52,14 @@ buildGoModule rec {
   postPatch = ''
     # Without patching, "go run" fails with the error message:
     # package github.com/google/go-licenses: no Go files in /build/source/vendor/github.com/google/go-licenses
-    substituteInPlace scripts/build-licenses.sh --replace \
+    substituteInPlace scripts/build-licenses.sh --replace-fail \
       '$GO run ''${GO_FLAGS} github.com/google/go-licenses' 'go-licenses'
 
     patchShebangs scripts/
     substituteInPlace scripts/regression-test-demo.sh \
-      --replace 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
+      --replace-fail 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
 
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       'CPPFLAGS ?= -DNDEBUG' \
       'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
   '';
@@ -70,11 +70,11 @@ buildGoModule rec {
     # changes, the hash would change.
     # To work around this, use environment variables.
     postBuild = ''
-      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_others.go' \
-        --replace \
+      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
+        --replace-fail \
         '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
         '{os.Getenv("EBITENGINE_LIBGL")}' \
-        --replace \
+        --replace-fail \
         '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
         '{os.Getenv("EBITENGINE_LIBGLESv2")}'
     '';

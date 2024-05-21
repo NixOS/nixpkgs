@@ -32,17 +32,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Minor tolerance issues with Python 3.12; should be fixed in next release
+    # (see https://github.com/sepandhaghighi/pycm/pull/528)
+    "verified_test"
+    "function_test"
+  ];
+
   postPatch = ''
     # Remove a trivial dependency on the author's `art` Python ASCII art library
     rm pycm/__main__.py
     # Also depends on python3Packages.notebook
     rm Otherfiles/notebook_check.py
     substituteInPlace setup.py \
-      --replace '=get_requires()' '=[]'
+      --replace-fail '=get_requires()' '=[]'
   '';
-
-  # https://github.com/sepandhaghighi/pycm/issues/488
-  pytestFlagsArray = [ "Test" ];
 
   pythonImportsCheck = [
     "pycm"

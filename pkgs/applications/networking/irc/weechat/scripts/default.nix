@@ -1,6 +1,8 @@
 { callPackage, luaPackages, perlPackages, python3Packages }:
 
 {
+  autosort = callPackage ./autosort { };
+
   colorize_nicks = callPackage ./colorize_nicks { };
 
   edit = callPackage ./edit { };

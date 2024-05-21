@@ -3,6 +3,7 @@
 , gettext
 , python3
 , fetchFromGitHub
+, plugins ? [ ]
 , nixosTests
 }:
 
@@ -95,6 +96,7 @@ python.pkgs.buildPythonApplication rec {
     "pillow"
     "python-dateutil"
     "reportlab"
+    "rules"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -132,7 +134,7 @@ python.pkgs.buildPythonApplication rec {
     vobject
     whitenoise
     zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml;
+  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
 
   passthru.optional-dependencies = {
     mysql = with python.pkgs; [
@@ -210,6 +212,12 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) pretalx;
     };
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python.pkgs) callPackage;
+        directory = ./plugins;
+      }
+    );
   };
 
   inherit meta;

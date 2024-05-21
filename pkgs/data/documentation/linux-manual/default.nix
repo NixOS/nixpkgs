@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, linuxPackages_latest }:
+{ lib, stdenv, perl, linuxPackages_latest }:
 
 stdenv.mkDerivation rec {
   pname = "linux-manual";

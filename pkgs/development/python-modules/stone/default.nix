@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.3.3";
+  version = "3.3.6";
   pyproject = true;
 
   # distutils removal, https://github.com/dropbox/stone/issues/323
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "stone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l86j2fd6x57bKt/TFGiyg+ZFjZFFCo43rE48MoPvXWc=";
+    hash = "sha256-Og0hUUCCd9wRdHUhZBl62rDAunP2Bph5COsCw/T1kUA=";
   };
 
   postPatch = ''

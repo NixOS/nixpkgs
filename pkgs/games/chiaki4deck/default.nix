@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , pkg-config
@@ -19,7 +18,9 @@
 , libevdev
 , udev
 , hidapi
+, json_c
 , fftw
+, miniupnpc
 , speexdsp
 , libplacebo
 , vulkan-loader
@@ -33,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.6.6";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hai7fIyeNcAURfeQtAIqOLb9j8erPNoy3zHK4rgLjc0=";
+    hash = "sha256-gJafzBryuGDU8ke3JTKkQdSEND+btSZ93Ei7ZRsqchg=";
     fetchSubmodules = true;
   };
 
@@ -66,7 +67,9 @@ stdenv.mkDerivation rec {
     protobuf
     SDL2
     hidapi
+    json_c
     fftw
+    miniupnpc
     libevdev
     udev
     speexdsp

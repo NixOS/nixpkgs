@@ -1,6 +1,5 @@
 { buildDunePackage
 , lib
-, fetchurl
 , astring
 , base64
 , cmdliner

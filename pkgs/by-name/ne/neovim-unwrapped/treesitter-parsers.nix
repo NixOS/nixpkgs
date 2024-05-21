@@ -1,24 +1,36 @@
 { fetchurl }:
 
 {
-  c = fetchurl {
-    url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.20.2.tar.gz";
-    hash = "sha256:af66fde03feb0df4faf03750102a0d265b007e5d957057b6b293c13116a70af2";
+  c.src = fetchurl {
+    url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.21.0.tar.gz";
+    hash = "sha256:6f0f5d1b71cf8ffd8a37fb638c6022fa1245bd630150b538547d52128ce0ea7e";
   };
-  lua = fetchurl {
-    url = "https://github.com/MunifTanjim/tree-sitter-lua/archive/v0.0.14.tar.gz";
-    hash = "sha256:930d0370dc15b66389869355c8e14305b9ba7aafd36edbfdb468c8023395016d";
+  lua.src = fetchurl {
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-lua/archive/v0.1.0.tar.gz";
+    hash = "sha256:230cfcbfa74ed1f7b8149e9a1f34c2efc4c589a71fe0f5dc8560622f8020d722";
   };
-  vim = fetchurl {
-    url = "https://github.com/neovim/tree-sitter-vim/archive/v0.3.0.tar.gz";
-    hash = "sha256:403acec3efb7cdb18ff3d68640fc823502a4ffcdfbb71cec3f98aa786c21cbe2";
+  vim.src = fetchurl {
+    url = "https://github.com/neovim/tree-sitter-vim/archive/v0.4.0.tar.gz";
+    hash = "sha256:9f856f8b4a10ab43348550fa2d3cb2846ae3d8e60f45887200549c051c66f9d5";
   };
-  vimdoc = fetchurl {
-    url = "https://github.com/neovim/tree-sitter-vimdoc/archive/v2.0.0.tar.gz";
-    hash = "sha256:1ff8f4afd3a9599dd4c3ce87c155660b078c1229704d1a254433e33794b8f274";
+  vimdoc.src = fetchurl {
+    url = "https://github.com/neovim/tree-sitter-vimdoc/archive/v2.5.1.tar.gz";
+    hash = "sha256:063645096504b21603585507c41c6d8718ff3c11b2150c5bfc31e8f3ee9afea3";
   };
-  query = fetchurl {
-    url = "https://github.com/nvim-treesitter/tree-sitter-query/archive/v0.1.0.tar.gz";
-    hash = "sha256:e2b806f80e8bf1c4f4e5a96248393fe6622fc1fc6189d6896d269658f67f914c";
+  query.src = fetchurl {
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-query/archive/v0.3.0.tar.gz";
+    hash = "sha256:f878ff37abcb83250e31a6569e997546f3dbab74dcb26683cb2d613f7568cfc0";
+  };
+  python.src = fetchurl {
+    url = "https://github.com/tree-sitter/tree-sitter-python/archive/v0.21.0.tar.gz";
+    hash = "sha256:720304a603271fa89e4430a14d6a81a023d6d7d1171b1533e49c0ab44f1e1c13";
+  };
+  bash.src = fetchurl {
+    url = "https://github.com/tree-sitter/tree-sitter-bash/archive/v0.21.0.tar.gz";
+    hash = "sha256:f0515efda839cfede851adb24ac154227fbc0dfb60c6c11595ecfa9087d43ceb";
+  };
+  markdown.src = fetchurl {
+    url = "https://github.com/MDeiml/tree-sitter-markdown/archive/v0.2.3.tar.gz";
+    hash = "sha256:4909d6023643f1afc3ab219585d4035b7403f3a17849782ab803c5f73c8a31d5";
   };
 }

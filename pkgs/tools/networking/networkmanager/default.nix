@@ -6,7 +6,6 @@
 , pkg-config
 , dbus
 , gnome
-, systemd
 , libuuid
 , polkit
 , gnutls
@@ -51,6 +50,9 @@
 , runtimeShell
 , buildPackages
 , nixosTests
+, systemd
+, udev
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 let
@@ -74,7 +76,8 @@ stdenv.mkDerivation rec {
     # System paths
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    (lib.mesonOption "systemdsystemunitdir"
+      (if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"))
     # to enable link-local connections
     "-Dudev_dir=${placeholder "out"}/lib/udev"
     "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
@@ -82,7 +85,8 @@ stdenv.mkDerivation rec {
 
     # Platform
     "-Dmodprobe=${kmod}/bin/modprobe"
-    "-Dsession_tracking=systemd"
+    (lib.mesonOption "session_tracking" (if withSystemd then "systemd" else "no"))
+    (lib.mesonBool "systemd_journal" withSystemd)
     "-Dlibaudit=yes-disabled-by-default"
     "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
 
@@ -130,7 +134,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd
+    (if withSystemd then systemd else udev)
     libselinux
     audit
     libpsl
@@ -182,6 +186,9 @@ stdenv.mkDerivation rec {
     # TODO: submit upstream
     substituteInPlace meson.build \
       --replace "'vala', req" "'vala', native: false, req"
+  '' + lib.optionalString withSystemd ''
+    substituteInPlace data/NetworkManager.service.in \
+      --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
   '';
 
   preBuild = ''

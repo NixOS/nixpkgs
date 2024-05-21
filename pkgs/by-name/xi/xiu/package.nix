@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xiu";
-  version = "0.12.6";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "harlanc";
     repo = "xiu";
     rev = "v${version}";
-    hash = "sha256-53fVb5c9uS92/rPvZDWXxZX42p4cHqumGe6Dw+/hLvk=";
+    hash = "sha256-tFArcI7NcIopM5uPshaOU3ExJW5URc5Mf2V0ZwwgwKo=";
   };
 
-  cargoHash = "sha256-ICZQ+UJ4LPNSeT9SjdcCUXgam40hMAOrJmLIwPEfqs4=";
+  cargoHash = "sha256-OBL1uDVogcU6saEz2d2sWJTwXM2KE/YfhsNZtH0Cnk8=";
 
   nativeBuildInputs = [
     cmake

@@ -11,9 +11,14 @@ lib.recurseIntoAttrs {
 
   miniz-versions-mismatch = testers.testBuildFailure (testers.hasPkgConfigModules {
     package = miniz;
-    version = "1.2.3";
+    version = "1.2.3";  # Deliberately-incorrect version number
     versionCheck = true;
   });
+
+  miniz-no-versionCheck = testers.hasPkgConfigModules {
+    package = miniz;
+    version = "1.2.3";  # Deliberately-incorrect version number
+  };
 
   zlib-has-zlib = testers.hasPkgConfigModules {
     package = zlib;

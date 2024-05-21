@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace src/lang/dune \
-      --replace "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
+      --replace-warn "(run git rev-parse --short HEAD)" "(run echo -n nixpkgs)"
   '';
 
   dontConfigure = true;
@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     ocamlPackages.duppy
     ocamlPackages.mm
     ocamlPackages.ocurl
+    ocamlPackages.ocaml_pcre
     ocamlPackages.cry
     ocamlPackages.camomile
     ocamlPackages.uri
@@ -98,8 +99,9 @@ stdenv.mkDerivation {
     ocamlPackages.fdkaac
     ocamlPackages.flac
     ocamlPackages.frei0r
-    ocamlPackages.gd4o
+    ocamlPackages.gd
     ocamlPackages.graphics
+    # ocamlPackages.gstreamer # Broken but advertised feature
     ocamlPackages.imagelib
     ocamlPackages.inotify
     ocamlPackages.ladspa

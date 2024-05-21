@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pygount";
-  version = "1.6.1";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "pygount";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j+mXIyF/54MCm0yv7Z+ymy/EeZz7iS/a+/5I9lo1+Zo=";
+    hash = "sha256-PFqcSnJoGL4bXFy3hu3Iurbb8QK1NqCDs8aJmMxP4Hc=";
   };
 
   nativeBuildInputs = [

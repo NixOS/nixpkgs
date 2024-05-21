@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gitUpdater,
   makeFontsConf,
   buildLua,

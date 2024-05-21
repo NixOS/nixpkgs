@@ -10,19 +10,6 @@ index 148acade5c..6395fbfbe5 100644
 +PROGRAM="@runtimeShell@ -c '@ethtool@/bin/ethtool -i $$1 |@gnused@/bin/sed -n s/^driver:\ //p' -- $env{INTERFACE}", ENV{ID_NET_DRIVER}="%c"
  
  LABEL="nm_drivers_end"
-diff --git a/data/NetworkManager.service.in b/data/NetworkManager.service.in
-index f09ae86ceb..b2ecb405ef 100644
---- a/data/NetworkManager.service.in
-+++ b/data/NetworkManager.service.in
-@@ -9,7 +9,7 @@ BindsTo=dbus.service
- [Service]
- Type=dbus
- BusName=org.freedesktop.NetworkManager
--ExecReload=/usr/bin/busctl call org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Reload u 0
-+ExecReload=@systemd@/bin/busctl call org.freedesktop.NetworkManager /org/freedesktop/NetworkManager org.freedesktop.NetworkManager Reload u 0
- #ExecReload=/bin/kill -HUP $MAINPID
- ExecStart=@sbindir@/NetworkManager --no-daemon
- Restart=on-failure
 diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
 index a9e8c08508..875d6cc2cd 100644
 --- a/src/core/devices/nm-device.c

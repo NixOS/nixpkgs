@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, buildDunePackage, ocaml
 , ocaml-crunch
 , astring, cmdliner, cppo, fpath, result, tyxml
 , markup, yojson, sexplib0, jq

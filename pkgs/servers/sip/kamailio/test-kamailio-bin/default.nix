@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "kamailio-bin-test";
   meta.timeout = 60;
-  src = ./.;
 
+  dontUnpack = true;
   dontInstall = true;
 
   buildPhase = ''

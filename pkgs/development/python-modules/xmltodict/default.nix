@@ -2,14 +2,12 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "xmltodict";
   version = "0.13.0";
   format = "setuptools";
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

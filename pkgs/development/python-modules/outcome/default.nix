@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , setuptools
 , attrs
 , pytest
@@ -10,8 +9,6 @@
 buildPythonPackage rec {
   pname = "outcome";
   version = "1.3.0.post0";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

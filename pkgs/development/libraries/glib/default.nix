@@ -23,7 +23,10 @@
 , testers
 , gobject-introspection
 , mesonEmulatorHook
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+, withIntrospection ?
+  stdenv.hostPlatform.emulatorAvailable buildPackages &&
+  lib.meta.availableOn stdenv.hostPlatform gobject-introspection &&
+  stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;

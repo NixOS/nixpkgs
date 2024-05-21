@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "nixops-libvirtd";
-  version = "unstable-2023-09-01";
+  version = "1.0.0-unstable-2023-09-01";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -39,7 +39,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_virtd" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "NixOps libvirtd backend plugin";

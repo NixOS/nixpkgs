@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
 , setuptools
 }:
@@ -9,8 +8,6 @@ buildPythonPackage rec {
   pname = "simple-term-menu";
   version = "1.6.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

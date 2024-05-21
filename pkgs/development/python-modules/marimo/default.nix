@@ -3,30 +3,32 @@
 , fetchPypi
 , pythonOlder
 , setuptools
+, black
 , click
+, docutils
+, itsdangerous
 , jedi
 , markdown
-, pymdown-extensions
+, psutil
 , pygments
+, pymdown-extensions
+, starlette
 , tomlkit
 , uvicorn
-, starlette
 , websockets
-, docutils
-, black
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.4.10";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F6Hf8KPIkXuRhO/1mVHE1wfU6//vbUK1ghoqANmZjag=";
+    hash = "sha256-L6ICaaMRrMOr/d8CJGcXxOYCWTVh8ObckW7xNeLRB2Q=";
   };
 
   build-system = [
@@ -34,17 +36,19 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    black
     click
+    docutils
+    itsdangerous
     jedi
     markdown
-    pymdown-extensions
+    psutil
     pygments
+    pymdown-extensions
+    starlette
     tomlkit
     uvicorn
-    starlette
     websockets
-    docutils
-    black
   ];
 
   nativeCheckInputs = [

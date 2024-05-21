@@ -14,13 +14,13 @@ let
 in
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.10.0";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
     rev = "v${version}";
-    hash = "sha256-pycRC+ZpN2P5Z66/aGA4gykLF7IwdeToRadaJSA1L9w=";
+    hash = "sha256-LuWxjBsOBo6tSlSGaDWrNYcTerIpU+rw3r+zN6gtYb0=";
   };
 
   nativeBuildInputs = [

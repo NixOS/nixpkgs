@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkterm";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
-    owner = "Jeija";
+    owner = "wvdakker";
     repo = "gtkterm";
     rev = version;
-    sha256 = "sha256-KYkAHpyDl47LBKb7ZjxPCGw9XuMrqHPyejMhIvYAr68=";
+    sha256 = "sha256-oGqOXIu5P3KfdV6Unm7Nz+BRhb5Z6rne0+e0wZ2EcAI=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple, graphical serial port terminal emulator";
-    homepage = "https://github.com/Jeija/gtkterm";
+    homepage = "https://github.com/wvdakker/gtkterm";
     license = licenses.gpl3Plus;
     longDescription = ''
       GTKTerm is a simple, graphical serial port terminal emulator for

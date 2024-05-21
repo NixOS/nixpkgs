@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.7.7";
+  version = "1.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-bigquery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+UF49ReSxKQ8ouutOv1b9JcU/6CNk7Yw8f1/tlRvwnU=";
+    hash = "sha256-Uc842hkrCYDR92ACDtNW+Iqq5l54CSp40D1tOL7wt8o=";
   };
 
   pythonRelaxDeps = [

@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "5.0.49";
+  version = "5.0.52";
 
   src = fetchurl {
     name = "Bartender ${lib.versions.major finalAttrs.version}.dmg";
     url = "https://www.macbartender.com/B2/updates/${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}/Bartender%20${lib.versions.major finalAttrs.version}.dmg";
-    hash = "sha256-DOQLtdbwYFyRri3GBdjLfFNII65QJMvAQu9Be4ATBx0=";
+    hash = "sha256-gKsDD/4z397ZpT+8xu7BI1c9r+nledzrPfD/ACexFvQ=";
   };
 
   dontPatch = true;
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Take control of your menu bar";
     longDescription = ''
       Bartender is an award-winning app for macOS that superpowers your menu bar, giving you total control over your menu bar items, what's displayed, and when, with menu bar items only showing when you need them.
@@ -40,9 +40,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.macbartender.com";
     changelog = "https://www.macbartender.com/Bartender${lib.versions.major finalAttrs.version}/release_notes/";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ stepbrobd ];
+    license = [ lib.licenses.unfree ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [ stepbrobd ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
 })

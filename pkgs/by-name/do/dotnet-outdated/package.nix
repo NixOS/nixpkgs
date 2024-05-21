@@ -8,13 +8,13 @@ let
 
 in buildDotnetModule rec {
   pname = "dotnet-outdated";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "dotnet-outdated";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cYEW++XKCBhB4fyGj4bDKOBuQ1CJwm9CfZfiZUiy7Sw=";
+    hash = "sha256-wXPcFYnbQbnF1xg3PA9iQsd0BrMD2P+OzZYLd4XwhbQ=";
   };
 
   inherit dotnet-sdk;

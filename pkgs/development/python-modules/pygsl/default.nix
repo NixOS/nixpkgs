@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gsl
 , swig
 , numpy
@@ -9,12 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.3.3";
+  version = "2.3.4";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F3m85Bs8sONw0Rv0EAOFK6R1DFHfW4dxuzQmXo4PHfM=";
+  src = fetchFromGitHub {
+    owner = "pygsl";
+    repo = "pygsl";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-2TalLKDDoJdKGZHr7eNNvVW8fL7wQJjnZv34LJokfow=";
   };
 
   nativeBuildInputs = [
@@ -24,9 +26,13 @@ buildPythonPackage rec {
   buildInputs = [
     gsl
   ];
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
   ];
+
+  preBuild = ''
+    python setup.py build_ext --inplace
+  '';
 
   preCheck = ''
     cd tests

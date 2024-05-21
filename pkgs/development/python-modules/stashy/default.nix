@@ -2,7 +2,6 @@
 , buildPythonPackage
 , decorator
 , fetchPypi
-, pythonOlder
 , requests
  }:
 
@@ -10,7 +9,6 @@ buildPythonPackage rec {
   pname = "stashy";
   version = "0.7";
   format = "setuptools";
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;

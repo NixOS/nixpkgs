@@ -16,7 +16,7 @@ in
 appimageTools.wrapType2 {
   inherit meta pname version src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.ocl-icd ];
+  extraPkgs = pkgs: [ pkgs.ocl-icd ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications

@@ -1,23 +1,22 @@
-{
-  lib
-  , buildPythonPackage
-  , fetchFromGitHub
-  , pytestCheckHook
-  , requests
-  , ruamel-yaml
-  , setuptools
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+, ruamel-yaml
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.27.0";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     rev = "v${version}";
-    hash = "sha256-dp4yE8cTeXAPoixJ6ZtsvcTSKdYpDIebHkddUiqJe5Q=";
+    hash = "sha256-WtKG2ujEGUW0nhYWxfYDkxicN/uEqBxKCh9FcCfjmHM=";
     fetchSubmodules = true;
   };
 

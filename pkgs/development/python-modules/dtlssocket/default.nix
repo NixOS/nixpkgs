@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "dtlssocket";
-  version = "0.1.16";
+  version = "0.1.18";
 
   format = "pyproject";
 
   src = fetchPypi {
     pname = "DTLSSocket";
     inherit version;
-    hash = "sha256-MLEIrkX84cAz4+9sLd1+dBgGKuN0Io46f6lpslQ2ajk=";
+    hash = "sha256-TnS2LYe6CeAlezc83bGpRqOpQbPJMQHzJn6PnXon4FI=";
   };
 
   nativeBuildInputs = [

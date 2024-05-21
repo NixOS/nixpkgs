@@ -2,7 +2,6 @@
 , nixosTests
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 let
   python = python3.override {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, makeWrapper
+{ lib, stdenv, fetchurl, pkg-config, makeWrapper
 , libsndfile, jack2
 , libGLU, libGL, lv2, cairo
 , ladspaH, php, libXrandr }:
