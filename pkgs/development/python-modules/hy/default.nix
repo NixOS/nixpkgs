@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.28.0";
+  version = "0.29.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "hylang";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-XH8qZ6OsTrFXcv/8ZyrTtN6l50JXIUcHJbfCRXHzSTs=";
+    hash = "sha256-8b2V78mwzSThmVl1SfMGBw8VSpE5rCuucnIyD0nq5To=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
