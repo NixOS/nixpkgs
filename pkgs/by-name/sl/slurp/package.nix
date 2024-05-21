@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, libxkbcommon
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
-, wayland-protocols
-, wayland-scanner
-, buildDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  buildDocs ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2M8f3kN6tihwKlUCp2Qowv5xD6Ufb71AURXqwQShlXI=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -46,13 +45,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [ (lib.mesonEnable "man-pages" buildDocs) ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/emersion/slurp/releases/tag/v${finalAttrs.version}";
     description = "Select a region in a Wayland compositor";
-    inherit (wayland.meta) platforms;
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/emersion/slurp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "slurp";
-    maintainers = with maintainers; [ buffet nickcao ];
+    maintainers = with lib.maintainers; [
+      buffet
+      nickcao
+    ];
   };
 })
