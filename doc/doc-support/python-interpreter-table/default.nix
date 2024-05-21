@@ -11,7 +11,7 @@ let
   in concatStringsSep ":" (map (x: "${(getBin x).outPath}/bin") inputs);
 
   data = pkgs.writeText "python-interpreter-table.md"
-    (toJSON (import ./collect-data { inherit pkgs; }));
+    (toJSON (import ./collect-data { inherit pkgs; inherit (pkgs) lib; }));
 
   headers = ''["Package","Aliases", "Interpreter"]'';
   keys = ''[.pkgKey, (if .aliases == null then "" else .aliases|join(", ") end) , .interpreter]'';
