@@ -6138,8 +6138,6 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river { };
-
   rivercarro = callPackage ../applications/misc/rivercarro { };
 
   river-luatile = callPackage ../applications/misc/river-luatile{ };
