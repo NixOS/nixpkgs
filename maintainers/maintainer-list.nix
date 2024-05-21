@@ -14496,6 +14496,12 @@
     githubId = 399535;
     name = "Niklas Hambüchen";
   };
+  nhnn = {
+    matrix = "@nhnn:nhnn.dev";
+    github = "thenhnn";
+    githubId = 162156666;
+    name = "nhnn";
+  };
   nhooyr = {
     email = "anmol@aubble.com";
     github = "nhooyr";

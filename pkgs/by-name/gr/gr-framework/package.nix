@@ -2,9 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
+, qt5
 
 , cmake
-, wrapQtAppsHook
 
 , cairo
 , ffmpeg
@@ -14,29 +14,28 @@
 , libjpeg
 , libtiff
 , qhull
-, qtbase
 , xorg
 , zeromq
 }:
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.72.11";
+  version = "0.73.5";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-HspDRqO/JKpPeHOfctYAOwwR3y1u+GW3v0OnN7OfLT4=";
+    hash = "sha256-9Py2r774GaUXWhF3yO3ceT1rPi/uqMVZVAo0xs9n+I0=";
   };
 
   patches = [
-    ./Use-the-module-mode-to-search-for-the-LibXml2-package.patch
+    ./patches/use-the-module-mode-to-search-for-the-LibXml2-package.patch
   ];
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libtiff
     qhull
-    qtbase
+    qt5.qtbase
     xorg.libX11
     xorg.libXft
     xorg.libXt

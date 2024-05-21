@@ -1477,8 +1477,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.21.1";
-          hash = "sha256-z/GhynjkoEcaRp59tYr1lnM5vfV0OaDCcCpC02OdVLE=";
+          version = "0.21.2";
+          hash = "sha256-UZthDY+O8rG+oz/jQyQKDPbdS+lVKiLyuicU+4SGivw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -3700,8 +3700,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.12";
-          hash = "sha256-4Iq6idux029i7cBV3x79ZRAbSk3ymqx+Q2jv0zV9ZTI=";
+          version = "0.8.13";
+          hash = "sha256-DxM7oWAbIonsKTvJjxX4oTaBwvRcxNT2y10ljYAzVeI=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
