@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/World/Wildcard";
     downloadPage = "https://gitlab.gnome.org/World/Wildcard/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [];
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "wildcard";
     platforms = lib.platforms.linux;
   };
