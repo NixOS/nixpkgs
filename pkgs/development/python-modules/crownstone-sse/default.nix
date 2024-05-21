@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, certifi
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  certifi,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-RUqo68UAVGV+JmauKsGlp7dG8FzixHBDnr3eho/IQdY=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Tests are only providing coverage
   doCheck = false;
 
-  pythonImportsCheck = [
-    "crownstone_sse"
-  ];
+  pythonImportsCheck = [ "crownstone_sse" ];
 
   meta = with lib; {
     description = "Python module for listening to Crownstone SSE events";
