@@ -5,13 +5,15 @@ with lib;
 let
   cfg = config.services.kanata;
 
+  upstreamDoc = "See [the upstream documentation](https://github.com/jtroo/kanata/blob/main/docs/config.adoc) and [example config files](https://github.com/jtroo/kanata/tree/main/cfg_samples) for more information.";
+
   keyboard = {
     options = {
       devices = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
-        description = mdDoc ''
+        description = ''
           Paths to keyboard devices.
 
           An empty list, the default value, lets kanata detect which
@@ -22,53 +24,40 @@ let
         type = types.lines;
         example = ''
           (defsrc
-            grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-            tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-            caps a    s    d    f    g    h    j    k    l    ;    '    ret
-            lsft z    x    c    v    b    n    m    ,    .    /    rsft
-            lctl lmet lalt           spc            ralt rmet rctl)
+            caps)
 
-          (deflayer qwerty
-            grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-            tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-            @cap a    s    d    f    g    h    j    k    l    ;    '    ret
-            lsft z    x    c    v    b    n    m    ,    .    /    rsft
-            lctl lmet lalt           spc            ralt rmet rctl)
-
-          (defalias
-            ;; tap within 100ms for capslk, hold more than 100ms for lctl
-            cap (tap-hold 100 100 caps lctl))
+          (deflayermap (default-layer)
+            ;; tap caps lock as caps lock, hold caps lock as left control
+            caps (tap-hold 100 100 caps lctl))
         '';
-        description = mdDoc ''
+        description = ''
           Configuration other than `defcfg`.
 
-          See [example config files](https://github.com/jtroo/kanata)
-          for more information.
+          ${upstreamDoc}
         '';
       };
       extraDefCfg = mkOption {
         type = types.lines;
         default = "";
         example = "danger-enable-cmd yes";
-        description = mdDoc ''
+        description = ''
           Configuration of `defcfg` other than `linux-dev` (generated
           from the devices option) and
           `linux-continue-if-no-devs-found` (hardcoded to be yes).
 
-          See [example config files](https://github.com/jtroo/kanata)
-          for more information.
+          ${upstreamDoc}
         '';
       };
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = mdDoc "Extra command line arguments passed to kanata.";
+        description = "Extra command line arguments passed to kanata.";
       };
       port = mkOption {
         type = types.nullOr types.port;
         default = null;
         example = 6666;
-        description = mdDoc ''
+        description = ''
           Port to run the TCP server on. `null` will not run the server.
         '';
       };
@@ -86,14 +75,20 @@ let
     in
     optionalString ((length devices) > 0) "linux-dev (${devicesString})";
 
-  mkConfig = name: keyboard: pkgs.writeText "${mkName name}-config.kdb" ''
-    (defcfg
-      ${keyboard.extraDefCfg}
-      ${mkDevices keyboard.devices}
-      linux-continue-if-no-devs-found yes)
+  mkConfig = name: keyboard: pkgs.writeTextFile {
+    name = "${mkName name}-config.kdb";
+    text = ''
+      (defcfg
+        ${keyboard.extraDefCfg}
+        ${mkDevices keyboard.devices}
+        linux-continue-if-no-devs-found yes)
 
-    ${keyboard.config}
-  '';
+      ${keyboard.config}
+    '';
+    checkPhase = ''
+      ${getExe cfg.package} --cfg "$target" --check --debug
+    '';
+  };
 
   mkService = name: keyboard: nameValuePair (mkName name) {
     wantedBy = [ "multi-user.target" ];
@@ -151,9 +146,9 @@ let
 in
 {
   options.services.kanata = {
-    enable = mkEnableOption (mdDoc "kanata");
+    enable = mkEnableOption "kanata, a tool to improve keyboard comfort and usability with advanced customization";
     package = mkPackageOption pkgs "kanata" {
-      example = "kanata-with-cmd";
+      example = [ "kanata-with-cmd" ];
       extraDescription = ''
         ::: {.note}
         If {option}`danger-enable-cmd` is enabled in any of the keyboards, the
@@ -164,7 +159,7 @@ in
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboard);
       default = { };
-      description = mdDoc "Keyboard configurations.";
+      description = "Keyboard configurations.";
     };
   };
 

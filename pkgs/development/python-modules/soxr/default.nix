@@ -3,7 +3,7 @@
 , fetchFromGitHub
 
 # build-system
-, cython_3
+, cython
 , numpy
 , oldest-supported-numpy
 , setuptools
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -27,18 +27,25 @@ buildPythonPackage rec {
     repo = "python-soxr";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-H2sueQq32o/9EHENANKVoiWlFoSF88P0LZ7DfEh/Esg=";
+    hash = "sha256-HGtoMfMQ5/2iEIFtik7mCrSxFnLXkSSx2W8wBul0+jk=";
   };
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "SYS_LIBSOXR = False" "SYS_LIBSOXR = True"
+  '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gnutar
     numpy
     oldest-supported-numpy
     setuptools
     setuptools-scm
+  ];
+
+  buildInputs = [
+    libsoxr
   ];
 
   pythonImportsCheck = [

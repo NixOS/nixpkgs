@@ -4,7 +4,7 @@
 , cmake
 , qtwebengine
 , qttools
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 }:
 
@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =  [ qtwebengine qttools ];
-  nativeBuildInputs = [ cmake wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook3 wrapQtAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
 
   meta = with lib; {
     description = "Simple RSS/Atom feed reader with online synchronization";
+    mainProgram = "rssguard";
     longDescription = ''
       RSS Guard is a simple, light and easy-to-use RSS/ATOM feed aggregator
       developed using Qt framework and with online feed synchronization support

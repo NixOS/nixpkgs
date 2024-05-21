@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchzip
 , fetchpatch
 , meson
 , ninja
@@ -18,9 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
   version = "1.7.0";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-    rev = "refs/tags/v${finalAttrs.version}";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/snapshot/dtc-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-FMh3VvlY3fUK8fbd0M+aCmlUrmG9YegiOOQ7MOByffc=";
   };
 
@@ -47,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://github.com/dgibson/dtc/commit/35f26d2921b68d97fefbd5a2b6e821a2f02ff65d.patch";
       sha256 = "sha256-cO4f/jJX/pQL7kk4jpKUhsCVESW2ZuWaTr7z3BuvVkw=";
+    })
+
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git/patch/?id=3fbfdd08afd2a7a25b27433f6f5678c0fe694721";
+      hash = "sha256-skK8m1s4xkK6x9AqzxiEK+1uMEmS27dBI1CdEXNFTfU=";
     })
   ];
 
@@ -102,5 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;
+    mainProgram = "dtc";
   };
 })

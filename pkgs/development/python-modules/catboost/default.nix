@@ -13,11 +13,11 @@
 , wheel
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   inherit (catboost) pname version src meta;
   format = "pyproject";
 
-  sourceRoot = "source/catboost/python-package";
+  sourceRoot = "${src.name}/catboost/python-package";
 
   nativeBuildInputs = [
     setuptools

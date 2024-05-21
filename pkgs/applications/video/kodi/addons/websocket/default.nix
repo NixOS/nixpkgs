@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six, addonDir }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, six, addonDir }:
 
 buildKodiAddon rec {
   pname = "websocket";
@@ -6,7 +6,7 @@ buildKodiAddon rec {
   version = "1.6.4";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
     sha256 = "sha256-1Wy+hxB059UoZnQlncytVT3sQ07dYAhNRnW3/QVD4ZE=";
   };
 

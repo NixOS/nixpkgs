@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "python-swiftclient";
-  version = "4.4.0";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p32Xqw5AEsZ4cy5XW9/u0oKzSJuRdegsRqR6yEke7oQ=";
+    hash = "sha256-8qCIflo5KXq8BDJRrj+QiRTOFEei+NLcpWcWGGCBQr0=";
   };
 
   # remove duplicate script that will be created by setuptools from the
@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/openstack/python-swiftclient";
     description = "Python bindings to the OpenStack Object Storage API";
+    mainProgram = "swift";
     license = licenses.asl20;
     maintainers = teams.openstack.members;
   };

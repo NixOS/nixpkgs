@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
 , xdg-utils, libXrender, fontconfig, freetype, systemd, libpulseaudio
+, cairo, gdk-pixbuf, gtk3, pixman
 # For glewinfo
 , libXmu, libXi, libXext }:
 
@@ -19,6 +20,10 @@ let
     freetype
     systemd
     libpulseaudio
+    cairo
+    gdk-pixbuf
+    gtk3
+    pixman
   ];
   libPath = lib.makeLibraryPath packages;
 in
@@ -31,8 +36,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CS1A9udt47bhgnYJqqkCG3z4XaPVHmz417VTsY2ccOA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which xdg-utils ];
+  nativeBuildInputs = [ makeWrapper which xdg-utils ];
 
   unpackPhase = ''
     mkdir -p phony-home $out/share/applications
@@ -62,7 +66,8 @@ stdenv.mkDerivation rec {
       patchInterpreter "$1"
       wrapProgram "$out/libexec/genymotion/$1" \
         --set "LD_LIBRARY_PATH" "${libPath}" \
-        --unset "QML2_IMPORT_PATH"
+        --unset "QML2_IMPORT_PATH" \
+        --unset "QT_PLUGIN_PATH"
     }
 
     patchTool() {
@@ -73,6 +78,8 @@ stdenv.mkDerivation rec {
 
     patchExecutable genymotion
     patchExecutable player
+    patchInterpreter qemu/x86_64/bin/qemu-img
+    patchInterpreter qemu/x86_64/bin/qemu-system-x86_64
 
     patchTool adb
     patchTool aapt

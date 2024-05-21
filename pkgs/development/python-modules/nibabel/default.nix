@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , hatchling
 , hatch-vcs
@@ -15,19 +16,19 @@
 , pytest-doctestplus
 , pytest-httpserver
 , pytest-xdist
-, pytestCheckHook
+, pytest7CheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "5.1.0";
-  format = "pyproject";
+  version = "5.2.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-znPKXpVyCechmiI8tx93I1yd8qz00/J/hhujjpSBrFM=";
+    hash = "sha256-tsgLLnKOS8K2XxFC2bjSKHqRAqi/hHfhFe8NgzRVmXU=";
   };
 
   nativeBuildInputs = [
@@ -70,20 +71,21 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-httpserver
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ passthru.optional-dependencies.all;
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
-  disabledTests = [
-    # https://github.com/nipy/nibabel/issues/951
-    "test_filenames"
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # uses distutils
+    "nisext/tests/test_sexts.py"
   ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nibabel";
+    changelog = "https://github.com/nipy/nibabel/blob/${version}/Changelog";
     description = "Access a multitude of neuroimaging data formats";
     license = licenses.mit;
     maintainers = with maintainers; [ ashgillman ];

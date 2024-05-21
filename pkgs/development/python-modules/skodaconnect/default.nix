@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "skodaconnect";
-  version = "1.3.9";
+  version = "1.3.11";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "lendy007";
     repo = "skodaconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-7QDelJzyRnYNqVP9IuREpCm5s+qJ8cxSEn1YcqnYepA=";
+    hash = "sha256-Cy2sXj8+t8lIqrKmI9Aa7tNEIvRArynU/02ajJ+tYHg=";
   };
 
   nativeBuildInputs = [

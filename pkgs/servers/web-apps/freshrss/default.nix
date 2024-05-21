@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   passthru.tests = {
-    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth;
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth;
   };
 
   buildInputs = [ php ];

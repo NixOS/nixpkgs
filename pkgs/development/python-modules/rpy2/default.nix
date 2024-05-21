@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , isPyPy
 , R
 , rWrapper
@@ -24,14 +25,14 @@
 }:
 
 buildPythonPackage rec {
-    version = "3.5.14";
+    version = "3.5.16";
     format = "setuptools";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      hash = "sha256-X0auMdNuEXvjZq1K4CSTwBWsa6WevjtM1yAAdTMvxIE=";
+      hash = "sha256-g34vdFg2WKXEwzl2GnP5Q08z75ztPjDGTadWIWXCgBs=";
     };
 
     patches = [
@@ -81,10 +82,6 @@ buildPythonPackage rec {
     ];
 
     doCheck = !stdenv.isDarwin;
-
-    # newlines in environment variables are a problem due to
-    # https://github.com/rpy2/rpy2/issues/1066
-    preCheck = "unset postPatch";
 
     nativeCheckInputs = [
       pytestCheckHook

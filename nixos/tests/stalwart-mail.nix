@@ -40,22 +40,26 @@ in import ./make-test-python.nix ({ lib, ... }: {
           };
         };
 
-        session.auth.mechanisms = [ "PLAIN" ];
-        session.auth.directory = "in-memory";
-        jmap.directory = "in-memory";  # shared with imap
+        resolver.public-suffix = [ ];  # do not fetch from web in sandbox
 
-        session.rcpt.directory = "in-memory";
-        queue.outbound.next-hop = [ "local" ];
+        session.auth.mechanisms = "[plain]";
+        session.auth.directory = "'in-memory'";
+        storage.directory = "in-memory";
+
+        session.rcpt.directory = "'in-memory'";
+        queue.outbound.next-hop = "'local'";
 
         directory."in-memory" = {
           type = "memory";
-          users = [
+          principals = [
             {
+              type = "individual";
               name = "alice";
               secret = "foobar";
               email = [ "alice@${domain}" ];
             }
             {
+              type = "individual";
               name = "bob";
               secret = "foobar";
               email = [ "bob@${domain}" ];
@@ -90,8 +94,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
         with IMAP4('localhost') as imap:
             imap.starttls()
-            imap.login('bob', 'foobar')
-            imap.select('"All Mail"')
+            status, [caps] = imap.login('bob', 'foobar')
+            assert status == 'OK'
+            imap.select()
             status, [ref] = imap.search(None, 'ALL')
             assert status == 'OK'
             [msgId] = ref.split()

@@ -135,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.7.0";
+    version = "3.7.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -145,7 +145,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha256-3xtzeLcU8GkLKF7Z5OWK/icKyY28nKWDlYnBr8yjOrE=";
+      hash = "sha256-YUyfVkPNB5nfOROV+mu8NklCe7g5cizjsRTTu8GjslA=";
     };
 
     # Fix FHS paths in tests
@@ -308,7 +308,7 @@ let
     passthru = {
       shellPath = "/bin/fish";
       tests = {
-        nixos = nixosTests.fish;
+        nixos = lib.optionalAttrs stdenv.isLinux nixosTests.fish;
 
         # Test the fish_config tool by checking the generated splash page.
         # Since the webserver requires a port to run, it is not started.
@@ -322,18 +322,17 @@ let
             # if we don't set `delete=False`, the file will get cleaned up
             # automatically (leading the test to fail because there's no
             # tempfile to check)
-            sed -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
+            ${lib.getExe gnused} -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
 
             # we delete everything after the fileurl is assigned
-            sed -e '/fileurl =/q' -i webconfig.py
+            ${lib.getExe gnused} -e '/fileurl =/q' -i webconfig.py
             echo "print(fileurl)" >> webconfig.py
 
             # and check whether the message appears on the page
-            cat (${python3}/bin/python ./webconfig.py \
-              | tail -n1 | sed -ne 's|.*\(/build/.*\)|\1|p' \
-            ) | grep 'a href="http://localhost.*Start the Fish Web config'
-
             # cannot test the http server because it needs a localhost port
+            cat (${python3}/bin/python ./webconfig.py \
+              | tail -n1 | ${lib.getExe gnused} -e 's|file://||' \
+            ) | ${lib.getExe gnugrep} -q 'a href="http://localhost.*Start the Fish Web config'
           '';
           in
           runCommand "test-web-config" { } ''

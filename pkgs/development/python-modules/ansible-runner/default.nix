@@ -18,19 +18,20 @@
 , pythonOlder
 , python-daemon
 , pyyaml
+, setuptools
 , six
 }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.3.4";
-  format = "setuptools";
+  version = "2.3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eaG9E02BPI6jdAWZxv2WGhFCXOd1fy/XJc9W1qGnI2w=";
+    hash = "sha256-shdKEtytLcLzQuqCh2iY9WigtmxTVoYAv4BXcVj8uhw=";
   };
 
   patches = [
@@ -40,13 +41,19 @@ buildPythonPackage rec {
       hash = "sha256-eTnQkftvjK0YHU+ovotRVSuVlvaVeXp5SvYk1DPCg88=";
       excludes = [ ".github/workflows/ci.yml" "tox.ini" ];
     })
+    (fetchpatch {
+      # python 3.12 compat
+      url = "https://github.com/ansible/ansible-runner/commit/dc248497bb2375a363222ce755bf3a31f21d5f64.patch";
+      hash = "sha256-QT28Iw0uENoO35rqZpYBcmJB/GNDEF4m86SKf6p0XQU=";
+    })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     pbr
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ansible-core
     psutil
     pexpect
@@ -103,6 +110,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps when interfacing with Ansible";
+    mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

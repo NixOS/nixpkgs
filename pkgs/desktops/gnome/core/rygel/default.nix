@@ -7,7 +7,7 @@
 , gettext
 , libxml2
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , glib
 , gssdp_1_6
@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.42.4";
+  version = "0.42.5";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "YxDfqi0zK2YRm5sCD61qS9J9m8Yfr3gMpcoLYoEzA/c=";
+    sha256 = "ETNgLS5nEKreayKqmNkzhMjVY5bzRHY0E+luARC32J8=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
-    homepage = "https://wiki.gnome.org/Projects/Rygel";
+    homepage = "https://gitlab.gnome.org/GNOME/rygel";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

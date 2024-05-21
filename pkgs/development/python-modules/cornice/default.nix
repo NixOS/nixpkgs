@@ -1,26 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
 , pyramid
-, simplejson
-, six
-, venusian
+, pytestCheckHook
+, pytest-cache
+, webtest
+, marshmallow
+, colander
 }:
 
 buildPythonPackage rec {
   pname = "cornice";
-  version = "6.0.1";
-  format = "setuptools";
+  version = "6.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6edf6f206ff1c3d108d7a7b9ae640a2f4737cfc04f0914ccc4eefe511d3a8985";
+  src = fetchFromGitHub {
+    owner = "Cornices";
+    repo = "cornice";
+    rev = version;
+    hash = "sha256-jAf8unDPpr/ZAWkb9LhOW4URjwcRnaYVUKmfnYBStTg=";
   };
 
-  propagatedBuildInputs = [ pyramid simplejson six venusian ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  # tests not packaged with pypi release
-  doCheck = false;
+  dependencies = [ pyramid ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cache
+    webtest
+    marshmallow
+    colander
+  ];
   pythonImportsCheck = [ "cornice" ];
 
   meta = with lib; {

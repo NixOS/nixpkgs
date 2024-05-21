@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.considerate ];
     platforms = platforms.linux;
+    mainProgram = "udpreplay";
   };
 }

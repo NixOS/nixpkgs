@@ -5,7 +5,7 @@
 , pytest
 , jinja2
 , matplotlib
-, nose
+, pynose
 , pillow
 , pytestCheckHook
 }:
@@ -28,12 +28,10 @@ buildPythonPackage rec {
     pytest
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION=version;
-
   propagatedBuildInputs = [
     jinja2
     matplotlib
-    nose
+    pynose
     pillow
   ];
 

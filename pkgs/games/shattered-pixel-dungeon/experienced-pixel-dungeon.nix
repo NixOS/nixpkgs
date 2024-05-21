@@ -4,21 +4,21 @@
 
 callPackage ./generic.nix rec {
   pname = "experienced-pixel-dungeon";
-  version = "2.16.2";
+  version = "2.17.2";
 
   src = fetchFromGitHub {
     owner = "TrashboxBobylev";
     repo = "Experienced-Pixel-Dungeon-Redone";
     rev = "ExpPD-${version}";
-    hash = "sha256-fTHAA3pCXAA9W32eeY29eaLnfcG5pLop/awQG5zKMt4=";
+    hash = "sha256-eX+wPw2Bi37yQZ+ftjEkiGzvheJZingqDqy1481ABvs=";
   };
 
   postPatch = ''
     substituteInPlace build.gradle \
-      --replace "gdxControllersVersion = '2.2.3-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
+      --replace-fail "gdxControllersVersion = '2.2.3-SNAPSHOT'" "gdxControllersVersion = '2.2.3'"
   '';
 
-  depsHash = "sha256-MUUeWZUCVPakK1MJwn0lPnjAlLpPWB/J17Ad68XRcHg=";
+  depsHash = "sha256-PyBEhlOOVD3/YH4SWs1yMkdg3U96znk1/VV6SAr8S30=";
 
   desktopName = "Experienced Pixel Dungeon";
 

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, enableStatic ? stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-h3mXoGRYgPg0wKQ1u6uFP7wlEUMQd5uIBt4Hr7vjNtA=";
   };
+
+  patches = [ ./fix-openssl-detection.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];
@@ -33,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openquantumsafe.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ maintainers.sigmanificient ];
   };
 }

@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "napalm";
-  version = "4.1.0";
+  version = "5.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "napalm-automation";
     repo = "napalm";
     rev = "refs/tags/${version}";
-    hash = "sha256-JqjuYMJcP58UMn1pPYg7x8KpqCKQUs19Ng9HbI2iX38=";
+    hash = "sha256-Abw3h69qTFwOOFeAfivqAIWLozErJ1yZZfx7CbMy1AI=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cffi
-    future
     jinja2
     junos-eznc
     lxml

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Real-time adjustable equalizer plugin for ALSA";
     homepage = "https://thedigitalmachine.net/alsaequal.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ymeister ];
   };
 }

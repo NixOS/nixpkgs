@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nestedtext";
-  version = "3.6";
+  version = "3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "nestedtext";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SHY/MTmYbNh3azkyvwEtuvT+V7YzfLi2B3FvBzv6Omo=";
+    hash = "sha256-lNqSmEmzuRGdXs/4mwKSh7yDGHnAykpIDIR+abbLCns=";
   };
 
   nativeBuildInputs = [

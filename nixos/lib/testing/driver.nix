@@ -1,6 +1,6 @@
 { config, lib, hostPkgs, ... }:
 let
-  inherit (lib) mkOption types literalMD mdDoc;
+  inherit (lib) mkOption types literalMD;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -104,13 +104,13 @@ in
   options = {
 
     driver = mkOption {
-      description = mdDoc "Package containing a script that runs the test.";
+      description = "Package containing a script that runs the test.";
       type = types.package;
       defaultText = literalMD "set by the test framework";
     };
 
     hostPkgs = mkOption {
-      description = mdDoc "Nixpkgs attrset used outside the nodes.";
+      description = "Nixpkgs attrset used outside the nodes.";
       type = types.raw;
       example = lib.literalExpression ''
         import nixpkgs { inherit system config overlays; }
@@ -118,14 +118,14 @@ in
     };
 
     qemu.package = mkOption {
-      description = mdDoc "Which qemu package to use for the virtualisation of [{option}`nodes`](#test-opt-nodes).";
+      description = "Which qemu package to use for the virtualisation of [{option}`nodes`](#test-opt-nodes).";
       type = types.package;
       default = hostPkgs.qemu_test;
       defaultText = "hostPkgs.qemu_test";
     };
 
     globalTimeout = mkOption {
-      description = mdDoc ''
+      description = ''
         A global timeout for the complete test, expressed in seconds.
         Beyond that timeout, every resource will be killed and released and the test will fail.
 
@@ -137,16 +137,16 @@ in
     };
 
     enableOCR = mkOption {
-      description = mdDoc ''
+      description = ''
         Whether to enable Optical Character Recognition functionality for
-        testing graphical programs. See [Machine objects](`ssec-machine-objects`).
+        testing graphical programs. See [`Machine objects`](#ssec-machine-objects).
       '';
       type = types.bool;
       default = false;
     };
 
     extraPythonPackages = mkOption {
-      description = mdDoc ''
+      description = ''
         Python packages to add to the test driver.
 
         The argument is a Python package set, similar to `pkgs.pythonPackages`.
@@ -159,7 +159,7 @@ in
     };
 
     extraDriverArgs = mkOption {
-      description = mdDoc ''
+      description = ''
         Extra arguments to pass to the test driver.
 
         They become part of [{option}`driver`](#test-opt-driver) via `wrapProgram`.
@@ -171,7 +171,7 @@ in
     skipLint = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Do not run the linters. This may speed up your iteration cycle, but it is not something you should commit.
       '';
     };
@@ -179,7 +179,7 @@ in
     skipTypeCheck = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Disable type checking. This must not be enabled for new NixOS tests.
 
         This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#test-opt-testScript).

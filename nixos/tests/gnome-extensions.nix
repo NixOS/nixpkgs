@@ -2,7 +2,7 @@ import ./make-test-python.nix (
 { pkgs, lib, ...}:
 {
   name = "gnome-extensions";
-  meta.maintainers = [ lib.maintainers.piegames ];
+  meta.maintainers = [ ];
 
   nodes.machine =
     { pkgs, ... }:
@@ -86,7 +86,7 @@ import ./make-test-python.nix (
       "ddterm"
       "emoji-selector"
       "gsconnect"
-      "system-monitor"
+      "system-monitor-next"
       "desktop-icons-ng-ding"
       "workspace-indicator"
       "vitals"

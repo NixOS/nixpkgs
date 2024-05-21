@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mhost";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "lukaspustina";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j0378f8gj8hdcdhpj6lqlnriasmjxzri42wjj9pygzkmpd3ym86";
+    sha256 = "sha256-6jn9jOCh96d9y2l1OZ5hgxg7sYXPUFzJiiT95OR7lD0=";
   };
 
-  cargoSha256 = "0gqrya0bpdd67k2sxib7f4npnrx84d9r4hjq2sg2xz4j8pmgs018";
+  cargoHash = "sha256-d2JYT/eJaGm8pfmjsuSZiQxlzcsypFH53F/9joW0J6I=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+    SystemConfiguration
+  ];
 
   CARGO_CRATE_NAME = "mhost";
 

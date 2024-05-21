@@ -82,12 +82,12 @@ python3Packages.buildPythonApplication {
     pygobject3
     reportlab
     usbutils
-    sip_4
+    sip4
     dbus-python
     distro
   ] ++ lib.optionals withQt5 [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
     enum-compat
   ];
 

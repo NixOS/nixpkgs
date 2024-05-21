@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An opinionated command line tool for managing multiple kubeconfigs";
+    mainProgram = "kconf";
     homepage = "https://github.com/particledecay/kconf";
     license = licenses.mit;
     maintainers = with maintainers; [ thmzlt ];

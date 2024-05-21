@@ -10,6 +10,7 @@ let
     crossOverlays = [];
 
     # Ignore custom stdenvs when cross compiling for compatibility
+    # Use replaceCrossStdenv instead.
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
@@ -44,47 +45,49 @@ in lib.init bootStages ++ [
     inherit config;
     overlays = overlays ++ crossOverlays;
     selfBuild = false;
-    stdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
-      buildPlatform = localSystem;
-      hostPlatform = crossSystem;
-      targetPlatform = crossSystem;
+    stdenv = let
+      baseStdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
+        buildPlatform = localSystem;
+        hostPlatform = crossSystem;
+        targetPlatform = crossSystem;
 
-      # Prior overrides are surely not valid as packages built with this run on
-      # a different platform, and so are disabled.
-      overrides = _: _: {};
-      extraBuildInputs = [ ] # Old ones run on wrong platform
-         ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
-         ;
-      allowedRequisites = null;
+        # Prior overrides are surely not valid as packages built with this run on
+        # a different platform, and so are disabled.
+        overrides = _: _: {};
+        extraBuildInputs = [ ] # Old ones run on wrong platform
+           ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
+           ;
+        allowedRequisites = null;
 
-      hasCC = !targetPlatform.isGhcjs;
+        hasCC = !targetPlatform.isGhcjs;
 
-      cc = if crossSystem.useiOSPrebuilt or false
-             then buildPackages.darwin.iosSdkPkgs.clang
-           else if crossSystem.useAndroidPrebuilt or false
-             then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
-           else if targetPlatform.isGhcjs
-             # Need to use `throw` so tryEval for splicing works, ugh.  Using
-             # `null` or skipping the attribute would cause an eval failure
-             # `tryEval` wouldn't catch, wrecking accessing previous stages
-             # when there is a C compiler and everything should be fine.
-             then throw "no C compiler provided for this platform"
-           else if crossSystem.isDarwin
-             then buildPackages.llvmPackages.libcxxClang
-           else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages.clang
-           else buildPackages.gcc;
+        cc = if crossSystem.useiOSPrebuilt or false
+               then buildPackages.darwin.iosSdkPkgs.clang
+             else if crossSystem.useAndroidPrebuilt or false
+               then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
+             else if targetPlatform.isGhcjs
+               # Need to use `throw` so tryEval for splicing works, ugh.  Using
+               # `null` or skipping the attribute would cause an eval failure
+               # `tryEval` wouldn't catch, wrecking accessing previous stages
+               # when there is a C compiler and everything should be fine.
+               then throw "no C compiler provided for this platform"
+             else if crossSystem.isDarwin
+               then buildPackages.llvmPackages.libcxxClang
+             else if crossSystem.useLLVM or false
+               then buildPackages.llvmPackages.clang
+             else buildPackages.gcc;
 
-      extraNativeBuildInputs = old.extraNativeBuildInputs
-        ++ lib.optionals
-             (hostPlatform.isLinux && !buildPlatform.isLinux)
-             [ buildPackages.patchelf ]
-        ++ lib.optional
-             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
-               in f hostPlatform && !(f buildPlatform) )
-             buildPackages.updateAutotoolsGnuConfigScriptsHook
-        ;
-    }));
+        extraNativeBuildInputs = old.extraNativeBuildInputs
+          ++ lib.optionals
+               (hostPlatform.isLinux && !buildPlatform.isLinux)
+               [ buildPackages.patchelf ]
+          ++ lib.optional
+               (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+                 in f hostPlatform && !(f buildPlatform) )
+               buildPackages.updateAutotoolsGnuConfigScriptsHook
+          ;
+      }));
+    in if config ? replaceCrossStdenv then config.replaceCrossStdenv { inherit buildPackages baseStdenv; } else baseStdenv;
   })
 
 ]

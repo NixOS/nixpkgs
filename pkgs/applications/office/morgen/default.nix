@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "3.1.6";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
-    hash = "sha256-/rMPNIpjkHdLE0lAdWCz71DbcqIW+1Y6RdFrYAfTSKU=";
+    hash = "sha256-N9G9yfUhKZd3dcsyBKODL6vnMqQgLk2DRQ+YZAYdPks=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       --replace '/opt/Morgen' $out/bin
 
     makeWrapper ${electron}/bin/electron $out/bin/morgen \
-      --add-flags $out/opt/Morgen/resources/app.asar
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}} $out/opt/Morgen/resources/app.asar"
 
     runHook postInstall
   '';

@@ -5,7 +5,7 @@
 , ninja
 , vala
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , discount
 , glib
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

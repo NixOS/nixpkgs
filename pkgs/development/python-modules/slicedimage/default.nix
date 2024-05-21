@@ -3,15 +3,12 @@
 , fetchFromGitHub
 , boto3
 , diskcache
-, enum34
 , packaging
-, pathlib
 , numpy
 , requests
 , scikit-image
 , six
 , pytestCheckHook
-, isPy27
 , tifffile
 }:
 
@@ -36,7 +33,7 @@ buildPythonPackage rec {
     scikit-image
     six
     tifffile
-  ] ++ lib.optionals isPy27 [ pathlib enum34 ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -49,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to access sliced imaging data";
+    mainProgram = "slicedimage";
     homepage = "https://github.com/spacetx/slicedimage";
     license = licenses.mit;
     maintainers = [ ];

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flask
+, lxml
 , pandas
 , pyyaml
 , poetry-core
@@ -9,25 +10,25 @@
 , pythonRelaxDepsHook
 , pythonOlder
 , toml-adapt
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "succulent";
-  version = "0.3.2";
-  format = "pyproject";
+  version = "0.3.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
     rev = "refs/tags/${version}";
-    hash = "sha256-2WiKrIQkgFIjmZkEA8veXcKCY4X0aygqoP7R3UCCljQ=";
+    hash = "sha256-+S4ekvaQvbBxjUQkG+Bd9lYdZwHB3oq7Ay9kWquCcyE=";
   };
 
   pythonRelaxDeps = [
     "flask"
-    "pandas"
   ];
 
   nativeBuildInputs = [
@@ -37,8 +38,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flask
+    lxml
     pandas
     pyyaml
+    xmltodict
   ];
 
   nativeCheckInputs = [

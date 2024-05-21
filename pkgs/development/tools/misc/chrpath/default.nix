@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line tool to adjust the RPATH or RUNPATH of ELF binaries";
+    mainProgram = "chrpath";
     longDescription = ''
       chrpath changes, lists or removes the rpath or runpath setting in a
       binary. The rpath, or runpath if it is present, is where the runtime

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A custom parser/auto-formatter for Standard ML";
+    mainProgram = "smlfmt";
     longDescription = ''
       A custom parser and code formatter for Standard ML, with helpful error messages.
 

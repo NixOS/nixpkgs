@@ -51,7 +51,7 @@ Use `programs.steam.enable = true;` if you want to add steam to `systemPackages`
     you need to add:
 
     ```nix
-    steam.override { withJava = true; };
+    steam.override { withJava = true; }
     ```
 
 ## steam-run {#sec-steam-run}

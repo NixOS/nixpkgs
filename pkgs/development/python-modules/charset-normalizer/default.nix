@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "charset-normalizer";
-  version = "3.2.0";
+  version = "3.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Ousret";
     repo = "charset_normalizer";
     rev = "refs/tags/${version}";
-    hash = "sha256-CfL5rlrwJs9453z+1xPUzs1B3OyjFBaU6klzY7gJCzA=";
+    hash = "sha256-T9lnlS05Ogb2eLLHYWFnjBtRaB/OBqGWHQ/2WLunrNY=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for encoding and language detection";
+    mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
     changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

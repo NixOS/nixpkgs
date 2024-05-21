@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , jupyterhub
 , escapism
 , docker
@@ -9,12 +10,16 @@
 buildPythonPackage rec {
   pname = "dockerspawner";
   version = "13.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-POlTZ9luS9wQ/vt9w8VMfTEqGzg/DhfB45ePfvnyito=";
+    hash = "sha256-POlTZ9luS9wQ/vt9w8VMfTEqGzg/DhfB45ePfvnyito=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     jupyterhub

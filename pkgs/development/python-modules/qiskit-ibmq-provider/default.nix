@@ -6,7 +6,7 @@
 , nest-asyncio
 , qiskit-terra
 , requests
-, requests_ntlm
+, requests-ntlm
 , websocket-client
   # Visualization inputs
 , withVisualization ? true
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     nest-asyncio
     qiskit-terra
     requests
-    requests_ntlm
+    requests-ntlm
     websocket-client
     websockets
   ] ++ lib.optionals withVisualization visualizationPackages;

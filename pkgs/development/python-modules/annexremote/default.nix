@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "annexremote";
-  version = "1.6.4";
+  version = "1.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Lykos153";
     repo = "AnnexRemote";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eBq1nZnNuzTLvc11G/XaenZlVEUke3kpWlZ7P5g4kc8=";
+    hash = "sha256-8WAa5EO5n/dccNW0TUwFgcRjvDFt8QfpHIX2arM4HGc=";
   };
 
   nativeBuildInputs = [

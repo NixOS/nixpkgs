@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
 , graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
-, gdk-pixbuf, wrapGAppsHook
+, gdk-pixbuf, wrapGAppsHook3
 }:
 
 let
@@ -20,7 +20,7 @@ let
     ppx_deriving_yojson
     ppx_import
     stdlib-shims
-    why3
+    why3.dev
     re
     result
     seq
@@ -37,19 +37,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "28.0";
+  version = "28.1";
   slang   = "Nickel";
 
   src = fetchurl {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-KWEogjMOy27d0LTKOvwEkrcND+szeaG46JMZTG4XOYM=";
+    hash = "sha256-AiC8dDt9okaM65JvMx7cfd+qfGA7pHli3j4zyOHj9ZM=";
   };
+
+  preConfigure = ''
+    substituteInPlace src/dune --replace " bytes " " "
+  '';
 
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
+  nativeBuildInputs = [ wrapGAppsHook3 ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
 
   buildInputs = with ocamlPackages; [
     dune-site dune-configurator

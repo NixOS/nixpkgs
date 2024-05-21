@@ -48,6 +48,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/bup/bup";
     description = "Efficient file backup system based on the git packfile format";
+    mainProgram = "bup";
     license = licenses.gpl2Plus;
 
     longDescription = ''

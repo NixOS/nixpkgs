@@ -63,7 +63,7 @@ mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

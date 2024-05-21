@@ -20,14 +20,14 @@ in
 
     services.miredo = {
 
-      enable = mkEnableOption (lib.mdDoc "the Miredo IPv6 tunneling service");
+      enable = mkEnableOption "the Miredo IPv6 tunneling service";
 
       package = mkPackageOption pkgs "miredo" { };
 
       serverAddress = mkOption {
         default = "teredo.remlab.net";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The hostname or primary IPv4 address of the Teredo server.
           This setting is required if Miredo runs as a Teredo client.
           "teredo.remlab.net" is an experimental service for testing only.
@@ -38,7 +38,7 @@ in
       interfaceName = mkOption {
         default = "teredo";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Name of the network tunneling interface.
         '';
       };
@@ -46,7 +46,7 @@ in
       bindAddress = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           Depending on the local firewall/NAT rules, you might need to force
           Miredo to use a fixed UDP port and or IPv4 address.
         '';
@@ -55,7 +55,7 @@ in
       bindPort = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           Depending on the local firewall/NAT rules, you might need to force
           Miredo to use a fixed UDP port and or IPv4 address.
         '';

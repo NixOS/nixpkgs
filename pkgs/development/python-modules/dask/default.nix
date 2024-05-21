@@ -28,6 +28,7 @@
 
 # tests
 , arrow-cpp
+, dask-expr
 , hypothesis
 , pytest-asyncio
 , pytest-rerunfailures
@@ -36,9 +37,9 @@
 , pythonOlder
 }:
 
-buildPythonPackage rec {
+let self = buildPythonPackage rec {
   pname = "dask";
-  version = "2023.12.0";
+  version = "2024.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,15 +48,15 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-LMd55s8LT4m6Ym+LmXb4TKPnZ0jMkNBfcPJxmgruMDM=";
+    hash = "sha256-FzvzmQa9kJAZw67HY+d+3uC6Bd246vp5QsyXepGnKH8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cloudpickle
     fsspec
@@ -79,6 +80,7 @@ buildPythonPackage rec {
     ++ self.distributed
     ++ self.diagnostics;
     dataframe = [
+      # dask-expr -> circular dependency with dask-expr
       numpy
       pandas
     ];
@@ -92,13 +94,17 @@ buildPythonPackage rec {
   });
 
   nativeCheckInputs = [
+    dask-expr
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
     # from panda[test]
     hypothesis
     pytest-asyncio
-  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+  ]
+  ++ passthru.optional-dependencies.array
+  ++ passthru.optional-dependencies.dataframe
+  ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
     pyarrow
   ];
 
@@ -156,20 +162,35 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "dask"
-    "dask.array"
     "dask.bag"
     "dask.bytes"
-    "dask.dataframe"
-    "dask.dataframe.io"
-    "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
 
-  meta = with lib; {
+  doCheck = false;
+
+  # Enable tests via passthru to avoid cyclic dependency with dask-expr.
+  passthru.tests = {
+    check = self.overridePythonAttrs (old: {
+      doCheck = true;
+      pythonImportsCheck = [
+        # Requires the `dask.optional-dependencies.array` that are only in `nativeCheckInputs`
+        "dask.array"
+        # Requires the `dask.optional-dependencies.dataframe` that are only in `nativeCheckInputs`
+        "dask.dataframe"
+        "dask.dataframe.io"
+        "dask.dataframe.tseries"
+      ] ++ old.pythonImportsCheck;
+    });
+  };
+
+
+  meta = {
     description = "Minimal task scheduling abstraction";
+    mainProgram = "dask";
     homepage = "https://dask.org/";
     changelog = "https://docs.dask.org/en/latest/changelog.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+}; in self

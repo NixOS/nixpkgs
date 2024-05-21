@@ -13,7 +13,7 @@
 , python-mpv-jsonipc
 , pywebview
 , tkinter
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

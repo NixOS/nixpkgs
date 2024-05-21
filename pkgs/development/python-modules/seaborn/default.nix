@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.13.0";
+  version = "0.13.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mwaskom";
     repo = "seaborn";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RbtBNKTjUHdCFe1V7IvACgbSNIPhVFMYmtE34GKVIzs=";
+    hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,5 @@ buildPythonPackage rec {
     homepage = "https://seaborn.pydata.org/";
     changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
   };
 }

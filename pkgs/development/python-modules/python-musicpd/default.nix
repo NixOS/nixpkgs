@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "python-musicpd";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "sha256-5Br4rZO1c/pPmAZ/UecYjuVLttR8R+xeReKsc/xnaeI=";
+    sha256 = "sha256-/FdM0UolVqhJNpS60Q/nra1hSHKL/LiSMX7/Hcipwco=";
   };
 
   format = "setuptools";

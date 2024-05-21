@@ -7,7 +7,7 @@ let
 in {
 
   options.services.clipmenu = {
-    enable = mkEnableOption (lib.mdDoc "clipmenu, the clipboard management daemon");
+    enable = mkEnableOption "clipmenu, the clipboard management daemon";
 
     package = mkPackageOption pkgs "clipmenu" { };
   };

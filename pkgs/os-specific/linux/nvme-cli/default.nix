@@ -4,7 +4,6 @@
 , libnvme
 , json_c
 , zlib
-, libhugetlbfs
 , python3Packages
 }:
 

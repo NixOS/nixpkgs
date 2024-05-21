@@ -1,20 +1,18 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pulldown-cmark";
-  version = "0.9.3";
+  version = "0.11.0";
 
-  src = fetchFromGitHub {
-    owner = "raphlinus";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FK/+6N81qYyFsisPn5SkpubvWMYO7dLX9iHgNY/tAo4=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-1RE622jAtIxv9Jk6vMdm1djaaUCyNGXHIIela+WRubI=";
   };
 
-  cargoHash = "sha256-fcVnIb6WPRk133uTMH0xxmEJ3YgsftsTJXjqfOQQPDI=";
+  cargoHash = "sha256-L1KPpLw1MEYDisVdPEO16ZvSRx/ya22oDReyS+hG5t4=";
 
   meta = {
     description = "A pull parser for CommonMark written in Rust";

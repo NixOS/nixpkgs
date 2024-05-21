@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "2.1.0";
+  version = "24.1.0";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "sha256-C7TLOuC0CHredDiWFIAFmOlV8ivX0j4bs3b8IB8FsqE=";
+    sha256 = "sha256-ei9CPlJg+Kfjh7vu5VnT6DNLmmnA8wZ2A1jXnm//Fgo=";
   };
 
   nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];

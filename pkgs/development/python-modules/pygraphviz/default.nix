@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pygraphviz";
-  version = "1.12";
+  version = "1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pygraphviz";
     repo = "pygraphviz";
-    rev = "pygraphviz-${version}";
-    hash = "sha256-XDP77H724eiMa/V18OtLxpUpxlIVDmcFLMYOAbazquo=";
+    rev = "refs/tags/pygraphviz-${version}";
+    hash = "sha256-/H7eHgs3jtbgat8//1Y1S3iV5s0UBKW+J+zK+f8qGqI=";
   };
 
   patches = [

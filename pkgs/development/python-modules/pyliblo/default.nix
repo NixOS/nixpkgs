@@ -4,7 +4,7 @@
 , isPyPy
 , pythonAtLeast
 , liblo
-, cython
+, cython_0
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,9 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = [ liblo cython ];
+  build-system = [ cython_0 ];
+
+  buildInputs = [ liblo ];
 
   meta = with lib; {
     homepage = "https://das.nasophon.de/pyliblo/";

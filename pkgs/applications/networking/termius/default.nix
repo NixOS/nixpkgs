@@ -9,7 +9,7 @@
 , libsecret
 , mesa
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
-  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook3 ];
 
   buildInputs = [
     alsa-lib

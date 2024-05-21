@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "PineTime smart watch companion app for Linux phone and desktop";
+    mainProgram = "watchmate";
     homepage = "https://github.com/azymohliad/watchmate";
     changelog = "https://github.com/azymohliad/watchmate/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

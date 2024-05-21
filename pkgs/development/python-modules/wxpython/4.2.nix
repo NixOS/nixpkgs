@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , setuptools
-, pythonOlder
+, pythonAtLeast
 , fetchPypi
 , substituteAll
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pname = "wxpython";
   version = "4.2.1";
   format = "other";
-  disabled = pythonOlder "3.7";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     pname = "wxPython";

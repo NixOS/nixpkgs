@@ -7,7 +7,7 @@ in
 {
   options = {
     programs.nexttrace = {
-      enable = lib.mkEnableOption (lib.mdDoc "Nexttrace to the global environment and configure a setcap wrapper for it");
+      enable = lib.mkEnableOption "Nexttrace to the global environment and configure a setcap wrapper for it";
       package = lib.mkPackageOption pkgs "nexttrace" { };
     };
   };

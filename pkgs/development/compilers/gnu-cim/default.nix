@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for fname in lib/{simulation,simset}.c; do
       substituteInPlace "$fname" \
-        --replace \
+        --replace-fail \
           '#include "../../lib/cim.h"' \
           '#include "../lib/cim.h"'
     done
   '';
 
-  CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
+  env.CFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-return-type -Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   doCheck = true;
 

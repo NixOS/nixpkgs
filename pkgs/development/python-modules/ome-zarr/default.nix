@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , aiohttp
 , dask
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.8.0";
+  version = "0.8.3";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -25,7 +24,7 @@ buildPythonPackage rec {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DMBTrDyUmNsrjOsFKrqukJNZ1f/mAjz4aunNUcwVMKg=";
+    hash = "sha256-JuNXVse/n/lFbNaLwMcir8NBHiRxcbYvtbxePwI6YoY=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +46,27 @@ buildPythonPackage rec {
   disabledTests = [
     # attempts to access network
     "test_s3_info"
+  ];
+
+  pytestFlagsArray = [
+    # Fail with RecursionError
+    # https://github.com/ome/ome-zarr-py/issues/352
+    "--deselect=tests/test_cli.py::TestCli::test_astronaut_download"
+    "--deselect=tests/test_cli.py::TestCli::test_astronaut_info"
+    "--deselect=tests/test_cli.py::TestCli::test_coins_info"
+    "--deselect=tests/test_emitter.py::test_close"
+    "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
+    "--deselect=tests/test_node.py::TestNode::test_image"
+    "--deselect=tests/test_node.py::TestNode::test_label"
+    "--deselect=tests/test_node.py::TestNode::test_labels"
+    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_download"
+    "--deselect=tests/test_ome_zarr.py::TestOmeZarr::test_info"
+    "--deselect=tests/test_reader.py::TestReader::test_image"
+    "--deselect=tests/test_reader.py::TestReader::test_label"
+    "--deselect=tests/test_reader.py::TestReader::test_labels"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_label"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_labels"
+    "--deselect=tests/test_starting_points.py::TestStartingPoints::test_top_level"
   ];
 
   pythonImportsCheck = [

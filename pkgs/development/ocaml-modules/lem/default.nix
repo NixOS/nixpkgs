@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/rems-project/lem";
     description = "A tool for lightweight executable mathematics";
+    mainProgram = "lem";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = with licenses; [ bsd3 gpl2 ];
     platforms = ocaml.meta.platforms;

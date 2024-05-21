@@ -1,7 +1,7 @@
 { stdenv
 , lib
-, fetchFromGitLab
 , autoreconfHook
+, fetchurl
 , file
 , glib
 , gnome
@@ -20,15 +20,12 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-sstp";
-  version = "unstable-2023-03-09";
+  version = "1.3.2";
   name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "network-manager-sstp";
-    rev = "852db07dc7d19c37e398d831410bd94c8659a210";
-    hash = "sha256-DxgcuTza2G5a7F2mBtDaEuynu7F1Ex9pnAESAjyoRq8=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
   nativeBuildInputs = [

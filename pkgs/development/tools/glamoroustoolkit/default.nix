@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchzip
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , dbus
 , fontconfig
@@ -14,6 +14,7 @@
 , libXi
 , libXrandr
 , libXrender
+, libgit2
 , libglvnd
 , libuuid
 , libxcb
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GQeYR232zoHLIt1AzznD7rp6u4zMiAdj1+0OfXfT6AQ=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   sourceRoot = ".";
 
@@ -91,7 +92,8 @@ preFixup = let
 
     ln -s $out/lib/libcrypto.so $out/lib/libcrypto.so.1.1
     ln -s $out/lib/libcairo.so $out/lib/libcairo.so.2
-    ln -s $out/lib/libgit2.so $out/lib/libgit2.so.1.1
+    rm $out/lib/libgit2.so
+    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
   '';
 
   meta = {

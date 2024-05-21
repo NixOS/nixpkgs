@@ -15,7 +15,6 @@
 , x264
 , libintl
 , lib
-, opencore-amr
 , IOKit
 , CoreFoundation
 , DiskArbitration
@@ -26,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
-  version = "1.22.7";
+  version = "1.24.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-UgtGvKY3GJrYaimP8kWy2JN128rIsF102uqRD4Gp6do=";
+    hash = "sha256-RdqYvxBAyUcv1Z9icSgt4lo3IauFt4qq+BBJSVUPvvU=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     gst-plugins-base
     orc
     libintl
-    opencore-amr
   ] ++ lib.optionals enableGplPlugins [
     a52dec
     libcdio

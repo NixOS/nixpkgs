@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ somasis ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+    mainProgram = "stw";
   };
 }

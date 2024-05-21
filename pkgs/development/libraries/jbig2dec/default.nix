@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     patchShebangs test_jbig2dec.py
   '';
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   nativeBuildInputs = [ autoconf automake libtool ];
+
+  # `autogen.sh` runs `configure`, and expects that any flags needed
+  # by `configure` (like `--host`) are passed to `autogen.sh`.
+  configureScript = "./autogen.sh";
 
   nativeCheckInputs = [ python3 ];
   doCheck = true;
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.jbig2dec.com/";
     description = "Decoder implementation of the JBIG2 image compression format";
-    license = lib.licenses.agpl3;
+    mainProgram = "jbig2dec";
+    license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
   };
 }

@@ -2,10 +2,11 @@
 , stdenv
 , buildPythonPackage
 , cargo
-, darwin
+, libiconv
 , fetchFromGitHub
 , json-stream
 , json-stream-rs-tokenizer
+, pythonOlder
 , rustc
 , rustPlatform
 , setuptools
@@ -15,14 +16,16 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.22";
-  format = "setuptools";
+  version = "0.4.25";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EW726gUXTBX3gTxlFQ45RgkUa2Z4tIjUZxO4GBLXgEs=";
+    hash = "sha256-zo/jRAWSwcOnO8eU4KhDNz44P6xDGcrZf9CflwsSvF0=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -42,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.libiconv
+    libiconv
   ];
 
   # Tests depend on json-stream, which depends on this package.

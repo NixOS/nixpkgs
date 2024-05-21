@@ -3,7 +3,7 @@
 , perl
 , buildPerlModule
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , withGtk3 ? false
 , ffmpeg
 , mpv
@@ -38,20 +38,20 @@ let
 in
 buildPerlModule rec {
   pname = "pipe-viewer";
-  version = "0.4.8";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = "pipe-viewer";
     rev = version;
-    hash = "sha256-bFbriqpy+Jjwv/s4PZmLdL3hFtM8gfIn+yJjk3fCsnQ=";
+    hash = "sha256-GTmva1pDG1g2wZoS3ABYxhWdbARdlcS0rxGjkdJL7js=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals withGtk3 [ wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
   buildInputs = [ perlEnv ]
-    # Can't be in perlEnv for wrapGAppsHook to work correctly
+    # Can't be in perlEnv for wrapGAppsHook3 to work correctly
     ++ lib.optional withGtk3 Gtk3;
 
   # Not supported by buildPerlModule

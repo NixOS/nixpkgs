@@ -4,7 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 , cmake
-, cython_3
+, cython
 , ninja
 , scikit-build
 , setuptools
@@ -18,21 +18,26 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.5.2";
-  format = "pyproject";
+  version = "3.9.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D7Z0xKqAJAPKSAEK+3Mpz/LaEKqKYczp+m6SqfzufwA=";
+    hash = "sha256-HwTVaPFVktdt1/MfNYajRqVr9uSg6oc++yVvY0WC9AQ=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython >=3.0.9, <3.1.0" "Cython"
+  '';
+
+  build-system = [
     cmake
-    cython_3
+    cython
     ninja
     scikit-build
     setuptools

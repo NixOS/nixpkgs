@@ -1,1 +1,0 @@
-pkgs/by-name/fo/foo: Path package.nix is a symlink pointing to a path outside the directory of that package.

@@ -22,6 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "foreman clone written in go language";
+    mainProgram = "goreman";
     homepage = "https://github.com/mattn/goreman";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];

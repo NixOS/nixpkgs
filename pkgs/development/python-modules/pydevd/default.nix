@@ -2,10 +2,11 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, setuptools
 , numpy
 , psutil
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , trio
 , untangle
@@ -13,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "2.9.6";
-  format = "setuptools";
+  version = "3.0.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,19 +23,14 @@ buildPythonPackage rec {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-TDU/V7kY7zVxiP4OVjGqpsRVYplpkgCly2qAOqhZONo=";
+    hash = "sha256-aylmLN7lVUza2lt2K48rJsx3XatXPgPjcmPZ05raLX0=";
   };
 
-  patches = [
-    # https://github.com/fabioz/PyDev.Debugger/pull/258
-    (fetchpatch {
-      name = "numpy-1.25-test-compatibility.patch";
-      url = "https://github.com/fabioz/PyDev.Debugger/commit/6f637d951cda62dc2202a2c7b6af526c4d1e8a00.patch";
-      hash = "sha256-DLzZZwQHtqGZGA8nsBLNQqamuI4xUfQ89Gd21sJa9/s=";
-    })
-  ];
-
   __darwinAllowLocalNetworking = true;
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     numpy
@@ -59,8 +55,16 @@ buildPythonPackage rec {
     # https://github.com/fabioz/PyDev.Debugger/issues/227
     "test_to_server_and_to_client"
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
-    "test_tracing_other_threads"
+    "test_step_next_step_in_multi_threads"
     "test_tracing_basic"
+    "test_tracing_other_threads"
+    # subprocess.CalledProcessError
+    "test_find_main_thread_id"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    "test_case_handled_and_unhandled_exception_generator"
+    "test_case_stop_async_iteration_exception"
+    "test_case_unhandled_exception_generator"
+    "test_function_breakpoints_async"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_multiprocessing_simple"
     "test_evaluate_exception_trace"
@@ -75,5 +79,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fabioz/PyDev.Debugger";
     license = licenses.epl10;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "pydevd";
   };
 }

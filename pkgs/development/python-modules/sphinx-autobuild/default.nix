@@ -1,35 +1,57 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+
+# build-system
+, flit-core
+
+# dependencies
 , colorama
 , sphinx
-, livereload
+, starlette
+, uvicorn
+, watchfiles
+, websockets
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
-  version = "2021.3.14";
-  format = "setuptools";
+  version = "2024.04.16";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "de1ca3b66e271d2b5b5140c35034c89e47f263f2cd5db302c9217065f7443f05";
+  src = fetchFromGitHub {
+    owner = "sphinx-doc";
+    repo = "sphinx-autobuild";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5HgRqt2ZTGcQ6X2sZN0gRfahmwlqpDbae5gOnGa02L0=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-    sphinx
-    livereload
+  build-system = [
+    flit-core
   ];
 
-  # No tests included.
-  doCheck = false;
+  dependencies = [
+    colorama
+    sphinx
+    starlette
+    uvicorn
+    watchfiles
+    websockets
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sphinx_autobuild" ];
 
   meta = with lib; {
     description = "Rebuild Sphinx documentation on changes, with live-reload in the browser";
-    homepage = "https://github.com/executablebooks/sphinx-autobuild";
+    mainProgram = "sphinx-autobuild";
+    homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [holgerpeters];
   };

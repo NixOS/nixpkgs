@@ -192,7 +192,7 @@ stdenv.mkDerivation {
   passthru = {
     inherit modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-etag-compression nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sso nginx-status-page nginx-unix-socket;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;
@@ -200,6 +200,7 @@ stdenv.mkDerivation {
 
   meta = if meta != null then meta else with lib; {
     description = "A reverse proxy and lightweight webserver";
+    mainProgram = "nginx";
     homepage    = "http://nginx.org";
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;

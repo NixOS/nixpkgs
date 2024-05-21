@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Recon tool that allows searching shortened URLs";
+    mainProgram = "urlhunter";
     longDescription = ''
       urlhunter is a recon tool that allows searching on URLs that are
       exposed via shortener services such as bit.ly and goo.gl.

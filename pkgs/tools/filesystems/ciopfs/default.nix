@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.brain-dump.org/projects/ciopfs/";
     description = "A case-insensitive filesystem layered on top of any other filesystem";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

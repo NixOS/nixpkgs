@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, config, wrapGAppsHook, autoPatchelfHook
+{ lib, stdenv, fetchurl, config, wrapGAppsHook3, autoPatchelfHook
 , alsa-lib
 , curl
 , dbus-glib
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha256; };
 
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook patchelfUnstable ];
+  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook patchelfUnstable ];
   buildInputs = [
     gtk3
     adwaita-icon-theme
@@ -108,7 +108,7 @@ stdenv.mkDerivation {
     updateScript = import ./update.nix {
       inherit pname channel lib writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
       baseUrl =
-        if channel == "devedition"
+        if channel == "developer-edition"
           then "https://archive.mozilla.org/pub/devedition/releases/"
           else "https://archive.mozilla.org/pub/firefox/releases/";
     };

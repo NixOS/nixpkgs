@@ -12,6 +12,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "A frontend to easily manage connections to remote filesystems";
+    mainProgram = "gigolo";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };

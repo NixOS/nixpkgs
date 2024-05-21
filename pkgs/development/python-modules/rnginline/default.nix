@@ -2,6 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , poetry-core
+, pythonRelaxDepsHook
 , lxml
 , docopt-ng
 , typing-extensions
@@ -14,24 +15,28 @@
 buildPythonPackage rec {
   pname = "rnginline";
   version = "1.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JWqzs+OqOynIAWYVgGrZiuiCqObAgGe6rBt0DcP3U6E=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "docopt-ng"
+    "importlib-metadata"
+    "lxml"
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'importlib-metadata = "^6.6.0"' 'importlib-metadata = "^6.0.0"'
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = [
     docopt-ng
     lxml
     typing-extensions
@@ -49,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python library and command-line tool for loading multi-file RELAX NG schemas from arbitary URLs, and flattening them into a single RELAX NG schema";
     homepage = "https://github.com/h4l/rnginline";
+    changelog = "https://github.com/h4l/rnginline/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse ];
   };

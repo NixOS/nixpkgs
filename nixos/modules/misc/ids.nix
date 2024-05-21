@@ -19,7 +19,7 @@ in
 
     ids.uids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The user IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -27,7 +27,7 @@ in
 
     ids.gids = lib.mkOption {
       internal = true;
-      description = lib.mdDoc ''
+      description = ''
         The group IDs used in NixOS.
       '';
       type = types.attrsOf types.int;
@@ -313,7 +313,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       #monero = 287; # dynamically allocated as of 2021-05-08
@@ -623,7 +623,7 @@ in
       kanboard = 281;
       # pykms = 282; # DynamicUser = true
       kodi = 283;
-      restya-board = 284;
+      # restya-board = 284; # removed 2024-01-22
       mighttpd2 = 285;
       hass = 286;
       # monero = 287; # dynamically allocated as of 2021-05-08

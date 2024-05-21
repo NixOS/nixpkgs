@@ -1,21 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, SDL_compat, libX11, libXext }:
+{ lib
+, stdenv
+, fetchFromGitHub
+
+, SDL2
+
+, libX11
+, libXext
+
+, guiBackend ? "sdl"
+
+, enableSDL ? guiBackend == "sdl"
+, enableX11 ? guiBackend == "x11"
+}:
+
+assert lib.assertMsg (builtins.elem guiBackend ["sdl" "x11" "none"]) "Unsupported GUI backend";
+assert lib.assertMsg (!(enableSDL && enableX11)) "RVVM can have only one GUI backend at a time";
+assert lib.assertMsg (stdenv.isDarwin -> !enableX11) "macOS supports only SDL GUI backend";
 
 stdenv.mkDerivation rec {
   pname = "rvvm";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "LekKit";
     repo = "RVVM";
     rev = "v${version}";
-    sha256 = "sha256-1wAKijRYB0FGBe4cSHUynkO4ePVG4QvVIgSoWzNbqtE=";
+    sha256 = "sha256-5nSlKyWDAx0EeKFzzwP5+99XuJz9BHXEF1WNkRMLa9U=";
   };
 
-  buildInputs = if stdenv.isDarwin then [ SDL_compat ] else [ libX11 libXext ];
+  buildInputs = []
+    ++ lib.optionals enableSDL [ SDL2 ]
+    ++ lib.optionals enableX11 [ libX11 libXext ];
+
+  enableParallelBuilding = true;
 
   buildFlags = [ "all" "lib" ];
 
   makeFlags = [ "PREFIX=$(out)" ]
+    ++ lib.optional enableSDL "USE_SDL=2" # Use SDL2 instead of SDL1
+    ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0"
+
     # work around https://github.com/NixOS/nixpkgs/issues/19098
     ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "CFLAGS=-fno-lto";
 
@@ -24,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "The RISC-V Virtual Machine";
     license = with licenses; [ gpl3 /* or */ mpl20 ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kamillaova ];
     mainProgram = "rvvm";
   };
 }

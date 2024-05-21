@@ -21,11 +21,21 @@
 , gzip
 , fontconfig
 , freetype
+, libbsd
 , libpulseaudio
 , libGL
+, libdrm
+, libpng
 , libuuid
 , libX11
 , libxcb
+, libxkbcommon
+, xcbutilwm
+, xcbutilrenderutil
+, xcbutilkeysyms
+, xcbutilimage
+, xcbutilcursor
+, libxkbfile
 , libXcomposite
 , libXcursor
 , libXdamage
@@ -51,6 +61,7 @@
 , which
 , runCommand
 , xkeyboard_config
+, xorg
 , zlib
 , makeDesktopItem
 , tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
@@ -136,15 +147,27 @@ let
           alsa-lib
           dbus
           expat
+          libbsd
           libpulseaudio
           libuuid
           libX11
           libxcb
+          libxkbcommon
+          xcbutilwm
+          xcbutilrenderutil
+          xcbutilkeysyms
+          xcbutilimage
+          xcbutilcursor
+          xorg.libICE
+          xorg.libSM
+          libxkbfile
           libXcomposite
           libXcursor
           libXdamage
           libXfixes
           libGL
+          libdrm
+          libpng
           nspr
           nss_latest
           systemd
@@ -222,9 +245,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ alapshin msfjarvis ];
-        beta = [ alapshin msfjarvis ];
-        canary = [ alapshin msfjarvis ];
+        stable = [ alapshin ];
+        beta = [ alapshin ];
+        canary = [ alapshin ];
         dev = canary;
       }."${channel}";
       mainProgram = pname;

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchDebianPatch
-, autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook
+, autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config wrapGAppsHook autoconf
+    pkg-config wrapGAppsHook3 autoconf
   ];
 
   buildInputs = [

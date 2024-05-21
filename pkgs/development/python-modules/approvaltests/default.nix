@@ -5,6 +5,7 @@
 , buildPythonPackage
 , empty-files
 , fetchFromGitHub
+, mock
 , mrjob
 , numpy
 , pyperclip
@@ -14,35 +15,38 @@
 , pythonOlder
 , setuptools
 , testfixtures
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "10.2.0";
+  version = "11.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2NaqqgrHXJovoVExvbr0s86eRbcxy+DUrsdRH/vak3E=";
+    hash = "sha256-oG1TH9F8IYDZWLuL2TIesNuZQVzGQRqkGk502HTG+O8=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     allpairspy
     approval-utilities
     beautifulsoup4
     empty-files
+    mock
     mrjob
     pyperclip
     pytest
     testfixtures
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -52,8 +56,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_docstrings"
-    # Tests expects paths below ApprovalTests.Python directory
+    # Tests expect paths below ApprovalTests.Python directory
     "test_received_filename"
     "test_pytest_namer"
   ];
@@ -68,6 +71,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/approvals/ApprovalTests.Python";
     changelog = "https://github.com/approvals/ApprovalTests.Python/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib-networking
 , gobject-introspection
 , openconnect
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optional stdenv.isLinux glib-networking;
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection glib-networking ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection glib-networking ];
 
   propagatedBuildInputs = [
     requests
@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interactively authenticate to GlobalProtect VPNs that require SAML";
+    mainProgram = "gp-saml-gui";
     homepage = "https://github.com/dlenski/gp-saml-gui";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.pallix ];

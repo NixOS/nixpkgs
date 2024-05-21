@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "sugar over the Mock library to help test race conditions";
     homepage = "https://github.com/c-oreills/before_after";
-    maintainers = with maintainers; [ yuka ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Only;
   };
 }

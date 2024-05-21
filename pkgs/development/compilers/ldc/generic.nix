@@ -1,5 +1,5 @@
 { version, sha256 }:
-{ lib, stdenv, fetchurl, cmake, ninja, llvm_16, curl, tzdata
+{ lib, stdenv, fetchurl, cmake, ninja, llvm_17, curl, tzdata
 , libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, runCommand, targetPackages
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_16.dev makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_17.dev makeWrapper ninja unzip
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
@@ -130,7 +130,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ldc-developers/ldc";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE
     license = with licenses; [ bsd3 boost mit ncsa gpl2Plus ];
-    maintainers = with maintainers; [ ThomasMader lionello jtbx ];
+    mainProgram = "ldc2";
+    maintainers = with maintainers; [ lionello jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

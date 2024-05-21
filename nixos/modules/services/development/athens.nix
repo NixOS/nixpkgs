@@ -157,13 +157,13 @@ in
   };
 
   options.services.athens = {
-    enable = mkEnableOption (lib.mdDoc "Go module datastore and proxy");
+    enable = mkEnableOption "Go module datastore and proxy";
 
     package = mkOption {
       default = pkgs.athens;
       defaultText = literalExpression "pkgs.athens";
       example = "pkgs.athens";
-      description = lib.mdDoc "Which athens derivation to use";
+      description = "Which athens derivation to use";
       type = types.package;
     };
 
@@ -172,7 +172,7 @@ in
       default = pkgs.go;
       defaultText = literalExpression "pkgs.go";
       example = "pkgs.go_1_21";
-      description = lib.mdDoc ''
+      description = ''
         The Go package used by Athens at runtime.
 
         Athens primarily runs two Go commands:
@@ -183,14 +183,14 @@ in
 
     goEnv = mkOption {
       type = types.enum [ "development" "production" ];
-      description = lib.mdDoc "Specifies the type of environment to run. One of 'development' or 'production'.";
+      description = "Specifies the type of environment to run. One of 'development' or 'production'.";
       default = "development";
       example = "production";
     };
 
     goBinaryEnvVars = mkOption {
       type = types.attrs;
-      description = lib.mdDoc "Environment variables to pass to the Go binary.";
+      description = "Environment variables to pass to the Go binary.";
       example = ''
         { "GOPROXY" = "direct", "GODEBUG" = "true" }
       '';
@@ -199,14 +199,14 @@ in
 
     goGetWorkers = mkOption {
       type = types.int;
-      description = lib.mdDoc "Number of workers concurrently downloading modules.";
+      description = "Number of workers concurrently downloading modules.";
       default = 10;
       example = 32;
     };
 
     goGetDir = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Temporary directory that Athens will use to
         fetch modules from VCS prior to persisting
         them to a storage backend.
@@ -220,13 +220,13 @@ in
 
     protocolWorkers = mkOption {
       type = types.int;
-      description = lib.mdDoc "Number of workers concurrently serving protocol paths.";
+      description = "Number of workers concurrently serving protocol paths.";
       default = 30;
     };
 
     logLevel = mkOption {
       type = types.nullOr (types.enum [ "panic" "fatal" "error" "warning" "info" "debug" "trace" ]);
-      description = lib.mdDoc ''
+      description = ''
         Log level for Athens.
         Supports all logrus log levels (https://github.com/Sirupsen/logrus#level-logging)".
       '';
@@ -236,7 +236,7 @@ in
 
     cloudRuntime = mkOption {
       type = types.enum [ "GCP" "none" ];
-      description = lib.mdDoc ''
+      description = ''
         Specifies the Cloud Provider on which the Proxy/registry is running.
       '';
       default = "none";
@@ -245,20 +245,20 @@ in
 
     enablePprof = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Enable pprof endpoints.";
+      description = "Enable pprof endpoints.";
       default = false;
     };
 
     pprofPort = mkOption {
       type = types.port;
-      description = lib.mdDoc "Port number for pprof endpoints.";
+      description = "Port number for pprof endpoints.";
       default = 3301;
       example = 443;
     };
 
     filterFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''Filename for the include exclude filter.'';
+      description = ''Filename for the include exclude filter.'';
       default = null;
       example = literalExpression ''
         pkgs.writeText "filterFile" '''
@@ -271,34 +271,34 @@ in
 
     robotsFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''Provides /robots.txt for net crawlers.'';
+      description = ''Provides /robots.txt for net crawlers.'';
       default = null;
       example = literalExpression ''pkgs.writeText "robots.txt" "# my custom robots.txt ..."'';
     };
 
     timeout = mkOption {
       type = types.int;
-      description = lib.mdDoc "Timeout for external network calls in seconds.";
+      description = "Timeout for external network calls in seconds.";
       default = 300;
       example = 3;
     };
 
     storageType = mkOption {
       type = types.enum [ "memory" "disk" "mongo" "gcp" "minio" "s3" "azureblob" "external" ];
-      description = lib.mdDoc "Specifies the type of storage backend to use.";
+      description = "Specifies the type of storage backend to use.";
       default = "disk";
     };
 
     tlsCertFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc "Path to the TLS certificate file.";
+      description = "Path to the TLS certificate file.";
       default = null;
       example = "/etc/ssl/certs/athens.crt";
     };
 
     tlsKeyFile = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc "Path to the TLS key file.";
+      description = "Path to the TLS key file.";
       default = null;
       example = "/etc/ssl/certs/athens.key";
     };
@@ -306,7 +306,7 @@ in
     port = mkOption {
       type = types.port;
       default = 3000;
-      description = lib.mdDoc ''
+      description = ''
         Port number Athens listens on.
       '';
       example = 443;
@@ -314,7 +314,7 @@ in
 
     unixSocket = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the unix socket file.
         If set, Athens will listen on the unix socket instead of TCP socket.
       '';
@@ -324,7 +324,7 @@ in
 
     globalEndpoint = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Endpoint for a package registry in case of a proxy cache miss.
       '';
       default = "";
@@ -333,7 +333,7 @@ in
 
     basicAuthUser = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Username for basic auth.
       '';
       default = null;
@@ -342,7 +342,7 @@ in
 
     basicAuthPass = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Password for basic auth. Warning: this is stored in plain text in the config file.
       '';
       default = null;
@@ -351,7 +351,7 @@ in
 
     forceSSL = mkOption {
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Force SSL redirects for incoming requests.
       '';
       default = false;
@@ -359,7 +359,7 @@ in
 
     validatorHook = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Endpoint to validate modules against.
 
         Not used if empty.
@@ -370,7 +370,7 @@ in
 
     pathPrefix = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Sets basepath for all routes.
       '';
       default = null;
@@ -379,7 +379,7 @@ in
 
     netrcPath = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the .netrc file.
       '';
       default = null;
@@ -388,7 +388,7 @@ in
 
     githubToken = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         Creates .netrc file with the given token to be used for GitHub.
         Warning: this is stored in plain text in the config file.
       '';
@@ -398,7 +398,7 @@ in
 
     hgrcPath = mkOption {
       type = types.nullOr types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to the .hgrc file.
       '';
       default = null;
@@ -407,7 +407,7 @@ in
 
     traceExporter = mkOption {
       type = types.nullOr (types.enum [ "jaeger" "datadog" ]);
-      description = lib.mdDoc ''
+      description = ''
         Trace exporter to use.
       '';
       default = null;
@@ -415,7 +415,7 @@ in
 
     traceExporterURL = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         URL endpoint that traces will be sent to.
       '';
       default = null;
@@ -424,13 +424,13 @@ in
 
     statsExporter = mkOption {
       type = types.nullOr (types.enum [ "prometheus" ]);
-      description = lib.mdDoc "Stats exporter to use.";
+      description = "Stats exporter to use.";
       default = null;
     };
 
     sumDBs = mkOption {
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         List of fully qualified URLs that Athens will proxy
         that the go command can use a checksum verifier.
       '';
@@ -439,7 +439,7 @@ in
 
     noSumPatterns = mkOption {
       type = types.listOf types.str;
-      description = lib.mdDoc ''
+      description = ''
         List of patterns that Athens sum db proxy will return a 403 for.
       '';
       default = [ ];
@@ -448,7 +448,7 @@ in
 
     downloadMode = mkOption {
       type = types.oneOf [ (types.enum [ "sync" "async" "redirect" "async_redirect" "none" ]) (types.strMatching "^file:.*$|^custom:.*$") ];
-      description = lib.mdDoc ''
+      description = ''
         Defines how Athens behaves when a module@version
         is not found in storage. There are 7 options:
         1. "sync": download the module synchronously and
@@ -472,7 +472,7 @@ in
 
     networkMode = mkOption {
       type = types.enum [ "strict" "offline" "fallback" ];
-      description = lib.mdDoc ''
+      description = ''
         Configures how Athens will return the results
         of the /list endpoint as it can be assembled from both its own
         storage and the upstream VCS.
@@ -492,13 +492,13 @@ in
 
     downloadURL = mkOption {
       type = types.str;
-      description = lib.mdDoc "URL used if DownloadMode is set to redirect.";
+      description = "URL used if DownloadMode is set to redirect.";
       default = "https://proxy.golang.org";
     };
 
     singleFlightType = mkOption {
       type = types.enum [ "memory" "etcd" "redis" "redis-sentinel" "gcp" "azureblob" ];
-      description = lib.mdDoc ''
+      description = ''
         Determines what mechanism Athens uses to manage concurrency flowing into the Athens backend.
       '';
       default = "memory";
@@ -506,7 +506,7 @@ in
 
     indexType = mkOption {
       type = types.enum [ "none" "memory" "mysql" "postgres" ];
-      description = lib.mdDoc ''
+      description = ''
         Type of index backend Athens will use.
       '';
       default = "none";
@@ -514,7 +514,7 @@ in
 
     shutdownTimeout = mkOption {
       type = types.int;
-      description = lib.mdDoc ''
+      description = ''
         Number of seconds to wait for the server to shutdown gracefully.
       '';
       default = 60;
@@ -525,7 +525,7 @@ in
       etcd = {
         endpoints = mkOption {
           type = types.listOf types.str;
-          description = lib.mdDoc "URLs that determine all distributed etcd servers.";
+          description = "URLs that determine all distributed etcd servers.";
           default = [ ];
           example = [ "localhost:2379" ];
         };
@@ -533,13 +533,13 @@ in
       redis = {
         endpoint = mkOption {
           type = types.str;
-          description = lib.mdDoc "URL of the redis server.";
+          description = "URL of the redis server.";
           default = "";
           example = "localhost:6379";
         };
         password = mkOption {
           type = types.str;
-          description = lib.mdDoc "Password for the redis server. Warning: this is stored in plain text in the config file.";
+          description = "Password for the redis server. Warning: this is stored in plain text in the config file.";
           default = "";
           example = "swordfish";
         };
@@ -547,19 +547,19 @@ in
         lockConfig = {
           ttl = mkOption {
             type = types.int;
-            description = lib.mdDoc "TTL for the lock in seconds.";
+            description = "TTL for the lock in seconds.";
             default = 900;
             example = 1;
           };
           timeout = mkOption {
             type = types.int;
-            description = lib.mdDoc "Timeout for the lock in seconds.";
+            description = "Timeout for the lock in seconds.";
             default = 15;
             example = 1;
           };
           maxRetries = mkOption {
             type = types.int;
-            description = lib.mdDoc "Maximum number of retries for the lock.";
+            description = "Maximum number of retries for the lock.";
             default = 10;
             example = 1;
           };
@@ -569,19 +569,19 @@ in
       redisSentinel = {
         endpoints = mkOption {
           type = types.listOf types.str;
-          description = lib.mdDoc "URLs that determine all distributed redis servers.";
+          description = "URLs that determine all distributed redis servers.";
           default = [ ];
           example = [ "localhost:26379" ];
         };
         masterName = mkOption {
           type = types.str;
-          description = lib.mdDoc "Name of the sentinel master server.";
+          description = "Name of the sentinel master server.";
           default = "";
           example = "redis-1";
         };
         sentinelPassword = mkOption {
           type = types.str;
-          description = lib.mdDoc "Password for the sentinel server. Warning: this is stored in plain text in the config file.";
+          description = "Password for the sentinel server. Warning: this is stored in plain text in the config file.";
           default = "";
           example = "swordfish";
         };
@@ -589,19 +589,19 @@ in
         lockConfig = {
           ttl = mkOption {
             type = types.int;
-            description = lib.mdDoc "TTL for the lock in seconds.";
+            description = "TTL for the lock in seconds.";
             default = 900;
             example = 1;
           };
           timeout = mkOption {
             type = types.int;
-            description = lib.mdDoc "Timeout for the lock in seconds.";
+            description = "Timeout for the lock in seconds.";
             default = 15;
             example = 1;
           };
           maxRetries = mkOption {
             type = types.int;
-            description = lib.mdDoc "Maximum number of retries for the lock.";
+            description = "Maximum number of retries for the lock.";
             default = 10;
             example = 1;
           };
@@ -613,7 +613,7 @@ in
       cdn = {
         endpoint = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "hostname of the CDN server.";
+          description = "hostname of the CDN server.";
           example = "cdn.example.com";
           default = null;
         };
@@ -622,7 +622,7 @@ in
       disk = {
         rootPath = mkOption {
           type = types.nullOr types.path;
-          description = lib.mdDoc "Athens disk root folder.";
+          description = "Athens disk root folder.";
           default = "/var/lib/athens";
         };
       };
@@ -630,19 +630,19 @@ in
       gcp = {
         projectID = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "GCP project ID.";
+          description = "GCP project ID.";
           example = "my-project";
           default = null;
         };
         bucket = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "GCP backend storage bucket.";
+          description = "GCP backend storage bucket.";
           example = "my-bucket";
           default = null;
         };
         jsonKey = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Base64 encoded GCP service account key. Warning: this is stored in plain text in the config file.";
+          description = "Base64 encoded GCP service account key. Warning: this is stored in plain text in the config file.";
           default = null;
         };
       };
@@ -650,36 +650,36 @@ in
       minio = {
         endpoint = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Endpoint of the minio storage backend.";
+          description = "Endpoint of the minio storage backend.";
           example = "minio.example.com:9001";
           default = null;
         };
         key = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Access key id for the minio storage backend.";
+          description = "Access key id for the minio storage backend.";
           example = "minio";
           default = null;
         };
         secret = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Secret key for the minio storage backend. Warning: this is stored in plain text in the config file.";
+          description = "Secret key for the minio storage backend. Warning: this is stored in plain text in the config file.";
           example = "minio123";
           default = null;
         };
         enableSSL = mkOption {
           type = types.bool;
-          description = lib.mdDoc "Enable SSL for the minio storage backend.";
+          description = "Enable SSL for the minio storage backend.";
           default = false;
         };
         bucket = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Bucket name for the minio storage backend.";
+          description = "Bucket name for the minio storage backend.";
           example = "gomods";
           default = null;
         };
         region = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Region for the minio storage backend.";
+          description = "Region for the minio storage backend.";
           example = "us-east-1";
           default = null;
         };
@@ -688,25 +688,25 @@ in
       mongo = {
         url = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "URL of the mongo database.";
+          description = "URL of the mongo database.";
           example = "mongodb://localhost:27017";
           default = null;
         };
         defaultDBName = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Name of the mongo database.";
+          description = "Name of the mongo database.";
           example = "athens";
           default = null;
         };
         certPath = mkOption {
           type = types.nullOr types.path;
-          description = lib.mdDoc "Path to the certificate file for the mongo database.";
+          description = "Path to the certificate file for the mongo database.";
           example = "/etc/ssl/mongo.pem";
           default = null;
         };
         insecure = mkOption {
           type = types.bool;
-          description = lib.mdDoc "Allow insecure connections to the mongo database.";
+          description = "Allow insecure connections to the mongo database.";
           default = false;
         };
       };
@@ -714,55 +714,55 @@ in
       s3 = {
         region = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Region of the S3 storage backend.";
+          description = "Region of the S3 storage backend.";
           example = "eu-west-3";
           default = null;
         };
         key = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Access key id for the S3 storage backend.";
+          description = "Access key id for the S3 storage backend.";
           example = "minio";
           default = null;
         };
         secret = mkOption {
           type = types.str;
-          description = lib.mdDoc "Secret key for the S3 storage backend. Warning: this is stored in plain text in the config file.";
+          description = "Secret key for the S3 storage backend. Warning: this is stored in plain text in the config file.";
           default = "";
         };
         token = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Token for the S3 storage backend. Warning: this is stored in plain text in the config file.";
+          description = "Token for the S3 storage backend. Warning: this is stored in plain text in the config file.";
           default = null;
         };
         bucket = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Bucket name for the S3 storage backend.";
+          description = "Bucket name for the S3 storage backend.";
           example = "gomods";
           default = null;
         };
         forcePathStyle = mkOption {
           type = types.bool;
-          description = lib.mdDoc "Force path style for the S3 storage backend.";
+          description = "Force path style for the S3 storage backend.";
           default = false;
         };
         useDefaultConfiguration = mkOption {
           type = types.bool;
-          description = lib.mdDoc "Use default configuration for the S3 storage backend.";
+          description = "Use default configuration for the S3 storage backend.";
           default = false;
         };
         credentialsEndpoint = mkOption {
           type = types.str;
-          description = lib.mdDoc "Credentials endpoint for the S3 storage backend.";
+          description = "Credentials endpoint for the S3 storage backend.";
           default = "";
         };
         awsContainerCredentialsRelativeURI = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Container relative url (used by fargate).";
+          description = "Container relative url (used by fargate).";
           default = null;
         };
         endpoint = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Endpoint for the S3 storage backend.";
+          description = "Endpoint for the S3 storage backend.";
           default = null;
         };
       };
@@ -770,17 +770,17 @@ in
       azureblob = {
         accountName = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Account name for the Azure Blob storage backend.";
+          description = "Account name for the Azure Blob storage backend.";
           default = null;
         };
         accountKey = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Account key for the Azure Blob storage backend. Warning: this is stored in plain text in the config file.";
+          description = "Account key for the Azure Blob storage backend. Warning: this is stored in plain text in the config file.";
           default = null;
         };
         containerName = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Container name for the Azure Blob storage backend.";
+          description = "Container name for the Azure Blob storage backend.";
           default = null;
         };
       };
@@ -788,7 +788,7 @@ in
       external = {
         url = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "URL of the backend storage layer.";
+          description = "URL of the backend storage layer.";
           example = "https://athens.example.com";
           default = null;
         };
@@ -799,43 +799,43 @@ in
       mysql = {
         protocol = mkOption {
           type = types.str;
-          description = lib.mdDoc "Protocol for the MySQL database.";
+          description = "Protocol for the MySQL database.";
           default = "tcp";
         };
         host = mkOption {
           type = types.str;
-          description = lib.mdDoc "Host for the MySQL database.";
+          description = "Host for the MySQL database.";
           default = "localhost";
         };
         port = mkOption {
           type = types.int;
-          description = lib.mdDoc "Port for the MySQL database.";
+          description = "Port for the MySQL database.";
           default = 3306;
         };
         user = mkOption {
           type = types.str;
-          description = lib.mdDoc "User for the MySQL database.";
+          description = "User for the MySQL database.";
           default = "root";
         };
         password = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Password for the MySQL database. Warning: this is stored in plain text in the config file.";
+          description = "Password for the MySQL database. Warning: this is stored in plain text in the config file.";
           default = null;
         };
         database = mkOption {
           type = types.str;
-          description = lib.mdDoc "Database name for the MySQL database.";
+          description = "Database name for the MySQL database.";
           default = "athens";
         };
         params = {
           parseTime = mkOption {
             type = types.nullOr types.str;
-            description = lib.mdDoc "Parse time for the MySQL database.";
+            description = "Parse time for the MySQL database.";
             default = "true";
           };
           timeout = mkOption {
             type = types.nullOr types.str;
-            description = lib.mdDoc "Timeout for the MySQL database.";
+            description = "Timeout for the MySQL database.";
             default = "30s";
           };
         };
@@ -844,38 +844,38 @@ in
       postgres = {
         host = mkOption {
           type = types.str;
-          description = lib.mdDoc "Host for the Postgres database.";
+          description = "Host for the Postgres database.";
           default = "localhost";
         };
         port = mkOption {
           type = types.int;
-          description = lib.mdDoc "Port for the Postgres database.";
+          description = "Port for the Postgres database.";
           default = 5432;
         };
         user = mkOption {
           type = types.str;
-          description = lib.mdDoc "User for the Postgres database.";
+          description = "User for the Postgres database.";
           default = "postgres";
         };
         password = mkOption {
           type = types.nullOr types.str;
-          description = lib.mdDoc "Password for the Postgres database. Warning: this is stored in plain text in the config file.";
+          description = "Password for the Postgres database. Warning: this is stored in plain text in the config file.";
           default = null;
         };
         database = mkOption {
           type = types.str;
-          description = lib.mdDoc "Database name for the Postgres database.";
+          description = "Database name for the Postgres database.";
           default = "athens";
         };
         params = {
           connect_timeout = mkOption {
             type = types.nullOr types.str;
-            description = lib.mdDoc "Connect timeout for the Postgres database.";
+            description = "Connect timeout for the Postgres database.";
             default = "30s";
           };
           sslmode = mkOption {
             type = types.nullOr types.str;
-            description = lib.mdDoc "SSL mode for the Postgres database.";
+            description = "SSL mode for the Postgres database.";
             default = "disable";
           };
         };
@@ -884,7 +884,7 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      description = lib.mdDoc ''
+      description = ''
         Extra configuration options for the athens config file.
       '';
       default = { };

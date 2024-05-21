@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.19.0";
+  version = "4.21.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bh51aawTvoE5st0sIaVdNQBm7j+A3wbGCLOYzcbzDo8=";
+    hash = "sha256-hXJ8ACefX6a+2+YjjSqmQDvt2LSGSrESB9B988wbLuU=";
   };
 
   postPatch = ''
@@ -92,6 +92,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An implementation of JSON Schema validation";
+    mainProgram = "jsonschema";
     homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

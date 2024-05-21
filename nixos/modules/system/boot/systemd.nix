@@ -47,6 +47,9 @@ let
       "rescue.target"
       "rescue.service"
 
+      # systemd-debug-generator
+      "debug-shell.service"
+
       # Udev.
       "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
@@ -97,6 +100,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      ] ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service") ++ [
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -428,7 +432,13 @@ in
 
   config = {
 
-    warnings = concatLists (
+    warnings = let
+      mkOneNetOnlineWarn = typeStr: name: def: lib.optional
+        (lib.elem "network-online.target" def.after && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo)))
+        "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
+      mkNetOnlineWarns = typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
+      mkMountNetOnlineWarns = typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
+    in concatLists (
       mapAttrsToList
         (name: service:
           let
@@ -447,6 +457,29 @@ in
                 "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
               )
             ]
+        )
+        cfg.services
+    )
+    ++ (mkNetOnlineWarns "target" cfg.targets)
+    ++ (mkNetOnlineWarns "service" cfg.services)
+    ++ (mkNetOnlineWarns "socket" cfg.sockets)
+    ++ (mkNetOnlineWarns "timer" cfg.timers)
+    ++ (mkNetOnlineWarns "path" cfg.paths)
+    ++ (mkMountNetOnlineWarns "mount" cfg.mounts)
+    ++ (mkMountNetOnlineWarns "automount" cfg.automounts)
+    ++ (mkNetOnlineWarns "slice" cfg.slices);
+
+    assertions = concatLists (
+      mapAttrsToList
+        (name: service:
+          map (message: {
+            assertion = false;
+            inherit message;
+          }) (concatLists [
+            (optional ((builtins.elem "network-interfaces.target" service.after) || (builtins.elem "network-interfaces.target" service.wants))
+              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
+            )
+          ])
         )
         cfg.services
     );
@@ -554,19 +587,25 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
+    # This target only exists so that services ordered before sysinit.target
+    # are restarted in the correct order, notably BEFORE the other services,
+    # when switching configurations.
+    systemd.targets.sysinit-reactivation = {
+      description = "Reactivate sysinit units";
+    };
+
     systemd.units =
-         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
-      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+      let
+        withName = cfgToUnit: cfg: lib.nameValuePair cfg.name (cfgToUnit cfg);
+      in
+         mapAttrs' (_: withName pathToUnit) cfg.paths
+      // mapAttrs' (_: withName serviceToUnit) cfg.services
+      // mapAttrs' (_: withName sliceToUnit) cfg.slices
+      // mapAttrs' (_: withName socketToUnit) cfg.sockets
+      // mapAttrs' (_: withName targetToUnit) cfg.targets
+      // mapAttrs' (_: withName timerToUnit) cfg.timers
+      // listToAttrs (map (withName mountToUnit) cfg.mounts)
+      // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
       # Environment of PID 1
       systemd.managerEnvironment = {
@@ -631,7 +670,6 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

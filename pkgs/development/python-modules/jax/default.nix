@@ -1,6 +1,7 @@
 { lib
 , blas
 , buildPythonPackage
+, callPackage
 , setuptools
 , importlib-metadata
 , fetchFromGitHub
@@ -28,7 +29,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.23";
+  version = "0.4.28";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,8 +38,8 @@ buildPythonPackage rec {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-PDa3yVH/sszGbWkVkJ+19FdOr3oqdYk+OdbeUTMTDuU=";
+    rev = "refs/tags/jax-v${version}";
+    hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +81,14 @@ buildPythonPackage rec {
     "tests/"
   ];
 
+  # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
+  # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
+  # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
+  # NOTE: this doesn't seem to be an issue on linux
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
+  '';
+
   disabledTests = [
     # Exceeds tolerance when the machine is busy
     "test_custom_linear_solve_aux"
@@ -89,6 +98,9 @@ buildPythonPackage rec {
     "testKde3"
     "testKde5"
     "testKde6"
+    # Invokes python manually in a subprocess, which does not have the correct dependencies
+    # ImportError: This version of jax requires jaxlib version >= 0.4.19.
+    "test_no_log_spam"
   ] ++ lib.optionals usingMKL [
     # See
     #  * https://github.com/google/jax/issues/9705
@@ -122,6 +134,26 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jax" ];
+
+  # Test CUDA-enabled jax and jaxlib. Running CUDA-enabled tests is not
+  # currently feasible within the nix build environment so we have to maintain
+  # this script separately. See https://github.com/NixOS/nixpkgs/pull/256230
+  # for a possible remedy to this situation.
+  #
+  # Run these tests with eg
+  #
+  #   NIXPKGS_ALLOW_UNFREE=1 nixglhost -- nix run --impure .#python3Packages.jax.passthru.tests.test_cuda_jaxlibBin
+  passthru.tests = {
+    test_cuda_jaxlibSource = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib.override { cudaSupport = true; };
+    };
+    test_cuda_jaxlibBin = callPackage ./test-cuda.nix {
+      jaxlib = jaxlib-bin.override { cudaSupport = true; };
+    };
+  };
+
+  # updater fails to pick the correct branch
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";

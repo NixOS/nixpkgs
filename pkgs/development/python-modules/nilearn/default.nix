@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.10.2";
+  version = "0.10.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A+9Npy0a6HsuPyi3cdx+BUZKoXliblfDAFlWJahlQnM=";
+    hash = "sha256-lFC9Vqd22ZezJPRd0Yv5bom9jYAWCXT8x1kzP7rqNcI=";
   };
 
   nativeBuildInputs = [ hatch-vcs ];

@@ -33,8 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-dependency
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
   '';
@@ -50,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fix common misspellings in source code";
+    mainProgram = "codespell";
     homepage = "https://github.com/codespell-project/codespell";
     license = with licenses; [ gpl2Only cc-by-sa-30 ];
     maintainers = with maintainers; [ johnazoidberg SuperSandro2000 ];

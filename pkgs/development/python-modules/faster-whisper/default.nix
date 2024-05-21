@@ -1,6 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonRelaxDepsHook
+
+# build-system
+, setuptools
 
 # dependencies
 , av
@@ -15,17 +19,26 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "guillaumekln";
+    owner = "SYSTRAN";
     repo = "faster-whisper";
-    rev = "refs/tags/${version}";
-    hash = "sha256-qcpPQv5WoUkT92/TZ+MMq452FgPNcm3ZZ+ZNc0btOGE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-O2RRwb+omgSpfckHh3oPu454g2ULT4gyolrg5olHcRc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "tokenizers"
+  ];
+
+  dependencies = [
     av
     ctranslate2
     huggingface-hub
@@ -49,9 +62,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/guillaumekln/faster-whisper/releases/tag/${version}";
+    changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/v${version}";
     description = "Faster Whisper transcription with CTranslate2";
-    homepage = "https://github.com/guillaumekln/faster-whisper";
+    homepage = "https://github.com/SYSTRAN/faster-whisper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

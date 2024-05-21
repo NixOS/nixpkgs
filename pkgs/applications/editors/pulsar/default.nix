@@ -1,8 +1,9 @@
 { lib
 , stdenv
 , git
+, git-lfs
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , alsa-lib
 , at-spi2-atk
 , cairo
@@ -33,13 +34,13 @@
 
 let
   pname = "pulsar";
-  version = "1.109.0";
+  version = "1.114.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-pIm3mI1YdfapxXgIciSHtI4LeqMw5RdYTnH+eHUQ4Yo=";
+    x86_64-linux.hash = "sha256-O//dowoMgQfS3hq088IKr5aJd5St9zpT/ypfuswnyv0=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-KIY/qzfl7CU0YwIgQlNHoAMhLfrTbQe7ZZvzdkUVw+M=";
+    aarch64-linux.hash = "sha256-EzCTB1Ib9cTbslEdXPsS5gehHr1qd5v4iZgOqpxhUmA=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     asar
   ];
@@ -137,16 +138,36 @@ stdenv.mkDerivation rec {
       --set-rpath "${newLibpath}" \
       $opt/resources/app/ppm/bin/node
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $opt/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+      $opt/resources/app.asar.unpacked/node_modules/symbol-provider-ctags/vendor/ctags-linux
 
-  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # Replace the bundled git with the one from nixpkgs
     dugite=$opt/resources/app.asar.unpacked/node_modules/dugite
     rm -f $dugite/git/bin/git
     ln -s ${git}/bin/git $dugite/git/bin/git
-    rm -f $dugite/git/libexec/git-core/git
-    ln -s ${git}/bin/git $dugite/git/libexec/git-core/git
 
+    # Not only do we need to replace the git binary itself, we also need to replace
+    # all the symlinks in dugite/git/libexec/git-core.
+    for file in "$dugite/git/libexec/git-core"/*; do
+      if [ -x "$file" ] && file "$file" | grep -q "ELF"; then
+          # Remove ELF executable
+          rm "$file"
+
+          # Get the corresponding filename in nixpkgs's git
+          filename=$(basename "$file")
+          git_executable="${git}/libexec/git-core/$filename"
+
+          # Create symlink to $git_executable
+          ln -s "$git_executable" "$file"
+
+          echo "Replaced $file with symlink to $git_executable"
+        fi
+    done
+
+    # Was symlinked in previous loop, but actually, nixpkgs has a separate package for git-lfs
+    # Unlink to avoid a "File exists" error and relink correctly
+    unlink $dugite/git/libexec/git-core/git-lfs
+    ln -s ${git-lfs}/bin/git-lfs $dugite/git/libexec/git-core/git-lfs
+  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     # We have to patch a prebuilt binary in the asar archive
     # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
 
@@ -208,7 +229,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ colamaroro ];
+    maintainers = with maintainers; [ bryango ];
     knownVulnerabilities = [
       "CVE-2023-5217"
       "CVE-2022-21718"

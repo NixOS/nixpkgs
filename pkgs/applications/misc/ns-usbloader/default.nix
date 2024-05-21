@@ -4,7 +4,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , gvfs
 , maven
 , jre
@@ -42,7 +42,7 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     gvfs
   ];
 
@@ -100,5 +100,6 @@ maven.buildMavenPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ soupglasses ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "ns-usbloader";
   };
 }

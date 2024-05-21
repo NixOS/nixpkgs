@@ -5,6 +5,7 @@
 , pillow
 , pytestCheckHook
 , python-dateutil
+, setuptools
 , text-unidecode
 , ukpostcodeparser
 , validators
@@ -12,14 +13,18 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "19.6.1";
-  format = "setuptools";
+  version = "24.11.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Faker";
     inherit version;
-    hash = "sha256-XWt4gLO+pwgHXd+Rk4QkRT8HBTpZ+PoEU8GHDfb/MpI=";
+    hash = "sha256-NLlHWBwrztNAw5s1+J2/rE81aTLP/4/ok73oVJA/Dm4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -42,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for generating fake user data";
+    mainProgram = "faker";
     homepage = "http://faker.rtfd.org";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];

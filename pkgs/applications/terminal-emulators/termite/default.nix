@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook3, nixosTests }:
 
 let
 
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ vte-ng gtk3 ncurses pcre2 ];
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config ];
+  nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
 
   outputs = [ "out" "terminfo" ];
 

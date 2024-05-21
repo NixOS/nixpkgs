@@ -5,7 +5,7 @@
 , mock
 , pkgs
 , pyahocorasick
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , requests
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytestCheckHook
+    pytest7CheckHook
     responses
     unidiff
     pkgs.gitMinimal
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     description = "An enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

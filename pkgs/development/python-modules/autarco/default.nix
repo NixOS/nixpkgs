@@ -3,35 +3,33 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, mashumaro
+, orjson
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
+, syrupy
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "0.2.0";
-  format = "pyproject";
+  version = "0.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-autarco";
-    rev = "v${version}";
-    hash = "sha256-3f6N4b6WZPAUUQTuGeb20q0f7ZqDR+O24QRze5RpRlw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IBf6Dw2Yf7m+5bQ72K0kPxGdtpl8JowQ9IO3gWS3Vso=";
   };
 
-  patches = [
-    # https://github.com/klaasnicolaas/python-autarco/pull/265
-    (fetchpatch {
-      name = "remove-setuptools-dependency.patch";
-      url = "https://github.com/klaasnicolaas/python-autarco/commit/bf40e8a4f64cd9c9cf72930260895537ea5b2adc.patch";
-      hash = "sha256-Fgijy7sd67LUIqh3qjQjyothnjdW7Zcil/bQSuVsBR8=";
-    })
+  pythonRelaxDeps = [
+    "orjson"
   ];
 
   postPatch = ''
@@ -43,10 +41,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     aiohttp
+    mashumaro
+    orjson
     yarl
   ];
 
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [
@@ -65,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for the Autarco Inverter";
     homepage = "https://github.com/klaasnicolaas/python-autarco";
+    changelog = "https://github.com/klaasnicolaas/python-autarco/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

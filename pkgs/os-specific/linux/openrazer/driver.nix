@@ -45,6 +45,7 @@ stdenv.mkDerivation (common // {
 
   meta = common.meta // {
     description = "An entirely open source Linux driver that allows you to manage your Razer peripherals on GNU/Linux";
+    mainProgram = "razer_mount";
     broken = kernel.kernelOlder "4.19";
   };
 })

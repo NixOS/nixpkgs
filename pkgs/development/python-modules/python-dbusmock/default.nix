@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nose
 , dbus
+, gobject-introspection
 , dbus-python
 , pygobject3
 , bluez
@@ -20,17 +21,15 @@ let
   '';
 in buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.29.1";
+  version = "0.31.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sfvVLPTSTXjwyB0a2NyDIONv01FXZ40nHZwwo3oqI90=";
+    hash = "sha256-DdV78o089Jkc7mSsGvlJgVpv8kPpMILo7lC6EbLxkxg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
@@ -42,6 +41,7 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     dbus
+    gobject-introspection
     pygobject3
     bluez
     pbap-client

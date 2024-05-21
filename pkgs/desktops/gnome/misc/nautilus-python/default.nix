@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus-python";
-  version = "4.0";
+  version = "4.0.1";
 
   outputs = [ "out" "dev" "doc" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus-python/${lib.versions.majorMinor version}/nautilus-python-${version}.tar.xz";
-    sha256 = "FyQ9Yut9fYOalGGrjQcBaIgFxxYaZwXmFBOljsJoKBo=";
+    hash = "sha256-/EnBBPsyoK0ZWmawE2eEzRnRDYs+jVnV7n9z6PlOko8=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Python bindings for the Nautilus Extension API";
-    homepage = "https://wiki.gnome.org/Projects/NautilusPython";
+    homepage = "https://gitlab.gnome.org/GNOME/nautilus-python";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

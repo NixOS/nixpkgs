@@ -19,18 +19,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libdeflate isa-l ];
 
-  makeFlags = [ "CC=cc" ];
+  makeFlags = [
+    "CC:=$(CC)"
+    "BINDIR=$(out)/bin"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 -t $out/bin seqtk
-
-    runHook postInstall
+  preInstall = ''
+    mkdir -p "$out/bin"
   '';
 
   meta = with lib; {
     description = "Toolkit for processing sequences in FASTA/Q formats";
+    mainProgram = "seqtk";
     license = licenses.mit;
     homepage = "https://github.com/lh3/seqtk";
     platforms = platforms.all;

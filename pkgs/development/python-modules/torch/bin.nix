@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, autoAddDriverRunpath
 , fetchurl
 , python
 , pythonAtLeast
@@ -24,7 +25,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.1.2";
+  version = "2.3.0";
 in buildPythonPackage {
   inherit version;
 
@@ -33,20 +34,31 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
+  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
   buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
     # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
     # libnvToolsExt-$hash.so.1
     cuda_nvtx
+
+    cuda_cudart
+    cuda_cupti
+    cuda_nvrtc
+    cudnn
+    libcublas
+    libcufft
+    libcurand
+    libcusolver
+    libcusparse
+    nccl
   ]);
 
   autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.isLinux [
@@ -79,18 +91,6 @@ in buildPythonPackage {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
-
-    patchelf $out/${python.sitePackages}/torch/lib/libcudnn.so.8 --add-needed libcudnn_cnn_infer.so.8
-
-    pushd $out/${python.sitePackages}/torch/lib || exit 1
-      for LIBNVRTC in ./libnvrtc*
-      do
-        case "$LIBNVRTC" in
-          ./libnvrtc-builtins*) true;;
-          ./libnvrtc*) patchelf "$LIBNVRTC" --add-needed libnvrtc-builtins* ;;
-        esac
-      done
-    popd || exit 1
   '';
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
@@ -106,10 +106,10 @@ in buildPythonPackage {
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     # torch's license is BSD3.
-    # torch-bin includes CUDA and MKL binaries, therefore unfreeRedistributable is set.
+    # torch-bin used to vendor CUDA. It still links against CUDA and MKL.
     license = with licenses; [ bsd3 issl unfreeRedistributable ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
     hydraPlatforms = []; # output size 3.2G on 1.11.0
     maintainers = with maintainers; [ junjihashimoto ];
   };

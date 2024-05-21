@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "geometric";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "leeping";
     repo = "geomeTRIC";
-    rev = version;
-    hash = "sha256-3d4z1n8+e0HgdeKLNSsHLb3XHOk09uy+gP9AwNvNITE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DmrKLVQrPQDzTMxqEImnvRr3Wb2R3+hxtDVCN9XUcFM=";
   };
 
   patches = [ (fetchpatch {
@@ -42,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Geometry optimization code for molecular structures";
+    mainProgram = "geometric-optimize";
     homepage = "https://github.com/leeping/geomeTRIC";
     license = [ licenses.bsd3 ];
     maintainers = [ maintainers.markuskowa ];

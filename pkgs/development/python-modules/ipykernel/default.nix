@@ -18,18 +18,21 @@
 , pyzmq
 , tornado
 , traitlets
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "6.28.0";
+  version = "6.29.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-acEUA9Jt5p3wIiWRb5FrN+pLmvQX2gqMgn+EMo2I5fM=";
+    hash = "sha256-PUQHAGD5R1rCCSt2ASP63xBdLiSTwkhItmkafE9Cr1w=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
@@ -63,6 +66,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
+    inherit sage;
   };
 
   meta = {
@@ -70,6 +74,6 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ] ++ lib.teams.jupyter.members;
+    maintainers = lib.teams.jupyter.members;
   };
 }

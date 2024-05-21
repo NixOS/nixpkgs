@@ -20,7 +20,7 @@ in {
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Extra flags passed to llama-cpp-server.";
-        example = ["-c" "4096" "-ngl" "32" "--numa"];
+        example = ["-c" "4096" "-ngl" "32" "--numa" "numactl"];
         default = [];
       };
 
@@ -56,7 +56,7 @@ in {
       serviceConfig = {
         Type = "idle";
         KillSignal = "SIGINT";
-        ExecStart = "${cfg.package}/bin/llama-cpp-server --log-disable --host ${cfg.host} --port ${builtins.toString cfg.port} -m ${cfg.model} ${utils.escapeSystemdExecArgs cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/llama-server --log-disable --host ${cfg.host} --port ${builtins.toString cfg.port} -m ${cfg.model} ${utils.escapeSystemdExecArgs cfg.extraFlags}";
         Restart = "on-failure";
         RestartSec = 300;
 
@@ -92,7 +92,6 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-          "~@resources"
         ];
         SystemCallErrorNumber = "EPERM";
         ProtectProc = "invisible";

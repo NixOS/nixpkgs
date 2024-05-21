@@ -3,7 +3,7 @@
 , fetchPypi
 , param
 , pytestCheckHook
-, pythonOlder
+, pythonAtLeast
 , pyyaml
 , requests
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ClI for Python common tasks for users";
+    mainProgram = "pyct";
     homepage = "https://github.com/pyviz/pyct";
     changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${version}";
     license = licenses.bsd3;

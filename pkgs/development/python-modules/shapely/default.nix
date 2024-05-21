@@ -1,31 +1,32 @@
 { lib
 , stdenv
 , buildPythonPackage
-, pythonOlder
 , fetchPypi
-, cython
+, pytestCheckHook
+, pythonOlder
+
+, cython_0
 , geos
+, numpy
 , oldest-supported-numpy
 , setuptools
 , wheel
-, numpy
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.2";
-  format = "pyproject";
+  version = "2.0.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FxPMBMFxuv/Fslm6hTHFiswqMBcHt/Ah2IoV7QkGSec=";
+    hash = "sha256-Xcc2En+scACbjTCaDut08+CJeeUwz3AX8vUH72Lmz7g=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
     geos # for geos-config
     oldest-supported-numpy
     setuptools

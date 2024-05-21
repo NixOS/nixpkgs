@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , atk
 , bzip2
 , cairo
@@ -31,6 +31,7 @@
 , darwin
 , alsa-lib
 , makeDesktopItem
+, copyDesktopItems
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -78,13 +79,15 @@ rustPlatform.buildRustPackage rec {
       comment = meta.description;
       genericName = "Remote Desktop";
       categories = [ "Network" ];
+      mimeTypes = [ "x-scheme-handler/rustdesk" ];
     })
   ];
 
   nativeBuildInputs = [
+    copyDesktopItems
     pkg-config
     rustPlatform.bindgenHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildFeatures = lib.optionals stdenv.isLinux [ "linux-pkg-config" ];

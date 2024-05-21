@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 
 # runtime
@@ -37,13 +38,13 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-utils";
-  version = "0.41.1";
+  version = "0.41.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "SQLAlchemy-Utils";
-    hash = "sha256-ohgb/wHuuER544Vx0sBxjrUgQvmv2MGU0NAod+hLfXQ=";
+    hash = "sha256-vFmcjDszGeU85sXDxHESC9Ml0AcftvOKEOkk49B7mZA=";
   };
 
   patches = [
@@ -76,7 +77,6 @@ buildPythonPackage rec {
     docutils
     flexmock
     psycopg2
-    psycopg2cffi
     pg8000
     pytz
     python-dateutil
@@ -84,6 +84,10 @@ buildPythonPackage rec {
     pyodbc
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies)
+  ++ lib.optionals (pythonOlder "3.12") [
+    # requires distutils, which were removed in 3.12
+    psycopg2cffi
+  ]
   ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
   ];

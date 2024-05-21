@@ -10,6 +10,7 @@
 , packaging
 , psutil
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , setuptools
 , setuptools-scm
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2023.12.0";
+  version = "2024.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-Zv31BTzY31eXkU7wqa+h33qGrH+OTzKEj6L7Ei/aizk=";
+    hash = "sha256-9W5BpBQHw1ZXCOWiFPeIlMns/Yys1gtdwQ4Lhd7qjK8=";
   };
 
   postPatch = ''
@@ -42,13 +43,18 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "dask"
+  ];
+
+  dependencies = [
     click
     cloudpickle
     dask

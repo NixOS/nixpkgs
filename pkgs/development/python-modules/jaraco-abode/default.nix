@@ -3,7 +3,6 @@
 , bx-py-utils
 , colorlog
 , fetchFromGitHub
-, fetchPypi
 , importlib-resources
 , jaraco-classes
 , jaraco-collections
@@ -25,29 +24,22 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "5.1.0";
-  format = "pyproject";
+  version = "5.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-guLgmhjFgYLRZsQ0j92NXkktZ80bwVvMUJLZeg3dgxE=";
+    hash = "sha256-TUxljF1k/fvQoNcHx6jMRJrYgzxjXefvMl+mBD0DL8o=";
   };
-
-  postPatch = ''
-    # https://github.com/jaraco/jaraco.abode/issues/19
-    echo "graft jaraco" > MANIFEST.in
-  '';
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     requests
@@ -92,6 +84,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/jaraco/jaraco.abode/blob/${version}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
+    mainProgram = "abode";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee dotlambda ];
   };

@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command line tool that tests files for HTML5 validity";
+    mainProgram = "html5validator";
     homepage = "https://github.com/svenkreiss/html5validator";
     changelog = "https://github.com/svenkreiss/html5validator/releases/tag/v${version}";
     license = licenses.mit;

@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multi-purpose serial data visualization & processing program";
+    mainProgram = "serial-studio";
     homepage = "https://serial-studio.github.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

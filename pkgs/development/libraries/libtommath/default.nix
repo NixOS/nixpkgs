@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libtommath";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://github.com/libtom/libtommath/releases/download/v${version}/ltm-${version}.tar.xz";
-    sha256 = "sha256-mGAl17N0J2/uLjDpnzZJ5KwNuKAiV6N+4Q6ucqvtDR8=";
+    sha256 = "sha256-KWJy2TQ1mRMI63NgdgDANLVYgHoH6CnnURQuZcz6nQg=";
   };
 
   nativeBuildInputs = [ libtool ];

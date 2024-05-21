@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "4.1.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = pname;
     rev = version;
-    hash = "sha256-JsgAdLjDQQkLyLFoZCVG2jZ8vQDaGUPtPmHYAcwADQg";
+    hash = "sha256-gSkiNwRR47CZ1YjVa5o8EByCzWBAYPfsMRXydTwFwp0=";
   };
 
-  cargoHash = "sha256-IE9c57rj8EANyj4KmbyagafJyMovzHOhp0PFCQBzqdA=";
+  cargoHash = "sha256-dY00xcMnOCWhdRzC+3mTHSIqeYEPUDBJeYd/GiLM/38=";
 
   nativeBuildInputs = [
     pkg-config

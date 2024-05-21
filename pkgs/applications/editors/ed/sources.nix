@@ -23,10 +23,10 @@ in
 {
   ed = let
     pname = "ed";
-    version = "1.19";
+    version = "1.20.2";
     src = fetchurl {
       url = "mirror://gnu/ed/ed-${version}.tar.lz";
-      hash = "sha256-zi8uXEJHkKqW0J2suT2bv9wLfrYknJy3U4RS6Ox3zUg=";
+      hash = "sha256-Zf7HMY9IwsoX8zSsD0cD3v5iA3uxPMI5IN4He1+iRSM=";
     };
   in import ./generic.nix {
     inherit pname version src meta;

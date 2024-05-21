@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.9.2";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "banesullivan";
     repo = "scooby";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x6GPRo0OuXJtN41urviY0joZKzq0SQjUdRBpIylgcXY=";
+    hash = "sha256-KXhLN8KPz61l+4v88+kVSvodT6OXDJ3Pw9A9aFWSqYE=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,6 @@ buildPythonPackage rec {
     pyvips
     scipy
   ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -61,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
     description = "A lightweight tool for reporting Python package versions and hardware resources";
+    mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];

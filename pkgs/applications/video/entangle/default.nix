@@ -9,7 +9,7 @@
 , perl
 , python3
 , pkgconf
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , dbus
 , elfutils
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     perl # for pod2man and build scripts
     python3 # for build scripts
     pkgconf
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

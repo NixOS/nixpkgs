@@ -1,11 +1,22 @@
 # This expression returns a list of all fetchurl calls used by ‘expr’.
 
-with import ../.. { };
-with lib;
-
-{ expr }:
+{ expr, lib ? import ../../lib }:
 
 let
+  inherit (lib)
+    addErrorContext
+    attrNames
+    concatLists
+    const
+    filter
+    genericClosure
+    isAttrs
+    isDerivation
+    isList
+    mapAttrsToList
+    optional
+    optionals
+    ;
 
   root = expr;
 

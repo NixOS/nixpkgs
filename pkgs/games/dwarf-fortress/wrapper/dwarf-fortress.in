@@ -1,9 +1,35 @@
 #!@stdenv_shell@ -e
 
+export NIXPKGS_DF_EXE="@dfExe@"
 source @dfInit@
 
-export DYLD_LIBRARY_PATH="$env_dir/libs"
-export DYLD_FRAMEWORK_PATH="$env_dir/libs"
+# If we're switching back from dfhack to vanilla, cleanup all dfhack
+# links so Dwarf Fortress doesn't autoload its leftover libdfhooks.so.
+# Otherwise, populate them.
+dfhack_files=(
+  dfhack
+  dfhack-run
+  .dfhackrc
+  libdfhooks.so
+  dfhack-config/default
+  dfhack-config/init
+  hack/*
+  stonesense/*
+  *.init *.init-example
+)
 
-cd "$DF_DIR"
-exec "$exe" "$@"
+if [ "${NIXPKGS_DF_EXE##*/}" == dfhack ]; then
+  for i in "${dfhack_files[@]}"; do
+    if [ -e "$i" ]; then
+      update_path "$i"
+    else
+      cleanup_path "$i"
+    fi
+  done
+else
+  for i in "${dfhack_files[@]}"; do
+    cleanup_path "$i"
+  done
+fi
+
+go

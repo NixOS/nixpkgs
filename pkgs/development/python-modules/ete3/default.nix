@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python framework for the analysis and visualization of trees";
+    mainProgram = "ete3";
     homepage = "http://etetoolkit.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ delehef ];

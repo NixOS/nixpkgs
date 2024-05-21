@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pycodestyle";
-  version = "2.11.0";
+  version = "2.11.1";
 
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JZvMF4V9ios7SiMnMkt55fAgoTwWB0Zw+cjI+HLqdtA=";
+    hash = "sha256-QboOevyXUt+1PO1UieifgYa+AOWZ5xJmBpW3p1/yZj8=";
   };
 
   pythonImportsCheck = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/PyCQA/pycodestyle/blob/${version}/CHANGES.txt";
     description = "Python style guide checker";
+    mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
     license = licenses.mit;
     maintainers = with maintainers; [

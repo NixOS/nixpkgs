@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.46.0";
+  version = "3.48.2";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QmAIstrVSMmvHHsDtZ3wRA/eXDPzj7VAaxA6Q9ZTyvw=";
+    hash = "sha256-B5SutKm+MaCSrCBiG19U7CgPkYWUPTKLEFza5imK0ac=";
   };
 
   depsBuildBuild = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    # # .so files link to this
+    cairo
     glib
   ] ++ lib.optionals stdenv.isDarwin [
     ncurses
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pycairo
-    cairo
+    gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
 
   mesonFlags = [

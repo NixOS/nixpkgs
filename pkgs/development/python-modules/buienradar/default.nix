@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , docopt
 , pytz
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "buienradar";
   version = "1.0.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "mjj4791";
@@ -53,6 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and CLI tools for interacting with buienradar";
+    mainProgram = "buienradar";
     homepage = "https://github.com/mjj4791/python-buienradar";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

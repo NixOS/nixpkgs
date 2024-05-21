@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , python
 , xvfb-run
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , pygobject3
 , graphviz
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   propagatedBuildInputs = [
     pygobject3
@@ -56,6 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An interactive viewer for graphs written in Graphviz's dot";
+    mainProgram = "xdot";
     homepage = "https://github.com/jrfonseca/xdot.py";
     license = licenses.lgpl3Plus;
   };

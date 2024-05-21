@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, requests, inputstream-adaptive, inputstreamhelper }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, inputstream-adaptive, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "invidious";
@@ -6,7 +6,7 @@ buildKodiAddon rec {
   version = "0.2.6";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/plugin.video.invidious/plugin.video.invidious-${version}+nexus.0.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/plugin.video.invidious/plugin.video.invidious-${version}+nexus.0.zip";
     sha256 = "sha256-XnlnhvtHMh4uQTupW/SSOmaEV8xZrL61/6GoRpyKR0o=";
   };
 

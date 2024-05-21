@@ -8,22 +8,25 @@
 
 buildPythonPackage rec {
   pname = "strct";
-  version = "0.0.32";
+  version = "0.0.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shaypal5";
     repo = "strct";
     rev = "v${version}";
-    hash = "sha256-ctafvdfSOdp7tlCUYg7d5XTXR1qBcWvOVtGtNUnhYIw=";
+    hash = "sha256-uPM2U+emZUCGqEhIeTBmaOu8eSfK4arqvv9bItBWpUs=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace  \
-        "--cov" \
-        "#--cov"
+    substituteInPlace pyproject.toml \
+      --replace-fail  \
+        '"--cov' \
+        '#"--cov'
   '';
+
+  # don't append .dev0 to version
+  env.RELEASING_PROCESS = "1";
 
   nativeBuildInputs = [
     setuptools

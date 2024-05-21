@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, nixosTests, testers, jre }:
+{ stdenvNoCC, lib, fetchurl, nixosTests, testers, jre }:
 
 let
-  common = { version, hash }: stdenv.mkDerivation (finalAttrs: {
+  common = { version, hash }: stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "apache-tomcat";
     inherit version;
 
@@ -39,12 +39,12 @@ let
 
 in {
   tomcat9 = common {
-    version = "9.0.83";
-    hash = "sha256-dgktroncHzrm3RFATWSFJ2GkAfGM03PJO1/37yzk+Qo=";
+    version = "9.0.88";
+    hash = "sha256-vvgcyqT318ieqG61b2NDxRzXkzdMjswgOLen9eJ9Zig=";
   };
 
   tomcat10 = common {
-    version = "10.1.16";
-    hash = "sha256-QysLmKN3RQ8TuaR7gup9947QvPLuS3WRgrTH/cH+WEE=";
+    version = "10.1.23";
+    hash = "sha256-pVcsnpD/geoWaB35cXa7ap9Texw/vg/7pSl/7lnDmKo=";
   };
 }

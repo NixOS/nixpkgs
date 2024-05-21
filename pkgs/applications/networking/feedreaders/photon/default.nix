@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "RSS/Atom reader with the focus on speed, usability and a bit of unix philosophy";
+    mainProgram = "photon";
     homepage = "https://sr.ht/~ghost08/photon";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kmein ];

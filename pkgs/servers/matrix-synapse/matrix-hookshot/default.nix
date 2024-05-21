@@ -72,10 +72,16 @@ mkYarnPackage rec {
         "$out/libexec/matrix-hookshot/deps/matrix-hookshot/lib/App/BridgeApp.js"
   '';
 
+  postFixup = ''
+    # Scrub reference to rustc
+    rm $out/libexec/matrix-hookshot/deps/matrix-hookshot/target/.rustc_info.json
+  '';
+
   doDist = false;
 
   meta = with lib; {
     description = "A bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
+    mainProgram = "matrix-hookshot";
     maintainers = with maintainers; [ chvp ];
     license = licenses.asl20;
     platforms = platforms.linux;

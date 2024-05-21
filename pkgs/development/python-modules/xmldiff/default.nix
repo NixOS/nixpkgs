@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "xmldiff";
   version = "2.6.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-GbAws/o30fC1xa2a2pBZiEw78sdRxd2PHrTtSc/j/GA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     lxml
     setuptools
   ];

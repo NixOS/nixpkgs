@@ -1,40 +1,60 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "oterm";
-  version = "0.1.17";
+  version = "0.2.8";
   pyproject = true;
+
   src = fetchFromGitHub {
     owner = "ggozad";
     repo = "oterm";
     rev = "refs/tags/${version}";
-    hash = "sha256-huDxrhFtG2QoytJQHIikOP+LgYiKbj0XxbgS9bz6SHw=";
+    hash = "sha256-6UFNsEc6bYBrBYfCbeiDfemueeRMEXHGCT8junZVFtk=";
   };
+
+  pythonRelaxDeps = [
+    "aiosqlite"
+    "httpx"
+    "ollama"
+    "packaging"
+    "pillow"
+    "typer"
+  ];
+
+  build-system = with python3Packages; [ poetry-core ];
+
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
+
   propagatedBuildInputs = with python3Packages; [
-    textual
-    typer
-    python-dotenv
-    httpx
+    aiohttp
     aiosql
     aiosqlite
-    pyperclip
+    httpx
+    ollama
     packaging
+    pillow
+    pyperclip
+    python-dotenv
     rich-pixels
+    textual
+    typer
   ];
-  nativeBuildInputs = with python3Packages; [ poetry-core ];
+
+  pythonImportsCheck = [ "oterm" ];
 
   # Tests require a HTTP connection to ollama
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "A text-based terminal client for Ollama";
     homepage = "https://github.com/ggozad/oterm";
     changelog = "https://github.com/ggozad/oterm/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ suhr ];
+    license = lib.licenses.mit;
     mainProgram = "oterm";
+    maintainers = with lib.maintainers; [ suhr ];
   };
 }

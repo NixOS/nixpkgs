@@ -20,7 +20,7 @@ let
     downloadPage = "https://teams.microsoft.com/downloads";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ liff tricktron ];
+    maintainers = with maintainers; [ tricktron ];
     platforms = [ "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "teams";
   };

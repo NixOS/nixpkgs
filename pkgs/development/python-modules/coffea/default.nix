@@ -1,29 +1,32 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , hatchling
 , hatch-vcs
+, aiohttp
 , awkward
-, uproot
+, cachetools
+, cloudpickle
+, correctionlib
 , dask
 , dask-awkward
 , dask-histogram
-, correctionlib
-, pyarrow
-, fsspec
+, fsspec-xrootd
+, hist
+, lz4
 , matplotlib
+, mplhep
 , numba
 , numpy
-, scipy
-, tqdm
-, lz4
-, cloudpickle
-, toml
-, mplhep
 , packaging
 , pandas
-, hist
-, cachetools
+, pyarrow
+, requests
+, scipy
+, toml
+, tqdm
+, uproot
 , distributed
 , pyinstrument
 , pytestCheckHook
@@ -31,52 +34,48 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2023.12.0";
+  version = "2024.5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xlud3ibdI4UnoHe72NPc7WQojuWPpXtncENDinYgk4o=";
+    hash = "sha256-FHE7/VL0mnf0eBPzCsrr8ISr7OmfFvI9xuV0CPa7JdU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "numba>=0.58.1" "numba"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     awkward
-    uproot
+    cachetools
+    cloudpickle
+    correctionlib
     dask
-    dask.optional-dependencies.array
     dask-awkward
     dask-histogram
-    correctionlib
-    pyarrow
-    fsspec
+    fsspec-xrootd
+    hist
+    lz4
     matplotlib
+    mplhep
     numba
     numpy
-    scipy
-    tqdm
-    lz4
-    cloudpickle
-    toml
-    mplhep
     packaging
     pandas
-    hist
-    cachetools
-  ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+    pyarrow
+    requests
+    scipy
+    toml
+    tqdm
+    uproot
+  ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
@@ -88,9 +87,18 @@ buildPythonPackage rec {
     "coffea"
   ];
 
+  disabledTests = [
+    # Requires internet access
+    # https://github.com/CoffeaTeam/coffea/issues/1094
+    "test_lumimask"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];
   };

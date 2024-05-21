@@ -74,6 +74,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Console-based email client";
+    mainProgram = "lumail2";
     homepage = "https://lumail.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;

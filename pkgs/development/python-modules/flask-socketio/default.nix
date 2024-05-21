@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-SocketIO";
+  pname = "flask-socketio";
   version = "5.3.6";
   format = "pyproject";
 

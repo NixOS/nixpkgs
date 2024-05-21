@@ -1,21 +1,38 @@
 { lib
+, stdenv
 , python3
+, fetchPypi
 , fetchFromGitHub
 , wrapQtAppsHook
+, qtbase
+, qtwayland
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      pynitrokey = super.pynitrokey.overridePythonAttrs (old: rec {
+        version = "0.4.45";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-iY4ThrmXP7pEjTYYU4lePVAbuJGTdHX3iKswXzuf7W8=";
+        };
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.1.4";
+  version = "2.2.2";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.9";
+  disabled = python.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     rev = "v${version}";
-    hash = "sha256-loOCa6XlLx1YEfqR0SUUalVIEPCoYsNEHFo2MIKexeA=";
+    hash = "sha256-MiyfmsrKZRoe7YMEjR1LHPesfJh6+dcSydoEAgrALJ8=";
   };
 
   # https://github.com/Nitrokey/nitrokey-app2/issues/152
@@ -23,35 +40,24 @@ python3.pkgs.buildPythonApplication rec {
   # pythonRelaxDepsHook does not work here, because it runs in postBuild and
   # only modifies the dependencies in the built distribution.
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "pynitrokey ==" "pynitrokey >="
+    substituteInPlace pyproject.toml --replace 'pynitrokey = "' 'pynitrokey = ">='
   '';
 
-  # The pyproject.toml file seems to be incomplete and does not generate
-  # resources (i.e. run pyrcc5 and pyuic5) but the Makefile does.
-  preBuild = ''
-    make build-ui
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
-    flit-core
-    pyqt5
+  nativeBuildInputs = with python.pkgs; [
+    poetry-core
     wrapQtAppsHook
   ];
 
-  dontWrapQtApps = true;
-
-  propagatedBuildInputs = with python3.pkgs; [
-    pynitrokey
-    pyudev
-    pyqt5
-    pyqt5-stubs
-    qt-material
+  buildInputs = [ qtbase ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
-  preFixup = ''
-    wrapQtApp "$out/bin/nitrokeyapp" \
-      --set-default CRYPTOGRAPHY_OPENSSL_NO_LEGACY 1
-  '';
+  propagatedBuildInputs = with python.pkgs; [
+    pynitrokey
+    pyudev
+    pyside6
+    qt-material
+  ];
 
   pythonImportsCheck = [
     "nitrokeyapp"

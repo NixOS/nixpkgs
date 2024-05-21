@@ -4,11 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "XStatic-Font-Awesome";
+  pname = "xstatic-font-awesome";
   version = "6.2.1.1";
 
   src = fetchPypi {
-    inherit version pname;
+    pname = "XStatic-Font-Awesome";
+    inherit version;
     sha256 = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
   };
 

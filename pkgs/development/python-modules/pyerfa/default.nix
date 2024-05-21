@@ -1,11 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , jinja2
-, oldest-supported-numpy
+, setuptools
 , setuptools-scm
-, wheel
 , liberfa
 , packaging
 , numpy
@@ -15,31 +13,27 @@
 
 buildPythonPackage rec {
   pname = "pyerfa";
-  format = "pyproject";
-  version = "2.0.0.3";
+  version = "2.0.1.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-13+7+lg1DBlMy5nl2TqgXTwrFNWq2LZi2Txq2f/0Hzk=";
+    hash = "sha256-rLimcTIy6jXAS8bkCsTkYd/MgX05XvKjyAUcGjMkndM=";
   };
 
-  patches = [
-    # Sort of helps maybe for https://github.com/liberfa/pyerfa/issues/112
-    (fetchpatch {
-      url = "https://github.com/liberfa/pyerfa/commit/4866342b94c5e7344711146f1186a4c3e7534da8.patch";
-      hash = "sha256-uPFFdLYfRweQdeEApBAw6Ulqh31NTQwwmnaU+x/M+C0=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     jinja2
-    oldest-supported-numpy
     packaging
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
   ];
   buildInputs = [

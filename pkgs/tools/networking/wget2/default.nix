@@ -102,5 +102,6 @@ stdenv.mkDerivation rec {
     # wget2 GPLv3+; libwget LGPLv3+
     license = with licenses; [ gpl3Plus lgpl3Plus ];
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "wget2";
   };
 }

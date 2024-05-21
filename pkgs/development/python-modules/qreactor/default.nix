@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , twisted
 , qtpy
@@ -17,8 +16,6 @@ buildPythonPackage rec {
     rev = "364b3f561fb0d4d3938404d869baa4db7a982bf0";
     sha256 = "1nb5iwg0nfz86shw28a2kj5pyhd4jvvxhf73fhnfbl8scgnvjv9h";
   };
-
-  disabled = pythonOlder "3.0";
 
   propagatedBuildInputs = [
     twisted qtpy

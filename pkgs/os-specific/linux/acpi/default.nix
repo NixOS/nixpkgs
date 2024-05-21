@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Show battery status and other ACPI information";
+    mainProgram = "acpi";
     longDescription = ''
       Linux ACPI client is a small command-line
       program that attempts to replicate the functionality of

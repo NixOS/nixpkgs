@@ -19,7 +19,7 @@
     luksroot
     luksroot-format1
     luksroot-format2
-    # lvm
+    lvm
     separateBoot
     separateBootFat
     separateBootZfs
@@ -37,6 +37,9 @@
     clevisLuksFallback
     clevisZfs
     clevisZfsFallback
+    gptAutoRoot
+    clevisBcachefs
+    clevisBcachefsFallback
     ;
 
 }

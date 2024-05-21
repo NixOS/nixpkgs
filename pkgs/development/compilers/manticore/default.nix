@@ -39,6 +39,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A parallel, pure variant of Standard ML";
+    mainProgram = "pmlc";
 
     longDescription = ''
       Manticore is a high-level parallel programming language aimed at

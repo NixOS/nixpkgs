@@ -8,7 +8,7 @@ let
 in
 {
   options.services.greetd = {
-    enable = mkEnableOption (lib.mdDoc "greetd");
+    enable = mkEnableOption "greetd, a minimal and flexible login manager daemon";
 
     package = mkPackageOption pkgs [ "greetd" "greetd" ] { };
 
@@ -21,16 +21,27 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         greetd configuration ([documentation](https://man.sr.ht/~kennylevinsen/greetd/))
         as a Nix attribute set.
+      '';
+    };
+
+    greeterManagesPlymouth = mkOption {
+      type = types.bool;
+      internal = true;
+      default = false;
+      description = ''
+        Don't configure the greetd service to wait for Plymouth to exit.
+
+        Enable this if the greeter you're using can manage Plymouth itself to provide a smoother handoff.
       '';
     };
 
     vt = mkOption {
       type = types.int;
       default = 1;
-      description = lib.mdDoc ''
+      description = ''
         The virtual console (tty) that greetd should use. This option also disables getty on that tty.
       '';
     };
@@ -39,7 +50,7 @@ in
       type = types.bool;
       default = !(cfg.settings ? initial_session);
       defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
-      description = lib.mdDoc ''
+      description = ''
         Whether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
         because every greetd restart will trigger the autologin again.
@@ -60,15 +71,21 @@ in
     # This prevents nixos-rebuild from killing greetd by activating getty again
     systemd.services."autovt@${tty}".enable = false;
 
+    # Enable desktop session data
+    services.displayManager.enable = lib.mkDefault true;
+
     systemd.services.greetd = {
+      aliases = [ "display-manager.service" ];
+
       unitConfig = {
         Wants = [
           "systemd-user-sessions.service"
         ];
         After = [
           "systemd-user-sessions.service"
-          "plymouth-quit-wait.service"
           "getty@${tty}.service"
+        ] ++ lib.optionals (!cfg.greeterManagesPlymouth) [
+          "plymouth-quit-wait.service"
         ];
         Conflicts = [
           "getty@${tty}.service"
@@ -78,7 +95,7 @@ in
       serviceConfig = {
         ExecStart = "${pkgs.greetd.greetd}/bin/greetd --config ${settingsFormat.generate "greetd.toml" cfg.settings}";
 
-        Restart = mkIf cfg.restart "always";
+        Restart = mkIf cfg.restart "on-success";
 
         # Defaults from greetd upstream configuration
         IgnoreSIGPIPE = false;

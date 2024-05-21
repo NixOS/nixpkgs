@@ -10,19 +10,21 @@ configure a webserver to proxy HTTP requests to the socket.
 
 For instance, the following configuration could be used to use nginx as
 frontend proxy:
-```
-services.nginx = {
-  enable = true;
-  recommendedGzipSettings = true;
-  recommendedOptimisation = true;
-  recommendedProxySettings = true;
-  recommendedTlsSettings = true;
-  virtualHosts."git.example.com" = {
-    enableACME = true;
-    forceSSL = true;
-    locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+```nix
+{
+  services.nginx = {
+    enable = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    virtualHosts."git.example.com" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/".proxyPass = "http://unix:/run/gitlab/gitlab-workhorse.socket";
+    };
   };
-};
+}
 ```
 
 ## Configuring {#module-services-gitlab-configuring}
@@ -35,36 +37,38 @@ The default state dir is `/var/gitlab/state`. This is where
 all data like the repositories and uploads will be stored.
 
 A basic configuration with some custom settings could look like this:
-```
-services.gitlab = {
-  enable = true;
-  databasePasswordFile = "/var/keys/gitlab/db_password";
-  initialRootPasswordFile = "/var/keys/gitlab/root_password";
-  https = true;
-  host = "git.example.com";
-  port = 443;
-  user = "git";
-  group = "git";
-  smtp = {
+```nix
+{
+  services.gitlab = {
     enable = true;
-    address = "localhost";
-    port = 25;
-  };
-  secrets = {
-    dbFile = "/var/keys/gitlab/db";
-    secretFile = "/var/keys/gitlab/secret";
-    otpFile = "/var/keys/gitlab/otp";
-    jwsFile = "/var/keys/gitlab/jws";
-  };
-  extraConfig = {
-    gitlab = {
-      email_from = "gitlab-no-reply@example.com";
-      email_display_name = "Example GitLab";
-      email_reply_to = "gitlab-no-reply@example.com";
-      default_projects_features = { builds = false; };
+    databasePasswordFile = "/var/keys/gitlab/db_password";
+    initialRootPasswordFile = "/var/keys/gitlab/root_password";
+    https = true;
+    host = "git.example.com";
+    port = 443;
+    user = "git";
+    group = "git";
+    smtp = {
+      enable = true;
+      address = "localhost";
+      port = 25;
+    };
+    secrets = {
+      dbFile = "/var/keys/gitlab/db";
+      secretFile = "/var/keys/gitlab/secret";
+      otpFile = "/var/keys/gitlab/otp";
+      jwsFile = "/var/keys/gitlab/jws";
+    };
+    extraConfig = {
+      gitlab = {
+        email_from = "gitlab-no-reply@example.com";
+        email_display_name = "Example GitLab";
+        email_reply_to = "gitlab-no-reply@example.com";
+        default_projects_features = { builds = false; };
+      };
     };
   };
-};
+}
 ```
 
 If you're setting up a new GitLab instance, generate new

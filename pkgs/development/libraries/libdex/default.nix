@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitLab
+, fetchurl
 , gi-docgen
 , gobject-introspection
 , meson
@@ -14,16 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdex";
-  version = "0.4.1";
+  version = "0.6.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libdex";
-    rev = version;
-    sha256 = "e2Q3KhdMqvMeVVZZKQfVoc3BqbOcUYEnBBG24FJRI1k=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-HojSsAYo5Ya3I7f7pRXM6XUvrxISLN5aPA1biDmYUio=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +50,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gnome.updateScript {
     packageName = "libdex";
+    versionPolicy = "odd-unstable";
   };
 
   meta = with lib; {

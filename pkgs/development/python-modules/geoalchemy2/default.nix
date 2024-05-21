@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.14.3";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,15 +22,15 @@ buildPythonPackage rec {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     rev = "refs/tags/${version}";
-    hash = "sha256-L3/gLbiEF2VEqyhfVPnREMUPFbf9cD3tqGJ+AbThPkQ=";
+    hash = "sha256-EMsaB6VDDDvXg9LKa9ms0+AfzX1rG+yeR898EK59DDs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     sqlalchemy
     packaging
   ];
@@ -38,11 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     alembic
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.shapely;
-
-  env = {
-    SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  };
+  ] ++ optional-dependencies.shapely;
 
   disabledTestPaths = [
     # tests require live databases
@@ -64,7 +60,7 @@ buildPythonPackage rec {
     "geoalchemy2"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     shapely = [ shapely ];
   };
 

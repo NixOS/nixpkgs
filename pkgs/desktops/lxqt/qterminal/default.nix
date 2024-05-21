@@ -1,17 +1,18 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , lxqt-build-tools
-, qtermwidget
 , qtbase
+, qtermwidget
 , qttools
 , qtx11extras
+, wrapQtAppsHook
 , gitUpdater
 , nixosTests
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qterminal";
   version = "1.4.0";
 
@@ -26,12 +27,13 @@ mkDerivation rec {
     cmake
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qtbase
-    qtx11extras
     qtermwidget
+    qtx11extras
   ];
 
   passthru.updateScript = gitUpdater { };
@@ -41,6 +43,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lxqt/qterminal";
     description = "A lightweight Qt-based terminal emulator";
+    mainProgram = "qterminal";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; teams.lxqt.members;

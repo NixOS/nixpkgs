@@ -2,7 +2,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , setuptools
-, wrapGAppsHook
+, wrapGAppsHook3
 , gdk-pixbuf
 , glib-networking
 , gobject-introspection
@@ -35,7 +35,7 @@ buildPythonApplication rec {
     gobject-introspection
     imagemagick
     setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [

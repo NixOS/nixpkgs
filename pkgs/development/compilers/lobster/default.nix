@@ -16,14 +16,14 @@
 , ForceFeedback
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
   version = "2023.13";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7lMIIJ3iduyxZKwK65tle3c+az2G2Mpi4JwAeCCsTxw=";
   };
 
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "The Lobster programming language";
+    mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of
       very static typing and memory management with a very lightweight,
@@ -62,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

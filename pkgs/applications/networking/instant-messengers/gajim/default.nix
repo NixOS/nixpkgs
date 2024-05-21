@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook
+{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook3
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome
@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook gobject-introspection
+    gettext wrapGAppsHook3 gobject-introspection
   ];
 
   dontWrapGApps = true;
@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
   # test are broken in 1.7.3, 1.8.0
   doCheck = false;
 
-  # necessary for wrapGAppsHook
+  # necessary for wrapGAppsHook3
   strictDeps = false;
 
   meta = {

@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , packaging
 , poetry-core
-, poetry-semver
+, semver
 , pytestCheckHook
 , pythonOlder
 , toml
@@ -13,26 +13,26 @@
 buildPythonPackage rec {
   pname = "requirements-detector";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "landscapeio";
-    repo = pname;
+    repo = "requirements-detector";
     rev = "refs/tags/${version}";
     hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astroid
     packaging
-    poetry-semver
     toml
+    semver
   ];
 
   nativeCheckInputs = [
@@ -49,5 +49,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
+    mainProgram = "detect-requirements";
+    # https://github.com/landscapeio/requirements-detector/issues/48
+    broken = versionAtLeast astroid.version "3";
   };
 }

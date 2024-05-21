@@ -5,6 +5,7 @@
 , bison
 , boost182
 , flex
+, fmt
 , gtest
 , libbacktrace
 , lit
@@ -14,17 +15,18 @@
 , nix
 , nixpkgs-fmt
 , pkg-config
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixd";
-  version = "1.2.2";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
-    rev = version;
-    hash = "sha256-W44orkPZQ9gDUTogb8YVIaw4WHzUA+ExOXhTnZlJ6yY=";
+    rev = finalAttrs.version;
+    hash = "sha256-A6hoZ4fbWxd7Mx+r3e1HEw2IPaAn4WcMEIocy/ZCz28=";
   };
 
   mesonBuildType = "release";
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libbacktrace
     nix
+    fmt
     gtest
     boost182
     llvmPackages.llvm
@@ -72,19 +75,29 @@ stdenv.mkDerivation rec {
 
     # Disable nixd regression tests, because it uses some features provided by
     # nix, and does not correctly work in the sandbox
-    meson test --print-errorlogs server regression/nix-ast-dump
+    meson test --print-errorlogs  unit/libnixf/Basic unit/libnixf/Parse unit/libnixt
     runHook postCheck
   '';
 
   passthru.updateScript = nix-update-script { };
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libnixf" "libnixt" ];
+    };
+  };
+
   meta = {
     description = "Nix language server";
     homepage = "https://github.com/nix-community/nixd";
-    changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
+    changelog = "https://github.com/nix-community/nixd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth marsam ];
+    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
     mainProgram = "nixd";
     platforms = lib.platforms.unix;
   };
-}
+})

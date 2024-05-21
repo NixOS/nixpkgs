@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build time
 , autoreconfHook
@@ -15,7 +16,7 @@
 , c-ares
 , json_c
 , libcap
-, libelf
+, elfutils
 , libunwind
 , libyang
 , net-snmp
@@ -94,6 +95,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-oDPr51vI+tlT1IiUPufmZh/UE0TNKWrn4RqpnGoGxNo=";
   };
 
+  patches = [
+    # fixes crash in OSPF TE parsing
+    (fetchpatch {
+      name = "CVE-2024-27913.patch";
+      url = "https://github.com/FRRouting/frr/commit/541503eecd302d2cc8456167d130014cd2cf1134.patch";
+      hash = "sha256-7NxPlQK/6lbLs/NqNi4OZ2uBWfXw99SiXDR6okNvJlg=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     bison
@@ -108,7 +118,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     c-ares
     json_c
-    libelf
     libunwind
     libyang
     openssl
@@ -122,6 +131,8 @@ stdenv.mkDerivation rec {
     libcap
   ] ++ lib.optionals snmpSupport [
     net-snmp
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"

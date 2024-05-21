@@ -3,7 +3,7 @@
 , fetchurl
 , perlPackages
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , dblatex
 , gnumake
@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   meta = with lib; {
     description = "Create and manage multiple choice questionnaires with automated marking.";
+    mainProgram = "auto-multiple-choice";
     longDescription = ''
       Create, manage and mark multiple-choice questionnaires.
       auto-multiple-choice features automated or manual formatting with

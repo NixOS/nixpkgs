@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.14.2";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gM7hqFriXkcwNO+I3d138kfp1F4YsO/Qbq0NzMszkwM=";
+    hash = "sha256-n8MFYwne25MdzVwYmmXt9d9rqKU37patAazb3Wn9coM=";
   };
 
   postPatch = ''

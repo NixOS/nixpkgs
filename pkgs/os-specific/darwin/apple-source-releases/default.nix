@@ -6,9 +6,11 @@ let
   # a stdenv out of something like this. With some care we can probably get rid of this, but for
   # now it's staying here.
   versions = {
+    "macos-14.3" = {
+      system_cmds   = "970.0.4";
+    };
     "osx-10.12.6" = {
       xnu           = "3789.70.16";
-      libiconv      = "50";
       Libnotify     = "165.20.1";
       objc4         = "709.1";
       dyld          = "433.5";
@@ -35,7 +37,6 @@ let
       dtrace        = "168";
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
-      libiconv      = "44";
       Libnotify     = "150.40.1";
       objc4         = "680";
       eap8021x      = "222.40.1";
@@ -155,7 +156,7 @@ let
     version = versions.${sdkName}.${pname};
   in fetchApple' pname version sha256;
 
-  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
+  appleDerivation'' = stdenv: pname: version: sdkName: sha256: attrs: stdenv.mkDerivation (finalAttrs: {
     inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
@@ -181,10 +182,10 @@ let
       fi
     '';
 
-  } // attrs // {
+  } // (if builtins.isFunction attrs then attrs finalAttrs else attrs) // {
     meta = (with lib; {
       platforms = platforms.darwin;
-      license = licenses.apsl20;
+      license = licenses.apple-psl20;
     }) // (attrs.meta or {});
   });
 
@@ -269,14 +270,15 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "sha256-jfAEk0OLrJa9AIZVikIoHomd+l+4rCfc320Xh50qK5M=" {};
-    libiconv        = applePackage "libiconv"          "osx-10.12.6"     "sha256-ZzPFkchK3EU95UQUVVrR0t8iilhi/VnIkjjtP6KT2oI=" {};
     Libinfo         = applePackage "Libinfo"           "osx-10.11.6"     "sha256-6F7wiwerv4nz/xXHtp1qCHSaFzZgzcRN+jbmXA5oWOQ=" {};
     Libm            = applePackage "Libm"              "osx-10.7.4"      "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es=" {};
     Libnotify       = applePackage "Libnotify"         "osx-10.12.6"     "sha256-6wvMBxAUfiYcQtmlfYCj1d3kFmFM/jdboTd7hRvi3e4=" {};
     libmalloc       = if stdenv.isx86_64 then
       applePackage "libmalloc" "osx-10.12.6" "sha256-brfG4GEF2yZipKdhlPq6DhT2z5hKYSb2MAmffaikdO4=" {}
     else macosPackages_11_0_1.libmalloc;
-    libplatform     = applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {};
+    libplatform     = if stdenv.isx86_64 then
+      applePackage "libplatform"       "osx-10.12.6"     "sha256-6McMTjw55xtnCsFI3AB1osRagnuB5pSTqeMKD3gpGtM=" {}
+    else macosPackages_11_0_1.libplatform;
     libpthread      = applePackage "libpthread"        "osx-10.12.6"     "sha256-QvJ9PERmrCWBiDmOWrLvQUKZ4JxHuh8gS5nlZKDLqE8=" {};
     libresolv       = applePackage "libresolv"         "osx-10.12.6"     "sha256-FtvwjJKSFX6j9APYPC8WLXVOjbHLZa1Gcoc8yxLy8qE=" {};
     Libsystem       = applePackage "Libsystem"         "osx-10.12.6"     "sha256-zvRdCP//TjKCGAqm/5nJXPppshU1cv2fg/L/yK/olGQ=" {};
@@ -304,7 +306,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "sha256-JYy6HwmultKeZtLfaysbsyLoWg+OaTh7eJu54JkJC0Q=" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "sha256-kmEOprkiJGMVcl7yHkGX8ymk/5KjE99gWuF8j2hK5hY=" {};
-    system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "sha256-KBdGlHeXo2PwgRQOOeElJ1RBqCY1Tdhn5KD42CMhdzI=" {};
+    system_cmds     = applePackage "system_cmds"       "macos-14.3"      "sha256-qFp9nkzsq9uQ7zoyfvO+3gvDlc7kaPvn6luvmO/Io30=" {};
     text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "sha256-KSebU7ZyUsPeqn51nzuGNaNxs9pvmlIQQdkWXIVzDxw=" {};
     top             = applePackage "top"               "osx-10.11.6"     "sha256-jbz64ODogtpNyLpXGSZj1jCBdFPVXcVcBkL1vc7g5qQ=" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "sha256-bYGtYnBOcE5W03AZzfVTJXPZ6GgryGAMt/LgLPxFkVk=" {};

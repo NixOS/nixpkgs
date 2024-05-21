@@ -9,21 +9,21 @@ in
     hostName = mkOption {
       type = types.str;
       default = name;
-      description = lib.mdDoc "Canonical hostname for the server.";
+      description = "Canonical hostname for the server.";
     };
 
     serverAliases = mkOption {
       type = with types; listOf str;
       default = [ ];
       example = [ "www.example.org" "example.org" ];
-      description = lib.mdDoc ''
+      description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listenAddresses = mkOption {
       type = with types; listOf str;
-      description = lib.mdDoc ''
+      description = ''
         A list of host interfaces to bind to for this virtual host.
       '';
       default = [ ];
@@ -33,7 +33,7 @@ in
     useACMEHost = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         A host of an existing Let's Encrypt certificate to use.
         This is mostly useful if you use DNS challenges but Caddy does not
         currently support your provider.
@@ -57,7 +57,7 @@ in
           output discard
         ''';
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration for HTTP request logging (also known as access logs). See
         <https://caddyserver.com/docs/caddyfile/directives/log#log>
         for details.
@@ -67,7 +67,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Additional lines of configuration appended to this virtual host in the
         automatically generated `Caddyfile`.
       '';

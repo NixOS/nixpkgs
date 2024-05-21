@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python module for GTFS";
+    mainProgram = "gtfs2db";
     homepage = "https://github.com/jarondl/pygtfs";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

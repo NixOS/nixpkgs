@@ -14,7 +14,7 @@
 , gsettings-desktop-schemas
 , libgudev
 , jansson
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , gtk3
@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.34.0";
+  version = "1.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-qzaORw9rFh/IuDS8l5ErfnmvkrjNfqOZwtQAzomrpag=";
+    sha256 = "sha256-qEcESH6jr+FIXEf7KrWYuPd59UCuDcvwocX4XmSn4lM=";
   };
 
   mesonFlags = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     python3
   ];

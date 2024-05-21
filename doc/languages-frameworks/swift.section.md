@@ -112,13 +112,17 @@ stdenv.mkDerivation rec {
 If you'd like to build a different configuration than `release`:
 
 ```nix
-swiftpmBuildConfig = "debug";
+{
+  swiftpmBuildConfig = "debug";
+}
 ```
 
 It is also possible to provide additional flags to `swift build`:
 
 ```nix
-swiftpmFlags = [ "--disable-dead-strip" ];
+{
+  swiftpmFlags = [ "--disable-dead-strip" ];
+}
 ```
 
 The default `buildPhase` already passes `-j` for parallel building.
@@ -132,7 +136,9 @@ Including `swiftpm` in your `nativeBuildInputs` also provides a default
 `checkPhase`, but it must be enabled with:
 
 ```nix
-doCheck = true;
+{
+  doCheck = true;
+}
 ```
 
 This essentially runs: `swift test -c release`
@@ -147,13 +153,15 @@ them, we need to make them writable.
 A special function `swiftpmMakeMutable` is available to replace the symlink
 with a writable copy:
 
-```
-configurePhase = generated.configure ++ ''
-  # Replace the dependency symlink with a writable copy.
-  swiftpmMakeMutable swift-crypto
-  # Now apply a patch.
-  patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
-'';
+```nix
+{
+  configurePhase = generated.configure ++ ''
+    # Replace the dependency symlink with a writable copy.
+    swiftpmMakeMutable swift-crypto
+    # Now apply a patch.
+    patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
+  '';
+}
 ```
 
 ## Considerations for custom build tools {#ssec-swift-considerations-for-custom-build-tools}

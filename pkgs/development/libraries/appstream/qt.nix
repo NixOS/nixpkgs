@@ -15,7 +15,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = appstream.nativeBuildInputs ++ [ qttools ];
 
-  mesonFlags = appstream.mesonFlags ++ [ "-Dqt${qtSuffix}=true" ];
+  mesonFlags = appstream.mesonFlags ++ [
+    (lib.mesonBool "qt" true)
+    (lib.mesonOption "qt-versions" (lib.versions.major qtbase.version))
+  ];
 
   patches = appstream.patches;
 

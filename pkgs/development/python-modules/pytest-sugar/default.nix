@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "0.9.7";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8edMGr+lX3JBz3CIAytuN4Vm8WuTjz8IkF4s9ElO3UY=";
+    hash = "sha256-ZCLoMlj1sMBM58YyF2x3Msq1/bkJyznMpckTn4EnbAo=";
   };
 
   buildInputs = [

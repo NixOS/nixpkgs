@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , pcre, windows ? null
 , variant ? null
 }:
@@ -25,8 +25,17 @@ stdenv.mkDerivation rec {
   ]
     ++ lib.optional (variant != null) "--enable-${variant}";
 
-  # https://bugs.exim.org/show_bug.cgi?id=2173
-  patches = [ ./stacksize-detection.patch ];
+  patches = [
+    # https://bugs.exim.org/show_bug.cgi?id=2173
+    ./stacksize-detection.patch
+
+    # Fix segfaults & tests on powerpc64
+    (fetchpatch {
+      name = "sljit-ppc-icache-flush.patch";
+      url = "https://github.com/void-linux/void-packages/raw/d286e231ee680875ad8e80f90ea62e46f5edd812/srcpkgs/pcre/patches/ppc-icache-flush.patch";
+      hash = "sha256-pttmKwihLzKrAV6O4qVLp2pu4NwNJEFS/9Id8/b3nAU=";
+    })
+  ];
 
   preCheck = ''
     patchShebangs RunGrepTest

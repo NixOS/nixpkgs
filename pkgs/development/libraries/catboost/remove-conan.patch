@@ -1,26 +1,26 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index becd2ad03c..7e3c8c99b1 100644
+index ed6c53b220..5c6fb8f157 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -27,7 +27,6 @@ cmake_policy(SET CMP0104 OLD)
- 
+@@ -29,7 +29,6 @@ include(cmake/global_flags.cmake)
+ include(cmake/global_vars.cmake)
  include(cmake/archive.cmake)
  include(cmake/common.cmake)
 -include(cmake/conan.cmake)
  include(cmake/cuda.cmake)
  include(cmake/cython.cmake)
  include(cmake/fbs.cmake)
-@@ -37,21 +36,6 @@ include(cmake/recursive_library.cmake)
+@@ -38,21 +37,6 @@ include(cmake/recursive_library.cmake)
+ include(cmake/shared_libs.cmake)
  include(cmake/swig.cmake)
- include(cmake/global_vars.cmake)
  
 -if (CMAKE_CROSSCOMPILING)
--  include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+-  include(${PROJECT_BINARY_DIR}/conan_paths.cmake)
 -else()
 -  conan_cmake_autodetect(settings)
 -  conan_cmake_install(
--    PATH_OR_REFERENCE ${CMAKE_SOURCE_DIR}
--    INSTALL_FOLDER ${CMAKE_BINARY_DIR}
+-    PATH_OR_REFERENCE ${PROJECT_SOURCE_DIR}
+-    INSTALL_FOLDER ${PROJECT_BINARY_DIR}
 -    BUILD missing
 -    REMOTE conancenter
 -    SETTINGS ${settings}

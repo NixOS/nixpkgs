@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "MeshLabXML";
+  pname = "meshlabxml";
   version = "2018.3";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "MeshLabXML";
+    inherit version;
     sha256 = "1villmg46hqby5jjkkpxr5bxydr72y5b3cbfngwpyxxdljn091w8";
   };
 

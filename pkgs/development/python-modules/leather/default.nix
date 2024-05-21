@@ -4,17 +4,17 @@
 , six
 , cssselect
 , lxml
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "leather";
-  version = "0.3.4";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b43e21c8fa46b2679de8449f4d953c06418666dc058ce41055ee8a8d3bb40918";
+    sha256 = "sha256-+WS+wghvMVOmwW5wfyDLcY+BH1evEWB19MD0gFxgi5U=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -22,14 +22,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cssselect
     lxml
-    nose
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
-  '';
 
   meta = with lib; {
     homepage = "http://leather.rtfd.io";

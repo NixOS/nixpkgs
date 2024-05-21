@@ -8,7 +8,7 @@ with lib;
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         This option enables Mullvad VPN daemon.
         This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
       '';
@@ -17,7 +17,7 @@ with lib;
     enableExcludeWrapper = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         This option activates the wrapper that allows the use of mullvad-exclude.
         Might have minor security impact, so consider disabling if you do not use the feature.
       '';
@@ -53,7 +53,7 @@ with lib;
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" ];
+      wants = [ "network.target" "network-online.target" ];
       after = [
         "network-online.target"
         "NetworkManager.service"

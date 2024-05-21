@@ -10,7 +10,7 @@
 , stdenv
 , udev
 , unzip
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
+  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook3 unzip ];
 
   buildInputs = with xorg; [
     libXScrnSaver

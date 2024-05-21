@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo wrapper that encourages you after running commands";
+    mainProgram = "cargo-mommy";
     homepage = "https://github.com/Gankra/cargo-mommy";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ GoldsteinE ];

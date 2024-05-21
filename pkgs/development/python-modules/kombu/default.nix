@@ -15,7 +15,7 @@
 , pycurl
 , pymongo
   #, pyro4
-, pytestCheckHook
+, pytest7CheckHook
 , pythonOlder
 , pyyaml
 , redis
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.4";
+  version = "5.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C7LieGRNEd6mJywXl0o9u5aIqUnzu2CutbeRMpxE+tw=";
+    hash = "sha256-ARxM2aNVwUod6NNdJXMUodJFbVK3FAOIVhrKw88al78=";
   };
 
   propagatedBuildInputs = [
@@ -89,7 +89,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     case
     hypothesis
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [

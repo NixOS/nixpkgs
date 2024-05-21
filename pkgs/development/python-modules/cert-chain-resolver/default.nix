@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Resolve / obtain the certificate intermediates of a x509 certificate";
+    mainProgram = "cert-chain-resolver";
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
     changelog = "https://github.com/rkoopmans/python-certificate-chain-resolver/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     # The maintainer is using this on linux, but if you test it on other platforms
     # please add them here!
     platforms = platforms.linux;
+    mainProgram = "igmpproxy";
   };
 }

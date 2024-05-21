@@ -117,6 +117,7 @@ If there are git dependencies.
 - From the mix_deps.nix file, remove the dependencies that had git versions and pass them as an override to the import function.
 
 ```nix
+{
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
@@ -138,8 +139,9 @@ If there are git dependencies.
         # you can re-use the same beamDeps argument as generated
         beamDeps = with final; [ prometheus ];
       };
-  });
-};
+    });
+  };
+}
 ```
 
 You will need to run the build process once to fix the hash to correspond to your new git src.
@@ -153,11 +155,13 @@ Practical steps
 - start with the following argument to mixRelease
 
 ```nix
+{
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
     hash = lib.fakeHash;
   };
+}
 ```
 
 The first build will complain about the hash value, you can replace with the suggested value after that.
@@ -216,7 +220,7 @@ in packages.mixRelease {
 Setup will require the following steps:
 
 - Move your secrets to runtime environment variables. For more information refer to the [runtime.exs docs](https://hexdocs.pm/mix/Mix.Tasks.Release.html#module-runtime-configuration). On a fresh Phoenix build that would mean that both `DATABASE_URL` and `SECRET_KEY` need to be moved to `runtime.exs`.
-- `cd assets` and `nix-shell -p node2nix --run node2nix --development` will generate a Nix expression containing your frontend dependencies
+- `cd assets` and `nix-shell -p node2nix --run "node2nix --development"` will generate a Nix expression containing your frontend dependencies
 - commit and push those changes
 - you can now `nix-build .`
 - To run the release, set the `RELEASE_TMP` environment variable to a directory that your program has write access to. It will be used to store the BEAM settings.

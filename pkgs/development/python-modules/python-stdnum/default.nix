@@ -3,25 +3,30 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , zeep
 }:
 
 buildPythonPackage rec {
   pname = "python-stdnum";
-  version = "1.19";
-  format = "setuptools";
+  version = "1.20";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ez7IL1Y5DqdMGQVp6Y8vsUuGmAix1UeFcI8i0P6tiz8=";
+    hash = "sha256-rSos8usCXeQIIQI182tK4xJS3jGGJAzKqBJuEXy4JpA=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
+      --replace-fail " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

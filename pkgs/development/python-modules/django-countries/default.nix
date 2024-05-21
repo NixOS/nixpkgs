@@ -2,10 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# build
+# build-system
 , setuptools
 
-# propagates
+# dependencies
 , asgiref
 , typing-extensions
 
@@ -19,21 +19,21 @@
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "7.5.1";
-  format = "pyproject";
+  version = "7.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-se6s0sgIfMLW0sIMp/3vK4KdDPQ5ahg6OQCDAs4my4M=";
+    hash = "sha256-IR9cJbDVkZrcF3Ti70mV8VeXINQDK8OpwUTWVjD4Zn0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     typing-extensions
   ];

@@ -28,18 +28,19 @@
 , xcbutilwm
 , xcffib
 , xkbcommon
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.23.0";
-  format = "setuptools";
+  version = "0.25.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    rev = "v${version}";
-    hash = "sha256-WxnpkKqYGGEsFTt/1iCSiCzdESJP6HFJ6BztaMsMbYo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-j5hpXfUSDUT9nBr6CafIzqdTYQxSWok+ZlQA7bGdVvk=";
   };
 
   patches = [
@@ -58,15 +59,13 @@ buildPythonPackage rec {
         --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
-    pkg-config
+  build-system = [
     setuptools
     setuptools-scm
+    pkg-config
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     (cairocffi.override { withXcffib = true; })
     dbus-next
     dbus-python
@@ -91,13 +90,18 @@ buildPythonPackage rec {
     xcbutilwm
   ];
 
-  doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
+  doCheck = false;
+  passthru = {
+    tests.qtile = nixosTests.qtile;
+    providedSessions = [ "qtile" ];
+  };
 
   meta = with lib; {
     homepage = "http://www.qtile.org/";
     license = licenses.mit;
     description = "A small, flexible, scriptable tiling window manager written in Python";
+    mainProgram = "qtile";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kamilchm arjan-s ];
+    maintainers = with maintainers; [ arjan-s sigmanificient ];
   };
 }

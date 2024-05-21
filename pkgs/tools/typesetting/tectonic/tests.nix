@@ -3,6 +3,7 @@
 
 { lib
 , fetchFromGitHub
+, writeText
 , runCommand
 , tectonic
 , curl
@@ -26,7 +27,7 @@ let
   };
   testfiles = "${biber-dev-source}/testfiles";
 
-  noNetNotice = builtins.toFile "tectonic-offline-notice" ''
+  noNetNotice = writeText "tectonic-offline-notice" ''
     # To fetch tectonic's web bundle, the tests require internet access,
     # which is not available in the current environment.
   '';
@@ -83,5 +84,16 @@ lib.mapAttrs networkRequiringTestPkg {
     # tectonic caches in the $HOME directory, so set it to $PWD
     export HOME=$PWD
     tectonic -X compile ./test.tex
+  '';
+
+  workspace = ''
+    tectonic -X new
+    cat Tectonic.toml | grep "${tectonic.bundleUrl}"
+  '';
+
+  /** test that the `nextonic -> tectonic` symlink is working as intended */
+  nextonic = ''
+    nextonic new 2>&1 \
+      | grep '"version 2" Tectonic command-line interface activated'
   '';
 }

@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
-  version = "8.5.1";
+  version = "8.5.2";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MzwifQsOSJt9wq8bhVAY6HqXP4Zs4+a2GcG79PdAiMY=";
+    hash = "sha256-Vf6BFr8MphaUJoHMtksbbVQb+jha7jowhktQCVFxlxQ=";
   };
 
-  cargoHash = "sha256-wyyIZ7i1icvD53hnUM4H/kvxj6K/pVzAAvKKp5LzwTE=";
+  cargoHash = "sha256-skUG1B6TCFEXeQSRwA6vWjXmNifk5bTR4+JESw7CZMo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Foundation Cocoa ];
 
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A Cargo subcommand for watching over Cargo project's source";
+    mainProgram = "cargo-watch";
     homepage = "https://github.com/watchexec/cargo-watch";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ivan matthiasbeyer ];

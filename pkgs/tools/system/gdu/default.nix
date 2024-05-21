@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, gdu
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  gdu,
 }:
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.25.0";
+  version = "5.28.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
-    repo = pname;
+    repo = "gdu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TtfTIG0XlEDXVjIZ6Vpy/Z5StXcxyaEocwoe7M75YDw=";
+    hash = "sha256-HfWJVO62UeKE513fq1PaXyaldmrnQ/Fh5bXWSa0xGls=";
   };
 
-  vendorHash = "sha256-DkH1H2XvVlDMFuFSbCmhPMC709upPvXhpzlEgNq5zoA=";
+  vendorHash = "sha256-SlVJDb24txy7DPsL0cG7LeGUjngXaUQ1SusgBfgf4PE=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
+    "-X=github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
   ];
 
   postPatch = ''
-    substituteInPlace cmd/gdu/app/app_test.go --replace "development" "${version}"
+    substituteInPlace cmd/gdu/app/app_test.go \
+      --replace-fail "development" "${version}"
   '';
 
   postInstall = ''
@@ -40,9 +40,7 @@ buildGoModule rec {
 
   doCheck = !stdenv.isDarwin;
 
-  passthru.tests.version = testers.testVersion {
-    package = gdu;
-  };
+  passthru.tests.version = testers.testVersion { package = gdu; };
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";
@@ -54,7 +52,10 @@ buildGoModule rec {
     homepage = "https://github.com/dundee/gdu";
     changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab zowoq ];
+    maintainers = with maintainers; [
+      fab
+      zowoq
+    ];
     mainProgram = "gdu";
   };
 }

@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.dovecot;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9166;
@@ -11,7 +15,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };
@@ -19,7 +23,7 @@ in
       type = types.path;
       default = "/var/run/dovecot/stats";
       example = "/var/run/dovecot2/old-stats";
-      description = lib.mdDoc ''
+      description = ''
         Path under which the stats socket is placed.
         The user/group under which the exporter runs,
         should be able to access the socket in order
@@ -67,7 +71,7 @@ in
       type = types.listOf types.str;
       default = [ "user" ];
       example = [ "user" "global" ];
-      description = lib.mdDoc ''
+      description = ''
         Stats scopes to query.
       '';
     };

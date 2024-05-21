@@ -17,7 +17,7 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = "aioconsole";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SKJLc1Tauwpmh2xtFFyHqKRaaQAK99SpbbGLFmAbKcQ=";
+    hash = "sha256-c8zeKebS04bZS9pMIKAauaLPvRrWaGoDKbnF906tFzQ=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Asynchronous console and interfaces for asyncio";
-    homepage = "https://github.com/vxgmichel/aioconsole";
     changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
+    description = "Asynchronous console and interfaces for asyncio";
+    mainProgram = "apython";
+    homepage = "https://github.com/vxgmichel/aioconsole";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ catern ];
   };

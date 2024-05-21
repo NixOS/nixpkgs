@@ -17,6 +17,7 @@ let
   ++ optional cfg.ext4.enable e2fsprogs
   ++ optional cfg.xfs.enable xfsprogs
   ;
+  hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
   settingsFormat = pkgs.formats.yaml { };
   cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
 in
@@ -26,7 +27,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Enable the cloud-init service. This services reads
           configuration metadata in a cloud environment and configures
           the machine according to this metadata.
@@ -44,24 +45,27 @@ in
 
       btrfs.enable = mkOption {
         type = types.bool;
-        default = false;
-        description = mdDoc ''
+        default = hasFs "btrfs";
+        defaultText = literalExpression ''hasFs "btrfs"'';
+        description = ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
       };
 
       ext4.enable = mkOption {
         type = types.bool;
-        default = true;
-        description = mdDoc ''
+        default = hasFs "ext4";
+        defaultText = literalExpression ''hasFs "ext4"'';
+        description = ''
           Allow the cloud-init service to operate `ext4` filesystem.
         '';
       };
 
       xfs.enable = mkOption {
         type = types.bool;
-        default = false;
-        description = mdDoc ''
+        default = hasFs "xfs";
+        defaultText = literalExpression ''hasFs "xfs"'';
+        description = ''
           Allow the cloud-init service to operate `xfs` filesystem.
         '';
       };
@@ -69,14 +73,14 @@ in
       network.enable = mkOption {
         type = types.bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Allow the cloud-init service to configure network interfaces
           through systemd-networkd.
         '';
       };
 
       settings = mkOption {
-        description = mdDoc ''
+        description = ''
           Structured cloud-init configuration.
         '';
         type = types.submodule {
@@ -88,7 +92,7 @@ in
       config = mkOption {
         type = types.str;
         default = "";
-        description = mdDoc ''
+        description = ''
           raw cloud-init configuration.
 
           Takes precedence over the `settings` option if set.
@@ -164,7 +168,10 @@ in
     systemd.services.cloud-init-local = {
       description = "Initial cloud-init job (pre-networking)";
       wantedBy = [ "multi-user.target" ];
-      before = [ "systemd-networkd.service" ];
+      # In certain environments (AWS for example), cloud-init-local will
+      # first configure an IP through DHCP, and later delete it.
+      # This can cause race conditions with anything else trying to set IP through DHCP.
+      before = [ "systemd-networkd.service" "dhcpcd.service" ];
       path = path;
       serviceConfig = {
         Type = "oneshot";
@@ -201,7 +208,7 @@ in
       description = "Apply the settings specified in cloud-config";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
+      after = [ "network-online.target" "cloud-config.target" ];
 
       path = path;
       serviceConfig = {
@@ -217,7 +224,7 @@ in
       description = "Execute cloud user/final scripts";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
+      after = [ "network-online.target" "cloud-config.service" "rc-local.service" ];
       requires = [ "cloud-config.target" ];
       path = path;
       serviceConfig = {

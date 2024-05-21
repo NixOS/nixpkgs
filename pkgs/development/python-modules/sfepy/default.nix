@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -7,7 +6,7 @@
 , matplotlib
 , pyparsing
 , tables
-, cython
+, cython_0
 , python
 , sympy
 , meshio
@@ -34,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    cython
+    cython_0
     scipy
     matplotlib
     pyparsing

@@ -13,25 +13,26 @@
 , pytest-trio
 , pytestCheckHook
 , pythonOlder
-, sniffio
 , socksio
+, trio
 # for passthru.tests
 , httpx
 , httpx-socks
+, respx
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "1.0.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "encode";
-    repo = pname;
+    repo = "httpcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-UEpERsB7jZlMqRtyHxLYBisfDbTGaAiTtsgU1WUpvtA=";
+    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
   };
 
   nativeBuildInputs = [
@@ -40,18 +41,22 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    anyio
     certifi
     h11
-    sniffio
   ];
 
   passthru.optional-dependencies = {
+    asyncio = [
+      anyio
+    ];
     http2 = [
       h2
     ];
     socks = [
       socksio
+    ];
+    trio = [
+      trio
     ];
   };
 
@@ -61,19 +66,7 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.socks;
-
-  disabledTests = [
-    # https://github.com/encode/httpcore/discussions/813
-    "test_connection_pool_timeout_during_request"
-    "test_connection_pool_timeout_during_response"
-    "test_h11_timeout_during_request"
-    "test_h11_timeout_during_response"
-    "test_h2_timeout_during_handshake"
-    "test_h2_timeout_during_request"
-    "test_h2_timeout_during_response"
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "httpcore"
@@ -82,11 +75,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit httpx httpx-socks;
+    inherit httpx httpx-socks respx;
   };
 
   meta = with lib; {
-    changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
+    changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;

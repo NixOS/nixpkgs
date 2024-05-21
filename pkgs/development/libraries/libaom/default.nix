@@ -1,7 +1,11 @@
 { lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
-, enableButteraugli ? true, libjxl
 , enableVmaf ? true, libvmaf
 , gitUpdater
+
+# for passthru.tests
+, ffmpeg
+, libavif
+, libheif
 }:
 
 let
@@ -9,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.7.1";
+  version = "3.9.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-v2SBiDE4zZe3LMrlo/tP9GzmG/PJZ42rKi1svKJR6ZA=";
+    hash = "sha256-ON/BWCO2k7fADW3ZANKjnRE8SrQZpjdyUF1N0fD/xnc=";
     stripRoot = false;
   };
 
@@ -23,8 +27,7 @@ stdenv.mkDerivation rec {
     yasm perl cmake pkg-config python3
   ];
 
-  propagatedBuildInputs = lib.optional enableButteraugli libjxl
-    ++ lib.optional enableVmaf libvmaf;
+  propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
   preConfigure = ''
     # build uses `git describe` to set the build version
@@ -42,8 +45,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
-  ] ++ lib.optionals enableButteraugli [
-    "-DCONFIG_TUNE_BUTTERAUGLI=1"
   ] ++ lib.optionals enableVmaf [
     "-DCONFIG_TUNE_VMAF=1"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
@@ -70,6 +71,10 @@ stdenv.mkDerivation rec {
       url = "https://aomedia.googlesource.com/aom";
       rev-prefix = "v";
       ignoredVersions = "(alpha|beta|rc).*";
+    };
+    tests = {
+      inherit libavif libheif;
+      ffmpeg = ffmpeg.override { withAom = true; };
     };
   };
 

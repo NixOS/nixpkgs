@@ -2,6 +2,7 @@
 , buildPythonPackage
 , cython
 , fetchPypi
+, fetchpatch
 , mock
 , numpy
 , scipy
@@ -23,6 +24,16 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
   };
+
+  patches = [
+    # https://github.com/piskvorky/gensim/pull/3524
+    # Import deprecated scipy.linalg.triu from numpy.triu. remove on next update
+    (fetchpatch {
+      name = "scipi-linalg-triu-fix.patch";
+      url = "https://github.com/piskvorky/gensim/commit/ad68ee3f105fc37cf8db333bfb837fe889ff74ac.patch";
+      hash = "sha256-Ij6HvVD8M2amzcjihu5bo8Lk0iCPl3iIq0lcOnI6G2s=";
+    })
+  ];
 
   nativeBuildInputs = [
     cython

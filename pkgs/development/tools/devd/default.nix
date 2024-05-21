@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A local webserver for developers";
+    mainProgram = "devd";
     homepage = "https://github.com/cortesi/devd";
     license = licenses.mit;
     maintainers = with maintainers; [ brianhicks ];

@@ -55,6 +55,18 @@ in stdenv.mkDerivation {
 
   patches = map fetchpatch patchesToFetch;
 
+  # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
+  postPatch = ''
+    sed '1i#include <cstdint>' \
+      -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
+      -i IO/Image/vtkSEPReader.h
+  ''
+  + optionalString stdenv.isDarwin ''
+    sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
+    sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
+    sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
+  '';
+
   dontWrapQtApps = true;
 
   # Shared libraries don't work, because of rpath troubles with the current
@@ -86,12 +98,6 @@ in stdenv.mkDerivation {
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
   };
-
-  postPatch = optionalString stdenv.isDarwin ''
-    sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
-    sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
-    sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
-  '';
 
   postInstall = optionalString enablePython ''
     substitute \

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "container2wasm";
-  version = "0.5.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "ktock";
     repo = "container2wasm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ttRl7buVi0bei3zqq1smzLOEdsgtaFdS/S9VIcMgF8w=";
+    hash = "sha256-/E65h2kyzjtAnh72+zyxXf8OvxlUvXT/M25CPteUamE=";
   };
 
-  vendorHash = "sha256-m2KBO14vwSgYkw2aE2AIbkk91dzb83B9n3QSx4YGiME=";
+  vendorHash = "sha256-/V2n9SpBtJVQwERJhSugvAvIoOGuZNnhaaf8k9hh04k=";
 
   ldflags = [
     "-s"

@@ -21,10 +21,6 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
-
-    # unless linked, the binary is placed in $out/bin/nuclear-someVersion
-    # link it to $out/bin/nuclear
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
   '';
 
   meta = with lib; {

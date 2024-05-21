@@ -2,18 +2,20 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, flaky
 , pyjwt
 , pytestCheckHook
 , pythonOlder
 , requests
 , responses
+, setuptools
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.32.0";
-  format = "setuptools";
+  version = "3.41.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,10 +23,14 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-otf1A8onfi6u3Vv7IxBtziLEy2UqVeJxw1u+XIfSchA=";
+    hash = "sha256-FQO1D960mg0G/zYMo4J5MtJbPID4oE8UWNpTPKWtsic=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cryptography
     requests
     pyjwt
@@ -34,17 +40,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    responses
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-    --replace "pyjwt[crypto]>=2.0.0,<3.0.0" "pyjwt[crypto]>=2.0.0,<3.0.0"
-  '';
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  checkInputs = [
+    flaky
+    responses
   ];
 
   pythonImportsCheck = [

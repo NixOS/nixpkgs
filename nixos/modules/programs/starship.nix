@@ -1,13 +1,21 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.starship;
 
   settingsFormat = pkgs.formats.toml { };
 
-  settingsFile = settingsFormat.generate "starship.toml" cfg.settings;
+  userSettingsFile = settingsFormat.generate "starship.toml" cfg.settings;
+
+  settingsFile = if cfg.presets == [] then userSettingsFile else pkgs.runCommand "starship.toml"
+    {
+      nativeBuildInputs = [ pkgs.yq ];
+    } ''
+    tomlq -s -t 'reduce .[] as $item ({}; . * $item)' \
+      ${lib.concatStringsSep " " (map (f: "${cfg.package}/share/starship/presets/${f}.toml") cfg.presets)} \
+      ${userSettingsFile} \
+      > $out
+  '';
 
   initOption =
     if cfg.interactiveOnly then
@@ -18,22 +26,28 @@ let
 in
 {
   options.programs.starship = {
-    enable = mkEnableOption (lib.mdDoc "the Starship shell prompt");
+    enable = lib.mkEnableOption "the Starship shell prompt";
 
-    interactiveOnly = mkOption {
-      default = true;
-      example = false;
-      type = types.bool;
-      description = lib.mdDoc ''
-        Whether to enable starship only when the shell is interactive.
-        Some plugins require this to be set to false to function correctly.
+    package = lib.mkPackageOption pkgs "starship" { };
+
+    interactiveOnly = lib.mkEnableOption ''
+      starship only when the shell is interactive.
+      Some plugins require this to be set to false to function correctly
+    '' // { default = true; };
+
+    presets = lib.mkOption {
+      default = [ ];
+      example = [ "nerd-font-symbols" ];
+      type = with lib.types; listOf str;
+      description = ''
+        Presets files to be merged with settings in order.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Configuration included in `starship.toml`.
 
         See https://starship.rs/config/#prompt for documentation.
@@ -41,7 +55,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     programs.bash.${initOption} = ''
       if [[ $TERM != "dumb" ]]; then
         # don't set STARSHIP_CONFIG automatically if there's a user-specified
@@ -51,7 +65,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${pkgs.starship}/bin/starship init bash)"
+        eval "$(${cfg.package}/bin/starship init bash)"
       fi
     '';
 
@@ -64,7 +78,7 @@ in
         if not test -f "$HOME/.config/starship.toml";
           set -x STARSHIP_CONFIG ${settingsFile}
         end
-        eval (${pkgs.starship}/bin/starship init fish)
+        eval (${cfg.package}/bin/starship init fish)
       end
     '';
 
@@ -77,7 +91,7 @@ in
         if [[ ! -f "$HOME/.config/starship.toml" ]]; then
           export STARSHIP_CONFIG=${settingsFile}
         fi
-        eval "$(${pkgs.starship}/bin/starship init zsh)"
+        eval "$(${cfg.package}/bin/starship init zsh)"
       fi
     '';
   };

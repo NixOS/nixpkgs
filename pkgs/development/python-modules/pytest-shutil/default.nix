@@ -1,13 +1,15 @@
 { lib
 , isPyPy
 , buildPythonPackage
-, fetchPypi
+, pytest-fixture-config
+, fetchpatch
 
-# build
-, pytest
+# build-time
+, setuptools
+, setuptools-git
 
 # runtime
-, setuptools-git
+, pytest
 , mock
 , path
 , execnet
@@ -15,32 +17,34 @@
 , six
 
 # tests
-, cmdline
 , pytestCheckHook
  }:
 
 buildPythonPackage rec {
   pname = "pytest-shutil";
-  version = "1.7.0";
-  format = "setuptools";
+  inherit (pytest-fixture-config) version src;
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2BZSYd5251CFBcNB2UwCsRPclj8nRUOrynTb+r0CEmE=";
-  };
+  sourceRoot = "${src.name}/pytest-shutil";
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "contextlib2" 'contextlib2;python_version<"3"' \
-      --replace "path.py" "path"
-  '';
-
-  buildInputs = [
-    pytest
+  # imp was removed in Python 3.12
+  patches = [
+    (fetchpatch {
+      name = "stop-using-imp.patch";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-pytest-shutil/stop-using-imp.patch?rev=10";
+      hash = "sha256-L8tXoQ9q8o6aP3TpJY/sUVVbUd/ebw0h6de6dBj1WNY=";
+      stripLen = 1;
+    })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-git
+  ];
+
+  buildInputs = [ pytest ];
+
+  dependencies = [
     mock
     path
     execnet
@@ -49,7 +53,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    cmdline
     pytestCheckHook
   ];
 

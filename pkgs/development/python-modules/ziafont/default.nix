@@ -2,15 +2,15 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 , nbval
 }:
 
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.6";
-
-  format = "pyproject";
+  version = "0.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,8 +18,12 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-3ZVj1ZxbFkFDDYbsIPzo7GMWGx7f5qWZQlcGCVXv73M=";
+    hash = "sha256-C+dC+mNquDuj6RfJpiEbeuGZOIXcgSrTB4XM21reBPs=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

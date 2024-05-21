@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , buildPythonApplication
-, fetchpatch
 , pem
 , pyside6
 , twisted
@@ -14,7 +13,7 @@
 
 buildPythonApplication rec {
   pname = "syncplay";
-  version = "1.7.0";
+  version = "1.7.2";
 
   format = "other";
 
@@ -22,15 +21,10 @@ buildPythonApplication rec {
     owner = "Syncplay";
     repo = "syncplay";
     rev = "v${version}";
-    sha256 = "sha256-Te81yOv3D6M6aMfC5XrM6/I6BlMdlY1yRk1RRJa9Mxg=";
+    sha256 = "sha256-PERPE6141LXmb8fmW17Vu54Unpf9vEK+ahm6q1byRTU=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-typeerror.patch";
-      url = "https://github.com/Syncplay/syncplay/commit/b62b038cdf58c54205987dfc52ebf228505ad03b.patch";
-      hash = "sha256-pSP33Qn1I+nJBW8T1E1tSJKRh5OnZMRsbU+jr5z4u7c=";
-    })
     ./trusted_certificates.patch
   ];
 
@@ -52,6 +46,6 @@ buildPythonApplication rec {
     description = "Free software that synchronises media players";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ Enzime ];
+    maintainers = with maintainers; [ assistant Enzime ];
   };
 }

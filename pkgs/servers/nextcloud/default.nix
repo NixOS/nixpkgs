@@ -1,7 +1,7 @@
 { lib, stdenvNoCC, fetchurl, nixosTests
 , nextcloud27Packages
 , nextcloud28Packages
-, nextcloud26Packages
+, nextcloud29Packages
 }:
 
 let
@@ -36,28 +36,28 @@ let
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
-      platforms = with platforms; unix;
+      platforms = platforms.linux;
       knownVulnerabilities = extraVulnerabilities
         ++ (optional eol "Nextcloud version ${version} is EOL");
     };
   };
 in {
-  nextcloud26 = generic {
-    version = "26.0.10";
-    hash = "sha256-yArkYMxOmvfQsJd6TJJX+t22a/V5OW9nwHfgLZsmlIw=";
-    packages = nextcloud26Packages;
-  };
-
   nextcloud27 = generic {
-    version = "27.1.5";
-    hash = "sha256-O1NMmOdrf+2Mo5NMrUGbEK9YViWfMTvsIs06e/pu+WE=";
+    version = "27.1.9";
+    hash = "sha256-+P4QzLWFNJ+EUQ25tLAgjbfziV2vPXpejxfSNuzEEfU=";
     packages = nextcloud27Packages;
   };
 
   nextcloud28 = generic {
-    version = "28.0.1";
-    hash = "sha256-L4BzW0Qwgicv5qO14yE3lX8fxEjHU0K5S1IAspcl86Q=";
+    version = "28.0.5";
+    hash = "sha256-3KEQD5W4ZLreETR3cjxxrIlxkzUsMX45zShth2NXBus=";
     packages = nextcloud28Packages;
+  };
+
+  nextcloud29 = generic {
+    version = "29.0.0";
+    hash = "sha256-6bU/ZDK29mRIfThpZF+hIaZM8O1q7oOqVgkD2vhrUr0=";
+    packages = nextcloud29Packages;
   };
 
   # tip: get the sha with:

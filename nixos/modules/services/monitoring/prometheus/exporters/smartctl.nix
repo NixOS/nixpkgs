@@ -1,9 +1,8 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.smartctl;
+  inherit (lib) mkOption types literalExpression;
   args = lib.escapeShellArgs ([
     "--web.listen-address=${cfg.listenAddress}:${toString cfg.port}"
     "--smartctl.path=${pkgs.smartmontools}/bin/smartctl"
@@ -20,7 +19,7 @@ in {
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
-      description = lib.mdDoc ''
+      description = ''
         Paths to the disks that will be monitored. Will autodiscover
         all disks if none given.
       '';
@@ -29,7 +28,7 @@ in {
       type = types.str;
       default = "60s";
       example = "2m";
-      description = lib.mdDoc ''
+      description = ''
         Interval that limits how often a disk can be queried.
       '';
     };

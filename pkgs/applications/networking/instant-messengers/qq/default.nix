@@ -9,6 +9,7 @@
 , libdrm
 , libgcrypt
 , libkrb5
+, libnotify
 , mesa # for libgbm
 , libGL
 , nss
@@ -18,18 +19,20 @@
 , vips
 , at-spi2-core
 , autoPatchelfHook
-, wrapGAppsHook
+, makeShellWrapper
+, wrapGAppsHook3
+, commandLineArgs ? ""
 }:
 
 let
   sources = import ./sources.nix;
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_amd64.deb";
+      url = sources.amd64_url;
       hash = sources.amd64_hash;
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${sources.urlhash}/linuxqq_${sources.version}_arm64.deb";
+      url = sources.arm64_url;
       hash = sources.arm64_hash;
     };
   };
@@ -42,7 +45,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    makeShellWrapper
+    wrapGAppsHook3
     dpkg
   ];
 
@@ -61,6 +65,8 @@ stdenv.mkDerivation {
     xorg.libXdamage
   ];
 
+  dontWrapGApps = true;
+
   runtimeDependencies = map lib.getLib [
     systemd
   ];
@@ -74,9 +80,12 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/qq.desktop \
       --replace "/opt/QQ/qq" "$out/bin/qq" \
       --replace "/usr/share" "$out/share"
-    makeWrapper $out/opt/QQ/qq $out/bin/qq \
+    makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
+      "''${gappsWrapperArgs[@]}"
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
@@ -87,6 +96,9 @@ stdenv.mkDerivation {
     # https://github.com/microcai/gentoo-zh/commit/06ad5e702327adfe5604c276635ae8a373f7d29e
     ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
       $out/opt/QQ/libappindicator3.so
+
+    ln -s ${libnotify}/lib/libnotify.so \
+      $out/opt/QQ/libnotify.so
 
     runHook postInstall
   '';

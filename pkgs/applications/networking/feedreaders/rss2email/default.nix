@@ -1,4 +1,9 @@
-{ pythonPackages, fetchurl, lib, nixosTests }:
+{ lib
+, pythonPackages
+, fetchPypi
+, fetchpatch2
+, nixosTests
+}:
 
 with pythonPackages;
 
@@ -9,10 +14,18 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ feedparser html2text ];
   nativeCheckInputs = [ beautifulsoup4 ];
 
-  src = fetchurl {
-    url = "mirror://pypi/r/rss2email/${pname}-${version}.tar.gz";
-    sha256 = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-RwORS2PHquxBZLNKqCJtR5XX4SHqPCb/Fn+Y68dfI/g=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "html2text-2024.2.25-compat.patch";
+      url = "https://github.com/rss2email/rss2email/commit/b5c0e78006c2db6929b5ff50e8529de58a00412a.patch";
+      hash = "sha256-edmsi3I0acx5iF9xoAS9deSexqW2UtWZR/L7CgeZs/M=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ];
 

@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.15.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BEKsa5mzJplcyR65/4T0MizrYxEk8/ON8SDFt8ZxqMU=";
+    hash = "sha256-H/S2TNzUIAjHDCrfQ3pkHC3yVf1k1DYkR5eBme8Cuq4=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-RrcJJzjmihjR/E19Pqgl//+yweRsaqWZ0yPcd1AvOc0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -59,6 +59,7 @@ buildGoModule rec {
     homepage = "https://github.com/ko-build/ko";
     changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
     description = "Build and deploy Go applications on Kubernetes";
+    mainProgram = "ko";
     longDescription = ''
       ko is a simple, fast container image builder for Go applications.
       It's ideal for use cases where your image contains a single Go application without any/many dependencies on the OS base image (e.g. no cgo, no OS package dependencies).

@@ -27,13 +27,14 @@
 , pygobject3
 , pyopenssl
 , qrcode
-, pytest-asyncio
+, pytest-asyncio_0_21
 , python-snappy
 , pytestCheckHook
 , pythonOlder
   # , pytrie
 , rlp
 , service-identity
+, setuptools
 , spake2
 , twisted
 , txaio
@@ -49,7 +50,7 @@
 buildPythonPackage rec {
   pname = "autobahn";
   version = "23.6.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -60,10 +61,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest>=2.8.6,<3.3.0" "pytest"
+      --replace-fail "pytest>=2.8.6,<3.3.0" "pytest"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     cryptography
     hyperlink
     pynacl
@@ -72,11 +77,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0_21
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.scram
-  ++ passthru.optional-dependencies.serialization
-  ++ passthru.optional-dependencies.xbr;
+  ] ++ optional-dependencies.scram
+  ++ optional-dependencies.serialization
+  ++ optional-dependencies.xbr;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
@@ -91,7 +96,7 @@ buildPythonPackage rec {
     "autobahn"
   ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
     accelerate = [ /* wsaccel */ ];
     compress = [ python-snappy ];

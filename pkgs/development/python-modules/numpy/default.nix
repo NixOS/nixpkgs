@@ -8,7 +8,7 @@
 , writeTextFile
 
 # build-system
-, cython_3
+, cython
 , gfortran
 , meson-python
 , mesonEmulatorHook
@@ -18,6 +18,9 @@
 # native dependencies
 , blas
 , lapack
+
+# Reverse dependency
+, sage
 
 # tests
 , hypothesis
@@ -53,14 +56,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.26.1";
+  version = "1.26.4";
   pyproject = true;
   disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-yMbHLUqfgx8yjvsTEmQqHK+vqoiYHZq3Y2jVDQfZPL4=";
+    hash = "sha256-KgKrqe0S5KxOs+qUIcQgMBoMZGDZgw10qd+H76SRIBA=";
   };
 
   patches = [
@@ -88,10 +91,13 @@ in buildPythonPackage rec {
     # remove needless reference to full Python path stored in built wheel
     substituteInPlace numpy/meson.build \
       --replace 'py.full_path()' "'python'"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "meson-python>=0.15.0,<0.16.0" "meson-python"
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gfortran
     meson-python
     pkg-config
@@ -111,7 +117,7 @@ in buildPythonPackage rec {
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
-  # see https://github.com/xianyi/OpenBLAS/issues/2993
+  # see https://github.com/OpenMathLib/OpenBLAS/issues/2993
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
     export OMP_NUM_THREADS=$((NIX_BUILD_CORES > 64 ? 64 : NIX_BUILD_CORES))
@@ -164,6 +170,9 @@ in buildPythonPackage rec {
     "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
   ] ++ lib.optionals stdenv.isAarch64 [
     "test_big_arrays" # OOM on a 16G machine
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # can fail on virtualized machines confused over their cpu identity
+    "test_dispatcher"
   ];
 
   passthru = {
@@ -171,6 +180,7 @@ in buildPythonPackage rec {
     blas = blas.provider;
     blasImplementation = blas.implementation;
     inherit cfg;
+    tests = { inherit sage; };
   };
 
   # Disable test
@@ -180,8 +190,8 @@ in buildPythonPackage rec {
   meta = {
     changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
     description = "Scientific tools for Python";
+    mainProgram = "f2py";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wfa2-lib";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "smarco";
     repo = "WFA2-lib";
     rev = "v${version}";
-    hash = "sha256-h4e+f+JkQr3qqaBUDly24ZvKxaEGzeJtMXejh8aD5D0=";
+    hash = "sha256-vTeSvhSt3PQ/BID6uM1CuXkQipgG7VViDexvAwV4nW8=";
   };
 
   nativeBuildInputs = [

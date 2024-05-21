@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake, cunit }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cunit,
+  sphinx,
+  autoreconfHook,
+  nettle,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wslay";
@@ -11,17 +20,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-xKQGZO5hNzMg+JYKeqOBsu73YO+ucBEOcNhG8iSNYvA=";
   };
 
+  postPatch = ''
+    substituteInPlace doc/sphinx/conf.py.in \
+      --replace-fail "add_stylesheet" "add_css_file"
+  '';
+
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "WSLAY_TESTS" true)
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    sphinx
   ];
+
+  buildInputs = [ nettle ];
 
   doCheck = true;
 
   checkInputs = [ cunit ];
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH=$(pwd)/lib/.libs
+  '';
 
   meta = with lib; {
     homepage = "https://tatsuhiro-t.github.io/wslay/";

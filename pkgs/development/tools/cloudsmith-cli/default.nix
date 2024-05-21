@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "0.35.2";
+  version = "1.2.3";
   format = "wheel";
 
   src = fetchPypi {
     pname = "cloudsmith_cli";
     inherit format version;
-    hash = "sha256-+M4CPveS9dltMI291Atm84T/cf4dPOO3wPvPI15E73Y=";
+    hash = "sha256-MIoRLWk6G8uchQlGOYOsg3XliZ1wMrYSOhAEQrus+fQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
+    mainProgram = "cloudsmith";
     changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ ];
     license = licenses.asl20;

@@ -9,7 +9,7 @@
 , keybinder3
 , desktop-file-utils
 , shared-mime-info
-, wrapGAppsHook
+, wrapGAppsHook3
 , wafHook
 , bash
 , dbus
@@ -29,7 +29,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook3 intltool
     # For setup hook
     gobject-introspection wafHook
     itstool            # for help pages

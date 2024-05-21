@@ -6,19 +6,21 @@
 , python-multipart
 , starlette
 , wtforms
+, httpx
+, jinja2
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "starlette-wtf";
-  version = "0.4.3";
+  version = "0.4.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "muicss";
     repo = "starlette-wtf";
-    rev = "v${version}";
-    hash = "sha256-TSxcIgINRjQwiyhpGOEEpXJKcPlhFCxMQh4/GY1g1lw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-88zU2NAsdty2OhHauwQ5+6LazuRDYPoqN9IIipI1t2Q=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +35,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    httpx
+    jinja2
   ];
 
   meta = with lib; {

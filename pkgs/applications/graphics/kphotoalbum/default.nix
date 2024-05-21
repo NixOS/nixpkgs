@@ -4,7 +4,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, wrapGAppsHook
+, wrapGAppsHook3
 , exiv2
 , ffmpeg
 , libkdcraw
@@ -38,7 +38,7 @@ mkDerivation rec {
   # be on the system anyway, so there is no real harm including it
   buildInputs = [ exiv2 phonon libvlc ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
 
   propagatedBuildInputs = [ kconfig kiconthemes kio kinit kpurpose libkdcraw ];
 

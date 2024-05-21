@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to remove commented-out code from Python files";
+    mainProgram = "eradicate";
     homepage = "https://github.com/myint/eradicate";
     changelog = "https://github.com/wemake-services/eradicate/releases/tag/${version}";
     license = with licenses; [ mit ];

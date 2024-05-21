@@ -28,6 +28,6 @@ stdenv.mkDerivation  rec {
     description = "fakeXinerama for Xpra";
     platforms = platforms.linux;
     maintainers = [ ];
-    license = licenses.gpl2;
+    license = licenses.mit;
   };
 }

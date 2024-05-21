@@ -9,14 +9,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cdn";
-  version = "13.0.0";
+  version = "13.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-yJ8jTeT4Gu23YSHl5GZ0+zdlC3s+GIxS4ir8z/HBkA4=";
+    pname = "azure_mgmt_cdn";
+    inherit version;
+    hash = "sha256-Igpr2snnXkwAyEGlnY3j7JAQ4LnhQS3snmwka2GeO/I=";
   };
 
   propagatedBuildInputs = [

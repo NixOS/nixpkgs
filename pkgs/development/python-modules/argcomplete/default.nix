@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.1.6";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,10 +17,8 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Akwa6dsf8w/Sw0ydUrqKEP5+dzHYX4hS8vcl7Gw4ePc=";
+    hash = "sha256-ekTmT6jYkC36X2e0ukwHfDGwdPg3jK8jML2naBCgNI8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

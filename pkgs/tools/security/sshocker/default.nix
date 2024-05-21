@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for SSH, reverse sshfs and port forwarder";
+    mainProgram = "sshocker";
     homepage = "https://github.com/lima-vm/sshocker";
     changelog = "https://github.com/lima-vm/sshocker/releases/tag/v${version}";
     license = licenses.asl20;

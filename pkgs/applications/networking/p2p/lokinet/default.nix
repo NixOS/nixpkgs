@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , libevent
 , libsodium
@@ -32,6 +33,15 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
     hash = "sha256-aVFLDGTbRUOw2XWDpl+ojwHBG7c0miGeoKMLwMpqVtg=";
   };
+
+  patches = [
+    # Fix gcc-13 compatibility:
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/oxen-io/lokinet/commit/89c5c73be48788ba14a55cb6d82d57208b487eaf.patch";
+      hash = "sha256-yCy4WXs6p67TMe4uPNAuQyJvtP3IbpJS81AeomNu9lU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -1,21 +1,19 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, libopus, soxr
 , IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
 , nixosTests }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "sha256-dlK1xQQqst4VQjioC7MZzqXwMC+JfqtvnD5lrOqGhYI=";
+    sha256 = "sha256-XxpiLojs1TI3qM7yXS+OPcHKo6pLcfJ+Eop7GjQ4HQw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   # not needed
   buildInputs = [
     boost179
-    asio avahi flac libogg libvorbis
+    asio avahi flac libogg libvorbis libopus
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
   ++ lib.optional stdenv.isLinux alsa-lib

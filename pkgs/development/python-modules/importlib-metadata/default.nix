@@ -7,11 +7,14 @@
 , typing-extensions
 , toml
 , zipp
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "6.8.0";
+  version = "7.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    hash = "sha256-26zniS2MDErBrQlmYiMvgx1OZPTEVFvVMBaj6dRlR0M=";
+    hash = "sha256-t4k4uSbujV8CD8R3LUhwRYBaVd260uzyHG1gk43H/NI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +43,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "importlib_metadata"
   ];
+
+  passthru.tests = { inherit sage; };
 
   meta = with lib; {
     description = "Read metadata from Python packages";

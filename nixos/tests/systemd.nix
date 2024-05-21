@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd";
 
-  nodes.machine = { lib, ... }: {
+  nodes.machine = { config, lib, ... }: {
     imports = [ common/user-account.nix common/x11.nix ];
 
     virtualisation.emptyDiskImages = [ 512 512 ];
@@ -38,9 +38,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       script = "true";
     };
 
+    systemd.services.testDependency1 = {
+      description = "Test Dependency 1";
+      wantedBy = [ config.systemd.services."testservice1".name ];
+      serviceConfig.Type = "oneshot";
+      script = ''
+        true
+      '';
+    };
+
     systemd.services.testservice1 = {
       description = "Test Service 1";
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ config.systemd.targets.multi-user.name ];
       serviceConfig.Type = "oneshot";
       script = ''
         if [ "$XXX_SYSTEM" = foo ]; then

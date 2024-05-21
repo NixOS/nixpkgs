@@ -1,10 +1,10 @@
 #!@stdenv_shell@ -e
 
+export NIXPKGS_DF_EXE="soundsense/soundSense.sh"
 source @dfInit@
 
-for p in soundsense/*; do
-  update_path "$p"
+for path in soundsense/*; do
+  update_path "$path"
 done
 
-cd "$DF_DIR"
-PATH=@jre@/bin exec $DF_DIR/soundsense/soundSense.sh
+PATH="@jre@/bin:$PATH" go

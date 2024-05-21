@@ -1,25 +1,26 @@
 { buildPythonPackage
 , lib
-, pythonOlder
 , fetchPypi
+, setuptools
 , six
-, enum34
 }:
 
 buildPythonPackage rec {
   pname = "absl-py";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "2.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0sJE0BBIukdufAgL0sbfXhQdIR3oAiNGDVs7iipYQz0=";
+    hash = "sha256-eCB5DvuzFnOc3otOGTVyQ/w2CKFSAkKIUT3ZaNfZWf8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
   ];
 
   # checks use bazel; should be revisited

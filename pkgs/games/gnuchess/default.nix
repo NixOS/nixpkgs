@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ makeWrapper ];
 
+  configureFlags = [
+    # register keyword is removed in c++17 so stick to c++14
+    "CXXFLAGS=-std=c++14"
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/gnuchessx --set PATH "$out/bin"
     wrapProgram $out/bin/gnuchessu --set PATH "$out/bin"

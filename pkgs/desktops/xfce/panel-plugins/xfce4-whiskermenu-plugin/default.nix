@@ -17,10 +17,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-whiskermenu-plugin";
-  version = "2.8.2";
+  version = "2.8.3";
   rev-prefix = "v";
   odd-unstable = false;
-  sha256 = "sha256-v1YvmdL1AUyzJjbU9/yIYAAuQfbVlJCcdagM5yhKMuU=";
+  sha256 = "sha256-xRLvjRu/I+wsTWXUhrJUcrQz+JkZCYqoJSqYAYOztgg=";
 
   nativeBuildInputs = [
     cmake
@@ -42,6 +42,7 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Alternate application launcher for Xfce";
+    mainProgram = "xfce4-popup-whiskermenu";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

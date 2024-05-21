@@ -6,15 +6,12 @@
 , isPyPy
 , pythonOlder
 
-# https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
 # build-system
 , certifi
-, oldest-supported-numpy
 , pkg-config
 , pybind11
 , setuptools
 , setuptools-scm
-, wheel
 
 # native libraries
 , ffmpeg-headless
@@ -72,6 +69,9 @@
 # required for headless detection
 , libX11
 , wayland
+
+# Reverse dependency
+, sage
 }:
 
 let
@@ -79,15 +79,15 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.8.0";
+  version = "3.8.4";
   pname = "matplotlib";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-34UF4cGdXCwmr/NJeny9PM/C6XBD0eTbPnavo5kWS2k=";
+    hash = "sha256-iqw5fV6ewViWDjHDgcX/xS3dUr2aR3F+KmlAOBZ9/+o=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -102,31 +102,20 @@ buildPythonPackage rec {
     let
       tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    lib.optionalString enableTk ''
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+    '' + lib.optionalString enableTk ''
       sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
     '' + lib.optionalString (stdenv.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.c \
         --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
         --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-    '' +
-    # bring our own system libraries
-    # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst#c-libraries
-    ''
-      echo "[libs]
-      system_freetype=true
-      system_qhull=true" > mplsetup.cfg
     '';
 
   nativeBuildInputs = [
-    certifi
-    numpy
-    oldest-supported-numpy # TODO remove after updating to 3.8.0
     pkg-config
-    pybind11
-    setuptools
-    setuptools-scm
-    wheel
   ] ++ lib.optionals enableGtk3 [
     gobject-introspection
   ];
@@ -153,7 +142,15 @@ buildPythonPackage rec {
     "strictoverflow"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    certifi
+    numpy
+    pybind11
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     # explicit
     contourpy
     cycler
@@ -184,16 +181,19 @@ buildPythonPackage rec {
     libs = {
       system_freetype = true;
       system_qhull = true;
-    } // lib.optionalAttrs stdenv.isDarwin {
       # LTO not working in darwin stdenv, see #19312
-      enable_lto = false;
+      enable_lto = !stdenv.isDarwin;
     };
   };
 
+  passthru.tests = { inherit sage; };
+
   env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
 
-  # Matplotlib needs to be built against a specific version of freetype in
-  # order for all of the tests to pass.
+  # Encountering a ModuleNotFoundError, as describved and investigated at:
+  # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
+  # which may fail due to a freetype version that doesn't match the freetype
+  # version used by upstream.
   doCheck = false;
 
   meta = with lib; {

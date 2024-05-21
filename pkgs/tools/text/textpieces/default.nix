@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , python3
 , meson
 , ninja
@@ -61,6 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     pythonEnv
   ];
 
+  patches = [
+  (fetchpatch {
+    url = "https://github.com/liferooter/textpieces/commit/26348782b9fddc5f2ffb9497cf18ec8ce9592960.patch";
+    hash = "sha256-w86PCeDhoyMPm63GCBa2Ax8KfCdlxtmGeUrmt1ZSz1k=";
+  })
+  ];
+
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
@@ -74,6 +82,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zendo ];
-    broken = true; # https://github.com/liferooter/textpieces/issues/130
   };
 })

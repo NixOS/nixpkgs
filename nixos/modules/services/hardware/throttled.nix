@@ -7,12 +7,12 @@ let
 in {
   options = {
     services.throttled = {
-      enable = mkEnableOption (lib.mdDoc "fix for Intel CPU throttling");
+      enable = mkEnableOption "fix for Intel CPU throttling";
 
       extraConfig = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc "Alternative configuration";
+        description = "Alternative configuration";
       };
     };
   };

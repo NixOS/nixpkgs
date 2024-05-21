@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     description = "An efficient dynamic menu for wayland (wlroots)";
     homepage = "https://github.com/nyyManni/dmenu-wayland";
     maintainers = with maintainers; [ rewine ];
+    mainProgram = "dmenu-wl";
   };
 }

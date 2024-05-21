@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mediafile";
-  version = "0.10.1";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "beetbox";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2h17FA0GTY4R+WhZiQtPFYf6gH7XLbI3aOB/nUXFtJI=";
+    hash = "sha256-5HHfG1hCIbM/QSXgB61yHNNWJTsuyAh6CQJ7SZhZuvo=";
   };
 
   nativeBuildInputs = [

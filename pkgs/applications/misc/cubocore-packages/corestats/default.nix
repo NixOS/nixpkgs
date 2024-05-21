@@ -25,6 +25,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A system resource viewer from the C Suite";
+    mainProgram = "corestats";
     homepage = "https://gitlab.com/cubocore/coreapps/corestats";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

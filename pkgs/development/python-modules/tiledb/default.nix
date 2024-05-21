@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.23.0";
+  version = "0.26.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     rev = "refs/tags/${version}";
-    hash = "sha256-QxqUYu8y+k5SLRFtxpcs57gnAHgXIre0smURlqUzC1s=";
+    hash = "sha256-8c1l4zoD44SjaOUXlFUSho/y7oMNOEVM9ZlnRs1irV8=";
   };
 
   nativeBuildInputs = [
@@ -47,8 +47,6 @@ buildPythonPackage rec {
   ];
 
   TILEDB_PATH = tiledb;
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   disabled = !isPy3k; # Not bothering with python2 anymore
 
@@ -80,7 +78,6 @@ buildPythonPackage rec {
     description = "Python interface to the TileDB storage manager";
     homepage = "https://github.com/TileDB-Inc/TileDB-Py";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh ];
     # tiledb/core.cc:556:30: error: ‘struct std::array<long unsigned int, 2>’ has no member named ‘second’
     broken = true;
   };

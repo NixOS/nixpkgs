@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , python3
 , makeWrapper
@@ -17,23 +17,23 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.12.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    hash = "sha256-1+TqIExvZHE3X38Fh43CasmTyjIr2WcEw07ZJEFrcBw=";
+    hash = "sha256-AnyltqNP+XyVzgCobM3g6DIXntD3spKecYtCRx+8oic=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-27r6lZiD1Ptk0WIYdwNLSZy6iMnmaZjKXBUjr+5+1lQ=";
+    hash = "sha256-3CYSw1Qy363eyhy3UyFgihSau+miNHwvKjhlq/kWxWQ=";
   };
 
   nativeBuildInputs = [
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
     nodejs
     python3
     makeWrapper

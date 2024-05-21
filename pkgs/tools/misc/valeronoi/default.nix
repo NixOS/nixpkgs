@@ -4,7 +4,6 @@
 , boost
 , cgal
 , cmake
-, copyDesktopItems
 , gpp
 , mpfr
 , qtbase
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     wrapQtAppsHook
   ];
 

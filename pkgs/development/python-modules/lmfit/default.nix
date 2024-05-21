@@ -4,6 +4,7 @@
   setuptools,
   setuptools-scm,
   asteval,
+  dill,
   numpy,
   scipy,
   uncertainties,
@@ -14,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "lmfit";
-  version = "1.2.2";
+  version = "1.3.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BEoFKhGmHaBXYnRQTBfrfigDtBEo4lgh6WYyIH8jyIw=";
+    hash = "sha256-vDhiRK29EO8aKixPnRez3vkFVSwKZK74VPCtRswwnMU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "--cov=lmfit --cov-report html" ""
+    substituteInPlace pyproject.toml --replace "--cov=lmfit --cov-report html" ""
   '';
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     asteval
+    dill
     numpy
     scipy
     uncertainties
@@ -43,13 +45,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pandas
     matplotlib
-  ];
-
-  disabledTests = [
-    # https://github.com/lmfit/lmfit-py/issues/878
-    "test_emcee_multiprocessing"
-    "test_explicit_independent_vars"
-    "test_result_eval_custom_x"
   ];
 
   meta = with lib; {

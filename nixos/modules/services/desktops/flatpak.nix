@@ -14,7 +14,7 @@ in {
   ###### interface
   options = {
     services.flatpak = {
-      enable = mkEnableOption (lib.mdDoc "flatpak");
+      enable = mkEnableOption "flatpak";
     };
   };
 
@@ -31,6 +31,8 @@ in {
     environment.systemPackages = [ pkgs.flatpak ];
 
     security.polkit.enable = true;
+
+    fonts.fontDir.enable = true;
 
     services.dbus.packages = [ pkgs.flatpak ];
 

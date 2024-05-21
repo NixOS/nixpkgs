@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LukeSmithxyz/grb";
     license = licenses.publicDomain;
     maintainers = [ maintainers.cafkafk ];
+    mainProgram = "grb";
   };
 }

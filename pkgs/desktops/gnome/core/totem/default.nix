@@ -13,7 +13,7 @@
 , glib
 , gobject-introspection
 , totem-pl-parser
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , vala
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     python3Packages.python
     itstool
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -91,9 +91,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
     gnome-desktop
     gsettings-desktop-schemas
-    # for plug-ins
     python3Packages.pygobject3
-    python3Packages.dbus-python
   ];
 
   nativeCheckInputs = [
@@ -124,8 +122,6 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "totem";
@@ -134,7 +130,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Videos";
+    homepage = "https://apps.gnome.org/Totem/";
     description = "Movie player for the GNOME desktop based on GStreamer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins

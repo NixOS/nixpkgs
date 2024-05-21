@@ -1,27 +1,20 @@
-{ lib, stdenv, undmg, fetchurl }:
-let
-  common = import ./common.nix { inherit fetchurl; };
-  inherit (stdenv.hostPlatform) system;
-in
-stdenv.mkDerivation rec {
-  inherit (common) pname version;
-  src = common.sources.${system} or (throw "Source for ${pname} is not available for ${system}");
+{ stdenv, pname, version, src, meta, undmg }:
 
-  appName = "Lens";
+stdenv.mkDerivation {
+  inherit pname version src meta;
 
-  sourceRoot = "${appName}.app";
+  sourceRoot = ".";
 
-  buildInputs = [ undmg ];
+  nativeBuildInputs = [ undmg ];
+
   installPhase = ''
-    mkdir -p "$out/Applications/${appName}.app"
-    cp -R . "$out/Applications/${appName}.app"
+    runHook preInstall
+
+    mkdir -p "$out/Applications"
+    cp -R "Lens.app" "$out/Applications/Lens.app"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "The Kubernetes IDE";
-    homepage = "https://k8slens.dev/";
-    license = licenses.lens;
-    maintainers = with maintainers; [ dbirks ];
-    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
-  };
+  dontFixup = true;
 }

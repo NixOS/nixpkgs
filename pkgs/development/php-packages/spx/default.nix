@@ -1,8 +1,14 @@
-{ buildPecl, lib, fetchFromGitHub, zlib }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  zlib,
+}:
 
 let
-  version = "0.4.14";
-in buildPecl {
+  version = "0.4.15";
+in
+buildPecl {
   inherit version;
   pname = "spx";
 
@@ -10,12 +16,10 @@ in buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-LdR3ilknSUuNTAb9wfIpNGdaR3uwd4C47nZYRzfTfx8=";
+    hash = "sha256-gw6wbPt1Qy0vNfT0flq7bxpnGU3SgJvPVhk8H0Imvx4=";
   };
 
-  configureFlags = [
-    "--with-zlib-dir=${zlib.dev}"
-  ];
+  configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];
 
   preConfigure = ''
     substituteInPlace Makefile.frag \

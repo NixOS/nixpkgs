@@ -87,6 +87,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cross-platform desktop notification library for Python";
+    mainProgram = "notifypy";
     homepage = "https://github.com/ms7m/notify-py";
     changelog = "https://github.com/ms7m/notify-py/releases/tag/v${version}";
     license = licenses.mit;

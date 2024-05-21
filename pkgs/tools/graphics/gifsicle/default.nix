@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gifsicle";
-  version = "1.94";
+  version = "1.95";
 
   src = fetchurl {
     url = "https://www.lcdf.org/gifsicle/${pname}-${version}.tar.gz";
-    sha256 = "sha256-S8lwBcB4liDedfiZl9PC9wdYxyxhqgou8E96Zxov+Js=";
+    sha256 = "sha256-snEWRwCf0qExMPO+FgUy7UZTjnYr/A8CDepQYYp9yVA=";
   };
 
   buildInputs = lib.optionals gifview [ xorgproto libXt libX11 ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Command-line tool for creating, editing, and getting information about GIF images and animations";
     homepage = "https://www.lcdf.org/gifsicle/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ zimbatm ];
   };

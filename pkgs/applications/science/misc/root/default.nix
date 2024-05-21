@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , callPackage
+, fetchgit
 , fetchurl
 , fetchpatch
 , makeWrapper
@@ -53,12 +54,11 @@
 , Cocoa
 , CoreSymbolication
 , OpenGL
-, noSplash ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.30.02";
+  version = "6.30.06";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -66,7 +66,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-eWWkVtGtHuDV/kdpv1qP7Cka9oTtk9sPMICpw2JDUYM=";
+    hash = "sha256-MA237RtnjtL7ljXKZ1khoZRcfCED2oQAM7STCR9VcAw=";
+  };
+
+  clad_src = fetchgit {
+    url = "https://github.com/vgvassilev/clad";
+    rev = "refs/tags/v1.4"; # Make sure that this is the same tag as in the ROOT build files!
+    hash = "sha256-OI9PaS7kQ/ewD5Soe3gG5FZdlR6qG6Y3mfHwi5dj1sI=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -111,11 +117,15 @@ stdenv.mkDerivation rec {
   patches = [
     ./sw_vers.patch
 
-    # Fix for builtin_llvm=OFF
-    # https://github.com/root-project/root/pull/14238
+    # compatibility with recent XRootD
+    # https://github.com/root-project/root/pull/13752
     (fetchpatch {
-      url = "https://github.com/root-project/root/commit/1477d3adebf27a19f3a8b85f21c27a0a5649c7ff.diff";
-      hash = "sha256-g+FqXBTWXA7t7F/rMarnmOK2014oCNnNJbHhjH+Tvjw=";
+      url = "https://github.com/root-project/root/commit/3d3cda6c520791282298782189cdb8ca07ace4b9.diff";
+      hash = "sha256-O3aXzrOEQiPjZgbAj9TL6Wt/adN1kKFwjooeaFRyT4I=";
+    })
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/6e7798e62dbed1ffa8b91a180fa5a080b7c04ba3.diff";
+      hash = "sha256-47/J631DBnVlvM1Pm9iicKXDKAqN8v9hjAstQuHmH8Q=";
     })
   ];
 
@@ -128,6 +138,23 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
+    # We have to bypass the connection check, because it would disable clad.
+    # This should probably be fixed upstream with a flag to disable the
+    # connectivity check!
+    substituteInPlace CMakeLists.txt \
+      --replace 'if(NO_CONNECTION)' 'if(FALSE)'
+    substituteInPlace interpreter/cling/tools/plugins/CMakeLists.txt \
+      --replace 'if(NOT DEFINED NO_CONNECTION OR NOT NO_CONNECTION)' 'if(TRUE)'
+    # Make sure that clad is not downloaded when building
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+    # Make sure that clad is finding the right llvm version
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_13.dev}/lib/cmake/llvm'
+    # Fix that will also be upstream in ROOT 6.32. TODO: remove it when updating to 6.32
+    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
+      --replace 'set(_CLAD_LIBRARY_PATH ''${clad_install_dir}/plugins/lib)' 'set(_CLAD_LIBRARY_PATH ''${CMAKE_CURRENT_BINARY_DIR}/clad-prefix/src/clad-build/lib''${LLVM_LIBDIR_SUFFIX})'
+
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
       --replace 'add_clang_symlink(''${link} clang)' ""
 
@@ -139,8 +166,6 @@ stdenv.mkDerivation rec {
       -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
-  '' + lib.optionalString noSplash ''
-    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '' + lib.optionalString stdenv.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/macosx/CMakeLists.txt \
@@ -150,57 +175,22 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-Drpath=ON"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
-    "-Dbuiltin_freetype=OFF"
-    "-Dbuiltin_gtest=OFF"
-    "-Dbuiltin_nlohmannjson=OFF"
-    "-Dbuiltin_openui5=ON"
-    "-Dalien=OFF"
-    "-Dbonjour=OFF"
-    "-Dcastor=OFF"
-    "-Dchirp=OFF"
-    "-Dclad=OFF"
-    "-Ddavix=ON"
-    "-Ddcache=OFF"
     "-Dfail-on-missing=ON"
-    "-Dfftw3=OFF"
     "-Dfitsio=OFF"
-    "-Dfortran=OFF"
     "-Dgnuinstall=ON"
-    "-Dimt=ON"
-    "-Dgfal=OFF"
-    "-Dgviz=OFF"
-    "-Dhdfs=OFF"
-    "-Dhttp=ON"
-    "-Dkrb5=OFF"
-    "-Dldap=OFF"
-    "-Dmonalisa=OFF"
     "-Dmysql=OFF"
-    "-Dodbc=OFF"
-    "-Dopengl=ON"
-    "-Doracle=OFF"
     "-Dpgsql=OFF"
-    "-Dpythia6=OFF"
-    "-Dpythia8=OFF"
-    "-Drfio=OFF"
-    "-Droot7=ON"
     "-Dsqlite=OFF"
-    "-Dssl=ON"
-    "-Dtmva=ON"
     "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
-    "-Dwebgui=ON"
-    "-Dxml=ON"
-    "-Dxrootd=ON"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
 
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
     # fatal error: could not build module '_Builtin_intrinsics'
@@ -210,13 +200,10 @@ stdenv.mkDerivation rec {
   # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
-  # Workaround the xrootd runpath bug #169677 by prefixing [DY]LD_LIBRARY_PATH with ${lib.makeLibraryPath xrootd}.
-  # TODO: Remove the [DY]LDLIBRARY_PATH prefix for xrootd when #200830 get merged.
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --set PYTHONPATH "$out/lib" \
-        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib:${lib.makeLibraryPath [ xrootd ]}"
+        --set PYTHONPATH "$out/lib"
     done
 
     # Make ldd and sed available to the ROOT executable by prefixing PATH.
@@ -225,8 +212,7 @@ stdenv.mkDerivation rec {
         gnused # sed
         stdenv.cc # c++ ld etc.
         stdenv.cc.libc # ldd
-      ]}" \
-      --prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xrootd ]}"
+      ]}"
 
     # Patch thisroot.{sh,csh,fish}
 
@@ -270,10 +256,10 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    homepage = "https://root.cern.ch/";
+    homepage = "https://root.cern/";
     description = "A data analysis framework";
     platforms = platforms.unix;
-    maintainers = [ maintainers.veprbl ];
+    maintainers = [ maintainers.guitargeek maintainers.veprbl ];
     license = licenses.lgpl21;
   };
 }

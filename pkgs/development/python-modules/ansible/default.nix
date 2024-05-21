@@ -21,7 +21,7 @@
 
 let
   pname = "ansible";
-  version = "8.6.0";
+  version = "9.5.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -31,7 +31,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lfTlkydNWdU/NvYiB1NbfScq3CcBrHoO169qbYFjemA=";
+    hash = "sha256-PCeLyWQrl/yVOyugW5nNgIAedb81Z9+qHLUTH+DsHs0=";
   };
 
   postPatch = ''
@@ -80,6 +80,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Radically simple IT automation";
+    mainProgram = "ansible-community";
     homepage = "https://www.ansible.com";
     changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
     license = licenses.gpl3Plus;

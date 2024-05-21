@@ -8,6 +8,7 @@
 , scikit-learn
 , scikit-image
 , packaging
+, pretty-errors
 , psutil
 , py-deprecate
 , torch
@@ -20,25 +21,26 @@
 
 let
   pname = "torchmetrics";
-  version = "1.2.1";
+  version = "1.4.0.post0";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uvebKCJL2TSQUGmtVE1MtYwzgs+0lWvHvsN5PwJyl/g=";
+    hash = "sha256-tQqlLfdk8rSJqwR3rC7kqnM+pLFYZSPHfI7RmIi2Iq4=";
   };
 
-  disabled = pythonOlder "3.8";
-
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     lightning-utilities
     packaging
+    pretty-errors
     py-deprecate
   ];
 

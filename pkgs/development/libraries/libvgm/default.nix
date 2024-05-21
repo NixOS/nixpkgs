@@ -40,15 +40,15 @@ let
   inherit (lib) optional optionals;
   onOff = val: if val then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libvgm";
-  version = "unstable-2023-08-14";
+  version = "0-unstable-2024-04-24";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "libvgm";
-    rev = "079c4e737e6a73b38ae20125521d7d9eafda28e9";
-    sha256 = "hmaGIf9AQOYqrpnmKAB9I2vO+EXrzvoRaQ6Epdygy4o=";
+    rev = "1271ab3a0ec1440d2e537ead46165e189671dfd0";
+    hash = "sha256-vle9h7+izdpu9fe6LWD06j8oVQIL/lOApPrdjILmPX4=";
   };
 
   outputs = [

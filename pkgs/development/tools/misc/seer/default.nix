@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Qt gui frontend for GDB";
+    mainProgram = "seergdb";
     homepage = "https://github.com/epasveer/seer";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

@@ -8,7 +8,7 @@
 , cffi
 , cloudpickle
 , cmake
-, cython
+, cython_0
 , fsspec
 , hypothesis
 , numpy
@@ -16,9 +16,9 @@
 , pytestCheckHook
 , pytest-lazy-fixture
 , pkg-config
-, scipy
-, fetchpatch
+, setuptools
 , setuptools-scm
+, oldest-supported-numpy
 }:
 
 let
@@ -27,8 +27,8 @@ in
 
 buildPythonPackage rec {
   pname = "pyarrow";
-  format = "setuptools";
   inherit (arrow-cpp) version src;
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -36,19 +36,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython
+    cython_0
     pkg-config
+    setuptools
     setuptools-scm
+    oldest-supported-numpy
   ];
 
   buildInputs = [ arrow-cpp ];
 
   propagatedBuildInputs = [
     cffi
+    numpy
+  ];
+
+  checkInputs = [
     cloudpickle
     fsspec
-    numpy
-    scipy
   ];
 
   nativeCheckInputs = [
@@ -65,8 +69,6 @@ buildPythonPackage rec {
   PYARROW_WITH_HDFS = zero_or_one true;
   PYARROW_WITH_PARQUET = zero_or_one true;
   PYARROW_WITH_PARQUET_ENCRYPTION = zero_or_one true;
-  # Plasma is deprecated since arrow 10.0.0
-  PYARROW_WITH_PLASMA = zero_or_one false;
   PYARROW_WITH_S3 = zero_or_one arrow-cpp.enableS3;
   PYARROW_WITH_GCS = zero_or_one arrow-cpp.enableGcs;
   PYARROW_BUNDLE_ARROW_CPP_HEADERS = zero_or_one false;
@@ -159,7 +161,6 @@ buildPythonPackage rec {
     "feather"
     "flight"
     "fs"
-    "hdfs"
     "json"
     "parquet"
   ];

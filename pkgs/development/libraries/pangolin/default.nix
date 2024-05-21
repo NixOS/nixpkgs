@@ -1,18 +1,17 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
 , xorg, ffmpeg_4, libjpeg, libpng, libtiff, eigen
-, Carbon ? null, Cocoa ? null
+, Carbon, Cocoa
 }:
 
 stdenv.mkDerivation rec {
   pname = "pangolin";
-
-  version = "0.8";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "stevenlovegrove";
     repo = "Pangolin";
     rev = "v${version}";
-    sha256 = "sha256-X8TZWJOQOCItYt/F8E5ahiaPJXoppu9qBlEqfHP0vRc=";
+    sha256 = "sha256-B5YuNcJZHjR3dlVs66rySi68j29O3iMtlQvCjTUZBeY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config doxygen ];

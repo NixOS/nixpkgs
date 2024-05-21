@@ -13,33 +13,33 @@
 , graphene
 , gst_all_1
 , glib-networking
-, darwin
-, libsoup_3
 }:
 
 stdenv.mkDerivation rec {
   pname = "glide-media-player";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "philn";
     repo = "glide";
     rev = version;
-    hash = "sha256-dIXuWaoTeyVBhzr6VWxYBsn+CnUYG/KzhzNJtLLdRuI=";
+    hash = "sha256-rWWMMuA41uFWazIJBVLxzaCrR5X5tI4x+GXXYkfeqz8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-azvxW40fuKuF/N0qwzofFk1bZiNxyTN6YBFU5qHQkCA=";
+    hash = "sha256-Kvdbo5tkhwsah9W7Y5zqpoA3bVHfmjGj7Cjsqxkljls=";
   };
 
   postPatch = ''
     substituteInPlace scripts/meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-    patchShebangs --build scripts/meson_post_install.py
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i "/wayland,x11egl,x11glx/d" meson.build
+      --replace-warn "gtk-update-icon-cache" "gtk4-update-icon-cache"
+    substituteInPlace data/net.baseart.Glide.desktop \
+      --replace-warn "Icon=net.baseart.Glide.svg" "Icon=net.baseart.Glide"
+    patchShebangs --build \
+      scripts/meson_post_install.py \
+      build-aux/cargo-build.py
   '';
 
   nativeBuildInputs = [
@@ -61,15 +61,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-good
     glib-networking
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.IOKit
   ];
-
-  # FIXME: gst-plugins-good missing libsoup breaks streaming
-  # (https://github.com/nixos/nixpkgs/issues/271960)
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsoup_3 ]}")
-  '';
 
   meta = with lib; {
     description = "Linux/macOS media player based on GStreamer and GTK";
@@ -77,8 +69,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aleksana ];
     mainProgram = "glide";
-    platforms = platforms.unix;
-    # error: could not find system library 'gstreamer-gl-1.0' required by the 'gstreamer-gl-sys' crate
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    # Required gdk4-{wayland,x11} and gstreamer-gl not available on darwin
+    platforms = subtractLists platforms.darwin platforms.unix;
   };
 }

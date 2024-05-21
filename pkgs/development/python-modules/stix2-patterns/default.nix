@@ -1,12 +1,12 @@
-{ lib
-, antlr4-python3-runtime
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, wheel
-, six
+{
+  lib,
+  antlr4-python3-runtime,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -25,26 +25,19 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
+      --replace-fail "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     antlr4-python3-runtime
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "stix2patterns"
-  ];
+  pythonImportsCheck = [ "stix2patterns" ];
 
   disabledTestPaths = [
     # Exception: Could not deserialize ATN with version  (expected 4)
@@ -56,6 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Validate patterns used to express cyber observable content in STIX Indicators";
+    mainProgram = "validate-patterns";
     homepage = "https://github.com/oasis-open/cti-pattern-validator";
     changelog = "https://github.com/oasis-open/cti-pattern-validator/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;

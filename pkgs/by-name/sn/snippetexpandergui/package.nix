@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromSourcehut
-, makeWrapper
+, wrapGAppsHook3
 , wails
 , scdoc
 , installShellFiles
@@ -10,6 +10,7 @@
 , webkitgtk
 , gsettings-desktop-schemas
 , snippetexpanderd
+, snippetexpanderx
 }:
 
 buildGoModule rec {
@@ -17,30 +18,31 @@ buildGoModule rec {
 
   pname = "snippetexpandergui";
 
-  vendorHash = "sha256-iZfZdT8KlfZMVLQcYmo6EooIdsSGrpO/ojwT9Ft1GQI=";
+  vendorHash = "sha256-W9NkENdZRzqSAONI9QS2EI5aERK+AaPqwYwITKLwXQE=";
 
   proxyVendor = true;
 
   modRoot = "cmd/snippetexpandergui";
 
   nativeBuildInputs = [
-    makeWrapper
     wails
     scdoc
     installShellFiles
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     xorg.libX11
     gtk3
     webkitgtk
-    gsettings-desktop-schemas
     snippetexpanderd
+    snippetexpanderx
   ];
 
   ldflags = [
     "-s"
     "-w"
+    "-X 'main.version=${src.rev}'"
   ];
 
   tags = [
@@ -54,17 +56,19 @@ buildGoModule rec {
     installManPage snippetexpandergui.1
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/snippetexpandergui \
-      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Ensure snippetexpanderd and snippetexpanderx are available to start/stop.
+      --prefix PATH : ${lib.makeBinPath [ snippetexpanderd snippetexpanderx ]}
+    )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Your little expandable text snippet helper GUI";
     homepage = "https://snippetexpander.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ianmjones ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ianmjones ];
+    platforms = lib.platforms.linux;
     mainProgram = "snippetexpandergui";
   };
 }

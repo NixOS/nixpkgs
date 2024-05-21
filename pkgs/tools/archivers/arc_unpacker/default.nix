@@ -31,6 +31,11 @@ stdenv.mkDerivation {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/failing_tests.patch?h=arc_unpacker-git&id=bda1ad9f69e6802e703b2e6913d71a36d76cfef9";
       hash = "sha256-bClACsf/+SktyLAPtt7EcSqprkw8JVIi1ZLpcJcv9IE=";
     })
+    (fetchpatch {
+      name = "include_cstdint.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/include_cstdint.patch?h=arc_unpacker-git&id=8c5c5121b23813c7650db19cb617b409d8fdcc9f";
+      hash = "sha256-3BQ1v7s9enUK/js7Jqrqo2RdSRvGVd7hMcY4iL51SiE=";
+    })
   ];
 
   postPatch = ''
@@ -86,5 +91,8 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.all;
     mainProgram = "arc_unpacker";
+
+    # unit test failures
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

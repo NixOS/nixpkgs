@@ -1,16 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest
-, pytestCheckHook
-, pytest-describe
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest,
+  pytestCheckHook,
+  pytest-describe,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-spec";
-  version = "unstable-2023-06-04";
+  version = "3.2.0-unstable-2023-06-04";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -24,8 +24,8 @@ buildPythonPackage rec {
     sed -i '/addopts/d' setup.cfg
     # TODO: upstream
     substituteInPlace pyproject.toml \
-        --replace "poetry>=0.12" "poetry-core" \
-        --replace "poetry.masonry.api" "poetry.core.masonry.api"
+        --replace-fail "poetry>=0.12" "poetry-core" \
+        --replace-fail "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
   nativeBuildInputs = [ poetry-core ];

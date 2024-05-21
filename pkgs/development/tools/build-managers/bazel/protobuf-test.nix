@@ -160,7 +160,7 @@ let
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-protocol-buffers";
+    name = "${bazel.pname}-test-protocol-buffers";
     inherit workspaceDir;
     bazelPkg = bazel;
     buildInputs = [ (if lib.strings.versionOlder bazel.version "5.0.0" then openjdk8 else jdk11_headless) ];

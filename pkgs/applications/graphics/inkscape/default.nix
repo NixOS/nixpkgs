@@ -6,6 +6,7 @@
 , cmake
 , desktopToDarwinBundle
 , fetchurl
+, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -39,7 +40,7 @@
 , potrace
 , python3
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , libepoxy
 , zlib
 }:
@@ -92,6 +93,13 @@ stdenv.mkDerivation rec {
       src = ./fix-ps2pdf-path.patch;
       inherit ghostscript;
     })
+
+    # Fix build with libxml2 2.12
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/6089
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/694d8ae43d06efff21adebf377ce614d660b24cd.patch";
+      hash = "sha256-9IXJzpZbNU5fnt7XKgqCzUDrwr08qxGwo8TqnL+xc6E=";
+    })
   ];
 
   postPatch = ''
@@ -111,7 +119,7 @@ stdenv.mkDerivation rec {
     python3Env
     glib # for setup hook
     gdk-pixbuf # for setup hook
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ] ++ (with perlPackages; [
     perl

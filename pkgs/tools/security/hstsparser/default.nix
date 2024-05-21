@@ -29,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to parse Firefox and Chrome HSTS databases into forensic artifacts";
+    mainProgram = "hstsparser";
     homepage = "https://github.com/thebeanogamer/hstsparser";
     changelog = "https://github.com/thebeanogamer/hstsparser/releases/tag/${version}";
     license = licenses.mit;

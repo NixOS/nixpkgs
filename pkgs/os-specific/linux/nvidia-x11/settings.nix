@@ -16,7 +16,7 @@ nvidia_x11: sha256:
 , libXxf86vm
 , libvdpau
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , addOpenGLRunpath
 , withGtk2 ? false
 , withGtk3 ? true
@@ -96,7 +96,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
-    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook3 ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

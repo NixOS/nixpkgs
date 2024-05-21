@@ -23,9 +23,9 @@
 , pytestCheckHook
 }:
 
-let countourpy = buildPythonPackage rec {
+let contourpy = buildPythonPackage rec {
   pname = "contourpy";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ let countourpy = buildPythonPackage rec {
     owner = "contourpy";
     repo = "contourpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7M+5HMDqQI4UgVfW/MXsVyz/yM6wjTcJEdw7vPvzuNY=";
+    hash = "sha256-5yZrIwwe9dL5vtdSJnOhY9X4BdK/cdEY4DkVVjCq1uw=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ let countourpy = buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    check = countourpy.overridePythonAttrs (_: { doCheck = true; });
+    check = contourpy.overridePythonAttrs (_: { doCheck = true; });
   };
 
   pythonImportsCheck = [
@@ -76,4 +76,4 @@ let countourpy = buildPythonPackage rec {
     maintainers = with maintainers; [ ];
   };
 };
-in countourpy
+in contourpy

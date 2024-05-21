@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libz";
-  version = "unstable-2018-03-31";
+  version = "1.2.8.2015.12.26-unstable-2018-03-31";
 
   src = fetchFromGitLab {
     owner = "sortix";
@@ -18,7 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
   outputDoc = "dev"; # single tiny man3 page
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "libz-";
+  };
 
   meta = {
     homepage = "https://sortix.org/libz/";

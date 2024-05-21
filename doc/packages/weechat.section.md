@@ -3,9 +3,9 @@
 WeeChat can be configured to include your choice of plugins, reducing its closure size from the default configuration which includes all available plugins. To make use of this functionality, install an expression that overrides its configuration, such as:
 
 ```nix
-weechat.override {configure = {availablePlugins, ...}: {
+weechat.override {configure = ({availablePlugins, ...}: {
     plugins = with availablePlugins; [ python perl ];
-  }
+  });
 }
 ```
 
@@ -59,7 +59,7 @@ weechat.override {
     ];
     init = ''
       /set plugins.var.python.jabber.key "val"
-    '':
+    '';
   };
 }
 ```

@@ -184,8 +184,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
-  anjuta = callPackage ./devtools/anjuta { };
-
   devhelp = callPackage ./devtools/devhelp { };
 
 #### Games
@@ -262,4 +260,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
+
+#### Removals
+  anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
 }

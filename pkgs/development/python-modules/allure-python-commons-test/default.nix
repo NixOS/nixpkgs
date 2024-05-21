@@ -1,7 +1,6 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pythonOlder
 , attrs
 , pluggy
 , six
@@ -12,14 +11,12 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.13.2";
+  version = "2.13.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xh6NtqiuTg7UxKqJ7/p45rCUQGWiGDEaNAslzeYtgfg=";
+    hash = "sha256-pWkLVfBrLEhdhuTE95K3aqrhEY2wEyo5uRzuJC3ngjE=";
   };
 
   nativeBuildInputs = [

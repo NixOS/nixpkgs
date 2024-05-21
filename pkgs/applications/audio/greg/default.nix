@@ -18,6 +18,7 @@ with pythonPackages; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/manolomartinez/greg";
     description = "A command-line podcast aggregator";
+    mainProgram = "greg";
     license = licenses.gpl3;
     maintainers = with maintainers; [ edwtjo ];
   };

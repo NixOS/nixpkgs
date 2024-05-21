@@ -1,10 +1,10 @@
 { lib
-, buildGoModule
+, stdenv
+, buildGo122Module
 , fetchFromGitHub
 , fetchNpmDeps
-, fetchpatch
 , cacert
-, go
+, go_1_22
 , git
 , enumer
 , mockgen
@@ -12,34 +12,29 @@
 , npmHooks
 , nix-update-script
 , nixosTests
-, stdenv
 }:
+
+let
+  buildGoModule = buildGo122Module;
+  go = go_1_22;
+in
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.123.7";
+  version = "0.126.3";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-I8qcKrCuiUpDdsWDMiEZdo+PBkMELo5V6GW+nKFaD3Y=";
+    hash = "sha256-Q+g/XEfIfpGchIZQdouoP9muqq6l0xixOLmIntgIWe0=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/evcc-io/evcc/pull/11547
-      name = "evcc-mockgen.patch";
-      url = "https://github.com/evcc-io/evcc/commit/5ec02a9dba79a733f71fc02a9552eb01e4e08f0b.patch";
-      hash = "sha256-uxKdtwdhUcMFCMkG756OD9aSMP9rdOL4Tg0HBWwp3kw=";
-    })
-  ];
-
-  vendorHash = "sha256-FKF6+64mjrKgzFAb+O0QCURieOoRB//QNbpMFMcNG8s=";
+  vendorHash = "sha256-tFj1cPBB1qeuwz1RXVVDVNJRfFFKPH6mdMnaiM3jwUc=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-a3AyqQ8GYP3g9KGbjtLHjHBrJGHg2sNjAQlMUa26pOY=";
+    hash = "sha256-ghDLmsmcG+qDItiqaZy8MTYw/AU58bZfUzYY32XKNyk=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +50,6 @@ buildGoModule rec {
       cacert
       mockgen
     ];
-
-    inherit patches;
 
     preBuild = ''
       make assets
@@ -79,13 +72,33 @@ buildGoModule rec {
     make ui
   '';
 
-  doCheck = !stdenv.isDarwin; # tries to bind to local network, doesn't work in darwin sandbox
+  doCheck = !stdenv.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  preCheck = ''
-    # requires network access
-    rm meter/template_test.go
-    rm charger/template_test.go
-  '';
+  checkFlags = let
+    skippedTests = [
+      # network access
+      "TestOctopusConfigParse"
+      "TestTemplates/allinpower"
+      "TestTemplates/electricitymaps"
+      "TestTemplates/elering"
+      "TestTemplates/energinet"
+      "TestTemplates/grünstromindex"
+      "TestTemplates/pun"
+      "TestTemplates/entsoe"
+      "TestTemplates/ngeso"
+      "TestTemplates/tibber"
+      "TestTemplates/groupe-e"
+      "TestTemplates/awattar"
+      "TestTemplates/energy-charts-api"
+      "TestTemplates/polestar"
+      "TestTemplates/sma-inverter-speedwire/battery"
+      "TestTemplates/sma-inverter-speedwire/pv"
+      "TestTemplates/smartenergy"
+      "TestTemplates/tibber-pulse/grid"
+
+    ];
+  in
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {

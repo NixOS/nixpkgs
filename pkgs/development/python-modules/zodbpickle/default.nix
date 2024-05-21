@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "3.1";
+  version = "3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uewy5wbHuAi3mlOnrZZgkRfpQoN3K0AO52VSEHqrzBE=";
+    hash = "sha256-dcF5Kse9W89JUFggYqw2hOMiqhOrmEIOO/7EWCJzo2g=";
   };
 
   # fails..

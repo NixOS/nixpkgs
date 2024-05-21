@@ -57,7 +57,9 @@ let
   # bcachefs does not support mounting devices with colons in the path, ergo we don't (see #49671)
   firstDevice = fs: lib.head (lib.splitString ":" fs.device);
 
-  openCommand = name: fs: if config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices) then ''
+  useClevis = fs: config.boot.initrd.clevis.enable && (lib.hasAttr (firstDevice fs) config.boot.initrd.clevis.devices);
+
+  openCommand = name: fs: if useClevis fs then ''
     if clevis decrypt < /etc/clevis/${firstDevice fs}.jwe | bcachefs unlock ${firstDevice fs}
     then
       printf "unlocked ${name} using clevis\n"
@@ -92,8 +94,19 @@ let
         # As is, RemainAfterExit doesn't accomplish anything.
         RemainAfterExit = true;
       };
-      script = ''
-        ${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"
+      script = let
+        unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
+        unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
+      in if useClevis fs then ''
+        if ${config.boot.initrd.clevis.package}/bin/clevis decrypt < "/etc/clevis/${device}.jwe" | ${unlock}
+        then
+          printf "unlocked ${name} using clevis\n"
+        else
+          printf "falling back to interactive unlocking...\n"
+          ${unlockInteractively}
+        fi
+      '' else ''
+        ${unlockInteractively}
       '';
     };
   };
@@ -118,17 +131,22 @@ let
 in
 
 {
-  config = lib.mkIf (lib.elem "bcachefs" config.boot.supportedFilesystems) (lib.mkMerge [
+  config = lib.mkIf (config.boot.supportedFilesystems.bcachefs or false) (lib.mkMerge [
     {
       inherit assertions;
       # needed for systemd-remount-fs
       system.fsPackages = [ pkgs.bcachefs-tools ];
-      # FIXME: Remove this line when the default kernel has bcachefs
+      # FIXME: Remove this line when the LTS (default) kernel is at least version 6.7
       boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-      systemd.services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
+      services.udev.packages = [ pkgs.bcachefs-tools ];
+
+      systemd = {
+        packages = [ pkgs.bcachefs-tools ];
+        services = lib.mapAttrs' (mkUnits "") (lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems);
+      };
     }
 
-    (lib.mkIf ((lib.elem "bcachefs" config.boot.initrd.supportedFilesystems) || (bootFs != {})) {
+    (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != {})) {
       inherit assertions;
       # chacha20 and poly1305 are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "sha256" "chacha20" "poly1305" ];

@@ -4,7 +4,7 @@
 , python
 , geos_3_11
 , pytestCheckHook
-, cython
+, cython_0
 , numpy
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     geos_3_11 # for geos-config
-    cython
+    cython_0
   ];
 
   propagatedBuildInputs = [

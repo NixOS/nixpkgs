@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook3
 , pytestCheckHook
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, bluez, vdf
@@ -8,16 +8,16 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.11";
+  version = "0.4.8.13";
 
   src = fetchFromGitHub {
     owner  = "Ryochan7";
     repo   = pname;
-    rev    = "v${version}";
-    sha256 = "xu9QqddJf0cXkhNPrOnE+L8CV5AfgcCyk9DSh+G94c0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-vK/5S+GyqVfKTqn5PaPmOV/tXE9PIW57gqYxvhGaJSg=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [ gtk3 libappindicator-gtk3 librsvg ];
 

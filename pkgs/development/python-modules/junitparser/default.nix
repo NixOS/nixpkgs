@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Manipulates JUnit/xUnit Result XML files";
+    mainProgram = "junitparser";
     license = licenses.asl20;
     homepage = "https://github.com/weiwei/junitparser";
     maintainers = with maintainers; [ multun ];

@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , ninja
 , lit
+, z3
 , gitUpdater
 , callPackage
 }:
@@ -17,18 +18,18 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.61.0";
+  version = "1.74.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    sha256 = "sha256-3zuaruaveUeJ7uKP5fMiDFPOGKcs6aTNuGOuhxV6nss=";
+    hash = "sha256-RFvWUd98OiL2I3aFrP61LQRZr4FSKrrZ5YOblBKRCA4=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  nativeBuildInputs = [ cmake ninja git pythonEnv ];
+  nativeBuildInputs = [ cmake ninja git pythonEnv z3 ];
   buildInputs = [ circt-llvm ];
 
   cmakeFlags = [
@@ -65,6 +66,13 @@ stdenv.mkDerivation rec {
   checkTarget = "check-circt check-circt-integration";
 
   outputs = [ "out" "lib" "dev" ];
+
+  # Copy circt-llvm's postFixup stage so that it can make all our dylib references
+  # absolute as well.
+  #
+  # We don't need `postPatch` because circt seems to be automatically inheriting
+  # the config somehow, presumably via. `-DMLIR_DIR`.
+  postFixup = circt-llvm.postFixup;
 
   postInstall = ''
     moveToOutput lib "$lib"

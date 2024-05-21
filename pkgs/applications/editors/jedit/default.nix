@@ -1,63 +1,118 @@
-{ lib, stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging, bsh }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  ant,
+  jdk,
+  jre,
+  xmlstarlet,
+  makeWrapper,
+  stripJavaArchivesHook,
+}:
 
-let
-  version = "5.2.0";
-  bcpg = fetchurl {
-    url = "mirror://maven/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar";
-    sha256 = "16xhmwks4l65m5x150nd23y5lyppha9sa5fj65rzhxw66gbli82d";
-  };
-  jsr305 = fetchurl {
-    url = "mirror://maven/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar";
-    sha256 = "0s74pv8qjc42c7q8nbc0c3b1hgx0bmk3b8vbk1z80p4bbgx56zqy";
-  };
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jedit";
-  inherit version;
-  src = fetchurl {
-    url = "mirror://sourceforge/jedit/jedit${version}source.tar.bz2";
-    sha256 = "03wmbh90rl5lsc35d7jwcp9j5qyyzq1nccxf4fal8bmnx8n4si0x";
+  version = "5.6.0-unstable-2023-11-19";
+
+  src = fetchsvn {
+    url = "https://svn.code.sf.net/p/jedit/svn/jEdit/trunk";
+    rev = "25703";
+    hash = "sha256-z1KTZqKl6Dlqayw/3h/JvHQK3kSfio02R8V6aCb4g4Q=";
   };
 
-  buildInputs = [ ant jdk commonsBsf commonsLogging ];
+  ivyDeps = stdenv.mkDerivation {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-ivy-deps";
+    inherit (finalAttrs) src;
 
-  # This patch removes from the build process:
-  #  - the automatic download of dependencies (see configurePhase);
-  #  - the tests
-  patches = [ ./build.xml.patch ];
+    nativeBuildInputs = [
+      ant
+      jdk
+      xmlstarlet
+    ];
 
-  configurePhase = ''
-    mkdir -p lib/ant-contrib/ lib/scripting lib/compile lib/default-plugins
-    cp ${ant}/lib/ant/lib/ant-contrib-*.jar lib/ant-contrib/
-    cp ${bsh} ${bcpg} lib/scripting/
-    cp ${jsr305} lib/compile/
+    # set defaultCacheDir to something that can exist
+    # this directory won't get copied, but needs to be set properly
+    configurePhase = ''
+      runHook preConfigure
+
+      xmlstarlet ed --subnode /ivysettings -t elem -n caches ivysettings.xml \
+          | xmlstarlet ed --insert /ivysettings/caches -t attr -n defaultCacheDir -v "$(pwd)/ivy-cache" \
+          > ivysettings.xml.tmp
+      mv ivysettings.xml.tmp ivysettings.xml
+
+      runHook postConfigure
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+      ant retrieve
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/lib
+      cp -r lib/* $out/lib
+      runHook postInstall
+    '';
+
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash = "sha256-J5i5IhXlXw84y/4K6Vt84au4eVXVLupmtfscO+y1Fi0=";
+  };
+
+  # ignore a test failing because of the build environment
+  postPatch = ''
+    substituteInPlace test/org/gjt/sp/jedit/MiscUtilitiesTest.java \
+        --replace-fail "public class MiscUtilitiesTest" "@org.junit.Ignore public class MiscUtilitiesTest"
   '';
 
-  buildPhase = "ant build";
+  nativeBuildInputs = [
+    ant
+    jdk
+    makeWrapper
+    stripJavaArchivesHook
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    ln -s ${finalAttrs.ivyDeps}/lib ./lib
+    ant build -Divy.done=true
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/jEdit
-    cp -r build/jedit.jar doc icons keymaps macros modes startup $out/share/jEdit
+    cp -r build/jedit.jar doc keymaps macros modes startup $out/share/jEdit
 
-    sed -i "s|Icon=.*|Icon=$out/share/jEdit/icons/jedit-icon48.png|g" package-files/linux/deb/jedit.desktop
-    mkdir -p $out/share/applications
-    mv package-files/linux/deb/jedit.desktop $out/share/applications/jedit.desktop
+    install -Dm644 icons/jedit-icon48.png $out/share/icons/hicolor/48x48/apps/jedit.png
+    install -Dm644 package-files/linux/deb/jedit.desktop -t $out/share/applications
 
-    # specify the correct JAVA_HOME
-    sed -i '1a JAVA_HOME=${jdk}' package-files/linux/jedit
-    sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" package-files/linux/jedit
-    mkdir -p $out/bin
-    cp package-files/linux/jedit $out/bin/jedit
-    chmod +x $out/bin/jedit
+    sed -i $out/share/applications/jedit.desktop \
+        -e "s|Icon=.*|Icon=jedit|g" \
+        -e "s|Exec=.*|Exec=jedit|g"
+
+    install -Dm755 package-files/linux/jedit -t $out/bin
+    substituteInPlace $out/bin/jedit \
+        --replace-fail "/usr/share/jEdit/@jar.filename@" "$out/share/jEdit/jedit.jar"
+
+    wrapProgram $out/bin/jedit --set JAVA_HOME ${jre}
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Mature programmer's text editor (Java based)";
+  meta = {
+    description = "A programmer's text editor written in Java";
     homepage = "http://www.jedit.org";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Only;
+    mainProgram = "jedit";
+    maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # ivyDeps contains .jar dependencies
+    ];
   };
-}
+})

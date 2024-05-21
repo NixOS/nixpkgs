@@ -8,16 +8,16 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-network-manager-openvpn";
-  version = "0.0.4-unstable-2023-07-05";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager-openvpn";
-    rev = "b79f6732646378ef1b92696de3665ff9560286d3";
-    hash = "sha256-Z5X8RRu+1KaZ0pnH7tzGhfeST2W8bxMZnuryLhFjG/g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AHG4jEEv1ihpboQwz6FmNtlqCE83qyOeGzBDHQcvD6o=";
   };
 
   nativeBuildInputs = [

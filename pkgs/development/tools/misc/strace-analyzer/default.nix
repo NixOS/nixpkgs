@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "strace-analyzer";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "wookietreiber";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wx0/Jb2uaS1qdRQymfE00IEOyfgLtD4lXYasaJgcoxo=";
+    sha256 = "sha256-KbdQeZoWFz4D5txu/411J0HNnIAs3t5IvO30/34vBek=";
   };
 
-  cargoHash = "sha256-3OS3LEEk58+IJDQrgwo+BJq6hblojk22QxDtZY5ofA4=";
+  cargoHash = "sha256-t1BFc5cNOQJIbufFH2hHI4f7SMrZ5mwVODXukdbHf3M=";
 
   nativeCheckInputs = [ strace ];
 
@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Analyzes strace output";
+    mainProgram = "strace-analyzer";
     homepage = "https://github.com/wookietreiber/strace-analyzer";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];

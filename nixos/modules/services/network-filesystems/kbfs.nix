@@ -15,13 +15,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to mount the Keybase filesystem.";
+        description = "Whether to mount the Keybase filesystem.";
       };
 
       enableRedirector = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Keybase root redirector service, allowing
           any user to access KBFS files via `/keybase`,
           which will show different contents depending on the requester.
@@ -32,7 +32,7 @@ in {
         type = types.str;
         default = "%h/keybase";
         example = "/keybase";
-        description = lib.mdDoc "Mountpoint for the Keybase filesystem.";
+        description = "Mountpoint for the Keybase filesystem.";
       };
 
       extraFlags = mkOption {
@@ -42,7 +42,7 @@ in {
           "-label kbfs"
           "-mount-type normal"
         ];
-        description = lib.mdDoc ''
+        description = ''
           Additional flags to pass to the Keybase filesystem on launch.
         '';
       };
@@ -92,7 +92,12 @@ in {
     (mkIf cfg.enableRedirector {
       security.wrappers."keybase-redirector".source = "${pkgs.kbfs}/bin/redirector";
 
-      systemd.tmpfiles.rules = [ "d /keybase 0755 root root 0" ];
+      systemd.tmpfiles.settings."10-kbfs"."/keybase".d = {
+        user = "root";
+        group = "root";
+        mode = "0755";
+        age = "0";
+      };
 
       # Upstream: https://github.com/keybase/client/blob/master/packaging/linux/systemd/keybase-redirector.service
       systemd.user.services.keybase-redirector = {

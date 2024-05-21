@@ -7,7 +7,7 @@
 , setuptools-scm
 , pytest-asyncio
 , pytest-cases
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 }:
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cases
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

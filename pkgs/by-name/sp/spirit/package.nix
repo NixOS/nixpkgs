@@ -5,16 +5,16 @@
 
 buildGoModule {
   pname = "spirit";
-  version = "unstable-2023-12-15";
+  version = "0-unstable-2024-04-18";
 
   src = fetchFromGitHub {
     owner = "cashapp";
     repo = "spirit";
-    rev = "3abce3e15c01b18e7a9fc12e19ad5c0f541d1ffd";
-    hash = "sha256-B4z5bdb0hRx7U2RLTRDxRYt1ltACNXz/B6qAs4qjtAo=";
+    rev = "886ee21e7338faef6612495b27d409713a202082";
+    hash = "sha256-xXObprJCo9evArCX5ezqrD+lagiHMO4SwycY+pTkHPg=";
   };
 
-  vendorHash = "sha256-hKTQvTWd48mnVODWE6W541TPuxCyELLgpz96XB29kec=";
+  vendorHash = "sha256-r6iQs5kgOniHCN8KteQ17rPhQ/73Exuqlu6qWgKEIzs=";
 
   subPackages = [ "cmd/spirit" ];
 

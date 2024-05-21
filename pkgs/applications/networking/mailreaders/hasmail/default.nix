@@ -34,6 +34,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simple tray icon for detecting new email on IMAP servers";
+    mainProgram = "hasmail";
     homepage = "https://github.com/jonhoo/hasmail";
     license = licenses.unlicense;
     maintainers = with maintainers; [ doronbehar ];

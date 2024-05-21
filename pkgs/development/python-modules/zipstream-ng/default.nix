@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to generate streamable zip files";
+    mainProgram = "zipserver";
     longDescription = ''
       A modern and easy to use streamable zip file generator. It can package and stream many files
       and folders on the fly without needing temporary files or excessive memory

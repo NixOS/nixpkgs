@@ -1,0 +1,16 @@
+diff --git a/meson.build b/meson.build
+index 5c09644..fc65d37 100644
+--- a/meson.build
++++ b/meson.build
+@@ -39,9 +39,8 @@ elif get_option('use_qt_version') == 'qt6'
+ 		private_headers: [ 'Gui', 'WaylandClient', 'WaylandGlobalPrivate' ],
+ 	)
+ 
+-	qmake = find_program( [ 'qmake-qt6', 'qmake6' ], required: true )
+-	ret = run_command( qmake, '-query', 'QT_INSTALL_HEADERS', check: true )
+-	QtHeaderPath = ret.stdout().strip()
++	qmake = find_program( [ 'qmake-qt6', 'qmake6' ], required: false )
++	QtHeaderPath = '@qtWaylandPath@'
+ 
+ 	QtGlobal = '@0@/QtWaylandGlobal/@1@'.format( QtHeaderPath, QtDeps.version() )
+ 

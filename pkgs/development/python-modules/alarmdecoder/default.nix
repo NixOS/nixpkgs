@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-q2s+wngDKtWm5mxGHNAc63Ed6tiQD9gLHVoQZNWFB0w=";
   };
 
+  postPatch = ''
+    substituteInPlace test/test_{ad2,devices,messages}.py \
+      --replace-fail assertEquals assertEqual
+  '';
+
   propagatedBuildInputs = [
     pyftdi
     pyopenssl

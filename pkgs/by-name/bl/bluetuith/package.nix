@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "bluetuith";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5Jn5qkCUj2ohpZU+XqR90Su2svcLqW+hW6kmeEVfrtI=";
+    sha256 = "sha256-JwPTFMimGDZnESx6l72cK545rzyDWWTBU66t9bU49w0=";
   };
 
-  vendorHash = "sha256-pYVEFKLPfstWWO6ypgv7ntAaE1Wmq2XKuZC2ccMa8Vc=";
+  vendorHash = "sha256-A0hUenuji3bfJghLRM2mvFbusrHm+tQ+LeRGzIETpbs=";
 
   CGO_ENABLED = 0;
 
@@ -41,6 +41,6 @@ buildGoModule rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "bluetuith";
-    maintainers = with maintainers; [ thehedgeh0g katexochen ];
+    maintainers = with maintainers; [ pyrox0 katexochen ];
   };
 }

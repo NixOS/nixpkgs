@@ -93,6 +93,7 @@ in {
 
   meta = with lib; {
     description = "A 2D graphics library with support for multiple output devices";
+    mainProgram = "cairo-trace";
     longDescription = ''
       Cairo is a 2D graphics library with support for multiple output
       devices.  Currently supported output targets include the X

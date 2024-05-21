@@ -23,14 +23,14 @@ in {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use ConnMan for managing your network connections.
         '';
       };
 
       package = lib.mkOption {
         type = lib.types.package;
-        description = lib.mdDoc "The connman package / build flavor";
+        description = "The connman package / build flavor";
         default = pkgs.connman;
         defaultText = lib.literalExpression "pkgs.connman";
         example = lib.literalExpression "pkgs.connmanFull";
@@ -39,7 +39,7 @@ in {
       enableVPN = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable ConnMan VPN service.
         '';
       };
@@ -47,7 +47,7 @@ in {
       extraConfig = lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Configuration lines appended to the generated connman configuration file.
         '';
       };
@@ -55,7 +55,7 @@ in {
       networkInterfaceBlacklist = lib.mkOption {
         type = with lib.types; listOf str;
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
-        description = lib.mdDoc ''
+        description = ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
       };
@@ -64,7 +64,7 @@ in {
         backend = lib.mkOption {
           type = lib.types.enum [ "wpa_supplicant" "iwd" ];
           default = "wpa_supplicant";
-          description = lib.mdDoc ''
+          description = ''
             Specify the Wi-Fi backend used.
             Currently supported are {option}`wpa_supplicant` or {option}`iwd`.
           '';
@@ -75,7 +75,7 @@ in {
         type = with lib.types; listOf str;
         default = [ ];
         example = [ "--nodnsproxy" ];
-        description = lib.mdDoc ''
+        description = ''
           Extra flags to pass to connmand
         '';
       };

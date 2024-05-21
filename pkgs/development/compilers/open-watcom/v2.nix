@@ -13,13 +13,13 @@
 stdenv.mkDerivation rec {
   pname = "${passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
-  version = "unstable-2023-05-17";
+  version = "0-unstable-2024-05-14";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "4053c858ac1f83a186704434bd16b6a6b8f4cf88";
-    sha256 = "sha256-o+cA5kqPow+ERCeWdA3UNKawF+EjuL87lPXUjFT/D1w=";
+    rev = "d3733a7fca1d02ad91b58b377ecb38e1293889db";
+    hash = "sha256-gDrmm7hd07lv0KhkP7Bys5qCuCCH+t/XvlftCYlCyI8=";
   };
 
   postPatch = ''
@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
     prettyName = "open-watcom-v2";
     updateScript = unstableGitUpdater {
       url = "https://github.com/open-watcom/open-watcom-v2.git";
+      # no numerical releases, monthly "YYYY-MM-DD-Build" tags and daily "Current-build", "Last-CI-build" & "Coverity-scan" retagging
+      hardcodeZeroVersion = true;
     };
   };
 

@@ -8,7 +8,7 @@
 , pygobject3
 , gobject-introspection
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , buildApplication ? false
 }:
 
@@ -28,7 +28,7 @@ python3Packages.buildPythonPackage rec {
     setuptools
   ] ++ lib.optionals buildApplication [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [
@@ -45,6 +45,7 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/benthetechguy/controku/releases/tag/${version}";
     description = "Control Roku devices from the comfort of your own desktop";
+    mainProgram = "controku";
     homepage = "https://github.com/benthetechguy/controku";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mjm ];

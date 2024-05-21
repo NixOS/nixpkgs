@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig-shell-completions";
-  version = "unstable-2023-11-18";
+  version = "0-unstable-2023-11-18";
 
   src = fetchFromGitHub {
     owner = "ziglang";

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , setuptools
 , pytest
 , portpicker
@@ -12,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "smtpdfix";
-  version = "0.5.1";
+  version = "0.5.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-882i0T6EySZ6jxOgoM11MU+ha41XfKjDDhUjeX7qvp4=";
+    hash = "sha256-5NGs6Q83EqGRJ+2IdOaXqGFIwfSNKy2wwHIJaOjj7JU=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/bebleo/smtpdfix/issues/335
+    "test_missing_certs"
   ];
 
   meta = with lib; {

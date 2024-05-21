@@ -22,8 +22,7 @@ in
         { enable = mkOption {
             type = types.bool;
             default = false;
-            description =
-              lib.mdDoc ''
+            description = ''
                 Whether to enable the Tox DHT bootstrap daemon.
               '';
           };
@@ -31,20 +30,19 @@ in
           port = mkOption {
             type = types.port;
             default = 33445;
-            description = lib.mdDoc "Listening port (UDP).";
+            description = "Listening port (UDP).";
           };
 
           keysFile = mkOption {
             type = types.str;
             default = "${WorkingDirectory}/keys";
-            description = lib.mdDoc "Node key file.";
+            description = "Node key file.";
           };
 
           extraConfig = mkOption {
             type = types.lines;
             default = "";
-            description =
-              lib.mdDoc ''
+            description = ''
                 Configuration for bootstrap daemon.
                 See <https://github.com/irungentoo/toxcore/blob/master/other/bootstrap_daemon/tox-bootstrapd.conf>
                 and <https://wiki.tox.chat/users/nodes>.

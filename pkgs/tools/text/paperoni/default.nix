@@ -43,9 +43,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An article extractor in Rust";
+    mainProgram = "paperoni";
     homepage = "https://github.com/hipstermojo/paperoni";
     changelog = "https://github.com/hipstermojo/paperoni/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

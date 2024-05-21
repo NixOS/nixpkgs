@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptoverif";
-  version = "2.07";
+  version = "2.08pl1";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    hash   = "sha256-GXXql4+JZ396BM6W2I3kN0u59xos7UCAtzR0IjMIETY=";
+    hash = "sha256-rmORSZuhds9W2WpNgYf4AJM2jgEUPoJit4G64qLqj5w=";
   };
 
   /* Fix up the frontend to load the 'default' cryptoverif library
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cryptographic protocol verifier in the computational model";
+    mainProgram = "cryptoverif";
     homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/";
     license     = lib.licenses.cecill-b;
     platforms   = lib.platforms.unix;

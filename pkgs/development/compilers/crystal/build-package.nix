@@ -26,6 +26,9 @@
   # The default `crystal build` options can be overridden with { foo.options = [ "--optionname" ]; }
 , crystalBinaries ? { }
 , enableParallelBuilding ? true
+  # Copy all shards dependencies instead of symlinking and add write permissions
+  # to make environment more local-like
+, copyShardDeps ? false
 , ...
 }@args:
 
@@ -71,19 +74,19 @@ let
 in
 stdenv.mkDerivation (mkDerivationArgs // {
 
-  configurePhase = args.configurePhase or lib.concatStringsSep "\n"
-    (
+  configurePhase = args.configurePhase or (lib.concatStringsSep "\n" (
       [
         "runHook preConfigure"
       ]
       ++ lib.optional (lockFile != null) "cp ${lockFile} ./shard.lock"
       ++ lib.optionals (shardsFile != null) [
         "test -e lib || mkdir lib"
-        "for d in ${crystalLib}/*; do ln -s $d lib/; done"
+        (if copyShardDeps then "for d in ${crystalLib}/*; do cp -r $d/ lib/; done; chmod -R +w lib/"
+          else "for d in ${crystalLib}/*; do ln -s $d lib/; done")
         "cp shard.lock lib/.shards.info"
       ]
       ++ [ "runHook postConfigure" ]
-    );
+    ));
 
   CRFLAGS = lib.concatStringsSep " " defaultOptions;
 

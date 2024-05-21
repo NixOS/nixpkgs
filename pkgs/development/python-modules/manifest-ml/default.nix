@@ -1,45 +1,57 @@
 { lib
+, accelerate
+, aiohttp
 , buildPythonPackage
+, fastapi
 , fetchFromGitHub
-, pythonOlder
+, flask
 , numpy
+, pg8000
+, pillow
 , pydantic
+, pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
 , redis
 , requests
-, aiohttp
+, sentence-transformers
+, setuptools
+, sqlalchemy
 , sqlitedict
 , tenacity
 , tiktoken
-, xxhash
-, # optional dependencies
-  accelerate
-, flask
-, sentence-transformers
 , torch
 , transformers
-, fastapi
 , uvicorn
-, pillow
-, pg8000
-, sqlalchemy
-, pytestCheckHook
+, xxhash
 }:
 
 buildPythonPackage rec {
   pname = "manifest-ml";
-  version = "0.1.8";
-  format = "setuptools";
+  version = "0.1.9";
+  pyproject = true;
 
-  disalbed = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "HazyResearch";
     repo = "manifest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d34TIZYDB8EDEIZUH5mDzfDHzFT290DwjPLJkNneklc=";
+    hash = "sha256-6m1XZOXzflBYyq9+PinbrW+zqvNGFN/aRDHH1b2Me5E=";
   };
 
-  propagatedBuildInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  pythonRelaxDeps = [
+    "pydantic"
+  ];
+
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     numpy
     pydantic
     redis
@@ -49,7 +61,7 @@ buildPythonPackage rec {
     tenacity
     tiktoken
     xxhash
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ];
 
   passthru.optional-dependencies = {
     api = [
@@ -77,7 +89,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -89,12 +101,17 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # these tests have db access
+    # Tests require DB access
     "test_init"
     "test_key_get_and_set"
     "test_get"
-    # this test has network access
+    # Tests require network access
+    "test_abatch_run"
+    "test_batch_run"
     "test_retry_handling"
+    "test_run_chat"
+    "test_run"
+    "test_score_run"
     # Test is time-senstive
     "test_timing"
   ];

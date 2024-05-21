@@ -1,4 +1,6 @@
 { lib
+, pkgs
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools
@@ -9,30 +11,35 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "23.11";
-
+  version = "24.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9HA87J01M9VGCHdcmdlA50AikXG8vYHDw/5ig8h9YXc=";
+    hash = "sha256-rqhaKDOQEOj6bcRz3qZJ+a4yG1qTC9SUjuxMhZlnmwU=";
   };
 
-  pythonImportsCheck = [ "virt.firmware.efi" ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-  pytestFlagsArray = ["tests/tests.py"];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    setuptools
     cryptography
     pefile
   ];
+
+  # tests require systemd-detect-virt
+  doCheck = lib.meta.availableOn stdenv.hostPlatform pkgs.systemd;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pkgs.systemd
+  ];
+
+  pytestFlagsArray = [ "tests/tests.py" ];
+
+  pythonImportsCheck = [ "virt.firmware.efi" ];
 
   meta = with lib; {
     description = "Tools for virtual machine firmware volumes";

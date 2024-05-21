@@ -6,7 +6,7 @@
 , writeText
 , jq
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , jitsi-meet
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     sha256 = webYarnHash;
   };
 
-  nativeBuildInputs = [ yarn prefetch-yarn-deps jq nodejs ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock jq nodejs ];
 
   buildPhase = ''
     runHook preBuild

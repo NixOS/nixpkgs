@@ -4,12 +4,12 @@
 
 let
   pname = "elixir-ls";
-  version = "0.18.1";
+  version = "0.21.1";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-o5/H2FeDXzT/ZyWtLmRs+TWJQfmuDUnnR5Brvkifn6E=";
+    hash = "sha256-OBLSj1nqv/p1FYg7DapCnr4EU2EW51MQM+YnZqDkcB4=";
     fetchSubmodules = true;
   };
 in
@@ -21,7 +21,7 @@ mixRelease {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    hash = "sha256-q4VKtGxrRaAhtNIJFjNN7tF+HFgU/UX9sKq0BkOIiQI=";
+    hash = "sha256-3PVMembw3CpYUQ/ynoPKmu0N5iZwoFu9uNjRS+kS4BY=";
   };
 
   # elixir-ls is an umbrella app
@@ -37,7 +37,7 @@ mixRelease {
   # of the no-deps-check requirement
   buildPhase = ''
     runHook preBuild
-    mix do compile --no-deps-check, elixir_ls.release
+    mix do compile --no-deps-check, elixir_ls.release${lib.optionalString (lib.versionAtLeast elixir.version "1.16.0") "2"}
     runHook postBuild
   '';
 

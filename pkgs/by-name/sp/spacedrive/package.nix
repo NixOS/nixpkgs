@@ -9,20 +9,20 @@
 
 let
   pname = "spacedrive";
-  version = "0.1.4";
+  version = "0.2.14";
 
   src = fetchurl {
     aarch64-darwin = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-aarch64.dmg";
-      hash = "sha256-gKboB5W0vW6ssZHRRivqbVPE0d0FCUdiNCsP0rKKtNo=";
+      hash = "sha256-G0Ey7ewZeXegiqkAXFmS0MdaYllTphp7Buqs5/4/mWY=";
     };
     x86_64-darwin = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-darwin-x86_64.dmg";
-      hash = "sha256-KD1hw6aDyqCsXLYM8WrOTI2AfFx7t++UWV7SaCmtypI=";
+      hash = "sha256-ypUDb94RlGqJfkf4htWKZ0UrGZ0SyCZrrAqtMuxDzDI=";
     };
     x86_64-linux = {
       url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.AppImage";
-      hash = "sha256-iBdW8iPuvztP0L5xLyVs7/K8yFe7kD7QwdTuKJLhB+c=";
+      hash = "sha256-DFJ1/uJW0BwEtJZxGpnvGC7U8YmsJTUbcuWEOAP2Bno=";
     };
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
@@ -33,7 +33,7 @@ let
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ heisfer mikaelfangel stepbrobd ];
+    maintainers = with lib.maintainers; [ DataHearth heisfer mikaelfangel stepbrobd ];
     mainProgram = "spacedrive";
   };
 
@@ -57,21 +57,17 @@ if stdenv.isDarwin then stdenv.mkDerivation
 else appimageTools.wrapType2 {
   inherit pname version src meta passthru;
 
-  extraPkgs = pkgs:
-    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
+  extraPkgs = pkgs: [ pkgs.libthai ];
 
   extraInstallCommands =
     let
       appimageContents = appimageTools.extractType2 { inherit pname version src; };
     in
     ''
-      # Remove version from entrypoint
-      mv $out/bin/spacedrive-"${version}" $out/bin/spacedrive
-
       # Install .desktop files
-      install -Dm444 ${appimageContents}/spacedrive.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/com.spacedrive.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/spacedrive.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/spacedrive.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=spacedrive'
+      substituteInPlace $out/share/applications/com.spacedrive.desktop \
+        --replace 'Exec=usr/bin/spacedrive' 'Exec=spacedrive'
     '';
 }

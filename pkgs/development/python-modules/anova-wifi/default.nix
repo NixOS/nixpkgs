@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, aiohttp
-, sensor-state-data
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  aiohttp,
+  sensor-state-data,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.10.3";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,19 +21,17 @@ buildPythonPackage rec {
     owner = "Lash-L";
     repo = "anova_wifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tCmvp29KSCkc+g0w0odcB7vGjtDx6evac7XsHEF0syM=";
+    hash = "sha256-0RRnQBLglPnPin9/gqWDKIsfi5V7ydrdDKwm93WEnvk=";
   };
 
   postPatch = ''
-      substituteInPlace pyproject.toml \
-        --replace "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
-    '';
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
+  '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     sensor-state-data
   ];

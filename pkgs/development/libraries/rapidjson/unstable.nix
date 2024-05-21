@@ -6,8 +6,6 @@
 , graphviz
 , gtest
 , valgrind
-# One of "11" or "17"; default in source is CXX 11
-, cxxStandard ? "11"
 , buildDocs ? true
 , buildTests ? !stdenv.hostPlatform.isStatic && !stdenv.isDarwin
 , buildExamples ? true
@@ -49,8 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "RAPIDJSON_BUILD_DOC" buildDocs)
     (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" buildTests)
     (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" buildExamples)
-    (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" (cxxStandard == "11"))
-    (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" (cxxStandard == "17"))
+    # gtest 1.13+ requires C++14 or later.
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" false)
+    (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" true)
   ] ++ lib.optionals buildTests [
     (lib.cmakeFeature "GTEST_INCLUDE_DIR" "${lib.getDev gtest}")
   ];
@@ -77,6 +76,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Madouura ];
-    broken = (cxxStandard != "11" && cxxStandard != "17");
   };
 })

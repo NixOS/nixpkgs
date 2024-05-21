@@ -6,7 +6,7 @@
 , django-guardian
 , pythonOlder
 , pytest-django
-, pytestCheckHook
+, pytest7CheckHook
 , pytz
 , pyyaml
 , uritemplate
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-django
-    pytestCheckHook
+    pytest7CheckHook
 
     # optional tests
     coreapi

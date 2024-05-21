@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-register";
+
   preConfigure = ''
     sed -i 's, -std=gnu99,,g' configure
     sed -i 's,malloc.h,stdlib.h,g' src-ILU/ilur/ilur.c
@@ -69,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://openil.sourceforge.net/";
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
+    mainProgram = "ilur";
     license = licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
     platforms = platforms.mesaPlatforms;

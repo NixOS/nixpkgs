@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/flacjacket/pywayland";
     description = "Python bindings to wayland using cffi";
+    mainProgram = "pywayland-scanner";
     license = licenses.ncsa;
     maintainers = with maintainers; [ chvp ];
   };

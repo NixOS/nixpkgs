@@ -9,12 +9,14 @@
 , librsvg
 , python3
 , udisks2
-, wrapGAppsHook
+, wrapGAppsHook3
+, testers
+, udiskie
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.1";
+  version = "2.5.2";
 
   pyproject = true;
 
@@ -22,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-bmpofyW5IBRmVlzHP9YRlI/JNnnamKfF9jCG85G0wBc=";
+    hash = "sha256-r9ppuWYY3e2thsfFh4ooOgfqNvmCVw7fS0SpJCJcysQ=";
   };
 
   patches = [
@@ -38,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     installShellFiles
     python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;
@@ -77,6 +79,10 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = udiskie;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/coldfix/udiskie";

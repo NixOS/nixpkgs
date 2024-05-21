@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nelua";
-  version = "unstable-2024-01-02";
+  version = "0-unstable-2024-04-20";
 
   src = fetchFromGitHub {
     owner = "edubart";
     repo = "nelua-lang";
-    rev = "4d4b2b187675522a3cf4584ef734a9f8df201159";
-    hash = "sha256-0ct4DG7ws16PrjmYfcAsr08zIO9cpb1Vtbm2OxcQcfY=";
+    rev = "9f75e009db190feda0f90ae858b48fd82f51b8b1";
+    hash = "sha256-JwuZZXYcH8KRPxt4PBwhYDjZlwqe6VfaONU8rdLIDs4=";
   };
 
   postPatch = ''
     substituteInPlace lualib/nelua/version.lua \
       --replace "NELUA_GIT_HASH = nil" "NELUA_GIT_HASH = '${src.rev}'" \
-      --replace "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "unstable-" version}'"
+      --replace "NELUA_GIT_DATE = nil" "NELUA_GIT_DATE = '${lib.removePrefix "0-unstable-" version}'"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -23,13 +23,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    # no releases, only stale "latest" tag
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "Minimal, efficient, statically-typed and meta-programmable systems programming language heavily inspired by Lua, which compiles to C and native code";
     homepage = "https://nelua.io/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

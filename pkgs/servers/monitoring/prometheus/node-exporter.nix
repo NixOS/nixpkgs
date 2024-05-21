@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.7.0";
+  version = "1.8.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-+KY/YXEqT/40QzODOk8lKAo0zMcNuiMvj6ippbJE9ho=";
+    hash = "sha256-TC7F/LQnn6OIhvWLy75MQyVGS7DlgJLbbaAUZUZTvEo=";
   };
 
-  vendorHash = "sha256-HrlzDupZP9+GxB58Lg62tvku1Sl2zo2iV0KnBNwkM58=";
+  vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";
+    mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
     changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

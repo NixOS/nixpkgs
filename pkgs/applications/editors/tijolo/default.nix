@@ -6,7 +6,7 @@
 , libgit2
 , editorconfig-core-c
 , gtksourceview4
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktopToDarwinBundle
 }:
 crystal.buildCrystalPackage rec {
@@ -20,7 +20,7 @@ crystal.buildCrystalPackage rec {
     hash = "sha256-3TfXvRVP3lu43qF3RWCHnZ3czTaSl5EzrhuTlpnMfKo=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ]
+  nativeBuildInputs = [ wrapGAppsHook3 ]
     ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
   buildInputs = [ vte libgit2 gtksourceview4 editorconfig-core-c ];
 

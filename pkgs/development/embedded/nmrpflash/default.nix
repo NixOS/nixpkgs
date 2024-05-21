@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   version = "0.9.22";
 
   src = fetchFromGitHub {
-    owner  = "jclehner";
-    repo   = "nmrpflash";
-    rev    = "v${version}";
-    sha256 = "sha256-gr/7tZYnuXFvfIUh2MmtgSbFoELTomQ4h05y/WFDhjo=";
+    owner = "jclehner";
+    repo = "nmrpflash";
+    rev = "v${version}";
+    hash = "sha256-gr/7tZYnuXFvfIUh2MmtgSbFoELTomQ4h05y/WFDhjo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jclehner/nmrpflash";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dadada ];
+    mainProgram = "nmrpflash";
     platforms = platforms.unix;
   };
 }

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.7.0";
+  version = "0.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,10 +19,8 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-DH+XBj+VcS56+nAOGjjrKG0dnSKrqiU6N5vkILm+vSE=";
+    hash = "sha256-ipu0JZIx/YgR7F5Z7sl/9YEEHkyiDllR5dHko7AlSe8=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     # We don't want flake8

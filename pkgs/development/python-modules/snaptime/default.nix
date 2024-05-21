@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , python-dateutil
 , pytz
 }:
@@ -8,14 +9,18 @@
 buildPythonPackage rec {
   pname = "snaptime";
   version = "0.2.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-4/HriQQ9WNMHIauYy2UCPxpMJ0DjsZdwQpixY8ktUIs=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  dependencies = [
     python-dateutil
     pytz
   ];

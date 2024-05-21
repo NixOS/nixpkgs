@@ -9,18 +9,19 @@
 , zodbpickle
 , zconfig
 , persistent
-, zc_lockfile
+, zc-lockfile
 , btrees
 , manuel
 }:
 
 buildPythonPackage rec {
-  pname = "ZODB";
-  version = "5.8.0";
+  pname = "zodb";
+  version = "6.0";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KNugDvYm3hBYnt7auFrQ8O33KSXnXTahXJnGOsBf52Q=";
+    pname = "ZODB";
+    inherit version;
+    hash = "sha256-5Rx5IRXF2q1OgGdXuvovdUwADCPmurw75eQHdf5Jtdw=";
   };
 
   # remove broken test
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     zodbpickle
     zconfig
     persistent
-    zc_lockfile
+    zc-lockfile
     btrees
   ];
 

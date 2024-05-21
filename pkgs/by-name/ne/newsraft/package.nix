@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.22";
+  version = "0.24";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "newsraft";
     repo = "newsraft";
     rev = "newsraft-${finalAttrs.version}";
-    hash = "sha256-QjIADDk1PSZP89+G7B1Bpu3oTEAykD4RJYghZnMJKho=";
+    hash = "sha256-LTiFwsjnGuGN4UgMpu/HGKtJbbYTx58zldjV2C/wtPQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

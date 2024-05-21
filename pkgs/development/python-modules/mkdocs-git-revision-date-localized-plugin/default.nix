@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, babel
 , gitpython
 , mkdocs
 , pytz
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.2.2";
+  version = "1.2.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +21,11 @@ buildPythonPackage rec {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6qLVmmJzMTrvuoeSVUjWqmI6f5MbAFWAj36v2l3ZeD8=";
+    hash = "sha256-cezL65Wsdaa9W4dGLgTz1x3UFrDRDJaGuttr58CBcuw=";
   };
 
   propagatedBuildInputs = [
+    babel
     gitpython
     mkdocs
     pytz

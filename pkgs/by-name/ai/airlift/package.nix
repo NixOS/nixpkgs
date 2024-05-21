@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchPypi
-, argparse
 , kubernetes-helm
 , kind
 , docker
@@ -11,22 +10,28 @@ python3.pkgs.buildPythonApplication rec {
 
   pname = "airlift";
   pyproject = true;
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1LE3fpfX4NExJdUdSjt4BXvxQTLJ8zrRkGHkxo/6Pb8=";
+    hash = "sha256-JcW2FXl+SrdveRmG5bD1ttf6F3LwvGZQF4ZCTpDpPa8=";
   };
+
+  postPatch = ''
+    sed -i '/argparse/d' pyproject.toml
+  '';
+
+   nativeBuildInputs = [
+    python3.pkgs.poetry-core
+  ];
+
   buildInputs = [
     kubernetes-helm
     kind
     docker
   ];
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-  ];
+
   propagatedBuildInputs = with python3.pkgs; [
-    argparse
     halo
     pyyaml
     hiyapyco

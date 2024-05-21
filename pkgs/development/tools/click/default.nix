@@ -13,7 +13,7 @@
 , getopt
 , setuptools
 , pygobject3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication {
@@ -57,7 +57,7 @@ buildPythonApplication {
     gobject-introspection
     vala
     getopt
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   # Tests were omitted for time constraint reasons

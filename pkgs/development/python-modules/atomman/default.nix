@@ -22,10 +22,10 @@
 , pythonRelaxDepsHook
 }:
 
-buildPythonPackage rec {
-  version = "unstable-2023-07-28";
+buildPythonPackage {
   pname = "atomman";
-  format = "pyproject";
+  version = "1.4.6-unstable-2023-07-28";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -36,14 +36,16 @@ buildPythonPackage rec {
     hash = "sha256-WfB+OY61IPprT6OCVHl8VA60p7lLVkRGuyYX+nm7bbA=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  build-system = [
     setuptools
     wheel
-    pythonRelaxDepsHook
+    numpy
+    cython
   ];
 
-  propagatedBuildInputs = [
-    cython
+  dependencies = [
     datamodeldict
     matplotlib
     numericalunits

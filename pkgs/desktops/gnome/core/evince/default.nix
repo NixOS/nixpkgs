@@ -23,7 +23,7 @@
 , libarchive
 , libhandy
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gobject-introspection
 , yelp-tools
@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "45.0";
+  version = "46.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0YZH1Cdcvd8NMoF7HQTjBzQqhb6RTsTa0tgIKq+KpKg=";
+    hash = "sha256-lLtSU2WwYKKML2AX0iy/KvURVQclSqQum/wAC7wYq2I=";
   };
 
   depsBuildBuild = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 
@@ -110,8 +110,6 @@ stdenv.mkDerivation rec {
     "-Dmultimedia=disabled"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
@@ -128,7 +126,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Evince";
+    homepage = "https://apps.gnome.org/Evince/";
     description = "GNOME's document viewer";
 
     longDescription = ''

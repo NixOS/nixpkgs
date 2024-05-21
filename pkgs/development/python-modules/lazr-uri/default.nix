@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "A self-contained, easily reusable library for parsing, manipulating";
     homepage = "https://launchpad.net/lazr.uri";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

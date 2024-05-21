@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-slim";
-  version = "1.40.7";
+  version = "1.40.11";
 
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
     rev = version;
-    hash = "sha256-X+7FMdIotnafUEKQUrvxYgN4qGqbtVJaZD+V4/whylM=";
+    hash = "sha256-X+1euWp4W53axbiBpL82bUPfod/JNhGVGWgOqKyhz6A=";
   };
 
   vendorHash = null;
@@ -39,6 +39,6 @@ buildGoModule rec {
     homepage = "https://slimtoolkit.org/";
     changelog = "https://github.com/slimtoolkit/slim/raw/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam mbrgm ];
+    maintainers = with maintainers; [ Br1ght0ne mbrgm ];
   };
 }

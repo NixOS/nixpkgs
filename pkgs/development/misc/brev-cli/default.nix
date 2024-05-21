@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "brev-cli";
-  version = "0.6.267";
+  version = "0.6.284";
 
   src = fetchFromGitHub {
     owner = "brevdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YGfvMXwmG3aiFjzlTNl2TQ7zGIoIV6IjXbqQm8wmO/A=";
+    sha256 = "sha256-G70309GQ3C7ZBS4baRKN3Ms4MBvCmLmPorbByZy4Qh4=";
   };
 
   vendorHash = "sha256-IR/tgqh8rS4uN5jSOcopCutbHCKHSU9icUfRhOgu4t8=";
@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Connect your laptop to cloud computers";
+    mainProgram = "brev";
     homepage = "https://github.com/brevdev/brev-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

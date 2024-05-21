@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch
 , recompressTarball
 , buildPackages
+, buildPlatform
 , pkgsBuildBuild
 , pkgsBuildTarget
 # Channel data:
@@ -25,7 +26,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libcap
-, xdg-utils, minizip, libwebp
+, minizip, libwebp
 , libusb1, re2
 , ffmpeg, libxslt, libxml2
 , nasm
@@ -102,14 +103,18 @@ let
     "flac"
     "libjpeg"
     "libpng"
+  ] ++ lib.optionals (!chromiumVersionAtLeast "124") [
+    # Use the vendored libwebp for M124+ until we figure out how to solve:
+    # Running phase: configurePhase
+    # ERROR Unresolved dependencies.
+    # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
+    #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     "libwebp"
+  ] ++ [
     "libxslt"
     # "opus"
   ];
 
-  opusWithCustomModes = libopus.override {
-    withCustomModes = true;
-  };
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -168,7 +173,6 @@ let
       buildPlatformLlvmStdenv.cc
       pkg-config
       libuuid
-      (libpng.override { apngSupport = false; }) # needed for "host/generate_colors_info"
     ]
     # When cross-compiling, chromium builds a huge proportion of its
     # components for both the `buildPlatform` (which it calls
@@ -176,17 +180,41 @@ let
     # half of the dependencies are needed here.  To avoid having to
     # maintain a separate list of buildPlatform-dependencies, we
     # simply throw in the kitchen sink.
-    ++ buildInputs
-    ;
-
-    buildInputs = [
-      (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
-      bzip2 flac speex opusWithCustomModes
+    # ** Because of overrides, we have to copy the list as it otherwise mess with splicing **
+    ++ [
+      (buildPackages.libpng.override { apngSupport = false; })  # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+      (buildPackages.libopus.override { withCustomModes = true; })
+      bzip2 flac speex
       libevent expat libjpeg snappy
       libcap
-    ] ++ lib.optionals (!xdg-utils.meta.broken) [
-      xdg-utils
-    ] ++ [
+      minizip libwebp
+      libusb1 re2
+      ffmpeg libxslt libxml2
+      nasm
+      nspr nss
+      util-linux alsa-lib
+      libkrb5
+      glib gtk3 dbus-glib
+      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
+      mesa # required for libgbm
+      pciutils protobuf speechd libXdamage at-spi2-core
+      pipewire
+      libva
+      libdrm wayland mesa.drivers libxkbcommon
+      curl
+      libepoxy
+      libffi
+      libevdev
+    ] ++ lib.optional systemdSupport systemd
+      ++ lib.optionals cupsSupport [ libgcrypt cups ]
+      ++ lib.optional pulseSupport libpulseaudio;
+
+    buildInputs = [
+      (libpng.override { apngSupport = false; })  # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
+      (libopus.override { withCustomModes = true; })
+      bzip2 flac speex
+      libevent expat libjpeg snappy
+      libcap
       minizip libwebp
       libusb1 re2
       ffmpeg libxslt libxml2
@@ -213,12 +241,33 @@ let
       ./patches/cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
-      # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
-      ./patches/widevine-79.patch
+    ] ++ lib.optionals (packageName == "chromium") [
+      # This patch is limited to chromium and ungoogled-chromium because electron-source sets
+      # enable_widevine to false.
+      #
+      # The patch disables the automatic Widevine download (component) that happens at runtime
+      # completely (~/.config/chromium/WidevineCdm/). This would happen if chromium encounters DRM
+      # protected content or when manually opening chrome://components.
+      #
+      # It also prevents previously downloaded Widevine blobs in that location from being loaded and
+      # used at all, while still allowing the use of our -wv wrapper. This is because those old
+      # versions are out of out our control and may be vulnerable, given we literally disable their
+      # auto updater.
+      #
+      # bundle_widevine_cdm is available as gn flag, but we cannot use it, as it expects a bunch of
+      # files Widevine files at configure/compile phase that we don't have. Changing the value of the
+      # BUNDLE_WIDEVINE_CDM build flag does work in the way we want though.
+      # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
+      # flag (declare_args) so we simply hardcode it to false.
+      ./patches/widevine-disable-auto-download-allow-bundle.patch
+    ] ++ [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+      # Chromium reads initial_preferences from its own executable directory
+      # This patch modifies it to read /etc/chromium/initial_preferences
+      ./patches/chromium-initial-prefs.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "120") [
       # We need to revert this patch to build M120+ with LLVM 17:
       ./patches/chromium-120-llvm-17.patch
@@ -236,6 +285,11 @@ let
         commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
         hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
       })
+    ] ++ lib.optionals (chromiumVersionAtLeast "121") [
+      # M121 is the first version to require the new rust toolchain.
+      # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
+      # allowing us to use our rustc and our clang.
+      ./patches/chromium-121-rust.patch
     ];
 
     postPatch = ''
@@ -289,10 +343,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-    '' + lib.optionalString (!xdg-utils.meta.broken) ''
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
-        chrome/browser/shell_integration_linux.cc
 
     '' + lib.optionalString systemdSupport ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -386,10 +436,11 @@ let
       # Feature overrides:
       # Native Client support was deprecated in 2020 and support will end in June 2021:
       enable_nacl = false;
-      # Enabling the Widevine component here doesn't affect whether we can
-      # redistribute the chromium package; the Widevine component is either
-      # added later in the wrapped -wv build or downloaded from Google:
+    } // lib.optionalAttrs (packageName == "chromium") {
+      # Enabling the Widevine here doesn't affect whether we can redistribute the chromium package.
+      # Widevine in this drv is a bit more complex than just that. See Widevine patch somewhere above.
       enable_widevine = true;
+    } // {
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
@@ -400,11 +451,15 @@ let
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
-      # We do intentionally not set rustc_version as nixpkgs will never do incremental
-      # rebuilds, thus leaving this empty is fine.
       rust_sysroot_absolute = "${buildPackages.rustc}";
-      # Building with rust is disabled for now - this matches the flags in other major distributions.
+      # Rust is enabled for M121+, see next section:
       enable_rust = false;
+    } // lib.optionalAttrs (chromiumVersionAtLeast "121") {
+      # M121 the first version to actually require a functioning rust toolchain
+      enable_rust = true;
+      # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
+      # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
+      rustc_version = buildPackages.rustc.version;
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
@@ -418,6 +473,13 @@ let
       link_pulseaudio = true;
     } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
+
+    # We cannot use chromiumVersionAtLeast in mkDerivation's env attrset due
+    # to infinite recursion when chromium.override is used (e.g. electron).
+    # To work aroud this, we use export in the preConfigure phase.
+    preConfigure = lib.optionalString (chromiumVersionAtLeast "121") ''
+      export RUSTC_BOOTSTRAP=1
+    '';
 
     configurePhase = ''
       runHook preConfigure
@@ -467,6 +529,10 @@ let
       for chromiumBinary in "$libExecPath/$packageName" "$libExecPath/libGLESv2.so"; do
         patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader pciutils ]}:$(patchelf --print-rpath "$chromiumBinary")" "$chromiumBinary"
       done
+
+      # replace bundled vulkan-loader
+      rm "$libExecPath/libvulkan.so.1"
+      ln -s -t "$libExecPath" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
     '';
 
     passthru = {

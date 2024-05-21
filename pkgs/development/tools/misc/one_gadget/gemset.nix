@@ -4,10 +4,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "04y4zgh4bbcb8wmkxwfqg4saky1d1f3xw8z6yk543q13h8ky8rz5";
+      sha256 = "08r67nglsqnxrbn803szf5bdnqhchhq8kf2by94f37fcl65wpp19";
       type = "gem";
     };
-    version = "2.4.15";
+    version = "2.5.0";
   };
   elftools = {
     dependencies = ["bindata"];
@@ -26,9 +26,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dwsmjhr9i8gwwbbpiyddbhcx74cvqqk90a5l8zbsjhjfs679irc";
+      sha256 = "1j9478h929jm5hq2fs3v8y37a7y2hhpli90mbps7yvka4ykci7mw";
       type = "gem";
     };
-    version = "1.8.1";
+    version = "1.9.0";
   };
 }

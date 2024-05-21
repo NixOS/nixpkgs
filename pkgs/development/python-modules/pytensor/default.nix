@@ -19,21 +19,20 @@
 , pytestCheckHook
 , pythonOlder
 , tensorflow-probability
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.18.5";
+  version = "2.20.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-0xwzFmYsec7uQaq6a4BAA6MYy2zIVZ0cTwodVJQ6yMs=";
+    hash = "sha256-bvkOMer+zYSsiU4a147eUEZjjUeTVpb9f/hepMZZ3sE=";
   };
 
   postPatch = ''
@@ -41,12 +40,12 @@ buildPythonPackage rec {
       --replace "versioneer[toml]==0.28" "versioneer[toml]"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     versioneer
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cons
     etuples
     filelock
@@ -61,7 +60,6 @@ buildPythonPackage rec {
     jax
     jaxlib
     numba
-    numba-scipy
     pytest-mock
     pytestCheckHook
     tensorflow-probability
@@ -93,10 +91,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
+    mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
     changelog = "https://github.com/pymc-devs/pytensor/releases";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    maintainers = with maintainers; [ bcdarwin ferrine ];
   };
 }

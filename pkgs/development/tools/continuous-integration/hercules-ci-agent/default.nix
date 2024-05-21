@@ -1,4 +1,5 @@
 {
+  crun,
   git,
   gnutar,
   gzip,
@@ -8,14 +9,13 @@
   makeBinaryWrapper,
   nixos,
   openssh,
-  runc,
   stdenv,
   testers,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
   inherit (lib) makeBinPath;
-  bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.isLinux runc;
+  bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.isLinux crun;
 
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990

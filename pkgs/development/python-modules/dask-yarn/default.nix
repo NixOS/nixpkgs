@@ -1,20 +1,22 @@
 { lib
-, stdenv
 , buildPythonPackage
-, dask
-, distributed
+, pythonOlder
 , fetchFromGitHub
 , fetchpatch
+, setuptools
+, versioneer
+, dask
+, distributed
 , grpcio
-, pytestCheckHook
-, pythonOlder
 , skein
+, pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "dask-yarn";
   version = "0.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -33,9 +35,18 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    distributed
+  postPatch = ''
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     dask
+    distributed
     grpcio
     skein
   ];
@@ -65,6 +76,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Deploy dask on YARN clusters";
+    mainProgram = "dask-yarn";
     longDescription = ''Dask-Yarn deploys Dask on YARN clusters,
       such as are found in traditional Hadoop installations.
       Dask-Yarn provides an easy interface to quickly start,

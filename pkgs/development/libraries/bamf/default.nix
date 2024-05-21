@@ -17,7 +17,7 @@
 , xorgserver
 , dbus
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     xorgserver
   ];
 

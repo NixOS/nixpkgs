@@ -14,11 +14,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-WPePzqZ2iGeJ7kzTj8eg7q1JEjw91WY7gViJJ46SLRY=";
   };
 
-  cargoHash = "sha256-9Z49aPfcIdMfYCFAXsxFxcfhaLjtPod+nMFHDmvgDY0=";
+  cargoHash = "sha256-CQnM7pFnk4LcstKllhbeohbrggKV6MBQy03oq7DEkP4=";
 
   nativeCheckInputs = [
     perl
   ];
+  # FIXME: remove patch when upstream version of rustc-serialize is updated
+  # https://github.com/NixOS/nixpkgs/pull/310673
+  cargoPatches = [ ./rustc-serialize-fix.patch ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

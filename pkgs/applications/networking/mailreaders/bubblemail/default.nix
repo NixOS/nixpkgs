@@ -7,7 +7,7 @@
 , libnotify
 , gst_all_1
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gnome-online-accounts
 , glib
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.pillow
     # For setup-hook
     gobject-introspection

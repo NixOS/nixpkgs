@@ -16,7 +16,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-zwHcGy7wjy2yx7nMi88R+z+Is+YcqGRMK0czeBNlcdA=";
+  vendorHash = "sha256-EvVazz51sW8z+8XfZB0Xo42KuUT6Q9n2Y/0HvlF1bV4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,6 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";
+    mainProgram = "threatest";
     homepage = "https://github.com/DataDog/threatest";
     changelog = "https://github.com/DataDog/threatest/releases/tag/v${version}";
     license = licenses.asl20;

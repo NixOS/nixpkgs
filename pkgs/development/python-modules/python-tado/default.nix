@@ -1,39 +1,41 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.17.3";
-  format = "setuptools";
+  version = "0.17.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    # https://github.com/wmalgadey/PyTado/issues/62
     rev = "refs/tags/${version}";
-    hash = "sha256-whpNYiAb2cqKI4m0HJN2lPt51FLuEzrkrRTSWs6uznU=";
+    hash = "sha256-KcYxUKQuO7TLS4YPg2mrBjP+DMnvZeJokGzwmeM/CvE=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "PyTado" ];
 
   meta = with lib; {
-    description =
-      "Python binding for Tado web API. Pythonize your central heating!";
+    description = "Python binding for Tado web API. Pythonize your central heating!";
     homepage = "https://github.com/wmalgadey/PyTado";
+    changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jamiemagee ];
+    mainProgram = "pytado";
   };
 }

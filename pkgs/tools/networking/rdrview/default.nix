@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/eafer/rdrview";
     license = licenses.asl20;
     maintainers = with maintainers; [ djanatyn ];
+    mainProgram = "rdrview";
   };
 }

@@ -11,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-extfs";
-  version = "3.7";
+  version = "3.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.extfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-RsAWqtoarn/2sZU5dkQYt794dXGOr5fe68VgMNDBst4=";
+    hash = "sha256-EIM2kS5V2+e7/bvuB8ezBZQl3XopdlzZ7Cmwr+Ns/Us=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

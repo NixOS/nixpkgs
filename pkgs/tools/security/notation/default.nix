@@ -1,17 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, notation }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, notation }:
 
 buildGoModule rec {
   pname = "notation";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "notaryproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KcB5l6TRZhciXO04mz5iORR4//cAhrh+o4Kdq7LA4A4=";
+    hash = "sha256-MJBFdtx+HkPCN1SIohKOy33BW746GNN2fWkr7TIuBmk=";
   };
 
-  vendorHash = "sha256-r58ZV63KIHKxh5HDeQRfd0OF0s7xpC4sXvsYLhm8AIE=";
+  vendorHash = "sha256-USkufc1dG4eyRfRJHSX4mVZHnvOc5onHenF98Aedac4=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   # This is a Go sub-module and cannot be built directly (e2e tests).
   excludedPackages = [ "./test" ];
@@ -23,6 +27,13 @@ buildGoModule rec {
     "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
   ];
 
+  postInstall = ''
+    installShellCompletion --cmd notation \
+      --bash <($out/bin/notation completion bash) \
+      --fish <($out/bin/notation completion fish) \
+      --zsh <($out/bin/notation completion zsh)
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = notation;
     command = "notation version";
@@ -33,5 +44,6 @@ buildGoModule rec {
     homepage = "https://notaryproject.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "notation";
   };
 }

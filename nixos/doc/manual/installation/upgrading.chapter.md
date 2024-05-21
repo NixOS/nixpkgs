@@ -33,8 +33,8 @@ To see what channels are available, go to <https://channels.nixos.org>.
 contains the channel's latest version and includes ISO images and
 VirtualBox appliances.) Please note that during the release process,
 channels that are not yet released will be present here as well. See the
-Getting NixOS page <https://nixos.org/nixos/download.html> to find the
-newest supported stable release.
+Getting NixOS page <https://nixos.org/download/> to find the newest
+supported stable release.
 
 When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For
@@ -101,8 +101,10 @@ You can keep a NixOS system up-to-date automatically by adding the
 following to `configuration.nix`:
 
 ```nix
-system.autoUpgrade.enable = true;
-system.autoUpgrade.allowReboot = true;
+{
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = true;
+}
 ```
 
 This enables a periodically executed systemd service named
@@ -114,5 +116,7 @@ the new generation contains a different kernel, initrd or kernel
 modules. You can also specify a channel explicitly, e.g.
 
 ```nix
-system.autoUpgrade.channel = "https://channels.nixos.org/nixos-23.11";
+{
+  system.autoUpgrade.channel = "https://channels.nixos.org/nixos-23.11";
+}
 ```

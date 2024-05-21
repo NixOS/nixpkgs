@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "django-configurations";
-  version = "2.5";
+  version = "2.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y/olLEDciOoXuLkPX0oxonJuWGrLH/Dtx0wijGHxnl0=";
+    hash = "sha256-blCDdX4rvfm7eFBWdTa5apNRX2sXUD10ko/2KNsuDpQ=";
   };
 
   buildInputs = [
@@ -58,6 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A helper for organizing Django settings";
+    mainProgram = "django-cadmin";
     homepage = "https://django-configurations.readthedocs.io/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ ];

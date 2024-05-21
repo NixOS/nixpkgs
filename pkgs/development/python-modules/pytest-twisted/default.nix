@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-twisted";
-  version = "1.14.0";
+  version = "1.14.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IJv1pkUs+/th3o8BWQLBTsgSZACRFQcHS7LuTOjf4xM=";
+    sha256 = "sha256-qbGLyfykfSiG+O/j/SeHmoHxwLtJ8cVgZmyedkSRtjI=";
   };
 
   buildInputs = [
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "A twisted plugin for py.test";
     homepage = "https://github.com/pytest-dev/pytest-twisted";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

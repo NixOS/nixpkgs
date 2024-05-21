@@ -17,6 +17,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "The falling tower game";
+    mainProgram = "xjump";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pmeunier ];
   };

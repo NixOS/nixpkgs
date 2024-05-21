@@ -5,16 +5,17 @@
 
 buildPythonPackage rec {
   pname = "ramlfications";
-  version = "0.1.9";
+  version = "0.2.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xvnna7kaq4nm5nfnwcwbr5bcm2s532hgyp7kq4v9iivn48rrf3v";
+    sha256 = "sha256-wcQd5j74y7d0xFeWlwlhceZj95ixUmv5upnv/6Rl1ew=";
   };
 
   meta = with lib; {
     description = "A Python RAML parser.";
+    mainProgram = "ramlfications";
     homepage    = "https://ramlfications.readthedocs.org";
     license     = licenses.asl20;
     maintainers = with maintainers; [ ];

@@ -1,7 +1,7 @@
 { lib, fetchurl
 # Optional due to unfree license.
 , faacSupport ? false
-, glib, python3Packages, gtk3, wrapGAppsHook
+, glib, python3Packages, gtk3, wrapGAppsHook3
 , gsettings-desktop-schemas, intltool, xvfb-run
 , gobject-introspection, gst_all_1, fdk-aac-encoder }:
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -73,6 +73,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://soundconverter.org/";
     description = "Leading audio file converter for the GNOME Desktop";
+    mainProgram = "soundconverter";
     longDescription = ''
       SoundConverter reads anything the GStreamer library can read,
       and writes WAV, FLAC, MP3, AAC and Ogg Vorbis files.

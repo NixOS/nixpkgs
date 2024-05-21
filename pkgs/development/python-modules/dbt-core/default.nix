@@ -1,13 +1,12 @@
 { lib
-, python3
-, buildPythonPackage
-, fetchFromGitHub
 , agate
+, buildPythonPackage
 , cffi
 , click
 , colorama
 , dbt-extractor
 , dbt-semantic-interfaces
+, fetchFromGitHub
 , hologram
 , idna
 , isodate
@@ -19,10 +18,13 @@
 , packaging
 , pathspec
 , protobuf
+, python3
+, pythonOlder
 , pythonRelaxDepsHook
 , pytz
 , pyyaml
 , requests
+, setuptools
 , sqlparse
 , typing-extensions
 , urllib3
@@ -31,21 +33,19 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.4";
-  format = "setuptools";
+  version = "1.7.13";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
-    repo = pname;
+    repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+2tmLclBZrY9SDCKvQ4QNbI4665BtsrEI1sBSY3GVGM=";
+    hash = "sha256-uai1ihdmJpFkQqpx7edWiwwy0ek4dbclR/2OuiNbaXM=";
   };
 
   sourceRoot = "${src.name}/core";
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "agate"
@@ -53,9 +53,16 @@ buildPythonPackage rec {
     "mashumaro"
     "networkx"
     "logbook"
+    "pathspec"
+    "urllib3"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  dependencies = [
     agate
     cffi
     click

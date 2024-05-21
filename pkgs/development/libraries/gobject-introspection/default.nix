@@ -22,6 +22,7 @@
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
 , testers
+, propagateFullGlib ? true
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
@@ -33,10 +34,13 @@ let
     pp.mako
     pp.markdown
   ];
+
+  # https://discourse.gnome.org/t/dealing-with-glib-and-gobject-introspection-circular-dependency/18701
+  glib' = glib.override { withIntrospection = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.78.1";
+  version = "1.80.1";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -45,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    sha256 = "vXur2Zr3JY52gZ5Fukprw5lgj+di2D/ePKwDPFCEG7Q=";
+    hash = "sha256-od98Qk4VvaGrY5wA6QUbmt9c6hqeUS+KYDtTzRmbxtg=";
   };
 
   patches = [
@@ -92,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     libffi
-    glib
+    (if propagateFullGlib then glib else glib')
   ];
 
   mesonFlags = [

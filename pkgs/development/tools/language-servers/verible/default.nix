@@ -18,8 +18,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2023-12-23";
-  GIT_VERSION = "v0.0-3471-g9cb45092";
+  GIT_DATE = "2024-02-01";
+  GIT_VERSION = "v0.0-3515-g2d841599";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
@@ -28,15 +28,8 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo  = "verible";
     rev   = "${GIT_VERSION}";
-    hash  = "sha256-nFt5TeFv63Igx8Zer2s/ZLj5DsHeZj5V/+3burnEm9g=";
+    hash  = "sha256-D/blcex/St1nLKvjzuKnmAJE8HVlGy8ampmXIxKK11M=";
   };
-
-  patches = [
-    # Patch WORKSPACE file to not include windows-related dependencies,
-    # as they are removed by bazel, breaking the fixed output derivation
-    # TODO: fix upstream
-    ./remove-unused-deps.patch
-  ];
 
   bazel = bazel_5;
   bazelFlags = [
@@ -46,7 +39,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-gZzrgZsHQ9zMoIDooVo9nRQbkJ41igme8wcNFj5EzWc=";
+    sha256 = "sha256-2YruKvU7OZQ7mKNrqYITat+cmf/DEytDElYw7CvkxJk=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +91,7 @@ buildBazelPackage rec {
     homepage = "https://github.com/chipsalliance/verible";
     license = licenses.asl20;
     maintainers = with maintainers; [ hzeller newam ];
+    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
     platforms = platforms.linux;
   };
 }

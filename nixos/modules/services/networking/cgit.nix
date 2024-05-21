@@ -96,30 +96,30 @@ in
 {
   options = {
     services.cgit = mkOption {
-      description = mdDoc "Configure cgit instances.";
+      description = "Configure cgit instances.";
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
         options = {
-          enable = mkEnableOption (mdDoc "cgit");
+          enable = mkEnableOption "cgit";
 
           package = mkPackageOption pkgs "cgit" {};
 
           nginx.virtualHost = mkOption {
-            description = mdDoc "VirtualHost to serve cgit on, defaults to the attribute name.";
+            description = "VirtualHost to serve cgit on, defaults to the attribute name.";
             type = types.str;
             default = config._module.args.name;
             example = "git.example.com";
           };
 
           nginx.location = mkOption {
-            description = mdDoc "Location to serve cgit under.";
+            description = "Location to serve cgit under.";
             type = types.str;
             default = "/";
             example = "/git/";
           };
 
           repos = mkOption {
-            description = mdDoc "cgit repository settings, see cgitrc(5)";
+            description = "cgit repository settings, see cgitrc(5)";
             type = with types; attrsOf (attrsOf settingType);
             default = {};
             example = {
@@ -131,14 +131,14 @@ in
           };
 
           scanPath = mkOption {
-            description = mdDoc "A path which will be scanned for repositories.";
+            description = "A path which will be scanned for repositories.";
             type = types.nullOr types.path;
             default = null;
             example = "/var/lib/git";
           };
 
           settings = mkOption {
-            description = mdDoc "cgit configuration, see cgitrc(5)";
+            description = "cgit configuration, see cgitrc(5)";
             type = types.attrsOf settingType;
             default = {};
             example = literalExpression ''
@@ -150,7 +150,7 @@ in
           };
 
           extraConfig = mkOption {
-            description = mdDoc "These lines go to the end of cgitrc verbatim.";
+            description = "These lines go to the end of cgitrc verbatim.";
             type = types.lines;
             default = "";
           };

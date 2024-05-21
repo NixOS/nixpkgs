@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--libexecdir=libexec"
   ];
 
-  doCheck = true;
+  doCheck = false; # https://github.com/FeralInteractive/gamemode/issues/468
   nativeCheckInputs = [
     appstream
   ];

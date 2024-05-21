@@ -50,6 +50,10 @@ buildPythonPackage rec {
     uncertainties
   ];
 
+  pytestFlagsArray = [
+    "--benchmark-disable"
+  ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -57,11 +61,14 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/hgrecco/pint/issues/1898
     "test_load_definitions_stage_2"
+    # pytest8 deprecation
+    "test_nonnumeric_magnitudes"
   ];
 
   meta = with lib; {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";
     description = "Physical quantities module";
+    mainProgram = "pint-convert";
     license = licenses.bsd3;
     homepage = "https://github.com/hgrecco/pint/";
     maintainers = with maintainers; [ doronbehar ];

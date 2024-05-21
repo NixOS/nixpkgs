@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parses log files, generates metrics for Graphite and Ganglia";
+    mainProgram = "logster";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/etsy/logster";
   };

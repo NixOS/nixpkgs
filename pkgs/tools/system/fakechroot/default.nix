@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dex4er/fakechroot/commit/e7c1f3a446e594a4d0cce5f5d499c9439ce1d5c5.patch";
       sha256 = "sha256-eX6kB4U1ZlXoRtkSVEIBTRjO/cTS/7z5a9S366DiRMg=";
     })
+    # pass __readlinkat_chk buffer length
+    (fetchpatch {
+      url = "https://github.com/dex4er/fakechroot/pull/115/commits/15479d9436b534cee0115064bd8deb8d4ece9b8c.patch";
+      hash = "sha256-wMIZ3hW5XkRXQYBMADlN6kxhDSiEr84PGWBW+f4b4Ko=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

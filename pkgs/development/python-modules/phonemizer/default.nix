@@ -51,6 +51,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bootphon/phonemizer";
     changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
+    mainProgram = "phonemize";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };

@@ -1,25 +1,38 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+}:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   pname = "rst2html5";
-  version = "2.0";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ejjja/fm6wXTf9YtjCYZsNDB8X5oAtyPoUIsYFDuZfc=";
+    hash = "sha256-MJmYyF+rAo8vywGizNyIbbCvxDmCYueVoC6pxNDzKuk=";
   };
 
-  buildInputs = with python3Packages; [
+  build-system = with python3.pkgs; [ poetry-core ];
+
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     docutils
     genshi
     pygments
   ];
 
-  meta = with lib;{
-    homepage = "https://rst2html5.readthedocs.io/en/latest/";
+  # Tests are not shipped as PyPI releases
+  doCheck = false;
+
+  pythonImportsCheck = [ "rst2html5" ];
+
+  meta = with lib; {
     description = "Converts ReSTructuredText to (X)HTML5";
+    homepage = "https://rst2html5.readthedocs.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "rst2html5";
   };
 }

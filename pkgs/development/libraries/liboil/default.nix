@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library of simple functions that are optimized for various CPUs";
+    mainProgram = "oil-bugreport";
     homepage    = "https://liboil.freedesktop.org";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];

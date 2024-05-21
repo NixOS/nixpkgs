@@ -5,8 +5,6 @@
 , numpy
 , pytestCheckHook
 , pykka
-, enum34
-, pythonOlder
 , pythonAtLeast
 }:
 
@@ -32,8 +30,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
   ];
 
   nativeCheckInputs = [
@@ -55,6 +51,5 @@ buildPythonPackage rec {
   meta = {
     description = "API for interacting with the NI-DAQmx driver";
     license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
   };
 }

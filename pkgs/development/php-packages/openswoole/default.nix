@@ -1,8 +1,16 @@
-{ lib, stdenv, buildPecl, valgrind, pcre2, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildPecl,
+  valgrind,
+  pcre2,
+  fetchFromGitHub,
+}:
 
 let
   version = "22.1.2";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "openswoole";
 

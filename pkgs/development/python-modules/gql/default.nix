@@ -25,25 +25,29 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.6.0b0";
+  version = "3.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
-    repo = "gql";
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yX6NbtGxBa3lL/bS3j2ouTPku6a4obqNGx1xRzx+Skk=";
+    hash = "sha256-jm0X+X8gQyQYn03gT14bdr79+Wd5KL9ryvrU/0VUtEU=";
   };
 
-  __darwinAllowLocalNetworking = true;
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      "websockets>=10,<11;python_version>'3.6'" \
+      "websockets>=10,<12;python_version>'3.6'"
+  '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     anyio
     backoff
     graphql-core
@@ -58,9 +62,9 @@ buildPythonPackage rec {
     pytest-console-scripts
     pytestCheckHook
     vcrpy
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       aiohttp
       botocore
@@ -131,6 +135,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "GraphQL client in Python";
+    mainProgram = "gql-cli";
     homepage = "https://github.com/graphql-python/gql";
     changelog = "https://github.com/graphql-python/gql/releases/tag/v${version}";
     license = with licenses; [ mit ];

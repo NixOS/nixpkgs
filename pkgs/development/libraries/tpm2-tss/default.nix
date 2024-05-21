@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl
+{ stdenv, lib, fetchFromGitHub
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "4.0.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "sha256-75yiKVZrR1vcCwKp4tDO4A9JB0KDM0MXPJ1N85kAaRk=";
+    hash = "sha256-cQdIPQNZzy5CisWw5yifPXC7FqaZxj4VKWpvtPOffE8=";
   };
 
   outputs = [ "out" "man" "dev" ];
@@ -53,11 +53,6 @@ stdenv.mkDerivation rec {
     # Do not rely on dynamic loader path
     # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
     ./no-dynamic-loader-path.patch
-    (fetchurl {
-      name = "skip-test-fapi-fix-provisioning-with-template-if-no-certificate-available.patch";
-      url = "https://github.com/tpm2-software/tpm2-tss/commit/218c0da8d9f675766b1de502a52e23a3aa52648e.patch";
-      sha256 = "sha256-dnl9ZAknCdmvix2TdQvF0fHoYeWp+jfCTg8Uc7h0voA=";
-    })
   ];
 
   postPatch = ''
@@ -65,7 +60,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tss2-tcti/tctildr-dl.c \
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib
+      --replace '@PREFIX@' $out/lib/
     substituteInPlace ./bootstrap \
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
   '';

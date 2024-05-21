@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A fast and easy to use Gemini server";
+    mainProgram = "stargazer";
     homepage = "https://sr.ht/~zethra/stargazer/";
     license = licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";

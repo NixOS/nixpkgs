@@ -45,9 +45,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A defined interface for working with a cache of jupyter notebooks";
+    mainProgram = "jcache";
     homepage = "https://github.com/executablebooks/jupyter-cache";
     changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

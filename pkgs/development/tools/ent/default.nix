@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ent-go";
-  version = "0.12.5";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "ent";
     rev = "v${version}";
-    sha256 = "sha256-g4n9cOTv/35WkvMjrtP2eEcbiu5kiafVXifz1zlEuCY=";
+    sha256 = "sha256-OEQWNWGVs0QYhPuCGEFgAVaUnfswmvWVt+e0cAdkBKE=";
   };
 
-  vendorHash = "sha256-DUi4Ik+qFbx4LIm9MDJ4H9/+sIfCzK8MMGKp0GIGX7w=";
+  vendorHash = "sha256-9KdSGIyi95EVQq9jGoVqK8aq3JXlQXB+Qwlh/Kfz4Oc=";
 
   subPackages = [ "cmd/ent" ];
 
@@ -29,13 +29,13 @@ buildGoModule rec {
       --zsh <($out/bin/ent completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An entity framework for Go";
     homepage = "https://entgo.io/";
+    changelog = "https://github.com/ent/ent/releases/tag/v${version}";
     downloadPage = "https://github.com/ent/ent";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "ent";
   };
 }
-

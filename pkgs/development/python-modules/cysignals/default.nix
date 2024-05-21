@@ -4,18 +4,21 @@
 , buildPythonPackage
 , cython
 , pariSupport ? true, pari # for interfacing with the PARI/GP signal handler
+
+# Reverse dependency
+, sage
 }:
 
 assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.11.2";
+  version = "1.11.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5858b1760fbe21848121b826b2463a67ac5a45caf3d73105497a68618c5a6fa6";
+    hash = "sha256-Dx4yHlWgf5AchqNqHkSX9v+d/nAGgdATCjjDbk6yOMM=";
   };
 
   # explicit check:
@@ -46,8 +49,11 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = { inherit sage; };
+
   meta = with lib; {
     description = "Interrupt and signal handling for Cython";
+    mainProgram = "cysignals-CSI";
     homepage = "https://github.com/sagemath/cysignals/";
     maintainers = teams.sage.members;
     license = licenses.lgpl3Plus;

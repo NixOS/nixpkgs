@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
@@ -8,7 +7,6 @@
 , colorama
 , contourpy
 , jinja2
-, mock
 , numpy
 , nodejs
 , packaging
@@ -48,14 +46,14 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.2.2";
+  version = "3.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-spWbhSTWnsTniGvDZAdEXwqS4fGVMNO/xARSNqG3pv8=";
+    hash = "sha256-2CSWHkJlNnsHUM5YsH5WStC4PKZLM1UhzTQh6bnxDYk=";
   };
 
   src_test = fetchFromGitHub {
@@ -128,6 +126,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";
+    mainProgram = "bokeh";
     homepage = "https://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ orivej ];

@@ -22,6 +22,7 @@
 , pythonOlder
 , queuelib
 , service-identity
+, setuptools
 , sybil
 , testfixtures
 , tldextract
@@ -32,31 +33,30 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.11.0";
-  format = "setuptools";
+  version = "2.11.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
+    hash = "sha256-czoDnHQj5StpvygQtTMgk9TkKoSEYDWcB7Auz/j3Pr4=";
   };
 
   patches = [
-    # Fix compatiblity with Twisted>=23.8. Remove with the next release.
+    # https://github.com/scrapy/scrapy/pull/6316
+    # fix test_get_func_args. remove on next update
     (fetchpatch {
-      url = "https://github.com/scrapy/scrapy/commit/aa95ada42cdf570f840f55c463375f8a81b303f8.patch";
-      hash = "sha256-LuhA5BqtjSUgkotplvUCtvGNYOTrl0MJRCXiSBMDFzY=";
-      excludes = [
-        "tests/CrawlerProcess/sleeping.py"
-        "tests/test_crawler.py"
-      ];
+      name = "test_get_func_args.patch";
+      url = "https://github.com/scrapy/scrapy/commit/b1fe97dc6c8509d58b29c61cf7801eeee1b409a9.patch";
+      hash = "sha256-POlmsuW4SD9baKwZieKfmlp2vtdlb7aKQ62VOmNXsr0=";
     })
   ];
 
   nativeBuildInputs = [
     installShellFiles
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -153,6 +153,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "High-level web crawling and web scraping framework";
+    mainProgram = "scrapy";
     longDescription = ''
       Scrapy is a fast high-level web crawling and web scraping framework, used to crawl
       websites and extract structured data from their pages. It can be used for a wide
@@ -161,6 +162,6 @@ buildPythonPackage rec {
     homepage = "https://scrapy.org/";
     changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ vinnymeller ];
   };
 }

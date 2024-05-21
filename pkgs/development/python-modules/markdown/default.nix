@@ -6,40 +6,41 @@
 , pyyaml
 , setuptools
 , unittestCheckHook
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.4.4";
+  version = "3.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Python-Markdown";
     repo = "markdown";
     rev = "refs/tags/${version}";
-    hash = "sha256-5PIIhbJVsotGwZ3BQ4x0I7WjgnGF3opNrn8J+xZCflg=";
+    hash = "sha256-jGo9/ZS2EhMDl/o1ref7Owqckuc7am578Ojmcz2aWIE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+  dependencies = lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
 
-  nativeCheckInputs = [ unittestCheckHook pyyaml ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "markdown" ];
 
   meta = with lib; {
-    changelog = "https://github.com/Python-Markdown/markdown/blob/${src.rev}/docs/change_log/index.md";
+    changelog = "https://github.com/Python-Markdown/markdown/blob/${src.rev}/docs/changelog.md";
     description = "Python implementation of John Gruber's Markdown";
+    mainProgram = "markdown_py";
     homepage = "https://github.com/Python-Markdown/markdown";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

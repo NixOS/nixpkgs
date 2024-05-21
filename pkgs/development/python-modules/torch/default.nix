@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages,
+  autoAddDriverRunpath,
   effectiveMagma ?
   if cudaSupport then magma-cuda-static
   else if rocmSupport then magma-hip
@@ -7,12 +8,13 @@
   magma,
   magma-hip,
   magma-cuda-static,
-  useSystemNccl ? true,
+  # Use the system NCCL as long as we're targeting CUDA on a supported platform.
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false, mpi,
   buildDocs ? false,
 
   # Native build inputs
-  cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  cmake, symlinkJoin, which, pybind11, removeReferencesTo,
   pythonRelaxDepsHook,
 
   # Build inputs
@@ -20,6 +22,7 @@
   Accelerate, CoreServices, libobjc,
 
   # Propagated build inputs
+  astunparse,
   fsspec,
   filelock,
   jinja2,
@@ -50,13 +53,15 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages,
+  rocmPackages_5,
   gpuTargets ? [ ]
 }:
 
 let
   inherit (lib) attrsets lists strings trivial;
   inherit (cudaPackages) cudaFlags cudnn nccl;
+
+  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 
@@ -125,8 +130,8 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.1.2";
-  format = "setuptools";
+  version = "2.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8.0";
 
@@ -143,7 +148,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-E/GQCRWBf3hYsDCCk0twaL9gkVOCEQeCvO3Va+jgIdE=";
+    hash = "sha256-UmH4Mv5QL7Mz4Y4pvxn8F1FGBR/UzYZjE2Ys8Oc0FWQ=";
   };
 
   patches = lib.optionals cudaSupport [
@@ -200,8 +205,8 @@ in buildPythonPackage rec {
   # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
   # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
   + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") ''
-    substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace '#if __cplusplus >= 201703L
-    inline void *aligned_alloc(size_t align, size_t size)' '#if __cplusplus >= 201703L && 0
+    substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace-fail '#if (__cplusplus >= 201703L) && (!defined(__MINGW32__)) && (!defined(_MSC_VER))
+    inline void *aligned_alloc(size_t align, size_t size)' '#if 0
     inline void *aligned_alloc(size_t align, size_t size)'
   '';
 
@@ -246,6 +251,9 @@ in buildPythonPackage rec {
   # Also avoids pytorch exporting the headers of pybind11
   USE_SYSTEM_PYBIND11 = true;
 
+  # NB technical debt: building without NNPACK as workaround for missing `six`
+  USE_NNPACK = 0;
+
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
     ${python.pythonOnBuildForHost.interpreter} setup.py build --cmake-only
@@ -273,9 +281,11 @@ in buildPythonPackage rec {
   PYTORCH_BUILD_VERSION = version;
   PYTORCH_BUILD_NUMBER = 0;
 
-  USE_NCCL = setBool (cudaSupport && cudaPackages ? nccl);
-  USE_SYSTEM_NCCL = setBool useSystemNccl;                  # don't build pytorch's third_party NCCL
-  USE_STATIC_NCCL = setBool useSystemNccl;
+  # In-tree builds of NCCL are not supported.
+  # Use NCCL when cudaSupport is enabled and nccl is available.
+  USE_NCCL = setBool useSystemNccl;
+  USE_SYSTEM_NCCL = USE_NCCL;
+  USE_STATIC_NCCL = USE_NCCL;
 
   # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
   # (upstream seems to have fixed this in the wrong place?)
@@ -331,7 +341,7 @@ in buildPythonPackage rec {
     pythonRelaxDepsHook
     removeReferencesTo
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
     cuda_nvcc
   ])
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
@@ -363,7 +373,7 @@ in buildPythonPackage rec {
     ] ++ lists.optionals (cudaPackages ? cudnn) [
       cudnn.dev
       cudnn.lib
-    ] ++ lists.optionals (useSystemNccl && cudaPackages ? nccl) [
+    ] ++ lists.optionals useSystemNccl [
       # Some platforms do not support NCCL (i.e., Jetson)
       nccl.dev # Provides nccl.h AND a static copy of NCCL!
     ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
@@ -380,6 +390,7 @@ in buildPythonPackage rec {
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   propagatedBuildInputs = [
+    astunparse
     cffi
     click
     numpy
@@ -484,7 +495,7 @@ in buildPythonPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru = {
-    inherit cudaSupport cudaPackages;
+    inherit cudaSupport cudaPackages rocmSupport rocmPackages;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support

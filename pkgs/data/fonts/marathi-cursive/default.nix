@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/MihailJP/MarathiCursive";
     description = "Modi script font with Graphite and OpenType support";
     maintainers = with maintainers; [ mathnerd314 ];
-    license = licenses.mit; # It's the M+ license, M+ is MIT(-ish)
+    license = licenses.mplus;
     platforms = platforms.all;
   };
 }

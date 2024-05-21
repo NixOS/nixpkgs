@@ -10,7 +10,7 @@
 , gtk3
 , glib
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , gnupg
 , desktop-file-utils
@@ -51,16 +51,12 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     openssh
     gnupg
     desktop-file-utils
     gcr
-    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
-    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
-    libhandy
-    libsecret
   ];
 
   buildInputs = [
@@ -109,8 +105,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Seahorse";
+    homepage = "https://gitlab.gnome.org/GNOME/seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
+    mainProgram = "seahorse";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

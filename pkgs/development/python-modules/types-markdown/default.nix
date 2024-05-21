@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "types-markdown";
-  version = "3.5.0.20240106";
+  version = "3.6.0.20240316";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types-Markdown";
     inherit version;
-    hash = "sha256-vkfTXL5h1Fi9F67BJ/HaIzzW7Zb6mhMccQN4pOiFcDA=";
+    hash = "sha256-3p+4SGC1W2R7FwyldolfzKYbk0puzcZcMZMsZ5W0QLg=";
   };
 
   nativeBuildInputs = [

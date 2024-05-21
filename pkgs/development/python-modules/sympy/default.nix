@@ -3,6 +3,9 @@
 , fetchPypi
 , glibcLocales
 , mpmath
+
+# Reverse dependency
+, sage
 }:
 
 buildPythonPackage rec {
@@ -27,8 +30,11 @@ buildPythonPackage rec {
     export LANG="en_US.UTF-8"
   '';
 
+  passthru.tests = { inherit sage; };
+
   meta = with lib; {
     description = "A Python library for symbolic mathematics";
+    mainProgram = "isympy";
     homepage    = "https://www.sympy.org/";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ] ++ teams.sage.members;

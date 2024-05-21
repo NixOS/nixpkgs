@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , bson
 , pytestCheckHook
 , pyyaml
@@ -12,7 +11,6 @@ buildPythonPackage rec {
   pname = "pymarshal";
   version = "2.2.0";
   format = "setuptools";
-  disabled = pythonOlder "3.0";
 
   src = fetchFromGitHub {
     owner = "stargateaudio";

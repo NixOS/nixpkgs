@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNU implementation of Shogi, also known as Japanese Chess";
+    mainProgram = "gnushogi";
     homepage = "https://www.gnu.org/software/gnushogi/";
     license = licenses.gpl3;
     maintainers = [ maintainers.ciil ];

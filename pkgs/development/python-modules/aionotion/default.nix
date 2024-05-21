@@ -2,44 +2,34 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
+, ciso8601
 , fetchFromGitHub
-, fetchpatch
+, frozenlist
+, mashumaro
 , poetry-core
-, pydantic
+, pyjwt
 , pytest-aiohttp
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, pytest-cov
 , pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2023.05.5";
-  format = "pyproject";
+  version = "2024.03.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    hash = "sha256-/2sF8m5R8YXkP89bi5zR3h13r5LrFOl1OsixAcX0D4o=";
+    repo = "aionotion";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
   };
-
-  patches = [
-    # This patch removes references to setuptools and wheel that are no longer
-    # necessary and changes poetry to poetry-core, so that we don't need to add
-    # unnecessary nativeBuildInputs.
-    #
-    #   https://github.com/bachya/aionotion/pull/269
-    #
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83.patch";
-      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -47,7 +37,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    certifi
+    ciso8601
+    frozenlist
+    mashumaro
+    pyjwt
+    yarl
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -71,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

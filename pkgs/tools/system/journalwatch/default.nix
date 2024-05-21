@@ -1,9 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, systemd, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, systemd, pytest }:
 
 buildPythonPackage rec {
   pname = "journalwatch";
   version = "1.1.0";
-  disabled = pythonOlder "3.3";
 
   src = fetchFromGitHub {
     owner = "The-Compiler";
@@ -32,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A tool to find error messages in the systemd journal";
+    mainProgram = "journalwatch";
     homepage = "https://github.com/The-Compiler/journalwatch";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ florianjacob ];

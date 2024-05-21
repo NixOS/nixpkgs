@@ -11,6 +11,10 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-wA2RDVOU5pZ1YI617g9QTVz9pB6ZCi2akbqsbfk+P5I=";
   };
 
+  patches = [
+    ./import-ferm-wrapped.patch
+  ];
+
   # perl is used at build time to gather the ferm version.
   nativeBuildInputs = [ makeWrapper perl ];
   buildInputs = [ perl ];
@@ -39,7 +43,7 @@ in stdenv.mkDerivation rec {
       command. The firewall configuration resembles structured programming-like
       language, which can contain levels and lists.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [mic92];
     platforms = lib.platforms.linux;
   };

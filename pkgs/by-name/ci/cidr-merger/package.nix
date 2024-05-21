@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A simple command line tool to merge ip/ip cidr/ip range, supports IPv4/IPv6";
+    mainProgram = "cidr-merger";
     homepage = "https://github.com/zhanhb/cidr-merger";
     license = licenses.mit;
     maintainers = with maintainers; [ cyounkins ];

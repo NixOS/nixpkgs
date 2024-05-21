@@ -3,7 +3,7 @@
 , makeWrapper
 , mkDerivation
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , withGrass ? true
@@ -52,6 +52,7 @@ let
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -77,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.2";
+  version = "3.36.2";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-RKxIJpp0lmRqyMYJuX2U4/GJh0FTnklFOcUft6LsuHc=";
+    hash = "sha256-/8mpzl/6UpjrMVjae2nqpS2DBRCq86rE+B3INzoRz8g=";
   };
 
   passthru = {
@@ -94,12 +95,12 @@ in mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
 
+    bison
     cmake
     flex
-    bison
     ninja
   ];
 

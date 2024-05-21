@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.dnsmasq;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    escapeShellArg
+    ;
 in
 {
   port = 9153;
@@ -11,7 +15,7 @@ in
     dnsmasqListenAddress = mkOption {
       type = types.str;
       default = "localhost:53";
-      description = lib.mdDoc ''
+      description = ''
         Address on which dnsmasq listens.
       '';
     };
@@ -19,7 +23,7 @@ in
       type = types.path;
       default = "/var/lib/misc/dnsmasq.leases";
       example = "/var/lib/dnsmasq/dnsmasq.leases";
-      description = lib.mdDoc ''
+      description = ''
         Path to the `dnsmasq.leases` file.
       '';
     };

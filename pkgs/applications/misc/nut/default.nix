@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libmodbus i2c-tools net-snmp gd ];
+  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libmodbus libtool i2c-tools net-snmp gd ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
   configureFlags =
     [ "--with-all"

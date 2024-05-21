@@ -16,19 +16,19 @@
 , pkg-config
 , udev
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 , darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "133";
+  version = "136";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KCpHiIdid5h5CU2uyMOo+p5h50h3Ki5/4mUpdTAPKQA=";
+    hash = "sha256-Hks/MWusPiBVdb5L+53qtR6VmXG/P4rDzsvHxLeA8Do=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals stdenv.isDarwin [
     libicns
   ];
@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
+    mainProgram = "ares";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
     platforms = lib.platforms.unix;

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "mods";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
     rev = "v${version}";
-    hash = "sha256-ZWH3YuN1cmdw96/HVzsp1u70ziUfupUeBjJiNI5a538=";
+    hash = "sha256-9sr6R7Keg9NQQapZKnjfrMOJilQEYCs8AS04TuNWQ68=";
   };
 
-  vendorHash = "sha256-PgaxqfgtwBYnzyL2F/OPJP1rdmLOtBCTKEPhMgvC6XA=";
+  vendorHash = "sha256-BL5bxyeVkcm7GO1Kzk9d/hj2wY50UhauEFq9YQ/JbCE=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 

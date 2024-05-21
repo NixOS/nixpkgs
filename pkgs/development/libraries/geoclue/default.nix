@@ -19,7 +19,7 @@
 , avahi
 , glib-networking
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , vala
 , withDemoAgent ? false
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     intltool
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     vala
     gobject-introspection

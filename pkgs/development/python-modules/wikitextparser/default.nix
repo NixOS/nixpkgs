@@ -1,6 +1,8 @@
 { buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , lib
+, setuptools
 , pytestCheckHook
 , regex
 , wcwidth
@@ -8,17 +10,22 @@
 
 buildPythonPackage rec {
   pname = "wikitextparser";
-  version = "0.55.5";
+  version = "0.55.13";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "5j9";
     repo = "wikitextparser";
     rev = "v${version}";
-    hash = "sha256-cmzyRbq4tCbuyrNnT0UYxoxuwXrFkIcWdrogSTfxSys=";
+    hash = "sha256-qLctOX0BsKAn2JzfmV2sTLJ/KcNfaJFAjOB3pxd5LQI=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
+    flit-core
     wcwidth
     regex
   ];

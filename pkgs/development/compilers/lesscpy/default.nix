@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python LESS Compiler";
+    mainProgram = "lesscpy";
     homepage    = "https://github.com/lesscpy/lesscpy";
     license     = licenses.mit;
     maintainers = with maintainers; [ s1341 ];

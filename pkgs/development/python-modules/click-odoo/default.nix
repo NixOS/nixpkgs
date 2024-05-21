@@ -24,12 +24,11 @@ buildPythonPackage rec {
     click
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Odoo scripting helper library";
+    mainProgram = "click-odoo";
     homepage = "https://github.com/acsone/click-odoo";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ yajo ];

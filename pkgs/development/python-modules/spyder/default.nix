@@ -15,6 +15,7 @@
 , nbconvert
 , numpy
 , numpydoc
+, pickleshare
 , psutil
 , pygments
 , pylint-venv
@@ -33,6 +34,7 @@
 , rope
 , rtree
 , scipy
+, setuptools
 , spyder-kernels
 , textdistance
 , three-merge
@@ -41,25 +43,26 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.5.0";
-  format = "setuptools";
+  version = "5.5.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zjQmUmkqwtXNnZKssNpl24p4FQscZKGiiJj5iwYl2UM=";
+    hash = "sha256-UiIyoFREfd3gV0uhSgZ8TVFQiP3yprrBZDOm3+8Dge0=";
   };
 
   patches = [
     ./dont-clear-pythonpath.patch
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     pyqtwebengine.wrapQtAppsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     chardet
     cloudpickle
@@ -73,6 +76,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    pickleshare
     psutil
     pygments
     pylint-venv
@@ -123,6 +127,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Scientific python development environment";
+    mainProgram = "spyder";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development
       environment for the Python language with advanced editing, interactive

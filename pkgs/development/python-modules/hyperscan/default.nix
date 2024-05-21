@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "hyperscan";
-  version = "0.6.0";
+  version = "0.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
-    rev = "v${version}";
-    hash = "sha256-6PoV9rY9CkXkAMWN2QCnfU4S0OJD/6bzkqFgvEVqNjo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TNiGh89SnGi0WAqfYudsj7GaVhOifi8ZcmTrMtVbk+c=";
   };
 
   buildInputs = [

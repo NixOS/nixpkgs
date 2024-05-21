@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "envchain";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sorah";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qxwiqhb8cg0zbn5p0mvnbyxx1xwvgiricrkjlvxz13sf2ngq87p";
+    sha256 = "sha256-QUy38kJzMbYOyT86as4/yq2ctcszSnB8a3eVWxgd4Fo=";
   };
 
   postPatch = ''

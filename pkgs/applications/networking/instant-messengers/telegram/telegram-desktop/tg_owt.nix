@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2023-12-21";
+  version = "0-unstable-2023-12-21";
 
   src = fetchFromGitHub {
     owner = "desktop-app";

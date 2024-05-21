@@ -10,20 +10,20 @@
 , stdenv
 , tcl
 , tk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xz
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
-  version = "3.3.117";
+  version = "3.3.119";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "sha256-PPFTdYapEcuwYBr4+hjPbacIyKFKcfac48uRGOhXHbk=";
+    sha256 = "sha256-6rPgnnZBEVwHhIv7MPfdDDu+K4y+RQF+leB327pqwDg=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
   buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 

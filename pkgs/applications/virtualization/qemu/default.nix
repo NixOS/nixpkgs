@@ -13,7 +13,7 @@
 , pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, pipewire
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, SDL2, SDL2_image
 , jackSupport ? !stdenv.isDarwin && !nixosTestRunner && !toolsOnly, libjack2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner && !toolsOnly, gtk3, gettext, vte, wrapGAppsHook3
 , vncSupport ? !nixosTestRunner && !toolsOnly, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner && !toolsOnly, libcacard
 , spiceSupport ? true && !nixosTestRunner && !toolsOnly, spice, spice-protocol
@@ -23,7 +23,7 @@
 , cephSupport ? false, ceph
 , glusterfsSupport ? false, glusterfs, libuuid
 , openGLSupport ? sdlSupport, mesa, libepoxy, libdrm
-, rutabagaSupport ? openGLSupport && !toolsOnly, rutabaga_gfx
+, rutabagaSupport ? openGLSupport && !toolsOnly && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx, rutabaga_gfx
 , virglSupport ? openGLSupport, virglrenderer
 , libiscsiSupport ? !toolsOnly, libiscsi
 , smbdSupport ? false, samba
@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.2.0";
+  version = "8.2.4";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vwDS+hIBDfiwrekzcd71jmMssypr/cX1oP+Oah+xvzI=";
+    hash = "sha256-7PVTf+q5JkG5nXSC9VHyGV06W9NKzvnVK/v/NTpgc5c=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
     python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
   ]
-    ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -134,11 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
-    })
-    # Fix display issues when using virtio-gpu on 8.2.0 https://gitlab.com/qemu-project/qemu/-/issues/2051
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/9d5b42beb6978dc6219d5dc029c9d453c6b8d503.diff";
-      sha256 = "sha256-NknkH/gFTsMcdq8/ArwM4+qrpU+ZHd+xVMFUuMJTtf0=";
     })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;

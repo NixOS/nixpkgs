@@ -1,14 +1,14 @@
-{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook }:
+{ lib, python3Packages, fetchFromGitHub, glib, wrapGAppsHook3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    rev = "printrun-${version}";
-    hash = "sha256-ijJc0CVPiYW5VjTqhY1kO+Fy3dfuPoMn7KRhvcsdAZw=";
+    rev = "refs/tags/printrun-${version}";
+    hash = "sha256-GmTA/C45MuptN/Y0KjpFjaLV3sWoM4rHz8AMfV9sf4U=";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
   '';
 
-  nativeBuildInputs = [ glib wrapGAppsHook ];
+  nativeBuildInputs = [ glib wrapGAppsHook3 ];
 
   propagatedBuildInputs = with python3Packages; [
     appdirs cython dbus-python numpy six wxpython psutil pyglet pyopengl pyserial cffi cairosvg lxml

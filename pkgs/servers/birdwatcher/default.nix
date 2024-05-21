@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "birdwatcher";
-  version = "2.2.4";
+  version = "2.2.5";
 
   vendorHash = "sha256-NTD2pnA/GeTn4tXtIFJ227qjRtvBFCjWYZv59Rumc74=";
 
@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "alice-lg";
     repo = "birdwatcher";
     rev = version;
-    hash = "sha256-nsmwq7aUcozpp3av38S9wTKv0kiGfmyglQgse9MWSl4=";
+    hash = "sha256-TTU5TYWD/KSh/orDdQnNrQJ/G7z5suBu7psF9V6AAIw=";
   };
 
   deleteVendor = true;

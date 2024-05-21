@@ -11,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
-  version = "3.7";
+  version = "3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.volume";
     rev = "refs/tags/${version}";
-    hash = "sha256-5ZO++l6BWA085U5IkghjCT46YhKc85SB7sNU2h4Fpec=";
+    hash = "sha256-tQNmSnQBchj3SUq2XPsK/LWrKiCw4MFKmopHbxnzMxg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools

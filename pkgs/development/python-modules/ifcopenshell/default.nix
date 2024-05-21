@@ -7,14 +7,16 @@
 , icu
 , swig
 , pcre
-, opencascade-occt
+, opencascade-occt_7_6
 , opencollada
 , libxml2
 }:
-
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "230915";
+  version = "240306";
   format = "other";
 
   src = fetchFromGitHub {
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     repo   = "IfcOpenShell";
     rev = "refs/tags/blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-dHw+5AlJbeuUeaxv7eE2XfLjR/K5S00dMSCtoWVcEB8=";
+    sha256 = "sha256-DtA8KeWipPfOnztKG/lrgLZeOCUG3nWR9oW7OST7koc=";
   };
 
   nativeBuildInputs = [ gcc10 cmake ];

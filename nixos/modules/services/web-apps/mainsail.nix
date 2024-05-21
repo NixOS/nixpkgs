@@ -6,14 +6,14 @@ let
 in
 {
   options.services.mainsail = {
-    enable = mkEnableOption (lib.mdDoc "a modern and responsive user interface for Klipper");
+    enable = mkEnableOption "a modern and responsive user interface for Klipper";
 
     package = mkPackageOption pkgs "mainsail" { };
 
     hostName = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "Hostname to serve mainsail on";
+      description = "Hostname to serve mainsail on";
     };
 
     nginx = mkOption {
@@ -25,7 +25,7 @@ in
           serverAliases = [ "mainsail.''${config.networking.domain}" ];
         }
       '';
-      description = lib.mdDoc "Extra configuration for the nginx virtual host of mainsail.";
+      description = "Extra configuration for the nginx virtual host of mainsail.";
     };
   };
 

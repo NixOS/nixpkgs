@@ -2,49 +2,38 @@
 , buildPythonPackage
 , fetchFromGitHub
 , django
-, freezegun
-, psycopg2
-, pytest-django
-, pytestCheckHook
 , pythonOlder
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "django-model-utils";
-  version = "4.3.1";
-  format = "setuptools";
+  version = "4.5.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-model-utils";
     rev = "refs/tags/${version}";
-    hash = "sha256-p3/JO6wNwZPYX7MIgMj/0caHt5s+uL51Sxa28/VITxo=";
+    hash = "sha256-GaBTCrEwEkJyVeY5YVptPioYcmivyQtBKjs+TgC9IqA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
   ];
 
-  # requires postgres database
+  # Test requires postgres database
   doCheck = false;
 
-  nativeCheckInputs = [
-    freezegun
-    psycopg2
-    pytest-django
-    pytestCheckHook
+  pythonImportsCheck = [
+    "model_utils"
   ];
-
-  pythonImportsCheck = [ "model_utils" ];
 
   meta = with lib; {
     homepage = "https://github.com/jazzband/django-model-utils";

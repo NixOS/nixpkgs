@@ -24,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python SWF Parser";
+    mainProgram = "swfparser";
     homepage = "https://github.com/facundobatista/yaswfp";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

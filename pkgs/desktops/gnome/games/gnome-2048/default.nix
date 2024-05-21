@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
-, wrapGAppsHook
+, wrapGAppsHook3
 , meson
 , vala
 , pkg-config
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -56,8 +56,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/2048";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-2048";
     description = "Obtain the 2048 tile";
+    mainProgram = "gnome-2048";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

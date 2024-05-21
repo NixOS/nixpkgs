@@ -1,17 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.2.0";
+  version = "2.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,30 +20,20 @@ buildPythonPackage rec {
     owner = "Cyr-ius";
     repo = "heatzypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Q6v1Ob1PY8tpMnd8hchepq983dsZ6lJPCKz83RRwL3w=";
+    hash = "sha256-A01e3duNQmVv9vyOs6+gF/BdevLiYi/uXSq5bKmuRao=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "replace_by_workflow" "${version}"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    requests
-  ];
+  dependencies = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "heatzypy"
-  ];
+  pythonImportsCheck = [ "heatzypy" ];
 
   meta = with lib; {
     description = "Module to interact with Heatzy devices";

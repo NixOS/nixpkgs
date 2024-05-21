@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , aiobotocore
 , aiohttp
 , buildPythonPackage
@@ -11,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2023.12.2";
+  version = "2024.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tewHBiSBu7RcsGGzGYTHGI0QbiksJwMwOeAk5LpXQNw=";
+    hash = "sha256-G4vI29Zee2D1SHN49u7/4d5ZqnLKqe/Kba1quHdAVIc=";
   };
 
   postPatch = ''
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
     changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";

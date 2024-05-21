@@ -3,23 +3,24 @@
 , buildPythonPackage
 , fetchPypi
 , openssl
+, setuptools
 , cryptography
 , pytestCheckHook
 , pretend
 , sphinxHook
 , sphinx-rtd-theme
-, flaky
+, pytest-rerunfailures
 }:
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "23.2.0";
-  format = "setuptools";
+  version = "24.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
-    hash = "sha256-J2+TH1WkUufeppxxc+mE6ypEB85BPJGKo0tV+C+bi6w=";
+    hash = "sha256-yr7Uv6pd+fGhbA72Sgy2Uxi1zQd6ftp9aXATHKL0Gm8=";
   };
 
   outputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     openssl
+    setuptools
     sphinxHook
     sphinx-rtd-theme
   ];
@@ -44,8 +46,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    flaky
     pretend
+    pytest-rerunfailures
     pytestCheckHook
   ];
 

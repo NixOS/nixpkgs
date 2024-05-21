@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Advanced purely-functional web programming language";
+    mainProgram = "urweb";
     homepage    = "http://www.impredicative.com/ur/";
     license     = lib.licenses.bsd3;
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;

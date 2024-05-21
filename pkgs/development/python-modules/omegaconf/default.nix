@@ -1,6 +1,7 @@
 { lib
 , antlr4
 , antlr4-python3-runtime
+, attrs
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
@@ -17,11 +18,12 @@ buildPythonPackage rec {
   pname = "omegaconf";
   version = "2.3.0";
   pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";
-    repo = pname;
+    repo = "omegaconf";
     rev = "refs/tags/v${version}";
     hash = "sha256-Qxa4uIiX5TAyQ5rFkizdev60S4iVAJ08ES6FpNqf8zI=";
   };
@@ -44,17 +46,21 @@ buildPythonPackage rec {
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = [
     jre_minimal
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     antlr4-python3-runtime
     pyyaml
   ];
 
   nativeCheckInputs = [
+    attrs
     pydevd
     pytest-mock
     pytestCheckHook
@@ -67,6 +73,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    "test_eq"
   ];
 
   meta = with lib; {

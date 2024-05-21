@@ -32,6 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "The Rancher Command Line Interface (CLI) is a unified tool for interacting with your Rancher Server";
+    mainProgram = "rancher";
     homepage = "https://github.com/rancher/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ bryanasdev000 ];

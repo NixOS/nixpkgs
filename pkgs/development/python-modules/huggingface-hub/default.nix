@@ -1,7 +1,8 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, fetchFromGitHub
+, setuptools
 , filelock
 , fsspec
 , packaging
@@ -13,8 +14,8 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.18.0";
-  format = "setuptools";
+  version = "0.23.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -22,10 +23,14 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/KbD3TNSbQ9ueXYFLoXnIRIoi/y3l0w72GZ1+JC8ULk=";
+    hash = "sha256-FfevPGec++3auA4Zxu84mhpD0RGatcPgDKi7LkmOVss=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     filelock
     fsspec
     packaging
@@ -44,9 +49,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Download and publish models and other files on the huggingface.co hub";
+    mainProgram = "huggingface-cli";
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [ GaetanLepage ];
   };
 }

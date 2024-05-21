@@ -4,7 +4,6 @@
 , click
 , fetchFromGitHub
 , packaging
-, pydantic
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -13,20 +12,20 @@
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "2.0.5";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
-    repo = pname;
+    repo = "pythonfinder";
     rev = "refs/tags/${version}";
-    hash = "sha256-L/+6w5lLqHO5c9CThoUPOHXRPVxBlOWFDAmfoYxRw5g=";
+    hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace " --cov" ""
   '';
 
@@ -35,9 +34,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    cached-property
     packaging
-    pydantic
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    cached-property
   ];
 
   passthru.optional-dependencies = {
@@ -55,15 +54,9 @@ buildPythonPackage rec {
     "pythonfinder"
   ];
 
-  # these tests invoke git in a subprocess and
-  # for some reason git can't be found even if included in nativeCheckInputs
-  # disabledTests = [
-  #   "test_shims_are_kept"
-  #   "test_shims_are_removed"
-  # ];
-
   meta = with lib; {
     description = "Cross platform search tool for finding Python";
+    mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
     changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

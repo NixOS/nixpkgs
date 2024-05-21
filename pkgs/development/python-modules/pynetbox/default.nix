@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools-scm
+, packaging
 , requests
 , six
 , pytestCheckHook
@@ -20,13 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-QIvh24ZqnF8uF9HOuY0yt3QT/jHgJ2C916d+rBqezWQ=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    packaging
     requests
     six
   ];

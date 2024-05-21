@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
+    mainProgram = "jsonlint";
     homepage = "https://github.com/nielstron/demjson3/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];

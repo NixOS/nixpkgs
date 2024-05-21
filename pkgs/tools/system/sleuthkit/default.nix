@@ -2,37 +2,33 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
-, libewf
+, ant
+, jdk
+, perl
+, stripJavaArchivesHook
 , afflib
+, libewf
 , openssl
 , zlib
-, openjdk
-, perl
-, ant
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.12.1";
+stdenv.mkDerivation (finalAttrs: {
   pname = "sleuthkit";
+  version = "4.12.1"; # Note: when updating don't forget to also update the rdeps outputHash
 
-  sleuthsrc = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
-    rev = "${pname}-${version}";
+    rev = "sleuthkit-${finalAttrs.version}";
     hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
   };
 
   # Fetch libraries using a fixed output derivation
-  rdeps = stdenv.mkDerivation rec {
+  rdeps = stdenv.mkDerivation {
+    name = "sleuthkit-${finalAttrs.version}-deps";
+    inherit (finalAttrs) src;
 
-    version = "1.0";
-    pname = "sleuthkit-deps";
-    nativeBuildInputs = [
-      openjdk
-      ant
-    ];
-
-    src = sleuthsrc;
+    nativeBuildInputs = [ ant jdk ];
 
     # unpack, build, install
     dontConfigure = true;
@@ -48,7 +44,6 @@ stdenv.mkDerivation rec {
     '';
 
     installPhase = ''
-      export IVY_HOME=$NIX_BUILD_TOP/.ant
       mkdir -m 755 -p $out/bindings/java
       cp -r bindings/java/lib $out/bindings/java
       mkdir -m 755 -p $out/case-uco/java
@@ -58,11 +53,23 @@ stdenv.mkDerivation rec {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "0fq7v6zlgybg4v6k9wqjlk4gaqgjrpihbnr182vaqriihflav2s8";
     outputHashAlgo = "sha256";
+    outputHash = "sha256-mc/KQrwn3xpPI0ngOLcpoQDaJJm/rM8XgaX//5PiRZk=";
   };
 
-  src = sleuthsrc;
+  postUnpack = ''
+    export IVY_HOME="$NIX_BUILD_TOP/.ant"
+    export ANT_ARGS="-Doffline=true -Ddefault-jar-location=$IVY_HOME/lib"
+
+    # pre-positioning these jar files allows -Doffline=true to work
+    mkdir -p source/{bindings,case-uco}/java $IVY_HOME
+    cp -r ${finalAttrs.rdeps}/bindings/java/lib source/bindings/java
+    chmod -R 755 source/bindings/java
+    cp -r ${finalAttrs.rdeps}/case-uco/java/lib source/case-uco/java
+    chmod -R 755 source/case-uco/java
+    cp -r ${finalAttrs.rdeps}/lib $IVY_HOME
+    chmod -R 755 $IVY_HOME
+  '';
 
   postPatch = ''
     substituteInPlace tsk/img/ewf.cpp --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
@@ -72,15 +79,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    openjdk
-    perl
     ant
-    rdeps
+    jdk
+    perl
+    stripJavaArchivesHook
   ];
 
   buildInputs = [
-    libewf
     afflib
+    libewf
     openssl
     zlib
   ];
@@ -90,31 +97,16 @@ stdenv.mkDerivation rec {
     rm -rf */.libs
   '';
 
-  postUnpack = ''
-    export IVY_HOME="$NIX_BUILD_TOP/.ant"
-    export JAVA_HOME="${openjdk}"
-    export ant_args="-Doffline=true -Ddefault-jar-location=$IVY_HOME/lib"
-
-    # pre-positioning these jar files allows -Doffline=true to work
-    mkdir -p source/{bindings,case-uco}/java $IVY_HOME
-    cp -r ${rdeps}/bindings/java/lib source/bindings/java
-    chmod -R 755 source/bindings/java
-    cp -r ${rdeps}/case-uco/java/lib source/case-uco/java
-    chmod -R 755 source/case-uco/java
-    cp -r ${rdeps}/lib $IVY_HOME
-    chmod -R 755 $IVY_HOME
-  '';
-
   meta = with lib; {
     description = "A forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
-    changelog = "https://github.com/sleuthkit/sleuthkit/releases/tag/sleuthkit-${version}";
+    changelog = "https://github.com/sleuthkit/sleuthkit/blob/${finalAttrs.src.rev}/NEWS.txt";
     maintainers = with maintainers; [ raskin gfrascadorio ];
     platforms = platforms.linux;
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # dependencies
+      binaryBytecode # dependencies
     ];
     license = licenses.ipl10;
   };
-}
+})

@@ -33,8 +33,6 @@ buildPythonPackage rec {
       --replace "protobuf>=4.22.0" "protobuf"
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   nativeBuildInputs = [
     setuptools-scm
   ];

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , meson
 , ninja
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

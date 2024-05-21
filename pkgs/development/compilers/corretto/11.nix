@@ -14,6 +14,12 @@ let
     inherit lib stdenv rsync runCommand testers;
     jdk = jdk11;
     gradle = gradle_7;
+    extraConfig = [
+      # jdk11 is built with --disable-warnings-as-errors (see openjdk/11.nix)
+      # because of several compile errors. We need to include this parameter for
+      # Corretto, too.
+      "--disable-warnings-as-errors"
+    ];
     version = "11.0.20.9.1";
     src = fetchFromGitHub {
       owner = "corretto";
@@ -23,15 +29,4 @@ let
     };
   };
 in
-corretto.overrideAttrs (oldAttrs: {
-  # jdk11 is built with --disable-warnings-as-errors (see openjdk/11.nix)
-  # because of several compile errors. We need to include this parameter for
-  # Corretto, too. Since the build is invoked via `gradle` build.gradle has to
-  # be adapted.
-  postPatch = oldAttrs.postPatch + ''
-    for file in $(find installers -name "build.gradle"); do
-      substituteInPlace $file --replace "command += archSpecificFlags" "command += archSpecificFlags + ['--disable-warnings-as-errors']"
-    done
-  '';
-
-})
+corretto

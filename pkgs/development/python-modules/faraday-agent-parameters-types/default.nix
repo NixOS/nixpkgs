@@ -5,20 +5,30 @@
 , packaging
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "1.5.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-yWDZPa9+DZh2Bj9IIeIVFpAt9nhQOk2tTZh02difsCs=";
+    hash = "sha256-Bh1s0IeUEa4EnGElQn5ruBxFSbcOqsrDqbw1nVjdi5s=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-warn '"pytest-runner",' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     marshmallow
@@ -28,11 +38,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
 
   pythonImportsCheck = [
     "faraday_agent_parameters_types"

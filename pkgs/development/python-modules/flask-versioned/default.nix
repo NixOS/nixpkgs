@@ -1,7 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, flask }:
 
 buildPythonPackage rec {
-  pname = "Flask-Versioned";
+  pname = "flask-versioned";
   version = "0.9.4-20101221";
 
   src = fetchFromGitHub {
@@ -20,4 +20,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ];
   };
 }
-

@@ -10,7 +10,7 @@
 
 let
   pname = "quickwit";
-  version = "0.6.4";
+  version = "0.8.0";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,16 +19,16 @@ rustPlatform.buildRustPackage rec {
     owner = "quickwit-oss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-stlm3oDMQVoMza3s4JApynXbzhrarfXw3uAxGMZQJqs=";
+    hash = "sha256-FZVGQfDuQYIdRnCsBZvXeLbJBdcLugZeHNm+kf6L9SY=";
   };
 
   postPatch = ''
     substituteInPlace ./quickwit-ingest/build.rs \
-      --replace '&[]' '&["."]'
+      --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
     substituteInPlace ./quickwit-codegen/example/build.rs \
-      --replace '&[]' '&["."]'
+      --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
     substituteInPlace ./quickwit-proto/build.rs \
-      --replace '&[]' '&["."]'
+      --replace-fail '.with_protos' '.with_includes(&["."]).with_protos'
   '';
 
   sourceRoot = "${src.name}/quickwit";
@@ -40,9 +40,9 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "chitchat-0.5.0" = "sha256-gGWMzTzQNb9JXSbPIanMJpEKhKen1KsIrWQz6wvypDY=";
-      "ownedbytes-0.5.0" = "sha256-ZuWwj5EzDm4YOUU/MhmR7CBOHM444ljBFSkC+wLBia4=";
-      "path-0.1.0" = "sha256-f+Iix+YuKy45zoQXH7ctzANaL96s7HNUBOhcM1ZV0Ko=";
+      "chitchat-0.8.0" = "sha256-cjwKaBXoztYUXgnJvtFH+OSQU6tl2U3zKFWX324+9wo=";
+      "mrecordlog-0.4.0" = "sha256-9LIVs+BqK9FLSfHL3vm9LL+/FXIXJ6v617QLv4luQik=";
+      "ownedbytes-0.6.0" = "sha256-in18/NYYIgUiZ9sm8NgJlebWidRp34DR7AhOD1Nh0aw=";
       "pulsar-5.0.2" = "sha256-j7wpsAro6x4fk3pvSL4fxLkddJFq8duZ7jDj0Edf3YQ=";
       "sasl2-sys-0.1.20+2.1.28" = "sha256-u4BsfmTDFxuY3i1amLCsr7MDv356YPThMHclura0Sxs=";
       "whichlang-0.1.0" = "sha256-7AvLGjtWHjG0TnZdg9p5D+O0H19uo2sqPxJMn6mOU0k=";

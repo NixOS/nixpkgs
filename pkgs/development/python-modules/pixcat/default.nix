@@ -31,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Display images on a kitty terminal with optional resizing";
+    mainProgram = "pixcat";
     homepage = "https://github.com/mirukan/pixcat";
     license = licenses.lgpl3;
     maintainers = [ maintainers.tilcreator ];

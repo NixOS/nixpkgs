@@ -1,17 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, pythonOlder
+
+# build-system
 , setuptools
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-osc";
   version = "1.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,12 +23,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
   pythonImportsCheck = [
     "pythonosc"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {

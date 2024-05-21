@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ] ++ (with ocamlPackages; [ ocaml findlib camlp5 ]);
   buildInputs = [ ncurses ] ++ (with ocamlPackages; [ lablgtk ]);
 
-  dontAddPrefix = true;
-  configureFlags = [ "--prefix" "$(out)" ];
+  prefixKey = "--prefix ";
 
   meta = with lib; {
     description = "A program for proof-tree visualization";
+    mainProgram = "prooftree";
     longDescription = ''
       Prooftree is a program for proof-tree visualization during interactive
       proof development in a theorem prover. It is currently being developed

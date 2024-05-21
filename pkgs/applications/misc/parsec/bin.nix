@@ -27,11 +27,11 @@
 
 stdenvNoCC.mkDerivation {
   pname = "parsec-bin";
-  version = "150_91a";
+  version = "150_93b";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20231209190803if_/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-/qugI7k0NYpq7p9l9auD2Pp+SFoFZ9jAZswpreVfgO4=";
+    url = "https://web.archive.org/web/20240329180120/https://builds.parsec.app/package/parsec-linux.deb";
+    sha256 = "sha256-wfsauQMubnGKGfL9c0Zee5g3nn0eEnOFalQNL3d4weE=";
   };
 
   unpackPhase = ''

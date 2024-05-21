@@ -1,14 +1,14 @@
 { lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle_7, openjdk17, git, perl, cmake }:
 let
   pname = "fastddsgen";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-NG4Ndc2eJjXA3bKWuwifgHX1kWtC5wWiiDKinlG2up0=";
+    hash = "sha256-oqbSIzsYUwD8bTqGKZ9he9d18EDq9mHZFoNUp0RK0qU=";
   };
 
   gradle = gradle_7;
@@ -83,6 +83,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Fast-DDS IDL code generator tool";
+    mainProgram = "fastddsgen";
     homepage = "https://github.com/eProsima/Fast-DDS-Gen";
     license = licenses.asl20;
     longDescription = ''

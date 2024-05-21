@@ -1,31 +1,44 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
 , deprecation
 , docker
-, wrapt }:
+, wrapt
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "3.7.1";
+  version = "4.4.1";
+  disabled = pythonOlder "3.9";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
-    rev = "v${version}";
-    hash = "sha256-OHuvUi5oa0fVcfo0FW9XwaUp52MEH4NTM6GqK4ic0oM=";
+    rev = "refs/tags/testcontainers-v${version}";
+    hash = "sha256-osWppbptWpBSHcrHlAqNpn6j2n/qQ7iCobH3TVqB2bc=";
   };
 
   postPatch = ''
     echo "${version}" > VERSION
   '';
 
+  build-system = [
+    poetry-core
+  ];
+
   buildInputs = [
     deprecation
     docker
     wrapt
+  ];
+
+  dependencies = [
+    typing-extensions
   ];
 
   # Tests require various container and database services running

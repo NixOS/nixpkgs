@@ -25,19 +25,18 @@
 , libepoxy
 , bash
 , gnome-session-ctl
-, gnomeShellSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "45.0";
+  version = "46.0";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cG0v/KysOFU6PAGFeT9aK0qslAu154nZU8mAgWO+8vE=";
+    hash = "sha256-xuFiSvYJC8ThoZH+Imir+nqN4HgxynpX8hfmeb97mlQ=";
   };
 
   patches = [
@@ -77,11 +76,6 @@ stdenv.mkDerivation rec {
     libepoxy
   ];
 
-  mesonFlags = [
-    "-Dsystemd=true"
-    "-Dsystemd_session=default"
-  ];
-
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
@@ -114,7 +108,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      ${lib.optionalString gnomeShellSupport "--suffix XDG_DATA_DIRS : \"${gnome.gnome-shell}/share\""} \
+      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share" \
       --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
   '';
 
@@ -133,7 +127,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME session manager";
-    homepage = "https://wiki.gnome.org/Projects/SessionManagement";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

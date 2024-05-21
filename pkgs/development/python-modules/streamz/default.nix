@@ -1,16 +1,18 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, confluent-kafka
-, distributed
-, fetchpatch
+, pythonOlder
 , fetchPypi
+, setuptools
+, confluent-kafka
+, dask
+, dask-expr
+, distributed
 , flaky
 , graphviz
 , networkx
 , pytest-asyncio
 , pytestCheckHook
-, pythonOlder
 , requests
 , six
 , toolz
@@ -21,7 +23,7 @@
 buildPythonPackage rec {
   pname = "streamz";
   version = "0.6.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -30,7 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     networkx
     six
     toolz
@@ -40,6 +46,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     confluent-kafka
+    dask
+    dask-expr
     distributed
     flaky
     graphviz

@@ -6,6 +6,7 @@
 , pytest-mock
 , pytestCheckHook
 , pyyaml
+, setuptools
 , setuptools-scm
 , subprocess-tee
 , pythonOlder
@@ -13,21 +14,22 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "4.1.10";
-  format = "pyproject";
+  version = "4.1.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K+jHtRDS4V7tHp70QyCdZ9muyPQnAmuIk21FNf9Zhj0=";
+    hash = "sha256-s+n518OhzmIi3kROncb+zn66cKxk8qC+/cTi1UIBi0o=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     subprocess-tee
   ];

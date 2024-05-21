@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, cython
+, cython_0
 , pkg-config
 , libgbinder
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    cython
+    cython_0
     pkg-config
   ];
 

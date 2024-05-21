@@ -1,49 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , poetry-core
 , pythonOlder
-, aiohttp
-, backoff
 , fastavro
-, importlib-metadata
+, httpx
+, httpx-sse
+, pydantic
 , requests
-, urllib3
+, tokenizers
+, types-requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "4.32";
-  format = "pyproject";
+  version = "5.3.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OAd0e+mE8hHc6RHBM1vXE68qwrcPcpZ4OB5v9uRQ5oE=";
+    hash = "sha256-tFoshbAl3RU2fWm/knSN5KMOyCq7Swj6UwG3LokFH+I=";
   };
 
-  patches = [
-    # https://github.com/cohere-ai/cohere-python/pull/289
-    (fetchpatch {
-      name = "replace-poetry-with-poetry-core.patch";
-      url = "https://github.com/cohere-ai/cohere-python/commit/e86480336331c0cf6f67e26b0825467dfca5b277.patch";
-      hash = "sha256-P1Ioq5ypzT3tx6cxrI3ep34Fi4cUx88YkfJ5ErN3VHk=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    backoff
+  dependencies = [
     fastavro
-    importlib-metadata
+    httpx
+    httpx-sse
+    pydantic
     requests
-    urllib3
+    tokenizers
+    types-requests
+    typing-extensions
   ];
 
   # tests require CO_API_KEY
@@ -56,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simplify interfacing with the Cohere API";
     homepage = "https://docs.cohere.com/docs";
-    changelog = "https://github.com/cohere-ai/cohere-python/blob/main/CHANGELOG.md#${builtins.replaceStrings ["."] [""] version}";
+    changelog = "https://github.com/cohere-ai/cohere-python/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

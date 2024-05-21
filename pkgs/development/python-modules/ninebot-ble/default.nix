@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Ninebot scooter BLE client";
+    mainProgram = "ninebot-ble";
     homepage = "https://github.com/ownbee/ninebot-ble";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

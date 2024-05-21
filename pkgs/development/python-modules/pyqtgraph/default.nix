@@ -11,6 +11,7 @@
 , freefont_ttf
 , makeFontsConf
 , setuptools
+, python
 }:
 
 let
@@ -20,14 +21,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.13.3";
+  version = "0.13.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
     rev = "refs/tags/pyqtgraph-${version}";
-    hash = "sha256-kFTNhv8pgIRSJX0ePmp1I0+MGfCaW8b86baIYZ2bZQM=";
+    hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +71,7 @@ buildPythonPackage rec {
     homepage = "https://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
     license = licenses.mit;
+    broken = lib.versionAtLeast python.version "3.12";
     platforms = platforms.unix;
     maintainers = with maintainers; [ koral ];
   };

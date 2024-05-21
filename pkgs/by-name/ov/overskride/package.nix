@@ -4,7 +4,7 @@
 
 owner = "kaii-lb";
 name = "overskride";
-version = "0.5.6";
+version = "0.5.7";
 
 in rustPlatform.buildRustPackage {
 
@@ -15,10 +15,10 @@ in rustPlatform.buildRustPackage {
     inherit owner;
     repo = name;
     rev = "v${version}";
-    hash = "sha256-syQzHHT0s15oj8Yl2vhgyXlPI8UxOqIXGDqFeUc/dJQ=";
+    hash = "sha256-vuCpUTn/Re2wZIoCmKHwBRPdfpHDzNHi42iwvBFYjXo=";
   };
 
-  cargoHash = "sha256-NEsqVfKZqXSLieRO0BvQGdggmXXYO15qVhbfgAFATPc=";
+  cargoHash = "sha256-hX3GHRiE/CbeT/zblQHzbxLPEc/grDddXgqoAe64zUM=";
 
   nativeBuildInputs = [
     pkg-config

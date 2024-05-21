@@ -1,12 +1,13 @@
 { lib, fetchFromGitHub
-, python3Packages, wrapGAppsHook, gobject-introspection
+, python3Packages, wrapGAppsHook3, gobject-introspection
 , gtk-layer-shell, pango, gdk-pixbuf, atk
 # Extra packages called by various internal nwg-panel modules
+, hyprland         # hyprctl
 , sway             # swaylock, swaymsg
 , systemd          # systemctl
 , wlr-randr        # wlr-randr
 , nwg-menu         # nwg-menu
-, light            # light
+, brightnessctl    # brightnessctl
 , pamixer          # pamixer
 , pulseaudio       # pactl
 , libdbusmenu-gtk3 # tray
@@ -15,24 +16,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.9.16";
+  version = "0.9.31";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
-    rev = "v${version}";
-    hash = "sha256-xHAn8NWSWSm95SIX1M8HIQwgNBq5/K5xsanbkAKfXSw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g3O+jWLwMBNfk0vAi/wq/YnGTAIscDJH2QV7bequyNU=";
   };
 
   # No tests
   doCheck = false;
 
-  # Because of wrapGAppsHook
+  # Because of wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
 
   buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango playerctl ];
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
   propagatedBuildInputs = (with python3Packages;
     [ i3ipc netifaces psutil pybluez pygobject3 requests dasbus setuptools ])
     # Run-time GTK dependency required by the Tray module
@@ -40,15 +41,15 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}
-    cp $src/nwg-panel-config.desktop $out/share/applications/
-    cp $src/nwg-shell.svg $src/nwg-panel.svg $out/share/pixmaps/
+    cp $src/nwg-panel-config.desktop nwg-processes.desktop $out/share/applications/
+    cp $src/nwg-shell.svg $src/nwg-panel.svg nwg-processes.svg $out/share/pixmaps/
   '';
 
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
       --prefix XDG_DATA_DIRS : "$out/share"
-      --prefix PATH : "${lib.makeBinPath [ light nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
+      --prefix PATH : "${lib.makeBinPath [ brightnessctl hyprland nwg-menu pamixer pulseaudio sway systemd wlr-randr ]}"
     )
   '';
 

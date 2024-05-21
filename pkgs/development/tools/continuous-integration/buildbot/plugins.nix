@@ -3,12 +3,12 @@
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
   www = buildPythonPackage rec {
-    pname = "buildbot-www";
+    pname = "buildbot_www";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-W0NRRS0z02/31eyqVRGJUZlUaI77I9WuAI3d3FlWHOQ=";
+      hash = "sha256-xOsz71kprzKKqvvwpsZTACWf4z+Svx9BQ72xGEZXKdw=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -30,12 +30,12 @@
   };
 
   www-react = buildPythonPackage rec {
-    pname = "buildbot-www-react";
+    pname = "buildbot_www_react";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-NfpgTZ0+sP2U8rkf+C4WTpXKVBvO8T+ijs8xIPe49tA=";
+      hash = "sha256-wUiMEAFmqjHXPjnPhsaLWqxvOXyEQIeRBL4W3LB3vkw=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -57,12 +57,12 @@
   };
 
   console-view = buildPythonPackage rec {
-    pname = "buildbot-console-view";
+    pname = "buildbot_console_view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-ykzzvsxP8e0TIHnZJPSnFJoZNNZDvbZ7vZ6hCZyd0iA=";
+      hash = "sha256-KerHS5F4b30TvlGeSf6QLUt49S6Iki7O5nex6KPypJY=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -79,12 +79,12 @@
   };
 
   react-console-view = buildPythonPackage rec {
-    pname = "buildbot-react-console-view";
+    pname = "buildbot_react_console_view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-U0j/ovoP3A83BzQWF4dtwisJxs00mZz0yyT12mlxfGo=";
+      hash = "sha256-XrywoVM2ErJ4i7WrRKPRaCOwt5JVDJT6xP7L/Dfv+gk=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -101,12 +101,12 @@
   };
 
   waterfall-view = buildPythonPackage rec {
-    pname = "buildbot-waterfall-view";
+    pname = "buildbot_waterfall_view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-cu0+66DHf8Hfvfx/IvVyexwl3I0MmLjJrNDBPLxo7Bg=";
+      hash = "sha256-mhVbuOhe0BrXHbn8bd41Q7I8Xak7fO8ahIK0r113vGY=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -123,12 +123,12 @@
   };
 
   react-waterfall-view = buildPythonPackage rec {
-    pname = "buildbot-react-waterfall-view";
+    pname = "buildbot_react_waterfall_view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-vt7ea0IWIKn4i8sBUUMsoOMi1gPzzFssQ6wORDClJqs=";
+      hash = "sha256-X89XrjdD0GL7MabLWtkQcdCa4Ain1AGre6mXF/inmck=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -145,12 +145,12 @@
   };
 
   grid-view = buildPythonPackage rec {
-    pname = "buildbot-grid-view";
+    pname = "buildbot_grid_view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Fd8r2+jV4YSuYu6zUl0fDjEdUGkzuHckR+PTSEyoXio=";
+      hash = "sha256-YH5SfYuW07Pp00LoBvcDB8MiHB1HzYWg5kQVICrkS5s=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -167,12 +167,12 @@
   };
 
   react-grid-view = buildPythonPackage rec {
-    pname = "buildbot-react-grid-view";
+    pname = "buildbot_react_grid_view";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Q8gwqUfMy+D9dPBSw60BhNV12iu9mjhc7KXKYjtO23s=";
+      hash = "sha256-rmyAsFCTeIYPdrlWDCxlbjw+BCKwcIaTHlK8KJP0T88=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -189,12 +189,12 @@
   };
 
   wsgi-dashboards = buildPythonPackage rec {
-    pname = "buildbot-wsgi-dashboards";
+    pname = "buildbot_wsgi_dashboards";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-LzsdHTABtHJzEfkyJ6LbmLE0QmKA3DVjY8VP90O3jT4=";
+      hash = "sha256-Ls3NJka5vVTx1GW9bnr3jlulj7/pNkX9omXrTIWrwtU=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -210,13 +210,35 @@
     };
   };
 
-  badges = buildPythonPackage rec {
-    pname = "buildbot-badges";
+  react-wsgi-dashboards = buildPythonPackage rec {
+    pname = "buildbot_react_wsgi_dashboards";
     inherit (buildbot-pkg) version;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-tVMXGYTZlkchfeEcHh3B/wGEZb8xUemtnbFzX65tvb8=";
+      hash = "sha256-t3LLZJ+kPcowqSyeRcuH3kEjBEiju1MI0z1qhU6KPBs=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://buildbot.net/";
+      description = "Buildbot WSGI dashboards Plugin (React)";
+      maintainers = teams.buildbot.members;
+      license = licenses.gpl2;
+    };
+  };
+
+  badges = buildPythonPackage rec {
+    pname = "buildbot_badges";
+    inherit (buildbot-pkg) version;
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-//MftUqUWE2+RpxRPzDEH7tOCN2D1HD8dETZw1OQe5s=";
     };
 
     buildInputs = [ buildbot-pkg ];

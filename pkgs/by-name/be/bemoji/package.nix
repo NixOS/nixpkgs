@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "bemoji";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "marty-oehme";
     repo = "bemoji";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DhsJX5HlyTh0QLlHy1OwyaYg4vxWpBSsF71D9fxqPWE=";
+    hash = "sha256-HXwho0vRI9ZrUuDMicMH4ZNExY+zJfbrne2LMQmmHww=";
   };
 
   strictDeps = true;

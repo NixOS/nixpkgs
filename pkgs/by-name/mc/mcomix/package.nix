@@ -6,7 +6,7 @@
 , mcomix
 , python3
 , testers
-, wrapGAppsHook
+, wrapGAppsHook3
 
   # Recommended Dependencies:
 , p7zip
@@ -18,12 +18,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchurl {
     url = "mirror://sourceforge/mcomix/mcomix-${version}.tar.gz";
-    hash = "sha256-InDEPXXih49k5MiG1bATElxCiUs2RZTV7JeRVMTeoAQ=";
+    hash = "sha256-+Shuun/7w86VKBNamTmCPEJfO76fdKY5+HBvzCi0xCc=";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     python3.pkgs.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -58,12 +58,17 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
+  postInstall = ''
+    cp -a share $out/
+  '';
+
   passthru.tests.version = testers.testVersion {
     package = mcomix;
   };
 
   meta = with lib; {
     description = "Comic book reader and image viewer";
+    mainProgram = "mcomix";
     longDescription = ''
       User-friendly, customizable image viewer, specifically designed to handle
       comic books and manga supporting a variety of container formats

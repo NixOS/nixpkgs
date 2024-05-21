@@ -37,6 +37,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Smart manager for information collecting";
+    mainProgram = "mytetra";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;
     maintainers = [ ];

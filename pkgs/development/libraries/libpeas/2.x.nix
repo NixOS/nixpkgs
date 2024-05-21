@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, substituteAll
 , pkg-config
 , gi-docgen
 , gobject-introspection
@@ -16,14 +17,24 @@
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.0.0";
+  version = "2.0.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-VAesvAwS95D3DJ0rmCJKzBvjrEScYGA7gZLKAgtJcBE=";
+    hash = "sha256-8w3/7WPKL0BHe0DhccCjH4DZFCW6Hh5HMg7mQlSA7MM=";
   };
+
+  patches = [
+    # Make PyGObject’s gi library available.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      pythonPaths = lib.concatMapStringsSep ", " (pkg: "'${pkg}/${python3.sitePackages}'") [
+        python3.pkgs.pygobject3
+      ];
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -78,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A GObject-based plugins engine";
-    homepage = "https://wiki.gnome.org/Projects/Libpeas";
+    homepage = "https://gitlab.gnome.org/GNOME/libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

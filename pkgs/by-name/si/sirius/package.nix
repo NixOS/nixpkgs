@@ -16,6 +16,7 @@
 , spfft
 , spla
 , costa
+, umpire
 , scalapack
 , boost
 , eigen
@@ -37,19 +38,17 @@ assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
 
 stdenv.mkDerivation rec {
   pname = "SIRIUS";
-  version = "7.4.3";
+  version = "7.5.2";
 
   src = fetchFromGitHub {
     owner = "electronic-structure";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s4rO+dePvtvn41wxCvbqgQGrEckWmfng7sPX2M8OPB0=";
+    hash = "sha256-DYie6ufgZNqg7ohlIed3Bo+sqLKHOxWXTwAkea2guLk=";
   };
 
-  postPatch = ''
-    substituteInPlace src/gpu/acc_blas_api.hpp \
-      --replace '#include <rocblas.h>' '#include <rocblas/rocblas.h>'
-  '';
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
@@ -63,6 +62,8 @@ stdenv.mkDerivation rec {
     gsl
     libxc
     hdf5
+    umpire
+    mpi
     spglib
     spfft
     spla
@@ -83,7 +84,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = [ mpi ];
+  propagatedBuildInputs = [ (lib.getBin mpi) ];
+
+  CXXFLAGS = [
+    # GCC 13: error: 'uintptr_t' in namespace 'std' does not name a type
+    "-include cstdint"
+  ];
 
   cmakeFlags = [
     "-DUSE_SCALAPACK=ON"
@@ -105,11 +111,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Can not run parallel checks generally as it requires exactly multiples of 4 MPI ranks
+  # Even cpu_serial tests had to be disabled as they require scalapack routines in the sandbox
+  # and run into the same problem as MPI tests
   checkPhase = ''
     runHook preCheck
 
     ctest --output-on-failure --label-exclude integration_test
-    ctest --output-on-failure -L cpu_serial
 
     runHook postCheck
   '';

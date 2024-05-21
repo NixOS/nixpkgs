@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , krakenex
 , pandas
@@ -9,8 +8,6 @@
 buildPythonPackage rec {
   pname = "pykrakenapi";
   version = "0.3.2";
-
-  disabled = pythonOlder "3.3";
 
   format = "setuptools";
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "micronaut";
-  version = "4.2.3";
+  version = "4.4.2";
 
   src = fetchzip {
     url = "https://github.com/micronaut-projects/micronaut-starter/releases/download/v${version}/micronaut-cli-${version}.zip";
-    sha256 = "sha256-+03wjNxIZr8vhvK3zfvFBwXC5WmEs5A6mydGXsmGuCI=";
+    sha256 = "sha256-5Loc9H5wqafoZYjPGCJ4kTNulS1/Njgn35T74zHr9s4=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

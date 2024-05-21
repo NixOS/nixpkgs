@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OPAm Light INstaller Engine";
+    mainProgram = "opaline";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;

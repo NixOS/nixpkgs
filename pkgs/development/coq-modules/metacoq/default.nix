@@ -13,8 +13,9 @@ let
       { case = "8.14"; out = "1.1-8.14"; }
       { case = "8.15"; out = "1.1-8.15"; }
       { case = "8.16"; out = "1.1-8.16"; }
-      { case = "8.17"; out = "1.2.1-8.17"; }
-      { case = "8.18"; out = "1.2.1-8.18"; }
+      { case = "8.17"; out = "1.3.1-8.17"; }
+      { case = "8.18"; out = "1.3.1-8.18"; }
+      { case = "8.19"; out = "1.3.1-8.19"; }
     ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
@@ -28,6 +29,9 @@ let
     "1.1-8.16".sha256 = "sha256-cTK4ptxpPPlqxAhasZFX3RpSlsoTZwhTqs2A3BZy9sA=";
     "1.2.1-8.17".sha256 = "sha256-FP4upuRsG8B5Q5FIr76t+ecRirrOUX0D1QiLq0/zMyE=";
     "1.2.1-8.18".sha256 = "sha256-49g5db2Bv8HpltptJdxA7zrmgNFGC6arx5h2mKHhrko=";
+    "1.3.1-8.17".sha256 = "sha256-l0/QLC7V3zSk/FsaE2eL6tXy2BzbcI5MAk/c+FESwnc=";
+    "1.3.1-8.18".sha256 = "sha256-L6Ym4Auwqaxv5tRmJLSVC812dxCqdUU5aN8+t5HVYzY=";
+    "1.3.1-8.19".sha256 = "sha256-fZED/Uel1jt5XF83dR6HfyhSkfBdLkET8C/ArDgsm64=";
   };
   releaseRev = v: "v${v}";
 

@@ -23,6 +23,7 @@ buildPythonPackage {
   meta = with lib; {
     homepage = "https://github.com/aroig/mutag";
     description = "A script to change email tags in a mu indexed maildir";
+    mainProgram = "mutag";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
   };

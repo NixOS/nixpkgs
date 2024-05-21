@@ -3,15 +3,12 @@
 , fetchPypi
 , hypothesis
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "srt";
   version = "3.5.3";
   format = "setuptools";
-
-  disabled = pythonOlder "2.7";
 
   src = fetchPypi {
     inherit pname version;

@@ -7,23 +7,25 @@
 , pygments
 , pytestCheckHook
 , pythonRelaxDepsHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
-  version = "0.1.4";
-  format = "setuptools";
+  version = "0.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-oa9q5k3OREGn6pQiyLy22MNJTiY6Pm+xrwA4DBUhxp0=";
+    hash = "sha256-dGbzZYEFEWE5bUz+647pPzP4Z/XmrJU82jNT4ZBRNHk=";
   };
 
   nativeBuildInputs = [
     antlr4
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -62,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/explorerscript";
     description = "A programming language + compiler/decompiler for creating scripts for Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.mit;
-    maintainers = with maintainers; [ marius851000 xfix ];
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

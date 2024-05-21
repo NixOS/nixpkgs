@@ -41,6 +41,9 @@ buildPythonPackage rec {
     "preshed"
   ];
 
+  # don't update to 4.0.0, version was yanked
+  passthru.skipBulkUpdate = true;
+
   meta = with lib; {
     description = "Cython hash tables that assume keys are pre-hashed";
     homepage = "https://github.com/explosion/preshed";

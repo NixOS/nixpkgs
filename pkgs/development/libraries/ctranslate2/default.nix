@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ctranslate2";
-  version = "3.24.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     rev = "v${version}";
-    hash = "sha256-RK5GQymtaYOM6HK2eRK5Rbz6NZva3Jt7lTPTUbSQXxI=";
+    hash = "sha256-p9zpmfs1V92a+3Mxgi5eLKuCUN+26FAL4SjySZzPOW8=";
     fetchSubmodules = true;
   };
 
@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast inference engine for Transformer models";
+    mainProgram = "ct2-translator";
     homepage = "https://github.com/OpenNMT/CTranslate2";
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

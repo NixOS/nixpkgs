@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "a2wsgi";
-  version = "1.10.0";
-  format = "pyproject";
+  version = "1.10.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yA7qK3Uu2kEhbGRbgqQ6YvYAbGM27zGn2xQDOZ7ffBY=";
+    hash = "sha256-UOgaxVqmCfosZm5CuswlxCTIiEzmBy8afpAhFLfuXWM=";
   };
 
   nativeBuildInputs = [

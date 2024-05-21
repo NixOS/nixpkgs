@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-storage-plugins";
-  version = "3.0.0";
+  version = "3.2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MinqSMpBlp3pCgQxorkMdrJuO0GExJsO02kg2/mGsFw=";
+    hash = "sha256-syUjK32RPV9FMV7RSpXy+PJ2AVigGH+ywm6iTjUAuec=";
   };
 
   nativeBuildInputs = [

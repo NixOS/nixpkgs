@@ -6,12 +6,13 @@
 , packaging
 , setuptools
 , dbus-next
+, rubicon-objc
 }:
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.5.6";
-  format = "pyproject";
+  version = "4.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,17 +20,19 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-txUWRCWLQ6jWrdEJ/D5+CsflNad5Onr/wLycENri1z8=";
+    hash = "sha256-6FtxfY0vjCbCueeXdAXOy6XSjne4I7brQ5OvJ+Q1KsQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rubicon-objc
   ];
 
   # no tests available, do the imports check instead
@@ -45,6 +48,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/samschott/desktop-notifier/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
-    platforms = platforms.linux;
   };
 }

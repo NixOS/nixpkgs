@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.33.1";
+  version = "2.34.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1Q1KKQmla/iHb5KbJZZmkpBT2j9uIwy8YDAJ7qDDC4Q=";
+    hash = "sha256-/VZUifiz8iImq+JLvckFDr7YMIqu0Xro2t3GFj0obg0=";
   };
 
   patches = lib.optionals (!stdenv.isDarwin) [
@@ -50,11 +50,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pillow
   ];

@@ -45,6 +45,9 @@ buildPythonPackage {
   #
   postPatch = ''
     sed -i "/extra_compile_args.append('-std=c++14')/d" setup.py
+
+    substituteInPlace google/protobuf/internal/json_format_test.py \
+      --replace-fail assertRaisesRegexp assertRaisesRegex
   '';
 
   nativeBuildInputs = lib.optional isPyPy tzdata;

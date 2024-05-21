@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3

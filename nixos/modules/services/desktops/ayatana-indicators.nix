@@ -9,15 +9,15 @@ let
 in
 {
   options.services.ayatana-indicators = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       Ayatana Indicators, a continuation of Canonical's Application Indicators
-    '');
+    '';
 
     packages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
       example = lib.literalExpression "with pkgs; [ ayatana-indicator-messages ]";
-      description = lib.mdDoc ''
+      description = ''
         List of packages containing Ayatana Indicator services
         that should be brought up by the SystemD "ayatana-indicators" user target.
 

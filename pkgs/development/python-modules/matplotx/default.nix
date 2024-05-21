@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/nschloe/matplotx";
     description = "More styles and useful extensions for Matplotlib";
+    mainProgram = "matplotx";
     changelog = "https://github.com/nschloe/matplotx/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ swflint ];

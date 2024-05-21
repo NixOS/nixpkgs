@@ -1,50 +1,52 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, meson
-, ninja
+, cmake
+, perl
 , pkg-config
-, gtk3
-, libxml2
-, wrapGAppsHook
+, qt6
+, xkeyboard_config
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "labwc-tweaks";
-  version = "unstable-2023-12-08";
+  version = "0-unstable-2024-04-27";
 
   src = fetchFromGitHub {
     owner = "labwc";
-    repo = finalAttrs.pname;
-    rev = "1c79d6a5ee3ac3d1a6140a1a98ae89674ef36635";
-    hash = "sha256-RD1VCKVoHsoY7SezY7tjZzomikMgA7N6B5vaYkIo9Es=";
+    repo = "labwc-tweaks";
+    rev = "9007079640e0f38c1d69ac94899229354a5c67b2";
+    hash = "sha256-klKPHAhJ6fedFojXPfesjs1dG5NJhBZkzynhka5vD8M=";
   };
 
   nativeBuildInputs = [
-    meson
-    ninja
+    cmake
+    perl
     pkg-config
-    wrapGAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    gtk3
-    libxml2
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace stack-lang.c --replace /usr/share /run/current-system/sw/share
-    sed -i '/{ NULL, "\/usr\/share" },/i { NULL, "/run/current-system/sw/share" },' theme.c
+    substituteInPlace tweaks-qt/gen-layout-list --replace-fail /usr/share/X11/xkb ${xkeyboard_config}/share/X11/xkb
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/labwc/labwc-tweaks";
     description = "Configuration gui app for labwc";
     mainProgram = "labwc-tweaks";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ romildo ];
+    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
   };
-})
+}

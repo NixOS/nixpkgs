@@ -28,7 +28,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enables the consul daemon.
         '';
       };
@@ -38,7 +38,7 @@ in
       webUi = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enables the web interface on the consul http port.
         '';
       };
@@ -46,7 +46,7 @@ in
       leaveOnStop = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           If enabled, causes a leave action to be sent when closing consul.
           This allows a clean termination of the node, but permanently removes
           it from the cluster. You probably don't want this option unless you
@@ -60,7 +60,7 @@ in
         advertise = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             The name of the interface to pull the advertise_addr from.
           '';
         };
@@ -68,7 +68,7 @@ in
         bind = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             The name of the interface to pull the bind_addr from.
           '';
         };
@@ -77,7 +77,7 @@ in
       forceAddrFamily = mkOption {
         type = types.enum [ "any" "ipv4" "ipv6" ];
         default = "any";
-        description = lib.mdDoc ''
+        description = ''
           Whether to bind ipv4/ipv6 or both kind of addresses.
         '';
       };
@@ -85,7 +85,7 @@ in
       forceIpv4 = mkOption {
         type = types.nullOr types.bool;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Deprecated: Use consul.forceAddrFamily instead.
           Whether we should force the interfaces to only pull ipv4 addresses.
         '';
@@ -94,7 +94,7 @@ in
       dropPrivileges = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether the consul agent should be run as a non-root consul user.
         '';
       };
@@ -102,7 +102,7 @@ in
       extraConfig = mkOption {
         default = { };
         type = types.attrsOf types.anything;
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration options which are serialized to json and added
           to the config.json file.
         '';
@@ -111,37 +111,37 @@ in
       extraConfigFiles = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration files to pass to consul
           NOTE: These will not trigger the service to be restarted when altered.
         '';
       };
 
       alerts = {
-        enable = mkEnableOption (lib.mdDoc "consul-alerts");
+        enable = mkEnableOption "consul-alerts";
 
         package = mkPackageOption pkgs "consul-alerts" { };
 
         listenAddr = mkOption {
-          description = lib.mdDoc "Api listening address.";
+          description = "Api listening address.";
           default = "localhost:9000";
           type = types.str;
         };
 
         consulAddr = mkOption {
-          description = lib.mdDoc "Consul api listening address";
+          description = "Consul api listening address";
           default = "localhost:8500";
           type = types.str;
         };
 
         watchChecks = mkOption {
-          description = lib.mdDoc "Whether to enable check watcher.";
+          description = "Whether to enable check watcher.";
           default = true;
           type = types.bool;
         };
 
         watchEvents = mkOption {
-          description = lib.mdDoc "Whether to enable event watcher.";
+          description = "Whether to enable event watcher.";
           default = true;
           type = types.bool;
         };

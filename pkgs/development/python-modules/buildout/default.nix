@@ -29,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A software build and configuration system";
+    mainProgram = "buildout";
     downloadPage = "https://github.com/buildout/buildout";
     homepage = "https://www.buildout.org";
     license = licenses.zpl21;

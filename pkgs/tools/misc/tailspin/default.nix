@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tailspin";
-  version = "2.3.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
     rev = version;
-    hash = "sha256-xbnJ2QoTrJwzWIm/GfYW9QCn0DsfA9jLC6rwik4Pxs8=";
+    hash = "sha256-Aqm7Nt+rAu8A2216JCuID1eIpWSdKpoKjILYovr7bYw=";
   };
 
-  cargoHash = "sha256-ios/qRp2crV3g7g/jATuUp/zBdDOCEMhAWfeKFM8NdM=";
+  cargoHash = "sha256-uTUowYoLEywGNzPyxq53Si5GSrh/F9kUFIDjw/wfdAQ=";
 
   meta = with lib; {
     description = "A log file highlighter";

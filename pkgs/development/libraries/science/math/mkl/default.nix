@@ -68,9 +68,7 @@ in stdenvNoCC.mkDerivation ({
 
   dontUnpack = stdenvNoCC.isLinux;
 
-  unpackPhase = if stdenvNoCC.isDarwin then ''
-    7zz x $src
-  '' else null;
+  sourceRoot = if stdenvNoCC.isDarwin then "." else null;
 
   nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then

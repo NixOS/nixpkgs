@@ -18,11 +18,11 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
-  preCheck = ''
+  checkFlags = [
     # Only run tests under mtp/encoding_test.go
     # Other tests require an Android deviced attached over USB.
-    buildFlagsArray+=("-run" "Test(Encode|Decode|Variant).*")
-  '';
+    "-run=Test(Encode|Decode|Variant)"
+  ];
 
   meta = with lib; {
     description = "A simple FUSE filesystem for mounting Android devices as a MTP device";

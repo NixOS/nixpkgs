@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.0.1";
+  version = "4.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jodal";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SYgT69/AZX/JDm89PwFqrUL9Ll1iHRKEy78BN4QKz9Y=";
+    hash = "sha256-2baFwZPNuVU39Kt5B8QvGKu7jMbg+GZ3ROoTxzPOXac=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     homepage = "https://www.pykka.org/";
     description = "A Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/releases/tag/v${version}";
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

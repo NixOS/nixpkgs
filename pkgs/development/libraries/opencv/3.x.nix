@@ -10,7 +10,7 @@
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR ?     !stdenv.isDarwin, openexr, ilmbase
+, enableEXR ?     !stdenv.isDarwin, openexr_3
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
@@ -39,7 +39,7 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
-  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages) backendStdenv cudatoolkit;
   inherit (cudaPackages.cudaFlags) cudaCapabilities;
 
   version = "3.4.18";
@@ -194,7 +194,7 @@ stdenv.mkDerivation {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
-    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optionals enableEXR [ openexr_3 ]
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
                      [ VideoDecodeAcceleration bzip2 ]
@@ -219,8 +219,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
-
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
 
@@ -243,7 +241,7 @@ stdenv.mkDerivation {
     (opencvFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
     "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"

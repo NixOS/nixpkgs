@@ -35,7 +35,7 @@
 , meson
 , xorgserver
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gi-docgen
 , sysprof
 , libsysprof-capture
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     gi-docgen
     xorgserver
   ];
@@ -156,11 +156,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Softish fork of Mutter 43.x";
     homepage = "https://github.com/BuddiesOfBudgie/magpie";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ federicoschonborn ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = lib.teams.budgie.members;
+    platforms = lib.platforms.linux;
   };
 })

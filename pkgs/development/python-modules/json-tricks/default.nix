@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, pytestCheckHook
+, pytest7CheckHook
 , numpy
 , pandas
 , pytz
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     numpy
     pandas
     pytz
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [

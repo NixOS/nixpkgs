@@ -66,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://dthompson.us/projects/haunt.html";
     description = "Guile-based static site generator";
+    mainProgram = "haunt";
     longDescription = ''
       Haunt is a simple, functional, hackable static site generator that gives
       authors the ability to treat websites as Scheme programs.

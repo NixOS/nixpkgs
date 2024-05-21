@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, coreutils
-, pkg-config
-, openssl
-, pam
-, openssh
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  coreutils,
+  pkg-config,
+  openssl,
+  pam,
+  openssh,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,7 @@ rustPlatform.buildRustPackage rec {
       --replace '/bin/false' '${coreutils}/bin/false'
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
@@ -42,9 +41,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::parse_user_authorized_keys"
   ];
 
-  nativeCheckInputs = [
-    openssh
-  ];
+  nativeCheckInputs = [ (openssh.override { dsaKeysSupport = true; }) ];
 
   env.USER = "nixbld";
 
