@@ -9,6 +9,7 @@
 # the shipped alternative sources (assembly).
 , open-watcom-bin
 , makeself, perl
+, vulkan-loader
 , javaBindings ? true, jdk # Almost doesn't affect closure size
 , pythonBindings ? false, python3
 , extensionPack ? null, fakeroot
@@ -263,7 +264,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
   # the source code (see postPatch).
   + optionalString (!headless && !enableHardening) ''
-    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
+    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
+       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
   passthru = {
