@@ -1,17 +1,18 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, defang
-, dnspython
-, fetchFromGitHub
-, playwrightcapture
-, poetry-core
-, pythonOlder
-, redis
-, requests
-, pythonRelaxDepsHook
-, sphinx
-, ua-parser
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  defang,
+  dnspython,
+  fetchFromGitHub,
+  playwrightcapture,
+  poetry-core,
+  pythonOlder,
+  redis,
+  requests,
+  pythonRelaxDepsHook,
+  sphinx,
+  ua-parser,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     "requests"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     async-timeout
@@ -55,9 +52,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lacuscore"
-  ];
+  pythonImportsCheck = [ "lacuscore" ];
 
   meta = with lib; {
     description = "The modulable part of Lacus";
