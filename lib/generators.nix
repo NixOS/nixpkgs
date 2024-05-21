@@ -155,8 +155,20 @@ in rec {
 
   /**
     Generate a key-value-style config file from an attrset.
-    *
-    * mkKeyValue is the same as in toINI.
+
+    # Inputs
+
+    Structured function argument
+
+    : mkKeyValue (optional, default: `mkKeyValueDefault {} "="`)
+      : format a setting line from key and value
+
+    : listsAsDuplicateKeys (optional, default: `false`)
+      : allow lists as values for duplicate keys
+
+    : indent (optional, default: `""`)
+      : Initial indentation level
+
   */
   toKeyValue = {
     mkKeyValue ? mkKeyValueDefault {} "=",
