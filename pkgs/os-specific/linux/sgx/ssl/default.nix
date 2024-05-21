@@ -10,7 +10,7 @@
 }:
 let
   sgxVersion = sgx-sdk.versionTag;
-  opensslVersion = "3.0.12";
+  opensslVersion = "3.0.13";
 in
 stdenv.mkDerivation {
   pname = "sgx-ssl" + lib.optionalString debug "-debug";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     let
       opensslSourceArchive = fetchurl {
         url = "https://www.openssl.org/source/openssl-${opensslVersion}.tar.gz";
-        hash = "sha256-+Tyejt3l6RZhGd4xdV/Ie0qjSGNmL2fd/LoU0La2m2E=";
+        hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
       };
     in
     ''
@@ -39,8 +39,8 @@ stdenv.mkDerivation {
 
     # Skip the tests. Build and run separately (see below).
     substituteInPlace Linux/sgx/Makefile \
-      --replace '$(MAKE) -C $(TEST_DIR) all' \
-                'bash -c "true"'
+      --replace-fail '$(MAKE) -C $(TEST_DIR) all' \
+                     'bash -c "true"'
   '';
 
   nativeBuildInputs = [
@@ -71,11 +71,11 @@ stdenv.mkDerivation {
     SIM = callPackage ./tests.nix { sgxMode = "SIM"; inherit opensslVersion; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic library for Intel SGX enclave applications based on OpenSSL";
     homepage = "https://github.com/intel/intel-sgx-ssl";
-    maintainers = with maintainers; [ phlip9 trundle veehaitch ];
+    maintainers = with lib.maintainers; [ phlip9 trundle veehaitch ];
     platforms = [ "x86_64-linux" ];
-    license = [ licenses.bsd3 licenses.openssl ];
+    license = with lib.licenses; [ bsd3 openssl ];
   };
 }
