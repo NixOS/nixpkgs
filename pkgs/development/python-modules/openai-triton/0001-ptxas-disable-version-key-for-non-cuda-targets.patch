@@ -1,0 +1,27 @@
+From 10f3d49aa6084d1b9b9624017cce7df106b9fb7e Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Tue, 6 Feb 2024 13:51:28 +0100
+Subject: [PATCH] ptxas: disable version key for non-cuda targets
+
+---
+ python/triton/runtime/jit.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/python/triton/runtime/jit.py b/python/triton/runtime/jit.py
+index d55972b4b..bd875a701 100644
+--- a/python/triton/runtime/jit.py
++++ b/python/triton/runtime/jit.py
+@@ -117,8 +117,8 @@ def version_key():
+         with open(lib.module_finder.find_spec(lib.name).origin, "rb") as f:
+             contents += [hashlib.md5(f.read()).hexdigest()]
+     # ptxas version
+-    ptxas = path_to_ptxas()[0]
+-    ptxas_version = hashlib.md5(subprocess.check_output([ptxas, "--version"])).hexdigest()
++    # ptxas = path_to_ptxas()[0]
++    ptxas_version = "noptxas"
+     return '-'.join(TRITON_VERSION) + '-' + ptxas_version + '-' + '-'.join(contents)
+ 
+ 
+-- 
+2.43.0
+

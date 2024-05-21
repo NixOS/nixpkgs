@@ -1,0 +1,19 @@
+commit f60dad2c1d8ad47fbff761ce1cb027fc7c3a40e8
+Author: Doron Behar <doron.behar@gmail.com>
+Date:   Tue Aug 1 13:47:37 2023 +0300
+
+    Musl: Fix atan test from test_complex_trigonometric.cpp
+
+diff --git a/test/test_complex_trigonometric.cpp b/test/test_complex_trigonometric.cpp
+index a486110..691db77 100644
+--- a/test/test_complex_trigonometric.cpp
++++ b/test/test_complex_trigonometric.cpp
+@@ -155,7 +155,7 @@ struct complex_trigonometric_test
+             out = atan(in);
+             detail::store_batch(out, res, i);
+         }
+-        size_t diff = detail::get_nb_diff(res, expected);
++        size_t diff = detail::get_nb_diff_near(res, expected, 1e-12);
+         CHECK_EQ(diff, 0);
+     }
+ 

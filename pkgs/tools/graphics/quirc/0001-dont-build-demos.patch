@@ -1,0 +1,29 @@
+diff --git a/Makefile b/Makefile
+index 2d5b745..ecef988 100644
+--- a/Makefile
++++ b/Makefile
+@@ -37,7 +37,7 @@ DEMO_UTIL_OBJ = \
+ 
+ OPENCV_CFLAGS := $(shell pkg-config --cflags opencv4 2>&1)
+ OPENCV_LIBS = $(shell pkg-config --libs opencv4)
+-QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) $(OPENCV_CFLAGS) --std=c++17
++QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) --std=c++17
+ 
+ .PHONY: all v4l sdl opencv install uninstall clean
+ 
+@@ -85,14 +85,11 @@ libquirc.so.$(LIB_VERSION): $(LIB_OBJ)
+ .cxx.o:
+ 	$(CXX) $(QUIRC_CXXFLAGS) -o $@ -c $<
+ 
+-install: libquirc.a libquirc.so.$(LIB_VERSION) quirc-demo quirc-scanner
++install: libquirc.a libquirc.so.$(LIB_VERSION)
+ 	install -o root -g root -m 0644 lib/quirc.h $(DESTDIR)$(PREFIX)/include
+ 	install -o root -g root -m 0644 libquirc.a $(DESTDIR)$(PREFIX)/lib
+ 	install -o root -g root -m 0755 libquirc.so.$(LIB_VERSION) \
+ 		$(DESTDIR)$(PREFIX)/lib
+-	install -o root -g root -m 0755 quirc-demo $(DESTDIR)$(PREFIX)/bin
+-	# install -o root -g root -m 0755 quirc-demo-opencv $(DESTDIR)$(PREFIX)/bin
+-	install -o root -g root -m 0755 quirc-scanner $(DESTDIR)$(PREFIX)/bin
+ 
+ uninstall:
+ 	rm -f $(DESTDIR)$(PREFIX)/include/quirc.h

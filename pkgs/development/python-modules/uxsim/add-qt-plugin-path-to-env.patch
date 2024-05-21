@@ -1,0 +1,24 @@
+diff --git a/uxsim/__init__.py b/uxsim/__init__.py
+index 01e1ad1..de1f0fd 100644
+--- a/uxsim/__init__.py
++++ b/uxsim/__init__.py
+@@ -1,8 +1,14 @@
+-from .uxsim import *
+-from .utils import *
++import os
++
+ from .analyzer import *
++from .utils import *
++from .uxsim import *
++
++# Only set our own plugin path if it's not already set
++if not os.getenv("QT_PLUGIN_PATH"): 
++    os.environ["QT_PLUGIN_PATH"] = "$NIX_QT_PLUGIN_PATH"
+ 
+ __version__ = "1.1.1"
+ __author__ = "Toru Seo"
+ __copyright__ = "Copyright (c) 2023 Toru Seo"
+-__license__ = "MIT License"
+\ No newline at end of file
++__license__ = "MIT License"
+
