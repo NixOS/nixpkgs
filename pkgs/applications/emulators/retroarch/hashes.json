@@ -804,10 +804,10 @@
         "src": {
             "owner": "libretro",
             "repo": "stella2014-libretro",
-            "rev": "8ab051edd4816f33a5631d230d54059eeed52c5f",
-            "hash": "sha256-wqssB8WXXF2Lu9heII8nWLLOvI38cIfHSMA7OOd6jx0="
+            "rev": "db6bee857f73138ae02755bf09e392b31fef4540",
+            "hash": "sha256-NH9ZsYPG1X5wLKpIvcqDkMUyI/eDLVITY/IaY5djt/8="
         },
-        "version": "unstable-2023-02-20"
+        "version": "unstable-2024-05-20"
     },
     "swanstation": {
         "fetcher": "fetchFromGitHub",
