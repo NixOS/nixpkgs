@@ -22,9 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-oyULNRjC0pcVUOeTjjW3g3mB7KySYcwAS+/KwQEIkK4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pyyaml ];
+  dependencies = [ pyyaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
