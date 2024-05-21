@@ -1,45 +1,54 @@
-{ lib
-, boto
-, buildPythonPackage
-, fasteners
-, fetchFromGitHub
-, freezegun
-, google-reauth
-, httplib2
-, oauth2client
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, retry-decorator
-, rsa
-, six
+{
+  lib,
+  boto,
+  buildPythonPackage,
+  fasteners,
+  fetchFromGitHub,
+  freezegun,
+  google-auth,
+  google-auth-httplib2,
+  google-reauth,
+  httplib2,
+  oauth2client,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  retry-decorator,
+  rsa,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "gcs-oauth2-boto-plugin";
-  version = "3.0";
-  format = "setuptools";
+  version = "3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = pname;
+    repo = "gcs-oauth2-boto-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-slTxh2j9VhLiSyiTmJIFFakzpzH/+mgilDRxx0VqqKQ=";
+    hash = "sha256-lEcty0Eqe2FvjMWkPBYHHM9eL5Wsqr53TGSS9bfCBrQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rsa==4.7.2" "rsa" \
-      --replace "version='2.7'" "version='${version}'"
-  '';
+  pythonRelaxDeps = [
+    "google-auth"
+    "rsa"
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     boto
     freezegun
+    google-auth
     google-reauth
+    google-auth-httplib2
     httplib2
     oauth2client
     pyopenssl
@@ -48,13 +57,9 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gcs_oauth2_boto_plugin"
-  ];
+  pythonImportsCheck = [ "gcs_oauth2_boto_plugin" ];
 
   meta = with lib; {
     description = "Auth plugin allowing use the use of OAuth 2.0 credentials for Google Cloud Storage";
