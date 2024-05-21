@@ -10357,8 +10357,6 @@ self: super: with self; {
 
   prison = callPackage ../development/python-modules/prison { };
 
-  proboscis = callPackage ../development/python-modules/proboscis { };
-
   process-tests = callPackage ../development/python-modules/process-tests { };
 
   procmon-parser = callPackage ../development/python-modules/procmon-parser { };
