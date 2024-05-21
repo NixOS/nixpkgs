@@ -5,12 +5,13 @@
 , certifi
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-cloud";
   version = "1.4.11";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-s84pK52uMupxQfdMldV14V3nj+yVku1Vw13CRX4o08U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     certifi
   ];
@@ -29,10 +34,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i '/codecov/d' requirements.txt
-  '';
-
   pythonImportsCheck = [
     "crownstone_cloud"
   ];
@@ -40,7 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for communicating with Crownstone Cloud and devices";
     homepage = "https://github.com/Crownstone-Community/crownstone-lib-python-cloud";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
