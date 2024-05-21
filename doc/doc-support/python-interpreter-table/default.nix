@@ -9,7 +9,6 @@ let
   data = pkgs.writeText "python-interpreter-table.md"
     (toJSON (import ./collect-data { inherit pkgs; inherit (pkgs) lib; }));
 
-  keys = ''[.attrname, (if .aliases == null then "" else .aliases|join(", ") end) , .interpreter]'';
 in pkgs.runCommand "python-table-md" {
     EXTRA_PATH = with pkgs; lib.makeBinPath [ jq unixtools.column ];
     inherit data;
@@ -20,7 +19,7 @@ in pkgs.runCommand "python-table-md" {
   |-|-|-|
   EOF
   cat $data \
-    | jq --raw-output '(.[] | ${keys}) | @tsv' -- \
+    | jq --raw-output '(.[] | [.attrname, .aliases, .interpreter]) | @tsv' -- \
     | column -t -s$'\t' -o ' | ' \
     | awk '{print "| "$0" |"}' >> $out
   ''

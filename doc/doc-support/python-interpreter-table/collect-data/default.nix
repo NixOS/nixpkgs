@@ -120,7 +120,14 @@ let
   ]
   */
   toRows = data:
-    map (interpreter: data.${interpreter} // { inherit interpreter; }) (naturalSort (attrNames data));
+    map (interpreter:
+      {
+        aliases = join ", " data.${interpreter}.aliases or [];
+        inherit (data.${interpreter}) attrname;
+        inherit interpreter;
+      }
+    ) (naturalSort (attrNames data));
 
+  join = lib.strings.concatStringsSep;
 in
 toRows result
