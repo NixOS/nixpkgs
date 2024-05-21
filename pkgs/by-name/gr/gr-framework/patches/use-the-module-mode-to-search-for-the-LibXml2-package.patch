@@ -1,0 +1,25 @@
+From 78a86da95c7227cbfd0f3073841df5409a576837 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloomm@gmail.com>
+Date: Wed, 31 Jan 2024 16:50:36 +0000
+Subject: [PATCH] Use the module mode to search for the `LibXml2` package.
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5f865a5b..5550b493 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -117,7 +117,7 @@ if(GR_USE_BUNDLED_LIBRARIES)
+   # (`ONLY_CMAKE_FIND_ROOT_PATH` option is not inherited to `find_package` calls within the LibXml2 config file)
+   find_package(LibXml2 NO_MODULE ONLY_CMAKE_FIND_ROOT_PATH)
+ else()
+-  find_package(LibXml2 NO_MODULE)
++  find_package(LibXml2 MODULE)
+ endif()
+
+ # Find the following packages only in 3rdparty, if `GR_USE_BUNDLED_LIBRARIES` is set
+--
+2.42.0
+

@@ -20896,7 +20896,7 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
-  gr-framework = libsForQt5.callPackage ../development/libraries/gr-framework {
+  gr-framework = callPackage ../by-name/gr/gr-framework/package.nix {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
