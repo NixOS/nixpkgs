@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-security";
-  version = "6.0.0";
+  version = "7.0.0";
   fpyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zq/BhpiZBnEQvYMMXMmLybjzLY6oQMofaTsaX1Kl+LA=";
+    hash = "sha256-WRLu1+nTdY/cqNJuHcJrQZQ9xHAyCKEYQmbiwlLhrWY=";
   };
 
   nativeBuildInputs = [
