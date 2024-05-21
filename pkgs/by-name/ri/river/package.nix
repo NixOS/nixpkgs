@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitea
 , libGL
 , libX11
@@ -14,14 +15,14 @@
 , wayland-protocols
 , wlroots_0_17
 , xwayland
-, zig_0_11
+, zig_0_12
 , withManpages ? true
 , xwaylandSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.1";
+  version = "0.3.2";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -31,14 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H/908/TP2uzJD1yH4mCXHvorY+4kAhzEkWn6nZGsyBg=";
+    hash = "sha256-I09cR5aN7qXOzV9HDXaL4TjoeJcVa0Ch00zxOJokdDE=";
   };
+
+  deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     pkg-config
     wayland
     xwayland
-    zig_0_11.hook
+    zig_0_12.hook
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -55,14 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  zigBuildFlags = lib.optional withManpages "-Dman-pages"
-                  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ] ++ lib.optional withManpages "-Dman-pages" ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
   '';
 
-  passthru.providedSessions = [ "river" ];
+  passthru = {
+    providedSessions = [ "river" ];
+    updateScript = ./update.nu;
+  };
 
   meta = {
     homepage = "https://codeberg.org/river/river";
