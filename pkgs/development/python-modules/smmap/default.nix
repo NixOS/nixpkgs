@@ -16,7 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-jXkCjqbMEx2l6rCZpdlamY1DxneZVv/+O0VQQJEQdto=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "smmap" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
