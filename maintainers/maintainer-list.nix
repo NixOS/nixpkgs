@@ -13000,6 +13000,12 @@
     githubId = 14259816;
     name = "Abin Simon";
   };
+  me-and = {
+    name = "Adam Dinwoodie";
+    email = "nix.thunder.wayne@post.dinwoodie.org";
+    github = "me-and";
+    githubId = 1397507;
+  };
   meatcar = {
     email = "nixpkgs@denys.me";
     github = "meatcar";
