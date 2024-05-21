@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, immich-go }:
 buildGoModule rec {
   pname = "immich-go";
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
     rev = "${version}";
-    hash = "sha256-zYqPPLDfBx4FLvZIo5E6nAeIiFfBCLI00xLieXFkMxs=";
+    hash = "sha256-TibDbA4rrr9+WmKAyd3CQ0lxFFv3v/A2HO6Iu66mgFM=";
   };
 
-  vendorHash = "sha256-Y5BujN2mk662oKxQpenjFlxazST2GqWr9ug0sOsxKbY=";
+  vendorHash = "sha256-nOJJz5KEXqxl3tP1Q12Cb/fugtxR67RjzH6khKg3ppE=";
 
   # options used by upstream:
   # https://github.com/simulot/immich-go/blob/0.13.2/.goreleaser.yaml
