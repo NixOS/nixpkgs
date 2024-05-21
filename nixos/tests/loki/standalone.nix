@@ -52,6 +52,11 @@
     machine.wait_for_unit("promtail.service")
     machine.wait_for_open_port(3100)
     machine.wait_for_open_port(9080)
+
+    machine.wait_until_succeeds(
+      "journalctl -o cat -u loki.service | grep 'Starting Loki' | grep 'version=${pkgs.grafana-loki.version}'"
+    )
+
     machine.succeed("echo 'Loki Ingestion Test' > /var/log/testlog")
     # should not have access to journal unless specified
     machine.fail(
