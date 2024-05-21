@@ -97,7 +97,7 @@ buildNpmPackage rec {
   # Here, we create a local cache of electron zip-files, so electron-packager can copy from it
   postConfigure = ''
     mkdir local-cache
-    cp -r --no-preserve=all ${electron}/libexec/electron electron
+    cp -r --no-preserve=all ${electron.dist} electron
     pushd electron
     zip -qr ../local-cache/electron-v${electron.version}-${platformInfo.zipSuffix}.zip *
     popd
