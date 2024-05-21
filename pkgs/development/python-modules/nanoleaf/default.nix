@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +25,14 @@ buildPythonPackage rec {
       --replace-fail 'gitVersion' '"${version}"'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nanoleaf"
-  ];
+  pythonImportsCheck = [ "nanoleaf" ];
 
   meta = with lib; {
     description = "Module for interacting with Nanoleaf Aurora lighting";
