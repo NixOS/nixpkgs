@@ -33,12 +33,15 @@ buildPythonPackage rec {
     "requests"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     defang
     dnspython
