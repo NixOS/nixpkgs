@@ -16,12 +16,16 @@ stdenv.mkDerivation rec {
 
   # https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-devel/m4/m4-1.4.19-r1.ebuild
   patches = lib.optional stdenv.hostPlatform.isLoongArch64 ./loong-fix-build.patch;
-  postPatch = if stdenv.hostPlatform.isLoongArch64 then ''
+  postPatch = ''
+    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  '' + lib.optionalString stdenv.hostPlatform.isLoongArch64 ''
     touch ./aclocal.m4 ./lib/config.hin ./configure ./doc/stamp-vti || die
     find . -name Makefile.in -exec touch {} + || die
-  '' else null;
+  '';
 
   strictDeps = true;
+
   enableParallelBuilding = true;
 
   doCheck = false;

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , buildPackages
+, updateAutotoolsGnuConfigScriptsHook
 , ncurses
 , pkg-config
 , abiVersion ? "6"
@@ -63,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
     pkg-config
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
    # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.

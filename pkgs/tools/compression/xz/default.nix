@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
+  postPatch = ''
+    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  '';
+
   preCheck = ''
     # Tests have a /bin/sh dependency...
     patchShebangs tests

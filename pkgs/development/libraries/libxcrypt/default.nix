@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, perl
+{ lib, stdenv, fetchurl, fetchpatch, perl, updateAutotoolsGnuConfigScriptsHook
 # Update the enabled crypt scheme ids in passthru when the enabled hashes change
 , enableHashes ? "strong"
 , nixosTests
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ;
 
   nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
     perl
   ] ++ lib.optionals fbLLVM17 [
     autoreconfHook

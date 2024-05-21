@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     ./CVE-2023-48795.patch
   ];
 
+  postPatch = ''
+    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
+  '';
+
   outputs = [ "out" "dev" "devdoc" ];
 
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc

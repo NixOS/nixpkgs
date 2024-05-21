@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
     patchShebangs scripts
   '';
 

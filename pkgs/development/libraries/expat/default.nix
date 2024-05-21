@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 # for passthru.tests
 , python3
 , perlPackages
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";

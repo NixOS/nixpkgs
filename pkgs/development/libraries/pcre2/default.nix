@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , withJitSealloc ? true
 }:
 
@@ -12,6 +13,8 @@ stdenv.mkDerivation rec {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
     hash = "sha256-4qU5hP8LB9/bWuRIa7ubIcyo598kNAlsyb8bcow1C8s=";
   };
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   postPatch = ''
     # Fix jit autodetection:

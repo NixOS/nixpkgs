@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
   postPatch = if vanilla then null else ''
     rm -f check/check-requires-private check/check-gtk check/missing
+    # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+    substituteInPlace ./config.guess ./glib/config.guess --replace-fail /usr/bin/uname uname
   '';
 
   buildInputs = [ libiconv ];
