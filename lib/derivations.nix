@@ -61,31 +61,31 @@ in
         (lazyDerivation { inherit derivation }).passthru
 
         (lazyDerivation { inherit derivation }).pythonPath
+
     # Inputs
 
-    structured function argument
+    Takes an attribute set with the following attributes
 
-    : derivation
-      : The derivation to be wrapped.
+    `derivation`
+    : The derivation to be wrapped.
 
-    : meta
-      : Optional meta attribute.
+    `meta`
+    : Optional meta attribute.
 
-        While this function is primarily about derivations, it can improve
-        the `meta` package attribute, which is usually specified through
-        `mkDerivation`.
+      While this function is primarily about derivations, it can improve
+      the `meta` package attribute, which is usually specified through
+      `mkDerivation`.
 
-    : passthru
-      : Optional list of assumed outputs. Default: ["out"]
+    `passthru`
+    : Optional extra values to add to the returned attrset.
 
-        This must match the set of outputs that the returned derivation has.
-        You must use this when the derivation has multiple outputs.
+      This can be used for adding package attributes, such as `tests`.
 
-    : outputs
-      : Optional list of assumed outputs. Default: ["out"]
+    `outputs`
+    : Optional list of assumed outputs. Default: ["out"]
 
-        This must match the set of outputs that the returned derivation has.
-        You must use this when the derivation has multiple outputs.
+      This must match the set of outputs that the returned derivation has.
+      You must use this when the derivation has multiple outputs.
   */
   lazyDerivation =
     args@{
