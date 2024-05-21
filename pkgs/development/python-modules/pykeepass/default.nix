@@ -29,6 +29,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    argon2-cffi
     setuptools
   ];
 
@@ -39,8 +40,6 @@ buildPythonPackage rec {
     pycryptodomex
     setuptools
   ];
-
-  propagatedNativeBuildInputs = [ argon2-cffi ];
 
   nativeCheckInputs = [
     pyotp

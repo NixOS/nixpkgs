@@ -31,8 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-dO4qw5Jx0exwb4RuOhu6qvGxQZ+LayHtXDHZKADLTEI=";
   };
 
-  nativeBuildInputs = [ rustPlatform.cargoSetupHook rustPlatform.maturinBuildHook ];
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi rustPlatform.cargoSetupHook rustPlatform.maturinBuildHook ];
   buildInputs = [ libiconv ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [ appdirs pyyaml ];

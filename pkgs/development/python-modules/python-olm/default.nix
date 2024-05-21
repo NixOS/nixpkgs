@@ -25,7 +25,7 @@ buildPythonPackage {
     future
   ];
 
-  propagatedNativeBuildInputs = [
+  nativeBuildInputs = [
     cffi
   ];
 

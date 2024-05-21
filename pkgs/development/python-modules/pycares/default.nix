@@ -30,7 +30,7 @@ buildPythonPackage rec {
     idna
   ];
 
-  propagatedNativeBuildInputs = [
+  nativeBuildInputs = [
     cffi
   ];
 

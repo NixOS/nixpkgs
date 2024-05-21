@@ -18,8 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-NTEafcAU/PU1/2n3pb3m8dbZptI9j9nnmVG4iFqHHe8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi pkg-config ];
   buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = [ cffi ];
   nativeCheckInputs = [ pytestCheckHook ];

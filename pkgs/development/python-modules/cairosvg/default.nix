@@ -21,11 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-QyUx1yNHKRuanr+2d3AmtgdWP9hxnEbudC2wrvcnG6A=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ cairocffi setuptools ];
 
   propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
-
-  propagatedNativeBuildInputs = [ cairocffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
