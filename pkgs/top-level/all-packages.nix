@@ -29395,6 +29395,9 @@ with pkgs;
 
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
+  windows11-fonts = (callPackage ../data/fonts/windows-fonts { }).windows11;
+  windows10-fonts = (callPackage ../data/fonts/windows-fonts { }).windows10;
+
   work-sans  = callPackage ../data/fonts/work-sans { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
