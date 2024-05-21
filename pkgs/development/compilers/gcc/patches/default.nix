@@ -133,8 +133,12 @@ in
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
+# Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
+++ optional (atLeast14 && stdenv.isDarwin && langAda) ../patches/14/gcc-darwin-remove-coreservices.patch
+
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optionals (stdenv.isDarwin && langAda) ({
+  "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
   "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
   "12" = [ ./gnat-darwin-dylib-install-name.patch ];
 }.${majorVersion} or [])
