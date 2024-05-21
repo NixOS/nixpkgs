@@ -22,12 +22,11 @@
 , pkg-config
 , metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
 , vulkanSupport ? false
-, mpiSupport ? false # Increases the runtime closure by ~700M
+, rpcSupport ? false
 , vulkan-headers
 , vulkan-loader
 , ninja
 , git
-, mpi
 }:
 
 let
@@ -35,7 +34,7 @@ let
   # otherwise we get libstdc++ errors downstream.
   # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
-  inherit (lib) cmakeBool cmakeFeature optionals;
+  inherit (lib) cmakeBool cmakeFeature optionals optionalString;
 
   darwinBuildInputs =
     with darwin.apple_sdk.frameworks;
@@ -103,7 +102,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
-    ++ optionals mpiSupport [ mpi ]
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
@@ -120,7 +118,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "LLAMA_CUDA" cudaSupport)
     (cmakeBool "LLAMA_HIPBLAS" rocmSupport)
     (cmakeBool "LLAMA_METAL" metalSupport)
-    (cmakeBool "LLAMA_MPI" mpiSupport)
+    (cmakeBool "LLAMA_RPC" rpcSupport)
     (cmakeBool "LLAMA_VULKAN" vulkanSupport)
   ]
       ++ optionals cudaSupport [
@@ -144,6 +142,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ++ optionals metalSupport [
         (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
         (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+      ] ++ optionals rpcSupport [
+        "-DLLAMA_RPC=ON"
+        # This is done so we can move rpc-server out of bin because llama.cpp doesn't
+        # install rpc-server in their install target.
+        "-DCMAKE_SKIP_BUILD_RPATH=ON"
       ];
 
   # upstream plans on adding targets at the cmakelevel, remove those
@@ -153,7 +156,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mv $out/bin/server $out/bin/llama-server
     mkdir -p $out/include
     cp $src/llama.h $out/include/
-  '';
+  '' + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
 
   passthru.updateScript = nix-update-script {
     attrPath = "llama-cpp";
