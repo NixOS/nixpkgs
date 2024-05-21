@@ -42,6 +42,12 @@ buildGoModule rec {
     "-X=main.gitTreeState=clean"
   ];
 
+  postPatch = ''
+    # Don't check for updates.
+    substituteInPlace cmd/syft/internal/options/update_check.go \
+      --replace-fail "CheckForAppUpdate: true" "CheckForAppUpdate: false"
+  '';
+
   preBuild = ''
     ldflags+=" -X main.gitCommit=$(cat COMMIT)"
     ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
@@ -51,9 +57,6 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = ''
-    # avoid update checks when generating completions
-    export SYFT_CHECK_FOR_APP_UPDATE=false
-
     installShellCompletion --cmd syft \
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \
@@ -64,7 +67,6 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    export SYFT_CHECK_FOR_APP_UPDATE=false
     $out/bin/syft --help
     $out/bin/syft version | grep "${version}"
 
