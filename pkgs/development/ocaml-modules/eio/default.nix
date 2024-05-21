@@ -63,8 +63,8 @@ buildDunePackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
-    changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/v${version}/CHANGES.md";
+    homepage = "https://github.com/ocaml-multicore/${pname}";
+    changelog = "https://github.com/ocaml-multicore/${pname}/raw/v${version}/CHANGES.md";
     description = "Effects-Based Parallel IO for OCaml";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ toastal ];
