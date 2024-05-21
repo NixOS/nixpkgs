@@ -50,6 +50,7 @@ buildPythonPackage rec {
     })
     ./3.8.6-CVE-2024-23334.patch
     ./3.8.6-CVE-2024-30251.patch
+    ./3.8.6-CVE-2024-27306.patch
   ];
 
   postPatch = ''
