@@ -7,19 +7,20 @@
 , pytestCheckHook
 , python
 , pythonOlder
+, setuptools
 , testers
 }:
 
 buildPythonPackage rec {
   pname = "hy";
   version = "0.29.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hylang";
-    repo = pname;
+    repo = "hy";
     rev = "refs/tags/${version}";
     hash = "sha256-8b2V78mwzSThmVl1SfMGBw8VSpE5rCuucnIyD0nq5To=";
   };
@@ -27,7 +28,11 @@ buildPythonPackage rec {
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     funcparserlib
   ] ++
   lib.optionals (pythonOlder "3.9") [
