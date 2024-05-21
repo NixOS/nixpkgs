@@ -1,5 +1,3 @@
-# For debugging, run from this directory:
-#     nix-build .
 { pkgs ? (import ../../.. { config = {}; overlays = []; }) }:
 let
   lib = pkgs.lib;
@@ -13,7 +11,6 @@ let
     zipAttrsWith
     ;
   inherit (lib.lists) naturalSort;
-  inherit (lib.strings) toJSON;
 
   interpreterName = python:
     let
@@ -121,28 +118,18 @@ let
     { attrname = "python311"; aliases = [ "python3" ]; interpreter = "CPython 3.11"; }
   ]
   */
-  toRows = data:
-    map (interpreter:
-      {
-        aliases = join ", " data.${interpreter}.aliases or [];
-        inherit (data.${interpreter}) attrname;
-        inherit interpreter;
-      }
-    ) (naturalSort (attrNames data));
+  toMarkdown = data:
+    let
+      line = interpreter: ''
+        | ${data.${interpreter}.attrname} | ${join ", " data.${interpreter}.aliases or []} | ${interpreter} |
+      '';
+    in
+    join "" (map line (naturalSort (attrNames data)));
 
   join = lib.strings.concatStringsSep;
 in
-pkgs.runCommand "python-table-md" {
-  EXTRA_PATH = with pkgs; lib.makeBinPath [ jq unixtools.column ];
-  data = toJSON (toRows result);
-} ''
-  export PATH=$PATH:$EXTRA_PATH
-  cat > $out << EOF
+''
   | Package | Aliases | Interpeter |
   |---------|---------|------------|
-  EOF
-  echo $data \
-    | jq --raw-output '(.[] | [.attrname, .aliases, .interpreter]) | @tsv' -- \
-    | column -t -s$'\t' -o ' | ' \
-    | awk '{print "| "$0" |"}' >> $out
+  ${toMarkdown result}
 ''
