@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
 
-, cmdstanpy
-, numpy
-, matplotlib
-, pandas
-, holidays
-, tqdm
-, importlib-resources
+  cmdstanpy,
+  numpy,
+  matplotlib,
+  pandas,
+  holidays,
+  tqdm,
+  importlib-resources,
 
-, dask
-, distributed
+  dask,
+  distributed,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,9 @@ buildPythonPackage rec {
 
   env.PROPHET_REPACKAGE_CMDSTAN = "false";
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cmdstanpy
     numpy
     matplotlib
@@ -48,7 +49,10 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  passthru.optional-dependencies.parallel = [ dask distributed ] ++ dask.optional-dependencies.dataframe;
+  optional-dependencies.parallel = [
+    dask
+    distributed
+  ] ++ dask.optional-dependencies.dataframe;
 
   preCheck = ''
     # use the generated files from $out for testing
