@@ -3,8 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   setuptools,
-  nosexcover,
-  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [ nosexcover ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "A pure python implementation of a sliding window memory map manager";
