@@ -1,16 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-
-# build-system
 , setuptools
-
-# dependencies
 , importlib-metadata
 , platformdirs
 , tomli
-
-# tests
+, pythonOlder
 , pytestCheckHook
 }:
 
@@ -19,23 +14,22 @@ buildPythonPackage rec {
   version = "0.40.2";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     platformdirs
     tomli
   ];
-
-  # nose is unavailable on pypy
-  #doCheck = !isPyPy;
 
   nativeCheckInputs = [
     pytestCheckHook
