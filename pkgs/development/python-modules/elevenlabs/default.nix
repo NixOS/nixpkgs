@@ -1,13 +1,10 @@
 { buildPythonPackage
 , fetchFromGitHub
-, ffmpeg
 , httpx
 , ipython
 , lib
-, mpv
 , poetry-core
 , pydantic
-, pytestCheckHook
 , requests
 , typing-extensions
 , websockets
@@ -40,12 +37,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "elevenlabs"
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    ffmpeg
-    mpv
   ];
 
   meta = {
