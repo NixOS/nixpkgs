@@ -67,13 +67,13 @@ in stdenv.mkDerivation {
   ];
 
   patches = [
-    ./remove-conan.patch
-    ./fix-cmake-find-packages.patch
-    ./add-cstdint.patch
-    ./fix-zoned-time.patch
-    ./fix-git-versioning.patch
-    ./add-explicit-libpng.patch
-    ./fix-cmake-install.patch
+    ./patches/remove-conan.patch
+    ./patches/fix-cmake-find-packages.patch
+    ./patches/add-cstdint.patch
+    ./patches/fix-zoned-time.patch
+    ./patches/fix-git-versioning.patch
+    ./patches/add-explicit-libpng.patch
+    ./patches/fix-cmake-install.patch
   ];
 
   postPatch = ''
