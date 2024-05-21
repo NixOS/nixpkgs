@@ -1,6 +1,6 @@
-{ lib, buildGo122Module, fetchFromGitHub, testers, flyctl, installShellFiles, gitUpdater }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles, gitUpdater }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "flyctl";
   version = "0.2.55";
 
