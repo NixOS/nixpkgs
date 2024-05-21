@@ -4,12 +4,13 @@
 , certifi
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-sse";
   version = "2.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-RUqo68UAVGV+JmauKsGlp7dG8FzixHBDnr3eho/IQdY=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     aiohttp
