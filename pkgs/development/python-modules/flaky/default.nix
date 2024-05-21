@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, mock
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -11,33 +13,36 @@ buildPythonPackage rec {
   version = "3.8.1";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-RyBKgeyQXz1az71h2uq8raj51AMWFtm8sGGEYXKWmfU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    mock
-    pytest
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    # based on tox.ini
-    pytest -k 'example and not options' --doctest-modules test/test_pytest/
-    pytest -k 'example and not options' test/test_pytest/
-    pytest -p no:flaky test/test_pytest/test_flaky_pytest_plugin.py
-    pytest --force-flaky --max-runs 2  test/test_pytest/test_pytest_options_example.py
-  '';
+  pythonImportsCheck = [ "flaky" ];
+
+  disabledTests = [
+    # AssertionError and ValueError
+    "test_flaky_plugin_handles_non_ascii_byte_string_in_exception"
+    "test_flaky_plugin_identifies_failure"
+    "test_something_flaky"
+    "test_write_then_read"
+    "test_writelines_then_read"
+  ];
 
   meta = with lib; {
-    changelog = "https://github.com/box/flaky/blob/v${version}/HISTORY.rst";
+    description = "Plugin for pytest that automatically reruns flaky tests";
     homepage = "https://github.com/box/flaky";
-    description = "Plugin for nose or py.test that automatically reruns flaky tests";
+    changelog = "https://github.com/box/flaky/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }
