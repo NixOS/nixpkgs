@@ -13,8 +13,8 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.3.1";
+  pyproject = true;
   # upper bound due to use of `distutils`; remove after next release:
   disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
@@ -22,13 +22,8 @@ buildPythonPackage rec {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-h//igmSV1cPAFifE1woIluSyGwZBRByYMLqeY3oLHnk=";
+    hash = "sha256-YjEJbDM9+PiC3Kse8NA/b/yJBsReaK6yIyEB9uktiEc=";
   };
-
-  # Ninja is not detected by setuptools for some reason even though it's present:
-  postPatch = ''
-    substituteInPlace "setup.cfg" --replace "    ninja" ""
-  '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
