@@ -14,16 +14,16 @@ on:
     # While `edited` is also triggered when the PR title/body is changed,
     # this PR action is fairly quick, and PR's don't get edited that often,
     # so it shouldn't be a problem
+    # There is a feature request for adding a `base_changed` event:
+    # https://github.com/orgs/community/discussions/35058
     types: [opened, synchronize, reopened, edited]
 
 permissions: {}
 
-# Create a check-by-name concurrency group based on the pull request number. if
-# an event triggers a run on the same PR while a previous run is still in
-# progress, the previous run will be canceled and the new one will start.
-concurrency:
-  group: check-by-name-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+# We don't use a concurrency group here, because the action is triggered quite often (due to the PR edit
+# trigger), and contributers would get notified on any canceled run.
+# There is a feature request for supressing notifications on concurrency-canceled runs:
+# https://github.com/orgs/community/discussions/13015
 
 jobs:
   check:
