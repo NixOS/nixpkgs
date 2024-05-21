@@ -1,9 +1,10 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,26 +19,23 @@ buildPythonPackage rec {
     hash = "sha256-nc8C5l8pcbgAR7N3Ro5yomjhXArzzxI45v8U9/kRQ7g=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    attrs
-  ];
+  dependencies = [ attrs ];
 
   # Has a test dependency on trio, which depends on outcome.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "outcome"
-  ];
+  pythonImportsCheck = [ "outcome" ];
 
   meta = {
     description = "Capture the outcome of Python function calls";
     homepage = "https://github.com/python-trio/outcome";
     changelog = "https://github.com/python-trio/outcome/releases/tag/v${version}";
-    license = with lib.licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ catern ];
   };
 }
