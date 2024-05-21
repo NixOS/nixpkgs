@@ -6617,6 +6617,11 @@ self: super: with self; {
     inherit (pkgs) libsodium;
   };
 
+  libnbd = toPythonModule (pkgs.libnbd.override {
+    buildPythonBindings = true;
+    python3 = python;
+  });
+
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
