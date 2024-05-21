@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, libxkbcommon
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
-, wayland-protocols
-, wayland-scanner
-, buildDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cairo,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  buildDocs ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2M8f3kN6tihwKlUCp2Qowv5xD6Ufb71AURXqwQShlXI=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
@@ -53,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/emersion/slurp";
     license = licenses.mit;
     mainProgram = "slurp";
-    maintainers = with maintainers; [ buffet nickcao ];
+    maintainers = with maintainers; [
+      buffet
+      nickcao
+    ];
   };
 })
