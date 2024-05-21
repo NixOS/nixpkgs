@@ -13,6 +13,13 @@ let
   inherit (lib.lists) sortOn map naturalSort;
   inherit (lib.strings) hasInfix hasPrefix hasSuffix;
 
+  interpreterName = python:
+    let
+      cuteName = {
+        cpython = "CPython";
+        pypy = "PyPy";
+      };
+    in ''${cuteName.${python.implementation}} ${python.pythonVersion}'';
   isPythonInterpreterName = name: (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
   aliasFilterWithExcludes = excludeList: name:
     isPythonInterpreterName name &&
@@ -30,8 +37,8 @@ let
   The return type is an attrset with the following shape:
   ```
   {
-    ${interpreterFieldValue} = {
-      interpreter = ${interpreterFieldValue};
+    ${interpreterName} = {
+      interpreter = ${interpreterName};
       attrname = ${attrname};
     };
     ....
@@ -55,13 +62,8 @@ let
         pkgs.pythonInterpreters;
     in
     mapAttrs'
-    (name: value: let
-      interpreterFieldValue =
-        (import ./nix/interpreterFieldValue.nix { python = value; });
-    in nameValuePair
-      interpreterFieldValue
-      {
-        interpreter = interpreterFieldValue;
+    (name: value: nameValuePair (interpreterName value) {
+        interpreter = (interpreterName value);
         attrname = name;
       })
     interpreters';
@@ -73,7 +75,7 @@ let
 
   ```
   {
-    ${interpreterFieldValue} = { interpreter = [ <alias1> <alias2> ... ]] };
+    ${interpreterName} = { interpreter = [ <alias1> <alias2> ... ]] };
     ....
   }
   ```
@@ -96,7 +98,7 @@ let
       aliasFilter = aliasFilterWithExcludes excludeList;
       aliases' = filterAttrs (name: _: aliasFilter name) pkgs;
       foldFn = (acc: name: value: let
-        interpreter = import ./nix/interpreterFieldValue.nix { python = value; };
+        interpreter = interpreterName value;
       in acc // {
         ${interpreter} = {
           aliases = (acc.${interpreter}.aliases or []) ++ [name];
@@ -105,11 +107,11 @@ let
     in
     foldlAttrs foldFn {} aliases';
 
-  #  Combine results from interpreters and aliases zipped by ${interpreterFieldValue}.
+  #  Combine results from interpreters and aliases zipped by ${interpreterName}.
   tableData = zipAttrsWith (_: values: values) [ aliases interpreters ];
 
   /* Return a list of table rows as attrsets.
-    The table columns are ${attrname}, ${aliases} and ${interpreterFieldValue}.
+    The table columns are ${attrname}, ${aliases} and ${interpreterName}.
   */
   toRows = data:
     # For each key in the sorted list merge their previously zipped values.
