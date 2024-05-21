@@ -12894,8 +12894,6 @@ with pkgs;
 
   sigal = callPackage ../applications/misc/sigal { };
 
-  sigi = callPackage ../applications/misc/sigi { };
-
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signalbackup-tools = darwin.apple_sdk_11_0.callPackage
@@ -20894,7 +20892,7 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
-  gr-framework = libsForQt5.callPackage ../development/libraries/gr-framework {
+  gr-framework = callPackage ../by-name/gr/gr-framework/package.nix {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
@@ -24552,8 +24550,6 @@ with pkgs;
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
   swiftclient = with python3Packages; toPythonApplication python-swiftclient;
-
-  sword = callPackage ../development/libraries/sword { };
 
   biblesync = callPackage ../development/libraries/biblesync { };
 
@@ -28670,7 +28666,7 @@ with pkgs;
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono { };
 
-  kde-rounded-corners = libsForQt5.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
+  kde-rounded-corners = kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
 
   khmeros = callPackage ../data/fonts/khmeros { };
 
@@ -36265,8 +36261,6 @@ with pkgs;
   augustus = callPackage ../games/augustus { };
 
   ballerburg = callPackage ../games/ballerburg { } ;
-
-  blockattack = callPackage ../games/blockattack { } ;
 
   colobot = callPackage ../games/colobot { };
 

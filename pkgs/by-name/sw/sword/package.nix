@@ -1,32 +1,53 @@
-{ lib, stdenv, fetchurl, pkg-config, icu, clucene_core, curl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  icu,
+  clucene_core,
+  curl,
+}:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "sword";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchurl {
-    url = "https://www.crosswire.org/ftpmirror/pub/sword/source/v1.8/${pname}-${version}.tar.gz";
-    sha256 = "14syphc47g6svkbg018nrsgq4z6hid1zydax243g8dx747vsi6nf";
+    url = "https://www.crosswire.org/ftpmirror/pub/sword/source/v${lib.versions.majorMinor finalAttrs.version}/sword-${finalAttrs.version}.tar.gz";
+    hash = "sha256-QkCc894vrxEIUj4sWsB0XSH57SpceO2HjuncwwNCa4o=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ icu clucene_core curl ];
+  buildInputs = [
+    icu
+    clucene_core
+    curl
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   prePatch = ''
     patchShebangs .;
   '';
 
-  configureFlags = [ "--without-conf" "--enable-tests=no" ];
+  configureFlags = [
+    "--without-conf"
+    "--enable-tests=no"
+  ];
+
   CXXFLAGS = [
     "-Wno-unused-but-set-variable"
+    "-Wno-unknown-warning-option"
     # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
     "-DU_USING_ICU_NAMESPACE=1"
   ];
 
-  meta = with lib; {
-    description = "A software framework that allows research manipulation of Biblical texts";
-    homepage = "http://www.crosswire.org/sword/";
+  meta = {
+    description = "Software framework that allows research manipulation of Biblical texts";
+    homepage = "https://www.crosswire.org/sword/";
     longDescription = ''
       The SWORD Project is the CrossWire Bible Society's free Bible software
       project. Its purpose is to create cross-platform open-source tools --
@@ -36,9 +57,8 @@ stdenv.mkDerivation rec {
       translators of the Bible, and have a growing collection of many hundred
       texts in around 100 languages.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-
-}
+})

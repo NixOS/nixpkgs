@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems

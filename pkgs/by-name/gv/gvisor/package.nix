@@ -6,6 +6,7 @@
 , iptables
 , makeWrapper
 , procps
+, glibc
 }:
 
 buildGoModule {
@@ -22,6 +23,12 @@ buildGoModule {
     rev = "9d995324d058812a5476f8c06b20167012511e9c";
     hash = "sha256-idgUEbYAfnm/HphVs12Sj1FwG+jmL2BBr0PJnG9BC3A=";
   };
+
+    # Replace the placeholder with the actual path to ldconfig
+  postPatch = ''
+    substituteInPlace runsc/container/container.go \
+      --replace-fail '"/sbin/ldconfig"' '"${glibc}/bin/ldconfig"'
+  '';
 
   vendorHash = "sha256-jbMXeNXzvjfJcIfHjvf8I3ePjm6KFTXJ94ia4T2hUs4=";
 

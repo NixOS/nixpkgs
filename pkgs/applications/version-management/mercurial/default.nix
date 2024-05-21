@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
 # depends on rust-cpython which won't support python312
 # https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9

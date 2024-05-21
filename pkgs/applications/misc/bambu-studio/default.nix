@@ -43,7 +43,6 @@
   webkitgtk,
   wxGTK31,
   xorg,
-  fetchpatch,
   withSystemd ? stdenv.isLinux,
 }:
 let
