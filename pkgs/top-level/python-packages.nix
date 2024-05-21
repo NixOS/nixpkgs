@@ -8863,8 +8863,6 @@ self: super: with self; {
 
   nose-cov = callPackage ../development/python-modules/nose-cov { };
 
-  nose-cprof = callPackage ../development/python-modules/nose-cprof { };
-
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
