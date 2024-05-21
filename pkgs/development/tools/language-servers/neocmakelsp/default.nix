@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Decodetalkers/neocmakelsp";
     license = licenses.mit;
     platforms = platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ rewine multivac61 ];
     mainProgram = "neocmakelsp";
   };
 }
