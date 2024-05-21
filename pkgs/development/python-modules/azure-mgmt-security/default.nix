@@ -20,11 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-WRLu1+nTdY/cqNJuHcJrQZQ9xHAyCKEYQmbiwlLhrWY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure Security Center Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/security/azure-mgmt-security";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-security_${version}/sdk/security/azure-mgmt-security/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
