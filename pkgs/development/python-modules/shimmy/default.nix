@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "shimmy";
-  version = "1.3.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Farama-Foundation";
     repo = "Shimmy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rYBbGyMSFF/iIGruKn2JXKAVIZIfJDEHUEZUESiUg/k=";
+    hash = "sha256-/wIXjOGb3UeMQdeifYagd7OcxbBcdGPS09mjvkFsWmk=";
   };
 
   build-system = [
@@ -54,10 +54,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
-
-    # Broken since ale-py v0.9.0 due to API change
-    # https://github.com/Farama-Foundation/Shimmy/issues/120
-    "tests/test_atari.py"
   ];
 
   preCheck = ''
