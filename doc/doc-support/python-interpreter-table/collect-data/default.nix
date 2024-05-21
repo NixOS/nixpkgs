@@ -1,7 +1,7 @@
 { pkgs, lib }:
 let
   inherit (lib.attrsets) attrNames mapAttrsToList mergeAttrsList zipAttrsWith;
-  inherit (lib.lists) sortOn map;
+  inherit (lib.lists) sortOn map naturalSort;
 
   interpreters = import ./interpreters.nix {
     inherit lib;
@@ -21,13 +21,8 @@ let
     The table columns are ${pkgKey}, ${aliases} and ${interpreterFieldValue}.
   */
   toRows = data:
-    let
-      toComparable = import ./nix/toComparable.nix { inherit lib; };
-      # Get a sorted list with the table data keys.
-      tableEntryKeyList = sortOn toComparable (attrNames data);
-    in
     # For each key in the sorted list merge their previously zipped values.
-    map (key: mergeAttrsList data.${key}) tableEntryKeyList;
+    map (key: mergeAttrsList data.${key}) (naturalSort (attrNames data));
 
 in
 toRows tableData
