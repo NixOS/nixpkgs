@@ -2494,8 +2494,6 @@ self: super: with self; {
 
   courlan = callPackage ../development/python-modules/courlan { };
 
-  cov-core = callPackage ../development/python-modules/cov-core { };
-
   coverage = callPackage ../development/python-modules/coverage { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
