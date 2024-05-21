@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, looseversion
-, mmtf-python
-, nose
-, numpy
-, pandas
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  looseversion,
+  mmtf-python,
+  nose,
+  numpy,
+  pandas,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-PRdemBo+bB2xJWmF2NylFTfNwEEo67i6XSaeDAFmQ/c=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "looseversion"
-  ];
+  pythonRelaxDeps = [ "looseversion" ];
 
   propagatedBuildInputs = [
     numpy
@@ -36,9 +33,7 @@ buildPythonPackage rec {
     looseversion
   ];
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     runHook preCheck
@@ -48,9 +43,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "biopandas"
-  ];
+  pythonImportsCheck = [ "biopandas" ];
 
   meta = {
     description = "Working with molecular structures in pandas DataFrames";
