@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   libuuid,
   libsodium,
@@ -27,13 +26,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.7.0";
+  version = "1.7.0-unstable-2024-05-09";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-nHT18bADESDBHoo9P+J3gGc092hRYs2vaWupgqlkvaA=";
+    # FIXME: switch to a tagged release once available > 1.7.0
+    # Fix for https://github.com/NixOS/nixpkgs/issues/313350
+    rev = "3ac510f6a41feb1b695381fa30869d557c00b822";
+    hash = "sha256-ZmkeYPiCy7vkXnMFbtUF4761K+I+Ef7UbmSY7dJG09U=";
   };
 
   nativeBuildInputs = [
@@ -76,11 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # code refactoring of bcachefs-tools broke reading passphrases from stdin (vs. terminal)
     # upstream issue https://github.com/koverstreet/bcachefs-tools/issues/261
-    (fetchpatch {
-    url = "https://github.com/koverstreet/bcachefs-tools/commit/38b0cb721d2a35f5a4af429bc7bd367461f2fa26.patch";
-    hash = "sha256-/9reye+Qoa+EMkS+wfdX+KwDeLHHJ/S+Qm7sWl0MtqM=";
-  })
-];
+    ./fix-encrypted-boot.patch
+  ];
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py
