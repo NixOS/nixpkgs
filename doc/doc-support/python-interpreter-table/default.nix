@@ -9,13 +9,18 @@ let
   data = pkgs.writeText "python-interpreter-table.md"
     (toJSON (import ./collect-data { inherit pkgs; inherit (pkgs) lib; }));
 
-  headers = ''["Package","Aliases", "Interpreter"]'';
   keys = ''[.pkgKey, (if .aliases == null then "" else .aliases|join(", ") end) , .interpreter]'';
-
-in pkgs.runCommand "python-table-md" { inherit data; } ''
-  export PATH=$PATH:${with pkgs; lib.makeBinPath [ jq unixtools.column ]}
+in pkgs.runCommand "python-table-md" {
+    EXTRA_PATH = with pkgs; lib.makeBinPath [ jq unixtools.column ];
+    inherit data;
+  } ''
+  export PATH=$PATH:$EXTRA_PATH
+  cat > $out << EOF
+  | Package | Aliases | Interpeter |
+  |-|-|-|
+  EOF
   cat $data \
-    | jq -r '(${headers} | (., map(length*"-"))), (.[] | ${keys}) | @tsv' -- \
+    | jq --raw-output '(.[] | ${keys}) | @tsv' -- \
     | column -t -s$'\t' -o ' | ' \
-    | awk '{print "| "$0" |"}' > $out
-''
+    | awk '{print "| "$0" |"}' >> $out
+  ''
