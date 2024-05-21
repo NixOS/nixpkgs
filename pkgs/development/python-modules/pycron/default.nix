@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, udatetime, pytz, pendulum, nose
-, delorean, coveralls, arrow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  udatetime,
+  pytz,
+  pendulum,
+  nose,
+  delorean,
+  coveralls,
+  arrow,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +23,15 @@ buildPythonPackage rec {
     sha256 = "12hkqrdfg3jbqkmck8i00ssyaw1c4hhvdhjxkmh2gm9pd99z5bpv";
   };
 
-  nativeCheckInputs = [ arrow coveralls delorean nose pendulum pytz udatetime ];
+  nativeCheckInputs = [
+    arrow
+    coveralls
+    delorean
+    nose
+    pendulum
+    pytz
+    udatetime
+  ];
 
   checkPhase = ''
     nosetests
