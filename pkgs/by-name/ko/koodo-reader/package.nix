@@ -12,9 +12,6 @@
   electron,
 }:
 
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
 mkYarnPackage rec {
   pname = "koodo-reader";
   version = "1.6.6";
@@ -68,7 +65,7 @@ mkYarnPackage rec {
     export HOME=$(mktemp -d)
     yarn --offline build
 
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
     yarn --offline run electron-builder --dir \
       -c.electronDist=electron-dist \
