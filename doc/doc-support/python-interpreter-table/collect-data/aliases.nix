@@ -1,6 +1,6 @@
 /* Look for aliases in the attrset `pkgs`.
 
-Two packages <pkgKey1> has and alias <pkgKey2> they return the same <table-fied-value> .
+Two packages <attrname1> has and alias <attrname2> they return the same <table-fied-value> .
 
 The return type is an attrset with the following shape:
 

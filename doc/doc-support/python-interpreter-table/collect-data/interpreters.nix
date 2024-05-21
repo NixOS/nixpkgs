@@ -5,7 +5,7 @@ The return type is an attrset with the following shape:
 {
   ${interpreterFieldValue} = {
     interpreter = ${interpreterFieldValue};
-    pkgKey = ${pkgKey};
+    attrname = ${attrname};
   };
   ....
 }
@@ -15,8 +15,8 @@ Example:
 
 ```
 {
-  "CPython 3.10" = { interpreter = "CPython 3.10"; pkgKey = "python310"; };
-  "PyPy 3.10" = { interpreter = "PyPy 3.10"; pkgKey = "pypy310"; };
+  "CPython 3.10" = { interpreter = "CPython 3.10"; attrname = "python310"; };
+  "PyPy 3.10" = { interpreter = "PyPy 3.10"; attrname = "pypy310"; };
   ....
 }
 ```
@@ -39,6 +39,6 @@ in mapAttrs'
       interpreterFieldValue
       {
         interpreter = interpreterFieldValue;
-        pkgKey = name;
+        attrname = name;
       })
     interpreters

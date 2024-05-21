@@ -10,7 +10,7 @@ let
   aliases =
     let
       # Collect interpreter keys to be excluded from the aliases set
-      excludeList = mapAttrsToList (_: value: value.pkgKey) interpreters;
+      excludeList = mapAttrsToList (_: value: value.attrname) interpreters;
     in
     import ./aliases.nix { inherit pkgs lib excludeList; };
 
@@ -18,7 +18,7 @@ let
   tableData = zipAttrsWith (_: values: values) [ aliases interpreters ];
 
   /* Return a list of table rows as attrsets.
-    The table columns are ${pkgKey}, ${aliases} and ${interpreterFieldValue}.
+    The table columns are ${attrname}, ${aliases} and ${interpreterFieldValue}.
   */
   toRows = data:
     # For each key in the sorted list merge their previously zipped values.

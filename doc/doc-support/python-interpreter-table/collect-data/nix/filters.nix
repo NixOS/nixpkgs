@@ -1,17 +1,17 @@
-# `pkgKey` must follow the regex `r"(pypy|python)(\d*)"` (Python flavor)
+# `attrname` must follow the regex `r"(pypy|python)(\d*)"` (Python flavor)
 { lib }:
 let
-  aliasFilterWithExcludes = excludeList: pkgKey:
+  aliasFilterWithExcludes = excludeList: attrname:
     let
       inherit (lib.strings) removePrefix toIntBase10;
       # It's faster to prepend a 0 and call `toIntBase10` than to check if the suffix is ""
-      nameSuffix = "0" + (removePrefix "python" (removePrefix "pypy" pkgKey));
+      nameSuffix = "0" + (removePrefix "python" (removePrefix "pypy" attrname));
     in
-      ((lib.strings.hasPrefix "python" pkgKey) || (lib.strings.hasPrefix "pypy" pkgKey)) &&
+      ((lib.strings.hasPrefix "python" attrname) || (lib.strings.hasPrefix "pypy" attrname)) &&
       # If the suffix contains more than an int number, then it isn't an interpreter alias
       (builtins.tryEval(toIntBase10 nameSuffix)).success &&
       # Aliases are not part of the `pkgs.pythonInterpreters` attrs
-      ! builtins.elem pkgKey excludeList;
+      ! builtins.elem attrname excludeList;
 
 in {
   inherit aliasFilterWithExcludes;
