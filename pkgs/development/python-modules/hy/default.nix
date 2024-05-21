@@ -1,14 +1,15 @@
-{ lib
-, astor
-, buildPythonPackage
-, fetchFromGitHub
-, funcparserlib
-, hy
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, testers
+{
+  lib,
+  astor,
+  buildPythonPackage,
+  fetchFromGitHub,
+  funcparserlib,
+  hy,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   version = "0.29.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hylang";
@@ -28,20 +29,11 @@ buildPythonPackage rec {
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    funcparserlib
-  ] ++
-  lib.optionals (pythonOlder "3.9") [
-    astor
-  ];
+  dependencies = [ funcparserlib ] ++ lib.optionals (pythonOlder "3.9") [ astor ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # For test_bin_hy
@@ -58,14 +50,12 @@ buildPythonPackage rec {
     # For backwards compatibility with removed pkgs/development/interpreters/hy
     # Example usage:
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
-    withPackages = python-packages:
-      (python.withPackages
-        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
-          name = "${hy.name}-env";
-          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
-            mainProgram = "hy";
-          };
-        });
+    withPackages =
+      python-packages:
+      (python.withPackages (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+        name = "${hy.name}-env";
+        meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
+      });
   };
 
   meta = with lib; {
@@ -73,6 +63,10 @@ buildPythonPackage rec {
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mazurel nixy thiagokokada ];
+    maintainers = with maintainers; [
+      mazurel
+      nixy
+      thiagokokada
+    ];
   };
 }
