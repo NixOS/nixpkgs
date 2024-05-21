@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, importlib-metadata
-, platformdirs
-, tomli
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  importlib-metadata,
+  platformdirs,
+  tomli,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     importlib-metadata
@@ -31,9 +30,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG.md";
@@ -61,6 +58,9 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.asl20;
     mainProgram = "yapf";
-    maintainers = with lib.maintainers; [ AndersonTorres siddharthist ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      siddharthist
+    ];
   };
 }
