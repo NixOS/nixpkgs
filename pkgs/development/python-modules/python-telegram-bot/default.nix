@@ -15,7 +15,6 @@
 , pythonOlder
 , pytz
 , setuptools
-, wheel
 , tornado
 }:
 
@@ -33,12 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-l5twJbyZh30+pt9DsCpQRuSav8qYNGlIhQW0qY9BmO4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiolimiter
     apscheduler
     cachetools
