@@ -73,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab mazurel nixy thiagokokada ];
+    maintainers = with maintainers; [ mazurel nixy thiagokokada ];
   };
 }
