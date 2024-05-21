@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # electron builds must be writable on darwin
   preBuild = lib.optionalString stdenv.isDarwin ''
-    cp -r ${electron}/Applications/Electron.app .
+    cp -r ${electron.dist}/Electron.app .
     chmod -R u+w Electron.app
   '';
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      -c.electronDist=${if stdenv.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
