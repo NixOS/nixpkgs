@@ -50,7 +50,6 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [
     setuptools
-    wheel
   ];
 
   dependencies = with python.pkgs; [
