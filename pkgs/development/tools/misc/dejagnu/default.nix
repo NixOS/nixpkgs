@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, expect, makeWrapper }:
+{ fetchurl, lib, stdenv, expect, makeWrapper, updateAutotoolsGnuConfigScriptsHook }:
 
 stdenv.mkDerivation rec {
   pname = "dejagnu";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook makeWrapper ];
   buildInputs = [ expect ];
 
   # dejagnu-1.6.3 can't successfully run tests in source tree:

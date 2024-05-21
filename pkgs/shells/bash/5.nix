@@ -2,6 +2,7 @@
 , stdenv
 , buildPackages
 , fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , bison
 , util-linux
 
@@ -97,7 +98,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ]
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook bison ]
     ++ lib.optional withDocs texinfo
     ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 

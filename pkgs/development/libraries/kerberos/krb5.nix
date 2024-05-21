@@ -74,6 +74,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace config/shlib.conf \
         --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
+  ''
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  + ''
+    substituteInPlace ./config/config.guess --replace-fail /usr/bin/uname uname
   '';
 
   libFolders = [ "util" "include" "lib" "build-tools" ];

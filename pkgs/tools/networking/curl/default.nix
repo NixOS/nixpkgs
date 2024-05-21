@@ -65,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./8.7.1-compression-fix.patch
   ];
 
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
   postPatch = ''
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
     patchShebangs scripts
   '';
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, writeTextDir
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook
 , withCMake ? true, cmake
 
 # sensitive downstream packages
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = lib.optionals withCMake [ cmake ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals withCMake [ cmake ];
 
   cmakeFlags = [] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "-DCARES_SHARED=OFF"
