@@ -9,7 +9,7 @@ let
   data = pkgs.writeText "python-interpreter-table.md"
     (toJSON (import ./collect-data { inherit pkgs; inherit (pkgs) lib; }));
 
-  keys = ''[.pkgKey, (if .aliases == null then "" else .aliases|join(", ") end) , .interpreter]'';
+  keys = ''[.attrname, (if .aliases == null then "" else .aliases|join(", ") end) , .interpreter]'';
 in pkgs.runCommand "python-table-md" {
     EXTRA_PATH = with pkgs; lib.makeBinPath [ jq unixtools.column ];
     inherit data;
