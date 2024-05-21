@@ -6,12 +6,7 @@
 }:
 
 let
-  inherit (lib)
-    mkEnableOption
-    mkPackageOption
-    mkOption
-    maintainers
-    ;
+  inherit (lib) mkEnableOption mkPackageOption mkOption maintainers;
   inherit (lib.types)
     bool
     port
@@ -156,5 +151,5 @@ in
 
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.Port ];
     };
-  meta.maintainers = with maintainers; [ nu-nu-ko ];
+    meta.maintainers = with maintainers; [ nu-nu-ko ];
 }
