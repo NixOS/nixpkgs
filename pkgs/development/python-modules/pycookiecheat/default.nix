@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, keyring
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, playwright
-, setuptools
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  keyring,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  playwright,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "n8henrie";
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     cryptography
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pycookiecheat"
-  ];
+  pythonImportsCheck = [ "pycookiecheat" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -67,9 +64,7 @@ buildPythonPackage rec {
     "test_load_firefox_cookie_db"
     "test_no_cookies"
     "test_warns_for_string_browser"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_slack_config"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_slack_config" ];
 
   meta = with lib; {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";
