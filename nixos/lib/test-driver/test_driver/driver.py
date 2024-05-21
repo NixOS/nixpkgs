@@ -9,7 +9,7 @@ from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional
 
 from colorama import Fore, Style
 
-from test_driver.logger import rootlog
+from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
@@ -49,6 +49,7 @@ class Driver:
     polling_conditions: List[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
+    logger: AbstractLogger
 
     def __init__(
         self,
@@ -56,6 +57,7 @@ class Driver:
         vlans: List[int],
         tests: str,
         out_dir: Path,
+        logger: AbstractLogger,
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
     ):
@@ -63,12 +65,13 @@ class Driver:
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
+        self.logger = logger
 
         tmp_dir = get_tmp_dir()
 
-        with rootlog.nested("start all VLans"):
+        with self.logger.nested("start all VLans"):
             vlans = list(set(vlans))
-            self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
+            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
 
         def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
             for s in scripts:
@@ -84,6 +87,7 @@ class Driver:
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
+                logger=self.logger,
             )
             for cmd in cmd(start_scripts)
         ]
@@ -92,19 +96,19 @@ class Driver:
         return self
 
     def __exit__(self, *_: Any) -> None:
-        with rootlog.nested("cleanup"):
+        with self.logger.nested("cleanup"):
             self.race_timer.cancel()
             for machine in self.machines:
                 machine.release()
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
-        with rootlog.nested("subtest: " + name):
+        with self.logger.subtest(name):
             try:
                 yield
                 return True
             except Exception as e:
-                rootlog.error(f'Test "{name}" failed with error: "{e}"')
+                self.logger.error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
     def test_symbols(self) -> Dict[str, Any]:
@@ -118,7 +122,7 @@ class Driver:
             machines=self.machines,
             vlans=self.vlans,
             driver=self,
-            log=rootlog,
+            log=self.logger,
             os=os,
             create_machine=self.create_machine,
             subtest=subtest,
@@ -150,13 +154,13 @@ class Driver:
 
     def test_script(self) -> None:
         """Run the test script"""
-        with rootlog.nested("run the VM test script"):
+        with self.logger.nested("run the VM test script"):
             symbols = self.test_symbols()  # call eagerly
             exec(self.tests, symbols, None)
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
-        rootlog.info(
+        self.logger.info(
             f"Test will time out and terminate in {self.global_timeout} seconds"
         )
         self.race_timer.start()
@@ -168,13 +172,13 @@ class Driver:
 
     def start_all(self) -> None:
         """Start all machines"""
-        with rootlog.nested("start all VMs"):
+        with self.logger.nested("start all VMs"):
             for machine in self.machines:
                 machine.start()
 
     def join_all(self) -> None:
         """Wait for all machines to shut down"""
-        with rootlog.nested("wait for all VMs to finish"):
+        with self.logger.nested("wait for all VMs to finish"):
             for machine in self.machines:
                 machine.wait_for_shutdown()
             self.race_timer.cancel()
@@ -182,7 +186,7 @@ class Driver:
     def terminate_test(self) -> None:
         # This will be usually running in another thread than
         # the thread actually executing the test script.
-        with rootlog.nested("timeout reached; test terminating..."):
+        with self.logger.nested("timeout reached; test terminating..."):
             for machine in self.machines:
                 machine.release()
             # As we cannot `sys.exit` from another thread
@@ -227,7 +231,7 @@ class Driver:
                     f"Unsupported arguments passed to create_machine: {args}"
                 )
 
-            rootlog.warning(
+            self.logger.warning(
                 Fore.YELLOW
                 + Style.BRIGHT
                 + "WARNING: Using create_machine with a single dictionary argument is deprecated and will be removed in NixOS 24.11"
@@ -246,13 +250,14 @@ class Driver:
             start_command=cmd,
             name=name,
             keep_vm_state=keep_vm_state,
+            logger=self.logger,
         )
 
     def serial_stdout_on(self) -> None:
-        rootlog._print_serial_logs = True
+        self.logger.print_serial_logs(True)
 
     def serial_stdout_off(self) -> None:
-        rootlog._print_serial_logs = False
+        self.logger.print_serial_logs(False)
 
     def check_polling_conditions(self) -> None:
         for condition in self.polling_conditions:
@@ -271,6 +276,7 @@ class Driver:
             def __init__(self, fun: Callable):
                 self.condition = PollingCondition(
                     fun,
+                    driver.logger,
                     seconds_interval,
                     description,
                 )
@@ -285,15 +291,17 @@ class Driver:
             def wait(self, timeout: int = 900) -> None:
                 def condition(last: bool) -> bool:
                     if last:
-                        rootlog.info(f"Last chance for {self.condition.description}")
+                        driver.logger.info(
+                            f"Last chance for {self.condition.description}"
+                        )
                     ret = self.condition.check(force=True)
                     if not ret and not last:
-                        rootlog.info(
+                        driver.logger.info(
                             f"({self.condition.description} failure not fatal yet)"
                         )
                     return ret
 
-                with rootlog.nested(f"waiting for {self.condition.description}"):
+                with driver.logger.nested(f"waiting for {self.condition.description}"):
                     retry(condition, timeout=timeout)
 
         if fun_ is None:
