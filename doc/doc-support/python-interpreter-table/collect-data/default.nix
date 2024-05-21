@@ -20,7 +20,8 @@ let
         pypy = "PyPy";
       };
     in ''${cuteName.${python.implementation}} ${python.pythonVersion}'';
-  isPythonInterpreterName = name:
+
+  isPythonInterpreter = name:
     /* NB: Package names that don't follow the regular expression:
       - `python-cosmopolitan` is not part of `pkgs.pythonInterpreters`.
       - `_prebuilt` interpreters are used for bootstrapping internally.
@@ -28,9 +29,9 @@ let
       - `rustpython` lacks `pythonVersion` and `implementation`.
     */
     (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
-  aliasFilterWithExcludes = excludeList: name:
-    isPythonInterpreterName name &&
-    ! builtins.elem name excludeList;
+
+  isAlias = excludeList: name:
+    isPythonInterpreter name && ! builtins.elem name excludeList;
 
   /* Collect Python interpreters from attrset `pkgs.pythonInterpreters`.
 
@@ -49,24 +50,19 @@ let
 
   ```
   {
-    "CPython 3.10" = { interpreter = "CPython 3.10"; attrname = "python310"; };
-    "PyPy 3.10" = { interpreter = "PyPy 3.10"; attrname = "pypy310"; };
+    "CPython 3.10" = { attrname = "python310"; };
+    "PyPy 3.10" = { attrname = "pypy310"; };
     ....
   }
   ```
   */
   interpreters =
     let
-      interpreters' = filterAttrs
-        (name: _: isPythonInterpreterName name)
-        pkgs.pythonInterpreters;
+      filtered = filterAttrs (name: _: isPythonInterpreter name) pkgs.pythonInterpreters;
     in
     mapAttrs'
-    (name: value: nameValuePair (interpreterName value) {
-        interpreter = (interpreterName value);
-        attrname = name;
-      })
-    interpreters';
+      (name: value: { name = interpreterName value; value = { attrname = name; }; })
+      filtered;
   /* Look for aliases in the attrset `pkgs`.
 
   Two packages <attrname1> has and alias <attrname2> they return the same <table-fied-value> .
@@ -95,27 +91,36 @@ let
     let
       # Collect interpreter keys to be excluded from the aliases set
       excludeList = mapAttrsToList (_: value: value.attrname) interpreters;
-      aliasFilter = aliasFilterWithExcludes excludeList;
-      aliases' = filterAttrs (name: _: aliasFilter name) pkgs;
-      foldFn = (acc: name: value: let
-        interpreter = interpreterName value;
-      in acc // {
-        ${interpreter} = {
-          aliases = (acc.${interpreter}.aliases or []) ++ [name];
-        };
-      });
+      filtered = filterAttrs (name: _: isAlias excludeList name) pkgs;
+      collectAliases = (acc: name: value:
+        let
+          interpreter = interpreterName value;
+        in acc // {
+          ${interpreter} = {
+            aliases = (acc.${interpreter}.aliases or []) ++ [name];
+          };
+        });
     in
-    foldlAttrs foldFn {} aliases';
+    foldlAttrs collectAliases {} filtered;
 
-  #  Combine results from interpreters and aliases zipped by ${interpreterName}.
-  tableData = zipAttrsWith (_: values: values) [ aliases interpreters ];
+  /*
+  Combine results from interpreters and aliases:
+  {
+    "CPython 3.10" = { aliases = [ ]; attrname = [ "python310" ]; };
+    "CPython 3.11" = { aliases = [ "python3" ]; attrname = [ "python311" ]; };
+  }
+  */
+  result = zipAttrsWith (_: values: mergeAttrsList values) [ aliases interpreters ];
 
-  /* Return a list of table rows as attrsets.
-    The table columns are ${attrname}, ${aliases} and ${interpreterName}.
+  /*
+  Return a list of table rows as attrsets, sorted by interpreter name and version:
+  [
+    { attrname = "python310"; aliases = [ ]; interpreter = "CPython 3.10"; }
+    { attrname = "python311"; aliases = [ "python3" ]; interpreter = "CPython 3.11"; }
+  ]
   */
   toRows = data:
-    # For each key in the sorted list merge their previously zipped values.
-    map (key: mergeAttrsList data.${key}) (naturalSort (attrNames data));
+    map (interpreter: data.${interpreter} // { inherit interpreter; }) (naturalSort (attrNames data));
 
 in
-toRows tableData
+toRows result
