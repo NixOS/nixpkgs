@@ -20,18 +20,18 @@ let
         pypy = "PyPy";
       };
     in ''${cuteName.${python.implementation}} ${python.pythonVersion}'';
-  isPythonInterpreterName = name: (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
+  isPythonInterpreterName = name:
+    /* NB: Package names that don't follow the regular expression:
+      - `python-cosmopolitan` is not part of `pkgs.pythonInterpreters`.
+      - `_prebuilt` interpreters are used for bootstrapping internally.
+      - `python3Minimal` contains python packages, left behind conservatively.
+      - `rustpython` lacks `pythonVersion` and `implementation`.
+    */
+    (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
   aliasFilterWithExcludes = excludeList: name:
     isPythonInterpreterName name &&
     ! builtins.elem name excludeList;
 
-  /* NB: About pkNames that don't follow the regular expression:
-    - `python-cosmopolitan` is not part of `pkgs.pythonInterpreters`.
-    - `_prebuilt` interpreters are used for bootstrapping internally.
-    - `python3Minimal` contains python packages, left behind conservatively.
-    - `rustpython` lacks `pythonVersion` and `implementation`.
-  */
-  interpreterFilter = aliasFilterWithExcludes [];
   /* Collect Python interpreters from attrset `pkgs.pythonInterpreters`.
 
   The return type is an attrset with the following shape:
@@ -58,7 +58,7 @@ let
   interpreters =
     let
       interpreters' = filterAttrs
-        (name: _: interpreterFilter name)
+        (name: _: isPythonInterpreterName name)
         pkgs.pythonInterpreters;
     in
     mapAttrs'
