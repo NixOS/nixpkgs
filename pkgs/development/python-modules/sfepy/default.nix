@@ -1,12 +1,18 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
+, cmake
+, cython_0
+, ninja
+, oldest-supported-numpy
+, setuptools
+, scikit-build
 , numpy
 , scipy
 , matplotlib
 , pyparsing
 , tables
-, cython_0
 , python
 , sympy
 , meshio
@@ -15,35 +21,42 @@
 , openssh
 , pyvista
 , pytest
-, pythonOlder
 , stdenv
 }:
 
 buildPythonPackage rec {
   pname = "sfepy";
-  version = "2023.1";
-  format = "setuptools";
+  version = "2024.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sfepy";
     repo = "sfepy";
     rev = "release_${version}";
-    hash = "sha256-PuU6DL9zftHltpYI9VZQzKGIP8l9UUU8GVChrHtpNM0=";
+    hash = "sha256-r2Qx9uJmVS4ugJxrIxg2UscnYu1Qr4hEkcz66NyWGmA=";
   };
 
-  propagatedBuildInputs = [
-    numpy
+  build-system = [
+    cmake
     cython_0
+    ninja
+    oldest-supported-numpy
+    setuptools
+    scikit-build
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  dependencies = [
+    numpy
     scipy
     matplotlib
     pyparsing
     tables
     sympy
     meshio
-    mpi4py
-    psutil
-    openssh
     pyvista
   ];
 
@@ -72,11 +85,11 @@ buildPythonPackage rec {
     ${python.interpreter} -c "import sfepy; sfepy.test()"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sfepy.org/";
     description = "Simple Finite Elements in Python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
     broken = stdenv.isDarwin;
   };
 }
