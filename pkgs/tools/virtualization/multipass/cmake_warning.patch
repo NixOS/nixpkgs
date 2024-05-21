@@ -1,0 +1,14 @@
+diff --git a/src/cert/CMakeLists.txt b/src/cert/CMakeLists.txt
+index d44a0b09..de440f24 100644
+--- a/src/cert/CMakeLists.txt
++++ b/src/cert/CMakeLists.txt
+@@ -22,7 +22,7 @@ add_library(cert STATIC
+ target_include_directories(cert PRIVATE
+   ${OPENSSL_INCLUDE_DIR})
+ 
+-foreach(flag -Wno-nested-anon-types -Wno-gnu -Wno-pedantic -Wno-ignored-qualifiers)
++foreach(flag -Wno-nested-anon-types -Wno-gnu -Wno-pedantic -Wno-ignored-qualifiers -Wno-ignored-attributes)
+   check_cxx_compiler_flag(${flag} SUPPORTED)
+   if(SUPPORTED)
+     target_compile_options(cert PRIVATE ${flag})
+

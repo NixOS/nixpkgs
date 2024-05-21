@@ -1,0 +1,33 @@
+name: "Set pending OfBorg status"
+on:
+  pull_request_target:
+
+# Sets the ofborg-eval status to "pending" to signal that we are waiting for
+# OfBorg even if it is running late. The status will be overwritten by OfBorg
+# once it starts evaluation.
+
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows (restricted) write access to
+# the GitHub repository. This means that it should not evaluate user input in a
+# way that allows code injection.
+
+permissions:
+  contents: read
+
+jobs:
+  action:
+    if: github.repository_owner == 'NixOS'
+    permissions:
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Set pending OfBorg status"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        curl \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -d '{"context": "ofborg-eval", "state": "pending", "description": "Waiting for OfBorg..."}' \
+          "https://api.github.com/repos/NixOS/nixpkgs/commits/${{ github.event.pull_request.head.sha }}/statuses"

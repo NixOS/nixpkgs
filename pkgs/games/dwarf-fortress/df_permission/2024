@@ -1,0 +1,57 @@
+From: Tarn Adams <tarn.adams@gmail.com>
+Date: Thu, 4 Apr 2024 20:18:35 -0700
+Subject: Re: Dwarf Fortress v50 Redistribution for NixOS
+To: Morgan <me@numin.it>
+
+Yeah, it's fine to continue redistributing the classic version as before.
+
+Ah, yeah, I'm aware of the command line issue.  Hopefully it can be cleaned
+up with some of the other missing functionality like legends mode image
+export.
+
+Tarn
+
+On Wed, Apr 3, 2024 at 1:26 AM Morgan <me@numin.it> wrote:
+
+> Tarn,
+>
+> I maintain the Dwarf Fortress package for NixOS (<https://nixos.org>),
+> and wanted to double check with you that packaging v50.x and later is
+> still okay. One of our maintainers previously received permission, but
+> that was 14(!) years ago:
+>
+>
+> https://github.com/NixOS/nixpkgs/blob/master/pkgs/games/dwarf-fortress/df_permission
+>
+> Users installing Dwarf Fortress using Nix automatically pull the
+> tar.bz2 classic builds from the Bay 12 Games site. The Nix package
+> recipes make minor changes to some of the executable files; namely,
+> patching paths to shared object files like SDL, ld-linux.so, and
+> libc++ using patchelf. Users who install Nix or run NixOS can run this
+> whole process automatically and have a working Dwarf Fortress with:
+>
+> `nix run nixpkgs#dwarf-fortress`
+>
+> We don't and can't distribute any of the files from Steam, though
+> users who buy the game can link the Steam game data directory into
+> their Nix Dwarf Fortress data directory and use the tile packs from
+> the Steam version, if they like.
+>
+> ~
+>
+> Enough of that formality: thanks for the game, it's a blast and a joy
+> for the imagination. I use it to make maps for large scale (50+
+> people) D&D campaigns in Southern California.
+>
+> BTW, automatic world generation mode using the command line seems to
+> be broken in v50.12. It navigates to the worldgen menu but doesn't get
+> farther. I'm hoping I can release some Nix scripts that people can use
+> to export world images and such in batch mode at some point, so I
+> don't have to even mess with extracting the game files to get
+> interesting map exports.
+>
+> Thanks,
+> Morgan Jones
+> ----
+> < We are failing in translating hyperreal concepts >  -The Board
+>

@@ -1,0 +1,25 @@
+From 533d064ce028a7ebd0ef3a845cb69f10ca04b09f Mon Sep 17 00:00:00 2001
+From: Jente Hidskes Ankarberg <jente@griffin.sh>
+Date: Fri, 17 Feb 2023 00:07:20 +0100
+Subject: [PATCH 2/2] fix open with O_CREAT
+
+---
+ fdbbackup/FileDecoder.actor.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git fdbbackup/FileDecoder.actor.cpp fdbbackup/FileDecoder.actor.cpp
+index 71f693259..547147ea0 100644
+--- a/fdbbackup/FileDecoder.actor.cpp
++++ b/fdbbackup/FileDecoder.actor.cpp
+@@ -433,7 +433,7 @@ public:
+ 					platform::createDirectory(path);
+ 				}
+ 			}
+-			self->lfd = open(self->file.fileName.c_str(), O_WRONLY | O_CREAT | O_TRUNC);
++			self->lfd = open(self->file.fileName.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0600);
+ 			if (self->lfd == -1) {
+ 				TraceEvent(SevError, "OpenLocalFileFailed").detail("File", self->file.fileName);
+ 				throw platform_error();
+-- 
+2.38.1
+

@@ -1,0 +1,59 @@
+From 4f5d0de7e35744cdbfa9e280ee7e15a54cf21abb Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 16 Feb 2020 14:24:07 -0600
+Subject: [PATCH 3/4] kdeinit-extra-libs
+
+---
+ src/kdeinit/kinit.cpp | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
+
+diff --git a/src/kdeinit/kinit.cpp b/src/kdeinit/kinit.cpp
+index 0801b75..622dd5f 100644
+--- a/src/kdeinit/kinit.cpp
++++ b/src/kdeinit/kinit.cpp
+@@ -96,9 +96,9 @@ static const char *extra_libs[] = {
+     "libKF5Parts.5.dylib",
+     "libKF5Plasma.5.dylib"
+ #else
+-    "libKF5KIOCore.so.5",
+-    "libKF5Parts.so.5",
+-    "libKF5Plasma.so.5"
++    NIXPKGS_KF5_KIOCORE,
++    NIXPKGS_KF5_PARTS,
++    NIXPKGS_KF5_PLASMA
+ #endif
+ };
+ #endif
+@@ -1524,20 +1524,6 @@ static int initXconnection()
+ }
+ #endif
+ 
+-#ifndef Q_OS_OSX
+-// Find a shared lib in the lib dir, e.g. libkio.so.
+-// Completely unrelated to plugins.
+-static QString findSharedLib(const QString &lib)
+-{
+-    QString path = QFile::decodeName(CMAKE_INSTALL_PREFIX "/" KDE_INSTALL_LIBDIR "/") + lib;
+-    if (QFile::exists(path)) {
+-        return path;
+-    }
+-    // We could also look in LD_LIBRARY_PATH, but really, who installs the main libs in different prefixes?
+-    return QString();
+-}
+-#endif
+-
+ extern "C" {
+ 
+     static void secondary_child_handler(int)
+@@ -1679,7 +1665,7 @@ int main(int argc, char **argv)
+ #if defined(Q_OS_UNIX) && !defined(Q_OS_OSX)
+     if (!d.suicide && qEnvironmentVariableIsEmpty("KDE_IS_PRELINKED")) {
+         for (const char *extra_lib : extra_libs) {
+-            const QString extra = findSharedLib(QString::fromLatin1(extra_lib));
++            const QString extra = QString::fromLatin1(extra_lib);
+             if (!extra.isEmpty()) {
+                 QLibrary l(extra);
+                 l.setLoadHints(QLibrary::ExportExternalSymbolsHint);
+-- 
+2.23.1
+

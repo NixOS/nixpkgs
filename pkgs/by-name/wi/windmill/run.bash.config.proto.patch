@@ -1,0 +1,41 @@
+diff --git a/windmill-worker/nsjail/run.bash.config.proto b/backend/windmill-worker/nsjail/run.bash.config.proto
+index e93e6b45..bbedb165 100644
+--- a/windmill-worker/nsjail/run.bash.config.proto
++++ b/windmill-worker/nsjail/run.bash.config.proto
+@@ -18,6 +18,12 @@ clone_newuser: {CLONE_NEWUSER}
+ keep_caps: false
+ keep_env: true
+ 
++mount {
++	src: "/nix/store"
++	dst: "/nix/store"
++	is_bind: true
++}
++
+ mount {
+     src: "/bin"
+     dst: "/bin"
+@@ -25,6 +31,7 @@ mount {
+ }
+ 
+ mount {
++    mandatory: false
+     src: "/lib"
+     dst: "/lib"
+ 	is_bind: true
+@@ -32,6 +39,7 @@ mount {
+ 
+ 
+ mount {
++    mandatory: false
+     src: "/lib64"
+     dst: "/lib64"
+ 	is_bind: true
+@@ -39,6 +47,7 @@ mount {
+ 
+ 
+ mount {
++    mandatory: false
+     src: "/usr"
+     dst: "/usr"
+ 	is_bind: true

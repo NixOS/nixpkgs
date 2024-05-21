@@ -1,0 +1,11 @@
+--- a/plaympeg.c	2014-09-04 08:55:10.646132150 +0200
++++ b/plaympeg.c	2014-09-04 08:56:57.465210820 +0200
+@@ -262,7 +262,7 @@
+       answer[i] = c;
+     }
+     answer[i] = 0;
+-    fprintf(stderr, answer + 4);
++    fprintf(stderr, "%s", answer + 4);
+   }
+   while(answer[3] == '-');
+ 

@@ -1,0 +1,90 @@
+--- copy/copy.c
++++ copy/copy.c
+@@ -46,7 +46,6 @@ static const char sccsid[] USED = "@(#)copy.sl	1.15 (gritter) 5/29/05";
+ #include <libgen.h>
+ #include <limits.h>
+ #include <dirent.h>
+-#include <utime.h>
+ #include <stdarg.h>
+ #include "sfile.h"
+ #include "memalign.h"
+@@ -441,12 +440,6 @@ attribs(const char *dst, const struct stat *sp)
+ 	if (oflag && ((sp->st_mode&S_IFMT) == S_IFLNK ?
+ 			lchown:chown)(dst, sp->st_uid, sp->st_gid) < 0)
+ 		complain("Unable to chown %s", dst);
+-	if (mflag && (sp->st_mode&S_IFMT) != S_IFLNK) {
+-		struct utimbuf	ut;
+-		ut.actime = sp->st_atime;
+-		ut.modtime = sp->st_mtime;
+-		utime(dst, &ut);
+-	}
+ }
+ 
+ static void
+--- cp/cp.c
++++ cp/cp.c
+@@ -56,7 +56,6 @@ static const char sccsid[] USED = "@(#)cp.sl	1.84 (gritter) 3/4/06";
+ #include	<libgen.h>
+ #include	<limits.h>
+ #include	<dirent.h>
+-#include	<utime.h>
+ #include	"sfile.h"
+ #include	"memalign.h"
+ #include	"alloca.h"
+@@ -354,18 +353,6 @@ permissions(const char *path, const struct stat *ssp)
+ 
+ 	mode = ssp->st_mode & 07777;
+ 	if (pflag) {
+-		struct utimbuf ut;
+-		ut.actime = ssp->st_atime;
+-		ut.modtime = ssp->st_mtime;
+-		if (utime(path, &ut) < 0) {
+-#if defined (SUS) || defined (S42)
+-			fprintf(stderr, "%s: cannot set times for %s\n%s: %s\n",
+-					progname, path,
+-					progname, strerror(errno));
+-#endif /* SUS || S42 */
+-			if (pers != PERS_MV)
+-				errcnt |= 010;
+-		}
+ 		if (myuid == 0) {
+ 			if (chown(path, ssp->st_uid, ssp->st_gid) < 0) {
+ #if defined (SUS) || defined (S42)
+--- touch/touch.c
++++ touch/touch.c
+@@ -47,7 +47,6 @@ static const char sccsid[] USED = "@(#)touch.sl	1.21 (gritter) 5/29/05";
+ #include	<stdlib.h>
+ #include	<errno.h>
+ #include	<libgen.h>
+-#include	<utime.h>
+ #include	<ctype.h>
+ #include	<time.h>
+ 
+@@ -80,7 +79,6 @@ static void
+ touch(const char *fn)
+ {
+ 	struct stat st;
+-	struct utimbuf ut;
+ 
+ 	if (stat(fn, &st) < 0) {
+ 		if (errno == ENOENT) {
+@@ -113,19 +111,6 @@ touch(const char *fn)
+ 			return;
+ 		}
+ 	}
+-	if (aflag)
+-		ut.actime = nacc;
+-	else
+-		ut.actime = st.st_atime;
+-	if (mflag)
+-		ut.modtime = nmod;
+-	else
+-		ut.modtime = st.st_mtime;
+-	if (utime(fn, nulltime ? NULL : &ut) < 0) {
+-		fprintf(stderr, "%s: cannot change times on %s\n",
+-				progname, fn);
+-		errcnt++;
+-	}
+ }
+ 
+ static void

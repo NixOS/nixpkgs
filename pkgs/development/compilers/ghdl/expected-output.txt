@@ -1,0 +1,8 @@
+simple-tb.vhd:71:5:@700ms:(report note): 32
+simple-tb.vhd:71:5:@900ms:(report note): 78
+simple-tb.vhd:71:5:@1100ms:(report note): 105
+simple-tb.vhd:71:5:@1300ms:(report note): 120
+simple-tb.vhd:71:5:@1500ms:(report note): 79
+simple-tb.vhd:71:5:@1700ms:(report note): 83
+simple-tb.vhd:71:5:@1900ms:(report note): 32
+simple-tb.vhd:75:1:@2100ms:(report note): All tests passed.

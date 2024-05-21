@@ -1,0 +1,12 @@
+diff --git a/viewer/viewer.go b/viewer/viewer.go
+index fcf850e..b0a0f8d 100644
+--- a/viewer/viewer.go
++++ b/viewer/viewer.go
+@@ -5,7 +5,6 @@ import (
+ 	"github.com/charmbracelet/bubbles/viewport"
+ 	tea "github.com/charmbracelet/bubbletea"
+ 	"github.com/charmbracelet/lipgloss"
+-	"github.com/mattn/go-runewidth"
+ 	"math"
+ 	"runtime"
+ 	"strings"

@@ -1,0 +1,12 @@
+diff --git a/src/gsm_pkexec.cpp b/src/gsm_pkexec.cpp
+index 5e1edf2f..717d7bf1 100644
+--- a/src/gsm_pkexec.cpp
++++ b/src/gsm_pkexec.cpp
+@@ -36,5 +36,6 @@ gsm_pkexec_create_root_password_dialog (const char *command)
+ gboolean
+ procman_has_pkexec (void)
+ {
+-  return g_file_test ("/usr/bin/pkexec", G_FILE_TEST_EXISTS);
++  return g_file_test ("/run/wrappers/bin/pkexec", G_FILE_TEST_EXISTS)
++      || g_file_test ("/usr/bin/pkexec", G_FILE_TEST_EXISTS);
+ }

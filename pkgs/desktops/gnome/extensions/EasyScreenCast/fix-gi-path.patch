@@ -1,0 +1,40 @@
+diff --git a/prefs.js b/prefs.js
+index 97b85a3..2fc6539 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -14,8 +14,8 @@
+ 'use strict';
+ 
+ const GIRepository = imports.gi.GIRepository;
+-GIRepository.Repository.prepend_search_path('/usr/lib64/gnome-shell');
+-GIRepository.Repository.prepend_library_path('/usr/lib64/gnome-shell');
++GIRepository.Repository.prepend_search_path('@gnomeShell@/lib/gnome-shell');
++GIRepository.Repository.prepend_library_path('@gnomeShell@/lib/gnome-shell');
+ 
+ const GObject = imports.gi.GObject;
+ const Gio = imports.gi.Gio;
+@@ -746,7 +746,7 @@ const EasyScreenCastSettingsWidget = GObject.registerClass({
+                 Lib.TalkativeLog('-^-NOT SET xdg-user video');
+ 
+                 ctx.CtrlExe.Execute(
+-                    '/usr/bin/sh -c "echo $HOME"',
++                    '/bin/sh -c "echo $HOME"',
+                     true,
+                     (success, out) => {
+                         Lib.TalkativeLog(`-^-CALLBACK sync S: ${success} out: ${out}`);
+diff --git a/utilaudio.js b/utilaudio.js
+index 957eda2..84af241 100644
+--- a/utilaudio.js
++++ b/utilaudio.js
+@@ -15,10 +15,7 @@
+ 
+ const GObject = imports.gi.GObject;
+ const GIRepository = imports.gi.GIRepository;
+-GIRepository.Repository.prepend_search_path('/usr/lib/gnome-shell');
+-GIRepository.Repository.prepend_library_path('/usr/lib/gnome-shell');
+-GIRepository.Repository.prepend_search_path('/usr/lib64/gnome-shell');
+-GIRepository.Repository.prepend_library_path('/usr/lib64/gnome-shell');
++GIRepository.Repository.prepend_search_path("@gnomeShell@/lib/gnome-shell");
+ const Gvc = imports.gi.Gvc;
+ 
+ const ExtensionUtils = imports.misc.extensionUtils;

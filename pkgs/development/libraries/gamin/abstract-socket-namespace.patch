@@ -1,0 +1,73 @@
+From 737452159d521aef2041a2767f3ebf9f68f4b6a9 Mon Sep 17 00:00:00 2001
+From: Christian Kampka <christian@kampka.net>
+Date: Tue, 1 Sep 2020 13:54:35 +0200
+Subject: [PATCH] Pin abstract namespace sockets to host_os
+
+Running programs with AC_RUN_IFELSE fails when cross-compiling.
+Since abstract namespace sockets are linux feature, we can easily
+assume it is available for linux and not for darwin.
+---
+ configure.in | 47 ++++++-----------------------------------------
+ 1 file changed, 6 insertions(+), 41 deletions(-)
+
+diff --git a/configure.in b/configure.in
+index eb129db..0ed82ba 100644
+--- a/configure.in
++++ b/configure.in
+@@ -387,47 +387,12 @@ fi
+ 
+ #### Abstract sockets
+ 
+-AC_MSG_CHECKING(abstract socket namespace)
+-AC_LANG_PUSH(C)
+-AC_RUN_IFELSE([AC_LANG_PROGRAM(
+-[[
+-#include <sys/types.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <stdio.h>
+-#include <sys/socket.h>
+-#include <sys/un.h>
+-#include <errno.h>
+-]],
+-[[
+-  int listen_fd;
+-  struct sockaddr_un addr;
+-  
+-  listen_fd = socket (PF_UNIX, SOCK_STREAM, 0);
+-  
+-  if (listen_fd < 0)
+-    {
+-      fprintf (stderr, "socket() failed: %s\n", strerror (errno));
+-      exit (1);
+-    }
+-
+-  memset (&addr, '\0', sizeof (addr));
+-  addr.sun_family = AF_UNIX;
+-  strcpy (addr.sun_path, "X/tmp/dbus-fake-socket-path-used-in-configure-test");
+-  addr.sun_path[0] = '\0'; /* this is what makes it abstract */
+-  
+-  if (bind (listen_fd, (struct sockaddr*) &addr, SUN_LEN (&addr)) < 0)
+-    {
+-       fprintf (stderr, "Abstract socket namespace bind() failed: %s\n", 
+-                strerror (errno));
+-       exit (1);
+-    }
+-  else 
+-    exit (0);
+-]])],
+-              [have_abstract_sockets=yes],
+-              [have_abstract_sockets=no])
+-AC_LANG_POP(C)
++AC_MSG_CHECKING([whether target os has abstract socket namespace])
++if test x$target_os = xlinux-gnu ; then
++    have_abstract_sockets=yes
++else
++    have_abstract_sockets=no
++fi	
+ AC_MSG_RESULT($have_abstract_sockets)
+ 
+ if test x$enable_abstract_sockets = xyes; then
+-- 
+2.25.4
+
