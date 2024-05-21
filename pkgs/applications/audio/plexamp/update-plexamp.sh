@@ -5,7 +5,7 @@
 set -Eeuxo pipefail
 
 cleanup() {
-    rm -rf "$TMPDIR"
+  rm -rf "$TMPDIR"
 }
 
 trap cleanup EXIT
@@ -42,7 +42,7 @@ if diff "$DEFAULT_NIX" "$WORKING_NIX"; then
 fi
 
 # update sha hash (convenietly provided)
-sed -i "s@sha.* = .*;@sha512 = \"$SHA512\";@g" "$WORKING_NIX"
+sed -i "s@hash.* = .*;@hash = \"sha512-$SHA512\";@g" "$WORKING_NIX"
 
 # update the changelog ("just" increment the number)
 CHANGELOG_URL=$(rg --only-matching 'changelog = "(.+)";' --replace '$1' $WORKING_NIX)
