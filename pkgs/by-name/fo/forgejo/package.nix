@@ -80,10 +80,6 @@ buildGoModule rec {
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
 
-  preBuild = ''
-    go run build/merge-forgejo-locales.go
-  '';
-
   postInstall = ''
     mkdir $data
     cp -R ./{templates,options} ${frontend}/public $data
@@ -93,10 +89,9 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  # $data is not available in goModules.drv and preBuild isn't needed
+  # $data is not available in goModules.drv
   overrideModAttrs = (_: {
     postPatch = null;
-    preBuild = null;
   });
 
   passthru = {
