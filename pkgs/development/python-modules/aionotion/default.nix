@@ -1,25 +1,26 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, certifi
-, ciso8601
-, fetchFromGitHub
-, frozenlist
-, mashumaro
-, poetry-core
-, pyjwt
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pytest-cov
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  ciso8601,
+  fetchFromGitHub,
+  frozenlist,
+  mashumaro,
+  poetry-core,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-cov,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2024.03.0";
+  version = "2024.03.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,14 +29,12 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aionotion";
     rev = "refs/tags/${version}";
-    hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
+    hash = "sha256-FPXltYgjU6ym/UhWEEbMBIJ+7REf+m5t0FnB/ZBeiM8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     certifi
     ciso8601
@@ -55,13 +54,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "examples"
-  ];
+  disabledTestPaths = [ "examples" ];
 
-  pythonImportsCheck = [
-    "aionotion"
-  ];
+  pythonImportsCheck = [ "aionotion" ];
 
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
