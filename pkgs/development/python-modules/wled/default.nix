@@ -1,24 +1,26 @@
 {
   lib,
   aiohttp,
+  aresponses,
   awesomeversion,
   backoff,
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
   poetry-core,
-  yarl,
-  aresponses,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
+  typer,
+  yarl,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "wled";
   version = "0.18.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -32,19 +34,26 @@ buildPythonPackage rec {
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
     cachetools
     yarl
   ];
+
+  passthru.optional-dependencies = {
+    cli = [
+      typer
+      zeroconf
+    ];
+  };
 
   nativeCheckInputs = [
     aresponses
