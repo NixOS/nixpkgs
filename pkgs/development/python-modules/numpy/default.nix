@@ -12,6 +12,7 @@
 , gfortran
 , meson-python
 , mesonEmulatorHook
+, nukeReferences
 , pkg-config
 , xcbuild
 
@@ -100,6 +101,7 @@ in buildPythonPackage rec {
     cython
     gfortran
     meson-python
+    nukeReferences
     pkg-config
   ] ++ lib.optionals (stdenv.isDarwin) [
     xcbuild.xcrun
@@ -133,6 +135,10 @@ in buildPythonPackage rec {
   '';
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    nuke-refs $out/${python.sitePackages}/numpy/__config__.py
+  '';
 
   nativeCheckInputs = [
     pytest-xdist
