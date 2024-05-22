@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, flex, cadical, symfpu, gmp, python3, gtest, libantlr3c, antlr3_4, boost, jdk, pythonBindings ? false }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "cvc5";
   version = "1.2.0";
@@ -23,26 +21,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake flex ];
   buildInputs = [
     cadical.dev symfpu gmp gtest libantlr3c antlr3_4 boost jdk
-    (python3.withPackages (ps: with ps; [ pyparsing tomli ] ++ optionals pythonBindings [ scikit-build cython ]))
+    (python3.withPackages (ps: with ps; [ pyparsing tomli ] ++ lib.optionals pythonBindings [ scikit-build cython ]))
   ];
 
   preConfigure = ''
     patchShebangs ./src/
   '';
 
-  postInstall = optionalString pythonBindings ''
+  postInstall = lib.optionalString pythonBindings ''
     mkdir -p $python/lib
     mv $out/lib/python3.11/ $python/lib/.
   '';
 
-  outputs = [ "out" "lib" "dev" ]  ++ optional pythonBindings "python";
+  outputs = [ "out" "lib" "dev" ]  ++ lib.optional pythonBindings "python";
   cmakeBuildType = "Production";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
-  ] ++ optionals pythonBindings [ "-DBUILD_BINDINGS_PYTHON=1" "-DPYTHONIC_PATH=${pythonic}" ];
+  ] ++ lib.optionals pythonBindings [ "-DBUILD_BINDINGS_PYTHON=1" "-DPYTHONIC_PATH=${pythonic}" ];
 
   doCheck = true;
 
