@@ -26,11 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-0FDhkIK8jy3/SFmCzrl9l4RTeIKDjO0o5UoODx6Wnfs=";
   };
 
+  build-system = [
+    setuptools
+    wheel
+  ];
+
   nativeBuildInputs = [
     cython
     pkg-config
-    setuptools
-    wheel
   ];
 
   buildInputs = [
