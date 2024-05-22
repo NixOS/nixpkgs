@@ -48,6 +48,7 @@ let
     file = [ ];
     sodium = [ libsodium ];
     threadshare = [ ];
+    inter = [ ];
 
     # mux
     flavors = [ ];
@@ -61,6 +62,7 @@ let
     onvif = [ pango ];
     raptorq = [ ];
     reqwest = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+    rtsp = [ ];
     rtp = [ ];
     webrtc = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
     webrtchttp = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
@@ -84,6 +86,7 @@ let
     dav1d = [
       # Only dav1d < 1.3 is supported for now.
       # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/1393
+      # TODO: Remove with gst-plugins-rs >=0.13.0
       (dav1d.overrideAttrs rec {
         version = "1.2.1";
         src = fetchFromGitHub {
@@ -142,7 +145,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.12.4";
+  version = "0.12.6";
 
   outputs = [ "out" "dev" ];
 
@@ -151,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-Qnp+e1Vww2kWjDG0x2tcigwDdG67I4xnm8+QrBI+o08=";
+    hash = "sha256-jROkSnae6kjXq6fWnUj2uVsaI7k7EkMRfbW7bfLfePA=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -176,12 +179,12 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.19.3" = "sha256-TjVXdnlYEfPLbUx1pC84rCC2MlNecECMK2Yo9XKwz9M=";
+      "cairo-rs-0.19.7" = "sha256-Up0p4hYMRNtmv1uItio1WhBwpm/gj0yxfitqC1Qs2S0=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
-      "gdk4-0.8.1" = "sha256-VPmegFZ/bC8x1vkl3YU208jQ8FCEKLwe6ZDatz4mIvM=";
-      "gstreamer-0.22.4" = "sha256-r5+wOEhTVztDMEu6t47yJ9HIlbXyjdvswUND4l7kPl8=";
+      "gdk4-0.8.2" = "sha256-DZjHlhzrELZ8M5YUM5kSeOphjF7863DmywFgGbZL4Jo=";
+      "gstreamer-0.22.5" = "sha256-2S18kyc6NqckesErr9rGVwJ357gH7VArjFVe/O5yGgQ=";
     };
   };
 
