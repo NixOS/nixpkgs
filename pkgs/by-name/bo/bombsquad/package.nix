@@ -23,7 +23,7 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-VLNO0TxI/KBj8RkpGjo9Rx40f7fuV3pK2kIoKff9sRU=";
+        hash = "sha256-YrbDhdVtNtxeE3fIRPIODwVO3lrxz7OAAYc7doBBQj8=";
       };
       aarch-64-linux = {
         name = "BombSquad_Linux_Arm64";
@@ -34,7 +34,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   name = "bombsquad";
-  version = "1.7.34";
+  version = "1.7.35";
   sourceRoot = ".";
   src = fetchurl {
     url = "https://files.ballistica.net/bombsquad/builds/${archive.name}_${finalAttrs.version}.tar.gz";
