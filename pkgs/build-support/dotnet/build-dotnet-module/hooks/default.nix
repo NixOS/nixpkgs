@@ -21,8 +21,8 @@ let
   libraryPath = lib.makeLibraryPath runtimeDeps;
 in
 {
-  dotnetConfigureHook = callPackage ({ }:
-    makeSetupHook {
+  dotnetConfigureHook = makeSetupHook
+    {
       name = "dotnet-configure-hook";
       substitutions = {
         nugetSource = nuget-source;
@@ -36,40 +36,46 @@ in
         ];
         inherit runtimeId;
       };
-    } ./dotnet-configure-hook.sh) { };
+    }
+    ./dotnet-configure-hook.sh;
 
-  dotnetBuildHook = callPackage ({ }:
-    makeSetupHook {
+  dotnetBuildHook = makeSetupHook
+    {
       name = "dotnet-build-hook";
       substitutions = {
         inherit buildType runtimeId;
       };
-    } ./dotnet-build-hook.sh) { };
+    }
+    ./dotnet-build-hook.sh;
 
-  dotnetCheckHook = callPackage ({ }:
-    makeSetupHook {
+  dotnetCheckHook = makeSetupHook
+    {
       name = "dotnet-check-hook";
       substitutions = {
         inherit buildType runtimeId libraryPath;
-        disabledTests = lib.optionalString (disabledTests != [])
-          (let
-            escapedNames = lib.lists.map (n: lib.replaceStrings [","] ["%2C"] n) disabledTests;
-            filters = lib.lists.map (n: "FullyQualifiedName!=${n}") escapedNames;
-          in
-          "${lib.concatStringsSep "&" filters}");
+        disabledTests = lib.optionalString (disabledTests != [ ])
+          (
+            let
+              escapedNames = lib.lists.map (n: lib.replaceStrings [ "," ] [ "%2C" ] n) disabledTests;
+              filters = lib.lists.map (n: "FullyQualifiedName!=${n}") escapedNames;
+            in
+            "${lib.concatStringsSep "&" filters}"
+          );
       };
-    } ./dotnet-check-hook.sh) { };
+    }
+    ./dotnet-check-hook.sh;
 
-  dotnetInstallHook = callPackage ({ }:
-    makeSetupHook {
+  dotnetInstallHook = makeSetupHook
+    {
       name = "dotnet-install-hook";
       substitutions = {
         inherit buildType runtimeId;
       };
-    } ./dotnet-install-hook.sh) { };
+    }
+    ./dotnet-install-hook.sh;
 
-  dotnetFixupHook = callPackage ({ }:
-    makeSetupHook {
+  dotnetFixupHook = makeSetupHook
+    {
       name = "dotnet-fixup-hook";
       substitutions = {
         dotnetRuntime = dotnet-runtime;
@@ -79,5 +85,6 @@ in
         dirname = "${coreutils}/bin/dirname";
         realpath = "${coreutils}/bin/realpath";
       };
-    } ./dotnet-fixup-hook.sh) { };
+    }
+    ./dotnet-fixup-hook.sh;
 }
