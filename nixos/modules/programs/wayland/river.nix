@@ -2,6 +2,8 @@
 
 let
   cfg = config.programs.river;
+
+  wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
   options.programs.river = {
@@ -9,13 +11,18 @@ in
 
     package = lib.mkPackageOption pkgs "river" {
       nullable = true;
-      default = pkgs.river.override {
-        xwaylandSupport = cfg.xwayland.enable;
-      };
       extraDescription = ''
+        If the package is not overridable with `xwaylandSupport`, then the module option
+        {option}`xwayland` will have no effect.
+
         Set to `null` to not add any River package to your path.
         This should be done if you want to use the Home Manager River module to install River.
       '';
+    } // {
+      apply = p: if p == null then null else
+        wayland-lib.genFinalPackage p {
+          xwaylandSupport = cfg.xwayland.enable;
+        };
     };
 
     xwayland.enable = lib.mkEnableOption "XWayland" // { default = true; };
