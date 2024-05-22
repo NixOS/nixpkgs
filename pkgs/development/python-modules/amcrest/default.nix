@@ -1,15 +1,16 @@
-{ lib
-, argcomplete
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, httpx
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, urllib3
-, typing-extensions
+{
+  lib,
+  argcomplete,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "amcrest"
-  ];
+  pythonImportsCheck = [ "amcrest" ];
 
   meta = with lib; {
     description = "Python module for Amcrest and Dahua Cameras";
