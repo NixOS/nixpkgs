@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  esbuild,
 }:
 
 let
@@ -28,11 +29,35 @@ let
     ];
   };
 
+  esbuild' = esbuild.override {
+    buildGoModule = args: buildGoModule (args // rec {
+      version = "0.14.38";
+      src = fetchFromGitHub {
+        owner = "evanw";
+        repo = "esbuild";
+        rev = "v${version}";
+        hash = "sha256-rvMi1oC7qGidvi4zrm9KCMMntu6LJGVOGN6VmU2ivQE=";
+      };
+      vendorHash = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+    });
+  };
+
   frontend = buildNpmPackage {
     inherit src version;
     pname = "fider-frontend";
 
+    dontNpmBuild = true;
+
+    nativeBuildInputs = [
+      esbuild'
+    ];
+
     npmDepsHash = "sha256-YsWRJab/dPiZxBwvE0B3cf/L8CJpdTrOD+bWU4OSX+o=";
+
+    env = {
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = 1;
+      ESBUILD_BINARY_PATH = lib.getExe esbuild';
+    };
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
