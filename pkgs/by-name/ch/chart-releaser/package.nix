@@ -23,7 +23,6 @@ buildGoModule rec {
 
   # Don't run tests.
   doCheck = false;
-  doInstallCheck = false;
 
   vendorHash = "sha256-S/V1kTgD/cXaJNYpPPNjM9ya2zv6Bsy/YBn7I/1EjwI=";
 
