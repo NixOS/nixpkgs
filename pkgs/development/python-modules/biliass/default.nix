@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "biliass";
-  version = "1.3.7";
+  version = "1.3.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "yutto-dev";
     repo = "biliass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Opb4rlGe+LDJZs3F7e/NZYfuMtHEWUZeMm8VZQfEzKI=";
+    hash = "sha256-hBorYAqtxTZ4LElxxJOGxC2g7sBRhRKVv6HOVHZn9FA=";
   };
 
   nativeBuildInputs = [
