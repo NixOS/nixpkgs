@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, weconnect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  weconnect,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,11 @@ buildPythonPackage rec {
       --replace-fail "pytest-cov" ""
   '';
 
-  pythonRelaxDeps = [
-    "python-dateutil"
-  ];
+  pythonRelaxDeps = [ "python-dateutil" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     paho-mqtt
@@ -52,13 +47,9 @@ buildPythonPackage rec {
     weconnect
   ] ++ weconnect.optional-dependencies.Images;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "weconnect_mqtt"
-  ];
+  pythonImportsCheck = [ "weconnect_mqtt" ];
 
   meta = with lib; {
     description = "Python client that publishes data from Volkswagen WeConnect";
