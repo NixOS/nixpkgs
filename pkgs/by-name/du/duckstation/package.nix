@@ -77,10 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
 
-  doCheck = true;
-  checkPhase = ''
+  doInstallCheck = true;
+
+  installCheckPhase = ''
     runHook preCheck
-    bin/common-tests
+
+    $out/share/duckstation/common-tests
+
     runHook postCheck
   '';
 
