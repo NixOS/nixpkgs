@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.61.1";
+  version = "0.63.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = "django-allauth";
     rev = "refs/tags/${version}";
-    hash = "sha256-C9SYlL1yMnSb+Zpi2opvDw1stxAHuI9/XKHyvkM36Cg=";
+    hash = "sha256-+8UYQMoocZrEehrHzRCDkdcH+n3w519qArhL3IxiD4c=";
   };
 
   nativeBuildInputs = [
@@ -51,20 +51,27 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
-    pyjwt
-    python3-openid
-    requests
-    requests-oauthlib
-  ] ++ pyjwt.optional-dependencies.crypto;
+  ];
 
   preBuild = "${python.interpreter} -m django compilemessages";
 
   passthru.optional-dependencies = {
+    mfa = [
+      qrcode
+    ];
+    openid = [
+      python3-openid
+    ];
     saml = [
       python3-saml
     ];
-    mfa = [
-      qrcode
+    socialaccount = [
+      pyjwt
+      requests
+      requests-oauthlib
+    ] ++ pyjwt.optional-dependencies.crypto;
+    steam = [
+      python3-openid
     ];
   };
 
