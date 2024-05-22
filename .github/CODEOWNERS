@@ -307,7 +307,7 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 
 # Forgejo
 nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
-pkgs/applications/version-management/forgejo @bendlas @emilylange
+pkgs/by-name/fo/forgejo/package.nix          @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @IvarWithoutBones
