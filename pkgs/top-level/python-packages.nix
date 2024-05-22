@@ -8869,8 +8869,6 @@ self: super: with self; {
 
   nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
 
-  nose-randomly = callPackage ../development/python-modules/nose-randomly { };
-
   nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
 
   nose-xunitmp = callPackage ../development/python-modules/nose-xunitmp { };
