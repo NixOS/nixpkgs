@@ -6100,10 +6100,6 @@ self: super: with self; {
 
   joserfc = callPackage ../development/python-modules/joserfc { };
 
-  journalwatch = callPackage ../tools/system/journalwatch {
-    inherit (self) systemd pytest;
-  };
-
   jplephem = callPackage ../development/python-modules/jplephem { };
 
   jproperties = callPackage ../development/python-modules/jproperties { };
