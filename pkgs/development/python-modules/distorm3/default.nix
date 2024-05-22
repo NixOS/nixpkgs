@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
   pytestCheckHook,
-  setuptools, 
+  setuptools,
   yasm,
 }:
 
@@ -13,7 +14,8 @@ buildPythonPackage rec {
   version = "3.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  # Still uses distutils, https://github.com/gdabah/distorm/issues/191
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "gdabah";
