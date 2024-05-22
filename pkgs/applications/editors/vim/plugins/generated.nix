@@ -10593,6 +10593,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-dap.nvim/";
   };
 
+  telescope-emoji-nvim = buildVimPlugin {
+    pname = "telescope-emoji.nvim";
+    version = "2022-12-08";
+    src = fetchFromGitHub {
+      owner = "xiyaowong";
+      repo = "telescope-emoji.nvim";
+      rev = "86248d97be84a1ce83f0541500ef9edc99ea2aa1";
+      sha256 = "18m46gj68xv6basaqzbschr60sc9xzi4dx21cvnx401bk97cqpgi";
+    };
+    meta.homepage = "https://github.com/xiyaowong/telescope-emoji.nvim/";
+  };
+
   telescope-file-browser-nvim = buildVimPlugin {
     pname = "telescope-file-browser.nvim";
     version = "2024-04-23";
