@@ -35,9 +35,9 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/helm/chart-releaser/v3/ct/cmd.Version=${version}"
-    "-X github.com/helm/chart-releaser/v3/ct/cmd.GitCommit=${src.rev}"
-    "-X github.com/helm/chart-releaser/v3/ct/cmd.BuildDate=19700101-00:00:00"
+    "-X github.com/helm/chart-releaser/cr/cmd.Version=${version}"
+    "-X github.com/helm/chart-releaser/cr/cmd.GitCommit=${src.rev}"
+    "-X github.com/helm/chart-releaser/cr/cmd.BuildDate=19700101-00:00:00"
   ];
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
