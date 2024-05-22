@@ -107,13 +107,12 @@ in pkgs.stdenv.mkDerivation {
 
   buildPhase = let
     pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
-    replaced = with lib.strings; replaceStrings
+    pythonSection = with lib.strings; replaceStrings
       [ "@python-interpreter-table@" ]
       [ pythonInterpreterTable ]
       (readFile ./languages-frameworks/python.section.md);
-    pythonSection = pkgs.writeText "python.section.substituted.md" replaced;
   in ''
-    cp ${pythonSection} ./languages-frameworks/python.section.md
+    cp ${builtins.toFile "python.section.md" pythonSection} ./languages-frameworks/python.section.md
 
     cat \
       ./functions/library.md.in \
