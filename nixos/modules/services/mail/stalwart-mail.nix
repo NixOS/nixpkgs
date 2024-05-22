@@ -81,11 +81,13 @@ in {
       services.stalwart-mail = {
         wantedBy = [ "multi-user.target" ];
         after = [ "local-fs.target" "network.target" ];
+
         preStart = if useLegacyStorage then ''
           mkdir -p ${dataDir}/{queue,reports,data/blobs}
         '' else ''
           mkdir -p ${dataDir}/{queue,reports,db}
         '';
+
         serviceConfig = {
           ExecStart = [
             ""
