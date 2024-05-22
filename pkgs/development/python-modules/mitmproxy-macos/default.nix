@@ -33,5 +33,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ boltzmannrain ];
     platforms = platforms.darwin;
+    broken = true; # last successful build 2023-12-04
   };
 }
