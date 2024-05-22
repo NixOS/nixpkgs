@@ -32945,11 +32945,11 @@ with pkgs;
   # Wrap avoiding rebuild
   mpv = mpv-unwrapped.wrapper { mpv = mpv-unwrapped; };
 
+  mpvScripts = mpv-unwrapped.scripts;
+
   shaka-packager = callPackage ../applications/video/shaka-packager { };
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
-
-  mpvScripts = callPackage ../applications/video/mpv/scripts { };
 
   open-in-mpv = callPackage ../applications/video/open-in-mpv { };
 

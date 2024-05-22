@@ -259,6 +259,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     ;
 
     wrapper = callPackage ./wrapper.nix { };
+    scripts = callPackage ./scripts { };
   };
 
   meta = {
