@@ -6225,7 +6225,9 @@ with pkgs;
   gerbilPackages-unstable = pkgs.gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
   glow-lang = pkgs.gerbilPackages-unstable.glow-lang;
 
-  default-gcc-version = 13;
+  default-gcc-version =
+    if stdenv.targetPlatform ? gccVersion then stdenv.targetPlatform.gccVersion
+    else 13;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
@@ -6830,10 +6832,18 @@ with pkgs;
     # taking the min bound of that.
     minSupported = toString (lib.trivial.max (choose stdenv.hostPlatform) (choose
       stdenv.targetPlatform));
-  in pkgs.${"llvmPackages_${minSupported}"};
+    version = if stdenv.targetPlatform ? llvmVersion then
+      # Try to match the LLVM version the target platform is expecting.
+      lib.elemAt (lib.attrNames (lib.filterAttrs (version: set:
+        (version == stdenv.targetPlatform.llvmVersion)
+        || (lib.strings.compareVersions set.release_version stdenv.targetPlatform.llvmVersion == 0)
+        || (lib.versions.major set.release_version == stdenv.targetPlatform.llvmVersion)
+      ) (lib.removeAttrs llvmPackagesSet [ "recurseForDerivations" ]))) 0
+    else minSupported;
+  in pkgs.${"llvmPackages_${version}"};
 
   inherit (rec {
-    llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
+    llvmPackagesSet = lib.removeAttrs (recurseIntoAttrs (callPackages ../development/compilers/llvm { })) [ "git" ];
 
     llvmPackages_12 = llvmPackagesSet."12";
     llvmPackages_13 = llvmPackagesSet."13";
@@ -6854,7 +6864,8 @@ with pkgs;
     lldb_19 = llvmPackages_19.lldb;
     llvm_19 = llvmPackages_19.llvm;
     bolt_19 = llvmPackages_19.bolt;
-  }) llvmPackages_12
+  }) llvmPackagesSet
+    llvmPackages_12
     llvmPackages_13
     llvmPackages_14
     llvmPackages_15

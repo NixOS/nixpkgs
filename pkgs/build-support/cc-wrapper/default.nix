@@ -197,6 +197,18 @@ let
     else
       false;
 
+  isGccCpuSupported = arch:
+    if isGNU then
+      {
+        generic = !targetPlatform.isx86;
+      }.${arch} or true
+    else if isClang then
+      {
+        # TODO: test clang
+      }.${arch} or true
+    else
+      false;
+
   isGccTuneSupported = tune:
     # for x86 -mtune= takes the same values as -march, plus two more:
     if targetPlatform.isx86 then
@@ -226,6 +238,12 @@ let
     else
       false;
 
+  # Pick a CPU model based on the compiler we're using.
+  cpuModel = if (targetPlatform ? cpuModel) then
+    /**/ if isGNU then targetPlatform.cpuModel.gnu
+    else targetPlatform.cpuModel.llvm
+  else null;
+
   # Clang does not support as many `-mtune=` values as gcc does;
   # this function will return the best possible approximation of the
   # provided `-mtune=` value, or `null` if none exists.
@@ -243,9 +261,11 @@ let
        then guess
        else null;
 
-  thumb = if targetPlatform.gcc.thumb then "thumb" else "arm";
-  tune = if targetPlatform ? gcc.tune
-         then findBestTuneApproximation targetPlatform.gcc.tune
+  thumb = if targetPlatform.thumb then "thumb" else "arm";
+  tune = if targetPlatform ? tune
+         /**/ then findBestTuneApproximation targetPlatform.tune
+         else if cpuModel != null
+         /**/ then findBestTuneApproximation cpuModel
          else null;
 
   # Machine flags. These are necessary to support
@@ -253,20 +273,21 @@ let
   # TODO: We should make a way to support miscellaneous machine
   # flags and other gcc flags as well.
 
-  machineFlags =
+  machineFlags = let
+  in
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
-    optional (targetPlatform ? gcc.arch && !(targetPlatform.isDarwin && targetPlatform.isAarch64) && isGccArchSupported targetPlatform.gcc.arch) "-march=${targetPlatform.gcc.arch}" ++
+    optional (cpuModel != null && !isClang && !(targetPlatform.isDarwin && targetPlatform.isAarch64) && isGccArchSupported cpuModel) "-march=${cpuModel}" ++
     # TODO: aarch64-darwin has mcpu incompatible with gcc
-    optional (targetPlatform ? gcc.cpu && !(targetPlatform.isDarwin && targetPlatform.isAarch64)) "-mcpu=${targetPlatform.gcc.cpu}" ++
+    optional (cpuModel != null && (isClang || !(targetPlatform.isDarwin && targetPlatform.isAarch64)) && isGccCpuSupported cpuModel) "-mcpu=${cpuModel}" ++
     # -mfloat-abi only matters on arm32 but we set it here
     # unconditionally just in case. If the abi specifically sets hard
     # vs. soft floats we use it here.
-    optional (targetPlatform ? gcc.float-abi) "-mfloat-abi=${targetPlatform.gcc.float-abi}" ++
-    optional (targetPlatform ? gcc.fpu) "-mfpu=${targetPlatform.gcc.fpu}" ++
-    optional (targetPlatform ? gcc.mode) "-mmode=${targetPlatform.gcc.mode}" ++
-    optional (targetPlatform ? gcc.thumb) "-m${thumb}" ++
+    optional (targetPlatform ? float-abi) "-mfloat-abi=${targetPlatform.float-abi}" ++
+    optional (targetPlatform ? fpu) "-mfpu=${targetPlatform.fpu}" ++
+    optional (targetPlatform ? mode) "-mmode=${targetPlatform.mode}" ++
+    optional (targetPlatform ? thumb) "-m${thumb}" ++
     optional (tune != null) "-mtune=${tune}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [];
