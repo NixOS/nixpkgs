@@ -15204,6 +15204,7 @@ with pkgs;
   };
 
   bun = callPackage ../development/web/bun { };
+  bunBaseline = callPackage ../development/web/bun/baseline.nix { };
 
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
