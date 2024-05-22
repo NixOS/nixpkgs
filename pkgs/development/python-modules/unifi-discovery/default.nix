@@ -53,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
