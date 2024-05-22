@@ -7,9 +7,21 @@
 , python3
 , ocamlPackages
 , makeWrapper
+, gpr2
 }:
 let
   gnat_version = lib.versions.major gnat.version;
+
+  # gnatprove fsf-14 requires gpr2 from a special branch
+  gpr2_24_2_next = gpr2.overrideAttrs(old: rec {
+    version = "24.2.0-next";
+    src = fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "gpr";
+      rev = "v${version}";
+      hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
+    };
+  });
 
   fetchSpark2014 = { rev, hash } : fetchFromGitHub {
     owner = "AdaCore";
@@ -33,6 +45,17 @@ let
       };
       commit_date = "2023-01-05";
     };
+    "14" = {
+      src = fetchSpark2014 {
+        rev = "ce5fad038790d5dc18f9b5345dc604f1ccf45b06"; # branch fsf-14
+        hash = "sha256-WprJJIe/GpcdabzR2xC2dAV7kIYdNTaTpNYoR3UYTVo=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-14 branch
+        ./0001-fix-install.patch
+      ];
+      commit_date = "2024-01-11";
+    };
   };
 
   thisSpark = spark2014.${gnat_version} or
@@ -44,6 +67,8 @@ stdenv.mkDerivation rec {
   version = "fsf-${gnat_version}_${thisSpark.commit_date}";
 
   src = thisSpark.src;
+
+  patches = thisSpark.patches or [];
 
   nativeBuildInputs = [
     gnat
@@ -69,6 +94,8 @@ stdenv.mkDerivation rec {
     re
     sexplib
     yojson
+  ]) ++ (lib.optionals (gnat_version == "14")[
+    gpr2_24_2_next
   ]);
 
   propagatedBuildInputs = [
