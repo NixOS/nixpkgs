@@ -37,7 +37,7 @@ buildPythonPackage rec {
       --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '' + lib.optionalString withVoice ''
     substituteInPlace "discord/player.py" \
-      --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
+      --replace "executable: str = 'ffmpeg'" "executable: str = '${ffmpeg}/bin/ffmpeg'"
   '';
 
   # Only have integration tests with discord
