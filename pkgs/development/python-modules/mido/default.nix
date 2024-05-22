@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
 
-# build-system
-, setuptools
-, setuptools-scm
-, pythonRelaxDepsHook
+  # build-system
+  setuptools,
+  setuptools-scm,
+  pythonRelaxDepsHook,
 
-# dependencies
-, packaging
+  # dependencies
+  packaging,
 
-# native dependencies
-, portmidi
+  # native dependencies
+  portmidi,
 
-# optional-dependencies
-, pygame
-, python-rtmidi
-, rtmidi-python
+  # optional-dependencies
+  pygame,
+  python-rtmidi,
+  rtmidi-python,
 
-# tests
-, pytestCheckHook
-, pythonOlder
+  # tests
+  pytestCheckHook,
+  pythonOlder,
 
 }:
 
@@ -51,13 +52,9 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "packaging"
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
-  dependencies = [
-    packaging
-  ];
+  dependencies = [ packaging ];
 
   optional-dependencies = {
     ports-pygame = [ pygame ];
@@ -65,13 +62,9 @@ buildPythonPackage rec {
     ports-rtmidi-python = [ rtmidi-python ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mido"
-  ];
+  pythonImportsCheck = [ "mido" ];
 
   meta = with lib; {
     description = "MIDI Objects for Python";

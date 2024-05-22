@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, graphviz
-, python
-, pytestCheckHook
-, chardet
-, pythonOlder
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  graphviz,
+  python,
+  pytestCheckHook,
+  chardet,
+  pythonOlder,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-YCRq8hUSP6Bi8hzXkb5n3aI6bygN8J9okZ5jeh5PMjU=";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  propagatedBuildInputs = [ pyparsing ];
 
   nativeCheckInputs = [
     chardet
@@ -48,18 +47,14 @@ buildPythonPackage rec {
       --replace "path = os.path.join(test_dir, TESTS_DIR_1)" "path = os.path.join('test/', TESTS_DIR_1)"
   '';
 
-  pytestFlagsArray = [
-    "test/pydot_unittest.py"
-  ];
+  pytestFlagsArray = [ "test/pydot_unittest.py" ];
 
   disabledTests = [
     # broken, fixed after 2.0.0
     "test_graph_with_shapefiles"
   ];
 
-  pythonImportsCheck = [
-    "pydot"
-  ];
+  pythonImportsCheck = [ "pydot" ];
 
   meta = with lib; {
     description = "Allows to create both directed and non directed graphs from Python";

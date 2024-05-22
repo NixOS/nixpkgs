@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, casttube
-, fetchPypi
-, pythonOlder
-, protobuf
-, setuptools
-, wheel
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  casttube,
+  fetchPypi,
+  pythonOlder,
+  protobuf,
+  setuptools,
+  wheel,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # no tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pychromecast"
-  ];
+  pythonImportsCheck = [ "pychromecast" ];
 
   meta = with lib; {
     description = "Library for Python to communicate with the Google Chromecast";

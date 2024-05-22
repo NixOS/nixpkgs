@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, django
-, pytestCheckHook
-, pytest-django
-, parameterized
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  django,
+  pytestCheckHook,
+  pytest-django,
+  parameterized,
 }:
 let
   # 0.18.12 was yanked from PyPI, it refers to this issue:
@@ -35,7 +36,11 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ django ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-django parameterized ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+    parameterized
+  ];
 
   meta = with lib; {
     description = "Translates Django models using a registration approach";

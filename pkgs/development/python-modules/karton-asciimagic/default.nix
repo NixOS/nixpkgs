@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, unittestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  karton-core,
+  unittestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-sY5ik9efzLBa6Fbh17Vh4q7PlwOGYjuodU9yvp/8E3k=";
   };
 
-  propagatedBuildInputs = [
-    karton-core
-  ];
+  propagatedBuildInputs = [ karton-core ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "karton.asciimagic"
-  ];
+  pythonImportsCheck = [ "karton.asciimagic" ];
 
   meta = with lib; {
     description = "Decoders for ascii-encoded executables for the Karton framework";

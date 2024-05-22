@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, spark-parser
-, xdis
-, nose
-, pytest
-, hypothesis
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  spark-parser,
+  xdis,
+  nose,
+  pytest,
+  hypothesis,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,17 @@ buildPythonPackage rec {
     hash = "sha256-xFHDjrPFzINOuLip5uCwzzIm5NlNCP0nbdA/6RWO2yc=";
   };
 
-  propagatedBuildInputs = [ spark-parser xdis ];
+  propagatedBuildInputs = [
+    spark-parser
+    xdis
+  ];
 
-  nativeCheckInputs = [ nose pytest hypothesis six ];
+  nativeCheckInputs = [
+    nose
+    pytest
+    hypothesis
+    six
+  ];
 
   # Tests attempt to decompile bytecode of the python version
   # that is running the tests - this does not work for versions
@@ -40,5 +49,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/rocky/python-uncompyle6/";
     license = licenses.gpl3;
   };
-
 }

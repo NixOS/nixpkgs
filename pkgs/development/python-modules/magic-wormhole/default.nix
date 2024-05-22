@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, spake2
-, pynacl
-, six
-, attrs
-, twisted
-, autobahn
-, automat
-, tqdm
-, click
-, humanize
-, iterable-io
-, txtorcon
-, zipstream-ng
+  # dependencies
+  spake2,
+  pynacl,
+  six,
+  attrs,
+  twisted,
+  autobahn,
+  automat,
+  tqdm,
+  click,
+  humanize,
+  iterable-io,
+  txtorcon,
+  zipstream-ng,
 
-# optional-dependencies
-, noiseprotocol
+  # optional-dependencies
+  noiseprotocol,
 
-# tests
-, nettools
-, unixtools
-, mock
-, magic-wormhole-transit-relay
-, magic-wormhole-mailbox-server
-, pytestCheckHook
+  # tests
+  nettools,
+  unixtools,
+  mock,
+  magic-wormhole-transit-relay,
+  magic-wormhole-mailbox-server,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     hash = "sha256-AG0jn4i/98N7wu/2CgBOJj+vklj3J5GS0Gugyc7WsIA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     spake2
@@ -61,14 +60,10 @@ buildPythonPackage rec {
     iterable-io
     txtorcon
     zipstream-ng
-  ]
-  ++ autobahn.optional-dependencies.twisted
-  ++ twisted.optional-dependencies.tls;
+  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
 
   passthru.optional-dependencies = {
-    dilation = [
-      noiseprotocol
-    ];
+    dilation = [ noiseprotocol ];
   };
 
   nativeCheckInputs = [
@@ -76,9 +71,7 @@ buildPythonPackage rec {
     magic-wormhole-transit-relay
     magic-wormhole-mailbox-server
     pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.dilation
-  ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
+  ] ++ passthru.optional-dependencies.dilation ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # These tests doesn't work within Darwin's sandbox

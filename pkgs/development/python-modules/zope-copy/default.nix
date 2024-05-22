@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, zope-interface
-, zope-location
-, zope-schema
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  zope-interface,
+  zope-location,
+  zope-schema,
+  unittestCheckHook,
 }:
-
 
 buildPythonPackage rec {
   pname = "zope.copy";
@@ -21,9 +21,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ zope-interface ];
 
   doCheck = !isPy27; # namespace conflicts
-  nativeCheckInputs = [ unittestCheckHook zope-location zope-schema ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    zope-location
+    zope-schema
+  ];
 
-  unittestFlagsArray = [ "-s" "src/zope/copy" ];
+  unittestFlagsArray = [
+    "-s"
+    "src/zope/copy"
+  ];
 
   meta = {
     maintainers = with lib.maintainers; [ domenkozar ];

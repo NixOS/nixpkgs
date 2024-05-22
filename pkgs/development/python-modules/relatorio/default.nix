@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, genshi
-, lxml
-, pyyaml
-, python-magic
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  genshi,
+  lxml,
+  pyyaml,
+  python-magic,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,14 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    chart = [ /* pycha */ pyyaml ];
+    chart = [
+      # pycha
+      pyyaml
+    ];
     fodt = [ python-magic ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.fodt;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.fodt;
 
   pythonImportsCheck = [ "relatorio" ];
 

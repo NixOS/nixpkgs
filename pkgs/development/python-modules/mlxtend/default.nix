@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, setuptools
-, pytestCheckHook
-, scipy
-, numpy
-, scikit-learn
-, pandas
-, matplotlib
-, joblib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  setuptools,
+  pytestCheckHook,
+  scipy,
+  numpy,
+  scikit-learn,
+  pandas,
+  matplotlib,
+  joblib,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-FlP6UqX/Ejk9c3Enm0EJ0xqy7iOhDlFqjWWxd4VIczQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     scipy
@@ -39,13 +38,9 @@ buildPythonPackage rec {
     joblib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "-sv"
-  ];
+  pytestFlagsArray = [ "-sv" ];
 
   disabledTestPaths = [
     # image tests download files over the network
@@ -55,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
-    license= licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
     # incompatible with nixpkgs scikit-learn version

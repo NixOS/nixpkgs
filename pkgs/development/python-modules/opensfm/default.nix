@@ -1,46 +1,43 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, opencv4
-, ceres-solver
-, suitesparse
-, metis
-, eigen
-, pkg-config
-, pybind11
-, numpy
-, pyyaml
-, lapack
-, gtest
-, gflags
-, glog
-, pytestCheckHook
-, networkx
-, pillow
-, exifread
-, gpxpy
-, pyproj
-, python-dateutil
-, joblib
-, repoze-lru
-, xmltodict
-, cloudpickle
-, scipy
-, sphinx
-, matplotlib
-, fpdf
-,
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  opencv4,
+  ceres-solver,
+  suitesparse,
+  metis,
+  eigen,
+  pkg-config,
+  pybind11,
+  numpy,
+  pyyaml,
+  lapack,
+  gtest,
+  gflags,
+  glog,
+  pytestCheckHook,
+  networkx,
+  pillow,
+  exifread,
+  gpxpy,
+  pyproj,
+  python-dateutil,
+  joblib,
+  repoze-lru,
+  xmltodict,
+  cloudpickle,
+  scipy,
+  sphinx,
+  matplotlib,
+  fpdf,
 }:
 
 let
   ceresSplit = (builtins.length ceres-solver.outputs) > 1;
-  ceres' =
-    if ceresSplit
-    then ceres-solver.dev
-    else ceres-solver;
+  ceres' = if ceresSplit then ceres-solver.dev else ceres-solver;
 in
 buildPythonPackage rec {
   pname = "opensfm";
@@ -71,7 +68,11 @@ buildPythonPackage rec {
     sed -i -e 's/^.*BuildDoc.*$//' setup.py
   '';
 
-  nativeBuildInputs = [ cmake pkg-config sphinx ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    sphinx
+  ];
   buildInputs = [
     ceres'
     suitesparse
@@ -109,12 +110,14 @@ buildPythonPackage rec {
     "-Sopensfm/src"
   ];
 
-  disabledTests = [
-    "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_reconstruction_incremental"
-    "test_reconstruction_triangulation"
-  ];
+  disabledTests =
+    [
+      "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_reconstruction_incremental"
+      "test_reconstruction_triangulation"
+    ];
 
   pythonImportsCheck = [ "opensfm" ];
 

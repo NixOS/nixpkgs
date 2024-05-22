@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, substituteAll
-, findutils
-, krb5
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  substituteAll,
+  findutils,
+  krb5,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -30,16 +31,12 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "k5test"
-  ];
+  pythonImportsCheck = [ "k5test" ];
 
   meta = with lib; {
     description = "Library for setting up self-contained Kerberos 5 environment";

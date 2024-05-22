@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, ninja
-, pybind11
-, setuptools
-, wheel
-, SDL2
-, zlib
-, importlib-resources
-, numpy
-, typing-extensions
-, importlib-metadata
-, gymnasium
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pybind11,
+  setuptools,
+  wheel,
+  SDL2,
+  zlib,
+  importlib-resources,
+  numpy,
+  typing-extensions,
+  importlib-metadata,
+  gymnasium,
+  pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -54,9 +55,7 @@ buildPythonPackage rec {
     importlib-resources
     numpy
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -75,9 +74,7 @@ buildPythonPackage rec {
   # test_atari_env.py::test_check_env fails on the majority of the environments because the ROM are missing.
   # The user is expected to manually download the roms:
   # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else
-  disabledTests = [
-    "test_check_env"
-  ];
+  disabledTests = [ "test_check_env" ];
 
   meta = {
     description = "A simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";

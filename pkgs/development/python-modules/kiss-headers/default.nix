@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, hatchling, requests, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  requests,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "kiss-headers";

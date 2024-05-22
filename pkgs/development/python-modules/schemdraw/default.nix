@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pyparsing
-, matplotlib
-, latex2mathml
-, ziafont
-, ziamath
-, pytestCheckHook
-, nbval
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pyparsing,
+  matplotlib,
+  latex2mathml,
+  ziafont,
+  ziamath,
+  pytestCheckHook,
+  nbval,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pyparsing
-  ];
+  dependencies = [ pyparsing ];
 
   optional-dependencies = {
-    matplotlib = [
-      matplotlib
-    ];
+    matplotlib = [ matplotlib ];
     svgmath = [
       latex2mathml
       ziafont
@@ -59,7 +54,7 @@ buildPythonPackage rec {
     substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
   '';
 
-  preCheck = "rm test/test_pictorial.ipynb";   # Tries to download files
+  preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
   pytestFlagsArray = [ "--nbval-lax" ];
 

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  poetry-core,
+  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "gguf";

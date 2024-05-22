@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools
-, click
-, prompt-toolkit
-, pygments
-, requests
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  setuptools,
+  click,
+  prompt-toolkit,
+  pygments,
+  requests,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "sqlparse"
-  ];
+  pythonRelaxDeps = [ "sqlparse" ];
 
   propagatedBuildInputs = [
     click

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, stdenv
-, packaging
-, setuptools
-, dbus-next
-, rubicon-objc
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  stdenv,
+  packaging,
+  setuptools,
+  dbus-next,
+  rubicon-objc,
 }:
 
 buildPythonPackage rec {
@@ -23,24 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-6FtxfY0vjCbCueeXdAXOy6XSjne4I7brQ5OvJ+Q1KsQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    packaging
-  ] ++ lib.optionals stdenv.isLinux [
-    dbus-next
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rubicon-objc
-  ];
+  dependencies =
+    [ packaging ]
+    ++ lib.optionals stdenv.isLinux [ dbus-next ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   # no tests available, do the imports check instead
   doCheck = false;
 
-  pythonImportsCheck = [
-    "desktop_notifier"
-  ];
+  pythonImportsCheck = [ "desktop_notifier" ];
 
   meta = with lib; {
     description = "Python library for cross-platform desktop notifications";

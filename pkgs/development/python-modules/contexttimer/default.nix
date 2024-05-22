@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
-, mock
-, fetchpatch
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
+  mock,
+  fetchpatch,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-  # https://github.com/brouberol/contexttimer/pull/16
+    # https://github.com/brouberol/contexttimer/pull/16
     (fetchpatch {
       url = "https://github.com/brouberol/contexttimer/commit/dd65871f3f25a523a47a74f2f5306c57048592b0.patch";
       hash = "sha256-vNBuFXvuvb6hWPzg4W4iyKbd4N+vofhxsKydEkc25E4=";

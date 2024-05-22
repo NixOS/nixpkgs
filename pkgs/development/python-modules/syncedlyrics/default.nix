@@ -1,12 +1,13 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, pythonRelaxDepsHook
-, rapidfuzz
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  rapidfuzz,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "rapidfuzz"
-  ];
+  pythonRelaxDeps = [ "rapidfuzz" ];
 
   dependencies = [
     requests
@@ -41,9 +40,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "syncedlyrics"
-  ];
+  pythonImportsCheck = [ "syncedlyrics" ];
 
   meta = with lib; {
     description = "Module to get LRC format (synchronized) lyrics";

@@ -3,7 +3,7 @@
   fetchFromGitHub,
   flit-core,
   lib,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

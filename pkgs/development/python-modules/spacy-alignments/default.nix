@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, cargo
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, rustPlatform
-, rustc
-, setuptools-rust
-, libiconv
+{
+  lib,
+  stdenv,
+  cargo,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  libiconv,
 }:
 
 buildPythonPackage rec {

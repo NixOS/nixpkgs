@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, deprecation
-, docker
-, wrapt
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  deprecation,
+  docker,
+  wrapt,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     echo "${version}" > VERSION
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   buildInputs = [
     deprecation
@@ -37,16 +36,12 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   # Tests require various container and database services running
   doCheck = false;
 
-  pythonImportsCheck = [
-    "testcontainers"
-  ];
+  pythonImportsCheck = [ "testcontainers" ];
 
   meta = with lib; {
     description = ''

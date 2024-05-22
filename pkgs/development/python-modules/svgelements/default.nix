@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, anyio
-, numpy
-, pillow
-, pytest-forked
-, pytest-xdist
-, pytestCheckHook
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  anyio,
+  numpy,
+  pillow,
+  pytest-forked,
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svgelements" ];
 
-  nativeCheckInputs =  [
+  nativeCheckInputs = [
     anyio
     numpy
     pillow

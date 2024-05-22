@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, python
-, onnx
-, isPy311
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  python,
+  onnx,
+  isPy311,
 }:
 let
   pname = "paddle2onnx";
   version = "1.2.0";
   format = "wheel";
-  pyShortVersion = "cp${builtins.replaceStrings ["."] [""] python.pythonVersion}";
+  pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
   src = fetchPypi {
     inherit pname version format;
     dist = pyShortVersion;
@@ -22,13 +23,16 @@ let
   };
 in
 buildPythonPackage {
-  inherit pname version src format;
+  inherit
+    pname
+    version
+    src
+    format
+    ;
 
   disabled = pythonOlder "3.8" || isPy311;
 
-  propagatedBuildInputs = [
-    onnx
-  ];
+  propagatedBuildInputs = [ onnx ];
 
   meta = with lib; {
     description = "ONNX Model Exporter for PaddlePaddle";

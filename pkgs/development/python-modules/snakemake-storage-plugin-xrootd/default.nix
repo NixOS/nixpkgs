@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, snakemake
-, snakemake-interface-storage-plugins
-, snakemake-interface-common
-, xrootd
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  snakemake,
+  snakemake-interface-storage-plugins,
+  snakemake-interface-common,
+  xrootd,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
       --replace 'xrootd = "^5.6.4"' ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     snakemake-interface-storage-plugins
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     xrootd
   ];
 
-  nativeCheckInputs = [
-    snakemake
-  ];
+  nativeCheckInputs = [ snakemake ];
 
   pythonImportsCheck = [ "snakemake_storage_plugin_xrootd" ];
 

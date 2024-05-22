@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-, ipywidgets
-, jinja2
-, jupyter
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, traitlets
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipykernel,
+  ipywidgets,
+  jinja2,
+  jupyter,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  traitlets,
+  wheel,
 }:
 
 buildPythonPackage rec {

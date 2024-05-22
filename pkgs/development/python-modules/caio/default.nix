@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, aiomisc
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  aiomisc,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [ "-Wno-error=implicit-function-declaration" ]
+  );
 
-  pythonImportsCheck = [
-    "caio"
-  ];
+  pythonImportsCheck = [ "caio" ];
 
   meta = with lib; {
     description = "File operations with asyncio support";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, python-dateutil
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  python-dateutil,
+  requests,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,18 +28,14 @@ buildPythonPackage rec {
       --replace-fail "setuptools==" "setuptools>="
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     python-dateutil
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "srpenergy.client" ];
 

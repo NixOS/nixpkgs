@@ -92,16 +92,18 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit" ];
 
-  disabledTests = [
-    "test_to_yaml_file"
-    # Tests expecting pytest-time
-    "test_monitor_builds_success"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # These tests have hardcoded "amd64" strings which fail on aarch64
-    "test_process_grammar_build_for"
-    "test_process_grammar_platform"
-    "test_process_grammar_default"
-  ];
+  disabledTests =
+    [
+      "test_to_yaml_file"
+      # Tests expecting pytest-time
+      "test_monitor_builds_success"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # These tests have hardcoded "amd64" strings which fail on aarch64
+      "test_process_grammar_build_for"
+      "test_process_grammar_platform"
+      "test_process_grammar_default"
+    ];
 
   passthru.updateScript = nix-update-script { };
 

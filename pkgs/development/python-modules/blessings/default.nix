@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -31,5 +32,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }
