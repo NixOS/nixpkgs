@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, colorama
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  colorama,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [
-    colorama
-  ];
+  dependencies = [ colorama ];
 
   pythonImportsCheck = [ "pretty_errors" ];
 

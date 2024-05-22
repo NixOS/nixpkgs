@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, anyio
-, httpx
-, pytest-asyncio
-, pytest-vcr
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  anyio,
+  httpx,
+  pytest-asyncio,
+  pytest-vcr,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-IEWFrdqrawFbuwA8bUewanmBoGWsjHJ7ucgvHQEaMcA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   # disable coverage options as they don't provide us value, and they break the default pytestCheckHook
   preCheck = ''
@@ -44,9 +41,7 @@ buildPythonPackage rec {
     pytest-vcr
   ];
 
-  pythonImportsCheck = [
-    "notion_client"
-  ];
+  pythonImportsCheck = [ "notion_client" ];
 
   meta = with lib; {
     description = "Python client for the official Notion API";

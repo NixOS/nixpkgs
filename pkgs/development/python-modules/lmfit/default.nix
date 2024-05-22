@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   buildPythonPackage,
   fetchPypi,
   setuptools,

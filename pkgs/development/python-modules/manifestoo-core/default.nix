@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, typing-extensions
-, fetchPypi
-, lib
-, nix-update-script
-, hatch-vcs
-, pythonOlder
-, importlib-resources
+{
+  buildPythonPackage,
+  typing-extensions,
+  fetchPypi,
+  lib,
+  nix-update-script,
+  hatch-vcs,
+  pythonOlder,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-a3v2WfJ42bh2LlAsH9ekpLFsAlOiTTLGNknTW2mTxCI=";
   };
 
-  nativeBuildInputs = [
-    hatch-vcs
-  ];
+  nativeBuildInputs = [ hatch-vcs ];
 
   propagatedBuildInputs =
     lib.optionals (pythonOlder "3.7") [ importlib-resources ]

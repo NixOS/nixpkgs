@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, wheel
-, pytestCheckHook
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pytestCheckHook,
+  pytest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,17 +30,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_test_utils"
-  ];
+  pythonImportsCheck = [ "pytest_test_utils" ];
 
   meta = with lib; {
     description = "Pytest utilities for tests";

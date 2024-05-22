@@ -1,28 +1,29 @@
-{ lib
-, adlfs
-, appdirs
-, buildPythonPackage
-, fastparquet
-, fetchFromGitHub
-, fsspec
-, gcsfs
-, humanize
-, importlib-metadata
-, importlib-resources
-, jinja2
-, joblib
-, pandas
-, pyarrow
-, pytest-cases
-, pytest-parallel
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, s3fs
-, setuptools
-, setuptools-scm
-, xxhash
+{
+  lib,
+  adlfs,
+  appdirs,
+  buildPythonPackage,
+  fastparquet,
+  fetchFromGitHub,
+  fsspec,
+  gcsfs,
+  humanize,
+  importlib-metadata,
+  importlib-resources,
+  jinja2,
+  joblib,
+  pandas,
+  pyarrow,
+  pytest-cases,
+  pytest-parallel,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  s3fs,
+  setuptools,
+  setuptools-scm,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -59,15 +60,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    aws = [
-      s3fs
-    ];
-    azure = [
-      adlfs
-    ];
-    gcs = [
-      gcsfs
-    ];
+    aws = [ s3fs ];
+    azure = [ adlfs ];
+    gcs = [ gcsfs ];
   };
 
   nativeCheckInputs = [
@@ -78,13 +73,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pins"
-  ];
+  pythonImportsCheck = [ "pins" ];
 
-  pytestFlagsArray = [
-    "pins/tests/"
-  ];
+  pytestFlagsArray = [ "pins/tests/" ];
 
   disabledTestPaths = [
     # Tests require network access

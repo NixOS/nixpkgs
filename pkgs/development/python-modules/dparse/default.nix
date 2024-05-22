@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch2
-, setuptools
-, packaging
-, tomli
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch2,
+  setuptools,
+  packaging,
+  tomli,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,15 +31,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   passthru.optional-dependencies = {
     # FIXME pipenv = [ pipenv ];
@@ -49,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "dparse"
-  ];
+  pythonImportsCheck = [ "dparse" ];
 
   disabledTests = [
     # requires unpackaged dependency pipenv

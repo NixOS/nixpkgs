@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, flit-core
-, z3-solver
-, astroid
-, pytestCheckHook
-, hypothesis
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  flit-core,
+  z3-solver,
+  astroid,
+  pytestCheckHook,
+  hypothesis,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {

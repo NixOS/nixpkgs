@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, gdcm
-, nibabel
-, numpy
-, pydicom
-, scipy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  gdcm,
+  nibabel,
+  numpy,
+  pydicom,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-2Pspxdeu3pHwXpbjS6bQQnvdeMuITRwYarPuLlmNcv8";
   };
 
-  propagatedBuildInputs = [ gdcm nibabel numpy pydicom scipy setuptools ];
+  propagatedBuildInputs = [
+    gdcm
+    nibabel
+    numpy
+    pydicom
+    scipy
+    setuptools
+  ];
 
   # python-gdcm just builds the python interface provided by the "gdcm" package, so
   # we should be able to replace "python-gdcm" with "gdcm" but this doesn't work

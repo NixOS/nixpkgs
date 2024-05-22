@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, llvmPackages
-, wurlitzer
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  llvmPackages,
+  wurlitzer,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,20 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-s9en6XwvO/WPsF7/+SEmGePHZQgl7zLgu5sEn4nD9YE=";
   };
 
-  buildInputs = [
-    llvmPackages.openmp
-  ];
+  buildInputs = [ llvmPackages.openmp ];
   propagatedBuildInputs = [
     numpy
     wurlitzer
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-  pytestFlagsArray = [
-    "wasserstein/tests"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "wasserstein/tests" ];
   disabledTestPaths = [
     "wasserstein/tests/test_emd.py" # requires "ot"
     # cyclic dependency on energyflow

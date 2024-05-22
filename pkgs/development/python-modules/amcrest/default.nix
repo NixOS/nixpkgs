@@ -30,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-v0jWEZo06vltEq//suGrvJ/AeeDxUG5CCFhbf03q34w=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     argcomplete
@@ -48,9 +46,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "amcrest"
-  ];
+  pythonImportsCheck = [ "amcrest" ];
 
   meta = with lib; {
     description = "Python module for Amcrest and Dahua Cameras";

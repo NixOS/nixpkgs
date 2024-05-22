@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, dataproperty
-, typepy
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  dataproperty,
+  typepy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-84KrXnks76mvIjcEeQPpwd8rPO5SMbH/jfqERaFTrWo=";
   };
 
-  propagatedBuildInputs = [ dataproperty typepy ];
+  propagatedBuildInputs = [
+    dataproperty
+    typepy
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

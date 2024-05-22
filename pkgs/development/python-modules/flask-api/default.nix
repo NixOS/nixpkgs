@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, flask
+  # dependencies
+  flask,
 
-# tests
-, markdown
-, pytestCheckHook
+  # tests
+  markdown,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    flask
-  ];
+  propagatedBuildInputs = [ flask ];
 
   nativeCheckInputs = [
     markdown

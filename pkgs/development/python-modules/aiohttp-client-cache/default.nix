@@ -1,11 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, poetry-core
-, aiohttp
-, attrs
-, itsdangerous
-, url-normalize
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  poetry-core,
+  aiohttp,
+  attrs,
+  itsdangerous,
+  url-normalize,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-B2b/9O2gVJjHUlN0pYeBDcwsy3slaAnd5SroeQqEU+s=";
   };
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [
     aiohttp
     attrs

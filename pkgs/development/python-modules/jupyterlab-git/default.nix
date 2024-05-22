@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, git
-, jupyter-server
-, hatch-jupyter-builder
-, hatch-nodejs-version
-, hatchling
-, jupyterlab
-, nbdime
-, nbformat
-, pexpect
-, pytest-asyncio
-, pytest-jupyter
-, pytest-tornasync
-, pytestCheckHook
-, pythonOlder
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  git,
+  jupyter-server,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  jupyterlab,
+  nbdime,
+  nbformat,
+  pexpect,
+  pytest-asyncio,
+  pytest-jupyter,
+  pytest-tornasync,
+  pytestCheckHook,
+  pythonOlder,
+  traitlets,
 }:
 
 buildPythonPackage rec {
@@ -73,9 +74,7 @@ buildPythonPackage rec {
     "test_Git_get_nbdiff_dict"
   ];
 
-  pythonImportsCheck = [
-    "jupyterlab_git"
-  ];
+  pythonImportsCheck = [ "jupyterlab_git" ];
 
   __darwinAllowLocalNetworking = true;
 

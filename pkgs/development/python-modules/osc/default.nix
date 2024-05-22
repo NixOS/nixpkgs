@@ -1,13 +1,14 @@
-{ stdenv
-, bashInteractive
-, buildPythonPackage
-, cryptography
-, diffstat
-, fetchFromGitHub
-, lib
-, rpm
-, urllib3
-, keyring
+{
+  stdenv,
+  bashInteractive,
+  buildPythonPackage,
+  cryptography,
+  diffstat,
+  fetchFromGitHub,
+  lib,
+  rpm,
+  urllib3,
+  keyring,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,15 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
-  nativeCheckInputs = [ rpm diffstat ];
-  propagatedBuildInputs = [ urllib3 cryptography keyring ];
+  nativeCheckInputs = [
+    rpm
+    diffstat
+  ];
+  propagatedBuildInputs = [
+    urllib3
+    cryptography
+    keyring
+  ];
 
   postInstall = ''
     install -D -m444 contrib/osc.fish $out/etc/fish/completions/osc.fish
@@ -45,8 +53,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     mainProgram = "osc";
-    maintainers = with maintainers; [ peti saschagrunert ];
+    maintainers = with maintainers; [
+      peti
+      saschagrunert
+    ];
     license = licenses.gpl2;
   };
-
 }

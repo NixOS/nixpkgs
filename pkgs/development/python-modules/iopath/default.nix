@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, tqdm
-, portalocker
-, boto3
-# check inputs
-, pytestCheckHook
-, torch
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  tqdm,
+  portalocker,
+  boto3,
+  # check inputs
+  pytestCheckHook,
+  torch,
 }:
 let
   pname = "iopath";
@@ -50,9 +51,7 @@ buildPythonPackage {
     "tests/async_writes_test.py"
   ];
 
-  pythonImportsCheck = [
-    "iopath"
-  ];
+  pythonImportsCheck = [ "iopath" ];
 
   passthru.optional-dependencies = {
     aws = [ boto3 ];

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, pytestCheckHook
-, mock
-, pyyaml
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pytestCheckHook,
+  mock,
+  pyyaml,
+  six,
 
-# for passthru.tests
-, asgi-csrf
-, connexion
-, fastapi
-, gradio
-, starlette
+  # for passthru.tests
+  asgi-csrf,
+  connexion,
+  fastapi,
+  gradio,
+  starlette,
 }:
 
 buildPythonPackage rec {
@@ -26,17 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-A/VGiMZj8beXcQXwIQQ7B5MVHkyxwanUoR/BPWIsQCY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [
-    "multipart"
-  ];
+  pythonImportsCheck = [ "multipart" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -51,7 +46,7 @@ buildPythonPackage rec {
       fastapi
       gradio
       starlette
-    ;
+      ;
   };
 
   meta = with lib; {

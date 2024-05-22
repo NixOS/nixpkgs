@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, arrow
-, buildPythonPackage
-, cloudpickle
-, cryptography
-, fetchFromGitHub
-, lz4
-, numpy
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, setuptools
+{
+  lib,
+  stdenv,
+  arrow,
+  buildPythonPackage,
+  cloudpickle,
+  cryptography,
+  fetchFromGitHub,
+  lz4,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-5otjjIyje0+z/Y/C2ivmu08PNm0oJcSSvZkQfGxHDuQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     # Not an explicit dependency, but it's imported by an entrypoint
@@ -50,15 +49,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "construct"
-  ];
+  pythonImportsCheck = [ "construct" ];
 
-  disabledTests = [
-    "test_benchmarks"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_multiprocessing"
-  ];
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

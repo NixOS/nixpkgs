@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, numpy
-, xarray
-, xarray-dataclasses
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  numpy,
+  xarray,
+  xarray-dataclasses,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-nCsxPhIgGmZZntYbhQ3KnzptcKdN288eNixbQDgECSQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     numpy

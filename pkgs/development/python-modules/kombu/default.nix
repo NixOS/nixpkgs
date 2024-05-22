@@ -1,28 +1,29 @@
-{ lib
-, amqp
-, azure-identity
-, azure-servicebus
-, azure-storage-queue
-, backports-zoneinfo
-, boto3
-, buildPythonPackage
-, case
-, confluent-kafka
-, fetchPypi
-, hypothesis
-, kazoo
-, msgpack
-, pycurl
-, pymongo
+{
+  lib,
+  amqp,
+  azure-identity,
+  azure-servicebus,
+  azure-storage-queue,
+  backports-zoneinfo,
+  boto3,
+  buildPythonPackage,
+  case,
+  confluent-kafka,
+  fetchPypi,
+  hypothesis,
+  kazoo,
+  msgpack,
+  pycurl,
+  pymongo,
   #, pyro4
-, pytest7CheckHook
-, pythonOlder
-, pyyaml
-, redis
-, sqlalchemy
-, typing-extensions
-, urllib3
-, vine
+  pytest7CheckHook,
+  pythonOlder,
+  pyyaml,
+  redis,
+  sqlalchemy,
+  typing-extensions,
+  urllib3,
+  vine,
 }:
 
 buildPythonPackage rec {
@@ -37,49 +38,32 @@ buildPythonPackage rec {
     hash = "sha256-ARxM2aNVwUod6NNdJXMUodJFbVK3FAOIVhrKw88al78=";
   };
 
-  propagatedBuildInputs = [
-    amqp
-    vine
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  propagatedBuildInputs =
+    [
+      amqp
+      vine
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ]
+    ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   passthru.optional-dependencies = {
-    msgpack = [
-      msgpack
-    ];
-    yaml = [
-      pyyaml
-    ];
-    redis = [
-      redis
-    ];
-    mongodb = [
-      pymongo
-    ];
+    msgpack = [ msgpack ];
+    yaml = [ pyyaml ];
+    redis = [ redis ];
+    mongodb = [ pymongo ];
     sqs = [
       boto3
       urllib3
       pycurl
     ];
-    zookeeper = [
-      kazoo
-    ];
-    sqlalchemy = [
-      sqlalchemy
-    ];
+    zookeeper = [ kazoo ];
+    sqlalchemy = [ sqlalchemy ];
     azurestoragequeues = [
       azure-identity
       azure-storage-queue
     ];
-    azureservicebus = [
-      azure-servicebus
-    ];
-    confluentkafka = [
-      confluent-kafka
-    ];
+    azureservicebus = [ azure-servicebus ];
+    confluentkafka = [ confluent-kafka ];
     # pyro4 doesn't suppport Python 3.11
     #pyro = [
     #  pyro4
@@ -92,9 +76,7 @@ buildPythonPackage rec {
     pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "kombu"
-  ];
+  pythonImportsCheck = [ "kombu" ];
 
   disabledTests = [
     # Disable pyro4 test

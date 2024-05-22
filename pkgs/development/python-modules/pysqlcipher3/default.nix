@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, sqlcipher }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sqlcipher,
+}:
 
 buildPythonPackage rec {
   pname = "pysqlcipher3";

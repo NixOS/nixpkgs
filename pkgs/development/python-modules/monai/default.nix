@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonAtLeast
-, ninja
-, ignite
-, numpy
-, pybind11
-, torch
-, which
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonAtLeast,
+  ninja,
+  ignite,
+  numpy,
+  pybind11,
+  torch,
+  which,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,20 @@ buildPythonPackage rec {
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [ ninja which ];
+  nativeBuildInputs = [
+    ninja
+    which
+  ];
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy torch ignite ];
+  propagatedBuildInputs = [
+    numpy
+    torch
+    ignite
+  ];
 
   BUILD_MONAI = 1;
 
-  doCheck = false;  # takes too long; tries to download data
+  doCheck = false; # takes too long; tries to download data
 
   pythonImportsCheck = [
     "monai"

@@ -1,18 +1,19 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 
-# build dependencies
-, cython
-, leptonica
-, pkg-config
-, tesseract4
+  # build dependencies
+  cython,
+  leptonica,
+  pkg-config,
+  tesseract4,
 
-# propagates
-, pillow
+  # propagates
+  pillow,
 
-# tests
-, unittestCheckHook
+  # tests
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -40,17 +41,11 @@ buildPythonPackage rec {
     tesseract4
   ];
 
-  propagatedBuildInputs = [
-    pillow
-  ];
+  propagatedBuildInputs = [ pillow ];
 
-  pythonImportsCheck = [
-    "tesserocr"
-  ];
+  pythonImportsCheck = [ "tesserocr" ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";

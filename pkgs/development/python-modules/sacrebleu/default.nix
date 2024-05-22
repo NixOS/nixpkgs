@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# Propagated build inputs
-, portalocker
-, regex
-, tabulate
-, numpy
-, colorama
-, lxml
+  # Propagated build inputs
+  portalocker,
+  regex,
+  tabulate,
+  numpy,
+  colorama,
+  lxml,
 
-# Check inputs
-, pytestCheckHook
+  # Check inputs
+  pytestCheckHook,
 }:
 let
   pname = "sacrebleu";
@@ -42,9 +43,7 @@ buildPythonPackage {
     lxml
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # require network access

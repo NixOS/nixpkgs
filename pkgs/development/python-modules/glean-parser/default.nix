@@ -1,17 +1,18 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, click
-, diskcache
-, fetchPypi
-, jinja2
-, jsonschema
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, setuptools-scm
-, yamllint
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  click,
+  diskcache,
+  fetchPypi,
+  jinja2,
+  jsonschema,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  yamllint,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace "MarkupSafe>=1.1.1,<=2.0.1" "MarkupSafe>=1.1.1"
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     appdirs
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -64,9 +61,7 @@ buildPythonPackage rec {
     "test_yaml_lint"
   ];
 
-  pythonImportsCheck = [
-    "glean_parser"
-  ];
+  pythonImportsCheck = [ "glean_parser" ];
 
   meta = with lib; {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
@@ -74,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla/glean_parser";
     changelog = "https://github.com/mozilla/glean_parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

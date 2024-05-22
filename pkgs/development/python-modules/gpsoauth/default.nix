@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pycryptodomex
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pycryptodomex,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   # upstream tests are not very comprehensive
   doCheck = false;

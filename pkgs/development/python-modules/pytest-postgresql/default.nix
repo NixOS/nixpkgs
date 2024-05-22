@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, mirakuru
-, port-for
-, psycopg
-, pytest
-, postgresql
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  mirakuru,
+  port-for,
+  psycopg,
+  pytest,
+  postgresql,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     mirakuru
     port-for
     psycopg
-    setuptools  # requires 'pkg_resources' at runtime
+    setuptools # requires 'pkg_resources' at runtime
   ];
 
   nativeCheckInputs = [
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     "-p"
     "no:postgresql"
   ];
-  disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ];  # requires Docker
+  disabledTestPaths = [ "tests/docker/test_noproc_docker.py" ]; # requires Docker
   disabledTests = [
     # permissions issue running pg as Nixbld user
     "test_executor_init_with_password"
@@ -62,7 +63,6 @@ buildPythonPackage rec {
     "pytest_postgresql"
     "pytest_postgresql.executor"
   ];
-
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/pytest-postgresql";

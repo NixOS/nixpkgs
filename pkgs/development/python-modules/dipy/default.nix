@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, cython
-, numpy
-, scipy
-, h5py
-, nibabel
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  packaging,
+  cython,
+  numpy,
+  scipy,
+  h5py,
+  nibabel,
+  tqdm,
 }:
 
 buildPythonPackage rec {

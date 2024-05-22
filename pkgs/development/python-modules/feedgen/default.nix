@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, lxml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  lxml,
+}:
 
 buildPythonPackage rec {
   pname = "feedgen";
@@ -10,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "sha256-2b1Rw7XpVqKlKZjDcIxNLHKfL8wxEYjh5dO5cmOTVGo=";
   };
 
-  propagatedBuildInputs = [ python-dateutil lxml ];
+  propagatedBuildInputs = [
+    python-dateutil
+    lxml
+  ];
 
   # No tests in archive
   doCheck = false;
@@ -19,7 +28,10 @@ buildPythonPackage rec {
     description = "Python module to generate ATOM feeds, RSS feeds and Podcasts.";
     downloadPage = "https://github.com/lkiesow/python-feedgen/releases";
     homepage = "https://github.com/lkiesow/python-feedgen";
-    license = with licenses; [ bsd2 lgpl3 ];
+    license = with licenses; [
+      bsd2
+      lgpl3
+    ];
     maintainers = with maintainers; [ casey ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pytestCheckHook
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  pytestCheckHook,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-DfIF+JvjIREi7zd5ZQ7Co/CIKC5iUeOgR/VLDPmrtTQ=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "crossplane"
-  ];
+  pythonImportsCheck = [ "crossplane" ];
 
   meta = with lib; {
     description = "NGINX configuration file parser and builder";

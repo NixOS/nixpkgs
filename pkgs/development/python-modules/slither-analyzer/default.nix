@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, crytic-compile
-, fetchFromGitHub
-, makeWrapper
-, packaging
-, prettytable
-, pythonOlder
-, setuptools-scm
-, solc
-, web3
-, withSolc ? false
-, testers
-, slither-analyzer
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  crytic-compile,
+  fetchFromGitHub,
+  makeWrapper,
+  packaging,
+  prettytable,
+  pythonOlder,
+  setuptools-scm,
+  solc,
+  web3,
+  withSolc ? false,
+  testers,
+  slither-analyzer,
 }:
 
 buildPythonPackage rec {
@@ -94,6 +95,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
     mainProgram = "slither";
-    maintainers = with maintainers; [ arturcygan fab hellwolf ];
+    maintainers = with maintainers; [
+      arturcygan
+      fab
+      hellwolf
+    ];
   };
 }

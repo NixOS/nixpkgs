@@ -1,4 +1,8 @@
-{ lib, fetchPypi, python3Packages }:
+{
+  lib,
+  fetchPypi,
+  python3Packages,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "chainstream";
@@ -13,9 +17,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-302P1BixEmkODm+qTLZwaWLktrlf9cEziQ/TIVfI07c=";
   };
 
-  pythonImportsCheck = [
-    "chainstream"
-  ];
+  pythonImportsCheck = [ "chainstream" ];
 
   meta = with lib; {
     description = "Chain I/O streams together into a single stream";

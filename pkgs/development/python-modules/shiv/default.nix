@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, click
-, pip
-, setuptools
-, wheel
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  pip,
+  setuptools,
+  wheel,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-4iJ2gTWXe+vftcDRp9/qKVV8VmtY0wDVuMJTXvIj13Y=";
   };
 
-  propagatedBuildInputs = [ click pip setuptools wheel ];
+  propagatedBuildInputs = [
+    click
+    pip
+    setuptools
+    wheel
+  ];
 
   pythonImportsCheck = [ "shiv" ];
 

@@ -1,16 +1,17 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchPypi
-, mkdocs
-, mkdocs-macros
-, mkdocs-material
-, jinja2
-, python-dateutil
-, termcolor
-, pyyaml
-, runCommand
-, setuptools
+{
+  lib,
+  callPackage,
+  buildPythonPackage,
+  fetchPypi,
+  mkdocs,
+  mkdocs-macros,
+  mkdocs-material,
+  jinja2,
+  python-dateutil,
+  termcolor,
+  pyyaml,
+  runCommand,
+  setuptools,
 }:
 
 buildPythonPackage rec {

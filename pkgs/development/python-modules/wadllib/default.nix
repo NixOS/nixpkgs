@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, setuptools
-, lazr-uri
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  setuptools,
+  lazr-uri,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "acd9ad6a2c1007d34ca208e1da6341bbca1804c0e6850f954db04bdd7666c5fc";
   };
 
-  propagatedBuildInputs = [ setuptools lazr-uri ];
+  propagatedBuildInputs = [
+    setuptools
+    lazr-uri
+  ];
 
   doCheck = isPy3k;
 

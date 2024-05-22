@@ -1,14 +1,15 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, html5lib
-, lxml
-, mock
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  lxml,
+  mock,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-mhJ+s1rtXEJ6DqVmiyWNEK+3cdDLpR63Q4QGmD9wVio=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mf2py"
-  ];
+  pythonImportsCheck = [ "mf2py" ];
 
   meta = with lib; {
     description = "Microformats2 parser written in Python";

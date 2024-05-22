@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, lxml
-, six
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  lxml,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
   };
 
-  propagatedBuildInputs = [ lxml six ];
+  propagatedBuildInputs = [
+    lxml
+    six
+  ];
 
   pythonImportsCheck = [ "xml_marshaller" ];
 

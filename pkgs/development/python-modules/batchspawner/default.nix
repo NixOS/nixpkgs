@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, jinja2
-, jupyterhub
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  jinja2,
+  jupyterhub,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "batchspawner"
-  ];
+  pythonImportsCheck = [ "batchspawner" ];
 
   meta = with lib; {
     description = "A spawner for Jupyterhub to spawn notebooks using batch resource managers";

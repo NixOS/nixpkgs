@@ -1,17 +1,18 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pandas
-, poetry-core
-, prometheus-api-client
-, pydantic
-, pythonRelaxDepsHook
-, requests
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pandas,
+  poetry-core,
+  prometheus-api-client,
+  pydantic,
+  pythonRelaxDepsHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     "urllib3"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     boto3
@@ -56,9 +53,7 @@ buildPythonPackage rec {
   # https://github.com/robusta-dev/prometrix/issues/9
   doCheck = false;
 
-  pythonImportsCheck = [
-    "prometrix"
-  ];
+  pythonImportsCheck = [ "prometrix" ];
 
   meta = with lib; {
     description = "Unified Prometheus client";

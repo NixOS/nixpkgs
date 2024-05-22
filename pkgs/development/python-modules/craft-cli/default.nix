@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, platformdirs
-, pydantic_1
-, pyyaml
-, setuptools
-, setuptools-scm
-, pytest-check
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  platformdirs,
+  pydantic_1,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "craft_cli"
-  ];
+  pythonImportsCheck = [ "craft_cli" ];
 
   nativeCheckInputs = [
     pytest-check

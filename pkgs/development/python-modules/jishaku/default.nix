@@ -12,7 +12,7 @@
   tabulate,
   pytestCheckHook,
   pytest-asyncio,
-  youtube-dl
+  youtube-dl,
 }:
 buildPythonPackage rec {
   pname = "jishaku";

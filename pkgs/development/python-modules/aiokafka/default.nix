@@ -1,17 +1,18 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, gssapi
-, kafka-python
-, lz4
-, packaging
-, python-snappy
-, pythonOlder
-, setuptools
-, zlib
-, zstandard
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  gssapi,
+  kafka-python,
+  lz4,
+  packaging,
+  python-snappy,
+  pythonOlder,
+  setuptools,
+  zlib,
+  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   dependencies = [
     async-timeout
@@ -44,26 +43,16 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    snappy = [
-      python-snappy
-    ];
-    lz4 = [
-      lz4
-    ];
-    zstd = [
-      zstandard
-    ];
-    gssapi = [
-      gssapi
-    ];
+    snappy = [ python-snappy ];
+    lz4 = [ lz4 ];
+    zstd = [ zstandard ];
+    gssapi = [ gssapi ];
   };
 
   # Checks require running Kafka server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiokafka"
-  ];
+  pythonImportsCheck = [ "aiokafka" ];
 
   meta = with lib; {
     description = "Kafka integration with asyncio";

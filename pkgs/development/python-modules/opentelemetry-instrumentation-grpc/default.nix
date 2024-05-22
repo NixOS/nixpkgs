@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-sdk
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, wrapt
-, pytestCheckHook
-, grpcio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-sdk,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  wrapt,
+  pytestCheckHook,
+  grpcio,
 }:
 
 buildPythonPackage {
@@ -22,9 +23,7 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-grpc";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     opentelemetry-api

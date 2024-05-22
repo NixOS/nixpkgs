@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitLab, pkg-config, lxml, libvirt, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pkg-config,
+  lxml,
+  libvirt,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "libvirt";
@@ -13,7 +21,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libvirt lxml ];
+  buildInputs = [
+    libvirt
+    lxml
+  ];
 
   nativeCheckInputs = [ nose ];
   checkPhase = ''

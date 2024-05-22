@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, gevent
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  gevent,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  propagatedBuildInputs = [ requests gevent ];
+  propagatedBuildInputs = [
+    requests
+    gevent
+  ];
 
   meta = with lib; {
     description = "Asynchronous HTTP requests";
@@ -26,5 +30,4 @@ buildPythonPackage rec {
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ matejc ];
   };
-
 }

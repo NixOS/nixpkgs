@@ -58,9 +58,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.isLinux [
-    attr
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access

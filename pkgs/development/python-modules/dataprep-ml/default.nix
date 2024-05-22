@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, dataclasses-json
-, fetchPypi
-, nltk-data
-, numpy
-, pandas
-, poetry-core
-, pydantic
-, pydateinfer
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, scipy
-, symlinkJoin
-, type-infer
+{
+  lib,
+  buildPythonPackage,
+  colorlog,
+  dataclasses-json,
+  fetchPypi,
+  nltk-data,
+  numpy,
+  pandas,
+  poetry-core,
+  pydantic,
+  pydateinfer,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  scipy,
+  symlinkJoin,
+  type-infer,
 }:
 let
   testNltkData = symlinkJoin {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-pZhHlNcQJLBww7ur2Z6Yb2IdbRsBtjzQAzfa4UzGKt4=";
   };
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  pythonRelaxDeps = [ "pydantic" ];
 
   nativeBuildInputs = [
     poetry-core

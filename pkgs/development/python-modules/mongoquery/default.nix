@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  isPy27,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     sha256 = "bd19fc465f0aa9feb3070f144fde41fc68cf28ea32dd3b7565f7df3ab6fc0ac2";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [
-    "mongoquery"
-  ];
+  pythonImportsCheck = [ "mongoquery" ];
 
   meta = with lib; {
     description = "A python implementation of mongodb queries";
