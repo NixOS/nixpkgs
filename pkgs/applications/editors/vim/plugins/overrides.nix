@@ -3210,6 +3210,10 @@ in
     ];
   };
 
+  telescope-glyph-nvim = super.telescope-github-nvim.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
+  };
+
   telescope-live-grep-args-nvim = super.telescope-live-grep-args-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim

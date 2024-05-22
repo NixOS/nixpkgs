@@ -13744,6 +13744,18 @@ final: prev:
     meta.hydraPlatforms = [ ];
   };
 
+  telescope-glyph-nvim = buildVimPlugin {
+    pname = "telescope-glyph.nvim";
+    version = "2022-08-22";
+    src = fetchFromGitHub {
+      owner = "ghassan0";
+      repo = "telescope-glyph.nvim";
+      rev = "f63f01e129e71cc25b79637610674bbf0be5ce9d";
+      sha256 = "0n1mdiwkkciqpxjad1nngrc7px5yziyan0daxgs9jsgdqmy1lzp8";
+    };
+    meta.homepage = "https://github.com/ghassan0/telescope-glyph.nvim/";
+  };
+
   telescope-live-grep-args-nvim = buildVimPlugin {
     pname = "telescope-live-grep-args.nvim";
     version = "2024-07-28";
