@@ -9,6 +9,9 @@
   bash,
   substituteAll,
 }:
+let
+  arch = stdenv.hostPlatform.uname.processor;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
   version = "1.0.5";
@@ -41,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   dontConfigure = true;
 
   preBuild = ''
-    HARECACHE="$(mktemp -d --tmpdir harecache.XXXXXXXX)"
+    HARECACHE="$(mktemp -d)"
     export HARECACHE
     export PREFIX=${builtins.placeholder "out"}
   '';
@@ -54,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./bootstrap.sh
+    hare build -o bin/haredo -qRa${arch} ./src
+    scdoc <doc/haredo.1.scd >doc/haredo.1
 
     runHook postBuild
   '';
@@ -70,7 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./bootstrap.sh install
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
+    cp ./bin/haredo $out/bin
+    cp ./doc/haredo.1 $out/share/man/man1
 
     runHook postInstall
   '';
