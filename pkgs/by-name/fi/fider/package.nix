@@ -103,13 +103,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out
-
-    cp -r locale $out/
-    cp -r views $out/
-    cp -r migrations $out/
-    cp -r ${server}/bin $out/
-    ls -la ${frontend}
-    cp -r ${frontend}/* $out/
+    cp -r locale views migrations ${server}/* ${frontend}/* $out/
 
     runHook postInstall
   '';
