@@ -1,34 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gibberish-detector
-, mock
-, pkgs
-, pyahocorasick
-, pytest7CheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, unidiff
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gibberish-detector,
+  mock,
+  pkgs,
+  pyahocorasick,
+  pytest7CheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  setuptools,
+  unidiff,
 }:
 
 buildPythonPackage rec {
   pname = "detect-secrets";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "1.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Yelp";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6EmL6XPySqcA3EA+FFkfw7Dkxl5LvyBorIw0hesV5eU=";
+    repo = "detect-secrets";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     gibberish-detector
     pyyaml
     pyahocorasick
@@ -37,10 +41,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    pkgs.gitMinimal
     pytest7CheckHook
     responses
     unidiff
-    pkgs.gitMinimal
   ];
 
   preCheck = ''
@@ -60,13 +64,12 @@ buildPythonPackage rec {
     "test_start_halfway"
   ];
 
-  pythonImportsCheck = [
-    "detect_secrets"
-  ];
+  pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
-    description = "An enterprise friendly way of detecting and preventing secrets in code";
+    description = "Module for detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
+    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
