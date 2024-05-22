@@ -45,5 +45,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/M0r13n/pyais/blob/${version}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
