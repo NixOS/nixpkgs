@@ -7616,6 +7616,8 @@ self: super: with self; {
 
   model-bakery = callPackage ../development/python-modules/model-bakery { };
 
+  model-checker = callPackage ../development/python-modules/model-checker { };
+
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modeled = callPackage ../development/python-modules/modeled { };

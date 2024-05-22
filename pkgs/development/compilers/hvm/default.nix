@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
-    description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
+    description = "A massively parallel, optimal functional runtime in Rust";
     mainProgram = "hvm";
     homepage = "https://github.com/higherorderco/hvm";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };
 }
