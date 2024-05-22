@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "3.1.1";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-r8uqToxkJg9j89UUZpxsPXutWPefAYDW95zFBKU9Al4=";
+    hash = "sha256-gN7TPbNGw1vT0oAE6+Kg4V3J5dhYH+Gvv3JwptQ2aMk=";
   };
 
   propagatedBuildInputs = [
