@@ -47,6 +47,7 @@ let
     pname = "fider-frontend";
 
     dontNpmBuild = true;
+    dontBuild = true; # It requires godotenv to be installed - which I don't really know how to do
 
     nativeBuildInputs = [
       esbuild'
