@@ -3,12 +3,13 @@
 , crc16
 , fetchPypi
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyoppleio";
   version = "1.0.7";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-S1w3pPqhX903kkXUq9ALz0+zRvNGOimLughRRVKjV8E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     crc16
   ];
 
@@ -30,9 +35,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for interacting with OPPLE lights";
-    mainProgram = "oppleio";
     homepage = "https://github.com/jedmeng/python-oppleio";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "oppleio";
   };
 }
