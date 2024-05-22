@@ -4,22 +4,27 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  setuptools, 
   yasm,
 }:
 
 buildPythonPackage rec {
   pname = "distorm3";
   version = "3.5.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
-    rev = version;
-    sha256 = "012bh1l2w7i9q8rcnznj3x0lra09d5yxd3r42cbrqdwl1mmg26qn";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -31,11 +36,14 @@ buildPythonPackage rec {
     "test_dummy"
   ];
 
-  pythonImportsCheck = [ "distorm3" ];
+  pythonImportsCheck = [
+    "distorm3"
+  ];
 
   meta = with lib; {
     description = "Disassembler library for x86/AMD64";
     homepage = "https://github.com/gdabah/distorm";
+    changelog = "https://github.com/gdabah/distorm/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
