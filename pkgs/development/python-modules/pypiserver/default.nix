@@ -28,13 +28,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
     setuptools-git
     wheel
   ];
 
   propagatedBuildInputs = [
     pip
+    setuptools
   ];
 
   passthru.optional-dependencies = {
