@@ -606,6 +606,8 @@ let
     github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
 
+    gluon = callPackage ../development/ocaml-modules/gluon { };
+
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-eio = callPackage ../development/ocaml-modules/gluten/eio.nix { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
