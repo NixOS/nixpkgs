@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, writeShellApplication
-, curl
-, jq
-, common-updater-scripts
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  writeShellApplication,
+  curl,
+  jq,
+  common-updater-scripts,
+  undmg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -38,7 +39,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "raycast-update-script";
-    runtimeInputs = [ curl jq common-updater-scripts ];
+    runtimeInputs = [
+      curl
+      jq
+      common-updater-scripts
+    ];
     text = ''
       set -eo pipefail
       url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
@@ -51,8 +56,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Control your tools with a few keystrokes";
     homepage = "https://raycast.app/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ lovesegfault stepbrobd donteatoreo ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      stepbrobd
+      donteatoreo
+    ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
