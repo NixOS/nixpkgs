@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.6";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-X4sAMGn4oBMY3cQkVj1dMcrDF7FgMl8SbZeUnCCOY6Q=";
+    sha256 = "sha256-4cby19BjgnmWf7klK1sBgtZnyvo7q3L1uyVPlVoS+uk=";
   };
 
   postPatch = ''
     substituteInPlace create-config.mk \
       --replace /bin/echo ${coreutils}/bin/echo
 
-    substituteInPlace multipathd/multipathd.service \
+    substituteInPlace multipathd/multipathd.service.in \
       --replace /sbin/multipathd "$out/bin/multipathd"
 
     sed -i -re '
