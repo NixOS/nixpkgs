@@ -12,8 +12,6 @@ buildGoModule rec {
   pname = "chart-releaser";
   version = "1.6.1";
 
-  # 0102fa30dd78df0d0f8093c4607e6080972ff82d
-
   src = fetchFromGitHub {
     owner = "helm";
     repo = pname;
@@ -59,7 +57,7 @@ buildGoModule rec {
     description = "Hosting Helm Charts via GitHub Pages and Releases";
     homepage = "https://github.com/helm/chart-releaser";
     license = licenses.asl20;
-    # maintainers = with maintainers; [ atkinschang ];
+    maintainers = with maintainers; [ gnuion ];
     mainProgram = "cr";
   };
 }
