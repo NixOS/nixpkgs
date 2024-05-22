@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, crc16
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  crc16,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,20 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-S1w3pPqhX903kkXUq9ALz0+zRvNGOimLughRRVKjV8E=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    crc16
-  ];
+  dependencies = [ crc16 ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyoppleio"
-  ];
+  pythonImportsCheck = [ "pyoppleio" ];
 
   meta = with lib; {
     description = "Library for interacting with OPPLE lights";
