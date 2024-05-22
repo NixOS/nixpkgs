@@ -2,7 +2,6 @@
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng
 , libxcrypt
-, sqlite
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
@@ -21,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.40.1";
+  version = "2.39.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-WeZ2qlPMtEtsOfD/4BqPonSJHJG+8UdHUvrZJGHe8k8=";
+    hash = "sha256-e2YF5I0aSfQ8xLTPxZ8xPQ3VQC+kC5aBC9Vy4Wff7Q8=";
   };
 
   patches = [
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   postPatch = ''
-    patchShebangs tests/run.sh tools/all_syscalls
+    patchShebangs tests/run.sh
 
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$bin/bin/umount"
@@ -60,7 +59,6 @@ stdenv.mkDerivation rec {
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
-    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     (lib.enableFeature writeSupport "write")
     (lib.enableFeature nlsSupport "nls")
     (lib.withFeature ncursesSupport "ncursesw")
@@ -82,7 +80,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config installShellFiles ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib libxcrypt sqlite ]
+  buildInputs = [ zlib libxcrypt ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
