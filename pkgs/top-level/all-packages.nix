@@ -41076,8 +41076,6 @@ with pkgs;
 
   dict-cc-py = callPackage ../applications/misc/dict-cc-py { };
 
-  sirikali = libsForQt5.callPackage ../tools/security/sirikali { };
-
   wpm = callPackage ../applications/misc/wpm { };
 
   weggli = callPackage ../tools/security/weggli { };
