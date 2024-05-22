@@ -35,5 +35,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "websecprobe";
+    platforms = platforms.linux;
   };
 }
