@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.47.0";
+  version = "1.47.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-Zmev3lbu8MavJmhJdEAOTSKI6knpRBv15iKRldUaNXg=";
+    hash = "sha256-mvzSAfOUKdLbJJKusT26XnXWzFBoK3MtyjVkO9XwkuM=";
   };
 
   # fuse2fs adds 14mb of dependencies
@@ -23,12 +23,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withFuse [ fuse ];
 
   patches = [
-    (fetchpatch { # avoid using missing __GNUC_PREREQ(X,Y)
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/9583597eb3e6e6b33f61dbc615d511ce030bc443/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
-      sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
-      excludes = [ "lib/ext2fs/hashmap.h" ];
-      extraPrefix = "";
-    })
     # Avoid trouble with older systems like NixOS 23.05.
     # TODO: most likely drop this at some point, e.g. when 23.05 loses support.
     (fetchurl {
