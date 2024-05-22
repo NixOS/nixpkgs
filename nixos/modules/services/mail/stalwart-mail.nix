@@ -76,63 +76,60 @@ in {
       };
     };
 
-    systemd.services.stalwart-mail = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "local-fs.target" "network.target" ];
+    systemd = {
+      packages = [ cfg.package ];
+      services.stalwart-mail = {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "local-fs.target" "network.target" ];
+        preStart = if useLegacyStorage then ''
+          mkdir -p ${dataDir}/{queue,reports,data/blobs}
+        '' else ''
+          mkdir -p ${dataDir}/{queue,reports,db}
+        '';
+        serviceConfig = {
+          ExecStart = [
+            ""
+            "${cfg.package}/bin/stalwart-mail --config=${configFile}"
+          ];
 
-      preStart = if useLegacyStorage then ''
-        mkdir -p ${dataDir}/{queue,reports,data/blobs}
-      '' else ''
-        mkdir -p ${dataDir}/{queue,reports,db}
-      '';
+          StandardOutput = "journal";
+          StandardError = "journal";
 
-      serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/stalwart-mail --config=${configFile}";
+          StateDirectory = "stalwart-mail";
 
-        # Base from template resources/systemd/stalwart-mail.service
-        Type = "simple";
-        LimitNOFILE = 65536;
-        KillMode = "process";
-        KillSignal = "SIGINT";
-        Restart = "on-failure";
-        RestartSec = 5;
-        StandardOutput = "journal";
-        StandardError = "journal";
-        SyslogIdentifier = "stalwart-mail";
+          # Bind standard privileged ports
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
 
-        User = "stalwart-mail";
-        Group = "stalwart-mail";
-        StateDirectory = "stalwart-mail";
-
-        # Bind standard privileged ports
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-
-        # Hardening
-        DeviceAllow = [ "" ];
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        PrivateDevices = true;
-        PrivateUsers = false;  # incompatible with CAP_NET_BIND_SERVICE
-        ProcSubset = "pid";
-        PrivateTmp = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
-        UMask = "0077";
+          # Hardening
+          DeviceAllow = [ "" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateDevices = true;
+          PrivateUsers = false;  # incompatible with CAP_NET_BIND_SERVICE
+          ProcSubset = "pid";
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          UMask = "0077";
+        };
+        unitConfig.ConditionPathExists = [
+          ""
+          "${configFile}"
+        ];
       };
     };
 
