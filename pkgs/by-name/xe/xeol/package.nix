@@ -35,5 +35,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "xeol";
+    platforms = platforms.linux;
   };
 }
