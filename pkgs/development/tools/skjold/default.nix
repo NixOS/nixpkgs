@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,17 +16,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-/ltaRs2WZXbrG3cVez+QIwupJrsV550TjOALbHX9Z0I=";
   };
 
-  pythonRelaxDeps = [
-    "packaging"
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     click
@@ -58,9 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     "urllib3"
   ];
 
-  pythonImportsCheck = [
-    "skjold"
-  ];
+  pythonImportsCheck = [ "skjold" ];
 
   meta = with lib; {
     description = "Tool to Python dependencies against security advisory databases";
