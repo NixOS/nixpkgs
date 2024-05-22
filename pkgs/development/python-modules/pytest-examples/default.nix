@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pytest-examples";
   version = "0.0.10";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -26,6 +26,7 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Fix deprecation warnings in Python 3.12, https://github.com/pydantic/pytest-examples/pull/22
     (fetchpatch {
       url = "https://github.com/pydantic/pytest-examples/commit/551ba911713c2859caabc91b664723dd6bc800c5.patch";
       hash = "sha256-Y3OU4fNyLADhBQGwX2jY0gagVV2q2dcn3kJRLUyCtZI=";
@@ -46,8 +47,11 @@ buildPythonPackage rec {
     "ruff"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+  ];
+
+  nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
 
@@ -55,7 +59,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
   ];
 
