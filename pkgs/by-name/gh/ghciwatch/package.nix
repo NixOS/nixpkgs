@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ghciwatch";
-  version = "0.5.11";
+  version = "0.5.12";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = "ghciwatch";
     rev = "v${version}";
-    hash = "sha256-lWeQ0nBJDUJ9c915WWy/YsIoWwtipz5ns2xvFJSD9LQ=";
+    hash = "sha256-XkwxAhZJFeAuWytCco4RFG1K/FJEiTmGDxOyY6KS/Ds=";
   };
 
-  cargoHash = "sha256-1jcdhTLCdCOh3EHywlFi83KupmWX4hGvB2/LhtzUPRk=";
+  cargoHash = "sha256-ToQes3WWnI7vDKSBQZEzpKFSex5oDdnOKjOC6MONrhg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation

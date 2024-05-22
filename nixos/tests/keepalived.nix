@@ -4,8 +4,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   nodes = {
     node1 = { pkgs, ... }: {
-      networking.firewall.extraCommands = "iptables -A INPUT -p vrrp -j ACCEPT";
       services.keepalived.enable = true;
+      services.keepalived.openFirewall = true;
       services.keepalived.vrrpInstances.test = {
         interface = "eth1";
         state = "MASTER";
@@ -16,8 +16,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       environment.systemPackages = [ pkgs.tcpdump ];
     };
     node2 = { pkgs, ... }: {
-      networking.firewall.extraCommands = "iptables -A INPUT -p vrrp -j ACCEPT";
       services.keepalived.enable = true;
+      services.keepalived.openFirewall = true;
       services.keepalived.vrrpInstances.test = {
         interface = "eth1";
         state = "MASTER";

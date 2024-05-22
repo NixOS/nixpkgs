@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fedora-modularity/libmodulemd/commit/29c339a31b1c753dcdef041e5c2e0e600e48b59d.patch";
       hash = "sha256-uniHrQdbcXlJk2hq106SgV/E330LfxDc07E4FbOMLr0=";
     })
+    # Adapt to GLib 2.80.1 documentation
+    (fetchpatch2 {
+      url = "https://github.com/fedora-modularity/libmodulemd/commit/f3336199b4e69af3305f156abc7533bed9e9a762.patch";
+      hash = "sha256-Rvg+/KTKiEBXVEK7tlcTDf53HkaW462g/rg1rHPzaZA=";
+    })
   ];
 
   nativeBuildInputs = [
