@@ -73,7 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./use_system_vencord.patch;
     });
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  };
 
   # disable code signing on macos
   # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
