@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitLab
 , fetchpatch
@@ -33,14 +34,12 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  disabledTests = [
-    # Test requires network access
-    "test_discovery"
-  ];
-
   pythonImportsCheck = [
     "tololib"
   ];
+
+  # Network discovery doesn't work in the sandbox for darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
