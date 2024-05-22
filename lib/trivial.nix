@@ -403,7 +403,7 @@ in {
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Uakari";
+  codeName = "Vicuña";
 
   /**
     Returns the current nixpkgs version suffix as string.
