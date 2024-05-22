@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  pytest-sugar,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-/+9KYxXYTN0T6PoccAA/pwdwWqOzCSZdNxj6xi6oG74=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     colorlog
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "skybellpy"
-  ];
+  pythonImportsCheck = [ "skybellpy" ];
 
   meta = with lib; {
     description = "Python wrapper for the Skybell alarm API";
