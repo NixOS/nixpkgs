@@ -12,7 +12,7 @@ if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 # journal has exploded or does not exist, such as in a container, chroot or
 # such cases.
 
-LABEL=${LABEL:-nixos-rebuild}
+LABEL="${LABEL:-nixos-rebuild}"
 # the cat >/dev/null is load bearing if systemd-cat fails to initialize,
 # because script does not like having its output fd hang up on it, and seems to
 # hang the terminal if that happens.
