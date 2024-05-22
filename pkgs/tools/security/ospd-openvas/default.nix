@@ -47,5 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/greenbone/ospd-openvas/releases/tag/v${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
