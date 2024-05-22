@@ -1,13 +1,19 @@
-{ lib
-, stdenv
+{ asciidoctor
+, darwin
 , fetchgit
-, asciidoctor
 , git
 , installShellFiles
-, rustPlatform
-, testers
+, jq
+, lib
+, makeWrapper
+, man-db
+, openssh
 , radicle-node
-, darwin
+, runCommand
+, rustPlatform
+, stdenv
+, testers
+, xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
   version = "1.0.0-rc.9";
@@ -20,7 +26,7 @@
   };
   cargoHash = "sha256-UM9eDWyeewWPq3+z0JWqdAsCxx6EqytuYMwLXDHOC64=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];
   buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -45,7 +51,40 @@
     done
   '';
 
-  passthru.tests.version = testers.testVersion { package = radicle-node; };
+  postFixup = ''
+    for program in $out/bin/* ;
+    do
+      wrapProgram "$program" \
+        --prefix PATH : "${lib.makeBinPath [ git man-db openssh xdg-utils ]}"
+    done
+  '';
+
+  passthru.tests =
+    let
+      package = radicle-node;
+    in
+    {
+      version = testers.testVersion { inherit package; };
+      basic = runCommand "${package.name}-basic-test"
+        {
+          nativeBuildInputs = [ jq openssh radicle-node ];
+        } ''
+        set -e
+        export RAD_HOME="$PWD/.radicle"
+        mkdir -p "$RAD_HOME/keys"
+        ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+        jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+
+        rad config > /dev/null
+        rad debug | jq -e '
+            (.sshVersion | contains("${openssh.version}"))
+          and
+            (.gitVersion | contains("${git.version}"))
+        '
+
+        touch $out
+      '';
+    };
 
   meta = {
     description = "Radicle node and CLI for decentralized code collaboration";
