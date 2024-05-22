@@ -22,5 +22,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://icon-theme.freedesktop.org/releases/";
     platforms = platforms.unix;
     license = licenses.gpl2Only;
+    maintainers = with maintainers; [ jopejoe1 ];
   };
 }
