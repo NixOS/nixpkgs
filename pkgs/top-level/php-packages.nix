@@ -59,6 +59,12 @@ in {
 
   inherit (builders.v1) buildComposerProject composerHooks mkComposerRepository;
 
+  buildComposerEnv = import ../build-support/build-composer {
+    inherit php lib;
+    inherit (pkgs) stdenv makeWrapper writeTextFile fetchurl unzip;
+    inherit (pkgs.php81Packages) composer;
+  };
+
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
   mkDerivation = origArgs:
@@ -190,6 +196,10 @@ in {
     castor = callPackage ../development/php-packages/castor { };
 
     composer = callPackage ../development/php-packages/composer { };
+
+    composer2nix = pkgs.callPackage ../development/php-packages/composer2nix {
+      inherit php buildComposerEnv;
+    };
 
     deployer = callPackage ../development/php-packages/deployer { };
 
