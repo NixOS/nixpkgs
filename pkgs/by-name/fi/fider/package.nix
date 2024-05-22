@@ -41,30 +41,50 @@ let
   };
 
   esbuild' = esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.14.38";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-rvMi1oC7qGidvi4zrm9KCMMntu6LJGVOGN6VmU2ivQE=";
-      };
-      vendorHash = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
-    });
+    buildGoModule =
+      args:
+      buildGoModule (
+        args
+        // rec {
+          version = "0.14.38";
+          src = fetchFromGitHub {
+            owner = "evanw";
+            repo = "esbuild";
+            rev = "v${version}";
+            hash = "sha256-rvMi1oC7qGidvi4zrm9KCMMntu6LJGVOGN6VmU2ivQE=";
+          };
+          vendorHash = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+        }
+      );
   };
 
   frontend = buildNpmPackage {
     inherit src version;
     pname = "fider-frontend";
 
-    dontNpmBuild = true;
-    dontBuild = true; # It requires godotenv to be installed - which I don't really know how to do
-
-    nativeBuildInputs = [
-      esbuild'
-    ];
+    nativeBuildInputs = [ esbuild' ];
 
     npmDepsHash = "sha256-YsWRJab/dPiZxBwvE0B3cf/L8CJpdTrOD+bWU4OSX+o=";
+
+    buildPhase = ''
+      runHook preBuild
+
+      npx lingui extract public/
+      npx lingui compile
+      NODE_ENV=production node esbuild.config.js
+      npx webpack-cli
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r dist ssr.js favicon.png robots.txt $out/
+
+      runHook postInstall
+    '';
 
     env = {
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = 1;
@@ -74,9 +94,8 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fider";
-  inherit version;
+  inherit version src;
 
-  dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -85,8 +104,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out
 
+    cp -r locale $out/
+    cp -r views $out/
+    cp -r migrations $out/
     cp -r ${server}/bin $out/
-    cp -r ${frontend}/lib $out/
+    ls -la ${frontend}
+    cp -r ${frontend}/* $out/
 
     runHook postInstall
   '';
