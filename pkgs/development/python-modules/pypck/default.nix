@@ -13,13 +13,13 @@
 buildPythonPackage rec {
   pname = "pypck";
   version = "0.7.19";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
-    repo = pname;
+    repo = "pypck";
     rev = "refs/tags/${version}";
     hash = "sha256-D4uUR8A1mrT+mxUswS34hSRczjRkRro/pz9NbMUCPjM=";
   };
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     echo "${version}" > VERSION
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-asyncio
