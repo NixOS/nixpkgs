@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "fim";
+    platforms = platforms.linux;
   };
 }
