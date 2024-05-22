@@ -1,31 +1,33 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, parameterized
-, pydantic
-, pytest-env
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  parameterized,
+  pydantic,
+  pytest-env,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.86.0";
-  format = "setuptools";
+  version = "1.87.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-elirU6u6smuYIj8oO6s2ybQB8Tu0pJPkBdjd0W0CfFE=";
+    hash = "sha256-fjJiWHT1Kc/H/oqoUqDw8Bl5nMR3QlHPosgcUXATlA4=";
   };
 
   postPatch = ''
@@ -33,7 +35,9 @@ buildPythonPackage rec {
     rm pytest.ini
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     boto3
     jsonschema
     pydantic
@@ -80,9 +84,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "samtranslator"
-  ];
+  pythonImportsCheck = [ "samtranslator" ];
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
