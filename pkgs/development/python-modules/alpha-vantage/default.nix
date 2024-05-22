@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, pytestCheckHook
-, requests
-, requests-mock
-, setuptools
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandas,
+  pytestCheckHook,
+  requests,
+  requests-mock,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-DWnaLjnbAHhpe8aGUN7JaXEYC0ivWlizOSAfdvg33DM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -44,9 +43,7 @@ buildPythonPackage rec {
   # https://github.com/RomelTorres/alpha_vantage/issues/344
   doCheck = false;
 
-  pythonImportsCheck = [
-    "alpha_vantage"
-  ];
+  pythonImportsCheck = [ "alpha_vantage" ];
 
   meta = with lib; {
     description = "Python module for the Alpha Vantage API";
