@@ -47,12 +47,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = with lib; {
+  meta = {
     description = "Control your tools with a few keystrokes";
     homepage = "https://raycast.app/";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ lovesegfault stepbrobd donteatoreo ];
+    license = with lib.licenses; [ unfree ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ lovesegfault stepbrobd donteatoreo ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
 })
