@@ -25,11 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-PdUlloJ4DncnktKQHofn/OLVrgSVyWhaeEEhl3Hgjek=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     python-dotenv
     requests
