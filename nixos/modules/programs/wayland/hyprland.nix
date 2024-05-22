@@ -1,8 +1,5 @@
-{ config
-, lib
-, pkgs
-, ...
-}:
+{ config, lib, pkgs, ... }:
+
 let
   cfg = config.programs.hyprland;
 
@@ -53,33 +50,29 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.finalPackage ];
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      environment.systemPackages = [ cfg.finalPackage ];
 
-    fonts.enableDefaultPackages = lib.mkDefault true;
-    hardware.opengl.enable = lib.mkDefault true;
+      services.displayManager.sessionPackages = [ cfg.finalPackage ];
 
-    programs = {
-      dconf.enable = lib.mkDefault true;
-      xwayland.enable = lib.mkDefault cfg.xwayland.enable;
-    };
+      xdg.portal = {
+        extraPortals = [ finalPortalPackage ];
+        configPackages = lib.mkDefault [ cfg.finalPackage ];
+      };
 
-    security.polkit.enable = true;
+      systemd = lib.mkIf cfg.systemd.setPath.enable {
+        user.extraConfig = ''
+          DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin:/etc/profiles/per-user/%u/bin:/run/wrappers/bin"
+        '';
+      };
+    }
 
-    services.displayManager.sessionPackages = [ cfg.finalPackage ];
-
-    xdg.portal = {
-      enable = lib.mkDefault true;
-      extraPortals = [ finalPortalPackage ];
-      configPackages = lib.mkDefault [ cfg.finalPackage ];
-    };
-
-    systemd = lib.mkIf cfg.systemd.setPath.enable {
-      user.extraConfig = ''
-        DefaultEnvironment="PATH=$PATH:/run/current-system/sw/bin:/etc/profiles/per-user/%u/bin:/run/wrappers/bin"
-      '';
-    };
-  };
+    (import ./wayland-session.nix {
+      inherit lib pkgs;
+      xwayland = cfg.xwayland.enable;
+    })
+  ]);
 
   imports = [
     (lib.mkRemovedOptionModule
