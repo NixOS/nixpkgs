@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, libgcrypt
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  libgcrypt,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,13 +17,9 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-WM0Z6sd8S71F8FfhhoUq3MSD/2uvRTY/FsBP7VGGtb0=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  buildInputs = with python3.pkgs; [
-    libgcrypt
-  ];
+  buildInputs = with python3.pkgs; [ libgcrypt ];
 
   dependencies = with python3.pkgs; [
     pyserial
@@ -31,9 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     scapy
   ];
 
-  pythonImportsCheck = [
-    "killerbee"
-  ];
+  pythonImportsCheck = [ "killerbee" ];
 
   meta = with lib; {
     description = "IEEE 802.15.4/ZigBee Security Research Toolkit";
