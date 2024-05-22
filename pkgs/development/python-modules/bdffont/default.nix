@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, nix-update-script
-, hatch-vcs
-, hatchling
-, brotli
-, fonttools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  nix-update-script,
+  hatch-vcs,
+  hatchling,
+  brotli,
+  fonttools,
 }:
 
 buildPythonPackage rec {

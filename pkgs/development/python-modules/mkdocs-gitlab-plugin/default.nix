@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, fetchzip
-, isPy3k
-, lib
-, mkdocs
+{
+  buildPythonPackage,
+  fetchzip,
+  isPy3k,
+  lib,
+  mkdocs,
 }:
 
 buildPythonPackage rec {

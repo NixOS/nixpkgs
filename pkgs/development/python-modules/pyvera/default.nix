@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
-, responses
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov,
+  pytest-asyncio,
+  pytest-timeout,
+  responses,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {

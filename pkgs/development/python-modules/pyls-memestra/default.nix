@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecated
-, memestra
-, python-lsp-server
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  deprecated,
+  memestra,
+  python-lsp-server,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
   # Tests fail because they rely on writting to read-only files
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyls_memestra"
-  ];
+  pythonImportsCheck = [ "pyls_memestra" ];
 
   meta = with lib; {
     description = "Memestra plugin for the Python Language Server";

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pythonOlder
-, mock
-, nose2
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pythonOlder,
+  mock,
+  nose2,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-8eB8cuhgXGqegLZLyPQnFN4Ip4nH3kF+ScP4ehlpLkc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     hypothesis
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "dpath"
-  ];
+  pythonImportsCheck = [ "dpath" ];
 
   meta = with lib; {
     description = "Python library for accessing and searching dictionaries via /slashed/paths ala xpath";

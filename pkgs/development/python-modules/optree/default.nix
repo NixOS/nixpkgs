@@ -1,13 +1,14 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, lib
-, cmake
-, setuptools
-, typing-extensions
-, pybind11
-, pytestCheckHook
+{
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  lib,
+  cmake,
+  setuptools,
+  typing-extensions,
+  pybind11,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
   nativeBuildInputs = [
     setuptools
     pybind11
     cmake
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # prevent import failures from pytest
   preCheck = ''
     rm -r optree
@@ -46,9 +43,7 @@ buildPythonPackage rec {
     # Fails because the 'test_treespec' module can't be found
     "test_treespec_pickle_missing_registration"
   ];
-  pythonImportsCheck = [
-    "optree"
-  ];
+  pythonImportsCheck = [ "optree" ];
 
   meta = with lib; {
     homepage = "https://github.com/metaopt/optree";

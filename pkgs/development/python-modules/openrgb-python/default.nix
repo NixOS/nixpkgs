@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-2eeb2XHYvBaHkHHs9KxZKDGXtcLaT28c/aLC9pxrRmM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "openrgb"
-  ];
+  pythonImportsCheck = [ "openrgb" ];
 
   meta = with lib; {
     description = "Module for the OpenRGB SDK";

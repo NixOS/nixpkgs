@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pythonOlder,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# docs
-, sphinxHook
-, sphinx-rtd-theme
-, myst-parser
+  # docs
+  sphinxHook,
+  sphinx-rtd-theme,
+  myst-parser,
 
-# propagates
-, typing-extensions
+  # propagates
+  typing-extensions,
 
-# optionals
-, cryptography
-, pillow
+  # optionals
+  cryptography,
+  pillow,
 
-# tests
-, fpdf2
-, pytestCheckHook
-, pytest-timeout
+  # tests
+  fpdf2,
+  pytestCheckHook,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     (fetchpatch2 {
       # add missing test marker on networked test
       url = "https://github.com/py-pdf/pypdf/commit/f43268734a529d4098e6258bf346148fd24c54f0.patch";
-      includes = [
-        "tests/test_generic.py"
-      ];
+      includes = [ "tests/test_generic.py" ];
       hash = "sha256-Ow32UB4crs3OgT+AmA9TNmcO5Y9SoSahybzD3AmWmVk=";
     })
   ];
@@ -69,33 +68,26 @@ buildPythonPackage rec {
       --replace "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   passthru.optional-dependencies = rec {
     full = crypto ++ image;
-    crypto = [
-      cryptography
-    ];
-    image = [
-      pillow
-    ];
+    crypto = [ cryptography ];
+    image = [ pillow ];
   };
 
-  pythonImportsCheck = [
-    "pypdf"
-  ];
+  pythonImportsCheck = [ "pypdf" ];
 
   nativeCheckInputs = [
-    (fpdf2.overridePythonAttrs { doCheck = false; })  # avoid reference loop
+    (fpdf2.overridePythonAttrs { doCheck = false; }) # avoid reference loop
     pytestCheckHook
     pytest-timeout
   ] ++ passthru.optional-dependencies.full;
 
   pytestFlagsArray = [
     # don't access the network
-    "-m" "'not enable_socket'"
+    "-m"
+    "'not enable_socket'"
   ];
 
   disabledTests = [

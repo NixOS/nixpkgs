@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, docopt }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  docopt,
+}:
 
 buildPythonPackage rec {
   pname = "httpserver";

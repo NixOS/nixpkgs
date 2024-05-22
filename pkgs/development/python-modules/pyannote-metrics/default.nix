@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, pyannote-core
-, pyannote-database
-, pandas
-, scipy
-, scikit-learn
-, docopt
-, tabulate
-, matplotlib
-, sympy
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  pyannote-core,
+  pyannote-database,
+  pandas,
+  scipy,
+  scikit-learn,
+  docopt,
+  tabulate,
+  matplotlib,
+  sympy,
+  numpy,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, importlib-resources
-, setuptools
-, packaging
-, tomli
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  importlib-metadata,
+  importlib-resources,
+  setuptools,
+  packaging,
+  tomli,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -42,13 +43,9 @@ buildPythonPackage rec {
     tomli
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pkg_about"
-  ];
+  pythonImportsCheck = [ "pkg_about" ];
 
   meta = with lib; {
     description = "Python metadata sharing at runtime";

@@ -4140,9 +4140,7 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
-  atlas = callPackage ../development/tools/database/atlas {
-    buildGoModule = buildGo122Module;
-  };
+  atlas = callPackage ../development/tools/database/atlas { };
 
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -7917,7 +7915,7 @@ with pkgs;
   ferm = callPackage ../tools/networking/ferm { };
 
   feroxbuster = callPackage ../tools/security/feroxbuster {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   ffsend = callPackage ../tools/misc/ffsend {
@@ -41075,8 +41073,6 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   dict-cc-py = callPackage ../applications/misc/dict-cc-py { };
-
-  sirikali = libsForQt5.callPackage ../tools/security/sirikali { };
 
   wpm = callPackage ../applications/misc/wpm { };
 

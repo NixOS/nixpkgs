@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, fetchpatch
-, appdirs
-, cffi
-, decorator
-, mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, oldest-supported-numpy
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytestCheckHook
-, pytools
-, setuptools
-, six
-, wheel
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  fetchpatch,
+  appdirs,
+  cffi,
+  decorator,
+  mako,
+  mesa_drivers,
+  numpy,
+  ocl-icd,
+  oldest-supported-numpy,
+  opencl-headers,
+  platformdirs,
+  pybind11,
+  pytest,
+  pytestCheckHook,
+  pytools,
+  setuptools,
+  six,
+  wheel,
 }:
 
 let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+  os-specific-buildInputs = if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+in
+buildPythonPackage rec {
   pname = "pyopencl";
   version = "2024.1";
   format = "pyproject";
@@ -41,7 +42,10 @@ in buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  buildInputs = [
+    opencl-headers
+    pybind11
+  ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [
     appdirs

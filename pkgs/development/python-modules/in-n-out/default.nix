@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, future
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, hatchling
-, hatch-vcs
-, toolz
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  future,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
+  toolz,
 }:
 
 buildPythonPackage rec {
@@ -30,18 +31,14 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [
     pytestCheckHook
     toolz
   ];
 
-  pythonImportsCheck = [
-    "in_n_out"
-  ];
+  pythonImportsCheck = [ "in_n_out" ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
     # Fatal Python error

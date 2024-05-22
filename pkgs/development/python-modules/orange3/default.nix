@@ -1,51 +1,52 @@
-{ lib
-, stdenv
-, baycomp
-, bottleneck
-, buildPythonPackage
-, chardet
-, copyDesktopItems
-, pythonRelaxDepsHook
-, cython
-, catboost
-, xgboost
-, fetchFromGitHub
-, fetchurl
-, httpx
-, joblib
-, keyring
-, keyrings-alt
-, makeDesktopItem
-, matplotlib
-, nix-update-script
-, numpy
-, oldest-supported-numpy
-, openpyxl
-, opentsne
-, orange-canvas-core
-, orange-widget-base
-, pandas
-, pytestCheckHook
-, pytest-qt
-, pyqtgraph
-, pyqtwebengine
-, python
-, python-louvain
-, pythonOlder
-, pyyaml
-, pip
-, qt5
-, qtconsole
-, recommonmark
-, requests
-, scikit-learn
-, scipy
-, serverfiles
-, setuptools
-, sphinx
-, wheel
-, xlrd
-, xlsxwriter
+{
+  lib,
+  stdenv,
+  baycomp,
+  bottleneck,
+  buildPythonPackage,
+  chardet,
+  copyDesktopItems,
+  pythonRelaxDepsHook,
+  cython,
+  catboost,
+  xgboost,
+  fetchFromGitHub,
+  fetchurl,
+  httpx,
+  joblib,
+  keyring,
+  keyrings-alt,
+  makeDesktopItem,
+  matplotlib,
+  nix-update-script,
+  numpy,
+  oldest-supported-numpy,
+  openpyxl,
+  opentsne,
+  orange-canvas-core,
+  orange-widget-base,
+  pandas,
+  pytestCheckHook,
+  pytest-qt,
+  pyqtgraph,
+  pyqtwebengine,
+  python,
+  python-louvain,
+  pythonOlder,
+  pyyaml,
+  pip,
+  qt5,
+  qtconsole,
+  recommonmark,
+  requests,
+  scikit-learn,
+  scipy,
+  serverfiles,
+  setuptools,
+  sphinx,
+  wheel,
+  xlrd,
+  xlsxwriter,
 }:
 
 let
@@ -125,7 +126,10 @@ let
     # FIXME: pythonRelaxDeps is not relaxing the scikit-learn version constraint, had to disable this
     dontCheckRuntimeDeps = true;
 
-    pythonImportsCheck = [ "Orange" "Orange.data._variable" ];
+    pythonImportsCheck = [
+      "Orange"
+      "Orange.data._variable"
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -136,8 +140,19 @@ let
         comment = "Explore, analyze, and visualize your data";
         icon = "orange-canvas";
         mimeTypes = [ "application/x-extension-ows" ];
-        categories = [ "Science" "Education" "ArtificialIntelligence" "DataVisualization" "NumericalAnalysis" "Qt" ];
-        keywords = [ "Machine Learning" "Scientific Visualization" "Statistical Analysis" ];
+        categories = [
+          "Science"
+          "Education"
+          "ArtificialIntelligence"
+          "DataVisualization"
+          "NumericalAnalysis"
+          "Qt"
+        ];
+        keywords = [
+          "Machine Learning"
+          "Scientific Visualization"
+          "Statistical Analysis"
+        ];
       })
     ];
 
@@ -180,7 +195,10 @@ let
 
         '';
 
-        nativeBuildInputs = [ pytestCheckHook pytest-qt ];
+        nativeBuildInputs = [
+          pytestCheckHook
+          pytest-qt
+        ];
 
         postCheck = ''
           touch $out

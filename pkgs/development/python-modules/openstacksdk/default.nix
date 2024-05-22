@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, platformdirs
-, cryptography
-, dogpile-cache
-, jmespath
-, jsonpatch
-, keystoneauth1
-, munch
-, netifaces
-, os-service-types
-, pbr
-, pythonOlder
-, pyyaml
-, requestsexceptions
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  platformdirs,
+  cryptography,
+  dogpile-cache,
+  jmespath,
+  jsonpatch,
+  keystoneauth1,
+  munch,
+  netifaces,
+  os-service-types,
+  pbr,
+  pythonOlder,
+  pyyaml,
+  requestsexceptions,
 }:
 
 buildPythonPackage rec {
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [
-    "openstack"
-  ];
+  pythonImportsCheck = [ "openstack" ];
 
   meta = with lib; {
     description = "An SDK for building applications to work with OpenStack";

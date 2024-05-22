@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-bIcnYcbfAwjet3cg97y+ujFfY2916ANk4sw0sZoU59g=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses
@@ -39,9 +38,7 @@ buildPythonPackage rec {
       --replace ', "pytest-runner"' ""
   '';
 
-  pythonImportsCheck = [
-    "pylaunches"
-  ];
+  pythonImportsCheck = [ "pylaunches" ];
 
   meta = with lib; {
     description = "Python module to get information about upcoming space launches";

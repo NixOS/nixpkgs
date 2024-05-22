@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, numpy
-, pillow
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  numpy,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 let
@@ -29,7 +30,6 @@ let
     rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
     hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
   };
-
 in
 buildPythonPackage {
   inherit pname version src;
@@ -42,9 +42,7 @@ buildPythonPackage {
     ./pillow-10.1.0-compat.patch
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     numpy
@@ -52,9 +50,7 @@ buildPythonPackage {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.
@@ -65,20 +61,21 @@ buildPythonPackage {
     ln -s ${test_data}/data_store/data $HOME/.pydicom/data
   '';
 
-  disabledTests = [
-    # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
-    "test_fetch_data_files"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # https://github.com/pydicom/pydicom/issues/1386
-    "test_array"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # flaky, hard to reproduce failure outside hydra
-    "test_time_check"
-  ];
+  disabledTests =
+    [
+      # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
+      "test_fetch_data_files"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # https://github.com/pydicom/pydicom/issues/1386
+      "test_array"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # flaky, hard to reproduce failure outside hydra
+      "test_time_check"
+    ];
 
-  pythonImportsCheck = [
-    "pydicom"
-  ];
+  pythonImportsCheck = [ "pydicom" ];
 
   meta = with lib; {
     description = "Python package for working with DICOM files";

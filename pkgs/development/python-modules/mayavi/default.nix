@@ -1,19 +1,20 @@
-{ lib
-, apptools
-, buildPythonPackage
-, envisage
-, fetchPypi
-, fetchpatch
-, numpy
-, packaging
-, pyface
-, pygments
-, pyqt5
-, pythonOlder
-, pythonAtLeast
-, traitsui
-, vtk
-, wrapQtAppsHook
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  envisage,
+  fetchPypi,
+  fetchpatch,
+  numpy,
+  packaging,
+  pyface,
+  pygments,
+  pyqt5,
+  pythonOlder,
+  pythonAtLeast,
+  traitsui,
+  vtk,
+  wrapQtAppsHook,
 }:
 
 buildPythonPackage rec {
@@ -53,9 +54,7 @@ buildPythonPackage rec {
       --replace "build.build.run(self)" "build.build.run(self); return"
   '';
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     apptools
@@ -74,9 +73,7 @@ buildPythonPackage rec {
   # Needs X server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mayavi"
-  ];
+  pythonImportsCheck = [ "mayavi" ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")

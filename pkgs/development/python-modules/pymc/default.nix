@@ -1,17 +1,18 @@
-{ lib
-, arviz
-, buildPythonPackage
-, cachetools
-, cloudpickle
-, fetchFromGitHub
-, numpy
-, pandas
-, pytensor
-, pythonOlder
-, rich
-, scipy
-, setuptools
-, typing-extensions
+{
+  lib,
+  arviz,
+  buildPythonPackage,
+  cachetools,
+  cloudpickle,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pytensor,
+  pythonOlder,
+  rich,
+  scipy,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace-fail ', "pytest-cov"' ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     arviz
@@ -53,15 +52,16 @@ buildPythonPackage rec {
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pymc"
-  ];
+  pythonImportsCheck = [ "pymc" ];
 
   meta = with lib; {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
     changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nidabdella ferrine ];
+    maintainers = with maintainers; [
+      nidabdella
+      ferrine
+    ];
   };
 }

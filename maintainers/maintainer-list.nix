@@ -3610,6 +3610,12 @@
     githubId = 1118859;
     name = "Scott Worley";
   };
+  chmouel = {
+    email = "chmouel@chmouel.com";
+    github = "chmouel";
+    githubId = 98980;
+    name = "Chmouel Boudjnah";
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
@@ -9829,6 +9835,12 @@
     github = "johnchildren";
     githubId = 32305209;
     name = "John Children";
+  };
+  johnjohnstone = {
+   email = "jjohnstone@riseup.net";
+   github = "johnjohnstone";
+   githubId = 3208498;
+   name = "John Johnstone";
   };
   johnmh = {
     email = "johnmh@openblox.org";

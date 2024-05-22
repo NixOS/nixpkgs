@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, attrs
-, backoff
-, backports-strenum
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyhumps
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, warrant-lite
+{
+  lib,
+  aiohttp,
+  attrs,
+  backoff,
+  backports-strenum,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyhumps,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  warrant-lite,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace-fail 'pyhumps = "^3.0.2,!=3.7.3"' 'pyhumps = "^3.0.2"'
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyoverkiz"
-  ];
+  pythonImportsCheck = [ "pyoverkiz" ];
 
   meta = with lib; {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";

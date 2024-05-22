@@ -1,43 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
 
-, cairo
-, ffmpeg
-, texliveInfraOnly
+  cairo,
+  ffmpeg,
+  texliveInfraOnly,
 
-, click
-, click-default-group
-, cloup
-, colour
-, grpcio
-, grpcio-tools
-, importlib-metadata
-, isosurfaces
-, jupyterlab
-, manimpango
-, mapbox-earcut
-, moderngl
-, moderngl-window
-, networkx
-, numpy
-, pillow
-, pycairo
-, pydub
-, pygments
-, rich
-, scipy
-, screeninfo
-, skia-pathops
-, srt
-, svgelements
-, tqdm
-, watchdog
+  click,
+  click-default-group,
+  cloup,
+  colour,
+  grpcio,
+  grpcio-tools,
+  importlib-metadata,
+  isosurfaces,
+  jupyterlab,
+  manimpango,
+  mapbox-earcut,
+  moderngl,
+  moderngl-window,
+  networkx,
+  numpy,
+  pillow,
+  pycairo,
+  pydub,
+  pygments,
+  rich,
+  scipy,
+  screeninfo,
+  skia-pathops,
+  srt,
+  svgelements,
+  tqdm,
+  watchdog,
 }:
 
 let
@@ -52,36 +53,137 @@ let
   #   https://github.com/yihui/tinytex/blob/master/tools/pkgs-custom.txt
   #
   # these two combined add up to:
-  manim-tinytex = texliveInfraOnly.withPackages (ps: with ps; [
+  manim-tinytex = texliveInfraOnly.withPackages (
+    ps: with ps; [
 
-    # tinytex
-    amsfonts amsmath atbegshi atveryend auxhook babel bibtex
-    bigintcalc bitset booktabs cm dehyph dvipdfmx dvips ec epstopdf-pkg etex
-    etexcmds etoolbox euenc everyshi fancyvrb filehook firstaid float fontspec
-    framed geometry gettitlestring glyphlist graphics graphics-cfg graphics-def
-    grffile helvetic hycolor hyperref hyph-utf8 iftex inconsolata infwarerr
-    intcalc knuth-lib kvdefinekeys kvoptions kvsetkeys l3backend l3kernel
-    l3packages latex latex-amsmath-dev latex-bin latex-fonts latex-tools-dev
-    latexconfig latexmk letltxmacro lm lm-math ltxcmds lua-alt-getopt luahbtex
-    lualatex-math lualibs luaotfload luatex mdwtools metafont mfware natbib
-    pdfescape pdftex pdftexcmds plain psnfss refcount rerunfilecheck stringenc
-    tex tex-ini-files times tipa tools unicode-data unicode-math uniquecounter
-    url xcolor xetex xetexconfig xkeyval xunicode zapfding
+      # tinytex
+      amsfonts
+      amsmath
+      atbegshi
+      atveryend
+      auxhook
+      babel
+      bibtex
+      bigintcalc
+      bitset
+      booktabs
+      cm
+      dehyph
+      dvipdfmx
+      dvips
+      ec
+      epstopdf-pkg
+      etex
+      etexcmds
+      etoolbox
+      euenc
+      everyshi
+      fancyvrb
+      filehook
+      firstaid
+      float
+      fontspec
+      framed
+      geometry
+      gettitlestring
+      glyphlist
+      graphics
+      graphics-cfg
+      graphics-def
+      grffile
+      helvetic
+      hycolor
+      hyperref
+      hyph-utf8
+      iftex
+      inconsolata
+      infwarerr
+      intcalc
+      knuth-lib
+      kvdefinekeys
+      kvoptions
+      kvsetkeys
+      l3backend
+      l3kernel
+      l3packages
+      latex
+      latex-amsmath-dev
+      latex-bin
+      latex-fonts
+      latex-tools-dev
+      latexconfig
+      latexmk
+      letltxmacro
+      lm
+      lm-math
+      ltxcmds
+      lua-alt-getopt
+      luahbtex
+      lualatex-math
+      lualibs
+      luaotfload
+      luatex
+      mdwtools
+      metafont
+      mfware
+      natbib
+      pdfescape
+      pdftex
+      pdftexcmds
+      plain
+      psnfss
+      refcount
+      rerunfilecheck
+      stringenc
+      tex
+      tex-ini-files
+      times
+      tipa
+      tools
+      unicode-data
+      unicode-math
+      uniquecounter
+      url
+      xcolor
+      xetex
+      xetexconfig
+      xkeyval
+      xunicode
+      zapfding
 
-    # manim-latex
-    standalone everysel preview doublestroke ms setspace rsfs relsize ragged2e
-    fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
-    babel-english gnu-freefont mathastext cbfonts-fd
-  ]);
-
-in buildPythonPackage rec {
+      # manim-latex
+      standalone
+      everysel
+      preview
+      doublestroke
+      ms
+      setspace
+      rsfs
+      relsize
+      ragged2e
+      fundus-calligra
+      microtype
+      wasysym
+      physics
+      dvisvgm
+      jknapltx
+      wasy
+      cm-super
+      babel-english
+      gnu-freefont
+      mathastext
+      cbfonts-fd
+    ]
+  );
+in
+buildPythonPackage rec {
   pname = "manim";
   pyproject = true;
   version = "0.18.1";
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner  = "ManimCommunity";
+    owner = "ManimCommunity";
     repo = "manim";
     rev = "refs/tags/v${version}";
     hash = "sha256-o+Wl3NMK6yopcsRVFtZuUE9c1GABa5d8rbQNHDJ4OiQ=";
@@ -100,9 +202,7 @@ in buildPythonPackage rec {
     "watchdog"
   ];
 
-  patches = [
-    ./pytest-report-header.patch
-  ];
+  patches = [ ./pytest-report-header.patch ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -142,7 +242,10 @@ in buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
       ffmpeg
       manim-tinytex
     ])

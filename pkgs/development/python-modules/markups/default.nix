@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchPypi
-, importlib-metadata
-, markdown
-, pygments
-, pytestCheckHook
-, python-markdown-math
-, pythonOlder
-, pyyaml
-, setuptools
-, textile
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  importlib-metadata,
+  markdown,
+  pygments,
+  pytestCheckHook,
+  python-markdown-math,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  textile,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     docutils
@@ -37,22 +36,16 @@ buildPythonPackage rec {
     python-markdown-math
     pyyaml
     textile
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: '.selector .ch { color: #408080' not found in 'pre...
     "test_get_pygments_stylesheet"
   ];
 
-  pythonImportsCheck = [
-    "markups"
-  ];
+  pythonImportsCheck = [ "markups" ];
 
   meta = with lib; {
     description = "Wrapper around various text markup languages";

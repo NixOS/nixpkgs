@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glyphslib
-, setuptools-scm
-, ufo2ft
-, fonttools
-, fontmath
-, lxml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glyphslib,
+  setuptools-scm,
+  ufo2ft,
+  fonttools,
+  fontmath,
+  lxml,
+  setuptools,
 }:
 
 buildPythonPackage rec {

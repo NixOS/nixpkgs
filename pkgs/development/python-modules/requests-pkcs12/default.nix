@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyopenssl
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyopenssl,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "requests_pkcs12"
-  ];
+  pythonImportsCheck = [ "requests_pkcs12" ];
 
   meta = with lib; {
     description = "PKCS#12 support for the Python requests library";

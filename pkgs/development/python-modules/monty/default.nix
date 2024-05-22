@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, numpy
-, pandas
-, pydantic
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, setuptools
-, setuptools-scm
-, torch
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msgpack,
+  numpy,
+  pandas,
+  pydantic,
+  pymongo,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
+  setuptools-scm,
+  torch,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -54,9 +55,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonImportsCheck = [
-    "monty"
-  ];
+  pythonImportsCheck = [ "monty" ];
 
   disabledTests = [
     # Test file was removed and re-added after 2022.9.9

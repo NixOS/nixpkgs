@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, appdirs
-, cliff
-, dogpile-cache
-, jsonschema
-, keystoneauth1
-, openstacksdk
-, osc-lib
-, oslo-utils
-, pyyaml
-, requests
-, stevedore
-, stestr
-, requests-mock
-, oslotest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  appdirs,
+  cliff,
+  dogpile-cache,
+  jsonschema,
+  keystoneauth1,
+  openstacksdk,
+  osc-lib,
+  oslo-utils,
+  pyyaml,
+  requests,
+  stevedore,
+  stestr,
+  requests-mock,
+  oslotest,
 }:
 
 buildPythonPackage rec {

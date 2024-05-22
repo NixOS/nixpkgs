@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, av
-, ctranslate2
-, huggingface-hub
-, onnxruntime
-, tokenizers
+  # dependencies
+  av,
+  ctranslate2,
+  huggingface-hub,
+  onnxruntime,
+  tokenizers,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "tokenizers"
-  ];
+  pythonRelaxDeps = [ "tokenizers" ];
 
   dependencies = [
     av
@@ -46,16 +45,12 @@ buildPythonPackage rec {
     tokenizers
   ];
 
-  pythonImportsCheck = [
-    "faster_whisper"
-  ];
+  pythonImportsCheck = [ "faster_whisper" ];
 
   # all tests require downloads
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

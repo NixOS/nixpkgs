@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, ipykernel
-, jupytext
-, mkdocs
-, mkdocs-material
-, nbconvert
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  ipykernel,
+  jupytext,
+  mkdocs,
+  mkdocs-material,
+  nbconvert,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace "[\"mkdocs\"," "[\"${mkdocs.out}/bin/mkdocs\","
   '';
 
-  pythonRelaxDeps = [
-    "nbconvert"
-  ];
+  pythonRelaxDeps = [ "nbconvert" ];
 
   nativeBuildInputs = [
     hatchling
@@ -50,13 +49,9 @@ buildPythonPackage rec {
     pygments
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mkdocs_jupyter"
-  ];
+  pythonImportsCheck = [ "mkdocs_jupyter" ];
 
   meta = with lib; {
     description = "Use Jupyter Notebook in mkdocs";

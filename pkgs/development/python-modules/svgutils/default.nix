@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, lxml
-, matplotlib
-, pytestCheckHook
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  lxml,
+  matplotlib,
+  pytestCheckHook,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,10 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  nativeCheckInputs = [ pytestCheckHook nose ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    nose
+  ];
 
   pythonImportsCheck = [ "svgutils" ];
 

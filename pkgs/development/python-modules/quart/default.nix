@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, aiofiles
-, blinker
-, click
-, flask
-, hypercorn
-, importlib-metadata
-, itsdangerous
-, jinja2
-, markupsafe
-, pydata-sphinx-theme
-, python-dotenv
-, typing-extensions
-, werkzeug
+  # propagates
+  aiofiles,
+  blinker,
+  click,
+  flask,
+  hypercorn,
+  importlib-metadata,
+  itsdangerous,
+  jinja2,
+  markupsafe,
+  pydata-sphinx-theme,
+  python-dotenv,
+  typing-extensions,
+  werkzeug,
 
-# tests
-, hypothesis
-, mock
-, py
-, pytest-asyncio
-, pytest7CheckHook
+  # tests
+  hypothesis,
+  mock,
+  py,
+  pytest-asyncio,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,35 +42,33 @@ buildPythonPackage rec {
     hash = "sha256-oR03Qu93F+pcWywbdYgMKIAdohBNezlGz04ws3yGAxs=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--no-cov-on-fail " ""
   '';
 
-  dependencies = [
-    aiofiles
-    blinker
-    click
-    flask
-    hypercorn
-    itsdangerous
-    jinja2
-    markupsafe
-    pydata-sphinx-theme
-    python-dotenv
-    werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-    typing-extensions
-  ];
+  dependencies =
+    [
+      aiofiles
+      blinker
+      click
+      flask
+      hypercorn
+      itsdangerous
+      jinja2
+      markupsafe
+      pydata-sphinx-theme
+      python-dotenv
+      werkzeug
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+      typing-extensions
+    ];
 
-  pythonImportsCheck = [
-    "quart"
-  ];
+  pythonImportsCheck = [ "quart" ];
 
   nativeCheckInputs = [
     hypothesis

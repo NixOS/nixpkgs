@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, httpx
-, pytest-aiohttp
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  httpx,
+  pytest-aiohttp,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     respx
   ];
 
-  pythonImportsCheck = [
-    "haphilipsjs"
-  ];
+  pythonImportsCheck = [ "haphilipsjs" ];
 
   meta = with lib; {
     description = "Python library to interact with Philips TVs with jointSPACE API";

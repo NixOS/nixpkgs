@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# dependencies
-, msgpack
+  # dependencies
+  msgpack,
 
-# tests
-, pytestCheckHook,
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,17 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-PfyjJZT5K/IMsyyWNZdh/CZf+uZHeJGfhyAPuu0IhJk=";
   };
 
-  build-system  = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    msgpack
-  ];
+  dependencies = [ msgpack ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "fluent"

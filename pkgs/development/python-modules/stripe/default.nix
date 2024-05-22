@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-kwXYSc6nFdxZxeOdAYkUdbguEO252V7h2BiUV+XeeS8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -31,9 +30,7 @@ buildPythonPackage rec {
   # Tests require network connectivity and there's no easy way to disable them
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stripe"
-  ];
+  pythonImportsCheck = [ "stripe" ];
 
   meta = with lib; {
     description = "Stripe Python bindings";

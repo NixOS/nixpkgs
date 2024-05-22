@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, matplotlib
-, numpy
-, pyaudio
-, pydub
-, pythonOlder
-, unittestCheckHook
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  matplotlib,
+  numpy,
+  pyaudio,
+  pydub,
+  pythonOlder,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +23,19 @@ buildPythonPackage rec {
     hash = "sha256-HNsw9VLP7XEgs8E2X6p7ygDM47AwWxMYjptipknFig4=";
   };
 
-  propagatedBuildInputs = [ matplotlib numpy pyaudio pydub ];
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    pyaudio
+    pydub
+  ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   pythonImportsCheck = [ "auditok" ];
 

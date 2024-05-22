@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, networkx
-, python-dateutil
-, rdflib
-, pydot
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  networkx,
+  python-dateutil,
+  rdflib,
+  pydot,
 }:
 
 buildPythonPackage rec {
@@ -25,16 +26,12 @@ buildPythonPackage rec {
     rdflib
   ];
 
-  nativeCheckInputs = [
-    pydot
-  ];
+  nativeCheckInputs = [ pydot ];
 
   # Multiple tests are out-dated and failing
   doCheck = false;
 
-  pythonImportsCheck = [
-    "prov"
-  ];
+  pythonImportsCheck = [ "prov" ];
 
   meta = with lib; {
     description = "Python library for W3C Provenance Data Model (PROV)";

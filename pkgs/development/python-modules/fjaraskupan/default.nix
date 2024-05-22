@@ -1,11 +1,12 @@
-{ lib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-3jw42lsCwNkFptMNpnhtbrPIkZP/8lUCcMigzq8Hbc4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
-    bleak
-  ];
+  dependencies = [ bleak ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fjaraskupan"
-  ];
+  pythonImportsCheck = [ "fjaraskupan" ];
 
   meta = with lib; {
     description = "Module for controlling Fjäråskupan kitchen fans";

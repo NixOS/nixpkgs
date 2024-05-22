@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, dnspython
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  dnspython,
 
-# for passthru.tests
-, celery  # check-input only
-, flask-pymongo
-, kombu  # check-input only
-, mongoengine
-, motor
-, pymongo-inmemory
+  # for passthru.tests
+  celery, # check-input only
+  flask-pymongo,
+  kombu, # check-input only
+  mongoengine,
+  motor,
+  pymongo-inmemory,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-QAB0CQuaYx8SC0LGGyIv10NJDBM6XS+ZwCCM78zMlk4=";
   };
 
-  propagatedBuildInputs = [
-    dnspython
-  ];
+  propagatedBuildInputs = [ dnspython ];
 
   # Tests call a running mongodb instance
   doCheck = false;
@@ -42,7 +41,7 @@ buildPythonPackage rec {
       mongoengine
       motor
       pymongo-inmemory
-    ;
+      ;
   };
 
   meta = with lib; {

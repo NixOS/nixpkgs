@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, asteroid-filterbanks
-, einops
-, huggingface-hub
-, pytorch-lightning
-, omegaconf
-, pyannote-core
-, pyannote-database
-, pyannote-metrics
-, pyannote-pipeline
-, pytorch-metric-learning
-, rich
-, semver
-, soundfile
-, speechbrain
-, tensorboardx
-, torch
-, torch-audiomentations
-, torchaudio
-, torchmetrics
-, numpy
-, pyscaffold
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  asteroid-filterbanks,
+  einops,
+  huggingface-hub,
+  pytorch-lightning,
+  omegaconf,
+  pyannote-core,
+  pyannote-database,
+  pyannote-metrics,
+  pyannote-pipeline,
+  pytorch-metric-learning,
+  rich,
+  semver,
+  soundfile,
+  speechbrain,
+  tensorboardx,
+  torch,
+  torch-audiomentations,
+  torchaudio,
+  torchmetrics,
+  numpy,
+  pyscaffold,
 }:
 
 buildPythonPackage rec {
