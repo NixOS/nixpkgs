@@ -421,6 +421,130 @@ rec {
 
   ################################################################################
 
+  types.openCpuModel = mkOptionType {
+    name = "cpu-model";
+    description = "cpu model";
+    merge = mergeOneOption;
+  };
+
+  types.cpuModel = platform: enum (attrValues (cpuModels platform));
+
+  cpuModels = platform: let
+    mkCpuModel = { zig ? "baseline", gnu ? "generic", llvm ? "generic", inferiors ? [], features ? [] }@args:
+      { zig = "baseline"; gnu = "generic"; llvm = "generic"; inferiors = []; features = []; } // args;
+    mkSimpleCpuModel = name:
+      mkCpuModel {
+        llvm = name;
+        gnu = name;
+        zig = builtins.replaceStrings [ "-" ] [ "_" ] name;
+        inferiors = [];
+        features = [];
+      };
+    generic = mkCpuModel {};
+
+    sets = {
+      aarch64 = {
+        ampere1 = mkSimpleCpuModel "ampere1";
+        ampere1a = mkSimpleCpuModel "ampere1a";
+        apple_m1 = (mkSimpleCpuModel "apple-m1") // { gnu = "generic"; };
+        apple_m2 = (mkSimpleCpuModel "apple-m2") // { gnu = "generic"; };
+        cortex_a53 = mkSimpleCpuModel "cortex-a53";
+        neoverse_n1 = mkSimpleCpuModel {
+          gnu = "armv8-a";
+          llvm = "neoverse-n1";
+          zig = "neoverse_n1";
+        };
+        neoverse_n2 = mkCpuModel {
+          gnu = "armv8-a";
+          llvm = "neoverse-n2";
+          zig = "neoverse_n2";
+        };
+        neoverse_n3 = mkCpuModel {
+          gnu = "armv9-a";
+          llvm =
+            /**/ if (platform ? llvmVersion && lib.versionAtLeast platform.llvmVersion "19") then "neoverse-n3"
+            else "armv9-a";
+          zig = "cortex-a510";
+        };
+      };
+      x86_64 = {
+        x86-64 = mkSimpleCpuModel "x86-64";
+
+        x86-64-v2 = (mkSimpleCpuModel "x86-64-v2") // {
+          inferiors = [ "x86-64" ];
+          features = [ "sse3" "ssse3" "sse4_1" "sse4_2" ];
+        };
+
+        x86-64-v3 = (mkSimpleCpuModel "x86-64-v3") // {
+          inferiors = [ "x86-64-v2" ] ++ sets.x86_64.x86-64-v2.inferiors;
+          features = [ "avx" "avx2" "fma" ] ++ sets.x86_64.x86-64-v2.features;
+        };
+
+        x86-64-v4 = (mkSimpleCpuModel "x86-64-v4") // {
+          inferiors = [ "x86-64-v3" ] ++ sets.x86_64.x86-64-v3.inferiors;
+          features = [ "avx" "avx2" "avx512" "fma" ] ++ sets.x86_64.x86-64-v2.features;
+        };
+
+        nehalem = (mkSimpleCpuModel "nehalem") // {
+          inferiors = [ "x86-64-v2" ] ++ sets.x86_64.x86-64-v2.inferiors;
+          features = [ "aes" ] ++ sets.x86_64.x86-64-v2.features;
+        };
+
+        westmere = (mkSimpleCpuModel "westmere") // {
+          inferiors = [ "nehalem" ] ++ sets.x86_64.nehalem.inferiors;
+          inherit (sets.x86_64.nehalem) features;
+        };
+
+        sandybridge = (mkSimpleCpuModel "sandybridge") // {
+          inferiors = [ "westmere" ] ++ sets.x86_64.westmere.inferiors;
+          features = [ "avx" ] ++ sets.x86_64.westmere.features;
+        };
+
+        ivybridge = (mkSimpleCpuModel "ivybridge") // {
+          inferiors = [ "sandybridge" ] ++ sets.x86_64.sandybridge.inferiors;
+          inherit (sets.x86_64.sandybridge) features;
+        };
+
+        haswell = (mkSimpleCpuModel "haswell") // {
+          inferiors = lib.unique ([ "ivybridge" "x86-64-v3" ] ++ sets.x86_64.ivybridge.inferiors ++ sets.x86_64.x86-64-v3.inferiors);
+          features = [ "avx2" "fma" ] ++ sets.x86_64.ivybridge.features;
+        };
+
+        broadwell = (mkSimpleCpuModel "broadwell") // {
+          inferiors = [ "haswell" ] ++ sets.x86_64.haswell.inferiors;
+          inherit (sets.x86_64.ivybridge) features;
+        };
+
+        skylake = (mkSimpleCpuModel "skylake") // {
+          inferiors = [ "broadwell" ] ++ sets.x86_64.broadwell.inferiors;
+          inherit (sets.x86_64.broadwell) features;
+        };
+
+        skylake-avx512 = (mkSimpleCpuModel "skylake-avx512") // {
+          inferiors = lib.unique ([ "skylake" "x86-64-v4" ] ++ sets.x86_64.skylake.inferiors ++ sets.x86_64.x86-64-v4.inferiors);
+          features = [ "avx512" ] ++ sets.x86_64.broadwell.features;
+        };
+
+        znver1 = (mkSimpleCpuModel "znver1") // {
+          inferiors = [ "skylake" ] ++ sets.x86_64.skylake.inferiors;
+          features = [ "sse4a" ] ++ sets.x86_64.skylake.features;
+        };
+
+        znver2 = (mkSimpleCpuModel "znver2") // {
+          inferiors = [ "znver1" ] ++ sets.x86_64.znver1.inferiors;
+          inherit (sets.x86_64.znver1) features;
+        };
+
+        znver3 = (mkSimpleCpuModel "znver3") // {
+          inferiors = [ "znver2" ] ++ sets.x86_64.znver2.inferiors;
+          inherit (sets.x86_64.znver2) features;
+        };
+      };
+    };
+  in setTypes types.openCpuModel ((sets.${platform.parsed.cpu.name} or {}) // { inherit generic; });
+
+  ################################################################################
+
   types.parsedPlatform = mkOptionType {
     name = "system";
     description = "fully parsed representation of llvm- or nix-style platform tuple";
