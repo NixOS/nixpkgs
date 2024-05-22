@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
+    maintainers = [ maintainers.OulipianSummer ];
   };
 }
