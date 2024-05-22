@@ -45,9 +45,9 @@ buildGoModule rec {
 
   postInstall = ''
     installShellCompletion --cmd cr \
-      --bash <($out/bin/ct completion bash) \
-      --zsh <($out/bin/ct completion zsh) \
-      --fish <($out/bin/ct completion fish) \
+      --bash <($out/bin/cr completion bash) \
+      --zsh <($out/bin/cr completion zsh) \
+      --fish <($out/bin/cr completion fish) \
 
     wrapProgram $out/bin/cr --prefix PATH : ${lib.makeBinPath [
       coreutils
