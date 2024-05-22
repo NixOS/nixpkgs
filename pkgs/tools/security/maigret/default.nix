@@ -8,11 +8,11 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "soxoj";
-    repo = pname;
+    repo = "maigret";
     rev = "refs/tags/v${version}";
     hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
@@ -26,9 +26,15 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiohttp
     aiohttp-socks
@@ -78,7 +84,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = true;
-  pythonRemoveDeps = [ "future-annotations" ];
+
+  pythonRemoveDeps = [
+    "future-annotations"
+  ];
 
   pytestFlagsArray = [
     # DeprecationWarning: There is no current event loop
@@ -106,7 +115,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to collect details about an username";
     homepage = "https://maigret.readthedocs.io";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/soxoj/maigret/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
