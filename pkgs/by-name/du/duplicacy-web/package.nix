@@ -1,29 +1,31 @@
 { stdenv, fetchurl, lib }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+
   version = "1.8.1";
-  urls = {
-    x86_64-linux = "https://acrosync.com/duplicacy-web/duplicacy_web_linux_x64_${version}";
-    aarch64-linux = "https://acrosync.com/duplicacy-web/duplicacy_web_linux_arm64_${version}";
-    armv5tel-linux = "https://acrosync.com/duplicacy-web/duplicacy_web_linux_arm_${version}";
-  };
-  hashes = {
-    "x86_64-linux" = "sha256-XgyMlA7rN4YU6bXWP52/9K2LhEigjzgD2xQenGU6dn4=";
-    "aarch64-linux" = "sha256-M2RluQKsP1002khAXwWcrTMeBu8sHgV8d9iYRMw3Zbc=";
-    "armv5tel-linux" = "sha256-O4CHtKiRTciqKehwCNOJciD8wP40cL95n+Qg/NhVSGQ=";
+  platforms = {
+    x86_64-linux = {
+      url = "https://acrosync.com/duplicacy-web/duplicacy_web_linux_x64_${version}";
+      hash = "sha256-XgyMlA7rN4YU6bXWP52/9K2LhEigjzgD2xQenGU6dn4=";
+    };
+    aarch64-linux = {
+      url = "https://acrosync.com/duplicacy-web/duplicacy_web_linux_arm64_${version}";
+      hash = "sha256-M2RluQKsP1002khAXwWcrTMeBu8sHgV8d9iYRMw3Zbc=";
+    };
+    armv5tel-linux = {
+      url = "https://acrosync.com/duplicacy-web/duplicacy_web_linux_arm_${version}";
+      hash = "sha256-O4CHtKiRTciqKehwCNOJciD8wP40cL95n+Qg/NhVSGQ=";
+    };
   };
 in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duplicacy-web";
-  version = version;
+  inherit version;
 
-  src = fetchurl {
-    url = urls.${stdenv.hostPlatform.system};
-    sha256 = hashes.${stdenv.hostPlatform.system};
-  };
-
-  phases = [ "installPhase" ];
+  src = fetchurl (platforms.${system} or throw "Unsupported system: ${system}");
+  dontUnpack = true;
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -31,12 +33,15 @@ stdenv.mkDerivation {
     chmod +x $out/bin/duplicacy-web
   '';
 
-  meta = with lib; {
+  meta =  {
     homepage = "https://duplicacy.com";
     description = "A new generation cloud backup tool with web-based GUI";
-    platforms = platforms.linux;
+    platforms = lib.attrNames platforms;
     license = licenses.unfree;
-    maintainers = [ maintainers.DogeRam1500 ];
+    maintainers = with lib.maintainers; [ DogeRam1500 ];
     downloadPage = "https://duplicacy.com/download.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
+
+
