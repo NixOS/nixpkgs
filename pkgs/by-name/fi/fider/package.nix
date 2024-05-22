@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   esbuild,
+  nixosTests,
 }:
 
 let
@@ -107,6 +108,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) fider;
+  };
 
   meta = {
     description = "Open platform to collect and prioritize feedback";
