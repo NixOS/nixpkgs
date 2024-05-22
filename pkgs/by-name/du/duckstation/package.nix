@@ -11,16 +11,21 @@
 , makeWrapper
 , ninja
 , pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
+, qt6
 , substituteAll
 , vulkan-loader
 , wayland
-, wrapQtAppsHook
 }:
 
+let
+  inherit (qt6)
+    qtbase
+    qtsvg
+    qttools
+    qtwayland
+    wrapQtAppsHook
+  ;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
   version = "0.1-6292";
