@@ -3,47 +3,38 @@
 , python3
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      packaging = super.packaging.overridePythonAttrs (oldAttrs: rec {
-        version = "21.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-3UfEKSfYmrkR5gZRiQfMLTofOLvQJjhZcGQ/nFuOz+s=";
-        };
-        nativeBuildInputs = with python3.pkgs; [ setuptools ];
-        propagatedBuildInputs = with python3.pkgs; [ pyparsing six ];
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "skjold";
-  version = "0.6.1";
-  format = "pyproject";
+  version = "0.6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twu";
-    repo = pname;
+    repo = "skjold";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rsdstzNZvokYfTjEyPrWR+0SJpf9wL0HAesq8+A+tPY=";
+    hash = "sha256-/ltaRs2WZXbrG3cVez+QIwupJrsV550TjOALbHX9Z0I=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
+  pythonRelaxDeps = [
+    "packaging"
+  ];
+
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     click
     packaging
     pyyaml
     toml
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-mock
     pytest-watch
     pytestCheckHook
@@ -75,7 +66,7 @@ buildPythonApplication rec {
     description = "Tool to Python dependencies against security advisory databases";
     homepage = "https://github.com/twu/skjold";
     changelog = "https://github.com/twu/skjold/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
