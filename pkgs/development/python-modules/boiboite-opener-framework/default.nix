@@ -7,12 +7,13 @@
   pythonOlder,
   pythonRelaxDepsHook,
   scapy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "boiboite-opener-framework";
   version = "1.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,7 +29,9 @@ buildPythonPackage rec {
       --replace "scapy==2.5.0rc1" "scapy"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     packaging
     scapy
   ];
