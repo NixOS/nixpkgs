@@ -49,20 +49,27 @@ stdenv.mkDerivation rec {
     gnat
     gprbuild
     python3
-    ocamlPackages.ocaml
     makeWrapper
-  ];
+  ] ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
   buildInputs = [
     gnatcoll-core
-    ocamlPackages.camlzip
-    ocamlPackages.findlib
-    ocamlPackages.menhir
-    ocamlPackages.menhirLib
-    ocamlPackages.num
-    ocamlPackages.yojson
-    ocamlPackages.zarith
-  ];
+  ] ++ (with ocamlPackages; [
+    ocamlgraph
+    zarith
+    ppx_deriving
+    ppx_sexp_conv
+    camlzip
+    menhirLib
+    num
+    re
+    sexplib
+    yojson
+  ]);
 
   propagatedBuildInputs = [
     gprbuild
