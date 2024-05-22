@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.34.109"; # N.B: if you change this, change botocore and awscli to a matching version
+  inherit (botocore) version; # N.B: botocore, boto3, awscli needs to be updated in lockstep, bump botocore version for updating these.
   pyproject = true;
 
   disabled = pythonOlder "3.8";
