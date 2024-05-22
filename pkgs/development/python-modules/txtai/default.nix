@@ -1,73 +1,109 @@
 {
-  lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pythonRelaxDepsHook
-# propagated build input
-, faiss
-, torch
-, transformers
-, huggingface-hub
-, numpy
-, pyyaml
-, regex
-# optional-dependencies
-, aiohttp
-, fastapi
-, uvicorn
-# TODO add apache-libcloud
-# , apache-libcloud
-, rich
-, duckdb
-, pillow
-, networkx
-, python-louvain
-, onnx
-, onnxruntime
-, soundfile
-, scipy
-, ttstokenizer
-, beautifulsoup4
-, nltk
-, pandas
-, tika
-, imagehash
-, timm
-, fasttext
-, sentencepiece
-, accelerate
-, onnxmltools
-, annoy
-, hnswlib
-# TODO add pymagnitude-lite
-#, pymagnitude-lite
-, scikit-learn
-, sentence-transformers
-, croniter
-, openpyxl
-, requests
-, xmltodict
-# native check inputs
-, unittestCheckHook
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  # propagated build input
+  faiss,
+  torch,
+  transformers,
+  huggingface-hub,
+  numpy,
+  pyyaml,
+  regex,
+  # optional-dependencies
+  aiohttp,
+  fastapi,
+  uvicorn,
+  # TODO add apache-libcloud
+  # , apache-libcloud
+  rich,
+  duckdb,
+  pillow,
+  networkx,
+  python-louvain,
+  onnx,
+  onnxruntime,
+  soundfile,
+  scipy,
+  ttstokenizer,
+  beautifulsoup4,
+  nltk,
+  pandas,
+  tika,
+  imagehash,
+  timm,
+  fasttext,
+  sentencepiece,
+  accelerate,
+  onnxmltools,
+  annoy,
+  hnswlib,
+  # TODO add pymagnitude-lite
+  #, pymagnitude-lite
+  scikit-learn,
+  sentence-transformers,
+  croniter,
+  openpyxl,
+  requests,
+  xmltodict,
+  # native check inputs
+  unittestCheckHook,
 }:
 let
   version = "7.1.0";
-  api = [ aiohttp fastapi uvicorn ];
+  api = [
+    aiohttp
+    fastapi
+    uvicorn
+  ];
   # cloud = [ apache-libcloud ];
   console = [ rich ];
 
-  database = [ duckdb pillow ];
+  database = [
+    duckdb
+    pillow
+  ];
 
-  graph = [ networkx python-louvain ];
+  graph = [
+    networkx
+    python-louvain
+  ];
 
-  model = [ onnx onnxruntime ];
+  model = [
+    onnx
+    onnxruntime
+  ];
 
-  pipeline-audio = [ onnx onnxruntime soundfile scipy ttstokenizer ];
-  pipeline-data = [ beautifulsoup4 nltk pandas tika ];
-  pipeline-image = [ imagehash pillow timm ];
-  pipeline-text = [ fasttext sentencepiece ];
-  pipeline-train = [ accelerate onnx onnxmltools onnxruntime ];
+  pipeline-audio = [
+    onnx
+    onnxruntime
+    soundfile
+    scipy
+    ttstokenizer
+  ];
+  pipeline-data = [
+    beautifulsoup4
+    nltk
+    pandas
+    tika
+  ];
+  pipeline-image = [
+    imagehash
+    pillow
+    timm
+  ];
+  pipeline-text = [
+    fasttext
+    sentencepiece
+  ];
+  pipeline-train = [
+    accelerate
+    onnx
+    onnxmltools
+    onnxruntime
+  ];
   pipeline = pipeline-audio ++ pipeline-data ++ pipeline-image ++ pipeline-text ++ pipeline-train;
 
   similarity = [
@@ -90,8 +126,21 @@ let
   all = api ++ console ++ database ++ graph ++ model ++ pipeline ++ similarity ++ workflow;
 
   optional-dependencies = {
-    inherit api console database graph model pipeline-audio pipeline-image
-      pipeline-text pipeline-train pipeline similarity workflow all;
+    inherit
+      api
+      console
+      database
+      graph
+      model
+      pipeline-audio
+      pipeline-image
+      pipeline-text
+      pipeline-train
+      pipeline
+      similarity
+      workflow
+      all
+      ;
   };
 in
 buildPythonPackage {
@@ -108,9 +157,7 @@ buildPythonPackage {
     hash = "sha256-L+L2jRkCQKOgd1k3N4mft0Kt6kvCN81lgSQUjoon5rk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # We call it faiss, not faiss-cpu.
@@ -143,7 +190,9 @@ buildPythonPackage {
   ] ++ optional-dependencies.api ++ optional-dependencies.similarity;
 
   unittestFlagsArray = [
-    "-s" "test/python" "-v"
+    "-s"
+    "test/python"
+    "-v"
   ];
 
   meta = with lib; {

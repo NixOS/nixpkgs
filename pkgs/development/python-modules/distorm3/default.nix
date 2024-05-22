@@ -24,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-Fhvxag2UN5wXEySP1n1pCahMQR/SfssywikeLmiASwQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -38,9 +36,7 @@ buildPythonPackage rec {
     "test_dummy"
   ];
 
-  pythonImportsCheck = [
-    "distorm3"
-  ];
+  pythonImportsCheck = [ "distorm3" ];
 
   meta = with lib; {
     description = "Disassembler library for x86/AMD64";

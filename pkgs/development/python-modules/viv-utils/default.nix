@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, funcy
-, intervaltree
-, pefile
-, typing-extensions
-, vivisect
-, pytest-sugar
-, pytestCheckHook
-, python-flirt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  funcy,
+  intervaltree,
+  pefile,
+  typing-extensions,
+  vivisect,
+  pytest-sugar,
+  pytestCheckHook,
+  python-flirt,
 }:
 buildPythonPackage rec {
   pname = "viv-utils";
@@ -42,9 +43,7 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
-      flirt = [
-        python-flirt
-      ];
+      flirt = [ python-flirt ];
     };
   };
 

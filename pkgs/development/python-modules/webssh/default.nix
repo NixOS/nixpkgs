@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, pytestCheckHook
-, tornado
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  paramiko,
+  pytestCheckHook,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     tornado
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "webssh"
-  ];
+  pythonImportsCheck = [ "webssh" ];
 
   disabledTests = [
     # Test fails with AttributeError (possibly related to paramiko update)

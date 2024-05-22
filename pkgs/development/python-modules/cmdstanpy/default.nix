@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, cmdstan
-, pythonRelaxDepsHook
-, setuptools
-, pandas
-, numpy
-, tqdm
-, stanio
-, xarray
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  cmdstan,
+  pythonRelaxDepsHook,
+  setuptools,
+  pandas,
+  numpy,
+  tqdm,
+  stanio,
+  xarray,
+  pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -60,9 +61,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix
@@ -70,14 +69,16 @@ buildPythonPackage rec {
     "test/test_cxx_installation.py"
   ];
 
-  disabledTests = [
-    "test_serialization" # Pickle class mismatch errors
-    # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
-    "test_multi_proc_threads"
-    "test_compile_force"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_init_types" # CmdStan error: error during processing Operation not permitted
-  ];
+  disabledTests =
+    [
+      "test_serialization" # Pickle class mismatch errors
+      # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
+      "test_multi_proc_threads"
+      "test_compile_force"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_init_types" # CmdStan error: error during processing Operation not permitted
+    ];
 
   pythonImportsCheck = [ "cmdstanpy" ];
 

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, argostranslate
-, beautifulsoup4
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  argostranslate,
+  beautifulsoup4,
 }:
 
 buildPythonPackage rec {

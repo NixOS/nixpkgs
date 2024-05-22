@@ -1,11 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, importlib-metadata
-, importlib-resources
-, setuptools
-, traits
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  importlib-metadata,
+  importlib-resources,
+  setuptools,
+  traits,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-fhNhg0e3pkjtIM29T9GlFkj1AQKR815OD/G/cKcgy/g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     importlib-metadata
@@ -32,9 +31,7 @@ buildPythonPackage rec {
 
   doCheck = false; # Needs X server
 
-  pythonImportsCheck = [
-    "pyface"
-  ];
+  pythonImportsCheck = [ "pyface" ];
 
   meta = with lib; {
     description = "Traits-capable windowing framework";

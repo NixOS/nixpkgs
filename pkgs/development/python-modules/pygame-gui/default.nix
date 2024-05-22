@@ -1,11 +1,12 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pygame-ce
-, python-i18n
-, pytestCheckHook
+{
+  lib,
+  pkgs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pygame-ce,
+  python-i18n,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-PVNi/I174AyEEjc+N2UGtgOYSGAgVQbqrKkWZnjOxFY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pygame-ce
@@ -55,14 +54,15 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_x"
   ];
 
-  disabledTestPaths = [
-    "tests/test_performance/test_text_performance.py"
-  ];
+  disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
   meta = with lib; {
     description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau pbsds ];
+    maintainers = with maintainers; [
+      emilytrau
+      pbsds
+    ];
   };
 }

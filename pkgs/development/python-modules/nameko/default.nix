@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# install_requires
-, dnspython
-, eventlet
-, kombu
-, mock
-, packaging
-, path
-, pyyaml
-, requests
-, setuptools
-, six
-, werkzeug
-, wrapt
+  # install_requires
+  dnspython,
+  eventlet,
+  kombu,
+  mock,
+  packaging,
+  path,
+  pyyaml,
+  requests,
+  setuptools,
+  six,
+  werkzeug,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "path.py" "path"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dnspython
@@ -57,9 +56,7 @@ buildPythonPackage rec {
   # and most of the tests are network based
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nameko"
-  ];
+  pythonImportsCheck = [ "nameko" ];
 
   meta = with lib; {
     description = "A microservices framework that lets service developers concentrate on application logic and encourages testability";

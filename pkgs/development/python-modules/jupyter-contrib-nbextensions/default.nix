@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ipython-genutils
-, jupyter-contrib-core
-, jupyter-highlight-selected-word
-, jupyter-nbextensions-configurator
-, lxml
-, nose
-, pytestCheckHook
-, notebook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ipython-genutils,
+  jupyter-contrib-core,
+  jupyter-highlight-selected-word,
+  jupyter-nbextensions-configurator,
+  lxml,
+  nose,
+  pytestCheckHook,
+  notebook,
 }:
 
 buildPythonPackage rec {

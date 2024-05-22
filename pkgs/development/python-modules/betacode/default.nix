@@ -1,4 +1,10 @@
-{ fetchPypi, buildPythonPackage, pygtrie, isPy3k, lib, }:
+{
+  fetchPypi,
+  buildPythonPackage,
+  pygtrie,
+  isPy3k,
+  lib,
+}:
 buildPythonPackage rec {
   pname = "betacode";
   version = "1.0";

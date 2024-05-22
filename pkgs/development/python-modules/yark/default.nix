@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, click
-, colorama
-, fetchPypi
-, flask
-, poetry-core
-, progress
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, yt-dlp
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchPypi,
+  flask,
+  poetry-core,
+  progress,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  yt-dlp,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yark"
-  ];
+  pythonImportsCheck = [ "yark" ];
 
   meta = with lib; {
     description = "Module for YouTube archiving";

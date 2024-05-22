@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, installShellFiles
-, setuptools
-, setuptools-scm
-, wheel
-, docutils
-, importlib-metadata
-, jinja2
-, packaging
-, pygments
-, pyyaml
-, reportlab
-, smartypants
-, pillow
-, pytestCheckHook
-, pymupdf
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  docutils,
+  importlib-metadata,
+  jinja2,
+  packaging,
+  pygments,
+  pyyaml,
+  reportlab,
+  smartypants,
+  pillow,
+  pytestCheckHook,
+  pymupdf,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,10 @@ buildPythonPackage rec {
     hash = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,9 +54,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  pythonImportsCheck = [
-    "rst2pdf"
-  ];
+  pythonImportsCheck = [ "rst2pdf" ];
 
   nativeCheckInputs = [
     pytestCheckHook

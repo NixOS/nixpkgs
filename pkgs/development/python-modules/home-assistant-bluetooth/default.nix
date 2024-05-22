@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython
-, poetry-core
-, setuptools
+  # build-system
+  cython,
+  poetry-core,
+  setuptools,
 
-# dependencies
-, habluetooth
+  # dependencies
+  habluetooth,
 
-# tests
-, bleak
-, pytestCheckHook
+  # tests
+  bleak,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,13 +42,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    habluetooth
-  ];
+  propagatedBuildInputs = [ habluetooth ];
 
-  pythonImportsCheck = [
-    "home_assistant_bluetooth"
-  ];
+  pythonImportsCheck = [ "home_assistant_bluetooth" ];
 
   nativeCheckInputs = [
     bleak

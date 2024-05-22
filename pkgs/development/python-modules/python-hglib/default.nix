@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mercurial
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mercurial,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-sYvR7VPJDuV9VxTWata7crZOkw1K7KmDCJLAi7KNpgg=";
   };
 
-  nativeCheckInputs = [ mercurial nose ];
+  nativeCheckInputs = [
+    mercurial
+    nose
+  ];
 
   preCheck = ''
     export HGTMP=$(mktemp -d)
@@ -28,6 +32,6 @@ buildPythonPackage rec {
     description = "Library with a fast, convenient interface to Mercurial. It uses Mercurial’s command server for communication with hg.";
     homepage = "https://www.mercurial-scm.org/wiki/PythonHglibs";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

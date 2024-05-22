@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, plumbum
-, requests
-, setuptools
-, hypothesis
-, pynose
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  plumbum,
+  requests,
+  setuptools,
+  hypothesis,
+  pynose,
+  responses,
 }:
 
 buildPythonPackage rec {

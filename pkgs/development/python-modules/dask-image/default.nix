@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, dask
-, numpy
-, scipy
-, pandas
-, pims
-, pytestCheckHook
-, scikit-image
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  dask,
+  numpy,
+  scipy,
+  pandas,
+  pims,
+  pytestCheckHook,
+  scikit-image,
 }:
 
 buildPythonPackage rec {
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     scikit-image
   ];
 
-  pythonImportsCheck = [
-    "dask_image"
-  ];
+  pythonImportsCheck = [ "dask_image" ];
 
   meta = {
     description = "Distributed image processing";

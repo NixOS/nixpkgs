@@ -1,23 +1,24 @@
-{ lib
-, asdf-standard
-, asdf-transform-schemas
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, importlib-metadata
-, jmespath
-, lz4
-, numpy
-, packaging
-, psutil
-, pytest-remotedata
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, semantic-version
-, setuptools
-, setuptools-scm
+{
+  lib,
+  asdf-standard,
+  asdf-transform-schemas,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  importlib-metadata,
+  jmespath,
+  lz4,
+  numpy,
+  packaging,
+  psutil,
+  pytest-remotedata,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -59,10 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
-  pythonImportsCheck = [
-    "asdf"
-  ];
+  pythonImportsCheck = [ "asdf" ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";

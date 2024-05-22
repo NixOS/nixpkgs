@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-x6lrkCumEpLoGMILCBBhnWuBps21C8wauS1QrE2yCn8=";
   };
 
-  propagatedBuildInputs = [ requests pillow ];
+  propagatedBuildInputs = [
+    requests
+    pillow
+  ];
 
   pythonImportsCheck = [ "staticmap" ];
 

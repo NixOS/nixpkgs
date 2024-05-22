@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, neo4j
-, llama-index-core
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  neo4j,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-zr3EAFuLzbQKnGPVE6BsLEtNpnfYhDq9brxWPFtQiG8=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     neo4j
     llama-index-core
   ];
 
-  pythonImportsCheck = [
-    "llama_index.graph_stores.neo4j"
-  ];
+  pythonImportsCheck = [ "llama_index.graph_stores.neo4j" ];
 
   meta = with lib; {
     description = "LlamaIndex Graph Store Integration for Neo4j";

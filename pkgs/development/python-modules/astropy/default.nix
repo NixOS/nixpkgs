@@ -1,27 +1,28 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
 
-# build time
-, astropy-extension-helpers
-, cython
-, jinja2
-, oldest-supported-numpy
-, setuptools-scm
-, wheel
-# testing
-, pytestCheckHook
-, stdenv
-, pytest-xdist
-, pytest-astropy
+  # build time
+  astropy-extension-helpers,
+  cython,
+  jinja2,
+  oldest-supported-numpy,
+  setuptools-scm,
+  wheel,
+  # testing
+  pytestCheckHook,
+  stdenv,
+  pytest-xdist,
+  pytest-astropy,
 
-# runtime
-, astropy-iers-data
-, numpy
-, packaging
-, pyerfa
-, pyyaml
+  # runtime
+  astropy-iers-data,
+  numpy,
+  packaging,
+  pyerfa,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -66,9 +67,7 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
   '';
-  pythonImportsCheck = [
-    "astropy"
-  ];
+  pythonImportsCheck = [ "astropy" ];
   disabledTests = [
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
@@ -84,15 +83,16 @@ buildPythonPackage rec {
     "test_sidereal_lon_independent"
     "test_timedelta_full_precision_arithmetic"
     "test_datetime_to_timedelta"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_sidereal_lat_independent"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_sidereal_lat_independent" ];
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ kentjames doronbehar ];
+    maintainers = with lib.maintainers; [
+      kentjames
+      doronbehar
+    ];
   };
 }

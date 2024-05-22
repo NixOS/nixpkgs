@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, jdk
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  jdk,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  pythonImportsCheck = [
-    "jnius"
-  ];
+  pythonImportsCheck = [ "jnius" ];
 
   meta = with lib; {
     description = "A Python module to access Java classes as Python classes using the Java Native Interface (JNI)";

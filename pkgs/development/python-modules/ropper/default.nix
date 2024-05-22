@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, filebytes
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  filebytes,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     filebytes
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ropper"
-  ];
+  pythonImportsCheck = [ "ropper" ];
 
   meta = with lib; {
     description = "Show information about files in different file formats";

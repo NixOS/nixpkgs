@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, autograd
-, numba
-, numpy
-, scikit-learn
-, scipy
-, matplotlib
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
+  autograd,
+  numba,
+  numpy,
+  scikit-learn,
+  scipy,
+  matplotlib,
+  seaborn,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,11 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook matplotlib seaborn ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    seaborn
+  ];
   disabledTestPaths = [
     "docs"
     "benchmarks"

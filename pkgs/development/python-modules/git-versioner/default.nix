@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, setuptools-scm
-, fetchFromGitLab
+{
+  lib,
+  buildPythonPackage,
+  setuptools-scm,
+  fetchFromGitLab,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-bnpuFJSd4nBXJA75V61kiB+nU5pUzdEAIScfKx7aaGU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  pythonImportsCheck = [
-    "__version__"
-  ];
+  pythonImportsCheck = [ "__version__" ];
 
   meta = with lib; {
     description = "Manage current / next version for project";
@@ -30,5 +27,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ slotThe ];
   };
-
 }

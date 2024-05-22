@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, appdirs
-, bokeh
-, buildPythonPackage
-, dask
-, entrypoints
-, fetchFromGitHub
-, fsspec
-, hvplot
-, intake-parquet
-, jinja2
-, msgpack
-, msgpack-numpy
-, pandas
-, panel
-, pyarrow
-, pytestCheckHook
-, python-snappy
-, pythonOlder
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, tornado
+{
+  lib,
+  stdenv,
+  appdirs,
+  bokeh,
+  buildPythonPackage,
+  dask,
+  entrypoints,
+  fetchFromGitHub,
+  fsspec,
+  hvplot,
+  intake-parquet,
+  jinja2,
+  msgpack,
+  msgpack-numpy,
+  pandas,
+  panel,
+  pyarrow,
+  pytestCheckHook,
+  python-snappy,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -75,9 +76,7 @@ buildPythonPackage rec {
       bokeh
       panel
     ];
-    remote = [
-      requests
-    ];
+    remote = [ requests ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -101,36 +100,37 @@ buildPythonPackage rec {
     "intake/tests/test_top_level.py"
   ];
 
-  disabledTests = [
-    # Disable tests which touch network
-    "http"
-    "test_address_flag"
-    "test_dir"
-    "test_discover"
-    "test_filtered_compressed_cache"
-    "test_flatten_flag"
-    "test_get_dir"
-    "test_pagination"
-    "test_port_flag"
-    "test_read_part_compressed"
-    "test_read_partition"
-    "test_read_pattern"
-    "test_remote_arr"
-    "test_remote_cat"
-    "test_remote_env"
-    # ValueError
-    "test_datasource_python_to_dask"
-    "test_catalog_passthrough"
-    # Timing-based, flaky on darwin and possibly others
-    "test_idle_timer"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    # Flaky with older low-res mtime on darwin < 10.13 (#143987)
-    "test_second_load_timestamp"
-  ];
+  disabledTests =
+    [
+      # Disable tests which touch network
+      "http"
+      "test_address_flag"
+      "test_dir"
+      "test_discover"
+      "test_filtered_compressed_cache"
+      "test_flatten_flag"
+      "test_get_dir"
+      "test_pagination"
+      "test_port_flag"
+      "test_read_part_compressed"
+      "test_read_partition"
+      "test_read_pattern"
+      "test_remote_arr"
+      "test_remote_cat"
+      "test_remote_env"
+      # ValueError
+      "test_datasource_python_to_dask"
+      "test_catalog_passthrough"
+      # Timing-based, flaky on darwin and possibly others
+      "test_idle_timer"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
+      [
+        # Flaky with older low-res mtime on darwin < 10.13 (#143987)
+        "test_second_load_timestamp"
+      ];
 
-  pythonImportsCheck = [
-    "intake"
-  ];
+  pythonImportsCheck = [ "intake" ];
 
   meta = with lib; {
     description = "Data load and catalog system";

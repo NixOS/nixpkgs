@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatch-nodejs-version
-, hatchling
-, importlib-metadata
-, pycrdt
-, pytestCheckHook
-, websockets
-, ypy-websocket
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatch-nodejs-version,
+  hatchling,
+  importlib-metadata,
+  pycrdt,
+  pytestCheckHook,
+  websockets,
+  ypy-websocket,
 }:
 
 buildPythonPackage rec {
@@ -29,11 +30,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    pycrdt
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ pycrdt ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "jupyter_ydoc" ];
 

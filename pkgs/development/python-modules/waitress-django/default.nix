@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, setuptools, django, waitress }:
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  django,
+  waitress,
+}:
 
 let
   fs = lib.fileset;

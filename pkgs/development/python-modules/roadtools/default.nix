@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, roadrecon
-, roadlib
-, roadtx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  roadrecon,
+  roadlib,
+  roadtx,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-Cqcd+bKkfYXCeJBXu6peMjBoA6gve2XBPdCAAuTKGEE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     roadrecon
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     roadtx
   ];
 
-  pythonImportsCheck = [
-    "roadtools"
-  ];
+  pythonImportsCheck = [ "roadtools" ];
 
   meta = with lib; {
     description = "Azure AD tooling framework";

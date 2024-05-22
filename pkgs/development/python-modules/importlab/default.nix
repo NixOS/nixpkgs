@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, networkx
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  networkx,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

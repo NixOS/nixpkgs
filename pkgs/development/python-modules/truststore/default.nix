@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, httpx
-, pyopenssl
-, pythonOlder
-, requests
-, trustme
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  httpx,
+  pyopenssl,
+  pythonOlder,
+  requests,
+  trustme,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-K11nHzpckNR8pqmgLOo/yCJ2cNQnqPHgjMDPQkpeRkQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # tests requires networking
   doCheck = false;
 
-  pythonImportsCheck = [
-    "truststore"
-  ];
+  pythonImportsCheck = [ "truststore" ];
 
   meta = with lib; {
     homepage = "https://github.com/sethmlarson/truststore";

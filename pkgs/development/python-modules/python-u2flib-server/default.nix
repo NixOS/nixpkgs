@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-# propagates
-, cryptography
-, six
+  # propagates
+  cryptography,
+  six,
 
-# optional
-, webob
+  # optional
+  webob,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-ginP9u+aHcdaWpwcFYJWu0Ghf7+nDZq9i3TVAacIPhg=";
   };
 
-  patches = [
-    ./cryptography-37-compat.patch
-  ];
+  patches = [ ./cryptography-37-compat.patch ];
 
   propagatedBuildInputs = [
     cryptography
@@ -36,9 +35,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    u2f_server = [
-      webob
-    ];
+    u2f_server = [ webob ];
   };
 
   pythonImportsCheck = [
@@ -46,9 +43,7 @@ buildPythonPackage rec {
     "u2flib_server.u2f"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.u2f_server;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.u2f_server;
 
   meta = with lib; {
     description = "Python based U2F server library";

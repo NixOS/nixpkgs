@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, spglib
-, numpy
-, scipy
-, matplotlib
-, ase
-, netcdf4
-, pytest
-, pythonOlder
-, cython
-, cmake
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  spglib,
+  numpy,
+  scipy,
+  matplotlib,
+  ase,
+  netcdf4,
+  pytest,
+  pythonOlder,
+  cython,
+  cmake,
 }:
 
 buildPythonPackage rec {
@@ -45,9 +46,7 @@ buildPythonPackage rec {
   # pypi release does no include files for tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "BoltzTraP2"
-  ];
+  pythonImportsCheck = [ "BoltzTraP2" ];
 
   meta = with lib; {
     description = "Band-structure interpolator and transport coefficient calculator";

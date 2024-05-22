@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest
-, pythonOlder
-, setuptoolsBuildHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest,
+  pythonOlder,
+  setuptoolsBuildHook,
 }:
 
 buildPythonPackage rec {
@@ -21,20 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-19YF3q85maCVdVg2HOOPbN45RNjBf6kiFAhLut8B2tQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   # pytest-socket require network for majority of tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_socket"
-  ];
+  pythonImportsCheck = [ "pytest_socket" ];
 
   meta = with lib; {
     description = "Pytest Plugin to disable socket calls during tests";

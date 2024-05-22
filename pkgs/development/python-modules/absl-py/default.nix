@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools
-, six
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-eCB5DvuzFnOc3otOGTVyQ/w2CKFSAkKIUT3ZaNfZWf8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   # checks use bazel; should be revisited
   doCheck = false;

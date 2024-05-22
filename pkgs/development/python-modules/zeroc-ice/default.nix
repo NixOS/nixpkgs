@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, bzip2
-, openssl
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  bzip2,
+  openssl,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-Bwn2Y/Bbu6O89iaSNWvMpXBhyJRmj6eL8j6HiPpbQbM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [
     bzip2

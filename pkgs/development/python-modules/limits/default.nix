@@ -1,23 +1,24 @@
-{ lib
-, aetcd
-, buildPythonPackage
-, coredis
-, deprecated
-, etcd3
-, fetchFromGitHub
-, hiro
-, importlib-resources
-, motor
-, packaging
-, pymemcache
-, pymongo
-, pytest-asyncio
-, pytest-lazy-fixture
-, pytestCheckHook
-, pythonOlder
-, redis
-, setuptools
-, typing-extensions
+{
+  lib,
+  aetcd,
+  buildPythonPackage,
+  coredis,
+  deprecated,
+  etcd3,
+  fetchFromGitHub,
+  hiro,
+  importlib-resources,
+  motor,
+  packaging,
+  pymemcache,
+  pymongo,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -52,9 +53,7 @@ buildPythonPackage rec {
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     deprecated
@@ -64,33 +63,17 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    redis = [
-      redis
-    ];
-    rediscluster = [
-      redis
-    ];
-    memcached = [
-      pymemcache
-    ];
-    mongodb = [
-      pymongo
-    ];
-    etcd = [
-      etcd3
-    ];
-    async-redis = [
-      coredis
-    ];
+    redis = [ redis ];
+    rediscluster = [ redis ];
+    memcached = [ pymemcache ];
+    mongodb = [ pymongo ];
+    etcd = [ etcd3 ];
+    async-redis = [ coredis ];
     # async-memcached = [
     #   emcache  # Missing module
     # ];
-    async-mongodb = [
-      motor
-    ];
-    async-etcd = [
-      aetcd
-    ];
+    async-mongodb = [ motor ];
+    async-etcd = [ aetcd ];
   };
 
   doCheck = pythonOlder "3.12"; # SystemError in protobuf
@@ -102,9 +85,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "limits"
-  ];
+  pythonImportsCheck = [ "limits" ];
 
   pytestFlagsArray = [
     # All other tests require a running Docker instance

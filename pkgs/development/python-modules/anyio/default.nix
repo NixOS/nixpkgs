@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, exceptiongroup
-, idna
-, sniffio
-, typing-extensions
+  # dependencies
+  exceptiongroup,
+  idna,
+  sniffio,
+  typing-extensions,
 
-# optionals
-, trio
+  # optionals
+  trio,
 
-# tests
-, hypothesis
-, psutil
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, trustme
-, uvloop
+  # tests
+  hypothesis,
+  psutil,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  trustme,
+  uvloop,
 }:
 
 buildPythonPackage rec {
@@ -46,18 +47,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    idna
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      idna
+      sniffio
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
   passthru.optional-dependencies = {
-    trio = [
-      trio
-    ];
+    trio = [ trio ];
   };
 
   # trustme uses pyopenssl
@@ -75,8 +76,10 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.trio;
 
   pytestFlagsArray = [
-    "-W" "ignore::trio.TrioDeprecationWarning"
-    "-m" "'not network'"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
+    "-m"
+    "'not network'"
   ];
 
   disabledTests = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
@@ -91,9 +94,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "anyio"
-  ];
+  pythonImportsCheck = [ "anyio" ];
 
   meta = with lib; {
     changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";

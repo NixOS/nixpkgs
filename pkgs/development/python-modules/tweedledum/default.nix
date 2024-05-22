@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, ninja
-, scikit-build
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  scikit-build,
   # Check Inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   version = "1.1.1";
   format = "pyproject";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "boschmitt";
     repo = "tweedledum";
     rev = "v${version}";
@@ -26,7 +27,11 @@ buildPythonPackage rec {
     sed -i '/\[project\]/a name = "tweedledum"' pyproject.toml
   '';
 
-  nativeBuildInputs = [ cmake ninja scikit-build ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    scikit-build
+  ];
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "tweedledum" ];
@@ -37,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
-    license = licenses.mit ;
+    license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];
   };
 }

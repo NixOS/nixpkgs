@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pandocfilters
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pandocfilters,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "69221502dac74f5df1317011ce62c85a83eef5da3b71c63b1908e98224304a8c";
   };
 
-  propagatedBuildInputs = [
-    pandocfilters
-  ];
+  propagatedBuildInputs = [ pandocfilters ];
 
   # No tests in pypi source
   doCheck = false;

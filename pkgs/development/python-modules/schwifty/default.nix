@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, hatchling
-, hatch-vcs
+  # build-system
+  hatchling,
+  hatch-vcs,
 
-# dependencies
-, importlib-resources
-, iso3166
-, pycountry
+  # dependencies
+  importlib-resources,
+  iso3166,
+  pycountry,
 
-# optional-dependencies
-, pydantic
+  # optional-dependencies
+  pydantic,
 
-# tests
-, pytestCheckHook
-, pytest-cov
-, pythonOlder
+  # tests
+  pytestCheckHook,
+  pytest-cov,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -40,14 +41,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     iso3166
     pycountry
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   passthru.optional-dependencies = {
-    pydantic = [
-      pydantic
-    ];
+    pydantic = [ pydantic ];
   };
 
   nativeCheckInputs = [
@@ -55,9 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "schwifty"
-  ];
+  pythonImportsCheck = [ "schwifty" ];
 
   meta = with lib; {
     changelog = "https://github.com/mdomke/schwifty/blob/${version}/CHANGELOG.rst";

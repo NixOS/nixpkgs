@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, smmap
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  smmap,
 }:
 
 buildPythonPackage rec {
@@ -25,21 +26,13 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "smmap"
-  ];
+  pythonRelaxDeps = [ "smmap" ];
 
-  propagatedBuildInputs = [
-    smmap
-  ];
+  propagatedBuildInputs = [ smmap ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gitdb"
-  ];
+  pythonImportsCheck = [ "gitdb" ];
 
   disabledTests = [
     # Tests need part which are not shipped with PyPI releases

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, distro
-, fetchFromGitHub
-, pyasyncore
-, pysnmp
-, pytestCheckHook
-, python-gnupg
-, pythonAtLeast
-, pythonOlder
-, qrcode
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  distro,
+  fetchFromGitHub,
+  pyasyncore,
+  pysnmp,
+  pytestCheckHook,
+  python-gnupg,
+  pythonAtLeast,
+  pythonOlder,
+  qrcode,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-1gz2lAS/AHeY54AaVXGeofLC68KjAP7POsIaBL3v2EY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     distro
@@ -37,13 +36,9 @@ buildPythonPackage rec {
     python-gnupg
     qrcode
     requests
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    pyasyncore
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_monitor_get_stats"
@@ -51,9 +46,7 @@ buildPythonPackage rec {
     "test_erasure_recovery"
   ];
 
-  pythonImportsCheck = [
-    "blocksatcli"
-  ];
+  pythonImportsCheck = [ "blocksatcli" ];
 
   meta = with lib; {
     description = "Blockstream Satellite CLI";

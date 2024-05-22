@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -13,9 +14,7 @@ buildPythonPackage rec {
     hash = "sha256-gtTyO6jmjQT0ZwmxvH+RAe1v5aruNStfP1qz1+AqYXs=";
   };
 
-  pythonImportsCheck = [
-    "dokuwiki"
-  ];
+  pythonImportsCheck = [ "dokuwiki" ];
 
   meta = with lib; {
     homepage = "https://github.com/fmenabe/python-dokuwiki";

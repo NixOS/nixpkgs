@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, nose
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  nose,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-6y4RbnXs751NIo/cZq9UJpr6JqtEYwQuM3hbiHxii6g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     nose
@@ -36,9 +35,7 @@ buildPythonPackage rec {
       --replace "tearDown" "teardown_method"
   '';
 
-  pythonImportsCheck = [
-    "ipython_genutils"
-  ];
+  pythonImportsCheck = [ "ipython_genutils" ];
 
   meta = {
     description = "Vestigial utilities from IPython";

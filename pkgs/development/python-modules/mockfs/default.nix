@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, importlib-metadata
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  importlib-metadata,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,15 +29,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ importlib-metadata ];
 
   pythonImportsCheck = [ "mockfs" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A simple mock filesystem for use in unit tests";

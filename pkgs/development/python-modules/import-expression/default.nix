@@ -1,10 +1,11 @@
-{ lib,
+{
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
   astunparse,
-  setuptools
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "import-expression";
@@ -38,7 +39,10 @@ buildPythonPackage rec {
   meta = {
     description = "Transpiles a superset of python to allow easy inline imports";
     homepage = "https://github.com/ioistired/import-expression-parser";
-    license = with lib.licenses; [ mit psfl ];
+    license = with lib.licenses; [
+      mit
+      psfl
+    ];
     mainProgram = "import-expression";
     maintainers = with lib.maintainers; [ lychee ];
   };

@@ -1,6 +1,8 @@
-{ lib, stdenv
-, buildPythonPackage
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pkgs,
 }:
 
 buildPythonPackage {
@@ -24,5 +26,4 @@ buildPythonPackage {
     homepage = "http://www.darwinsys.com/file/";
     license = licenses.lgpl2;
   };
-
 }
