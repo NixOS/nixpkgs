@@ -40,12 +40,12 @@ buildPythonPackage rec {
     hash = "sha256-rNIjHwFELHoxDxC/T5vPzHA6Ifjz01rJpTK6kjUxOIM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     fsspec
     humanize
