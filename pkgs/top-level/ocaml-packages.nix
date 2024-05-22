@@ -119,6 +119,8 @@ let
 
     bwd = callPackage ../development/ocaml-modules/bwd { };
 
+    bytestring = callPackage ../development/ocaml-modules/bytestring { };
+
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ### C ###
