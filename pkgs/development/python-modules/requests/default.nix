@@ -13,22 +13,25 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.31.0";
-  format = "setuptools";
+  version = "2.32.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lCxadY+Y15Dq7Ropy27vx/+w0c968Fw9J5Flbb1q0eE=";
+    hash = "sha256-3ZUf9ezz47OqJrQHA7p3SV2rQdqDmucu88jl2OJDMok=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     brotlicffi
