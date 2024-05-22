@@ -6,6 +6,8 @@
   scipy,
   sympy,
   setuptools,
+  pynose,
+  cython,
 }:
 
 buildPythonPackage rec {
@@ -26,8 +28,18 @@ buildPythonPackage rec {
     sympy
   ];
 
-  # nose test does not support 3.10 or later
-  doCheck = false;
+  nativeCheckInputs = [
+    pynose
+    cython
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    nosetests pydy
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "pydy" ];
 
