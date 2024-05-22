@@ -22,18 +22,12 @@ in
 
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = with pkgs; [
-        swaylock
-        foot
-        dmenu
-      ];
+      default = with pkgs; [ swaylock foot dmenu ];
       defaultText = lib.literalExpression ''
         with pkgs; [ swaylock foot dmenu ];
       '';
       example = lib.literalExpression ''
-        with pkgs; [
-          termite rofi light
-        ]
+        with pkgs; [ termite rofi light ]
       '';
       description = ''
         Extra packages to be installed system wide. See
@@ -48,7 +42,7 @@ in
       environment.systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
       # To make a river session available if a display manager like SDDM is enabled:
-      services.displayManager.sessionPackages = lib.optionals (cfg.package != null) [ cfg.package ];
+      services.displayManager.sessionPackages = lib.optional (cfg.package != null) cfg.package;
 
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
       xdg.portal.config.river.default = lib.mkDefault [ "wlr" "gtk" ];
