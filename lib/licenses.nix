@@ -1261,9 +1261,19 @@ in mkLicense lset) ({
     fullName = "xinetd License";
   };
 
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
+  };
+
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
+  };
+
+  zsh = {
+    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
+    fulllName = "Zsh License";
   };
 
   zpl20 = {
@@ -1276,11 +1286,7 @@ in mkLicense lset) ({
     fullName = "Zope Public License 2.1";
   };
 
-  xskat = {
-    spdxId = "XSkat";
-    fullName = "XSkat License";
-  };
-} // {
+ } // {
   # TODO: remove legacy aliases
   apsl10 = {
     # deprecated for consistency with `apple-psl20`; use `apple-psl10`
