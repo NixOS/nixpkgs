@@ -1,16 +1,17 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  apscheduler,
-  hiredis,
   aioredis,
+  apscheduler,
+  buildPythonPackage,
   ephem,
-  setuptools,
+  fetchPypi,
+  hiredis,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
   pytz,
   pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,8 @@ buildPythonPackage rec {
   version = "0.9.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # Typing issue
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
