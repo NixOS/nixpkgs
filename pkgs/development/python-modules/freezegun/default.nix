@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "1.4.0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EJObC6D/Wtrs87BqXC9zBx2WeOUHxertsjx2HVasd0s=";
+    hash = "sha256-sp3t/NptXo4IPOcbK1QnU61Iz+xEA3s/x5cC4pgKiek=";
   };
 
   nativeBuildInputs = [ setuptools ];
