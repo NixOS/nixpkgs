@@ -6,20 +6,21 @@ let
 
   src = fetchurl {
     url = "https://plexamp.plex.tv/plexamp.plex.tv/desktop/Plexamp-${version}.AppImage";
-    name="${pname}-${version}.AppImage";
+    name = "${pname}-${version}.AppImage";
     hash = "sha512-CrSXmRVatVSkMyB1QaNSL/tK60rQvT9JraRtYYLl0Fau3M1LJXK9yqvt77AjwIwIvi2Dm5SROG+c4rA1XtI4Yg==";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
-    install -m 444 -D ${appimageContents}/plexamp.png \
-      $out/share/icons/hicolor/512x512/apps/plexamp.png
+    install -m 444 -D ${appimageContents}/plexamp.svg \
+      $out/share/icons/hicolor/512x512/apps/plexamp.svg
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
