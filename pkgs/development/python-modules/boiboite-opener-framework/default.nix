@@ -75,5 +75,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Orange-Cyberdefense/bof/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
