@@ -6985,6 +6985,18 @@ final: prev:
     meta.homepage = "https://github.com/lawrence-laz/neotest-zig/";
   };
 
+  neotree-nvim = buildNeovimPlugin {
+    pname = "neotree.nvim";
+    version = "2024-05-22";
+    src = fetchFromGitHub {
+      owner = "nvim-neotree";
+      repo = "neotree.nvim";
+      rev = "29f7c215332ba95e470811c380ddbce2cebe2af4";
+      sha256 = "1k3fhgpakr1b8x9fk7sq699h3479k8x9yc3jbq7xq2jk7p0n4m62";
+    };
+    meta.homepage = "https://github.com/nvim-neo-tree/neo-tree.nvim/";
+  };
+
   neovim-ayu = buildVimPlugin {
     pname = "neovim-ayu";
     version = "2024-04-05";
