@@ -7,6 +7,7 @@
 , hiredis
 , aioredis
 , ephem
+, setuptools
 , pytz
 , pyyaml
 }:
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "automate-home";
   version = "0.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,7 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-41qd+KPSrOrczkovwXht3irbcYlYehBZ1HZ44yZe4cM=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Rename pyephem, https://github.com/majamassarini/automate-home/pull/3
+    substituteInPlace setup.py \
+      --replace-fail "pyephem" "ephem" \
+      --replace-fail "aioredis==1.3.1" "aioredis"
+  '';
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     apscheduler
     hiredis
     aioredis
@@ -36,13 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # Rename pyephem, https://github.com/majamassarini/automate-home/pull/3
-    substituteInPlace setup.py \
-      --replace "pyephem" "ephem" \
-      --replace "aioredis==1.3.1" "aioredis"
-  '';
-
   pythonImportsCheck = [
     "home"
   ];
@@ -50,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to automate (home) devices";
     homepage = "https://github.com/majamassarini/automate-home";
+    changelog = "https://github.com/majamassarini/automate-home/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
   };
