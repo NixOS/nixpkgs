@@ -2,13 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # tests
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +16,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "tkem";
-    repo = pname;
+    repo = "cachetools";
     rev = "refs/tags/v${version}";
     hash = "sha256-G+TkS6NsaiPGzNLk3DbBH8D1yLM8bFVLtHioNcIZMHw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -35,7 +31,7 @@ buildPythonPackage rec {
     description = "Extensible memoizing collections and decorators";
     homepage = "https://github.com/tkem/cachetools";
     changelog = "https://github.com/tkem/cachetools/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
