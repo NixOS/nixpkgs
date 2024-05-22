@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   fetchpatch,
   python3,
@@ -72,8 +71,6 @@ python3.pkgs.buildPythonApplication rec {
     yarl
   ];
 
-  __darwinAllowLocalNetworking = true;
-
   nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver
     pytest-asyncio
@@ -98,11 +95,6 @@ python3.pkgs.buildPythonApplication rec {
       "test_pdf_report"
       "test_self_check_db_negative_enabled"
       "test_self_check_db_positive_enable"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # AsyncioProgressbarExecutor is slower on darwin than it should be,
-      # Upstream issue: https://github.com/soxoj/maigret/issues/679
-      "test_asyncio_progressbar_executor"
     ];
 
   pythonImportsCheck = [ "maigret" ];
@@ -113,5 +105,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/soxoj/maigret/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
