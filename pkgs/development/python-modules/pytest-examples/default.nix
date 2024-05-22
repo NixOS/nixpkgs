@@ -70,5 +70,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pydantic/pytest-examples/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
