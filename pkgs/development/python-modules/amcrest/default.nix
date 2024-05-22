@@ -6,6 +6,7 @@
   httpx,
   mock,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   responses,
@@ -19,7 +20,8 @@ buildPythonPackage rec {
   version = "1.9.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # Still uses distutils, https://github.com/tchellomello/python-amcrest/issues/234
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "tchellomello";
