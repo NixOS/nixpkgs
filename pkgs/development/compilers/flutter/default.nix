@@ -67,6 +67,7 @@ let
     (builtins.readDir ./versions);
 in
 flutterVersions // {
-  stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames flutterVersions))};
+  latest = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames flutterVersions))};
+  stable = flutterVersions.v3_19;
   inherit wrapFlutter mkFlutter;
 }
