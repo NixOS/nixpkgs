@@ -5049,6 +5049,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/jdaddy.vim/";
   };
 
+  jdb-vim = buildVimPlugin {
+    pname = "jdb.vim";
+    version = "2022-03-05";
+    src = fetchFromGitHub {
+      owner = "brookhong";
+      repo = "jdb.vim";
+      rev = "d3993dae5bbc4fd4ecb4ce5e0c0af57be7edbdf1";
+      sha256 = "035n2qqmbk37c0xinwl8f80d2aqgyly0yxhggyr0f02sr61f8x7q";
+    };
+    meta.homepage = "https://github.com/brookhong/jdb.vim/";
+  };
+
   jedi-vim = buildVimPlugin {
     pname = "jedi-vim";
     version = "2023-12-30";
