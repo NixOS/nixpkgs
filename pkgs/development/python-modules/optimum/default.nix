@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, coloredlogs
-, datasets
-, evaluate
-, h5py
-, huggingface-hub
-, numpy
-, onnx
-, onnxruntime
-, packaging
-, protobuf
-, sympy
-, tensorflow
-, tf2onnx
-, timm
-, torch
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  coloredlogs,
+  datasets,
+  evaluate,
+  h5py,
+  huggingface-hub,
+  numpy,
+  onnx,
+  onnxruntime,
+  packaging,
+  protobuf,
+  sympy,
+  tensorflow,
+  tf2onnx,
+  timm,
+  torch,
+  transformers,
 }:
 
 buildPythonPackage rec {

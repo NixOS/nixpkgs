@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, flit-core
-, markdown-it-py
-, pytest-regressions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  flit-core,
+  markdown-it-py,
+  pytest-regressions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-YBJu0vIOD747DrJLcqiZMHq34+gHdXeGLCw1OxxzIJ0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    markdown-it-py
-  ];
+  propagatedBuildInputs = [ markdown-it-py ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-regressions
   ];
 
-  pythonImportsCheck = [
-    "mdit_py_plugins"
-  ];
+  pythonImportsCheck = [ "mdit_py_plugins" ];
 
   meta = with lib; {
     description = "Collection of core plugins for markdown-it-py";

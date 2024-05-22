@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, jinja2
-, multidict
-, poetry-core
-, pydantic
-, pyyaml
-, wtforms
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  jinja2,
+  multidict,
+  poetry-core,
+  pydantic,
+  pyyaml,
+  wtforms,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-313c+ENmTe1LyfEiMXNB9AUoGx3Yv/1D0T3HnAbd+Zw=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     jinja2
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "beanhub_forms"
-  ];
+  pythonImportsCheck = [ "beanhub_forms" ];
 
   meta = {
     description = "Library for generating and processing BeanHub's custom forms";

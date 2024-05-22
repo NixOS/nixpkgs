@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-5TkFrGaSkQOORhf5a7SjkzggFLPyqe9k3M0B4ljhWTQ=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  propagatedBuildInputs = [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     "test_flow_control"
   ];
 
-  pythonImportsCheck = [
-    "pescea"
-  ];
+  pythonImportsCheck = [ "pescea" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

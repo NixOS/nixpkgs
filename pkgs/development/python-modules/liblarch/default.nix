@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, pygobject3
-, xvfb-run
-, gobject-introspection
-, gtk3
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  pygobject3,
+  xvfb-run,
+  gobject-introspection,
+  gtk3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    pygobject3
-  ];
+  propagatedBuildInputs = [ pygobject3 ];
 
   checkPhase = ''
     runHook preCheck

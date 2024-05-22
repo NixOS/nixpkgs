@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# docs
-, python
-, sphinx
-, sphinx-rtd-theme
+  # docs
+  python,
+  sphinx,
+  sphinx-rtd-theme,
 
-# tests
-, hypothesis
-, pytestCheckHook
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -56,9 +57,7 @@ buildPythonPackage rec {
     "test_mock_fileobj"
   ];
 
-  pythonImportsCheck = [
-    "mutagen"
-  ];
+  pythonImportsCheck = [ "mutagen" ];
 
   meta = with lib; {
     description = "Python module for handling audio metadata";
@@ -73,7 +72,9 @@ buildPythonPackage rec {
       manipulate Ogg streams on an individual packet/page level.
     '';
     homepage = "https://mutagen.readthedocs.io";
-    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://mutagen.readthedocs.io/en/latest/changelog.html#release-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
   };

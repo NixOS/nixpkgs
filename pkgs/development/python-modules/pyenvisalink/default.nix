@@ -1,10 +1,11 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, colorlog
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  colorlog,
+  fetchPypi,
+  pyserial,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Tests require an Envisalink device
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyenvisalink"
-  ];
+  pythonImportsCheck = [ "pyenvisalink" ];
 
   meta = with lib; {
     description = "Python interface for Envisalink 2DS/3 Alarm API";

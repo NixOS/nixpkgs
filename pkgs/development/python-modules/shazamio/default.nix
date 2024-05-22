@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, wheel
-, aiofiles
-, aiohttp
-, dataclass-factory
-, numpy
-, pydantic
-, pydub
-, ffmpeg
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  wheel,
+  aiofiles,
+  aiohttp,
+  dataclass-factory,
+  numpy,
+  pydantic,
+  pydub,
+  ffmpeg,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

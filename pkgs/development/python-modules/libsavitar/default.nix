@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub, cmake, sip4 }:
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  sip4,
+}:
 
 buildPythonPackage rec {
   pname = "libsavitar";
@@ -27,6 +35,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ultimaker/libSavitar";
     license = licenses.lgpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar orivej gebner ];
+    maintainers = with maintainers; [
+      abbradar
+      orivej
+      gebner
+    ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, meson
-, ninja
-, psutil
-, pygobject3
-, gtk3
-, gobject-introspection
-, xapp
-, polkit
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  meson,
+  ninja,
+  psutil,
+  pygobject3,
+  gtk3,
+  gobject-introspection,
+  xapp,
+  polkit,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -54,9 +55,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "^master.*";
-  };
+  passthru.updateScript = gitUpdater { ignoredVersions = "^master.*"; };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";

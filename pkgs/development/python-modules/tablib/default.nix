@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markuppy
-, odfpy
-, openpyxl
-, pandas
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools-scm
-, tabulate
-, unicodecsv
-, xlrd
-, xlwt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  markuppy,
+  odfpy,
+  openpyxl,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools-scm,
+  tabulate,
+  unicodecsv,
+  xlrd,
+  xlwt,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace " --cov=tablib --cov=tests --cov-report xml --cov-report term --cov-report html" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   passthru.optional-dependencies = {
     all = [
@@ -47,28 +46,16 @@ buildPythonPackage rec {
       xlrd
       xlwt
     ];
-    cli = [
-      tabulate
-    ];
-    html = [
-      markuppy
-    ];
-    ods = [
-      odfpy
-    ];
-    pandas = [
-      pandas
-    ];
+    cli = [ tabulate ];
+    html = [ markuppy ];
+    ods = [ odfpy ];
+    pandas = [ pandas ];
     xls = [
       xlrd
       xlwt
     ];
-    xlsx = [
-      openpyxl
-    ];
-    yaml = [
-      pyyaml
-    ];
+    xlsx = [ openpyxl ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -82,9 +69,7 @@ buildPythonPackage rec {
     "tests/test_tablib.py"
   ];
 
-  pythonImportsCheck = [
-    "tablib"
-  ];
+  pythonImportsCheck = [ "tablib" ];
 
   meta = with lib; {
     description = "Format-agnostic tabular dataset library";

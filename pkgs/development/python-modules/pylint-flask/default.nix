@@ -1,11 +1,12 @@
-{ lib
-, astroid
-, buildPythonPackage
-, fetchPypi
-, pylint
-, pylint-plugin-utils
-, pythonOlder
-, setuptools
+{
+  lib,
+  astroid,
+  buildPythonPackage,
+  fetchPypi,
+  pylint,
+  pylint-plugin-utils,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-9Nl94iFr97/OB8nAixZul4/p8nJd4qUKmEWpfefjFRc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pylint
-  ];
+  buildInputs = [ pylint ];
 
   propagatedBuildInputs = [
     astroid
@@ -37,9 +34,7 @@ buildPythonPackage rec {
   # also tests are only available at GitHub, with an old release tag
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylint_flask"
-  ];
+  pythonImportsCheck = [ "pylint_flask" ];
 
   meta = with lib; {
     description = "A Pylint plugin to analyze Flask applications";

@@ -1,4 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, six, }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "jsonstreams";

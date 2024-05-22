@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, twisted
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  twisted,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     "test_cancel"
   ];
 
-  pythonImportsCheck = [
-    "txaio"
-  ];
+  pythonImportsCheck = [ "txaio" ];
 
   meta = with lib; {
     description = "Utilities to support code that runs unmodified on Twisted and asyncio";

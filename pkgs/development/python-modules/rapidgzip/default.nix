@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
-, setuptools
-, nasm
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  nasm,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-3PvBRYswEtnAZerRD18laW6pQ8i6cgRgGZy+bgSOaI0=";
   };
 
-  nativeBuildInputs = [ cython nasm setuptools ];
+  nativeBuildInputs = [
+    cython
+    nasm
+    setuptools
+  ];
 
   # has no tests
   doCheck = false;

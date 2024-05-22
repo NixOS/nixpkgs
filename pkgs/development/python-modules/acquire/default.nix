@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, dissect-cstruct
-, dissect-target
-, fetchFromGitHub
-, minio
-, pycryptodome
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-toolbelt
-, rich
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  dissect-cstruct,
+  dissect-target,
+  fetchFromGitHub,
+  minio,
+  pycryptodome,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-toolbelt,
+  rich,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -51,13 +52,9 @@ buildPythonPackage rec {
     ] ++ dissect-target.optional-dependencies.full;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
 
-  pythonImportsCheck = [
-    "acquire"
-  ];
+  pythonImportsCheck = [ "acquire" ];
 
   meta = with lib; {
     description = "Tool to quickly gather forensic artifacts from disk images or a live system";

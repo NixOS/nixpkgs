@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# propagates
-, django
-, jwcrypto
-, requests
-, oauthlib
+  # propagates
+  django,
+  jwcrypto,
+  requests,
+  oauthlib,
 
-# tests
-, djangorestframework
-, pytest-django
-, pytest-xdist
-, pytest-mock
-, pytestCheckHook
+  # tests
+  djangorestframework,
+  pytest-django,
+  pytest-xdist,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [
-    "django"
-  ];
+  pythonRelaxDeps = [ "django" ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cmake
-, setuptools-scm
-, numpy
-, pillow
-, pybind11
-, libzxing-cpp
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  setuptools-scm,
+  numpy,
+  pillow,
+  pybind11,
+  libzxing-cpp,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  buildInputs = [
-    pybind11
-  ];
+  buildInputs = [ pybind11 ];
 
   nativeBuildInputs = [
     cmake
@@ -43,11 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
-  pythonImportsCheck = [
-    "zxingcpp"
-  ];
+  pythonImportsCheck = [ "zxingcpp" ];
 }

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, looseversion
-, matplotlib
-, numba
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  looseversion,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = lib.optionalString stdenv.isDarwin ''
     # specifically needed for darwin
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pythonImportsCheck = [
-    "trackpy"
-  ];
+  pythonImportsCheck = [ "trackpy" ];
 
   meta = with lib; {
     description = "Particle-tracking toolkit";

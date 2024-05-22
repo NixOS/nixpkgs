@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, more-itertools
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  more-itertools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     "test_utime"
   ];
 
-  pythonImportsCheck = [
-    "path"
-  ];
+  pythonImportsCheck = [ "path" ];
 
   meta = with lib; {
     description = "Object-oriented file system path manipulation";

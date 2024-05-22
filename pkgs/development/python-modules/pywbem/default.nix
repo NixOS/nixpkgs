@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchPypi
-, formencode
-, httpretty
-, libxml2
-, lxml
-, mock
-, nocasedict
-, nocaselist
-, pbr
-, ply
-, pytest
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, requests-mock
-, six
-, testfixtures
-, yamlloader
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  formencode,
+  httpretty,
+  libxml2,
+  lxml,
+  mock,
+  nocasedict,
+  nocaselist,
+  pbr,
+  ply,
+  pytest,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  requests-mock,
+  six,
+  testfixtures,
+  yamlloader,
 }:
 
 buildPythonPackage rec {
@@ -58,9 +59,7 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  pythonImportsCheck = [
-    "pywbem"
-  ];
+  pythonImportsCheck = [ "pywbem" ];
 
   meta = with lib; {
     description = "Support for the WBEM standard for systems management";

@@ -37,26 +37,28 @@ buildPythonPackage rec {
     responses
   ];
 
-  disabledTests = [
-    # Various tests try to access credential files which are not included with the source distribution
-    "test_configure_service"
-    "test_cp4d_authenticator"
-    "test_cwd"
-    "test_files_dict"
-    "test_files_duplicate_parts"
-    "test_files_list"
-    "test_get_authenticator"
-    "test_gzip_compression_external"
-    "test_iam"
-    "test_read_external_sources_2"
-    "test_retry_config_external"
-    # assertion error due to requests brotli support
-    "test_http_client"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # Tests are blocking or failing
-    "test_abstract_class_instantiation"
-    "test_abstract_class_instantiation"
-  ];
+  disabledTests =
+    [
+      # Various tests try to access credential files which are not included with the source distribution
+      "test_configure_service"
+      "test_cp4d_authenticator"
+      "test_cwd"
+      "test_files_dict"
+      "test_files_duplicate_parts"
+      "test_files_list"
+      "test_get_authenticator"
+      "test_gzip_compression_external"
+      "test_iam"
+      "test_read_external_sources_2"
+      "test_retry_config_external"
+      # assertion error due to requests brotli support
+      "test_http_client"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # Tests are blocking or failing
+      "test_abstract_class_instantiation"
+      "test_abstract_class_instantiation"
+    ];
 
   disabledTestPaths = [
     "test/test_container_token_manager.py"

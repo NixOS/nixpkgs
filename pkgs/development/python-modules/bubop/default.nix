@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, loguru
-, python-dateutil
-, pyyaml
-, tqdm
-, click
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  loguru,
+  python-dateutil,
+  pyyaml,
+  tqdm,
+  click,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     --replace-fail 'PyYAML = "~5.3.1"' 'PyYAML = "^6.0"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     loguru

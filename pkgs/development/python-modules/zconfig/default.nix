@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, docutils
-, fetchPypi
-, manuel
-, pygments
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, zope-testrunner
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  manuel,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
@@ -26,31 +27,23 @@ buildPythonPackage rec {
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [
     docutils
     manuel
   ];
 
-  propagatedBuildInputs = [
-    zope-testrunner
-  ];
+  propagatedBuildInputs = [ zope-testrunner ];
 
   nativeCheckInputs = [
     pygments
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ZConfig"
-  ];
+  pythonImportsCheck = [ "ZConfig" ];
 
-  pytestFlagsArray = [
-    "-s"
-  ];
+  pytestFlagsArray = [ "-s" ];
 
   meta = with lib; {
     description = "Structured Configuration Library";

@@ -1,18 +1,19 @@
-{ lib
-, aenum
-, aiodns
-, aiohttp
-, buildPythonPackage
-, faust-cchardet
-, fetchFromGitHub
-, pyopenssl
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, related
-, requests
-, uonet-request-signer-hebe
-, yarl
+{
+  lib,
+  aenum,
+  aiodns,
+  aiohttp,
+  buildPythonPackage,
+  faust-cchardet,
+  fetchFromGitHub,
+  pyopenssl,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  related,
+  requests,
+  uonet-request-signer-hebe,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     hash = "sha256-ebWKcRxAAkHVqV2RaftIHBRJe/TYSUxS+5Utxb0yhtw=";
   };
 
-  pythonRemoveDeps = [
-    "faust-cchardet"
-  ];
+  pythonRemoveDeps = [ "faust-cchardet" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aenum
@@ -53,9 +50,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vulcan"
-  ];
+  pythonImportsCheck = [ "vulcan" ];
 
   meta = with lib; {
     description = "Python library for UONET+ e-register API";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, numpy
-, pytestCheckHook
-, pykka
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  six,
+  numpy,
+  pytestCheckHook,
+  pykka,
+  pythonAtLeast,
 }:
 
 # Note we currently do not patch the path to the drivers
@@ -44,9 +45,7 @@ buildPythonPackage rec {
   # Fixture "x_series_device" called directly. Fixtures are not meant to be called directly
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nidaqmx.task"
-  ];
+  pythonImportsCheck = [ "nidaqmx.task" ];
 
   meta = {
     description = "API for interacting with the NI-DAQmx driver";

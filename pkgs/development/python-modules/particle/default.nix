@@ -1,17 +1,18 @@
-{ lib
-, attrs
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, fetchPypi
-, hatch-vcs
-, hatchling
-, hepunits
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, tabulate
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  hepunits,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -50,13 +51,9 @@ buildPythonPackage rec {
     pandas
   ];
 
-  pythonImportsCheck = [
-    "particle"
-  ];
+  pythonImportsCheck = [ "particle" ];
 
-  disabledTestPaths = [
-    "tests/particle/test_performance.py"
-  ];
+  disabledTestPaths = [ "tests/particle/test_performance.py" ];
 
   meta = with lib; {
     description = "Package to deal with particles, the PDG particle data table and others";

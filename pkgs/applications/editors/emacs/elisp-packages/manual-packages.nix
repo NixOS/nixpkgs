@@ -33,6 +33,8 @@ in
 
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
+  emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
+
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, pytestCheckHook
-, packaging
-, platformdirs
-, requests
-, tqdm
-, paramiko
-, xxhash
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pytestCheckHook,
+  packaging,
+  platformdirs,
+  requests,
+  tqdm,
+  paramiko,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -49,9 +50,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # tries to touch network
   disabledTests = [
@@ -70,7 +69,6 @@ buildPythonPackage rec {
     "test_load_registry_from_doi"
     "test_retrieve"
     "test_stream_download"
-
   ];
 
   meta = with lib; {
@@ -79,5 +77,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ GuillaumeDesforges ];
   };
-
 }

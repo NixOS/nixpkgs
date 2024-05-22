@@ -1,6 +1,4 @@
-{ runCommand
-, fontbakery
-}:
+{ runCommand, fontbakery }:
 
 let
   inherit (fontbakery) pname version src;

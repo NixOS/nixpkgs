@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, freezegun
-, mock
-, pyjwt
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  pyjwt,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     docopt
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "notifications_python_client"
-  ];
+  pythonImportsCheck = [ "notifications_python_client" ];
 
   meta = with lib; {
     description = "Python client for the GOV.UK Notify API";

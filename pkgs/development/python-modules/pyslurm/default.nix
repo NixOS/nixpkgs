@@ -1,10 +1,11 @@
-{ lib
-, pythonOlder
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, cython
-, slurm
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  cython,
+  slurm,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-Qi0XftneKj7hdDiLY2hoRONRrPv49mfQlvlNkudH54Y=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [ cython slurm ];
+  buildInputs = [
+    cython
+    slurm
+  ];
 
   env = {
     SLURM_LIB_DIR = "${lib.getLib slurm}/lib";

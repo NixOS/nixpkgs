@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, inkex
-, lxml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  inkex,
+  lxml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,18 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-hvGvJFxhu7llj+tFfZvz12dZ8QYjY7zcLzB5S44l+IM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     inkex
     lxml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "svg2tikz" ];
 
@@ -43,6 +40,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/xyz2tex/svg2tikz";
     description = "Set of tools for converting SVG graphics to TikZ/PGF code";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dotlambda gal_bolle ];
+    maintainers = with maintainers; [
+      dotlambda
+      gal_bolle
+    ];
   };
 }

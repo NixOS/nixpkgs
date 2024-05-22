@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, numpy
-, scikit-learn
-, pytestCheckHook
-, torch
-, torchvision
-, tqdm
-, faiss
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  numpy,
+  scikit-learn,
+  pytestCheckHook,
+  torch,
+  torchvision,
+  tqdm,
+  faiss,
 }:
 
 buildPythonPackage rec {
-  pname   = "pytorch-metric-learning";
+  pname = "pytorch-metric-learning";
   version = "2.5.0";
   format = "setuptools";
 
@@ -46,23 +47,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # TypeError: setup() missing 1 required positional argument: 'world_size'
-    "TestDistributedLossWrapper"
-    # require network access:
-    "TestInference"
-    "test_get_nearest_neighbors"
-    "test_tuplestoweights_sampler"
-    "test_untrained_indexer"
-    "test_metric_loss_only"
-    "test_pca"
-    # flaky
-    "test_distributed_classifier_loss_and_miner"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-    "test_global_embedding_space_tester"
-    "test_with_same_parent_label_tester"
-  ];
+  disabledTests =
+    [
+      # TypeError: setup() missing 1 required positional argument: 'world_size'
+      "TestDistributedLossWrapper"
+      # require network access:
+      "TestInference"
+      "test_get_nearest_neighbors"
+      "test_tuplestoweights_sampler"
+      "test_untrained_indexer"
+      "test_metric_loss_only"
+      "test_pca"
+      # flaky
+      "test_distributed_classifier_loss_and_miner"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+      "test_global_embedding_space_tester"
+      "test_with_same_parent_label_tester"
+    ];
 
   meta = {
     description = "Metric learning library for PyTorch";

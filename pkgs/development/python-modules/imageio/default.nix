@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, isPyPy
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  isPyPy,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, libGL
+  # native dependencies
+  libGL,
 
-# dependencies
-, numpy
-, pillow
+  # dependencies
+  numpy,
+  pillow,
 
-# optional-dependencies
-, astropy
-, av
-, imageio-ffmpeg
-, pillow-heif
-, psutil
-, tifffile
+  # optional-dependencies
+  astropy,
+  av,
+  imageio-ffmpeg,
+  pillow-heif,
+  psutil,
+  tifffile,
 
-# tests
-, pytestCheckHook
-, fsspec
+  # tests
+  pytestCheckHook,
+  fsspec,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy
@@ -60,45 +59,36 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    bsdf = [];
-    dicom = [];
-    feisem = [];
+    bsdf = [ ];
+    dicom = [ ];
+    feisem = [ ];
     ffmpeg = [
       imageio-ffmpeg
       psutil
     ];
-    fits = lib.optionals (!isPyPy) [
-      astropy
-    ];
-    freeimage = [];
-    lytro = [];
-    numpy = [];
-    pillow = [];
-    simpleitk = [];
-    spe = [];
-    swf = [];
-    tifffile = [
-      tifffile
-    ];
-    pyav = [
-      av
-    ];
-    heif = [
-      pillow-heif
-    ];
+    fits = lib.optionals (!isPyPy) [ astropy ];
+    freeimage = [ ];
+    lytro = [ ];
+    numpy = [ ];
+    pillow = [ ];
+    simpleitk = [ ];
+    spe = [ ];
+    swf = [ ];
+    tifffile = [ tifffile ];
+    pyav = [ av ];
+    heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs = [
-    fsspec
-    psutil
-    pytestCheckHook
-  ]
-  ++ fsspec.optional-dependencies.github
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      fsspec
+      psutil
+      pytestCheckHook
+    ]
+    ++ fsspec.optional-dependencies.github
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "-m 'not needs_internet'"
-  ];
+  pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
   preCheck = ''
     export IMAGEIO_USERDIR="$TMP"

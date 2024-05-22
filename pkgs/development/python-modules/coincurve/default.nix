@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asn1crypto
-, autoconf
-, automake
-, cffi
-, libtool
-, pkg-config
-, pytestCheckHook
-, python
-, pythonOlder
-, secp256k1
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asn1crypto,
+  autoconf,
+  automake,
+  cffi,
+  libtool,
+  pkg-config,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  secp256k1,
 }:
 
 buildPythonPackage rec {
@@ -56,18 +57,17 @@ buildPythonPackage rec {
     rm tests/test_bench.py
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "coincurve"
-  ];
+  pythonImportsCheck = [ "coincurve" ];
 
   meta = with lib; {
     description = "Cross-platform bindings for libsecp256k1";
     homepage = "https://github.com/ofek/coincurve";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ ];
   };
 }

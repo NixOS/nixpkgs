@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, click
-, fetchPypi
-, lib
-, nix-update-script
-, setuptools-scm
+{
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  lib,
+  nix-update-script,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-zyfgsHzIoz4lnqANe63b2oqgD/oxBbTbJYEedfSHWQ8=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
   passthru.updateScript = nix-update-script { };
 

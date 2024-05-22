@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  six,
+  pyudev,
+  pygobject3,
+}:
 
 buildPythonPackage rec {
   pname = "rtslib";
@@ -12,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-z9fpSVyv96ZoJaP0ch2A3bX/o/K23ooEpxa/OAhY6Z4=";
   };
 
-  propagatedBuildInputs = [ six pyudev pygobject3 ];
+  propagatedBuildInputs = [
+    six
+    pyudev
+    pygobject3
+  ];
 
   meta = with lib; {
     description = "A Python object API for managing the Linux LIO kernel target";

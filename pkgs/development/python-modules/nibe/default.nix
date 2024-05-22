@@ -1,20 +1,21 @@
-{ lib
-, aiohttp
-, aresponses
-, async-modbus
-, async-timeout
-, asyncclick
-, buildPythonPackage
-, construct
-, exceptiongroup
-, fetchFromGitHub
-, pandas
-, pytest-asyncio
-, pytestCheckHook
-, python-slugify
-, pythonOlder
-, setuptools
-, tenacity
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-modbus,
+  async-timeout,
+  asyncclick,
+  buildPythonPackage,
+  construct,
+  exceptiongroup,
+  fetchFromGitHub,
+  pandas,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-slugify,
+  pythonOlder,
+  setuptools,
+  tenacity,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-j8P/lhBjlsmnOc4Cv/a2Hdf2EPO8CEpT4IOQHtiBgQA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     async-modbus
@@ -48,9 +47,7 @@ buildPythonPackage rec {
       pandas
       python-slugify
     ];
-    cli = [
-      asyncclick
-    ];
+    cli = [ asyncclick ];
   };
 
   nativeCheckInputs = [
@@ -59,9 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "nibe"
-  ];
+  pythonImportsCheck = [ "nibe" ];
 
   meta = with lib; {
     description = "Library for the communication with Nibe heatpumps";

@@ -1,8 +1,9 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-uilvJjuZrvdC2m4zhXCkbzLjwtbC1liWEZ20Ya7FYJ0=";
   };
 
-  propagatedBuildInputs = [
-    asn1crypto
-  ];
+  propagatedBuildInputs = [ asn1crypto ];
 
   # Upstream hasn't release the tests yet
   doCheck = false;
 
-  pythonImportsCheck = [
-    "asysocks"
-  ];
+  pythonImportsCheck = [ "asysocks" ];
 
   meta = with lib; {
     description = "Python Socks4/5 client and server library";

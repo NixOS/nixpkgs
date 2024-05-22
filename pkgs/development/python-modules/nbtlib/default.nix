@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -18,18 +19,14 @@ buildPythonPackage rec {
   };
 
   prePatch = ''
-      substituteInPlace pyproject.toml \
-      --replace "poetry>=0.12" "poetry-core" \
-      --replace "poetry.masonry" "poetry.core.masonry"
+    substituteInPlace pyproject.toml \
+    --replace "poetry>=0.12" "poetry-core" \
+    --replace "poetry.masonry" "poetry.core.masonry"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "nbtlib" ];
 

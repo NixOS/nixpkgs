@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, numpy
-, packaging
-, quantities
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  numpy,
+  packaging,
+  quantities,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -29,17 +30,13 @@ buildPythonPackage rec {
     quantities
   ];
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests --exclude=iotest
   '';
 
-  pythonImportsCheck = [
-    "neo"
-  ];
+  pythonImportsCheck = [ "neo" ];
 
   meta = with lib; {
     description = "Package for representing electrophysiology data";
