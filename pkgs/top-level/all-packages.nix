@@ -15203,8 +15203,14 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  bun = callPackage ../development/web/bun { };
-  bunBaseline = callPackage ../development/web/bun/baseline.nix { };
+  inherit
+    ({
+      bun = callPackage ../development/web/bun { };
+      bunBaseline = callPackage ../development/web/bun/baseline.nix { };
+    })
+    bun
+    bunBaseline
+    ;
 
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
