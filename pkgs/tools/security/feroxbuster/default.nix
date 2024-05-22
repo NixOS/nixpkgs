@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "epi052";
-    repo = pname;
+    repo = "feroxbuster";
     rev = "refs/tags/v${version}";
     hash = "sha256-3cznGVpZISLD2TbsHYyYYUTD55NmgBdNJ44V4XfZ40k=";
   };
@@ -27,15 +27,9 @@ rustPlatform.buildRustPackage rec {
 
   OPENSSL_NO_VENDOR = true;
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs = [ openssl ];
 
   # Tests require network access
   doCheck = false;
@@ -50,4 +44,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "feroxbuster";
   };
 }
-
