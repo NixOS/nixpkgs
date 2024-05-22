@@ -532,7 +532,6 @@ dont-distribute-packages:
  - apotiki
  - approx-rand-test
  - arbor-monad-metric-datadog
- - archive-libarchive
  - archive-tar-bytestring
  - archlinux-web
  - arduino-copilot
@@ -2567,7 +2566,6 @@ dont-distribute-packages:
  - lha
  - lhae
  - lhe
- - libarchive
  - libconfig
  - libcspm
  - libgraph
