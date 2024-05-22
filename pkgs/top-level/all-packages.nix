@@ -14700,7 +14700,9 @@ with pkgs;
 
   gbforth = callPackage ../development/compilers/gbforth { };
 
-  default-gcc-version = 14;
+  default-gcc-version =
+    if stdenv.targetPlatform ? gccVersion then stdenv.targetPlatform.gccVersion
+    else 14;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
@@ -15421,7 +15423,15 @@ with pkgs;
     # taking the min bound of that.
     minSupported = toString (lib.trivial.max (choose stdenv.hostPlatform) (choose
       stdenv.targetPlatform));
-  in pkgs.${"llvmPackages_${minSupported}"};
+    version = if stdenv.targetPlatform ? llvmVersion then
+      # Try to match the LLVM version the target platform is expecting.
+      lib.elemAt (lib.attrNames (lib.filterAttrs (version: set:
+        (version == stdenv.targetPlatform.llvmVersion)
+        || (lib.strings.compareVersions set.release_version stdenv.targetPlatform.llvmVersion == 0)
+        || (lib.versions.major set.release_version == stdenv.targetPlatform.llvmVersion)
+      ) (lib.removeAttrs llvmPackagesSet [ "recurseForDerivations" ]))) 0
+    else minSupported;
+  in pkgs.${"llvmPackages_${version}"};
 
   llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
     inherit (stdenvAdapters) overrideCC;
@@ -15431,7 +15441,7 @@ with pkgs;
   }));
 
   inherit (rec {
-    llvmPackagesSet = recurseIntoAttrs (callPackages ../development/compilers/llvm { });
+    llvmPackagesSet = lib.removeAttrs (recurseIntoAttrs (callPackages ../development/compilers/llvm { })) [ "git" ];
 
     llvmPackages_13 = llvmPackagesSet."13";
     llvmPackages_14 = llvmPackagesSet."14";
@@ -15451,7 +15461,8 @@ with pkgs;
     lldb_19 = llvmPackages_19.lldb;
     llvm_19 = llvmPackages_19.llvm;
     bolt_19 = llvmPackages_19.bolt;
-  }) llvmPackages_13
+  }) llvmPackagesSet
+    llvmPackages_13
     llvmPackages_14
     llvmPackages_15
     llvmPackages_16

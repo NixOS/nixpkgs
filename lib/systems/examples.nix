@@ -53,6 +53,16 @@ rec {
     config = "armv7l-unknown-linux-gnueabihf";
   };
 
+  asahi-m1 = {
+    config = "aarch64-unknown-linux-gnu";
+    cpuModel = "apple_m1";
+  };
+
+  asahi-m2 = {
+    config = "aarch64-unknown-linux-gnu";
+    cpuModel = "apple_m2";
+  };
+
   aarch64-multiplatform = {
     config = "aarch64-unknown-linux-gnu";
   };
