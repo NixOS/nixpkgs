@@ -29,7 +29,7 @@ buildGoModule rec {
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \
-      --replace "\"/etc/ct\"," "\"$out/etc/ct\","
+      --replace-fail "/etc/cr" "$out/etc/cr"
   '';
 
   # https://github.com/helm/chart-releaser/blob/fa01315c4668d4fca627a5afc67409e31b27305c/.goreleaser.yml#L37
