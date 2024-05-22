@@ -1,24 +1,11 @@
-{ pkgs ? (import ../../.. { config = {}; overlays = []; }) }:
+# For debugging, run in this directory:
+#     nix eval --impure --raw --expr 'import ./python-interpreter-table.nix {}'
+{ pkgs ? (import ../.. { config = { }; overlays = []; }) }:
 let
   lib = pkgs.lib;
-  inherit (lib.attrsets)
-    attrNames
-    filterAttrs
-    foldlAttrs
-    mapAttrs'
-    mapAttrsToList
-    mergeAttrsList
-    zipAttrsWith
-    ;
-  inherit (lib.lists) naturalSort;
-
-  interpreterName = python:
-    let
-      cuteName = {
-        cpython = "CPython";
-        pypy = "PyPy";
-      };
-    in ''${cuteName.${python.implementation}} ${python.pythonVersion}'';
+  inherit (lib.attrsets) attrNames filterAttrs;
+  inherit (lib.lists) elem filter map naturalSort reverseList;
+  inherit (lib.strings) concatStringsSep;
 
   isPythonInterpreter = name:
     /* NB: Package names that don't follow the regular expression:
@@ -29,104 +16,45 @@ let
     */
     (lib.strings.match "(pypy|python)([[:digit:]]*)" name) != null;
 
-  isAlias = excludeList: name:
-    isPythonInterpreter name && ! builtins.elem name excludeList;
-
-  /* Collect Python interpreters from attrset `pkgs.pythonInterpreters`.
-
-  The return type is an attrset with the following shape:
-  ```
-  {
-    ${interpreterName} = {
-      interpreter = ${interpreterName};
-      attrname = ${attrname};
-    };
-    ....
-  }
-  ```
-
-  Example:
-
-  ```
-  {
-    "CPython 3.10" = { attrname = "python310"; };
-    "PyPy 3.10" = { attrname = "pypy310"; };
-    ....
-  }
-  ```
-  */
-  interpreters =
+  interpreterName = pname:
     let
-      filtered = filterAttrs (name: _: isPythonInterpreter name) pkgs.pythonInterpreters;
+      cuteName = {
+        cpython = "CPython";
+        pypy = "PyPy";
+      };
+      interpreter = pkgs.${pname};
     in
-    mapAttrs'
-      (name: value: { name = interpreterName value; value = { attrname = name; }; })
-      filtered;
-  /* Look for aliases in the attrset `pkgs`.
+    "${cuteName.${interpreter.implementation}} ${interpreter.pythonVersion}";
 
-  Two packages <attrname1> has and alias <attrname2> they return the same <table-fied-value> .
+  interpreters = reverseList (naturalSort (
+    filter isPythonInterpreter (attrNames pkgs.pythonInterpreters)
+  ));
 
-  The return type is an attrset with the following shape:
+  aliases = pname:
+    attrNames (
+      filterAttrs (name: value:
+        isPythonInterpreter name
+        && name != pname
+        && interpreterName name == interpreterName pname
+      ) pkgs
+    );
 
-  ```
-  {
-    ${interpreterName} = { interpreter = [ <alias1> <alias2> ... ]] };
-    ....
-  }
-  ```
+  result = map (pname: {
+    inherit pname;
+    aliases = aliases pname;
+    interpreter = interpreterName pname;
+  }) interpreters;
 
-  Example:
-
-  ```
-  {
-    "CPython 3.10" = { aliases = [ "python310" ]; };
-    "CPython 3.11" = { aliases = [ "python3" "python311" ]; };
-    "PyPy 3.10" = { aliases = [ "pypy310" ]; };
-    ....
-  }
-  ```
-  */
-  aliases =
-    let
-      # Collect interpreter keys to be excluded from the aliases set
-      excludeList = mapAttrsToList (_: value: value.attrname) interpreters;
-      filtered = filterAttrs (name: _: isAlias excludeList name) pkgs;
-      collectAliases = (acc: name: value:
-        let
-          interpreter = interpreterName value;
-        in acc // {
-          ${interpreter} = {
-            aliases = (acc.${interpreter}.aliases or []) ++ [name];
-          };
-        });
-    in
-    foldlAttrs collectAliases {} filtered;
-
-  /*
-  Combine results from interpreters and aliases:
-  {
-    "CPython 3.10" = { aliases = [ ]; attrname = [ "python310" ]; };
-    "CPython 3.11" = { aliases = [ "python3" ]; attrname = [ "python311" ]; };
-  }
-  */
-  result = zipAttrsWith (_: values: mergeAttrsList values) [ aliases interpreters ];
-
-  /*
-  Return a list of table rows as attrsets, sorted by interpreter name and version:
-  [
-    { attrname = "python310"; aliases = [ ]; interpreter = "CPython 3.10"; }
-    { attrname = "python311"; aliases = [ "python3" ]; interpreter = "CPython 3.11"; }
-  ]
-  */
   toMarkdown = data:
     let
-      line = interpreter: ''
-        | ${data.${interpreter}.attrname} | ${join ", " data.${interpreter}.aliases or []} | ${interpreter} |
+      line = package: ''
+        | ${package.pname} | ${join ", " package.aliases or [ ]} | ${package.interpreter} |
       '';
     in
-    join "" (map line (naturalSort (attrNames data)));
+    join "" (map line data);
 
   join = lib.strings.concatStringsSep;
+
 in
 ''
   | Package | Aliases | Interpeter |
