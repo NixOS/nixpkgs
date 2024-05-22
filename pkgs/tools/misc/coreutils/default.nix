@@ -16,7 +16,7 @@
 , minimal ? true
 , withOpenssl ? !minimal, openssl
 , withPrefix ? false
-, singleBinary ? if stdenv.isFreeBSD then false else "symlinks" # you can also pass "shebangs" or false
+, singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
     ./fix-test-failure-musl.patch
+  ] ++ [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
+    # This is not precisely the patch provided - this is a diff of the Makefile.in
+    # after the patch was applied and autoreconf was run, since adding autoreconf
+    # here causes infinite recursion.
+    ./fix-mix-flags-deps-libintl.patch
   ];
 
   postPatch = ''
