@@ -2,6 +2,8 @@
 
 let
   cfg = config.programs.hyprland;
+
+  wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
   options.programs.hyprland = {
@@ -11,36 +13,26 @@ in
       A configuration file will be generated in {file}`~/.config/hypr/hyprland.conf`.
       See <https://wiki.hyprland.org> for more information'';
 
-    package = lib.mkPackageOption pkgs "hyprland" { };
-
-    finalPackage = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = cfg.package.override {
+    package = lib.mkPackageOption pkgs "hyprland" {
+      extraDescription = ''
+        If the package is not overridable with `enableXWayland`, then the module option
+        {option}`xwayland` will have no effect.
+      '';
+    } // {
+      apply = p: wayland-lib.genFinalPackage p {
         enableXWayland = cfg.xwayland.enable;
       };
-      defaultText = lib.literalMD ''
-        `programs.hyprland.package` with applied configuration
-      '';
-      description = ''
-        The Hyprland package after applying configuration.
-      '';
     };
 
-    portalPackage = lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
-
-    finalPortalPackage = lib.mkOption {
-      type = lib.types.package;
-      readOnly = true;
-      default = cfg.portalPackage.override {
-        hyprland = cfg.finalPackage;
+    portalPackage = lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" {
+      extraDescription = ''
+        If the package is not overridable with `hyprland`, then the Hyprland package
+        used by the portal may differ from the one set in the module option {option}`package`.
+      '';
+    } // {
+      apply = p: wayland-lib.genFinalPackage p {
+        hyprland = cfg.package;
       };
-      defaultText = lib.literalMD ''
-        `programs.hyprland.portalPackage` with applied configuration
-      '';
-      description = ''
-        The Hyprland Portal package after applying configuration.
-      '';
     };
 
     xwayland.enable = lib.mkEnableOption "XWayland" // { default = true; };
@@ -58,14 +50,14 @@ in
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      environment.systemPackages = [ cfg.finalPackage ];
+      environment.systemPackages = [ cfg.package ];
 
       # To make a Hyprland session available if a display manager like SDDM is enabled:
-      services.displayManager.sessionPackages = [ cfg.finalPackage ];
+      services.displayManager.sessionPackages = [ cfg.package ];
 
       xdg.portal = {
-        extraPortals = [ cfg.finalPortalPackage ];
-        configPackages = lib.mkDefault [ cfg.finalPackage ];
+        extraPortals = [ cfg.portalPackage ];
+        configPackages = lib.mkDefault [ cfg.package ];
       };
 
       systemd = lib.mkIf cfg.systemd.setPath.enable {
