@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.13.0";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "adamchainz";
     repo = pname;
     rev = version;
-    hash = "sha256-SjenPLLr4JoWK5HAokwgW+bw3mfAZiuDb1N7Za5wtrw=";
+    hash = "sha256-NBqcVjZs2R5IWnwlEg26V3gBQVUDdM2ZIK7DMg372G4=";
   };
 
   nativeBuildInputs = [ setuptools ];
