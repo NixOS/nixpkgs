@@ -1716,6 +1716,8 @@ let
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
 
+    spices = callPackage ../development/ocaml-modules/spices { };
+
     srt = callPackage ../development/ocaml-modules/srt {
       inherit (pkgs) srt;
     };
