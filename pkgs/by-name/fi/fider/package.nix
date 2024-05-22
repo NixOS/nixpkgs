@@ -27,6 +27,17 @@ let
       "-s"
       "-w"
     ];
+
+    doCheck = false; # It requires a bunch of things to be set, see `preCheck` below
+
+    # preCheck = ''
+    #   export JWT_SECRET=not_so_secret
+    #   export DATABASE_URL=sqlite://:memory:
+    #   export EMAIL_NOREPLY=email@example.com
+    #   export BASE_URL=http://127.0.0.1/
+    #   export EMAIL_SMTP_HOST=mailhog
+    #   export EMAIL_SMTP_PORT=1025
+    # '';
   };
 
   esbuild' = esbuild.override {
@@ -71,7 +82,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    ls -la ${server} ${frontend}
+
+    mkdir -p $out
+
+    cp -r ${server}/bin $out/
+    cp -r ${frontend}/lib $out/
+
     runHook postInstall
   '';
 
