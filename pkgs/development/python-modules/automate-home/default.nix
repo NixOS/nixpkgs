@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, apscheduler
-, hiredis
-, aioredis
-, ephem
-, setuptools
-, pytz
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  apscheduler,
+  hiredis,
+  aioredis,
+  ephem,
+  setuptools,
+  pytz,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace-fail "aioredis==1.3.1" "aioredis"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     apscheduler
@@ -44,13 +43,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "home"
-  ];
+  pythonImportsCheck = [ "home" ];
 
   meta = with lib; {
     description = "Python module to automate (home) devices";
