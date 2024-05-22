@@ -45,7 +45,7 @@ let
   isNative = stdenv.hostPlatform == stdenv.buildPlatform;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "openai-triton-llvm";
-  version = "17.0.0-c5dede880d17";
+  version = "18.1.0-5e5a22caf88a";
 
   outputs = [
     "out"
@@ -60,8 +60,8 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "c5dede880d175f7229c9b2923f4753e12702305d";
-    hash = "sha256-v4r3+7XVFK+Dzxt/rErZNJ9REqFO3JmGN4X4vZ+77ew=";
+    rev = "5e5a22caf88ac1ccfa8dc5720295fdeba0ad9372";
+    hash = "sha256-hrpvBgW+Bn2ZPTdVAFCrCPcFH1r1yXsuxToFueJXvNU=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ in stdenv.mkDerivation (finalAttrs: {
     doxygen
     sphinx
     python3Packages.recommonmark
+    python3Packages.myst-parser
   ];
 
   buildInputs = [
