@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-PdUlloJ4DncnktKQHofn/OLVrgSVyWhaeEEhl3Hgjek=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -66,5 +68,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/SergeyPirogov/webdriver_manager/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
