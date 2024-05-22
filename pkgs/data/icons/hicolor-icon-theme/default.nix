@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchurl, meson, pkg-config, ninja }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  meson,
+  pkg-config,
+  ninja,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hicolor-icon-theme";
