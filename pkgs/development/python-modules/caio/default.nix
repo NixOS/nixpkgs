@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mosquito/caio/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
