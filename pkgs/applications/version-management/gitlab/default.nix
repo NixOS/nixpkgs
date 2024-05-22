@@ -4,6 +4,7 @@
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup-yarn-lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 , cargo, rustc, rustPlatform
+, icu, zlib, which
 }:
 
 let
@@ -49,7 +50,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-7q2xWAsFkXHxkYNzIjPwJRy72xMXF278cpVzqGLt/9Y=";
+            hash = "sha256-BdqxuguqbNkaIYUyKiab/MB6nSxe8Sa4uFJrDPRvdD8=";
           };
 
           dontBuild = false;
@@ -74,9 +75,12 @@ let
             find $out -type f -name .rustc_info.json -delete
           '';
         };
+        static_holmes = attrs: {
+          buildInputs = [ which icu zlib ];
+        };
       };
     groups = [
-      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos" "opentelemetry"
     ];
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
