@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
@@ -20,24 +21,29 @@
 
 buildPythonPackage rec {
   pname = "sourmash";
-  version = "4.8.4";
+  version = "4.8.7";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q1hMESwzEHGXcd4XW4nLqU8cLTCxrqRgAOr1qB77roo=";
+    hash = "sha256-DNGOpJ2UzpL1yFsjN897cyjvMBPDMxFBTbcbKZYqk/0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-HisWvJgx15OfYoMzzqYm1JyY1/jmGXBSZZmuNaKTDjI=";
+    hash = "sha256-MY6KrXmFAlL3RK7BFNQrte4XiNdLisSkVh035MfTy+A=";
   };
+
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=10.14
+  '';
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+    bindgenHook
   ];
 
   buildInputs = [ iconv ];
