@@ -16,6 +16,7 @@
   copyDesktopItems,
   writeShellApplication,
   commandLineArgs ? "",
+  genericUpdater,
 }:
 let
   archive =
@@ -86,18 +87,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "bombsquad-versionLister";
-    runtimeInputs = [
-      curl
-      gnugrep
-    ];
-    text = ''
-      curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
-          | grep -oP '^### \K\d+\.\d+\.\d+' \
-          | head -n 1
-    '';
-  });
+  passthru.updateScript = genericUpdater {
+    versionLister = lib.getExe (writeShellApplication {
+      name = "bombsquad-versionLister";
+      runtimeInputs = [
+        curl
+        gnugrep
+      ];
+      text = ''
+        curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
+            | grep -oP '^### \K\d+\.\d+\.\d+' \
+            | head -n 1
+      '';
+    });
+  };
 
   meta = {
     description = "A free, multiplayer, arcade-style game for up to eight players that combines elements of fighting games and first-person shooters (FPS)";
@@ -107,7 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       unfree
     ];
-    maintainers = with lib.maintainers; [ syedahkam coffeeispower ];
+    maintainers = with lib.maintainers; [
+      syedahkam
+      coffeeispower
+    ];
     mainProgram = "bombsquad";
     platforms = lib.platforms.linux;
   };
