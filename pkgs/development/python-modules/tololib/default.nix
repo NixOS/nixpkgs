@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-TxWKV2nrnCxZmj6+wBDMSdJRvKV+MsPFbOyIlUJYJ3Q=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools-scm
   ];
 
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";
-    mainProgram = "tolo-cli";
     homepage = "https://gitlab.com/MatthiasLohr/tololib";
     changelog = "https://gitlab.com/MatthiasLohr/tololib/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tolo-cli";
   };
 }
