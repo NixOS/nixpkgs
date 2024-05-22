@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, scapy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  scapy,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     scapy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bof"
-  ];
+  pythonImportsCheck = [ "bof" ];
 
   disabledTests = [
     # Tests are using netcat and cat to do UDP connections
