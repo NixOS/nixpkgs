@@ -37953,7 +37953,7 @@ with pkgs;
 
   minia = callPackage ../applications/science/biology/minia { };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
+  mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };
 
   muscle = callPackage ../applications/science/biology/muscle { };
 
