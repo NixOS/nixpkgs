@@ -36,5 +36,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/riverloopsec/killerbee/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }
