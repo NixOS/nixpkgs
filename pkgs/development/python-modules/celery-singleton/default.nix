@@ -7,12 +7,13 @@
 , redis
 , pytestCheckHook
 , pytest-celery
+, redisServer
 }:
 
 buildPythonPackage rec {
   pname = "celery-singleton";
   version = "0.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "steinitzu";
@@ -54,15 +55,14 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests" ];
 
-  # Tests require a running Redis backend
-  disabledTests = [
-    "TestLock"
-    "TestUnlock"
-    "TestClear"
-    "TestSimpleTask"
-    "TestRaiseOnDuplicateConfig"
-    "TestUniqueOn"
-  ];
+  preCheck = ''
+    ${redisServer}/bin/redis-server &
+    REDIS_PID=$!
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
 
   pythonImportsCheck = [ "celery_singleton" ];
 
