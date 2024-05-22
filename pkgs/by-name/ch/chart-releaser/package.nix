@@ -19,7 +19,6 @@ buildGoModule rec {
     repo = pname;
     rev = "v${version}";
     hash = "sha256-8+O9JErEB1Z/zlrWm975v5Qf0YG0lbPcjY5LlDKw8U4=";
-
   };
 
   # Don't run tests.
