@@ -6,6 +6,7 @@
   pytest-sugar,
   pytest-timeout,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
   requests-mock,
@@ -17,7 +18,8 @@ buildPythonPackage rec {
   version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  # Still uses distrutils, https://github.com/MisterWil/skybellpy/issues/22
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "MisterWil";
