@@ -2494,8 +2494,6 @@ self: super: with self; {
 
   courlan = callPackage ../development/python-modules/courlan { };
 
-  cov-core = callPackage ../development/python-modules/cov-core { };
-
   coverage = callPackage ../development/python-modules/coverage { };
 
   coveralls = callPackage ../development/python-modules/coveralls { };
@@ -3884,6 +3882,8 @@ self: super: with self; {
   esig = callPackage ../development/python-modules/esig { };
 
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
+
+  esper = callPackage ../development/python-modules/esper { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
 
@@ -8861,8 +8861,6 @@ self: super: with self; {
 
   nose3 = callPackage ../development/python-modules/nose3 { };
 
-  nose-cov = callPackage ../development/python-modules/nose-cov { };
-
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose-timer = callPackage ../development/python-modules/nose-timer { };
@@ -11292,8 +11290,6 @@ self: super: with self; {
   pylsp-rope = callPackage ../development/python-modules/pylsp-rope { };
 
   pylpsd = callPackage ../development/python-modules/pylpsd { };
-
-  pylti = callPackage ../development/python-modules/pylti { };
 
   pylutron = callPackage ../development/python-modules/pylutron { };
 
