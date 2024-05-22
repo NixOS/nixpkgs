@@ -4,15 +4,17 @@
   buildPythonPackage,
   elastic-transport,
   fetchPypi,
+  orjson,
   pythonOlder,
   requests,
+  setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch8";
   version = "8.13.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,12 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-jVi5yYPll7ej8lmDEbvcLCEdBbpMiZUi2n4AORre81E=";
   };
 
-  nativeBuildInputs = [ elastic-transport ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ elastic-transport ];
 
   passthru.optional-dependencies = {
     async = [ aiohttp ];
+    requests = [ requests ];
+    orjson = [ orjson ];
   };
 
   # Check is disabled because running them destroy the content of the local cluster!
