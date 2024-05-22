@@ -2,23 +2,14 @@
 
 let
   cfg = config.programs.hyprland;
-
-  finalPortalPackage = cfg.portalPackage.override {
-    hyprland = cfg.finalPackage;
-  };
 in
 {
   options.programs.hyprland = {
-    enable = lib.mkEnableOption null // {
-      description = ''
-        Whether to enable Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
-
-        You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
-
-        A configuration file will be generated in {file}`~/.config/hypr/hyprland.conf`.
-        See <https://wiki.hyprland.org> for more information.
-      '';
-    };
+    enable = lib.mkEnableOption ''
+      Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
+      You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
+      A configuration file will be generated in {file}`~/.config/hypr/hyprland.conf`.
+      See <https://wiki.hyprland.org> for more information'';
 
     package = lib.mkPackageOption pkgs "hyprland" { };
 
@@ -28,8 +19,9 @@ in
       default = cfg.package.override {
         enableXWayland = cfg.xwayland.enable;
       };
-      defaultText = lib.literalExpression
-        "`programs.hyprland.package` with applied configuration";
+      defaultText = lib.literalMD ''
+        `programs.hyprland.package` with applied configuration
+      '';
       description = ''
         The Hyprland package after applying configuration.
       '';
@@ -37,7 +29,21 @@ in
 
     portalPackage = lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
-    xwayland.enable = lib.mkEnableOption ("XWayland") // { default = true; };
+    finalPortalPackage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      default = cfg.portalPackage.override {
+        hyprland = cfg.finalPackage;
+      };
+      defaultText = lib.literalMD ''
+        `programs.hyprland.portalPackage` with applied configuration
+      '';
+      description = ''
+        The Hyprland Portal package after applying configuration.
+      '';
+    };
+
+    xwayland.enable = lib.mkEnableOption "XWayland" // { default = true; };
 
     systemd.setPath.enable = lib.mkEnableOption null // {
       default = true;
@@ -54,10 +60,11 @@ in
     {
       environment.systemPackages = [ cfg.finalPackage ];
 
+      # To make a Hyprland session available if a display manager like SDDM is enabled:
       services.displayManager.sessionPackages = [ cfg.finalPackage ];
 
       xdg.portal = {
-        extraPortals = [ finalPortalPackage ];
+        extraPortals = [ cfg.finalPortalPackage ];
         configPackages = lib.mkDefault [ cfg.finalPackage ];
       };
 

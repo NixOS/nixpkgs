@@ -3,44 +3,9 @@
 let
   cfg = config.programs.sway;
 
-  wrapperOptions = lib.types.submodule {
-    options =
-      let
-        mkWrapperFeature  = default: description: lib.mkOption {
-          type = lib.types.bool;
-          inherit default;
-          example = !default;
-          description = "Whether to make use of the ${description}";
-        };
-      in {
-        base = mkWrapperFeature true ''
-          base wrapper to execute extra session commands and prepend a
-          dbus-run-session to the sway command.
-        '';
-        gtk = mkWrapperFeature false ''
-          wrapGAppsHook wrapper to execute sway with required environment
-          variables for GTK applications.
-        '';
-    };
-  };
-
   genFinalPackage = pkg:
     let
-      expectedArgs = lib.naturalSort [
-        "extraSessionCommands"
-        "extraOptions"
-        "withBaseWrapper"
-        "withGtkWrapper"
-        "enableXWayland"
-        "isNixOS"
-      ];
-      existedArgs = with lib;
-        naturalSort
-        (intersectLists expectedArgs (attrNames (functionArgs pkg.override)));
-    in if existedArgs != expectedArgs then
-      pkg
-    else
-      pkg.override {
+      args = {
         extraSessionCommands = cfg.extraSessionCommands;
         extraOptions = cfg.extraOptions;
         withBaseWrapper = cfg.wrapperFeatures.base;
@@ -48,6 +13,13 @@ let
         enableXWayland = cfg.xwayland.enable;
         isNixOS = true;
       };
+
+      expectedArgs = with lib;
+        lib.naturalSort (lib.attrNames args);
+      existingArgs = with lib;
+        naturalSort (intersectLists expectedArgs (attrNames (functionArgs pkg.override)));
+    in
+      if existingArgs != expectedArgs then pkg else pkg.override args;
 in
 {
   options.programs.sway = {
@@ -58,30 +30,28 @@ in
       <https://github.com/swaywm/sway/wiki> and
       "man 5 sway" for more information'';
 
-    package = lib.mkOption {
-      type = with lib.types; nullOr package;
-      default = pkgs.sway;
-      apply = p: if p == null then null else genFinalPackage p;
-      defaultText = lib.literalExpression "pkgs.sway";
-      description = ''
-        Sway package to use. If the package does not contain the override arguments
-        `extraSessionCommands`, `extraOptions`, `withBaseWrapper`, `withGtkWrapper`,
-        `enableXWayland` and `isNixOS`, then the module options {option}`wrapperFeatures`,
-        {option}`extraSessionCommands`, {option}`extraOptions` and {option}`wayland`
-        will have no effect.
+    package = lib.mkPackageOption pkgs "sway" {
+      nullable = true;
+      extraDescription = ''
+        If the package is not overridable with `extraSessionCommands`, `extraOptions`,
+        `withBaseWrapper`, `withGtkWrapper`, `enableXWayland` and `isNixOS`,
+        then the module options {option}`wrapperFeatures`, {option}`extraSessionCommands`,
+        {option}`extraOptions` and {option}`xwayland` will have no effect.
 
-        Set to `null` to not add any Sway package to your path. This should be done if
-        you want to use the Home Manager Sway module to install Sway.
+        Set to `null` to not add any Sway package to your path.
+        This should be done if you want to use the Home Manager Sway module to install Sway.
       '';
+    } // {
+      apply = p: if p == null then null else genFinalPackage p;
     };
 
-    wrapperFeatures = lib.mkOption {
-      type = wrapperOptions;
-      default = { };
-      example = { gtk = true; };
-      description = ''
-        Attribute set of features to enable in the wrapper.
-      '';
+    wrapperFeatures = {
+      base = lib.mkEnableOption ''
+        the base wrapper to execute extra session commands and prepend a
+        dbus-run-session to the sway command'' // { default = true; };
+      gtk = lib.mkEnableOption ''
+        the wrapGAppsHook wrapper to execute sway with required environment
+        variables for GTK applications'';
     };
 
     extraSessionCommands = lib.mkOption {
@@ -123,17 +93,12 @@ in
 
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = with pkgs; [
-        swaylock swayidle foot dmenu wmenu
-      ];
+      default = with pkgs; [ swaylock swayidle foot dmenu wmenu ];
       defaultText = lib.literalExpression ''
         with pkgs; [ swaylock swayidle foot dmenu wmenu ];
       '';
       example = lib.literalExpression ''
-        with pkgs; [
-          i3status i3status-rust
-          termite rofi light
-        ]
+        with pkgs; [ i3status i3status-rust termite rofi light ]
       '';
       description = ''
         Extra packages to be installed system wide. See
@@ -150,8 +115,7 @@ in
         {
           assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
           message = ''
-            The extraSessionCommands for Sway will not be run if
-            wrapperFeatures.base is disabled.
+            The extraSessionCommands for Sway will not be run if wrapperFeatures.base is disabled.
           '';
         }
       ];
@@ -160,7 +124,7 @@ in
         systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
         # Needed for the default wallpaper:
-        pathsToLink = lib.optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
+        pathsToLink = lib.optional (cfg.package != null) "/share/backgrounds/sway";
 
         etc = {
           "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
@@ -176,7 +140,7 @@ in
       programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
 
       # To make a Sway session available if a display manager like SDDM is enabled:
-      services.displayManager.sessionPackages = lib.optionals (cfg.package != null) [ cfg.package ];
+      services.displayManager.sessionPackages = lib.optional (cfg.package != null) cfg.package;
 
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
       xdg.portal.config.sway.default = lib.mkDefault [ "wlr" "gtk" ];
