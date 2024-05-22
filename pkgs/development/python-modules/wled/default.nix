@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-wled";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9682AbcADhd9m5XrYeDFiX+sJCCe+pnuvntJDnpzJ+U=";
+    hash = "sha256-0BJgbyDhCPFlHxlEry7Rh/j0nv3D3kRhIqCSW+Irhqk=";
   };
 
   postPatch = ''
