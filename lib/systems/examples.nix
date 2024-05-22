@@ -53,6 +53,22 @@ rec {
     config = "armv7l-unknown-linux-gnueabihf";
   };
 
+  asahi-m1 = {
+    config = "aarch64-unknown-linux-gnu";
+    cpuModel = "apple_m1";
+    # Use LLVM until we can fix GCC
+    useLLVM = true;
+    linker = "lld";
+  };
+
+  asahi-m2 = {
+    config = "aarch64-unknown-linux-gnu";
+    cpuModel = "apple_m2";
+    # Use LLVM until we can fix GCC
+    useLLVM = true;
+    linker = "lld";
+  };
+
   aarch64-multiplatform = {
     config = "aarch64-unknown-linux-gnu";
   };

@@ -83,6 +83,14 @@ let
       # Derived meta-data
       useLLVM = final.isFreeBSD || final.isOpenBSD;
 
+      cpuModel = let
+        name = args.cpuModel or "generic";
+      in if isString name then
+        (parse.cpuModels final.parsed.cpu.name).${name} or (throw "Unknown CPU model ${name} for CPU architecture ${final.parsed.cpu.name}")
+      else name;
+
+      isCpuModelGeneric = final.cpuModel == (parse.cpuModels final.parsed.cpu.name).generic;
+
       libc =
         /**/ if final.isDarwin                then "libSystem"
         else if final.isMinGW                 then "msvcrt"
@@ -303,7 +311,7 @@ let
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args // {
+      // builtins.removeAttrs args [ "cpuModel" ] // {
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and
           # removed, there will no longer be any need to modify any
