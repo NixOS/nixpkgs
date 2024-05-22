@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitLab
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitLab,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -22,21 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-TxWKV2nrnCxZmj6+wBDMSdJRvKV+MsPFbOyIlUJYJ3Q=";
   };
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
-    "tololib"
-  ];
+  pythonImportsCheck = [ "tololib" ];
 
   # Network discovery doesn't work in the sandbox for darwin
   doCheck = !stdenv.isDarwin;
