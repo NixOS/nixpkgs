@@ -3,20 +3,21 @@
   argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
-  mock,
   httpx,
+  mock,
   pytestCheckHook,
   pythonOlder,
   requests,
   responses,
-  urllib3,
+  setuptools,
   typing-extensions,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "amcrest";
   version = "1.9.8";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,7 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-v0jWEZo06vltEq//suGrvJ/AeeDxUG5CCFhbf03q34w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     argcomplete
     httpx
     requests
@@ -41,13 +46,15 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [ "amcrest" ];
+  pythonImportsCheck = [
+    "amcrest"
+  ];
 
   meta = with lib; {
     description = "Python module for Amcrest and Dahua Cameras";
     homepage = "https://github.com/tchellomello/python-amcrest";
     changelog = "https://github.com/tchellomello/python-amcrest/releases/tag/${version}";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }
