@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlmc";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "malvads";
     repo = "sqlmc";
     rev = "refs/tags/${version}";
-    hash = "sha256-VJSOOCFqDPTh7PoumAQqt+tdR05uGe/xTwxcJAAe//k=";
+    hash = "sha256-8p+9A1j+J3WItc1u8kG7LHY086kcwMGhEMENym2p/Fo=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools ];
