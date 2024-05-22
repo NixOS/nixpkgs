@@ -1,33 +1,37 @@
-{ alsa-lib
-, fetchFromGitHub
-, makeWrapper
-, openssl
-, pkg-config
-, python3
-, rustPlatform
-, lib
-, wayland
-, xorg
-, vulkan-loader
-, udev
-, jre_minimal
-, cairo
-, gtk3
-, wrapGAppsHook3
-, gsettings-desktop-schemas
-, glib
-, libxkbcommon
+{
+  alsa-lib,
+  fetchFromGitHub,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  python3,
+  rustPlatform,
+  lib,
+  wayland,
+  xorg,
+  vulkan-loader,
+  udev,
+  jre_minimal,
+  cairo,
+  gtk3,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  glib,
+  libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "nightly-2024-05-01";
+in
+rustPlatform.buildRustPackage {
   pname = "ruffle";
-  version = "nightly-2024-03-25";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
-    repo = pname;
+    repo = "ruffle";
     rev = version;
-    hash = "sha256-3G5xSGdMl4ISQmb2BVGdKz1cXU5Mnl+VkVYpJ6P12og=";
+    hash = "sha256-WfoYQku1NFhvWyqeSVKtsMMEyUA97YFD7cvdn4XYIPI=";
   };
 
   nativeBuildInputs = [
@@ -97,8 +101,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language";
     homepage = "https://ruffle.rs/";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ govanify jchw ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      govanify
+      jchw
+    ];
     platforms = platforms.linux;
     mainProgram = "ruffle_desktop";
   };
