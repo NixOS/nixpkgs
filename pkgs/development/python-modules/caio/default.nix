@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiomisc
 , buildPythonPackage
 , fetchFromGitHub
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-function-declaration"
+  ]);
 
   pythonImportsCheck = [
     "caio"
