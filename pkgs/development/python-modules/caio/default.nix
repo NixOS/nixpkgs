@@ -24,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-Q87NuL6yZ5uKImQqqdKTMWNyfUOb4NaZDEvNdqZbHDk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     aiomisc
