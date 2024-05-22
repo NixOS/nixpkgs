@@ -1,19 +1,23 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitLab,
+  testers,
   meson,
   pkg-config,
   ninja,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hicolor-icon-theme";
   version = "0.18";
 
-  src = fetchurl {
-    url = "https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-${version}.tar.xz";
-    hash = "sha256-2w5QqAqjv2S7RcvKXPn3Xv2TSM8qxpC5B0NSOMPPgdc=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "xdg";
+    repo = "default-icon-theme";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uoB7u/ok7vMxKDl8pINdnV9VsvmsntBcZuz3Q4zGz7M=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +28,15 @@ stdenvNoCC.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Default fallback theme used by implementations of the icon theme specification";
-    homepage = "https://icon-theme.freedesktop.org/releases/";
+    homepage = "https://www.freedesktop.org/wiki/Software/icon-theme/";
+    changelog = "https://gitlab.freedesktop.org/xdg/default-icon-theme/-/blob/${finalAttrs.src.rev}/NEWS";
     platforms = platforms.unix;
     license = licenses.gpl2Only;
+    pkgConfigModules = [ "default-icon-theme" ];
     maintainers = with maintainers; [ jopejoe1 ];
   };
-}
+})
