@@ -21,6 +21,7 @@ let
     kernelFamilies
     significantBytes
     cpuTypes
+    cpuModels
     execFormats
     ;
 
