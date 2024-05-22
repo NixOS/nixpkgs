@@ -56,5 +56,8 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "ward";
+    # Old requirements (cucumber-tag-expressions and rich)
+    # https://github.com/darrenburns/ward/issues/380
+    broken = versionAtLeast rich.version "13.0.0";
   };
 }
