@@ -1,0 +1,12 @@
+git --diff a/src/plugins/PluginManager.cpp b/src/plugins/PluginManager.cpp
+--- a/src/plugins/PluginManager.cpp
++++ b/src/plugins/PluginManager.cpp
+@@ -215,7 +215,7 @@
+     }
+ 
+     PythonToCppFunc pythonToCpp = Shiboken::Conversions::isPythonToCppPointerConvertible(
+-            reinterpret_cast<SbkObjectType *>(SbkCutterBindingsTypes[SBK_CUTTERPLUGIN_IDX]),
++            reinterpret_cast<SbkObjectType *>(SbkCutterBindingsTypeStructs[SBK_CUTTERPLUGIN_IDX].type),
+             pluginObject);
+     if (!pythonToCpp) {
+         qWarning() << "Plugin's create_cutter_plugin() function did not return an instance of "

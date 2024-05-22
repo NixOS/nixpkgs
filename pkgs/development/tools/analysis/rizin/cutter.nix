@@ -32,6 +32,8 @@ let cutter = stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./cutter-pyside-6.7.0.patch ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
