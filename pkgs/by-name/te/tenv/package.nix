@@ -38,7 +38,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/tofuutils/tenv/releases/tag/v${version}";
-    description = "OpenTofu, Terraform, Terragrunt and Atmos version manager written in Go.";
+    description = "OpenTofu, Terraform, Terragrunt and Atmos version manager written in Go";
     homepage = "https://tofuutils.github.io/tenv";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rmgpinto nmishin kvendingoldo ];
