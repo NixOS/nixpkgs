@@ -8,7 +8,7 @@
 , flit-core
 , fontconfig
 , fonttools
-, ghostscript
+, ghostscript_headless
 , glib
 , harfbuzz
 , html5lib
@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    ghostscript
+    ghostscript_headless
   ];
 
   disabledTests = [

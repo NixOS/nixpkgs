@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
-, ghostscript
+, ghostscript_headless
 , pillow
 , pytestCheckHook
 , pythonOlder
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    ghostscript
+    ghostscript_headless
     pillow
     pytestCheckHook
   ];
