@@ -7575,6 +7575,12 @@
     githubId = 1878840;
     name = "Gabriel Simmer";
   };
+  gnuion = {
+    email = "gnu.ion@gmail.com";
+    github = "gnuion";
+    githubId = 16549839;
+    name = "Jon Zuka";
+  };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
