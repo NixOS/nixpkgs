@@ -9124,6 +9124,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/popup.nvim/";
   };
 
+  precognition-nvim = buildVimPlugin {
+    pname = "precognition.nvim";
+    version = "2024-05-23";
+    src = fetchFromGitHub {
+      owner = "tris203";
+      repo = "precognition.nvim";
+      rev = "83d452db377867729230a7fbf806c39fa2977a9b";
+      sha256 = "081hmx03ri98pxrla89ngnwa77d4z7a788f1izyqn29ydzxi54pl";
+    };
+    meta.homepage = "https://github.com/tris203/precognition.nvim/";
+  };
+
   presence-nvim = buildVimPlugin {
     pname = "presence.nvim";
     version = "2023-01-29";
