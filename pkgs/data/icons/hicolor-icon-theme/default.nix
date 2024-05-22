@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hicolor-icon-theme";
-  version = "0.17";
+  version = "0.18";
 
   src = fetchurl {
     url = "https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-${version}.tar.xz";
-    sha256 = "1n59i3al3zx6p90ff0l43gzpzmlqnzm6hf5cryxqrlbi48sq8x1i";
+    sha256 = "sha256-2w5QqAqjv2S7RcvKXPn3Xv2TSM8qxpC5B0NSOMPPgdc=";
   };
 
   setupHook = ./setup-hook.sh;
