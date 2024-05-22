@@ -1,14 +1,15 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, hatchling
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, ruff
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  hatchling,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  ruff,
 }:
 
 buildPythonPackage rec {
@@ -40,36 +41,22 @@ buildPythonPackage rec {
   postPatch = ''
     # ruff binary is used directly, the ruff Python package is not needed
     substituteInPlace pytest_examples/lint.py \
-      --replace "'ruff'" "'${ruff}/bin/ruff'"
+      --replace-fail "'ruff'" "'${ruff}/bin/ruff'"
   '';
 
-  pythonRemoveDeps = [
-    "ruff"
-  ];
+  pythonRemoveDeps = [ "ruff" ];
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  dependencies = [
-    black
-  ];
+  dependencies = [ black ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_examples"
-  ];
+  pythonImportsCheck = [ "pytest_examples" ];
 
   disabledTests = [
     # Test fails with latest ruff v0.1.2
