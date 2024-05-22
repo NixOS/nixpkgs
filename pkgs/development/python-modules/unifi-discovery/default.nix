@@ -13,22 +13,27 @@
 buildPythonPackage rec {
   pname = "unifi-discovery";
   version = "1.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "unifi-discovery";
     rev = "refs/tags/v${version}";
     hash = "sha256-gE/2awyhDACrc0nuTvTPOcK2lFbPIZAXDPRnVJtWFco=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
+  '';
+
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     pyroute2
   ];
@@ -43,11 +48,6 @@ buildPythonPackage rec {
     "--asyncio-mode=auto"
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
-  '';
-
   pythonImportsCheck = [
     "unifi_discovery"
   ];
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to discover Unifi devices";
     homepage = "https://github.com/bdraco/unifi-discovery";
+    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
