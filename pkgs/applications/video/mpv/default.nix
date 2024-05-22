@@ -1,5 +1,6 @@
 { lib
 , buildPackages
+, callPackage
 , config
 , stdenv
 , fetchFromGitHub
@@ -256,6 +257,8 @@ in stdenv'.mkDerivation (finalAttrs: {
     vapoursynthSupport
     vapoursynth
     ;
+
+    wrapper = callPackage ./wrapper.nix { };
   };
 
   meta = {
