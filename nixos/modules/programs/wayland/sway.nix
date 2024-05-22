@@ -3,23 +3,7 @@
 let
   cfg = config.programs.sway;
 
-  genFinalPackage = pkg:
-    let
-      args = {
-        extraSessionCommands = cfg.extraSessionCommands;
-        extraOptions = cfg.extraOptions;
-        withBaseWrapper = cfg.wrapperFeatures.base;
-        withGtkWrapper = cfg.wrapperFeatures.gtk;
-        enableXWayland = cfg.xwayland.enable;
-        isNixOS = true;
-      };
-
-      expectedArgs = with lib;
-        lib.naturalSort (lib.attrNames args);
-      existingArgs = with lib;
-        naturalSort (intersectLists expectedArgs (attrNames (functionArgs pkg.override)));
-    in
-      if existingArgs != expectedArgs then pkg else pkg.override args;
+  wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
   options.programs.sway = {
@@ -42,7 +26,15 @@ in
         This should be done if you want to use the Home Manager Sway module to install Sway.
       '';
     } // {
-      apply = p: if p == null then null else genFinalPackage p;
+      apply = p: if p == null then null else
+        wayland-lib.genFinalPackage p {
+          extraSessionCommands = cfg.extraSessionCommands;
+          extraOptions = cfg.extraOptions;
+          withBaseWrapper = cfg.wrapperFeatures.base;
+          withGtkWrapper = cfg.wrapperFeatures.gtk;
+          enableXWayland = cfg.xwayland.enable;
+          isNixOS = true;
+        };
     };
 
     wrapperFeatures = {
