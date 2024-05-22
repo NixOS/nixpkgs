@@ -139,7 +139,11 @@ in buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";
 
-  src = ./.;
+  # lib.fileset prevents unnecessary rebuilds when default.nix changes.
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.difference ./. ./default.nix;
+  };
 
   projectFile = "src/project.sln";
   # File generated with `nix-build -A package.passthru.fetch-deps`.

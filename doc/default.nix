@@ -99,7 +99,10 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = ./.;
+  src = pkgs.lib.fileset.toSource {
+    root = ./.;
+    fileset = pkgs.lib.fileset.difference ./. (pkgs.lib.fileset.unions [ ./common.nix ./default.nix ./shell.nix ]);
+  };
 
   postPatch = ''
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json

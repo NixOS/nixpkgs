@@ -203,7 +203,12 @@ Traditionally the Maven repository is at `~/.m2/repository`. We will override th
 stdenv.mkDerivation {
   name = "maven-repository";
   buildInputs = [ maven ];
-  src = ./.; # or fetchFromGitHub, cleanSourceWith, etc
+  # or fetchFromGitHub, cleanSourceWith, etc.
+  # lib.fileset prevents unnecessary rebuilds when default.nix changes.
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.difference ./. ./default.nix;
+  };
   buildPhase = ''
     mvn package -Dmaven.repo.local=$out
   '';

@@ -17,7 +17,10 @@
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.difference ./. ./default.nix;
+  };
   pyproject = true;
 
   propagatedBuildInputs = [
