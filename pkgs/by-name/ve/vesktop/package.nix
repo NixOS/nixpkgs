@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   substituteAll,
+  makeBinaryWrapper,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -31,19 +32,35 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src patches;
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
     hash = "sha256-PogE8uf3W5cKSCqFHMz7FOvT7ONUP4FiFWGBgtk3UC8=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    copyDesktopItems
-    makeWrapper
-    nodejs
-    pnpm.configHook
-  ];
+  nativeBuildInputs =
+    [
+      nodejs
+      pnpm.configHook
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      # vesktop uses venmic, which is a shipped as a prebuilt node module
+      # and needs to be patched
+      autoPatchelfHook
+      copyDesktopItems
+      # we use a script wrapper here for environment variable expansion at runtime
+      # https://github.com/NixOS/nixpkgs/issues/172583
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # on macos we don't need to expand variables, so we can use the faster binary wrapper
+      makeBinaryWrapper
+    ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     libpulseaudio
     pipewire
     stdenv.cc.cc.lib
@@ -58,63 +75,88 @@ stdenv.mkDerivation (finalAttrs: {
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
+  # disable code signing on macos
+  # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
+  postConfigure = lib.optionalString stdenv.isDarwin ''
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+  '';
+
+  # electron builds must be writable on darwin
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    cp -r ${electron}/Applications/Electron.app .
+    chmod -R u+w Electron.app
+  '';
+
   buildPhase = ''
     runHook preBuild
 
     pnpm build
-    # using `pnpm exec` here apparently makes it ignore ELECTRON_SKIP_BINARY_DOWNLOAD
-    ./node_modules/.bin/electron-builder \
+    pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
 
-  # this is consistent with other nixpkgs electron packages and upstream, as far as I am aware
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/opt/Vesktop
-    cp -r dist/linux-*unpacked/resources $out/opt/Vesktop/
-
+  postBuild = lib.optionalString stdenv.isLinux ''
     pushd build
     ${libicns}/bin/icns2png -x icon.icns
-    for file in icon_*x32.png; do
-      file_suffix=''${file//icon_}
-      install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
-    done
-
-    makeWrapper ${electron}/bin/electron $out/bin/vesktop \
-      --add-flags $out/opt/Vesktop/resources/app.asar \
-      ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
-
-    runHook postInstall
+    popd
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "vesktop";
-      desktopName = "Vesktop";
-      exec = "vesktop %U";
-      icon = "vesktop";
-      startupWMClass = "Vesktop";
-      genericName = "Internet Messenger";
-      keywords = [
-        "discord"
-        "vencord"
-        "electron"
-        "chat"
-      ];
-      categories = [
-        "Network"
-        "InstantMessaging"
-        "Chat"
-      ];
-    })
-  ];
+  installPhase =
+    ''
+      runHook preInstall
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      mkdir -p $out/opt/Vesktop
+      cp -r dist/*unpacked/resources $out/opt/Vesktop/
+
+      for file in build/icon_*x32.png; do
+        file_suffix=''${file//icon_}
+        install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
+      done
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/{Applications,bin}
+      mv dist/mac*/Vesktop.App $out/Applications
+    ''
+    + ''
+      runHook postInstall
+    '';
+
+  postFixup =
+    lib.optionalString stdenv.isLinux ''
+      makeWrapper ${electron}/bin/electron $out/bin/vesktop \
+        --add-flags $out/opt/Vesktop/resources/app.asar \
+        ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      makeWrapper $out/Applications/Vesktop.app/Contents/MacOS/Vesktop $out/bin/vesktop
+    '';
+
+  desktopItems = lib.optional stdenv.isLinux (makeDesktopItem {
+    name = "vesktop";
+    desktopName = "Vesktop";
+    exec = "vesktop %U";
+    icon = "vesktop";
+    startupWMClass = "Vesktop";
+    genericName = "Internet Messenger";
+    keywords = [
+      "discord"
+      "vencord"
+      "electron"
+      "chat"
+    ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
+  });
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
@@ -131,10 +173,12 @@ stdenv.mkDerivation (finalAttrs: {
       vgskye
       pluiedev
     ];
+    mainProgram = "vesktop";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
-    mainProgram = "vesktop";
   };
 })
