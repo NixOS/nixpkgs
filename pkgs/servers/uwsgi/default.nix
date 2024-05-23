@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ abbradar schneefux globin ];
     platforms = lib.platforms.unix;
     mainProgram = "uwsgi";

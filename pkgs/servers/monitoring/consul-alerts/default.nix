@@ -22,7 +22,7 @@ buildGoPackage rec {
     homepage = "https://github.com/AcalephStorage/consul-alerts";
     # As per README
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.darwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ nh2 ];
   };
 }

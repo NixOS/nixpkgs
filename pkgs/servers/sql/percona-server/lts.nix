@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
       A free, fully compatible, enhanced, open source drop-in replacement for
       MySQL® that provides superior performance, scalability and instrumentation.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = teams.flyingcircus.members;
     platforms = platforms.unix;
   };
