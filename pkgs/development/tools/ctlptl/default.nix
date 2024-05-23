@@ -15,6 +15,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  subPackages = [ "cmd/ctlptl" ];
+
   ldflags = [
     "-s"
     "-w"
