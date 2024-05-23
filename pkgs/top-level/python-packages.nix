@@ -4711,6 +4711,8 @@ self: super: with self; {
 
   geocoder = callPackage ../development/python-modules/geocoder { };
 
+  geodatasets = callPackage ../development/python-modules/geodatasets { };
+
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
   geoip2 = callPackage ../development/python-modules/geoip2 { };
