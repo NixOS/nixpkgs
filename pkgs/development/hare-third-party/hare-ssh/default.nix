@@ -1,8 +1,13 @@
-{ lib, stdenv, hare, hareThirdParty, fetchFromSourcehut }:
+{
+  fetchFromSourcehut,
+  hare,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-ssh";
-  version = "unstable-2023-11-16";
+  version = "0-unstable-2023-11-16";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
