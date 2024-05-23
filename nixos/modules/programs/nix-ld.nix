@@ -30,7 +30,7 @@ in
   config = lib.mkIf config.programs.nix-ld.enable {
     environment.ldso = "${cfg.package}/libexec/nix-ld";
 
-    environment.systemPackages = [ nix-ld-libraries ];
+    environment.systemPackages = [ cfg.package nix-ld-libraries ];
 
     environment.pathsToLink = [ "/share/nix-ld" ];
 
