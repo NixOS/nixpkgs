@@ -67,11 +67,11 @@ in
     env.NIX_CFLAGS_COMPILE = "-Wno-error=restrict";
 
     patches = [
-       ./patches/use-find-package.patch
-       ./patches/add-cstdint.patch
-       ./patches/fix-zoned-time.patch
-       ./patches/skip-git-versioning.patch
-       ./patches/fix-cmake-install.patch
+      ./patches/use-find-package.patch
+      ./patches/add-cstdint.patch
+      ./patches/fix-zoned-time.patch
+      ./patches/skip-git-versioning.patch
+      ./patches/fix-cmake-install.patch
     ];
 
     postPatch = ''
