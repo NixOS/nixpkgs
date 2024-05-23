@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.41.0";
+  version = "4.41.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FUYQeEksjDasFvQraycNFAx3cLHfDdPpgZssqN8OIJw=";
+    hash = "sha256-eUMdlqHjCmK51hUPxjZq3tOl0o6EjipOziWergHwmPk=";
   };
 
   build-system = [ setuptools ];
@@ -186,14 +186,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "transformers" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       pashashocky
       happysalada
     ];
