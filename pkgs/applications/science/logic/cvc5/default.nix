@@ -14,7 +14,7 @@
   antlr3_4,
   boost,
   jdk,
-  pythonBindings ? false,
+  withPythonBindings ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
         pyparsing
         tomli
       ]
-      ++ lib.optionals pythonBindings [
+      ++ lib.optionals withPythonBindings [
         scikit-build
         cython
       ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./src/
   '';
 
-  postInstall = lib.optionalString pythonBindings ''
+  postInstall = lib.optionalString withPythonBindings ''
     mkdir -p $python/lib
     mv $out/lib/python3.11/ $python/lib/.
   '';
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "out"
     "lib"
     "dev"
-  ] ++ lib.optional pythonBindings "python";
+  ] ++ lib.optional withPythonBindings "python";
   cmakeBuildType = "Production";
 
   cmakeFlags =
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
       "-DCMAKE_SKIP_BUILD_RPATH=ON"
       "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
     ]
-    ++ lib.optionals pythonBindings [
+    ++ lib.optionals withPythonBindings [
       "-DBUILD_BINDINGS_PYTHON=1"
       "-DPYTHONIC_PATH=${pythonic}"
     ];
