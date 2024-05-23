@@ -85,6 +85,7 @@
 , "code-theme-converter"
 , "concurrently"
 , "conventional-changelog-cli"
+, "copilot-node-server"
 , "cpy-cli"
 , "create-cycle-app"
 , "create-react-native-app"
