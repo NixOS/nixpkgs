@@ -1,6 +1,6 @@
 {
   fetchFromSourcehut,
-  hare,
+  hareHook,
   lib,
   scdoc,
   stdenv,
@@ -18,13 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    hare
+    hareHook
     scdoc
   ];
-
-  preConfigure = ''
-    export HARECACHE=$(mktemp -d)
-  '';
 
   installFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
@@ -33,6 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A secret storage manager";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ auchter ];
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })
