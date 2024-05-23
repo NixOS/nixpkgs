@@ -7,7 +7,7 @@
 }:
 let
   src = fetchurl {
-    url = "https://releases.lmstudio.ai/linux/${version}/beta/LM_Studio-${version}.AppImage";
+    url = "https://releases.lmstudio.ai/linux/${version}/beta/LM_Studio-${version}-Ubuntu-20.04.AppImage";
     hash = "sha256-hcV8wDhulFAxHDBDKicpEGovwcsn9RaIi/idUz+YzD8=";
   };
 
