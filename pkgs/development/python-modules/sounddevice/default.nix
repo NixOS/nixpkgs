@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, cffi
-, numpy
-, portaudio
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  cffi,
+  numpy,
+  portaudio,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-Mja3jxXwQVvfAGpiDO8HPQwFIoUdZvSpYe1tjrFIL+k=";
   };
 
-  propagatedBuildInputs = [ cffi numpy portaudio ];
+  propagatedBuildInputs = [
+    cffi
+    numpy
+    portaudio
+  ];
 
   # No tests included nor upstream available.
   doCheck = false;

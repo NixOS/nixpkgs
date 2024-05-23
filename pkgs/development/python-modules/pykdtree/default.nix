@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, cython
-, numpy
-, setuptools
+  # build-system
+  cython,
+  numpy,
+  setuptools,
 
-# native dependencies
-, openmp
+  # native dependencies
+  openmp,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,13 +36,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    openmp
-  ];
+  buildInputs = [ openmp ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   preCheck = ''
     # make sure we don't import pykdtree from the source tree
@@ -49,9 +46,7 @@ buildPythonPackage rec {
     rm -rf pykdtree
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "kd-tree implementation for fast nearest neighbour search in Python";

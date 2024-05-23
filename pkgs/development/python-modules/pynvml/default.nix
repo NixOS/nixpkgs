@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, pythonOlder
-, addOpenGLRunpath
-, setuptools
-, pytestCheckHook
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  pythonOlder,
+  addOpenGLRunpath,
+  setuptools,
+  pytestCheckHook,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -39,11 +40,12 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  pythonImportsCheck = [ "pynvml" "pynvml.smi" ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
+  pythonImportsCheck = [
+    "pynvml"
+    "pynvml.smi"
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # OSError: /run/opengl-driver/lib/libnvidia-ml.so.1: cannot open shared object file: No such file or directory
   doCheck = false;

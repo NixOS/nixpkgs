@@ -1,11 +1,12 @@
-{ lib
-, pythonOlder
-, fetchPypi
-, buildPythonPackage
-, rustPlatform
-, pytestCheckHook
-, psutil
-, cbor2
+{
+  lib,
+  pythonOlder,
+  fetchPypi,
+  buildPythonPackage,
+  rustPlatform,
+  pytestCheckHook,
+  psutil,
+  cbor2,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-LdecJPSov2Y/QI4MWb20DcF0EtMuDO0VwiQDUeD55GI=";
   };
 
-  nativeBuildInputs = with rustPlatform; [ maturinBuildHook cargoSetupHook ];
+  nativeBuildInputs = with rustPlatform; [
+    maturinBuildHook
+    cargoSetupHook
+  ];
 
   postPatch = ''
     # We don't place pytest-benchmark in the closure because we have no
@@ -40,7 +44,11 @@ buildPythonPackage rec {
     hash = "sha256-FJET2Xb1cq4aePFhPXpp2oEPIOtpugYWNFAa2Dj0F6Y=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook psutil cbor2 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    psutil
+    cbor2
+  ];
   pythonImportsCheck = [ "pycddl" ];
 
   meta = with lib; {

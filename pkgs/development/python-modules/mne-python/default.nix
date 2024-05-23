@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, numpy
-, scipy
-, pytestCheckHook
-, pytest-timeout
-, pytest-harvest
-, matplotlib
-, decorator
-, jinja2
-, pooch
-, tqdm
-, packaging
-, importlib-resources
-, lazy-loader
-, h5io
-, pymatreader
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  numpy,
+  scipy,
+  pytestCheckHook,
+  pytest-timeout,
+  pytest-harvest,
+  matplotlib,
+  decorator,
+  jinja2,
+  pooch,
+  tqdm,
+  packaging,
+  importlib-resources,
+  lazy-loader,
+  h5io,
+  pymatreader,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -56,9 +57,7 @@ buildPythonPackage rec {
     packaging
     jinja2
     lazy-loader
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   passthru.optional-dependencies = {
     hdf5 = [
@@ -79,9 +78,7 @@ buildPythonPackage rec {
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
-  pythonImportsCheck = [
-    "mne"
-  ];
+  pythonImportsCheck = [ "mne" ];
 
   meta = with lib; {
     description = "Magnetoencephelography and electroencephalography in Python";
@@ -89,6 +86,9 @@ buildPythonPackage rec {
     homepage = "https://mne.tools";
     changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin mbalatsko ];
+    maintainers = with maintainers; [
+      bcdarwin
+      mbalatsko
+    ];
   };
 }

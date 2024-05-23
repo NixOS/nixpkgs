@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, django
-, django-tables2
-, django-tastypie
-, factory-boy
-, fetchFromGitHub
-, poetry-core
-, pylint-plugin-utils
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-tables2,
+  django-tastypie,
+  factory-boy,
+  fetchFromGitHub,
+  poetry-core,
+  pylint-plugin-utils,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,18 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-MNgu3LvFoohXA+JzUiHIaYFw0ssEe+H5T8Ea56LcGuI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pylint-plugin-utils
-  ];
+  propagatedBuildInputs = [ pylint-plugin-utils ];
 
   passthru.optional-dependencies = {
-    with_django = [
-      django
-    ];
+    with_django = [ django ];
   };
 
   nativeCheckInputs = [
@@ -53,9 +48,7 @@ buildPythonPackage rec {
     "test_linter_should_be_pickleable_with_pylint_django_plugin_installed"
   ];
 
-  pythonImportsCheck = [
-    "pylint_django"
-  ];
+  pythonImportsCheck = [ "pylint_django" ];
 
   meta = with lib; {
     description = "Pylint plugin to analyze Django applications";

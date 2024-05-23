@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, enum34
-, gfortran
-, isPy27
-, isPy3k
-, numpy
-, pytest
-, python
-, scipy
-, sundials
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  enum34,
+  gfortran,
+  isPy27,
+  isPy3k,
+  numpy,
+  pytest,
+  python,
+  scipy,
+  sundials,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/bmcage/odes";
     license = licenses.bsd3;
     maintainers = with maintainers; [ idontgetoutmuch ];
-    platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "aspy-yaml";

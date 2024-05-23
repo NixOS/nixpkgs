@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, llama-index-core
-, poetry-core
-, pythonOlder
-, tweepy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
+  tweepy,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-ZPwluiPdSkwMZ3JQy/HHhR7erYhUE9BWtplkfHk+TK8=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     llama-index-core
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.readers.twitter"
-  ];
+  pythonImportsCheck = [ "llama_index.readers.twitter" ];
 
   meta = with lib; {
     description = "LlamaIndex Readers Integration for Twitter";

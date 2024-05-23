@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonRelaxDepsHook
-, attrs
-, jsonschema
-, nbclient
-, nbdime
-, nbformat
-, pytest
-, black
-, coverage
-, ipykernel
-, pytest-cov
-, pytest-regressions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonRelaxDepsHook,
+  attrs,
+  jsonschema,
+  nbclient,
+  nbdime,
+  nbformat,
+  pytest,
+  black,
+  coverage,
+  ipykernel,
+  pytest-cov,
+  pytest-regressions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     nbformat
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   pythonImportsCheck = [ "pytest_notebook" ];
 

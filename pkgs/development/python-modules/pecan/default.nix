@@ -1,18 +1,19 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, logutils
-, mako
-, webob
-, webtest
-, pythonOlder
-, pytestCheckHook
-, genshi
-, gunicorn
-, jinja2
-, sqlalchemy
-, virtualenv
-, setuptools
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  logutils,
+  mako,
+  webob,
+  webtest,
+  pythonOlder,
+  pytestCheckHook,
+  genshi,
+  gunicorn,
+  jinja2,
+  sqlalchemy,
+  virtualenv,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -44,13 +45,9 @@ buildPythonPackage rec {
     webtest
   ];
 
-  pytestFlagsArray = [
-    "--pyargs pecan"
-  ];
+  pytestFlagsArray = [ "--pyargs pecan" ];
 
-  pythonImportsCheck = [
-    "pecan"
-  ];
+  pythonImportsCheck = [ "pecan" ];
 
   meta = with lib; {
     changelog = "https://pecan.readthedocs.io/en/latest/changes.html";

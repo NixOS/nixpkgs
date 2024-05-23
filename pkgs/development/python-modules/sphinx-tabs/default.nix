@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# documentation build dependencies
-, sphinxHook
-# runtime dependencies
-, sphinx
-, pygments
-, docutils
-# test dependencies
-, pytest
-, beautifulsoup4
+  # documentation build dependencies
+  sphinxHook,
+  # runtime dependencies
+  sphinx,
+  pygments,
+  docutils,
+  # test dependencies
+  pytest,
+  beautifulsoup4,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,10 @@ buildPythonPackage rec {
   version = "3.4.5";
   format = "pyproject";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "executablebooks";
@@ -41,7 +45,8 @@ buildPythonPackage rec {
     docutils
   ];
 
-  nativeCheckInputs = [ pytest
+  nativeCheckInputs = [
+    pytest
     beautifulsoup4
   ];
 

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch2
-, setuptools
-, aiohttp
-, incremental
-, systembridgemodels
-, pytest-aiohttp
-, pytest-socket
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch2,
+  setuptools,
+  aiohttp,
+  incremental,
+  systembridgemodels,
+  pytest-aiohttp,
+  pytest-socket,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
       --replace-fail ", dev=0" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp

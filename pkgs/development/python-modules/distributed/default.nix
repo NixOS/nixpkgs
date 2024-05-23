@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, click
-, cloudpickle
-, dask
-, fetchFromGitHub
-, jinja2
-, locket
-, msgpack
-, packaging
-, psutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, setuptools
-, setuptools-scm
-, sortedcontainers
-, tblib
-, toolz
-, tornado
-, urllib3
-, versioneer
-, zict
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cloudpickle,
+  dask,
+  fetchFromGitHub,
+  jinja2,
+  locket,
+  msgpack,
+  packaging,
+  psutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  sortedcontainers,
+  tblib,
+  toolz,
+  tornado,
+  urllib3,
+  versioneer,
+  zict,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
 
-  pythonRelaxDeps = [
-    "dask"
-  ];
+  pythonRelaxDeps = [ "dask" ];
 
   dependencies = [
     click
@@ -75,9 +74,7 @@ buildPythonPackage rec {
   # When tested random tests would fail and not repeatably
   doCheck = false;
 
-  pythonImportsCheck = [
-    "distributed"
-  ];
+  pythonImportsCheck = [ "distributed" ];
 
   meta = with lib; {
     description = "Distributed computation in Python";

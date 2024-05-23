@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, yajl
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  yajl,
 }:
 
 buildPythonPackage rec {
@@ -20,25 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-EClOm/ictxPaBbxHkL3/YWYQQy21YZZIJwdImOF0+Rc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    yajl
-  ];
+  buildInputs = [ yajl ];
 
-  dependencies = [
-    cffi
-  ];
+  dependencies = [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ijson"
-  ];
+  pythonImportsCheck = [ "ijson" ];
 
   meta = with lib; {
     description = "Iterative JSON parser with a standard Python iterator interface";

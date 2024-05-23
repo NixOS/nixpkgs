@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -20,5 +21,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/supervisor/meld3";
     license = licenses.free;
   };
-
 }

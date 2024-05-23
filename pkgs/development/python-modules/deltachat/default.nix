@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pkg-config
-, pkgconfig
-, setuptools-scm
-, libdeltachat
-, cffi
-, imap-tools
-, requests
-, pluggy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pkg-config,
+  pkgconfig,
+  setuptools-scm,
+  libdeltachat,
+  cffi,
+  imap-tools,
+  requests,
+  pluggy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    libdeltachat
-  ];
+  buildInputs = [ libdeltachat ];
 
   propagatedBuildInputs = [
     cffi
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "deltachat"

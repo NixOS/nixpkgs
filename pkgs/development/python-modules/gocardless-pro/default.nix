@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, six
-, pytestCheckHook
-, responses
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  six,
+  pytestCheckHook,
+  responses,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -41,4 +42,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

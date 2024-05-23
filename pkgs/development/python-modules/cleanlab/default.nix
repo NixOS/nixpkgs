@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, scikit-learn
-, termcolor
-, tqdm
-, pandas
-, setuptools
-# test dependencies
-, pytestCheckHook
-, pytest-lazy-fixture
-, tensorflow
-, torch
-, datasets
-, torchvision
-, keras
-, fasttext
-, hypothesis
-, wget
-, matplotlib
-, skorch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  scikit-learn,
+  termcolor,
+  tqdm,
+  pandas,
+  setuptools,
+  # test dependencies
+  pytestCheckHook,
+  pytest-lazy-fixture,
+  tensorflow,
+  torch,
+  datasets,
+  torchvision,
+  keras,
+  fasttext,
+  hypothesis,
+  wget,
+  matplotlib,
+  skorch,
 }:
 
 buildPythonPackage rec {

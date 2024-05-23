@@ -1,12 +1,13 @@
-{ lib
-, pkgs
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, cryptography
-, pytestCheckHook
-, pefile
+{
+  lib,
+  pkgs,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  cryptography,
+  pytestCheckHook,
+  pefile,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-rqhaKDOQEOj6bcRz3qZJ+a4yG1qTC9SUjuxMhZlnmwU=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     setuptools
@@ -45,6 +44,9 @@ buildPythonPackage rec {
     description = "Tools for virtual machine firmware volumes";
     homepage = "https://gitlab.com/kraxel/virt-firmware";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ lheckemann raitobezarius ];
+    maintainers = with maintainers; [
+      lheckemann
+      raitobezarius
+    ];
   };
 }

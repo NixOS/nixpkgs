@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pefile
-, pillow
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pefile,
+  pillow,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-/UxnWNyRNtwI4Rxx97i5QyjeMrUr5Sq+TfLTmU0xWyc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pefile
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # tests expect mingw and multiarch
   doCheck = false;
 
-  pythonImportsCheck = [
-    "icoextract"
-  ];
+  pythonImportsCheck = [ "icoextract" ];
 
   postInstall = ''
     mkdir -p $out/share/thumbnailers
@@ -46,6 +43,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/jlu5/icoextract";
     changelog = "https://github.com/jlu5/icoextract/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ bryanasdev000 donovanglover ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      donovanglover
+    ];
   };
 }

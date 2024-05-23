@@ -1,10 +1,11 @@
-{ lib
-, python
-, autoAddDriverRunpath
-, buildPythonPackage
-, autoPatchelfHook
-, unzip
-, cudaPackages
+{
+  lib,
+  python,
+  autoAddDriverRunpath,
+  buildPythonPackage,
+  autoPatchelfHook,
+  unzip,
+  cudaPackages,
 }:
 
 let
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     cudaPackages.tensorrt
   ];
 
-  pythonImportsCheck = [
-    "tensorrt"
-  ];
+  pythonImportsCheck = [ "tensorrt" ];
 
   meta = with lib; {
     description = "Python bindings for TensorRT, a high-performance deep learning interface";
@@ -49,8 +48,6 @@ buildPythonPackage rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ aidalgol ];
-    broken =
-      !(cudaPackages ? tensorrt)
-      || !(cudaPackages ? cudnn);
+    broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
   };
 }

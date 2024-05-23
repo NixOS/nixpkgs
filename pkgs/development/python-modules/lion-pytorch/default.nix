@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, torch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ torch ];
 
   pythonImportsCheck = [ "lion_pytorch" ];
-  doCheck = false;  # no tests currently
+  doCheck = false; # no tests currently
 
   meta = with lib; {
     description = "Optimizer tuned by Google Brain using genetic algorithms";

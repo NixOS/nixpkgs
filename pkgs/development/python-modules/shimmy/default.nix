@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, wheel
-, gymnasium
-, numpy
-, ale-py
-, bsuite
-, dm-control
-, gym
-, imageio
-, pettingzoo
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  gymnasium,
+  numpy,
+  ale-py,
+  bsuite,
+  dm-control,
+  gym,
+  imageio,
+  pettingzoo,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

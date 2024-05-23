@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, wheel
+  # build-system
+  setuptools,
+  wheel,
 
-# dependencies
-, beartype
-, einops
-, torch
+  # dependencies
+  beartype,
+  einops,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonImportsCheck = [
-    "rotary_embedding_torch"
-  ];
+  pythonImportsCheck = [ "rotary_embedding_torch" ];
 
   doCheck = false; # no tests
 

@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, numpy
-, cloudpickle
-, gym-notices
-, jax-jumpy
-, typing-extensions
-, farama-notifications
-, importlib-metadata
-, pythonOlder
-, ffmpeg
-, jax
-, jaxlib
-, matplotlib
-, moviepy
-, opencv4
-, pybox2d
-, pygame
-, pytestCheckHook
-, scipy
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  cloudpickle,
+  gym-notices,
+  jax-jumpy,
+  typing-extensions,
+  farama-notifications,
+  importlib-metadata,
+  pythonOlder,
+  ffmpeg,
+  jax,
+  jaxlib,
+  matplotlib,
+  moviepy,
+  opencv4,
+  pybox2d,
+  pygame,
+  pytestCheckHook,
+  scipy,
+  stdenv,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,10 @@
-{ lib
-, baseline
-, buildPythonPackage
-, fetchFromGitLab
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  baseline,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "plum"
-  ];
+  pythonImportsCheck = [ "plum" ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTestPaths = [
     # tests enum.IntFlag behaviour which has been disallowed in python 3.11.6

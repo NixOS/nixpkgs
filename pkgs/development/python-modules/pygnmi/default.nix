@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
-, dictdiffer
-, grpcio
-, protobuf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
+  dictdiffer,
+  grpcio,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,13 +35,9 @@ buildPythonPackage rec {
   # TypeError: expected string or bytes-like object
   doCheck = false;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pygnmi"
-  ];
+  pythonImportsCheck = [ "pygnmi" ];
 
   meta = with lib; {
     description = "Pure Python gNMI client to manage network functions and collect telemetry";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pexpect
-, python
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  pexpect,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,13 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pexpect
-  ];
+  nativeCheckInputs = [ pexpect ];
 
   checkPhase = ''
     ${python.interpreter} tests/cPyparsing_test.py
   '';
 
-  pythonImportsCheck = [
-    "cPyparsing"
-  ];
+  pythonImportsCheck = [ "cPyparsing" ];
 
   meta = with lib; {
     description = "Cython PyParsing implementation";

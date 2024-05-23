@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, nix-update-script
-, hatch-vcs
-, hatchling
-, bdffont
-, brotli
-, fonttools
-, pypng
-, pcffont
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  nix-update-script,
+  hatch-vcs,
+  hatchling,
+  bdffont,
+  brotli,
+  fonttools,
+  pypng,
+  pcffont,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-hBlTTIPx4TRgeXapVnSaKPUwseR3uYT0gcgKLGmmSZI=";
   };
 
-  pythonRelaxDeps = [
-    "fonttools"
-  ];
+  pythonRelaxDeps = [ "fonttools" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatch-vcs

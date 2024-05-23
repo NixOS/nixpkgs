@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, dataclasses-json
-, isodate
-, requests
-, requests-oauthlib
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  dataclasses-json,
+  isodate,
+  requests,
+  requests-oauthlib,
+  pytestCheckHook,
+  responses,
 }:
 buildPythonPackage rec {
   pname = "python-youtube";
@@ -27,9 +28,7 @@ buildPythonPackage rec {
       --replace "--cov-report xml" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     dataclasses-json
@@ -53,4 +52,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

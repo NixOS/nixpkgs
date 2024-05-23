@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qt5 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, qt5 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frequest";
@@ -32,6 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
   sourceRoot = "frequest";
+
+  patches = [
+    # This fix has been merged upstream into the develop branch, but it was not released yet. It can be removed once a new version is released.
+    (fetchpatch {
+      name = "Change-desktop-icon-name";
+      url = "https://github.com/fabiobento512/FRequest/commit/22e98970b78f6d9ca0037c39c2492e93e836abff.patch";
+      hash = "sha256-YoI68SPMHD4bAgjWpn6eSda3Oon8bevbiwTx1JFFm40=";
+    })
+  ];
 
   buildInputs = [
     qt5.qtbase

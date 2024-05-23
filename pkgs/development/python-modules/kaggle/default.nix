@@ -1,14 +1,15 @@
-{ buildPythonPackage
-, bleach
-, certifi
-, fetchPypi
-, lib
-, python-dateutil
-, python-slugify
-, six
-, requests
-, tqdm
-, urllib3
+{
+  buildPythonPackage,
+  bleach,
+  certifi,
+  fetchPypi,
+  lib,
+  python-dateutil,
+  python-slugify,
+  six,
+  requests,
+  tqdm,
+  urllib3,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # There aren't tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "textdistance"
-  ];
+  pythonImportsCheck = [ "textdistance" ];
 
   meta = with lib; {
     description = "Python library for comparing distance between two or more sequences";

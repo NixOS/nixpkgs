@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, botorch
-, ipywidgets
-, jinja2
-, pandas
-, plotly
-, setuptools
-, setuptools-scm
-, typeguard
-, wheel
-, hypothesis
-, mercurial
-, pyfakefs
-, pytestCheckHook
-, yappi
-, pyre-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  botorch,
+  ipywidgets,
+  jinja2,
+  pandas,
+  plotly,
+  setuptools,
+  setuptools-scm,
+  typeguard,
+  wheel,
+  hypothesis,
+  mercurial,
+  pyfakefs,
+  pytestCheckHook,
+  yappi,
+  pyre-extensions,
 }:
 
 buildPythonPackage rec {

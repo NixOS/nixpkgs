@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fastavro
-, fetchPypi
-, google-api-core
-, google-auth
-, google-cloud-bigquery
-, pandas
-, protobuf
-, pyarrow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fastavro,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  google-cloud-bigquery,
+  pandas,
+  protobuf,
+  pyarrow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,15 +31,9 @@ buildPythonPackage rec {
   ] ++ google-api-core.optional-dependencies.grpc;
 
   passthru.optional-dependencies = {
-    fastavro = [
-      fastavro
-    ];
-    pandas = [
-      pandas
-    ];
-    pyarrow = [
-      pyarrow
-    ];
+    fastavro = [ fastavro ];
+    pandas = [ pandas ];
+    pyarrow = [ pyarrow ];
   };
 
   nativeCheckInputs = [

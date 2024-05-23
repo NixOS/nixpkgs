@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, jwcrypto
-, numpy
-, pytestCheckHook
-, pythonOlder
-, redis
-, requests
-, simplejson
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jwcrypto,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
+  simplejson,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # this test failed on macos
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     "test_socket_set_keepalive_options"
   ];
 
-  pythonImportsCheck = [
-    "websockify"
-  ];
+  pythonImportsCheck = [ "websockify" ];
 
   meta = with lib; {
     description = "WebSockets support for any application/server";

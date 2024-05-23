@@ -1,17 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pcre
-, pkg-config
-, protobufc
-, withCrypto ? true, openssl
-, enableCuckoo ? true, jansson
-, enableDex ? true
-, enableDotNet ? true
-, enableMacho ? true
-, enableMagic ? true, file
-, enableStatic ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pcre,
+  pkg-config,
+  protobufc,
+  withCrypto ? true,
+  openssl,
+  enableCuckoo ? true,
+  jansson,
+  enableDex ? true,
+  enableDotNet ? true,
+  enableMacho ? true,
+  enableMagic ? true,
+  file,
+  enableStatic ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +25,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = pname;
-    rev = "v${version}";
+    repo = "yara";
+    rev = "refs/tags/v${version}";
     hash = "sha256-AecHsUBtBleUkWuYMQ4Tx/PY8cs9j7JwqncBziJD0hA=";
   };
 
@@ -38,16 +43,14 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    pcre
-    protobufc
-  ] ++ lib.optionals withCrypto [
-    openssl
-  ] ++ lib.optionals enableMagic [
-    file
-  ] ++ lib.optionals enableCuckoo [
-    jansson
-  ];
+  buildInputs =
+    [
+      pcre
+      protobufc
+    ]
+    ++ lib.optionals withCrypto [ openssl ]
+    ++ lib.optionals enableMagic [ file ]
+    ++ lib.optionals enableCuckoo [ jansson ];
 
   preConfigure = "./bootstrap.sh";
 
@@ -64,10 +67,12 @@ stdenv.mkDerivation rec {
   doCheck = enableStatic;
 
   meta = with lib; {
-    description = "The pattern matching swiss knife for malware researchers";
+    description = "Tool to perform pattern matching for malware-related tasks";
     homepage = "http://Virustotal.github.io/yara/";
+    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "yara";
     platforms = platforms.all;
   };
 }

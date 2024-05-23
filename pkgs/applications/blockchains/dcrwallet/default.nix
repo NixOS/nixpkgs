@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dcrwallet";
-  version = "1.8.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
     rev = "release-v${version}";
-    hash = "sha256-Pz25jExqbvy8fgiZy9vaYuVp8kuE6deGLlBEjxTnYGQ=";
+    hash = "sha256-KBmEMYNVHGkkFXE99nI0uCGGDpkC0MvSFWFPEQwvx+o=";
   };
 
-  vendorHash = "sha256-lvN7OcDoEzb9LyH9C5q8pd0BOnF2VKuh4O82U+tQ6fI=";
+  vendorHash = "sha256-66S1evvX/SEKFXB00dyI9IEuV8dmqM+k1wuhTtgVpBs=";
 
   subPackages = [ "." ];
 

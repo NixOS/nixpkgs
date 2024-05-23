@@ -1,36 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, cffi
+  # build-system
+  setuptools,
+  cffi,
 
-# dependencies
-, future
-, jinja2
-, junos-eznc
-, lxml
-, ncclient
-, netaddr
-, netmiko
-, netutils
-, paramiko
-, pyeapi
-, pyyaml
-, requests
-, scp
-, textfsm
-, ttp
-, ttp-templates
-, typing-extensions
+  # dependencies
+  future,
+  jinja2,
+  junos-eznc,
+  lxml,
+  ncclient,
+  netaddr,
+  netmiko,
+  netutils,
+  paramiko,
+  pyeapi,
+  pyyaml,
+  requests,
+  scp,
+  textfsm,
+  ttp,
+  ttp-templates,
+  typing-extensions,
 
-# tests
-, pytestCheckHook
-, ddt
-, mock
- }:
+  # tests
+  pytestCheckHook,
+  ddt,
+  mock,
+}:
 
 buildPythonPackage rec {
   pname = "napalm";
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     hash = "sha256-Abw3h69qTFwOOFeAfivqAIWLozErJ1yZZfx7CbMy1AI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cffi
@@ -72,11 +71,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook mock ddt ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    ddt
+  ];
 
   meta = with lib; {
-    description =
-      "Network Automation and Programmability Abstraction Layer with Multivendor support";
+    description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.c3d2.members;

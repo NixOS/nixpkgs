@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-MPxT5TOfX72dEzXg97afd/FePwbisXt/t++SXMJP3ZY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ zope-interface ];
 
   # circular deps
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zope.exceptions"
-  ];
+  pythonImportsCheck = [ "zope.exceptions" ];
 
   meta = with lib; {
     description = "Exception interfaces and implementations";
@@ -39,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.zpl21;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

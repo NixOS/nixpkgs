@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, joblib
-, matplotlib
-, numpy
-, pandas
-, scikit-learn
-, scipy
-, statsmodels
-, urllib3
-, pythonOlder
-, python
-, pytest7CheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  joblib,
+  matplotlib,
+  numpy,
+  pandas,
+  scikit-learn,
+  scipy,
+  statsmodels,
+  urllib3,
+  pythonOlder,
+  python,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  disabledTests= [
+  disabledTests = [
     # touches internet
     "test_load_from_web"
   ];

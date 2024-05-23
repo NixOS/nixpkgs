@@ -330,7 +330,14 @@ Container system, boot system and library changes are some examples of the pull 
 ## How to merge pull requests
 [pr-merge]: #how-to-merge-pull-requests
 
-The *Nixpkgs committers* are people who have been given
+To streamline automated updates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge`. The bot will verify if the following conditions are met, refusing to merge otherwise:
+
+- the commenter that issued the command should be among the package maintainers;
+- the package should reside in `pkgs/by-name`.
+
+Further, nixpkgs-merge-bot will ensure all ofBorg checks (except the Darwin-related ones) are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofBorg to finish before attempting the merge again.
+
+For other pull requests, the *Nixpkgs committers* are people who have been given
 permission to merge.
 
 It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
@@ -359,7 +366,7 @@ See [Nix Channel Status](https://status.nixos.org/) for the current channels and
 Here's a brief overview of the main Git branches and what channels they're used for:
 
 - `master`: The main branch, used for the unstable channels such as `nixpkgs-unstable`, `nixos-unstable` and `nixos-unstable-small`.
-- `release-YY.MM` (e.g. `release-23.11`): The NixOS release branches, used for the stable channels such as `nixos-23.11`, `nixos-23.11-small` and `nixpkgs-23.11-darwin`.
+- `release-YY.MM` (e.g. `release-24.05`): The NixOS release branches, used for the stable channels such as `nixos-24.05`, `nixos-24.05-small` and `nixpkgs-24.05-darwin`.
 
 When a channel is updated, a corresponding Git branch is also updated to point to the corresponding commit.
 So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/nixpkgs-unstable) corresponds to the Git commit from the [`nixpkgs-unstable` channel](https://channels.nixos.org/nixpkgs-unstable).

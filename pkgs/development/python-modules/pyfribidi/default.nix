@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -27,5 +28,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/pediapress/pyfribidi";
     license = licenses.gpl2;
   };
-
 }

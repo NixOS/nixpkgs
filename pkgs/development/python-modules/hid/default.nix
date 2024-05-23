@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, hidapi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  hidapi,
 }:
 
 buildPythonPackage rec {
@@ -15,25 +16,19 @@ buildPythonPackage rec {
     hash = "sha256-SNdk166XRroSO5bb9FeJPKgCaLd5HEsdLgUTEO64OGA=";
   };
 
- postPatch = ''
-   hidapi=${hidapi}/lib/
-   test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
-   sed -i -e "s|libhidapi|$hidapi/libhidapi|" hid/__init__.py
+  postPatch = ''
+    hidapi=${hidapi}/lib/
+    test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
+    sed -i -e "s|libhidapi|$hidapi/libhidapi|" hid/__init__.py
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    hidapi
-  ];
+  dependencies = [ hidapi ];
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "hid"
-  ];
+  pythonImportsCheck = [ "hid" ];
 
   meta = with lib; {
     description = "hidapi bindings in ctypes";

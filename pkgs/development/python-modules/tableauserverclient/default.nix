@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, packaging
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, setuptools
-, versioneer
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchPypi,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  requests-mock,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     rm versioneer.py
   '';
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   nativeBuildInputs = [
     setuptools
@@ -53,9 +52,7 @@ buildPythonPackage rec {
   # Tests attempt to create some file artifacts and fails
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tableauserverclient"
-  ];
+  pythonImportsCheck = [ "tableauserverclient" ];
 
   meta = with lib; {
     description = "Module for working with the Tableau Server REST API";

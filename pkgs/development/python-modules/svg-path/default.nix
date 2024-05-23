@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     "test_image"
   ];
 
-  pythonImportsCheck = [
-    "svg.path"
-  ];
+  pythonImportsCheck = [ "svg.path" ];
 
   meta = with lib; {
     description = "SVG path objects and parser";

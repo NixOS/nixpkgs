@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, poetry-core
-, pytz
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  poetry-core,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-Wt8ZCyCaERNXEd0/Q89QWUW/wGFSHAP2RZLhnv5xkgY=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    pytz
-  ];
+  dependencies = [ pytz ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "beanhub_extract"
-  ];
+  pythonImportsCheck = [ "beanhub_extract" ];
 
   meta = {
     description = "The simple library for extracting all kind of bank account transaction export files, mostly for beanhub-import to ingest and generate transactions";

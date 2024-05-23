@@ -26,16 +26,16 @@ let
 in
 buildNpmPackage' rec {
   pname = "jellyfin-web";
-  version = "10.9.1";
+  version = "10.9.2";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-web";
     rev = "v${version}";
-    hash = "sha256-KkPZ8OvGN/0gdoSVh9q0qEilae3tccgHRQQvrTsvycA=";
+    hash = "sha256-0MBVcMajRk+CR0nZ8Dtd3Mg4tKdLiHGs3AhI8BEqZyE=";
   };
 
-  npmDepsHash = "sha256-LmbygyCYSp0gtjU2pNCV17WEyEoaIzPs7H9UoMFV+PU=";
+  npmDepsHash = "sha256-aN+EXHRXez26oS4Ad1d9HSBkwVKnvYQMJvJVypDCk+0=";
 
   npmBuildScript = [ "build:production" ];
 

@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, symlinkJoin
-, ffmpeg-full
-, pkg-config
-, ninja
-, pybind11
-, sox
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  symlinkJoin,
+  ffmpeg-full,
+  pkg-config,
+  ninja,
+  pybind11,
+  sox,
+  torch,
 
-, cudaSupport ? torch.cudaSupport
-, cudaPackages
-, rocmSupport ? torch.rocmSupport
-, rocmPackages
+  cudaSupport ? torch.cudaSupport,
+  cudaPackages,
+  rocmSupport ? torch.rocmSupport,
+  rocmPackages,
 
-, gpuTargets ? []
+  gpuTargets ? [ ],
 }:
 
 let
@@ -26,11 +27,31 @@ let
     name = "rocm-merged";
 
     paths = with rocmPackages; [
-      rocm-core clr rccl miopen miopengemm rocrand rocblas
-      rocsparse hipsparse rocthrust rocprim hipcub roctracer
-      rocfft rocsolver hipfft hipsolver hipblas
-      rocminfo rocm-thunk rocm-comgr rocm-device-libs
-      rocm-runtime clr.icd hipify
+      rocm-core
+      clr
+      rccl
+      miopen
+      miopengemm
+      rocrand
+      rocblas
+      rocsparse
+      hipsparse
+      rocthrust
+      rocprim
+      hipcub
+      roctracer
+      rocfft
+      rocsolver
+      hipfft
+      hipsolver
+      hipblas
+      rocminfo
+      rocm-thunk
+      rocm-comgr
+      rocm-device-libs
+      rocm-runtime
+      clr.icd
+      hipify
     ];
 
     # Fix `setuptools` not being found
@@ -41,7 +62,7 @@ let
   # Only used for ROCm
   gpuTargetString = lib.strings.concatStringsSep ";" (
     if gpuTargets != [ ] then
-    # If gpuTargets is specified, it always takes priority.
+      # If gpuTargets is specified, it always takes priority.
       gpuTargets
     else if rocmSupport then
       rocmPackages.clr.gpuTargets
@@ -61,20 +82,19 @@ buildPythonPackage rec {
     hash = "sha256-8EPoZ/dfxrQjdtE0rZ+2pOaXxlyhRuweYnVuA9i0Fgc=";
   };
 
-  patches = [
-    ./0001-setup.py-propagate-cmakeFlags.patch
-  ];
+  patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'print(" --- Initializing submodules")' "return" \
-      --replace "_fetch_archives(_parse_sources())" "pass"
-  ''
-  + lib.optionalString rocmSupport ''
-    # There is no .info/version-dev, only .info/version
-    substituteInPlace cmake/LoadHIP.cmake \
-      --replace "/.info/version-dev" "/.info/version"
-  '';
+  postPatch =
+    ''
+      substituteInPlace setup.py \
+        --replace 'print(" --- Initializing submodules")' "return" \
+        --replace "_fetch_archives(_parse_sources())" "pass"
+    ''
+    + lib.optionalString rocmSupport ''
+      # There is no .info/version-dev, only .info/version
+      substituteInPlace cmake/LoadHIP.cmake \
+        --replace "/.info/version-dev" "/.info/version"
+    '';
 
   env = {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
@@ -90,17 +110,21 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    ninja
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ] ++ lib.optionals rocmSupport (with rocmPackages; [
-    clr
-    rocblas
-    hipblas
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      ninja
+    ]
+    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+    ++ lib.optionals rocmSupport (
+      with rocmPackages;
+      [
+        clr
+        rocblas
+        hipblas
+      ]
+    );
 
   buildInputs = [
     ffmpeg-full
@@ -109,14 +133,12 @@ buildPythonPackage rec {
     torch.cxxdev
   ];
 
-  propagatedBuildInputs = [
-    torch
-  ];
+  propagatedBuildInputs = [ torch ];
 
-  BUILD_SOX=0;
-  BUILD_KALDI=0;
-  BUILD_RNNT=0;
-  BUILD_CTC_DECODER=0;
+  BUILD_SOX = 0;
+  BUILD_KALDI = 0;
+  BUILD_RNNT = 0;
+  BUILD_CTC_DECODER = 0;
 
   preConfigure = lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
@@ -132,7 +154,11 @@ buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     license = licenses.bsd2;
-    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

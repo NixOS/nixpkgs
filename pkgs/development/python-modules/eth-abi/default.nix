@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, eth-hash
-, eth-typing
-, eth-utils
-, hypothesis
-, parsimonious
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  eth-hash,
+  eth-typing,
+  eth-utils,
+  hypothesis,
+  parsimonious,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

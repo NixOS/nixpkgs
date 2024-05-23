@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, einops
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, pythonOlder
-, setuptools
+{
+  buildPythonPackage,
+  einops,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-xz6yJiVZUkRcRa2rKZdytfpP+XCk/QI4xtKlNaS9FYo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     einops

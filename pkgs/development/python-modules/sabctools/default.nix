@@ -15,18 +15,18 @@ buildPythonPackage rec {
     hash = "sha256-PYfbmR9wT3SHT+oFyQF2F13g7FgdvY/l9p0D65c/+RU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = ["sabctools"];
+  pythonImportsCheck = [ "sabctools" ];
 
-  passthru.tests = {inherit sabnzbd;};
+  passthru.tests = {
+    inherit sabnzbd;
+  };
 
   meta = with lib; {
     description = "C implementations of functions for use within SABnzbd";
     homepage = "https://github.com/sabnzbd/sabctools";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [adamcstephens];
+    maintainers = with maintainers; [ adamcstephens ];
   };
 }

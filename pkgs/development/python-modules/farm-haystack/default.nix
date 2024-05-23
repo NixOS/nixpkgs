@@ -1,92 +1,93 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, hatchling
-, boilerpy3
-, events
-, httpx
-, jsonschema
-, lazy-imports
-, more-itertools
-, networkx
-, pandas
-, pillow
-, platformdirs
-, posthog
-, prompthub-py
-, pydantic
-, quantulum3
-, rank-bm25
-, requests
-, requests-cache
-, scikit-learn
-, sseclient-py
-, tenacity
-, tiktoken
-, tqdm
-, transformers
-, openai-whisper
-, boto3
-, botocore
-# , beir
-, selenium
-, coverage
-, dulwich
-# , jupytercontrib
-, mkdocs
-, mypy
-, pre-commit
-, psutil
-# , pydoc-markdown
-, pylint
-, pytest
-, pytest-asyncio
-, pytest-cov
-# , pytest-custom-exit-code
-, python-multipart
-, reno
-, responses
-, toml
-, tox
-, watchdog
-, elastic-transport
-, elasticsearch
-# , azure-ai-formrecognizer
-, beautifulsoup4
-, markdown
-, python-docx
-, python-frontmatter
-, python-magic
-, tika
-, black
-, huggingface-hub
-, sentence-transformers
-, mlflow
-, rapidfuzz
-, scipy
-, seqeval
-, pdf2image
-, pytesseract
-, faiss
-# , faiss-gpu
-, pinecone-client
-, onnxruntime
-, onnxruntime-tools
-# , onnxruntime-gpu
-, opensearch-py
-, pymupdf
-, langdetect
-, nltk
-, canals
-, jinja2
-, openai
-, aiorwlock
-, ray
-, psycopg2
-, sqlalchemy
-, sqlalchemy-utils
-, weaviate-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  hatchling,
+  boilerpy3,
+  events,
+  httpx,
+  jsonschema,
+  lazy-imports,
+  more-itertools,
+  networkx,
+  pandas,
+  pillow,
+  platformdirs,
+  posthog,
+  prompthub-py,
+  pydantic,
+  quantulum3,
+  rank-bm25,
+  requests,
+  requests-cache,
+  scikit-learn,
+  sseclient-py,
+  tenacity,
+  tiktoken,
+  tqdm,
+  transformers,
+  openai-whisper,
+  boto3,
+  botocore,
+  # , beir
+  selenium,
+  coverage,
+  dulwich,
+  # , jupytercontrib
+  mkdocs,
+  mypy,
+  pre-commit,
+  psutil,
+  # , pydoc-markdown
+  pylint,
+  pytest,
+  pytest-asyncio,
+  pytest-cov,
+  # , pytest-custom-exit-code
+  python-multipart,
+  reno,
+  responses,
+  toml,
+  tox,
+  watchdog,
+  elastic-transport,
+  elasticsearch,
+  # , azure-ai-formrecognizer
+  beautifulsoup4,
+  markdown,
+  python-docx,
+  python-frontmatter,
+  python-magic,
+  tika,
+  black,
+  huggingface-hub,
+  sentence-transformers,
+  mlflow,
+  rapidfuzz,
+  scipy,
+  seqeval,
+  pdf2image,
+  pytesseract,
+  faiss,
+  # , faiss-gpu
+  pinecone-client,
+  onnxruntime,
+  onnxruntime-tools,
+  # , onnxruntime-gpu
+  opensearch-py,
+  pymupdf,
+  langdetect,
+  nltk,
+  canals,
+  jinja2,
+  openai,
+  aiorwlock,
+  ray,
+  psycopg2,
+  sqlalchemy,
+  sqlalchemy-utils,
+  weaviate-client,
 }:
 
 buildPythonPackage rec {
@@ -146,9 +147,7 @@ buildPythonPackage rec {
     # all-gpu = [
     #   farm-haystack
     # ];
-    audio = [
-      openai-whisper
-    ];
+    audio = [ openai-whisper ];
     aws = [
       boto3
       botocore
@@ -156,12 +155,8 @@ buildPythonPackage rec {
     # beir = [
     #   beir
     # ];
-    colab = [
-      pillow
-    ];
-    crawler = [
-      selenium
-    ];
+    colab = [ pillow ];
+    crawler = [ selenium ];
     dev = [
       coverage
       dulwich
@@ -201,9 +196,7 @@ buildPythonPackage rec {
       # python-magic-bin
       tika
     ];
-    formatting = [
-      black
-    ];
+    formatting = [ black ];
     inference = [
       huggingface-hub
       sentence-transformers
@@ -219,15 +212,11 @@ buildPythonPackage rec {
       pdf2image
       pytesseract
     ];
-    only-faiss = [
-      faiss
-    ];
+    only-faiss = [ faiss ];
     # only-faiss-gpu = [
     #   faiss-gpu
     # ];
-    only-pinecone = [
-      pinecone-client
-    ];
+    only-pinecone = [ pinecone-client ];
     onnx = [
       onnxruntime
       onnxruntime-tools
@@ -236,12 +225,8 @@ buildPythonPackage rec {
     #   onnxruntime-gpu
     #   onnxruntime-tools
     # ];
-    opensearch = [
-      opensearch-py
-    ];
-    pdf = [
-      pymupdf
-    ];
+    opensearch = [ opensearch-py ];
+    pdf = [ pymupdf ];
     preprocessing = [
       langdetect
       nltk
@@ -266,21 +251,18 @@ buildPythonPackage rec {
       sqlalchemy
       sqlalchemy-utils
     ];
-    weaviate = [
-      weaviate-client
-    ];
+    weaviate = [ weaviate-client ];
   };
 
   # the setup for test is intensive, hopefully can be done at some point
   doCheck = false;
-
 
   pythonImportsCheck = [ "haystack" ];
 
   meta = with lib; {
     description = "LLM orchestration framework to build customizable, production-ready LLM applications";
     longDescription = ''
-    LLM orchestration framework to build customizable, production-ready LLM applications. Connect components (models, vector DBs, file converters) to pipelines or agents that can interact with your data. With advanced retrieval methods, it's best suited for building RAG, question answering, semantic search or conversational agent chatbots
+      LLM orchestration framework to build customizable, production-ready LLM applications. Connect components (models, vector DBs, file converters) to pipelines or agents that can interact with your data. With advanced retrieval methods, it's best suited for building RAG, question answering, semantic search or conversational agent chatbots
     '';
     changelog = "https://github.com/deepset-ai/haystack/releases/tag/${src.rev}";
     homepage = "https://github.com/deepset-ai/haystack";

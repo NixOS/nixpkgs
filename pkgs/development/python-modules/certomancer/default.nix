@@ -1,26 +1,27 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, click
-, cryptography
-, fetchFromGitHub
-, freezegun
-, jinja2
-, oscrypto
-, pyhanko-certvalidator
-, pytest-aiohttp
-, pytestCheckHook
-, python-dateutil
-, python-pkcs11
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, requests-mock
-, setuptools
-, tzlocal
-, werkzeug
-, wheel
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchFromGitHub,
+  freezegun,
+  jinja2,
+  oscrypto,
+  pyhanko-certvalidator,
+  pytest-aiohttp,
+  pytestCheckHook,
+  python-dateutil,
+  python-pkcs11,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  requests-mock,
+  setuptools,
+  tzlocal,
+  werkzeug,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -57,19 +58,13 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    requests-mocker = [
-      requests-mock
-    ];
+    requests-mocker = [ requests-mock ];
     web-api = [
       jinja2
       werkzeug
     ];
-    pkcs12 = [
-      cryptography
-    ];
-    pkcs11 = [
-      python-pkcs11
-    ];
+    pkcs12 = [ cryptography ];
+    pkcs11 = [ python-pkcs11 ];
   };
 
   nativeCheckInputs = [
@@ -86,9 +81,7 @@ buildPythonPackage rec {
     "test_validate"
   ];
 
-  pythonImportsCheck = [
-    "certomancer"
-  ];
+  pythonImportsCheck = [ "certomancer" ];
 
   meta = with lib; {
     description = "Quickly construct, mock & deploy PKI test configurations using simple declarative configuration";

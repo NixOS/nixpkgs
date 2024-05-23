@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, numpy
-, pytestCheckHook
-, pythonOlder
-, rdkit
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  rdkit,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -44,13 +45,9 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "meeko"
-  ];
+  pythonImportsCheck = [ "meeko" ];
 
   meta = {
     description = "Python package for preparing small molecule for docking";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pythonOlder
-, yara
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
+  yara,
 }:
 
 buildPythonPackage rec {
@@ -28,29 +29,17 @@ buildPythonPackage rec {
       --replace "include_dirs=['yara/libyara/include', 'yara/libyara/', '.']" "libraries = ['yara']"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    yara
-  ];
+  buildInputs = [ yara ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  setupPyBuildFlags = [
-    "--dynamic-linking"
-  ];
+  setupPyBuildFlags = [ "--dynamic-linking" ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "yara"
-  ];
+  pythonImportsCheck = [ "yara" ];
 
   meta = with lib; {
     description = "Python interface for YARA";

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchPypi
-, requests
- }:
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "stashy";
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "1x89zazwxnsx6rdfw8nfr372hj4sk8nrcs5hsjxpcxcva0calrcr";
   };
 
-  propagatedBuildInputs = [ decorator requests ];
+  propagatedBuildInputs = [
+    decorator
+    requests
+  ];
 
   # Tests require internet connection
   doCheck = false;

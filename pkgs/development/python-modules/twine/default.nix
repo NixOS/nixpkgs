@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, keyring
-, pkginfo
-, readme-renderer
-, requests
-, requests-toolbelt
-, rich
-, rfc3986
-, setuptools-scm
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  importlib-metadata,
+  keyring,
+  pkginfo,
+  readme-renderer,
+  requests,
+  requests-toolbelt,
+  rich,
+  rfc3986,
+  setuptools-scm,
+  urllib3,
 }:
 
 buildPythonPackage rec {

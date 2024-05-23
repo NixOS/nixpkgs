@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cachetools
-, numpy
-, pythonOlder
-, redis
-, redis-om
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cachetools,
+  numpy,
+  pythonOlder,
+  redis,
+  redis-om,
+  requests,
 }:
 
 buildPythonPackage rec {

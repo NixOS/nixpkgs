@@ -115,8 +115,7 @@ in rec {
   };
 
   rocgdb = callPackage ./rocgdb {
-    inherit rocmUpdateScript;
-    elfutils = elfutils.override { enableDebuginfod = true; };
+    inherit rocmUpdateScript rocdbgapi;
     stdenv = llvm.rocmClangStdenv;
   };
 

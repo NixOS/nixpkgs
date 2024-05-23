@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, fsspec
-, xrootd
-, pkgs
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  fsspec,
+  xrootd,
+  pkgs,
+  pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     xrootd
   ];
 
-  pythonImportsCheck = [
-    "fsspec_xrootd"
-  ];
+  pythonImportsCheck = [ "fsspec_xrootd" ];
 
   nativeCheckInputs = [
     pkgs.xrootd
@@ -51,9 +50,7 @@ buildPythonPackage rec {
   ];
 
   # Timeout related tests hang indifinetely
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "tests/test_basicio.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_basicio.py" ];
 
   meta = with lib; {
     description = "An XRootD implementation for fsspec";

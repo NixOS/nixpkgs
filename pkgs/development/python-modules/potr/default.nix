@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, pycrypto }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pycrypto,
+}:
 
 buildPythonPackage rec {
   pname = "python-potr";

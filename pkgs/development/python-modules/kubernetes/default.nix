@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, adal
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, google-auth
-, mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, requests-oauthlib
-, setuptools
-, six
-, urllib3
-, websocket-client
+{
+  lib,
+  stdenv,
+  adal,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  google-auth,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  requests-oauthlib,
+  setuptools,
+  six,
+  urllib3,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
       --replace-fail "assertEquals" "assertEqual"
   '';
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   build-system = [
     pythonRelaxDepsHook
@@ -60,14 +59,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    adal = [
-      adal
-    ];
+    adal = [ adal ];
   };
 
-  pythonImportsCheck = [
-    "kubernetes"
-  ];
+  pythonImportsCheck = [ "kubernetes" ];
 
   nativeCheckInputs = [
     mock

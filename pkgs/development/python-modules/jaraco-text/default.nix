@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, autocommand
-, importlib-resources
-, jaraco-functools
-, jaraco-context
-, inflect
-, pathlib2
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  autocommand,
+  importlib-resources,
+  jaraco-functools,
+  jaraco-context,
+  inflect,
+  pathlib2,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -25,32 +26,20 @@ buildPythonPackage rec {
     hash = "sha256-OJ4lyNSzLpcVv1MFlvqw9c06pHKW5DlpOS4YpUGvWSw=";
   };
 
-  pythonNamespaces = [
-    "jaraco"
-  ];
+  pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     autocommand
     jaraco-context
     jaraco-functools
     inflect
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    pathlib2
-  ];
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.optionals (pythonOlder "3.10") [ pathlib2 ];
 
-  pythonImportsCheck = [
-    "jaraco.text"
-  ];
+  pythonImportsCheck = [ "jaraco.text" ];
 
   meta = with lib; {
     description = "Module for text manipulation";

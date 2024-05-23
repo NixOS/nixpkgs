@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, bentoml
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, anyio
-, distro
-, httpx
-, httpx-auth
-, openllm-core
-, soundfile
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  bentoml,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  anyio,
+  distro,
+  httpx,
+  httpx-auth,
+  openllm-core,
+  soundfile,
+  transformers,
 }:
 
 buildPythonPackage rec {
@@ -44,12 +45,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    grpc = [
-      bentoml
-    ] ++ bentoml.optional-dependencies.grpc;
-    auth = [
-      httpx-auth
-    ];
+    grpc = [ bentoml ] ++ bentoml.optional-dependencies.grpc;
+    auth = [ httpx-auth ];
     agents = [
       transformers
       # diffusers

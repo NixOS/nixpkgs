@@ -1,16 +1,30 @@
 { lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, immich-go }:
 buildGoModule rec {
   pname = "immich-go";
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
     rev = "${version}";
-    hash = "sha256-zYqPPLDfBx4FLvZIo5E6nAeIiFfBCLI00xLieXFkMxs=";
+    hash = "sha256-5dgEyg55ffJLH8zxp6mFVsUqAzyPnY18XnX+jMethUc=";
+
+    # Inspired by: https://github.com/NixOS/nixpkgs/blob/f2d7a289c5a5ece8521dd082b81ac7e4a57c2c5c/pkgs/applications/graphics/pdfcpu/default.nix#L20-L32
+    # The intention here is to write the information into files in the `src`'s
+    # `$out`, and use them later in other phases (in this case `preBuild`).
+    # In order to keep determinism, we also delete the `.git` directory
+    # afterwards, imitating the default behavior of `leaveDotGit = false`.
+    # More info about git log format can be found at `git-log(1)` manpage.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git log -1 --pretty=%H > "COMMIT"
+      git log -1 --pretty=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ' > "SOURCE_DATE"
+      rm -rf ".git"
+    '';
   };
 
-  vendorHash = "sha256-Y5BujN2mk662oKxQpenjFlxazST2GqWr9ug0sOsxKbY=";
+  vendorHash = "sha256-nOJJz5KEXqxl3tP1Q12Cb/fugtxR67RjzH6khKg3ppE=";
 
   # options used by upstream:
   # https://github.com/simulot/immich-go/blob/0.13.2/.goreleaser.yaml
@@ -19,9 +33,12 @@ buildGoModule rec {
     "-w"
     "-extldflags=-static"
     "-X main.version=${version}"
-    "-X main.commit=${version}"
-    "-X main.date=unknown"
   ];
+
+  preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
+    ldflags+=" -X main.date=$(cat SOURCE_DATE)"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

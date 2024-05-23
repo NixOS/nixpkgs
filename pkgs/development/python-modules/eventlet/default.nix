@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
 
-# build-system
-, hatch-vcs
-, hatchling
+  # build-system
+  hatch-vcs,
+  hatchling,
 
-# dependencies
-, dnspython
-, greenlet
-, isPyPy
-, six
+  # dependencies
+  dnspython,
+  greenlet,
+  isPyPy,
+  six,
 
-# tests
-, iana-etc
-, pytestCheckHook
-, libredirect
+  # tests
+  iana-etc,
+  pytestCheckHook,
+  libredirect,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # libredirect is not available on darwin
   # tests hang on pypy indefinitely

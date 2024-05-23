@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pytestCheckHook
-, syrupy
-, pillow
-, rich
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pytestCheckHook,
+  syrupy,
+  pillow,
+  rich,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -35,22 +36,16 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    syrupy
-  ];
+  checkInputs = [ syrupy ];
 
   propagatedBuildInputs = [
     pillow
     rich
   ];
 
-  pythonRelaxDeps = [
-    "pillow"
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
   pythonImportsCheck = [ "rich_pixels" ];
 

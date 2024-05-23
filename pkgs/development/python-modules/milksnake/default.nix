@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, cffi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  cffi,
+}:
 
 buildPythonPackage rec {
   pname = "milksnake";
@@ -19,9 +25,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-   cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
   # tests rely on pip/venv
   doCheck = false;

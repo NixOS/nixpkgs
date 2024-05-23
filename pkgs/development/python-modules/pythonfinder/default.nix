@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cached-property
-, click
-, fetchFromGitHub
-, packaging
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cached-property,
+  click,
+  fetchFromGitHub,
+  packaging,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -29,20 +30,12 @@ buildPythonPackage rec {
       --replace " --cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-  ];
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
   passthru.optional-dependencies = {
-    cli = [
-      click
-    ];
+    cli = [ click ];
   };
 
   nativeCheckInputs = [
@@ -50,9 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pythonfinder"
-  ];
+  pythonImportsCheck = [ "pythonfinder" ];
 
   meta = with lib; {
     description = "Cross platform search tool for finding Python";

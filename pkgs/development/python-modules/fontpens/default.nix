@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, fonttools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+}:
 
 buildPythonPackage rec {
   pname = "fontpens";
@@ -15,20 +20,22 @@ buildPythonPackage rec {
 
   # can't run normal tests due to circular dependency with fontParts
   doCheck = false;
-  pythonImportsCheck = [ "fontPens" ] ++ (builtins.map (s: "fontPens." + s) [
-    "angledMarginPen"
-    "digestPointPen"
-    "flattenPen"
-    "guessSmoothPointPen"
-    "marginPen"
-    "penTools"
-    "printPen"
-    "printPointPen"
-    "recordingPointPen"
-    "thresholdPen"
-    "thresholdPointPen"
-    "transformPointPen"
-  ]);
+  pythonImportsCheck =
+    [ "fontPens" ]
+    ++ (builtins.map (s: "fontPens." + s) [
+      "angledMarginPen"
+      "digestPointPen"
+      "flattenPen"
+      "guessSmoothPointPen"
+      "marginPen"
+      "penTools"
+      "printPen"
+      "printPointPen"
+      "recordingPointPen"
+      "thresholdPen"
+      "thresholdPointPen"
+      "transformPointPen"
+    ]);
 
   meta = with lib; {
     description = "A collection of classes implementing the pen protocol for manipulating glyphs";

@@ -1,17 +1,18 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, fetchpatch
-, dask
-, urllib3
-, geojson
-, verlib2
-, pueblo
-, pandas
-, pythonOlder
-, sqlalchemy
-, pytestCheckHook
-, pytz
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  fetchpatch,
+  dask,
+  urllib3,
+  geojson,
+  verlib2,
+  pueblo,
+  pandas,
+  pythonOlder,
+  sqlalchemy,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {

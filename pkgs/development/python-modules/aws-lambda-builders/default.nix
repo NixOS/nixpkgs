@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, parameterized
-, pip
-, pyelftools
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  parameterized,
+  pip,
+  pyelftools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,9 @@ buildPythonPackage rec {
       --replace-fail "version=read_version()," 'version="${version}",'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     mock
@@ -73,9 +70,7 @@ buildPythonPackage rec {
     "tests/integration/workflows/dotnet_clipackage/test_dotnet.py"
   ];
 
-  pythonImportsCheck = [
-    "aws_lambda_builders"
-  ];
+  pythonImportsCheck = [ "aws_lambda_builders" ];
 
   meta = with lib; {
     description = "Tool to compile, build and package AWS Lambda functions";

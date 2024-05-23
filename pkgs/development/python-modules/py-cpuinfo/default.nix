@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, sysctl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  sysctl,
 }:
 
 buildPythonPackage rec {
@@ -15,15 +16,13 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-     owner = "workhorsy";
-     repo = pname;
-     rev = "v${version}";
-     hash = "sha256-Q5u0guAqDVhf6bvJTzNvCpWbIzjxxAjE7s0OuXj9T4Q=";
+    owner = "workhorsy";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-Q5u0guAqDVhf6bvJTzNvCpWbIzjxxAjE7s0OuXj9T4Q=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # On Darwin sysctl is used to read CPU information.
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -32,9 +31,7 @@ buildPythonPackage rec {
       --replace "_run_and_get_stdout(['sysctl'" "_run_and_get_stdout(['${sysctl}/bin/sysctl'"
   '';
 
-  pythonImportsCheck = [
-    "cpuinfo"
-  ];
+  pythonImportsCheck = [ "cpuinfo" ];
 
   meta = with lib; {
     description = "Get CPU info with pure Python";

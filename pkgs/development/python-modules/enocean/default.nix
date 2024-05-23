@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, enum-compat
-, pyserial
-, pynose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  enum-compat,
+  pyserial,
+  pynose,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  nativeCheckInputs = [
-    pynose
-  ];
+  nativeCheckInputs = [ pynose ];
 
   checkPhase = ''
     runHook preCheck

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, jupyter-server
-, pytestCheckHook
-, pytest-tornasync
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jupyter-server,
+  pytestCheckHook,
+  pytest-tornasync,
 }:
 
 buildPythonPackage rec {

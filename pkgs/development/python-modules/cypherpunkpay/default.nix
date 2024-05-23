@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, apscheduler
-, bitstring
-, buildPythonPackage
-, cffi
-, ecdsa
-, fetchFromGitHub
-, monero
-, poetry-core
-, pypng
-, pyqrcode
-, pyramid
-, pyramid-jinja2
-, pysocks
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, tzlocal
-, waitress
-, webtest
-, yoyo-migrations
+{
+  lib,
+  stdenv,
+  apscheduler,
+  bitstring,
+  buildPythonPackage,
+  cffi,
+  ecdsa,
+  fetchFromGitHub,
+  monero,
+  poetry-core,
+  pypng,
+  pyqrcode,
+  pyramid,
+  pyramid-jinja2,
+  pysocks,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  tzlocal,
+  waitress,
+  webtest,
+  yoyo-migrations,
 }:
 
 buildPythonPackage rec {
@@ -103,15 +104,16 @@ buildPythonPackage rec {
     "tests/acceptance/views_dummystore"
   ];
 
-  pythonImportsCheck = [
-    "cypherpunkpay"
-  ];
+  pythonImportsCheck = [ "cypherpunkpay" ];
 
   meta = with lib; {
     description = "Modern self-hosted software for accepting Bitcoin";
     homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
     changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ unlicense ];
+    license = with licenses; [
+      mit # or
+      unlicense
+    ];
     maintainers = with maintainers; [ prusnak ];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitiles
-, six
-, python
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitiles,
+  six,
+  python,
 }:
 
 buildPythonPackage {
@@ -22,11 +23,12 @@ buildPythonPackage {
     ./no-xcode.patch
   ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [ "gyp" "gyp.generator" ];
+  pythonImportsCheck = [
+    "gyp"
+    "gyp.generator"
+  ];
 
   # Make mac_tool.py executable so that patchShebangs hook processes it. This
   # file is copied and run by builds using gyp on macOS

@@ -1,10 +1,11 @@
-{ lib
-, nix-update-script
-, fetchPypi
-, buildPythonPackage
-, deprecated
-, regex
-, pip
+{
+  lib,
+  nix-update-script,
+  fetchPypi,
+  buildPythonPackage,
+  deprecated,
+  regex,
+  pip,
 }:
 
 buildPythonPackage rec {

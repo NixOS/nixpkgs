@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, editorconfig
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  editorconfig,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -24,17 +25,11 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsbeautifier"
-  ];
+  pythonImportsCheck = [ "jsbeautifier" ];
 
-  pytestFlagsArray = [
-    "jsbeautifier/tests/testindentation.py"
-  ];
+  pytestFlagsArray = [ "jsbeautifier/tests/testindentation.py" ];
 
   meta = with lib; {
     description = "JavaScript unobfuscator and beautifier";

@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, pythonAtLeast
-, buildPythonPackage
-, importlib-resources
-, pyyaml
-, requests
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  pythonAtLeast,
+  buildPythonPackage,
+  importlib-resources,
+  pyyaml,
+  requests,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,24 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-7a1F7180mnbMiEwRWzDQt2EhRsleSoVhWtTc+5DR/2o=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     pyyaml
     requests
-  ] ++ lib.optionals (!pythonAtLeast "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
 
   SKHEP_DATA = 1; # install the actual root files
 
   doCheck = false; # tests require networking
 
-  pythonImportsCheck = [
-    "skhep_testdata"
-  ];
+  pythonImportsCheck = [ "skhep_testdata" ];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/scikit-hep-testdata";

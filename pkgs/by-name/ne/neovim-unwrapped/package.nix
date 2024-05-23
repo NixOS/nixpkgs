@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libtermkey, libiconv
-, libuv, lua, ncurses, pkg-config
-, unibilium, gperf
+{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libiconv
+, libuv, lua, pkg-config
+, unibilium
 , libvterm-neovim
 , tree-sitter
 , fetchurl
@@ -93,8 +93,6 @@ in {
       ;
 
     buildInputs = [
-      gperf
-      libtermkey
       libuv
       libvterm-neovim
       # This is actually a c library, hence it's not included in neovimLuaEnv,
@@ -103,7 +101,6 @@ in {
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
       msgpack-c
-      ncurses
       neovimLuaEnv
       tree-sitter
       unibilium

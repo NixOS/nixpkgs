@@ -1,10 +1,11 @@
-{ lib
-, pkgs
-, python3Packages
-, podman
-, oniguruma
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  pkgs,
+  python3Packages,
+  podman,
+  oniguruma,
+  fetchPypi,
+  buildPythonPackage,
 }:
 buildPythonPackage rec {
   pname = "ansible-navigator";

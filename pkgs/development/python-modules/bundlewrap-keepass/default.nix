@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, bundlewrap
-, pykeepass
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  bundlewrap,
+  pykeepass,
 }:
 
 buildPythonPackage rec {
@@ -18,14 +19,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ bundlewrap pykeepass ];
+  propagatedBuildInputs = [
+    bundlewrap
+    pykeepass
+  ];
 
   # upstream has no checks
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bwkeepass"
-  ];
+  pythonImportsCheck = [ "bwkeepass" ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/bundlewrap-keepass";

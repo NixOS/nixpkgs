@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, dill
-, astropy
-, numpy
-, pandas
-, qt6
-, pyqt6
-, pyqt-builder
-, qtconsole
-, setuptools
-, setuptools-scm
-, scipy
-, ipython
-, ipykernel
-, h5py
-, matplotlib
-, xlrd
-, mpl-scatter-density
-, pvextractor
-, openpyxl
-, echo
-, pytest
-, pytest-flakes
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  dill,
+  astropy,
+  numpy,
+  pandas,
+  qt6,
+  pyqt6,
+  pyqt-builder,
+  qtconsole,
+  setuptools,
+  setuptools-scm,
+  scipy,
+  ipython,
+  ipykernel,
+  h5py,
+  matplotlib,
+  xlrd,
+  mpl-scatter-density,
+  pvextractor,
+  openpyxl,
+  echo,
+  pytest,
+  pytest-flakes,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +43,11 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pyqt-builder ];
-  nativeBuildInputs = [ setuptools setuptools-scm qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    qt6.wrapQtAppsHook
+  ];
   propagatedBuildInputs = [
     astropy
     dill
@@ -69,7 +74,11 @@ buildPythonPackage rec {
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [ pytest pytest-flakes pytest-cov ];
+  nativeCheckInputs = [
+    pytest
+    pytest-flakes
+    pytest-cov
+  ];
 
   pythonImportsCheck = [ "glue" ];
 

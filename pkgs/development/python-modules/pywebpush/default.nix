@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, http-ece
-, mock
-, py-vapid
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, six
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  http-ece,
+  mock,
+  py-vapid,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-A8zD6XW2A3S3Y0xJVZVha+Ujvyx9oNl26E/amsjGMwE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pywebpush"
-  ];
+  pythonImportsCheck = [ "pywebpush" ];
 
   meta = with lib; {
     description = "Webpush Data encryption library for Python";

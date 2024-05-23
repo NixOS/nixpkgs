@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, dateparser
-, httmock
-, matplotlib
-, numpy
-, pandas
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  dateparser,
+  httmock,
+  matplotlib,
+  numpy,
+  pandas,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,22 +31,13 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    httmock
-  ];
+  checkInputs = [ httmock ];
 
-  disabledTestPaths = [
-    "tests/test_prometheus_connect.py"
-  ];
+  disabledTestPaths = [ "tests/test_prometheus_connect.py" ];
 
-  pythonImportsCheck = [
-    "prometheus_api_client"
-  ];
-
+  pythonImportsCheck = [ "prometheus_api_client" ];
 
   meta = with lib; {
     description = "A Python wrapper for the Prometheus HTTP API";

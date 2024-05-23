@@ -1,11 +1,12 @@
-{ lib
-, astral
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  astral,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -28,26 +29,18 @@ buildPythonPackage rec {
       --replace 'astral = {version = "^2.2", python = "^3.6"}' 'astral = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     astral
     pytz
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "hdate"
-  ];
+  pythonImportsCheck = [ "hdate" ];
 
   meta = with lib; {
     description = "Python module for Jewish/Hebrew date and Zmanim";

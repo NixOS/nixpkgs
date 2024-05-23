@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, pkgs
-, lib
-, stdenv
-, hfst
+{
+  buildPythonPackage,
+  pkgs,
+  lib,
+  stdenv,
+  hfst,
 }:
 
 buildPythonPackage rec {
@@ -12,9 +13,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/src/python";
 
-  propagatedBuildInputs = [
-    hfst
-  ];
+  propagatedBuildInputs = [ hfst ];
 
   # Fixes some improper import paths
   patches = [ ./importfix.patch ];

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pytestCheckHook
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pytestCheckHook,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -32,18 +33,14 @@ buildPythonPackage rec {
     numpy
   ];
 
-  dependencies = [
-    numpy
-  ];
+  dependencies = [ numpy ];
 
   preBuild = ''
     # Remove existing site.cfg, use the one we built for numpy
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     pushd $out
@@ -60,9 +57,7 @@ buildPythonPackage rec {
     "test_omp_num_threads_empty_string"
   ];
 
-  pythonImportsCheck = [
-    "numexpr"
-  ];
+  pythonImportsCheck = [ "numexpr" ];
 
   meta = with lib; {
     description = "Fast numerical array expression evaluator for NumPy";

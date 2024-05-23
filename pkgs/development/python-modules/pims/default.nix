@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, slicerator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  imageio,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  slicerator,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     scikit-image
   ];
 
-  pythonImportsCheck = [
-    "pims"
-  ];
+  pythonImportsCheck = [ "pims" ];
 
   pytestFlagsArray = [
     "-W"

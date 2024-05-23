@@ -1,4 +1,9 @@
-{ buildPythonPackage, lib, fetchPypi, dmenu }:
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  dmenu,
+}:
 
 buildPythonPackage rec {
   pname = "dmenu-python";

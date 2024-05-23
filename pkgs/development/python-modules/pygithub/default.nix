@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, pynacl
-, typing-extensions
-, pyjwt
-, pythonOlder
-, requests
-, setuptools
-, setuptools-scm
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  pynacl,
+  typing-extensions,
+  pyjwt,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
   # Test suite makes REST calls against github.com
   doCheck = false;
 
-  pythonImportsCheck = [
-    "github"
-  ];
+  pythonImportsCheck = [ "github" ];
 
   meta = with lib; {
     description = "Python library to access the GitHub API v3";

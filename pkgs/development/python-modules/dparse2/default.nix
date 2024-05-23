@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, toml
-, pyyaml
-, packvers
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  toml,
+  pyyaml,
+  packvers,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,18 +29,14 @@ buildPythonPackage rec {
     packvers
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Requries pipenv
     "tests/test_parse.py"
   ];
 
-  pythonImportsCheck = [
-    "dparse2"
-  ];
+  pythonImportsCheck = [ "dparse2" ];
 
   meta = with lib; {
     description = "Module to parse Python dependency files";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-1ZTILfVLBI1Z1I5GsQn2IhezEaublSCMq5bZAvmj/ik=";
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   # There are no unit tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sphinxcontrib.katex"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.katex" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 

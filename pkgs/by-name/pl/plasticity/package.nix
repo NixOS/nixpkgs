@@ -33,11 +33,11 @@
 }:
 stdenv.mkDerivation rec  {
   pname = "plasticity";
-  version = "1.4.20";
+  version = "24.1.5";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-i2n35UmRSEtkaPvJDPC2imYqgIx+qKu4bOaarYl9qQQ=";
+    hash = "sha256-1oneFWWgMYsh12knn+Atp8ttSnTdaV+5TWwp2htZsvE=";
   };
 
   passthru.updateScript = ./update.sh;

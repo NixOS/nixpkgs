@@ -1,24 +1,25 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, curio
-, fetchFromGitHub
-, flask
-, httpcore
-, httpx
-, hypercorn
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, python-socks
-, pythonOlder
-, setuptools
-, sniffio
-, starlette
-, tiny-proxy
-, trio
-, trustme
-, yarl
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  curio,
+  fetchFromGitHub,
+  flask,
+  httpcore,
+  httpx,
+  hypercorn,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  python-socks,
+  pythonOlder,
+  setuptools,
+  sniffio,
+  starlette,
+  tiny-proxy,
+  trio,
+  trustme,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-9v5DfxEtM7jq+b8wR0M1klTSnSdFjQ4aDl8ZSZWxbFA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     httpx
@@ -46,12 +45,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    asyncio = [
-      async-timeout
-    ];
-    trio = [
-      trio
-    ];
+    asyncio = [ async-timeout ];
+    trio = [ trio ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -68,9 +63,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  pythonImportsCheck = [
-    "httpx_socks"
-  ];
+  pythonImportsCheck = [ "httpx_socks" ];
 
   disabledTests = [
     # Tests don't work in the sandbox

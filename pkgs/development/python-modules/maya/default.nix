@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, dateparser
-, fetchFromGitHub
-, freezegun
-, humanize
-, pendulum
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, setuptools
-, snaptime
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  dateparser,
+  fetchFromGitHub,
+  freezegun,
+  humanize,
+  pendulum,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  snaptime,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
       --replace-fail "humanize.time.abs_timedelta" "humanize.time._abs_timedelta"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dateparser
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "maya"
-  ];
+  pythonImportsCheck = [ "maya" ];
 
   disabledTests = [
     # https://github.com/timofurrer/maya/issues/202

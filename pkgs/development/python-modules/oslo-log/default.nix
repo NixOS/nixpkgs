@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, eventlet
-, oslo-config
-, oslo-context
-, oslo-serialization
-, oslo-utils
-, oslotest
-, pbr
-, pyinotify
-, python-dateutil
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  eventlet,
+  oslo-config,
+  oslo-context,
+  oslo-serialization,
+  oslo-utils,
+  oslotest,
+  pbr,
+  pyinotify,
+  python-dateutil,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.isLinux [
-    pyinotify
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ pyinotify ];
 
   nativeCheckInputs = [
     eventlet
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     "test_log_config_append_invalid"
   ];
 
-  pythonImportsCheck = [
-    "oslo_log"
-  ];
+  pythonImportsCheck = [ "oslo_log" ];
 
   meta = with lib; {
     description = "oslo.log library";

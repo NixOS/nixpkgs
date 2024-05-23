@@ -1,7 +1,9 @@
-{ lib, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "parse";
@@ -19,13 +21,9 @@ buildPythonPackage rec {
     rm .pytest.ini
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/r1chardj0n3s/parse";

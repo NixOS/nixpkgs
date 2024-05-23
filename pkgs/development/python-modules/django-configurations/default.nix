@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, dj-email-url
-, dj-search-url
-, django
-, django-cache-url
-, fetchPypi
-, importlib-metadata
-, mock
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  dj-email-url,
+  dj-search-url,
+  django,
+  django-cache-url,
+  fetchPypi,
+  importlib-metadata,
+  mock,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -24,15 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-blCDdX4rvfm7eFBWdTa5apNRX2sXUD10ko/2KNsuDpQ=";
   };
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    django
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ django ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     mock
@@ -52,9 +47,7 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: django-configurations settings importer wasn't correctly installed
   doCheck = false;
 
-  pythonImportsCheck = [
-    "configurations"
-  ];
+  pythonImportsCheck = [ "configurations" ];
 
   meta = with lib; {
     description = "A helper for organizing Django settings";

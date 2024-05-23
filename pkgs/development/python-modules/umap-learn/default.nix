@@ -1,25 +1,26 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, datashader
-, fetchFromGitHub
-, holoviews
-, matplotlib
-, numba
-, numpy
-, pandas
-, pynndescent
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, scikit-learn
-, scipy
-, seaborn
-, tbb
-, tensorflow
-, tensorflow-probability
-, tqdm
+{
+  lib,
+  bokeh,
+  buildPythonPackage,
+  colorcet,
+  datashader,
+  fetchFromGitHub,
+  holoviews,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pynndescent,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  seaborn,
+  tbb,
+  tensorflow,
+  tensorflow-probability,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -62,16 +63,12 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [
-      tbb
-    ];
+    tbb = [ tbb ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

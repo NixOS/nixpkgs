@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cairocffi
-, cssselect2
-, defusedxml
-, fetchPypi
-, pillow
-, pytestCheckHook
-, setuptools
-, tinycss2
+{
+  lib,
+  buildPythonPackage,
+  cairocffi,
+  cssselect2,
+  defusedxml,
+  fetchPypi,
+  pillow,
+  pytestCheckHook,
+  setuptools,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ cairocffi cssselect2 defusedxml pillow tinycss2 ];
+  propagatedBuildInputs = [
+    cairocffi
+    cssselect2
+    defusedxml
+    pillow
+    tinycss2
+  ];
 
   propagatedNativeBuildInputs = [ cairocffi ];
 
@@ -39,9 +46,7 @@ buildPythonPackage rec {
       --replace "--isort" ""
   '';
 
-  pytestFlagsArray = [
-    "cairosvg/test_api.py"
-  ];
+  pytestFlagsArray = [ "cairosvg/test_api.py" ];
 
   pythonImportsCheck = [ "cairosvg" ];
 

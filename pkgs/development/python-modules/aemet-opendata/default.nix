@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, geopy
-, pythonOlder
-, requests
-, setuptools
-, urllib3
-, wheel
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopy,
+  pythonOlder,
+  requests,
+  setuptools,
+  urllib3,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aemet_opendata.interface"
-  ];
+  pythonImportsCheck = [ "aemet_opendata.interface" ];
 
   meta = with lib; {
     description = "Python client for AEMET OpenData Rest API";

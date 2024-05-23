@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, ecdsa
-, rsa
-, pyasn1
+  # dependencies
+  ecdsa,
+  rsa,
+  pyasn1,
 
-# optional-dependencies
-, cryptography
-, pycrypto
-, pycryptodome
+  # optional-dependencies
+  cryptography,
+  pycrypto,
+  pycryptodome,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,12 +36,12 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       name = "CVE-2024-33663.patch";
-      url  = "https://build.opensuse.org/public/source/openSUSE:Factory/python-python-jose/CVE-2024-33663.patch?rev=36cd8815411620042f56a3b81599b341";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-python-jose/CVE-2024-33663.patch?rev=36cd8815411620042f56a3b81599b341";
       hash = "sha256-uxOCa7Lg82zY2nuHzw6CbcymCKUodITrFU3lLY1XMFU=";
     })
     (fetchpatch {
       name = "CVE-2024-33664.patch";
-      url  = "https://build.opensuse.org/public/source/openSUSE:Factory/python-python-jose/CVE-2024-33664.patch?rev=36cd8815411620042f56a3b81599b341";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-python-jose/CVE-2024-33664.patch?rev=36cd8815411620042f56a3b81599b341";
       hash = "sha256-wx/U1T7t7TloP+dMXxGxEVB3bMC7e6epmN8RE8FKksM=";
     })
   ];
@@ -50,9 +51,7 @@ buildPythonPackage rec {
       --replace '"pytest-runner",' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     ecdsa
@@ -61,20 +60,12 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    cryptography = [
-      cryptography
-    ];
-    pycrypto = [
-      pycrypto
-    ];
-    pycryptodome = [
-      pycryptodome
-    ];
+    cryptography = [ cryptography ];
+    pycrypto = [ pycrypto ];
+    pycryptodome = [ pycryptodome ];
   };
 
-  pythonImportsCheck = [
-    "jose"
-  ];
+  pythonImportsCheck = [ "jose" ];
 
   nativeCheckInputs = [
     pytestCheckHook

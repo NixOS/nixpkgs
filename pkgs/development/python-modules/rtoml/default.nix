@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, libiconv
-, pytestCheckHook
-, pythonOlder
-, rustPlatform
-, rustc
-, setuptools-rust
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  libiconv,
+  pytestCheckHook,
+  pythonOlder,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
 }:
 
 buildPythonPackage rec {
@@ -37,17 +38,11 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs = [
-    libiconv
-  ];
+  buildInputs = [ libiconv ];
 
-  pythonImportsCheck = [
-    "rtoml"
-  ];
+  pythonImportsCheck = [ "rtoml" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     cd tests

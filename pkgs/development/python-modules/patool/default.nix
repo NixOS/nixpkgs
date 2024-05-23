@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, p7zip
-, cabextract
-, zip
-, lzip
-, zpaq
-, gnutar
-, unar  # Free alternative to unrar
-, gnugrep
-, diffutils
-, file
-, gzip
-, bzip2
-, xz
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  p7zip,
+  cabextract,
+  zip,
+  lzip,
+  zpaq,
+  gnutar,
+  unar, # Free alternative to unrar
+  gnugrep,
+  diffutils,
+  file,
+  gzip,
+  bzip2,
+  xz,
 }:
 
 let
@@ -60,9 +61,7 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_ar"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_ar" ];
 
   meta = with lib; {
     description = "portable archive file manager";

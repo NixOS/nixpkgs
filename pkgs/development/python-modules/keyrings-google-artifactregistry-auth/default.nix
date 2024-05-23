@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, keyring
-, pluggy
-, pythonOlder
-, requests
-, setuptools-scm
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  keyring,
+  pluggy,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "keyrings.gauth"
-  ];
+  pythonImportsCheck = [ "keyrings.gauth" ];
 
   # upstream has no tests
   doCheck = false;

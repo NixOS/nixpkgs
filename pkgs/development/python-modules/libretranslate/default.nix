@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, pytestCheckHook
-, hatchling
-, argostranslate
-, flask
-, flask-swagger
-, flask-swagger-ui
-, flask-limiter
-, flask-babel
-, flask-session
-, waitress
-, expiringdict
-, langdetect
-, lexilang
-, ltpycld2
-, morfessor
-, appdirs
-, apscheduler
-, translatehtml
-, argos-translate-files
-, requests
-, redis
-, prometheus-client
-, polib
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  pytestCheckHook,
+  hatchling,
+  argostranslate,
+  flask,
+  flask-swagger,
+  flask-swagger-ui,
+  flask-limiter,
+  flask-babel,
+  flask-session,
+  waitress,
+  expiringdict,
+  langdetect,
+  lexilang,
+  ltpycld2,
+  morfessor,
+  appdirs,
+  apscheduler,
+  translatehtml,
+  argos-translate-files,
+  requests,
+  redis,
+  prometheus-client,
+  polib,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -79,9 +80,7 @@ buildPythonPackage rec {
 
   doCheck = false; # needs network access
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # required for import check to work (argostranslate)
   env.HOME = "/tmp";

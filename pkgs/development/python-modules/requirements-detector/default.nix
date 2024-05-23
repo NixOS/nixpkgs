@@ -1,13 +1,14 @@
-{ lib
-, astroid
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, poetry-core
-, semver
-, pytestCheckHook
-, pythonOlder
-, toml
+{
+  lib,
+  astroid,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  poetry-core,
+  semver,
+  pytestCheckHook,
+  pythonOlder,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     astroid
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     semver
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "requirements_detector"
-  ];
+  pythonImportsCheck = [ "requirements_detector" ];
 
   meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";

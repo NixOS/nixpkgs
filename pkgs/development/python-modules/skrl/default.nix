@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, gym
-, gymnasium
-, torch
-, tensorboard
-, tqdm
-, wandb
-, packaging
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  gym,
+  gymnasium,
+  torch,
+  tensorboard,
+  tqdm,
+  wandb,
+  packaging,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

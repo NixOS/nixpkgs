@@ -17,6 +17,7 @@
 , mesa
 , systemd
 , openssl
+, libglvnd
 }:
 
 let
@@ -82,6 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}
     )
   '';
 

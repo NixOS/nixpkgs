@@ -1,59 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-# propagated build inputs
-, chardet
-, filetype
-, lxml
-, msg-parser
-, nltk
-, openpyxl
-, pandas
-, pdf2image
-, pdfminer-six
-, pillow
-, pypandoc
-, python-docx
-, python-pptx
-, python-magic
-, markdown
-, requests
-, tabulate
-, xlrd
-# optional-dependencies
-, langdetect
-, sacremoses
-, sentencepiece
-, torch
-, transformers
-, unstructured-inference
-, s3fs
-, fsspec
-, adlfs
-# , discord-py
-, pygithub
-, python-gitlab
-, praw
-, slack-sdk
-, wikipedia
-, google-api-python-client
-# , gcsfs
-, elasticsearch8
-, jq
-# , dropboxdrivefs
-, atlassian-python-api
-# test dependencies
-, pytestCheckHook
-, black
-, coverage
-, click
-, freezegun
-# , label-studio-sdk
-, mypy
-, pytest-cov
-, pytest-mock
-, vcrpy
-, grpcio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # propagated build inputs
+  chardet,
+  filetype,
+  lxml,
+  msg-parser,
+  nltk,
+  openpyxl,
+  pandas,
+  pdf2image,
+  pdfminer-six,
+  pillow,
+  pypandoc,
+  python-docx,
+  python-pptx,
+  python-magic,
+  markdown,
+  requests,
+  tabulate,
+  xlrd,
+  # optional-dependencies
+  langdetect,
+  sacremoses,
+  sentencepiece,
+  torch,
+  transformers,
+  unstructured-inference,
+  s3fs,
+  fsspec,
+  adlfs,
+  # , discord-py
+  pygithub,
+  python-gitlab,
+  praw,
+  slack-sdk,
+  wikipedia,
+  google-api-python-client,
+  # , gcsfs
+  elasticsearch8,
+  jq,
+  # , dropboxdrivefs
+  atlassian-python-api,
+  # test dependencies
+  pytestCheckHook,
+  black,
+  coverage,
+  click,
+  freezegun,
+  # , label-studio-sdk
+  mypy,
+  pytest-cov,
+  pytest-mock,
+  vcrpy,
+  grpcio,
 }:
 let
   version = "0.13.7";
@@ -66,8 +67,14 @@ let
       transformers
     ];
     local-inference = [ unstructured-inference ];
-    s3 = [ s3fs fsspec ];
-    azure = [ adlfs fsspec ];
+    s3 = [
+      s3fs
+      fsspec
+    ];
+    azure = [
+      adlfs
+      fsspec
+    ];
     discord = [ ]; # discord-py
     github = [ pygithub ];
     gitlab = [ python-gitlab ];
@@ -75,9 +82,12 @@ let
     slack = [ slack-sdk ];
     wikipedia = [ wikipedia ];
     google-drive = [ google-api-python-client ];
-    gcs = []; # gcsfs fsspec
-    elasticsearch = [ elasticsearch8 jq ];
-    dropbox = []; # dropboxdrivefs fsspec
+    gcs = [ ]; # gcsfs fsspec
+    elasticsearch = [
+      elasticsearch8
+      jq
+    ];
+    dropbox = [ ]; # dropboxdrivefs fsspec
     confluence = [ atlassian-python-api ];
   };
 in

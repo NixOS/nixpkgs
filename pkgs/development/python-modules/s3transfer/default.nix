@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,37 +23,27 @@ buildPythonPackage rec {
     hash = "sha256-EHNkYviafnuU8AADp9oyaDuAnoPOdOVNSLCcoONnHPY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    botocore
-  ];
+  propagatedBuildInputs = [ botocore ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    # Requires network access
-    "tests/integration"
-  ] ++
-  # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
-  # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
-  # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
-  lib.optionals stdenv.isDarwin [
-    "tests/unit/test_compat.py"
-  ];
+  disabledTestPaths =
+    [
+      # Requires network access
+      "tests/integration"
+    ]
+    ++
+    # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
+    # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
+    # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
+    lib.optionals stdenv.isDarwin [ "tests/unit/test_compat.py" ];
 
-  pythonImportsCheck = [
-    "s3transfer"
-  ];
+  pythonImportsCheck = [ "s3transfer" ];
 
   passthru.optional-dependencies = {
-    crt = [
-      botocore.optional-dependencies.crt
-    ];
+    crt = [ botocore.optional-dependencies.crt ];
   };
 
   meta = with lib; {

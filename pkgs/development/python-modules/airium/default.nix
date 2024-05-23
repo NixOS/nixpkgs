@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, setuptools
-, pytestCheckHook
-, beautifulsoup4
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  setuptools,
+  pytestCheckHook,
+  beautifulsoup4,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-qAU+rmj2ZHw7KdxVvRyponcPiRcyENfDyW1y9JTiwsY=";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook

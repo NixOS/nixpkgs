@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, oldest-supported-numpy
-, setuptools
-, wheel
-, scipy
-, numpy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
+  scipy,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
   preCheck = "cd $out";
   nativeCheckInputs = [ pytestCheckHook ];
   # tests/ are not included to output package, so we have to set path explicitly
-  pytestFlagsArray = [
-    "$src/tests"
-  ];
+  pytestFlagsArray = [ "$src/tests" ];
 
   pythonImportsCheck = [ "dtw" ];
 

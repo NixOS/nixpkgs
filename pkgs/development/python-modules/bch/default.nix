@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, click-log
-, paho-mqtt
-, pyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  click-log,
+  paho-mqtt,
+  pyaml,
 }:
 
 buildPythonPackage rec {

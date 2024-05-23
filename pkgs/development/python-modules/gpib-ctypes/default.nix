@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pytestCheckHook
-, linux-gpib
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pytestCheckHook,
+  linux-gpib,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-c9l6TNmM4PtbvopnnFi5R1dQ9o3MI39BHHHPSGqfjCY=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace gpib_ctypes/gpib/gpib.py \
@@ -30,9 +29,7 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  pythonImportsCheck = [
-    "gpib_ctypes.gpib"
-  ];
+  pythonImportsCheck = [ "gpib_ctypes.gpib" ];
 
   meta = with lib; {
     description = "Cross-platform Python bindings for the NI GPIB and linux-gpib C interfaces";

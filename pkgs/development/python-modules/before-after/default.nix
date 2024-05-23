@@ -1,4 +1,10 @@
-{ buildPythonPackage, fetchPypi, fetchpatch, pytestCheckHook, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pytestCheckHook,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "before-after";

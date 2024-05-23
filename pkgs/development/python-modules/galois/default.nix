@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, setuptools-scm
-, pythonOlder
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-xdist
-, numpy
-, numba
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  setuptools-scm,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-xdist,
+  numpy,
+  numba,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -41,7 +42,10 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  pythonRelaxDeps = [ "numpy" "numba" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "numba"
+  ];
 
   pythonImportsCheck = [ "galois" ];
 

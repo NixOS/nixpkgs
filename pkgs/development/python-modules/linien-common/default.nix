@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, importlib-metadata
-, numpy
-, rpyc4
-, scipy
-, appdirs
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  importlib-metadata,
+  numpy,
+  rpyc4,
+  scipy,
+  appdirs,
+  callPackage,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,9 @@ buildPythonPackage rec {
     description = "Shared components of the Linien spectroscopy lock application";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-common";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fsagbuya doronbehar ];
+    maintainers = with maintainers; [
+      fsagbuya
+      doronbehar
+    ];
   };
 }

@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, packaging
+  # dependencies
+  packaging,
 
-# optional-dependencies
-, eventlet
-, gevent
-, tornado
-, setproctitle
+  # optional-dependencies
+  eventlet,
+  gevent,
+  tornado,
+  setproctitle,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,33 +38,19 @@ buildPythonPackage rec {
       --replace "--cov=gunicorn --cov-report=xml" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
   passthru.optional-dependencies = {
-    gevent = [
-      gevent
-    ];
-    eventlet = [
-      eventlet
-    ];
-    tornado = [
-      tornado
-    ];
-    gthread = [];
-    setproctitle = [
-      setproctitle
-    ];
+    gevent = [ gevent ];
+    eventlet = [ eventlet ];
+    tornado = [ tornado ];
+    gthread = [ ];
+    setproctitle = [ setproctitle ];
   };
 
-  pythonImportsCheck = [
-    "gunicorn"
-  ];
+  pythonImportsCheck = [ "gunicorn" ];
 
   nativeCheckInputs = [
     pytestCheckHook

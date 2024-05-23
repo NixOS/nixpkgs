@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, requests
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -22,17 +23,11 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "requests_file"
-  ];
+  pythonImportsCheck = [ "requests_file" ];
 
   meta = with lib; {
     description = "Transport adapter for fetching file:// URLs with the requests python library";

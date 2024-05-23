@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, pygments, dominate, beautifulsoup4, docutils, sphinx }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
+  dominate,
+  beautifulsoup4,
+  docutils,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "alectryon";

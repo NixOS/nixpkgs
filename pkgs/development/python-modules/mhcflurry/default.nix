@@ -1,16 +1,17 @@
-{ appdirs
-, buildPythonPackage
-, fetchFromGitHub
-, keras
-, lib
-, mhcgnomes
-, nose
-, pandas
-, pytestCheckHook
-, pyyaml
-, scikit-learn
-, tensorflow
-, tqdm
+{
+  appdirs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  keras,
+  lib,
+  mhcgnomes,
+  nose,
+  pandas,
+  pytestCheckHook,
+  pyyaml,
+  scikit-learn,
+  tensorflow,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,10 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [ nose pytestCheckHook ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # RuntimeError: Missing MHCflurry downloadable file: /homeless-shelter/.local...

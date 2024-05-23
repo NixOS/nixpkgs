@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
+{
+  lib,
+  buildPythonPackage,
 
-, lang
-, version
-, format
-, src
+  lang,
+  version,
+  format,
+  src,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     cd "${pname}"
   '';
 
-  pythonImportsCheck = [
-    "gruut_lang_${lang}"
-  ];
+  pythonImportsCheck = [ "gruut_lang_${lang}" ];
 
   doCheck = false;
 

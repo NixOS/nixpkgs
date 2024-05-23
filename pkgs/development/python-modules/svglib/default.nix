@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cssselect2
-, lxml
-, pillow
-, pytestCheckHook
-, reportlab
-, tinycss2
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cssselect2,
+  lxml,
+  pillow,
+  pytestCheckHook,
+  reportlab,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     tinycss2
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Ignore tests that require network access (TestWikipediaFlags and TestW3CSVG), and tests that
@@ -42,9 +41,7 @@ buildPythonPackage rec {
     "TestOtherFiles"
   ];
 
-  pythonImportsCheck = [
-    "svglib.svglib"
-  ];
+  pythonImportsCheck = [ "svglib.svglib" ];
 
   meta = with lib; {
     description = "A pure-Python library for reading and converting SVG";

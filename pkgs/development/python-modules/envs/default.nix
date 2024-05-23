@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, jinja2
-, mock
-, pynose
-, poetry-core
-, pythonOlder
-, terminaltables
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  jinja2,
+  mock,
+  pynose,
+  poetry-core,
+  pythonOlder,
+  terminaltables,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-nYQ1xphdHN1oKZ4ExY4r24rmz2ayWWqAeeb5qT8qA5g=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     click
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "envs"
-  ];
+  pythonImportsCheck = [ "envs" ];
 
   meta = with lib; {
     description = "Easy access to environment variables from Python";

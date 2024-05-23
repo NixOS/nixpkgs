@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, aenum
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, flatdict
-, pycryptodome
-, pycryptodomex
-, pydash
-, pyfakefs
-, pytest-asyncio
-, pytest-mock
-, pytest-recording
-, pytestCheckHook
-, python-jose
-, pythonOlder
-, pyyaml
-, xmltodict
-, yarl
+{
+  lib,
+  stdenv,
+  aenum,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  flatdict,
+  pycryptodome,
+  pycryptodomex,
+  pydash,
+  pyfakefs,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-recording,
+  pytestCheckHook,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  xmltodict,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -53,9 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"

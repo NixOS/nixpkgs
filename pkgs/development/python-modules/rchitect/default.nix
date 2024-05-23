@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cffi
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, R
-, rPackages
-, six
-, packaging
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cffi,
+  pytestCheckHook,
+  pytest-mock,
+  pythonOlder,
+  R,
+  rPackages,
+  six,
+  packaging,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     cffi
     six
     packaging
-  ] ++ (with rPackages; [
-    reticulate
-  ]);
+  ] ++ (with rPackages; [ reticulate ]);
 
   nativeCheckInputs = [
     pytestCheckHook

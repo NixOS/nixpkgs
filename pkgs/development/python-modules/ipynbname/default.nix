@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, ipykernel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ipykernel,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-HTxpze6Kl4FPRWpyBOnMGVtLu0ueRcvnV3lrFiST9gY=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    ipykernel
-  ];
+  dependencies = [ ipykernel ];
 
   pythonImportsCheck = [ "ipynbname" ];
 

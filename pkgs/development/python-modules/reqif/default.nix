@@ -1,15 +1,16 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, jinja2
-, lxml
-, pytestCheckHook
-, python
-, pythonOlder
-, pythonRelaxDepsHook
-, xmlschema
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
@@ -44,13 +45,9 @@ buildPythonPackage rec {
     xmlschema
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "reqif"
-  ];
+  pythonImportsCheck = [ "reqif" ];
 
   meta = with lib; {
     description = "Python library for ReqIF format";

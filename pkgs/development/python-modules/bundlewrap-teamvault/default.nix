@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, bundlewrap
-, passlib
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  bundlewrap,
+  passlib,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,21 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ bundlewrap passlib requests ];
+  propagatedBuildInputs = [
+    bundlewrap
+    passlib
+    requests
+  ];
 
   # upstream has no checks
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bwtv"
-  ];
+  pythonImportsCheck = [ "bwtv" ];
 
   meta = with lib; {
     homepage = "https://github.com/trehn/bundlewrap-teamvault";
     description = "Pull secrets from TeamVault into your BundleWrap repo";
-    license = [ licenses.gpl3 ] ;
+    license = [ licenses.gpl3 ];
     maintainers = with maintainers; [ hexchen ];
   };
 }

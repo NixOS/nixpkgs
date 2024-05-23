@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, inkscape
-, fetchFromGitLab
-, poetry-core
-, cssselect
-, lxml
-, numpy
-, packaging
-, pillow
-, pygobject3
-, pyparsing
-, pyserial
-, scour
-, gobject-introspection
-, pytestCheckHook
-, gtk3
+{
+  lib,
+  buildPythonPackage,
+  inkscape,
+  fetchFromGitLab,
+  poetry-core,
+  cssselect,
+  lxml,
+  numpy,
+  packaging,
+  pillow,
+  pygobject3,
+  pyparsing,
+  pyserial,
+  scour,
+  gobject-introspection,
+  pytestCheckHook,
+  gtk3,
 }:
 
 buildPythonPackage {
@@ -25,9 +26,7 @@ buildPythonPackage {
 
   inherit (inkscape) src;
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     cssselect

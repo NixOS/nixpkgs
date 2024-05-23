@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autoconf
-, cython_0
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  autoconf,
+  cython_0,
+  setuptools,
 }:
 
 buildPythonPackage rec {

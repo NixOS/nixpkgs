@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliff
-, fixtures
-, future
-, pbr
-, setuptools
-, subunit
-, testtools
-, tomlkit
-, voluptuous
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  fixtures,
+  future,
+  pbr,
+  setuptools,
+  subunit,
+  testtools,
+  tomlkit,
+  voluptuous,
+  callPackage,
 }:
 
 buildPythonPackage rec {

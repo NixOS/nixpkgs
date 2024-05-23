@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, fetchpatch
-, networkx
-, numpy
-, scipy
-, six
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  networkx,
+  numpy,
+  scipy,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-DmrKLVQrPQDzTMxqEImnvRr3Wb2R3+hxtDVCN9XUcFM=";
   };
 
-  patches = [ (fetchpatch {
-    name = "ase-is-optional";
-    url = "https://github.com/leeping/geomeTRIC/commit/aff6e4411980ac9cbe112a050c3a34ba7e305a43.patch";
-    hash = "sha256-JGGPX+JwkQ8Imgmyx+ReRTV+k6mxHYgm+Nd8WUjbFEg=";
-  }) ];
+  patches = [
+    (fetchpatch {
+      name = "ase-is-optional";
+      url = "https://github.com/leeping/geomeTRIC/commit/aff6e4411980ac9cbe112a050c3a34ba7e305a43.patch";
+      hash = "sha256-JGGPX+JwkQ8Imgmyx+ReRTV+k6mxHYgm+Nd8WUjbFEg=";
+    })
+  ];
 
   propagatedBuildInputs = [
     networkx
@@ -48,4 +51,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.markuskowa ];
   };
 }
-

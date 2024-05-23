@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ply
-, roman
-, uqbar
-, pythonOlder
-, pytestCheckHook
-, lilypond
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ply,
+  roman,
+  uqbar,
+  pythonOlder,
+  pytestCheckHook,
+  lilypond,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     uqbar
   ];
 
-  buildInputs = [
-    lilypond
-  ];
+  buildInputs = [ lilypond ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace abjad/io.py \

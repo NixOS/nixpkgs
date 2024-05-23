@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, filelock
-, lxml
-, pycryptodomex
-, pythonOlder
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  filelock,
+  lxml,
+  pycryptodomex,
+  pythonOlder,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
   # Tests require a running Docker instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "blobfile"
-  ];
+  pythonImportsCheck = [ "blobfile" ];
 
   meta = with lib; {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";

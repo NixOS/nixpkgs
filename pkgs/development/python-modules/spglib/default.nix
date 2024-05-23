@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, scikit-build-core
-, cmake
-, pathspec
-, ninja
-, pyproject-metadata
-, setuptools-scm
+  # build-system
+  scikit-build-core,
+  cmake,
+  pathspec,
+  ninja,
+  pyproject-metadata,
+  setuptools-scm,
 
-# dependencies
-, numpy
+  # dependencies
+  numpy,
 
-# tests
-, pytestCheckHook
-, pyyaml
+  # tests
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -39,18 +40,14 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "spglib"
-  ];
+  pythonImportsCheck = [ "spglib" ];
 
   meta = with lib; {
     description = "Python bindings for C library for finding and handling crystal symmetries";

@@ -84,14 +84,16 @@ buildPythonPackage rec {
     "TestStoreSCUCLI"
   ];
 
-  disabledTestPaths = [
-    # Ignore apps tests
-    "pynetdicom/apps/tests/"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/pydicom/pynetdicom/issues/924
-    "pynetdicom/tests/test_assoc.py"
-    "pynetdicom/tests/test_transport.py"
-  ];
+  disabledTestPaths =
+    [
+      # Ignore apps tests
+      "pynetdicom/apps/tests/"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/pydicom/pynetdicom/issues/924
+      "pynetdicom/tests/test_assoc.py"
+      "pynetdicom/tests/test_transport.py"
+    ];
 
   pythonImportsCheck = [ "pynetdicom" ];
 

@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, bleak
-, buildPythonPackage
-, ecpy
-, fetchPypi
-, future
-, hidapi
-, nfcpy
-, pillow
-, protobuf
-, pycrypto
-, pycryptodomex
-, pyelftools
-, python-gnupg
-, python-u2flib-host
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, setuptools-scm
-, websocket-client
+{
+  lib,
+  stdenv,
+  bleak,
+  buildPythonPackage,
+  ecpy,
+  fetchPypi,
+  future,
+  hidapi,
+  nfcpy,
+  pillow,
+  protobuf,
+  pycrypto,
+  pycryptodomex,
+  pyelftools,
+  python-gnupg,
+  python-u2flib-host,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  setuptools-scm,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
+  pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = [
     ecpy
@@ -56,17 +55,12 @@ buildPythonPackage rec {
     python-gnupg
     python-u2flib-host
     websocket-client
-  ]
-  ++ lib.optionals stdenv.isLinux [
-    bleak
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ bleak ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ledgerblue"
-  ];
+  pythonImportsCheck = [ "ledgerblue" ];
 
   meta = with lib; {
     description = "Python library to communicate with Ledger Blue/Nano S";

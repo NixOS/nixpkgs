@@ -3,7 +3,6 @@
   generateSplicesForMkScope,
   makeScopeWithSplicing',
   fetchurl,
-  fetchFromGitLab,
   libsForQt5,
   qt6Packages,
   cmark,
@@ -65,6 +64,7 @@
       kdiagram = self.callPackage ./misc/kdiagram {};
       kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client {};
       kirigami-addons = self.callPackage ./misc/kirigami-addons {};
+      kio-extras-kf5 = self.callPackage ./misc/kio-extras-kf5 {};
       kio-fuse = self.callPackage ./misc/kio-fuse {};
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};

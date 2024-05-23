@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
   # build_requires
-, cython
+  cython,
   # install_requires
-, certifi
-, importlib-metadata
-, urllib3
-, pytz
-, zstandard
-, lz4
+  certifi,
+  importlib-metadata,
+  urllib3,
+  pytz,
+  zstandard,
+  lz4,
   # extras_require
-, sqlalchemy
-, numpy
-, pandas
-, pyarrow
-, orjson
+  sqlalchemy,
+  numpy,
+  pandas,
+  pyarrow,
+  orjson,
   # not in tests_require, but should be
-, pytest-dotenv
+  pytest-dotenv,
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
@@ -49,9 +50,10 @@ buildPythonPackage rec {
     lz4
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-dotenv ]
-    ++ passthru.optional-dependencies.sqlalchemy
-    ++ passthru.optional-dependencies.numpy;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-dotenv
+  ] ++ passthru.optional-dependencies.sqlalchemy ++ passthru.optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [

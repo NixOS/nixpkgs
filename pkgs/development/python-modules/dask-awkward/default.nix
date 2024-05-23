@@ -1,21 +1,22 @@
-{ lib
-, awkward
-, buildPythonPackage
-, cachetools
-, dask
-, dask-histogram
-, distributed
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, hist
-, pandas
-, pyarrow
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typing-extensions
-, uproot
+{
+  lib,
+  awkward,
+  buildPythonPackage,
+  cachetools,
+  dask,
+  dask-histogram,
+  distributed,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  hist,
+  pandas,
+  pyarrow,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  typing-extensions,
+  uproot,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-Lkbp/XrDHOekMpT71pbxtuozgzU9iiGF2GJZ+tuV/yM=";
   };
 
-  pythonRelaxDeps = [
-    "awkward"
-  ];
+  pythonRelaxDeps = [ "awkward" ];
 
   nativeBuildInputs = [
     hatch-vcs
@@ -50,9 +49,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    io = [
-      pyarrow
-    ];
+    io = [ pyarrow ];
   };
 
   checkInputs = [
@@ -64,9 +61,7 @@ buildPythonPackage rec {
     uproot
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "dask_awkward"
-  ];
+  pythonImportsCheck = [ "dask_awkward" ];
 
   disabledTests = [
     # Tests require network access

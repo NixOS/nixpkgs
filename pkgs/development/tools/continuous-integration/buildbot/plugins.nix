@@ -8,7 +8,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-xOsz71kprzKKqvvwpsZTACWf4z+Svx9BQ72xGEZXKdw=";
+      hash = "sha256-EL5iZ257VXnL+29Jr6r3PVeURX1AcugfZ4RLTjClsXo=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -35,7 +35,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-wUiMEAFmqjHXPjnPhsaLWqxvOXyEQIeRBL4W3LB3vkw=";
+      hash = "sha256-5QLw5nXnU+z11E5Tgvu9bbbpCTRpV2zXndukcZPRjtE=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -62,7 +62,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-KerHS5F4b30TvlGeSf6QLUt49S6Iki7O5nex6KPypJY=";
+      hash = "sha256-tzqifo9A/KJF9dLpO7jblVaDjx7++v0wLz1Olc79JxI=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -84,7 +84,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-XrywoVM2ErJ4i7WrRKPRaCOwt5JVDJT6xP7L/Dfv+gk=";
+      hash = "sha256-fzaqYmaO+vWnQpUvOsPCny3W27atcIHsgeGV6dKEJeg=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -106,7 +106,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-mhVbuOhe0BrXHbn8bd41Q7I8Xak7fO8ahIK0r113vGY=";
+      hash = "sha256-BLIs91k8/A4LYMTDgct7TOWFoLU4qK47Javr8qRzkZQ=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -128,7 +128,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-X89XrjdD0GL7MabLWtkQcdCa4Ain1AGre6mXF/inmck=";
+      hash = "sha256-dX+tp+WidfLy612+41jz+do/iXQTaIQPcetG8td3jp4=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -150,7 +150,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-YH5SfYuW07Pp00LoBvcDB8MiHB1HzYWg5kQVICrkS5s=";
+      hash = "sha256-2kLGdvmf2mnF21gkDCf6h+bhnsxveaNNh95qczRY824=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -172,7 +172,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-rmyAsFCTeIYPdrlWDCxlbjw+BCKwcIaTHlK8KJP0T88=";
+      hash = "sha256-rIAbk9+6Wi1PCjizHp9p6jpCwaBgBT5Ch1Sa4VKDoww=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -194,7 +194,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-Ls3NJka5vVTx1GW9bnr3jlulj7/pNkX9omXrTIWrwtU=";
+      hash = "sha256-D9mjEKFrh+ytNbpuN/06XbiBnKjFLopXfjDg28j7niw=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -216,7 +216,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-t3LLZJ+kPcowqSyeRcuH3kEjBEiju1MI0z1qhU6KPBs=";
+      hash = "sha256-q3In0IMAIBUjxSzv4LlH9EJukLYJ3WzoEYkFBZB96W8=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -238,7 +238,7 @@
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-//MftUqUWE2+RpxRPzDEH7tOCN2D1HD8dETZw1OQe5s=";
+      hash = "sha256-TK4KYn3CWxymTsKWeqHr2i5rdO9ZDHvJrb9RqfKNJV4=";
     };
 
     buildInputs = [ buildbot-pkg ];

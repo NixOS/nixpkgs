@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, flask
-, isPy27
-, nixosTests
-, prometheus-client
-, py-air-control
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  flask,
+  isPy27,
+  nixosTests,
+  prometheus-client,
+  py-air-control,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,13 @@ buildPythonPackage rec {
     py-air-control
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "py_air_control_exporter" ];
 
-  passthru.tests = { inherit (nixosTests.prometheus-exporters) py-air-control; };
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) py-air-control;
+  };
 
   meta = with lib; {
     description = "Exports Air Quality Metrics to Prometheus";

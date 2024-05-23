@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, grequests
-, hawkauthlib
-, mock
-, pybrowserid
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  grequests,
+  hawkauthlib,
+  mock,
+  pybrowserid,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-DMFZl1hbYNaScOTWkAbK2nKti6wD5SS5A30q7TW5vO4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cryptography
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fxa"
-  ];
+  pythonImportsCheck = [ "fxa" ];
 
   disabledTestPaths = [
     # Requires network access

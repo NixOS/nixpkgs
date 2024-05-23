@@ -9,7 +9,7 @@
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, lib, stdenv, fetchurl, fetchpatch, cmake
+, lib, stdenv, fetchurl, cmake
 
 , clhep
 , expat

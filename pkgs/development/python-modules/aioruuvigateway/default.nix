@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, bluetooth-data-tools
-, httpx
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  bluetooth-data-tools,
+  httpx,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-Etv+kPFYEK79hpDeNmDfuyNj1vJ6udry1u+TRO5gLV4=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     bluetooth-data-tools
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioruuvigateway"
-  ];
+  pythonImportsCheck = [ "aioruuvigateway" ];
 
   meta = with lib; {
     description = "An asyncio-native library for requesting data from a Ruuvi Gateway";

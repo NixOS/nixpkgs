@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, scikit-learn
-, matplotlib
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  scikit-learn,
+  matplotlib,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {

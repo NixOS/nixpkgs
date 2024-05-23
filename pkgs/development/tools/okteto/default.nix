@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.26.1";
+  version = "2.27.1";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-bWyerkXmAto0c/LYybUSRctajmL1R0PldfpKsh8crfA=";
+    hash = "sha256-CpU29+dVC/OHZdVtbQKSUwoBHsUUb2ZmBNtU1YSa/UA=";
   };
 
-  vendorHash = "sha256-cYiyKNpsMfjqLL+6Q/s3nHRcj2y0DHuOu+S5GndLHxk=";
+  vendorHash = "sha256-RpkKWz/cJ1StbpVydqpSfA6uwIYgKa1YOCJVXZRer6k=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -20,6 +20,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = [ "integration" "samples" ];
 
   ldflags = [
     "-s"
@@ -30,7 +32,7 @@ buildGoModule rec {
   tags = [ "osusergo" "netgo" "static_build" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export HOME="$(mktemp -d)"
   '';
 
   checkFlags = [
@@ -46,7 +48,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = okteto;
-    command = "HOME=$(mktemp -d) okteto version";
+    command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 
   meta = with lib; {

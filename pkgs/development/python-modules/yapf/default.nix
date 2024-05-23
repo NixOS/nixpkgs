@@ -1,17 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-
-# build-system
-, setuptools
-
-# dependencies
-, importlib-metadata
-, platformdirs
-, tomli
-
-# tests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  importlib-metadata,
+  platformdirs,
+  tomli,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,27 +15,22 @@ buildPythonPackage rec {
   version = "0.40.2";
   pyproject = true;
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TauKXtcTTibVfBZHx0g6+z8TaHi1eQYreGyboWuUY3s=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     platformdirs
     tomli
   ];
 
-  # nose is unavailable on pypy
-  #doCheck = !isPyPy;
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG.md";
@@ -67,6 +58,9 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.asl20;
     mainProgram = "yapf";
-    maintainers = with lib.maintainers; [ AndersonTorres siddharthist ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      siddharthist
+    ];
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cliche
-, marshmallow
-, pytestCheckHook
-, recline
-, requests
-, requests-toolbelt
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliche,
+  marshmallow,
+  pytestCheckHook,
+  recline,
+  requests,
+  requests-toolbelt,
+  urllib3,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, numpy
-, libsamplerate
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  numpy,
+  libsamplerate,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage {
@@ -17,20 +18,16 @@ buildPythonPackage {
     hash = "sha256-7x03Q6VXfP9p8HCk15IDZ9HeqTyi5F1AlGX/otdh8VU=";
   };
 
-  buildInputs =  [
-    libsamplerate
-  ];
+  buildInputs = [ libsamplerate ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   preConfigure = ''
-     cat > site.cfg << END
-     [samplerate]
-     library_dirs=${libsamplerate.out}/lib
-     include_dirs=${lib.getDev libsamplerate}/include
-     END
+    cat > site.cfg << END
+    [samplerate]
+    library_dirs=${libsamplerate.out}/lib
+    include_dirs=${lib.getDev libsamplerate}/include
+    END
   '';
 
   doCheck = false;
@@ -40,5 +37,4 @@ buildPythonPackage {
     description = "High quality sampling rate convertion from audio data in numpy arrays";
     license = licenses.gpl2;
   };
-
 }

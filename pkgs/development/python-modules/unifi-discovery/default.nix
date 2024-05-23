@@ -1,34 +1,38 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyroute2
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyroute2,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "unifi-discovery";
   version = "1.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "unifi-discovery";
     rev = "refs/tags/v${version}";
     hash = "sha256-gE/2awyhDACrc0nuTvTPOcK2lFbPIZAXDPRnVJtWFco=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     pyroute2
   ];
@@ -39,23 +43,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "unifi_discovery"
-  ];
+  pythonImportsCheck = [ "unifi_discovery" ];
 
   meta = with lib; {
     description = "Module to discover Unifi devices";
     homepage = "https://github.com/bdraco/unifi-discovery";
+    changelog = "https://github.com/bdraco/unifi-discovery/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    platforms = platforms.linux;
   };
 }

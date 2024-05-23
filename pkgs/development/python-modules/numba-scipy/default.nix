@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, scipy
-, numba
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  scipy,
+  numba,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     "numba"
   ];
 
-  pythonImportsCheck = [
-    "numba_scipy"
-  ];
+  pythonImportsCheck = [ "numba_scipy" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

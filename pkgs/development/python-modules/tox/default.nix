@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, pluggy
-, py
-, six
-, virtualenv
-, setuptools-scm
-, toml
-, tomli
-, filelock
-, hatchling
-, hatch-vcs
-, platformdirs
-, pyproject-api
-, colorama
-, chardet
-, cachetools
-, testers
-, tox
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  packaging,
+  pluggy,
+  py,
+  six,
+  virtualenv,
+  setuptools-scm,
+  toml,
+  tomli,
+  filelock,
+  hatchling,
+  hatch-vcs,
+  platformdirs,
+  pyproject-api,
+  colorama,
+  chardet,
+  cachetools,
+  testers,
+  tox,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     six
     toml
     virtualenv
-  ]  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   doCheck = false; # infinite recursion via devpi-client
 

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -13,21 +14,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkarabela";
     repo = pname;
-    rev =  version;
+    rev = version;
     hash = "sha256-0bW9aB6ERRQK3psqeU0Siyi/8drEGisAp8UtTfOKlp0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pysubs2"
-  ];
+  pythonImportsCheck = [ "pysubs2" ];
 
   meta = with lib; {
     homepage = "https://github.com/tkarabela/pysubs2";

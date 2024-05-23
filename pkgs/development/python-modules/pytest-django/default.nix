@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, setuptools
-, setuptools-scm
-, django-configurations
-, pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  setuptools,
+  setuptools-scm,
+  django-configurations,
+  pytest,
+  pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   nativeCheckInputs = [
     django-configurations

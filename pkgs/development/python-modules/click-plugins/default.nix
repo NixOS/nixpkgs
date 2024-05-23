@@ -1,5 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi,
-  click, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -12,13 +16,9 @@ buildPythonPackage rec {
     sha256 = "46ab999744a9d831159c3411bb0c79346d94a444df9a3a3742e9ed63645f264b";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "An extension module for click to enable registering CLI commands";

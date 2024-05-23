@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pandocfilters
-, psutil
-, setuptools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pandocfilters,
+  psutil,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,18 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-beiGvN0DS6s8wFjcDKozDuwAM2OApX3lTRaUDRUqLeU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pandocfilters
     psutil
   ];
 
-  pythonImportsCheck = [
-    "pandocxnos"
-  ];
+  pythonImportsCheck = [ "pandocxnos" ];
 
   # tests need some patching
   doCheck = false;

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, flit-core
-, certifi
-, cryptography
-, python-dateutil
-, typing-extensions
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  flit-core,
+  certifi,
+  cryptography,
+  python-dateutil,
+  typing-extensions,
+  urllib3,
 }:
 
 let

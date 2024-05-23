@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, termcolor
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  termcolor,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-cYTCJyHZ9yNg6BfpZ+g3P0yMWFhYUxgYtlbANNgfohQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    termcolor
-  ];
+  propagatedBuildInputs = [ termcolor ];
 
   nativeCheckInputs = [
     pytest-xdist
@@ -40,9 +37,7 @@ buildPythonPackage rec {
     export FORCE_COLOR=1
   '';
 
-  pythonImportsCheck = [
-    "yaspin"
-  ];
+  pythonImportsCheck = [ "yaspin" ];
 
   meta = with lib; {
     description = "Yet Another Terminal Spinner";

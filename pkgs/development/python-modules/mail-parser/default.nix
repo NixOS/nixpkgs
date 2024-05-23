@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, python, glibcLocales, fetchFromGitHub, six, simplejson }:
+{
+  lib,
+  buildPythonPackage,
+  python,
+  glibcLocales,
+  fetchFromGitHub,
+  six,
+  simplejson,
+}:
 
 buildPythonPackage rec {
   pname = "mail-parser";
@@ -15,7 +23,10 @@ buildPythonPackage rec {
   LC_ALL = "en_US.utf-8";
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [ simplejson six ];
+  propagatedBuildInputs = [
+    simplejson
+    six
+  ];
 
   # Taken from .travis.yml
   checkPhase = ''

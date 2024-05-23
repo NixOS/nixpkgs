@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # All tests require an API key
   doCheck = false;
 
-  pythonImportsCheck = [
-    "meraki"
-  ];
+  pythonImportsCheck = [ "meraki" ];
 
   meta = with lib; {
     description = "Provides all current Meraki dashboard API calls to interface with the Cisco Meraki cloud-managed platform";

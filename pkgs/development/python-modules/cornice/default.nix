@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pyramid
-, pytestCheckHook
-, pytest-cache
-, webtest
-, marshmallow
-, colander
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pyramid,
+  pytestCheckHook,
+  pytest-cache,
+  webtest,
+  marshmallow,
+  colander,
 }:
 
 buildPythonPackage rec {

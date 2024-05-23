@@ -1,23 +1,24 @@
-{ lib
-, blas
-, buildPythonPackage
-, callPackage
-, setuptools
-, importlib-metadata
-, fetchFromGitHub
-, jaxlib
-, jaxlib-bin
-, hypothesis
-, lapack
-, matplotlib
-, ml-dtypes
-, numpy
-, opt-einsum
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
-, scipy
-, stdenv
+{
+  lib,
+  blas,
+  buildPythonPackage,
+  callPackage,
+  setuptools,
+  importlib-metadata,
+  fetchFromGitHub,
+  jaxlib,
+  jaxlib-bin,
+  hypothesis,
+  lapack,
+  matplotlib,
+  ml-dtypes,
+  numpy,
+  opt-einsum,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
+  scipy,
+  stdenv,
 }:
 
 let
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
@@ -89,44 +88,47 @@ buildPythonPackage rec {
     export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # Exceeds tolerance when the machine is busy
-    "test_custom_linear_solve_aux"
-    # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
-    #  requested in astype is not available, and will be truncated to
-    # dtype float32. (With numpy 1.24)
-    "testKde3"
-    "testKde5"
-    "testKde6"
-    # Invokes python manually in a subprocess, which does not have the correct dependencies
-    # ImportError: This version of jax requires jaxlib version >= 0.4.19.
-    "test_no_log_spam"
-  ] ++ lib.optionals usingMKL [
-    # See
-    #  * https://github.com/google/jax/issues/9705
-    #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
-    #  * https://github.com/NixOS/nixpkgs/issues/161960
-    "test_custom_linear_solve_cholesky"
-    "test_custom_root_with_aux"
-    "testEigvalsGrad_shape"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # See https://github.com/google/jax/issues/14793.
-    "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
-    "testQdwhWithRandomMatrix3"
-    "testScanGrad_jit_scan"
+  disabledTests =
+    [
+      # Exceeds tolerance when the machine is busy
+      "test_custom_linear_solve_aux"
+      # UserWarning: Explicitly requested dtype <class 'numpy.float64'>
+      #  requested in astype is not available, and will be truncated to
+      # dtype float32. (With numpy 1.24)
+      "testKde3"
+      "testKde5"
+      "testKde6"
+      # Invokes python manually in a subprocess, which does not have the correct dependencies
+      # ImportError: This version of jax requires jaxlib version >= 0.4.19.
+      "test_no_log_spam"
+    ]
+    ++ lib.optionals usingMKL [
+      # See
+      #  * https://github.com/google/jax/issues/9705
+      #  * https://discourse.nixos.org/t/getting-different-results-for-the-same-build-on-two-equally-configured-machines/17921
+      #  * https://github.com/NixOS/nixpkgs/issues/161960
+      "test_custom_linear_solve_cholesky"
+      "test_custom_root_with_aux"
+      "testEigvalsGrad_shape"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # See https://github.com/google/jax/issues/14793.
+      "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
+      "testQdwhWithRandomMatrix3"
+      "testScanGrad_jit_scan"
 
-    # See https://github.com/google/jax/issues/17867.
-    "test_array"
-    "test_async"
-    "test_copy0"
-    "test_device_put"
-    "test_make_array_from_callback"
-    "test_make_array_from_single_device_arrays"
+      # See https://github.com/google/jax/issues/17867.
+      "test_array"
+      "test_async"
+      "test_copy0"
+      "test_device_put"
+      "test_make_array_from_callback"
+      "test_make_array_from_single_device_arrays"
 
-    # Fails on some hardware due to some numerical error
-    # See https://github.com/google/jax/issues/18535
-    "testQdwhWithOnRankDeficientInput5"
-  ];
+      # Fails on some hardware due to some numerical error
+      # See https://github.com/google/jax/issues/18535
+      "testQdwhWithOnRankDeficientInput5"
+    ];
 
   disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # RuntimeWarning: invalid value encountered in cast

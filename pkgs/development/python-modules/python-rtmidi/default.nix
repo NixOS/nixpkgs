@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, alabaster
-, alsa-lib
-, buildPythonPackage
-, CoreAudio
-, CoreMIDI
-, CoreServices
-, Foundation
-, cython
-, fetchPypi
-, flake8
-, libjack2
-, meson-python
-, ninja
-, pkg-config
-, pythonOlder
-, tox
-, wheel
+{
+  lib,
+  stdenv,
+  alabaster,
+  alsa-lib,
+  buildPythonPackage,
+  CoreAudio,
+  CoreMIDI,
+  CoreServices,
+  Foundation,
+  cython,
+  fetchPypi,
+  flake8,
+  libjack2,
+  meson-python,
+  ninja,
+  pkg-config,
+  pythonOlder,
+  tox,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -40,16 +41,18 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-  ] ++ lib.optionals stdenv.isLinux [
-    libjack2
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreAudio
-    CoreMIDI
-    CoreServices
-    Foundation
-  ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals stdenv.isLinux [
+      libjack2
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreAudio
+      CoreMIDI
+      CoreServices
+      Foundation
+    ];
 
   nativeCheckInputs = [
     tox
@@ -57,9 +60,7 @@ buildPythonPackage rec {
     alabaster
   ];
 
-  pythonImportsCheck = [
-    "rtmidi"
-  ];
+  pythonImportsCheck = [ "rtmidi" ];
 
   meta = with lib; {
     description = "A Python binding for the RtMidi C++ library implemented using Cython";

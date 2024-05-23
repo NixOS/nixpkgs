@@ -1,10 +1,11 @@
-{ lib
-, aenum
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, requests
-, simplejson
+{
+  lib,
+  aenum,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  simplejson,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "wallbox"
-  ];
+  pythonImportsCheck = [ "wallbox" ];
 
   meta = with lib; {
     description = "Module for interacting with Wallbox EV charger api";

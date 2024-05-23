@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   patches = [
     # pngsuite is imported by code/test_png.py but is not defined in
@@ -32,7 +31,10 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  pythonImportsCheck = [ "png" "pngsuite" ];
+  pythonImportsCheck = [
+    "png"
+    "pngsuite"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

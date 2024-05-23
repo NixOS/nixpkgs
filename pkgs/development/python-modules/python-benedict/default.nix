@@ -1,26 +1,27 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, ftfy
-, mailchecker
-, openpyxl
-, orjson
-, phonenumbers
-, beautifulsoup4
-, pytestCheckHook
-, python-dateutil
-, python-decouple
-, python-fsutil
-, python-slugify
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, setuptools
-, toml
-, xlrd
-, xmltodict
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ftfy,
+  mailchecker,
+  openpyxl,
+  orjson,
+  phonenumbers,
+  beautifulsoup4,
+  pytestCheckHook,
+  python-dateutil,
+  python-decouple,
+  python-fsutil,
+  python-slugify,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  setuptools,
+  toml,
+  xlrd,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-1/eLJFXACn1W5Yz43BIhdqqUVk3t9285d8aLwH+VmAE=";
   };
 
-  pythonRelaxDeps = [
-    "boto3"
-  ];
+  pythonRelaxDeps = [ "boto3" ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -84,22 +83,14 @@ buildPythonPackage rec {
       phonenumbers
       python-dateutil
     ];
-    s3 = [
-      boto3
-    ];
-    toml = [
-      toml
-    ];
+    s3 = [ boto3 ];
+    toml = [ toml ];
     xls = [
       openpyxl
       xlrd
     ];
-    xml = [
-      xmltodict
-    ];
-    yaml = [
-      pyyaml
-    ];
+    xml = [ xmltodict ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -123,9 +114,7 @@ buildPythonPackage rec {
     "test_from_yaml_with_valid_url_valid_content"
   ];
 
-  pythonImportsCheck = [
-    "benedict"
-  ];
+  pythonImportsCheck = [ "benedict" ];
 
   meta = with lib; {
     description = "Module with keylist/keypath support";

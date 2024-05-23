@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # Test file handling fails
   doCheck = true;
 
-  pythonImportsCheck = [
-    "dissect.jffs"
-  ];
+  pythonImportsCheck = [ "dissect.jffs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the JFFS2 file system";

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, build
-, docutils
-, flit-core
-, packaging
-, pygments
-, requests
-, trove-classifiers
+  # dependencies
+  build,
+  docutils,
+  flit-core,
+  packaging,
+  pygments,
+  requests,
+  trove-classifiers,
 
-# test
-, pytestCheckHook
+  # test
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     trove-classifiers
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tries to reach pypi

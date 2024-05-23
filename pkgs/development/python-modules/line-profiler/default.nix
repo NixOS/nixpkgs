@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, isPyPy
-, ipython
-, scikit-build
-, cmake
-, pythonOlder
-, pytestCheckHook
-, ubelt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  isPyPy,
+  ipython,
+  scikit-build,
+  cmake,
+  pythonOlder,
+  pytestCheckHook,
+  ubelt,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  pythonImportsCheck = [
-    "line_profiler"
-  ];
+  pythonImportsCheck = [ "line_profiler" ];
 
   meta = with lib; {
     description = "Line-by-line profiler";

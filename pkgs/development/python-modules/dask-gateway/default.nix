@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, dask
-, distributed
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  dask,
+  distributed,
+  setuptools,
 }:
 
 buildPythonPackage rec {

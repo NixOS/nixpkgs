@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, cookiecutter
-, datasets
-, dill
-, fsspec
-, huggingface-hub
-, importlib-metadata
-, multiprocess
-, numpy
-, packaging
-, pandas
-, pyarrow
-, requests
-, responses
-, tqdm
-, xxhash
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  cookiecutter,
+  datasets,
+  dill,
+  fsspec,
+  huggingface-hub,
+  importlib-metadata,
+  multiprocess,
+  numpy,
+  packaging,
+  pandas,
+  pyarrow,
+  requests,
+  responses,
+  tqdm,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -52,16 +53,12 @@ buildPythonPackage rec {
     packaging
     pyarrow
     responses
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # most tests require internet access.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "evaluate"
-  ];
+  pythonImportsCheck = [ "evaluate" ];
 
   meta = with lib; {
     homepage = "https://huggingface.co/docs/evaluate/index";

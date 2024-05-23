@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, aiohttp
-, codecov
-, flake8
-, pytest
-, pytest-asyncio
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  aiohttp,
+  codecov,
+  flake8,
+  pytest,
+  pytest-asyncio,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {

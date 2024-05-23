@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mercantile
-, pytestCheckHook
-, requests
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mercantile,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     "test_free_providers"
   ];
 
-  pythonImportsCheck = [
-    "xyzservices.providers"
-  ];
+  pythonImportsCheck = [ "xyzservices.providers" ];
 
   nativeCheckInputs = [
     mercantile

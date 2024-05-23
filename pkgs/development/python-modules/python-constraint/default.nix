@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
   # Check inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

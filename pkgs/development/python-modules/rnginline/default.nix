@@ -1,15 +1,16 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, poetry-core
-, pythonRelaxDepsHook
-, lxml
-, docopt-ng
-, typing-extensions
-, importlib-metadata
-, importlib-resources
-, pytestCheckHook
-, mock
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  poetry-core,
+  pythonRelaxDepsHook,
+  lxml,
+  docopt-ng,
+  typing-extensions,
+  importlib-metadata,
+  importlib-resources,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     "lxml"
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     docopt-ng

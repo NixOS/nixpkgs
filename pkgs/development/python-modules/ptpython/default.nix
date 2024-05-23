@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, appdirs
-, importlib-metadata
-, jedi
-, prompt-toolkit
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  appdirs,
+  importlib-metadata,
+  jedi,
+  prompt-toolkit,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
     jedi
     prompt-toolkit
     pygments
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # no tests to run
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ptpython"
-  ];
+  pythonImportsCheck = [ "ptpython" ];
 
   meta = with lib; {
     description = "An advanced Python REPL";

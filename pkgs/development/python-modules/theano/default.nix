@@ -1,19 +1,22 @@
-{ lib, stdenv
-, runCommandCC
-, fetchPypi
-, buildPythonPackage
-, isPyPy
-, pythonOlder
-, isPy3k
-, nose
-, numpy
-, scipy
-, setuptools
-, six
-, libgpuarray
-, config
-, cudaSupport ? config.cudaSupport, cudaPackages ? { }
-, cudnnSupport ? cudaSupport
+{
+  lib,
+  stdenv,
+  runCommandCC,
+  fetchPypi,
+  buildPythonPackage,
+  isPyPy,
+  pythonOlder,
+  isPy3k,
+  nose,
+  numpy,
+  scipy,
+  setuptools,
+  six,
+  libgpuarray,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  cudnnSupport ? cudaSupport,
 }:
 
 let
@@ -23,7 +26,8 @@ in
 assert cudnnSupport -> cudaSupport;
 
 let
-  wrapped = command: buildTop: buildInputs:
+  wrapped =
+    command: buildTop: buildInputs:
     runCommandCC "${command}-wrapped" { inherit buildInputs; } ''
       type -P '${command}' || { echo '${command}: not found'; exit 1; }
       cat > "$out" <<EOF
@@ -37,18 +41,21 @@ let
 
   # Theano spews warnings and disabled flags if the compiler isn't named g++
   cxx_compiler_name =
-    if stdenv.cc.isGNU then "g++" else
-    if stdenv.cc.isClang then "clang++" else
-    throw "Unknown C++ compiler";
-  cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
-    (    lib.optional cudaSupport libgpuarray_
-      ++ lib.optional cudnnSupport cudnn );
+    if stdenv.cc.isGNU then
+      "g++"
+    else if stdenv.cc.isClang then
+      "clang++"
+    else
+      throw "Unknown C++ compiler";
+  cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano" (
+    lib.optional cudaSupport libgpuarray_ ++ lib.optional cudnnSupport cudnn
+  );
 
   # We need to be careful with overriding Python packages within the package set
   # as this can lead to collisions!
   libgpuarray_ = libgpuarray.override { inherit cudaSupport cudaPackages; };
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "theano";
   version = "1.0.5";
   format = "setuptools";
@@ -60,17 +67,20 @@ in buildPythonPackage rec {
     sha256 = "129f43ww2a6badfdr6b88kzjzz2b0wk0dwkvwb55z6dsagfkk53f";
   };
 
-  postPatch = ''
-    substituteInPlace theano/configdefaults.py \
-      --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${cxx_compiler}'\''', is_valid=warn_cxx)' \
-      --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
-  '' + lib.optionalString cudaSupport ''
-    substituteInPlace theano/configdefaults.py \
-      --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
-  '' + lib.optionalString cudnnSupport ''
-    substituteInPlace theano/configdefaults.py \
-      --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
-  '';
+  postPatch =
+    ''
+      substituteInPlace theano/configdefaults.py \
+        --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${cxx_compiler}'\''', is_valid=warn_cxx)' \
+        --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
+    ''
+    + lib.optionalString cudaSupport ''
+      substituteInPlace theano/configdefaults.py \
+        --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
+    ''
+    + lib.optionalString cudnnSupport ''
+      substituteInPlace theano/configdefaults.py \
+        --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
+    '';
 
   # needs to be postFixup so it runs before pythonImportsCheck even when
   # doCheck = false (meaning preCheck would be disabled)

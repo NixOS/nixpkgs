@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, pythonOlder
-, ebooklib
-, lxml
-, pillow
-, pypdf
-, python-slugify
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonRelaxDepsHook,
+  pythonOlder,
+  ebooklib,
+  lxml,
+  pillow,
+  pypdf,
+  python-slugify,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pypdf"
-  ];
+  pythonRelaxDeps = [ "pypdf" ];
 
   propagatedBuildInputs = [
     ebooklib

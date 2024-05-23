@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, cryptography
-, pycryptodome
+  # dependencies
+  cryptography,
+  pycryptodome,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,28 +26,17 @@ buildPythonPackage rec {
     hash = "sha256-+NFCveMPzE0hSs2Qe20/MDHApXVtU3cR/GPFKPqfVV4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    cryptography
-  ];
+  dependencies = [ cryptography ];
 
   optional-dependencies = {
-    drafts = [
-      pycryptodome
-    ];
+    drafts = [ pycryptodome ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "joserfc"
-  ];
+  pythonImportsCheck = [ "joserfc" ];
 
   meta = with lib; {
     description = "Implementations of JOSE RFCs in Python";

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "ukpostcodeparser";
@@ -14,9 +18,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "UK Postcode parser";
-    homepage    = "https://github.com/hamstah/ukpostcodeparser";
-    license     = licenses.publicDomain;
+    homepage = "https://github.com/hamstah/ukpostcodeparser";
+    license = licenses.publicDomain;
     maintainers = with maintainers; [ siddharthist ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

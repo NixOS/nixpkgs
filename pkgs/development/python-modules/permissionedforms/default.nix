@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, django
-, django-modelcluster
-, fetchFromGitHub
-, lib
-, python
+{
+  buildPythonPackage,
+  django,
+  django-modelcluster,
+  fetchFromGitHub,
+  lib,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     sha256 = "sha256-DQzPGmh5UEVpGWnW3IrEVPkZZ8mdiW9J851Ej4agTDc=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   checkInputs = [ django-modelcluster ];
 

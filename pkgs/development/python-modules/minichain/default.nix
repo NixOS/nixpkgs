@@ -1,14 +1,15 @@
-{ buildPythonPackage
-, eliot
-, fetchPypi
-, google-search-results
-, jinja2
-, lib
-, manifest-ml
-, openai
-, pytestCheckHook
-, pythonAtLeast
-, pythonRelaxDepsHook
+{
+  buildPythonPackage,
+  eliot,
+  fetchPypi,
+  google-search-results,
+  jinja2,
+  lib,
+  manifest-ml,
+  openai,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {

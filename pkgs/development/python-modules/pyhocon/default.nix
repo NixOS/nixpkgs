@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pyparsing
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pyparsing,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace "pyparsing~=2.0" "pyparsing>=2.0"
   '';
 
-  pythonImportsCheck = [
-    "pyhocon"
-  ];
+  pythonImportsCheck = [ "pyhocon" ];
 
   disabledTestPaths = [
     # pyparsing.exceptions.ParseException: Expected end of text, found '='

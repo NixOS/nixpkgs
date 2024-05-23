@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, fetchPypi
-, future
-, networkx
-, numpy
-, py4j
-, pymongo
-, pyspark
-, scipy
-, six
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  fetchPypi,
+  future,
+  networkx,
+  numpy,
+  py4j,
+  pymongo,
+  pyspark,
+  scipy,
+  six,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
   # tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hyperopt"
-  ];
+  pythonImportsCheck = [ "hyperopt" ];
 
   meta = with lib; {
     description = "Distributed Asynchronous Hyperparameter Optimization";

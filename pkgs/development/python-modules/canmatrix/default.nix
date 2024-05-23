@@ -1,19 +1,20 @@
-{ lib
-, attrs
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, future
-, importlib-metadata
-, ldfparser
-, lxml
-, openpyxl
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, six
-, xlrd
-, xlwt
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  future,
+  importlib-metadata,
+  ldfparser,
+  lxml,
+  openpyxl,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  six,
+  xlrd,
+  xlwt,
 }:
 
 buildPythonPackage rec {
@@ -40,36 +41,20 @@ buildPythonPackage rec {
     click
     future
     six
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
-    arxml = [
-      lxml
-    ];
-    fibex = [
-      lxml
-    ];
-    kcd = [
-      lxml
-    ];
-    ldf = [
-      ldfparser
-    ];
-    odx = [
-      lxml
-    ];
+    arxml = [ lxml ];
+    fibex = [ lxml ];
+    kcd = [ lxml ];
+    ldf = [ ldfparser ];
+    odx = [ lxml ];
     xls = [
       xlrd
       xlwt
     ];
-    xlsx = [
-      openpyxl
-    ];
-    yaml = [
-      pyyaml
-    ];
+    xlsx = [ openpyxl ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
@@ -81,13 +66,9 @@ buildPythonPackage rec {
     "-s src/canmatrix"
   ];
 
-  disabledTests = [
-    "long_envvar_name_imports"
-  ];
+  disabledTests = [ "long_envvar_name_imports" ];
 
-  pythonImportsCheck = [
-    "canmatrix"
-  ];
+  pythonImportsCheck = [ "canmatrix" ];
 
   meta = with lib; {
     description = "Support and convert several CAN (Controller Area Network) database formats";

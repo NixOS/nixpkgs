@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sphinx
-, mscgen
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
+  mscgen,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # There are no unit tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sphinxcontrib.mscgen"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.mscgen" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 

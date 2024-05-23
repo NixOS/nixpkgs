@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  zlib,
 }:
 
 buildPythonPackage rec {
@@ -21,22 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-wJC5eXIC9PNlbCtmq671WuoIJVkh3aX7K6WArJWjyFg=";
   };
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   nativeCheckInputs = [
     numpy
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyBigWig"
-  ];
+  pythonImportsCheck = [ "pyBigWig" ];
 
-  pytestFlagsArray = [
-    "pyBigWigTest/test*.py"
-  ];
+  pytestFlagsArray = [ "pyBigWigTest/test*.py" ];
 
   disabledTests = [
     # Test file is donwloaded from GitHub

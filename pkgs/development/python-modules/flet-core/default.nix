@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, flet-client-flutter
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, typing-extensions
-, repath
+  # propagates
+  typing-extensions,
+  repath,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/sdk/python/packages/flet-core";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     repath
@@ -33,6 +32,9 @@ buildPythonPackage rec {
     description = "The library is the foundation of Flet framework and is not intended to be used directly";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ heyimnova lucasew ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
   };
 }

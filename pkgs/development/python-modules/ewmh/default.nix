@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, xlib }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  xlib,
+}:
 
 buildPythonPackage rec {
   pname = "ewmh";

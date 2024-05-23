@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, numpy
-, scipy
-, pyamg
-, future
-, matplotlib
-, tkinter
-, mpi4py
-, scikit-fmm
-, gmsh
-, python
-, stdenv
-, openssh
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  pyamg,
+  future,
+  matplotlib,
+  tkinter,
+  mpi4py,
+  scikit-fmm,
+  gmsh,
+  python,
+  stdenv,
+  openssh,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -40,22 +41,16 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    gmsh
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [
-    gmsh
-  ];
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
     ${python.interpreter} setup.py test --modules
   '';
 
-  pythonImportsCheck = [
-    "fipy"
-  ];
+  pythonImportsCheck = [ "fipy" ];
 
   meta = with lib; {
     homepage = "https://www.ctcms.nist.gov/fipy/";

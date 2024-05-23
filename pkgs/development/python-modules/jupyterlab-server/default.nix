@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, babel
-, importlib-metadata
-, jinja2
-, json5
-, jsonschema
-, jupyter-server
-, packaging
-, requests
-, openapi-core
-, pytest-jupyter
-, pytestCheckHook
-, requests-mock
-, ruamel-yaml
-, strict-rfc3339
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatchling,
+  babel,
+  importlib-metadata,
+  jinja2,
+  json5,
+  jsonschema,
+  jupyter-server,
+  packaging,
+  requests,
+  openapi-core,
+  pytest-jupyter,
+  pytestCheckHook,
+  requests-mock,
+  ruamel-yaml,
+  strict-rfc3339,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     sed -i "/timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     babel
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
     openapi = [
@@ -71,7 +68,8 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

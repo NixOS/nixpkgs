@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, setuptools
-, networkx
-, jinja2
-, ipython
-, jsonpickle
-, pytestCheckHook
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPythonPackage,
+  setuptools,
+  networkx,
+  jinja2,
+  ipython,
+  jsonpickle,
+  pytestCheckHook,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-eo9Mk2c0hrBarCrzwmkXha3Qt4Bl1qR7Lhl9EkUx96E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   dependencies = [
     jinja2

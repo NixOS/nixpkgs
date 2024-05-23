@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, darwin
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  darwin,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,17 +38,11 @@ buildPythonPackage rec {
     make -C tests/objc
   '';
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  checkInputs = [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  checkInputs = [ darwin.apple_sdk.frameworks.Foundation ];
 
-  pythonImportsCheck = [
-    "rubicon.objc"
-  ];
+  pythonImportsCheck = [ "rubicon.objc" ];
 
   __darwinAllowLocalNetworking = true;
 

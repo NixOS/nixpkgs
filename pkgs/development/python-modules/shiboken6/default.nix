@@ -1,10 +1,11 @@
-{ lib
-, fetchurl
-, llvmPackages
-, python
-, cmake
-, autoPatchelfHook
-, stdenv
+{
+  lib,
+  fetchurl,
+  llvmPackages,
+  python,
+  cmake,
+  autoPatchelfHook,
+  stdenv,
 }:
 
 let
@@ -22,16 +23,12 @@ stdenv'.mkDerivation rec {
 
   sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
 
-  patches = [
-    ./fix-include-qt-headers.patch
-  ];
+  patches = [ ./fix-include-qt-headers.patch ];
 
   nativeBuildInputs = [
     cmake
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     llvmPackages.llvm
@@ -42,9 +39,7 @@ stdenv'.mkDerivation rec {
     python.pkgs.setuptools
   ];
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   # We intentionally use single quotes around `${BASH}` since it expands from a CMake
   # variable available in this file.
@@ -56,13 +51,16 @@ stdenv'.mkDerivation rec {
   # we need to remove the build tree reference from the RPATH and then add the correct
   # directory to the RPATH. On Linux, the second part is handled by autoPatchelfHook.
   # https://bugreports.qt.io/browse/PYSIDE-2233
-  preFixup = ''
-    echo "fixing RPATH of Shiboken.abi3.so"
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change {@rpath,$out/lib}/libshiboken6.abi3.6.6.dylib $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so
-  '' + lib.optionalString stdenv.isLinux ''
-    patchelf $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir}
-  '';
+  preFixup =
+    ''
+      echo "fixing RPATH of Shiboken.abi3.so"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change {@rpath,$out/lib}/libshiboken6.abi3.6.6.dylib $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      patchelf $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir}
+    '';
 
   postInstall = ''
     cd ../../..
@@ -74,9 +72,16 @@ stdenv'.mkDerivation rec {
 
   meta = with lib; {
     description = "Generator for the pyside6 Qt bindings";
-    license = with licenses; [ lgpl3Only gpl2Only gpl3Only ];
+    license = with licenses; [
+      lgpl3Only
+      gpl2Only
+      gpl3Only
+    ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ gebner Enzime ];
+    maintainers = with maintainers; [
+      gebner
+      Enzime
+    ];
     platforms = platforms.all;
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
-, click
-, click-default-group
-, python-dateutil
-, sqlite-fts4
-, tabulate
-, pluggy
-, pytestCheckHook
-, hypothesis
-, testers
-, sqlite-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  pythonOlder,
+  click,
+  click-default-group,
+  python-dateutil,
+  sqlite-fts4,
+  tabulate,
+  pluggy,
+  pytestCheckHook,
+  hypothesis,
+  testers,
+  sqlite-utils,
 }:
 
 buildPythonPackage rec {
@@ -46,13 +47,9 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  pythonImportsCheck = [
-    "sqlite_utils"
-  ];
+  pythonImportsCheck = [ "sqlite_utils" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = sqlite-utils;
-  };
+  passthru.tests.version = testers.testVersion { package = sqlite-utils; };
 
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
@@ -60,6 +57,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/simonw/sqlite-utils";
     changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ meatcar techknowlogick ];
+    maintainers = with maintainers; [
+      meatcar
+      techknowlogick
+    ];
   };
 }

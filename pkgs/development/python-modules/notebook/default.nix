@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, jupyter-server
-, jupyterlab
-, jupyterlab-server
-, notebook-shim
-, tornado
-, pytest-jupyter
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyter-server,
+  jupyterlab,
+  jupyterlab-server,
+  notebook-shim,
+  tornado,
+  pytest-jupyter,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -51,7 +52,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   env = {

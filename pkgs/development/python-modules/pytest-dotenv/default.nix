@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, python-dotenv }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  python-dotenv,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-dotenv";

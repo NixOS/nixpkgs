@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, hatch-jupyter-builder
-, hatchling
-, importlib-metadata
-, ipywidgets
-, psygnal
-, typing-extensions
-, watchfiles
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  hatch-jupyter-builder,
+  hatchling,
+  importlib-metadata,
+  ipywidgets,
+  psygnal,
+  typing-extensions,
+  watchfiles,
 }:
 
 buildPythonPackage rec {

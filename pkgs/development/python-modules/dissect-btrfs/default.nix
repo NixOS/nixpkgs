@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, google-crc32c
-, python-lzo
-, pythonOlder
-, setuptools
-, setuptools-scm
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  google-crc32c,
+  python-lzo,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -40,17 +41,13 @@ buildPythonPackage rec {
       python-lzo
       zstandard
     ];
-    gcrc32 = [
-      google-crc32c
-    ];
+    gcrc32 = [ google-crc32c ];
   };
 
   # Issue with the test file handling
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dissect.btrfs"
-  ];
+  pythonImportsCheck = [ "dissect.btrfs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the BTRFS file system";

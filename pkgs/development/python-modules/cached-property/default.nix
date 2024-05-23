@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, freezegun
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  freezegun,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     "test_threads_ttl_expiry"
   ];
 
-  pythonImportsCheck = [
-    "cached_property"
-  ];
+  pythonImportsCheck = [ "cached_property" ];
 
   meta = with lib; {
     description = "A decorator for caching properties in classes";

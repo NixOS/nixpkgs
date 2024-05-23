@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# optional-dependencies
-, furo
-, myst-parser
-, sphinx-autobuild
-, sphinxHook
+  # optional-dependencies
+  furo,
+  myst-parser,
+  sphinx-autobuild,
+  sphinxHook,
 
-# tests
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
       --replace " --cov=aiohappyeyeballs --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ] ++ passthru.optional-dependencies.docs;
+  nativeBuildInputs = [ poetry-core ] ++ passthru.optional-dependencies.docs;
 
   passthru.optional-dependencies = {
     docs = [
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiohappyeyeballs"
-  ];
+  pythonImportsCheck = [ "aiohappyeyeballs" ];
 
   disabledTestPaths = [
     # https://github.com/bdraco/aiohappyeyeballs/issues/30
@@ -73,6 +70,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/bdraco/aiohappyeyeballs";
     changelog = "https://github.com/bdraco/aiohappyeyeballs/blob/v${version}/CHANGELOG.md";
     license = licenses.psfl;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

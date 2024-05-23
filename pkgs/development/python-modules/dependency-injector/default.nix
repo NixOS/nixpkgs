@@ -1,19 +1,20 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fastapi
-, fetchFromGitHub
-, flask
-, httpx
-, mypy-boto3-s3
-, numpy
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, scipy
-, six
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  httpx,
+  mypy-boto3-s3,
+  numpy,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  scipy,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -30,41 +31,31 @@ buildPythonPackage rec {
     hash = "sha256-U3U/L8UuYrfpm4KwVNmViTbam7QdZd2vp1p+ENtOJlw=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    pydantic = [
-      pydantic
-    ];
-    flask = [
-      flask
-    ];
-    yaml = [
-      pyyaml
-    ];
+    aiohttp = [ aiohttp ];
+    pydantic = [ pydantic ];
+    flask = [ flask ];
+    yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs = [
-    fastapi
-    httpx
-    mypy-boto3-s3
-    numpy
-    pytest-asyncio
-    pytestCheckHook
-    scipy
-  ] ++ passthru.optional-dependencies.aiohttp
-  ++ passthru.optional-dependencies.pydantic
-  ++ passthru.optional-dependencies.yaml
-  ++ passthru.optional-dependencies.flask;
+  nativeCheckInputs =
+    [
+      fastapi
+      httpx
+      mypy-boto3-s3
+      numpy
+      pytest-asyncio
+      pytestCheckHook
+      scipy
+    ]
+    ++ passthru.optional-dependencies.aiohttp
+    ++ passthru.optional-dependencies.pydantic
+    ++ passthru.optional-dependencies.yaml
+    ++ passthru.optional-dependencies.flask;
 
-  pythonImportsCheck = [
-    "dependency_injector"
-  ];
+  pythonImportsCheck = [ "dependency_injector" ];
 
   disabledTestPaths = [
     # Exclude tests for EOL Python releases

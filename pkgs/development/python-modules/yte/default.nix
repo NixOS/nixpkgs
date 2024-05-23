@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, dpath
-, fetchFromGitHub
-, plac
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  dpath,
+  fetchFromGitHub,
+  plac,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-Rm3EKxRZCdYErkyWK9+fF2W7C+v5/MXD/LkehmB6UNQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     dpath
@@ -33,17 +32,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "yte"
-  ];
+  pythonImportsCheck = [ "yte" ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
   preCheck = ''
     # The CLI test need yte on the PATH

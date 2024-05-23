@@ -1,15 +1,16 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, mock
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wrapt
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  mock,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-QwT8+M4qo/qYsaz/ejvzzQUowynAxDe1Xg9Fa79iNH4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
@@ -52,9 +51,7 @@ buildPythonPackage rec {
     "test_happy_version"
   ];
 
-  pythonImportsCheck = [
-    "aws_encryption_sdk"
-  ];
+  pythonImportsCheck = [ "aws_encryption_sdk" ];
 
   meta = with lib; {
     description = "Python implementation of the AWS Encryption SDK";

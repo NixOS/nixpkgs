@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
 
-, cython_0
-, geos_3_11
-, numpy
-, oldest-supported-numpy
-, setuptools
-, wheel
+  cython_0,
+  geos_3_11,
+  numpy,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,9 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+      libc = lib.optionalString (
+        !stdenv.isDarwin
+      ) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
   ];
 
@@ -51,17 +54,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    geos_3_11
-  ];
+  buildInputs = [ geos_3_11 ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -r shapely # prevent import of local shapely

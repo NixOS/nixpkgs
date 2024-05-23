@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , nixosTests
+, stdenv
 , testers
 , telegraf
 }:
@@ -30,10 +31,11 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    inherit (nixosTests) telegraf;
     version = testers.testVersion {
       package = telegraf;
     };
+  } // lib.optionalAttrs stdenv.isLinux {
+    inherit (nixosTests) telegraf;
   };
 
   meta = with lib; {

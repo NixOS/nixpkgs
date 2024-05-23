@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, jsonschema
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  jsonschema,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,29 +24,26 @@ buildPythonPackage rec {
     hash = "sha256-Ek+rmgvG6DbtxljAEHVac/JzNI1MaLpPu4G8nhaxzg8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [
     pytestCheckHook
     jsonschema
   ];
 
-  pythonImportsCheck = [
-    "archspec"
-  ];
+  pythonImportsCheck = [ "archspec" ];
 
   meta = with lib; {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
     mainProgram = "archspec";
     homepage = "https://archspec.readthedocs.io/";
     changelog = "https://github.com/archspec/archspec/releases/tag/v${version}";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ atila ];
   };
 }

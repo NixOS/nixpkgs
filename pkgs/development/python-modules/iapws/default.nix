@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, scipy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  scipy,
+}:
 
 buildPythonPackage rec {
   pname = "iapws";

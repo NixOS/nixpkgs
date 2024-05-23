@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pillow
-, pillow-jpls
-, pydicom
-, pylibjpeg
-, pylibjpeg-libjpeg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  numpy,
+  pillow,
+  pillow-jpls,
+  pydicom,
+  pylibjpeg,
+  pylibjpeg-libjpeg,
 }:
 
 let
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.libjpeg;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/

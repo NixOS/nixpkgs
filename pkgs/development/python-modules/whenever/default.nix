@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, poetry-core
-, backports-zoneinfo
-, tzdata
-, pytestCheckHook
-, pytest-mypy-plugins
-, hypothesis
-, freezegun
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  poetry-core,
+  backports-zoneinfo,
+  tzdata,
+  pytestCheckHook,
+  pytest-mypy-plugins,
+  hypothesis,
+  freezegun,
 }:
 
 buildPythonPackage rec {
@@ -31,15 +32,9 @@ buildPythonPackage rec {
       --replace-fail '--benchmark-disable' '#--benchmark-disable'
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  dependencies = [ tzdata ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -48,9 +43,7 @@ buildPythonPackage rec {
     freezegun
   ];
 
-  pythonImportsCheck = [
-    "whenever"
-  ];
+  pythonImportsCheck = [ "whenever" ];
 
   # early TDD, many tests are failing
   # TODO: try enabling on bump

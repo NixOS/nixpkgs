@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, xlib
-, six
-, xvfb-run
-, setuptools
-, gobject-introspection
-, pygobject3
-, gtk3
-, libayatana-appindicator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  xlib,
+  six,
+  xvfb-run,
+  setuptools,
+  gobject-introspection,
+  pygobject3,
+  gtk3,
+  libayatana-appindicator,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     libayatana-appindicator
   ];
 
-  nativeCheckInputs = [
-    xvfb-run
-  ];
+  nativeCheckInputs = [ xvfb-run ];
 
   checkPhase = ''
     rm tests/icon_tests.py # test needs user input
@@ -56,7 +55,10 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/moses-palmer/pystray";
     description = "This library allows you to create a system tray icon";
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ jojosch ];
   };

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, redis
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  redis,
+  requests,
+  six,
+  urllib3,
 }:
 
 buildPythonPackage rec {

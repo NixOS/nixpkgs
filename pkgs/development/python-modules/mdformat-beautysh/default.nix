@@ -1,13 +1,14 @@
-{ lib
-, beautysh
-, buildPythonPackage
-, fetchFromGitHub
-, mdformat
-, mdformat-gfm
-, mdit-py-plugins
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  beautysh,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mdformat,
+  mdformat-gfm,
+  mdit-py-plugins,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-mH9PN6QsPmnIzh/0vxa+5mYLzANUHRruXC0ql4h8myw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     beautysh
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     mdit-py-plugins
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mdformat_beautysh"
-  ];
+  pythonImportsCheck = [ "mdformat_beautysh" ];
 
   meta = with lib; {
     description = "Mdformat plugin to beautify Bash scripts";

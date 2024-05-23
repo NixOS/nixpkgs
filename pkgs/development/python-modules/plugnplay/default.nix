@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 buildPythonPackage rec {
   pname = "plugnplay";
@@ -15,9 +16,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "plugnplay"
-  ];
+  pythonImportsCheck = [ "plugnplay" ];
 
   meta = with lib; {
     description = "A Generic plug-in system for python applications";

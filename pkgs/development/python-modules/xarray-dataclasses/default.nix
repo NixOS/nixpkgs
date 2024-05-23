@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, pytestCheckHook
-, pythonRelaxDepsHook
-, numpy
-, typing-extensions
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  numpy,
+  typing-extensions,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "xarray"
-  ];
+  pythonRelaxDeps = [ "xarray" ];
 
   propagatedBuildInputs = [
     numpy

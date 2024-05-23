@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, dunamai
-, fetchFromGitHub
-, jinja2
-, poetry-core
-, poetry
-, pytestCheckHook
-, pythonOlder
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  dunamai,
+  fetchFromGitHub,
+  jinja2,
+  poetry-core,
+  poetry,
+  pytestCheckHook,
+  pythonOlder,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-qkRnlLLzbYf7C2VjPDjYfllej8an4WftNahPLz/Wkxw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     dunamai
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  pythonImportsCheck = [
-    "poetry_dynamic_versioning"
-  ];
+  pythonImportsCheck = [ "poetry_dynamic_versioning" ];
 
   setupHook = ./setup-hook.sh;
 

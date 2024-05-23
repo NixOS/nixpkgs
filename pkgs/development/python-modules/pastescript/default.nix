@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, python
-, pytestCheckHook
-, six
-, paste
-, pastedeploy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  python,
+  pytestCheckHook,
+  six,
+  paste,
+  pastedeploy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonNamespaces = [
-    "paste"
-  ];
+  pythonNamespaces = [ "paste" ];
 
-  disabledTestPaths = [
-    "appsetup/testfiles"
-  ];
+  disabledTestPaths = [ "appsetup/testfiles" ];
 
   pythonImportsCheck = [
     "paste.script"

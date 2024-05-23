@@ -1,28 +1,29 @@
-{ lib
-, aiomysql
-, aiopg
-, aiosqlite
-, asyncpg
-, buildPythonPackage
-, cryptography
-, databases
-, fastapi
-, fetchFromGitHub
-, httpx
-, importlib-metadata
-, mysqlclient
-, nest-asyncio
-, orjson
-, poetry-core
-, psycopg2
-, pydantic
-, pymysql
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, sqlalchemy
-, typing-extensions
+{
+  lib,
+  aiomysql,
+  aiopg,
+  aiosqlite,
+  asyncpg,
+  buildPythonPackage,
+  cryptography,
+  databases,
+  fastapi,
+  fetchFromGitHub,
+  httpx,
+  importlib-metadata,
+  mysqlclient,
+  nest-asyncio,
+  orjson,
+  poetry-core,
+  psycopg2,
+  pydantic,
+  pymysql,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -50,39 +51,27 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    databases
-    psycopg2
-    pydantic
-    sqlalchemy
-    psycopg2
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
-  ];
+  propagatedBuildInputs =
+    [
+      databases
+      psycopg2
+      pydantic
+      sqlalchemy
+      psycopg2
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+      importlib-metadata
+    ];
 
   passthru.optional-dependencies = {
-    postgresql = [
-      asyncpg
-    ];
-    postgres = [
-      asyncpg
-    ];
-    aiopg = [
-      aiopg
-    ];
-    mysql = [
-      aiomysql
-    ];
-    sqlite = [
-      aiosqlite
-    ];
-    orjson = [
-      orjson
-    ];
-    crypto = [
-      cryptography
-    ];
+    postgresql = [ asyncpg ];
+    postgres = [ asyncpg ];
+    aiopg = [ aiopg ];
+    mysql = [ aiomysql ];
+    sqlite = [ aiosqlite ];
+    orjson = [ orjson ];
+    crypto = [ cryptography ];
     all = [
       aiomysql
       aiopg
@@ -95,9 +84,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     fastapi
@@ -106,9 +93,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ] ++ passthru.optional-dependencies.all;
 
-  disabledTestPaths = [
-    "benchmarks/test_benchmark_*.py"
-  ];
+  disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 
   disabledTests = [
     # TypeError: Object of type bytes is not JSON serializable
@@ -154,9 +139,7 @@ buildPythonPackage rec {
     "test_quering_of_related_model_works_but_no_result"
   ];
 
-  pythonImportsCheck = [
-    "ormar"
-  ];
+  pythonImportsCheck = [ "ormar" ];
 
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";

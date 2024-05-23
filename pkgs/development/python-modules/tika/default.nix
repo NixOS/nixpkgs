@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-VmcOuBKUTrJe1z8bOwdapB56E1t0skCCLyi4GeWzc9o=";
   };
 
-  propagatedBuildInputs = [ pyyaml requests ];
+  propagatedBuildInputs = [
+    pyyaml
+    requests
+  ];
 
   # Requires network
   doCheck = false;

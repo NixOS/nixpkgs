@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -15,18 +16,14 @@ buildPythonPackage rec {
     hash = "sha256-eCR7bUX0OlLvNcJbVYFFnoURciVAikEoo9r4v5ZIrGk=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace ",<6.0" ""
     substituteInPlace setup.cfg --replace ",<6.0" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Broken tests. Seem to be fixed upstream according to Travis.
   doCheck = false;
@@ -36,5 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ionelmc/python-lazy-object-proxy";
     license = with licenses; [ bsd2 ];
   };
-
 }

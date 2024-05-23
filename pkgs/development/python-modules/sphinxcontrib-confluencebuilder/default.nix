@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, docutils
-, sphinx
-, requests
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  docutils,
+  sphinx,
+  requests,
+  jinja2,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-FwjjlMTIhAD/v4Ig+uqrJJybdPqpPG+7OMuJwSqWo84=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     docutils
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Tests are disabled due to a circular dependency on Sphinx
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sphinxcontrib.confluencebuilder"
-  ];
+  pythonImportsCheck = [ "sphinxcontrib.confluencebuilder" ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, ccache
-, fetchFromGitHub
-, isPyPy
-, ordered-set
-, python3
-, setuptools
-, zstandard
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  ccache,
+  fetchFromGitHub,
+  isPyPy,
+  ordered-set,
+  python3,
+  setuptools,
+  zstandard,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,11 @@ buildPythonPackage rec {
   # default lto off for darwin
   patches = [ ./darwin-lto.patch ];
 
-  build-system = [ setuptools wheel ];
-  nativeCheckInputs = [ ccache  ];
+  build-system = [
+    setuptools
+    wheel
+  ];
+  nativeCheckInputs = [ ccache ];
 
   dependencies = [
     ordered-set
@@ -51,5 +55,4 @@ buildPythonPackage rec {
     license = licenses.asl20;
     homepage = "https://nuitka.net/";
   };
-
 }

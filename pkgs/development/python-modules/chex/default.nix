@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, absl-py
-, cloudpickle
-, dm-tree
-, jax
-, jaxlib
-, numpy
-, pytestCheckHook
-, toolz
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  absl-py,
+  cloudpickle,
+  dm-tree,
+  jax,
+  jaxlib,
+  numpy,
+  pytestCheckHook,
+  toolz,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-Z5Ns4fG5pC99I4xdGjDMKX6YZpTtd1y0TWcIOtr7dug=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     absl-py
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "chex"
-  ];
+  pythonImportsCheck = [ "chex" ];
 
   nativeCheckInputs = [
     cloudpickle

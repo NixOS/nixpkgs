@@ -1,5 +1,4 @@
 {
-  callPackage,
   stdenvNoCC,
   lib,
   php,
@@ -23,8 +22,7 @@ let
 
     let
       phpDrv = finalAttrs.php or php;
-      composer = finalAttrs.composer or phpDrv.packages.composer;
-      composer-local-repo-plugin = callPackage ../../pkgs/composer-local-repo-plugin.nix { };
+      composer = finalAttrs.composer or phpDrv.packages.composer-local-repo-plugin;
     in
     assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
     assert (
@@ -58,7 +56,6 @@ let
 
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
-        composer-local-repo-plugin
         phpDrv
         phpDrv.composerHooks.composerRepositoryHook
       ];

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, amaranth
-, pdm-backend
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  amaranth,
+  pdm-backend,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,10 @@ buildPythonPackage rec {
     description = "System on Chip toolkit for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-soc";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emily thoughtpolice pbsds ];
+    maintainers = with maintainers; [
+      emily
+      thoughtpolice
+      pbsds
+    ];
   };
 }

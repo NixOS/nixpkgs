@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, chromadb
-, fetchPypi
-, llama-index-core
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  chromadb,
+  fetchPypi,
+  llama-index-core,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-nFdLrzcPr0Vry2e51eonOm+h8rT9IFpZxHtoESNkuec=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     chromadb
     llama-index-core
   ];
 
-  pythonImportsCheck = [
-    "llama_index.vector_stores.chroma"
-  ];
+  pythonImportsCheck = [ "llama_index.vector_stores.chroma" ];
 
   meta = with lib; {
     description = "LlamaIndex Vector Store Integration for Chroma";

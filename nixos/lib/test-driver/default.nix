@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication {
     echo -e "\x1b[32m## run mypy\x1b[0m"
     mypy test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff\x1b[0m"
-    ruff .
+    ruff check .
     echo -e "\x1b[32m## run black\x1b[0m"
     black --check --diff .
   '';

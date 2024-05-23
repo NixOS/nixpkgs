@@ -1,13 +1,14 @@
-{ lib
-, ascii-magic
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, pillow
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  ascii-magic,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oauthlib,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
       --replace-fail "required_plugins = pytest-cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     oauthlib
@@ -51,13 +50,9 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "weconnect"
-  ];
+  pythonImportsCheck = [ "weconnect" ];
 
   meta = with lib; {
     description = "Python client for the Volkswagen WeConnect Services";

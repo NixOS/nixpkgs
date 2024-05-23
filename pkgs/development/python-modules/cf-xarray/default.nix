@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchFromGitHub
-, matplotlib
-, pint
-, pooch
-, pytestCheckHook
-, pythonOlder
-, regex
-, rich
-, scipy
-, setuptools
-, setuptools-scm
-, shapely
-, wheel
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchFromGitHub,
+  matplotlib,
+  pint,
+  pooch,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  rich,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  wheel,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     xarray
   ];
 
-  propagatedBuildInputs = [
-    xarray
-  ];
+  propagatedBuildInputs = [ xarray ];
 
   passthru.optional-dependencies = {
     all = [
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     scipy
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "cf_xarray"
-  ];
+  pythonImportsCheck = [ "cf_xarray" ];
 
   disabledTestPaths = [
     # Tests require network access

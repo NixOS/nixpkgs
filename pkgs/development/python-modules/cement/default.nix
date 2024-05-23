@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
   # 127.0.0.1:11211.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cement"
-  ];
+  pythonImportsCheck = [ "cement" ];
 
   meta = with lib; {
     description = "CLI Application Framework for Python";

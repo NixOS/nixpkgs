@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, paramiko
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  paramiko,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-ZPABWJmz0hLLgIjn1A668Ghoif8OJD1cEkLv6LUPBT4=";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-  ];
+  propagatedBuildInputs = [ paramiko ];
 
   checkPhase = ''
     SCPPY_PORT=10022 ${python.interpreter} test.py

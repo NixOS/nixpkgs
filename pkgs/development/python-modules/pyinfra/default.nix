@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, click
-, colorama
-, configparser
-, distro
-, fetchFromGitHub
-, fetchpatch
-, gevent
-, jinja2
-, paramiko
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pywinrm
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  configparser,
+  distro,
+  fetchFromGitHub,
+  fetchpatch,
+  gevent,
+  jinja2,
+  paramiko,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pywinrm,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -45,13 +46,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyinfra"
-  ];
+  pythonImportsCheck = [ "pyinfra" ];
 
   disabledTests = [
     # Test requires SSH binary

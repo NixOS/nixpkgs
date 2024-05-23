@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, substituteAll
-, pyparsing
-, graphviz
-, pytestCheckHook
-, texliveSmall
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  substituteAll,
+  pyparsing,
+  graphviz,
+  pytestCheckHook,
+  texliveSmall,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,16 @@ buildPythonPackage rec {
     ./remove-duplicate-script.patch
   ];
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  propagatedBuildInputs = [ pyparsing ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    (texliveSmall.withPackages (ps: with ps; [ preview pstricks ]))
+    (texliveSmall.withPackages (
+      ps: with ps; [
+        preview
+        pstricks
+      ]
+    ))
   ];
 
   meta = with lib; {

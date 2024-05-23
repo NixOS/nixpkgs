@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  lib,
 
-# pythonPackages
-, coverage
-, pytest
+  # pythonPackages
+  coverage,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -41,8 +42,6 @@ buildPythonPackage rec {
     mainProgram = "hcltool";
     homepage = "https://github.com/virtuald/pyhcl";
     license = licenses.mpl20;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

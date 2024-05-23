@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# tests
-, django
-, djangorestframework
-, python
+  # tests
+  django,
+  djangorestframework,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-fxLaxjni+0S59vtvKBduR0pYMwJWWBPzR5mnH+j6gVE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "rules"
-  ];
+  pythonImportsCheck = [ "rules" ];
 
   nativeCheckInputs = [
     django

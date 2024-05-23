@@ -8221,6 +8221,18 @@ final: prev:
     meta.homepage = "https://github.com/dcampos/nvim-snippy/";
   };
 
+  nvim-snippets = buildVimPlugin {
+    pname = "nvim-snippets";
+    version = "2024-02-07";
+    src = fetchFromGitHub {
+      owner = "garymjr";
+      repo = "nvim-snippets";
+      rev = "f394d17b9a83820714957a06c6ed8e12223f3034";
+      sha256 = "10yfjdjygxlagvf6pvj6n86n0kzf7j72zf7sq9mvy42a9h68i3ip";
+    };
+    meta.homepage = "https://github.com/garymjr/nvim-snippets/";
+  };
+
   nvim-solarized-lua = buildVimPlugin {
     pname = "nvim-solarized-lua";
     version = "2024-03-04";
@@ -17333,6 +17345,18 @@ final: prev:
       sha256 = "1wpn6gfw1r89232d779lz8wy19asrribindlcsaikrsqvml3a0hr";
     };
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
+  };
+
+  compiler-nvim = buildVimPlugin {
+    pname = "compiler-nvim";
+    version = "2024-04-26";
+    src = fetchFromGitHub {
+      owner = "Zeioth";
+      repo = "compiler.nvim";
+      rev = "cb14acd32ba9ea09d01bbe3493aefdc59b68965c";
+      sha256 = "sha256-YZyT5B0nk9LxaEA5ntuKPs7yf/Ix7zs3f6N3UOc9AIU=";
+    };
+    meta.homepage = "https://github.com/Zeioth/compiler.nvim/";
   };
 
 

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pep8
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  pep8,
 }:
 
 buildPythonPackage rec {
@@ -24,5 +25,4 @@ buildPythonPackage rec {
     license = licenses.lgpl2;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

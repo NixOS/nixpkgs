@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
-, matplotlib
-, pytestCheckHook
-, pythonOlder
-, beautifulsoup4
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
+  matplotlib,
+  pytestCheckHook,
+  pythonOlder,
+  beautifulsoup4,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -23,19 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-B+bJ1tKqTTlbNeJLxk56o2a21n3Yg6OHwJiFfCx46aw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   passthru.optional-dependencies = {
-    social_cards_generation = [
-      matplotlib
-    ];
+    social_cards_generation = [ matplotlib ];
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   nativeCheckInputs = [
     pytestCheckHook

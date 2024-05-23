@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, cachetools
-, cryptography
-, fetchPypi
-, flask
-, freezegun
-, grpcio
-, mock
-, oauth2client
-, pyasn1-modules
-, pyopenssl
-, pytest-asyncio
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, pyu2f
-, requests
-, responses
-, rsa
-, setuptools
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchPypi,
+  flask,
+  freezegun,
+  grpcio,
+  mock,
+  oauth2client,
+  pyasn1-modules,
+  pyopenssl,
+  pytest-asyncio,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
+  pyu2f,
+  requests,
+  responses,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     hash = "sha256-Zy3/My0HMidVD/x0V4aKxCGNbFALFV/mzBfSsTYCw2A=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cachetools
@@ -59,28 +58,26 @@ buildPythonPackage rec {
       cryptography
       pyopenssl
     ];
-    reauth = [
-      pyu2f
-    ];
-    requests = [
-      requests
-    ];
+    reauth = [ pyu2f ];
+    requests = [ requests ];
   };
 
-  nativeCheckInputs = [
-    aioresponses
-    flask
-    freezegun
-    grpcio
-    mock
-    oauth2client
-    pytest-asyncio
-    pytest-localserver
-    pytestCheckHook
-    responses
-  ] ++ passthru.optional-dependencies.aiohttp
-  ++ passthru.optional-dependencies.enterprise_cert
-  ++ passthru.optional-dependencies.reauth;
+  nativeCheckInputs =
+    [
+      aioresponses
+      flask
+      freezegun
+      grpcio
+      mock
+      oauth2client
+      pytest-asyncio
+      pytest-localserver
+      pytestCheckHook
+      responses
+    ]
+    ++ passthru.optional-dependencies.aiohttp
+    ++ passthru.optional-dependencies.enterprise_cert
+    ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"

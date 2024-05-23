@@ -1,14 +1,15 @@
-{ lib
-, apptools
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, ipython
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, traits
+{
+  lib,
+  apptools,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  ipython,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  traits,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     "envisage/tests/test_egg_plugin_manager.py"
   ];
 
-  pythonImportsCheck = [
-    "envisage"
-  ];
+  pythonImportsCheck = [ "envisage" ];
 
   meta = with lib; {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";

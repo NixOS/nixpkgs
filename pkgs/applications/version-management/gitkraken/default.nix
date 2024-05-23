@@ -11,32 +11,32 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "9.13.0";
+  version = "10.0.1";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-BBTa/MhfwTZ9YUJSGt8KocPn6f7m+W8G9yJr8I4NAtw=";
+      hash = "sha256-9xGplvSm0SVwNokO5WrEHejY5KhQfaYvIguaNR/IDM4=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-+1N4U5vV8XdHdtPeanjU38c8fzfY0uV0AA6exEe/FzQ=";
+      hash = "sha256-mRMHw6hAQocOFbJBC4LhmxdJ9Xd3ejGiTTwPk5XIeDc=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-kNX8ptDL8vvFDhH3bDU24A2xN1D+tgpzsCj/zIGqctE=";
+      hash = "sha256-qqeuhhBux6z/uytdmmaTrqz8m+IDfgmQDCdqggBgroY=";
     };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
   meta = {
-    homepage = "https://www.gitkraken.com/";
-    description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
+    homepage = "https://www.gitkraken.com/git-client";
+    description = "Simplifying Git for any OS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
@@ -97,13 +97,13 @@ let
     ];
 
     desktopItems = [ (makeDesktopItem {
-      name = "GitKraken";
+      name = "GitKraken Desktop";
       exec = "gitkraken";
       icon = "gitkraken";
-      desktopName = "GitKraken";
+      desktopName = "GitKraken Desktop";
       genericName = "Git Client";
       categories = [ "Development" ];
-      comment = "Graphical Git client from Axosoft";
+      comment = "Unleash your repo";
     }) ];
 
     nativeBuildInputs = [ copyDesktopItems (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];

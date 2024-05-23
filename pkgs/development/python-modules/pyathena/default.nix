@@ -1,16 +1,17 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, fastparquet
-, fetchPypi
-, fsspec
-, hatchling
-, pandas
-, pyarrow
-, pythonOlder
-, sqlalchemy
-, tenacity
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  fastparquet,
+  fetchPypi,
+  fsspec,
+  hatchling,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  sqlalchemy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-uVYnhxQJy6BvSZ/7JbKZPtE+uJkOtEZrd3uTokfZ3f8=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     boto3
@@ -37,18 +36,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    pandas = [
-      pandas
-    ];
-    sqlalchemy = [
-      sqlalchemy
-    ];
-    arrow = [
-      pyarrow
-    ];
-    fastparquet = [
-      fastparquet
-    ];
+    pandas = [ pandas ];
+    sqlalchemy = [ sqlalchemy ];
+    arrow = [ pyarrow ];
+    fastparquet = [ fastparquet ];
   };
 
   # Nearly all tests depend on a working AWS Athena instance,
@@ -56,9 +47,7 @@ buildPythonPackage rec {
   # https://github.com/laughingman7743/PyAthena/#testing
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyathena"
-  ];
+  pythonImportsCheck = [ "pyathena" ];
 
   meta = with lib; {
     description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittestCheckHook
-, mock
-, sphinx-testing
-, sphinx
-, blockdiag
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
+  mock,
+  sphinx-testing,
+  sphinx,
+  blockdiag,
 }:
 
 buildPythonPackage rec {
@@ -18,15 +19,24 @@ buildPythonPackage rec {
     sha256 = "aa49bf924516f5de8a479994c7be81e077df5599c9da2a082003d5b388e1d450";
   };
 
-  buildInputs = [ mock sphinx-testing ];
-  propagatedBuildInputs = [ sphinx blockdiag ];
+  buildInputs = [
+    mock
+    sphinx-testing
+  ];
+  propagatedBuildInputs = [
+    sphinx
+    blockdiag
+  ];
 
   # Seems to look for files in the wrong dir
   doCheck = false;
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
@@ -36,5 +46,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ];
     license = licenses.bsd2;
   };
-
 }

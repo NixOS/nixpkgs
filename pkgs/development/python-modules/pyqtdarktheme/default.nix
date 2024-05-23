@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, darkdetect
-, poetry-core
+  darkdetect,
+  poetry-core,
 
-, pyqt5
-, pytest-mock
-, pytest-qt
-, pytestCheckHook
-, qt5
+  pyqt5,
+  pytest-mock,
+  pytest-qt,
+  pytestCheckHook,
+  qt5,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-jK+wnIyPE8Bav0pzbvVisYYCzdRshYw1S2t0H3Pro5M=";
   };
 
-  patches = [
-    ./add-missing-argument-to-the-proxy-style-initializer.patch
-  ];
+  patches = [ ./add-missing-argument-to-the-proxy-style-initializer.patch ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    darkdetect
-  ];
+  propagatedBuildInputs = [ darkdetect ];
 
   nativeCheckInputs = [
     pyqt5
@@ -46,9 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "qdarktheme"
-  ];
+  pythonImportsCheck = [ "qdarktheme" ];
 
   prePatch = ''
     sed -i 's#darkdetect = ".*"#darkdetect = "*"#' pyproject.toml

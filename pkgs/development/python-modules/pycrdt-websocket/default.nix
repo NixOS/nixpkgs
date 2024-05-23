@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-, anyio
-, channels
-, httpx-ws
-, hypercorn
-, pycrdt
-, pytest-asyncio
-, pytestCheckHook
-, sqlite-anyio
-, trio
-, uvicorn
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  anyio,
+  channels,
+  httpx-ws,
+  hypercorn,
+  pycrdt,
+  pytest-asyncio,
+  pytestCheckHook,
+  sqlite-anyio,
+  trio,
+  uvicorn,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-nkm1ZQ6bYBRDDoREovhEthDZoHApYxzAnwVgDgpWW/s=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     anyio
@@ -41,14 +40,10 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    django = [
-      channels
-    ];
+    django = [ channels ];
   };
 
-  pythonImportsCheck = [
-    "pycrdt_websocket"
-  ];
+  pythonImportsCheck = [ "pycrdt_websocket" ];
 
   nativeCheckInputs = [
     httpx-ws

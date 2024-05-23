@@ -29,12 +29,14 @@ buildPythonPackage {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = [
-    libiconv # No-op on Linux, necessary on Darwin.
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      libiconv # No-op on Linux, necessary on Darwin.
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   propagatedBuildInputs = [
     attrs
@@ -73,7 +75,12 @@ buildPythonPackage {
 
   meta = {
     description = "Python bindings for `rerun` (an interactive visualization tool for stream data)";
-    inherit (rerun.meta) changelog homepage license maintainers;
+    inherit (rerun.meta)
+      changelog
+      homepage
+      license
+      maintainers
+      ;
     mainProgram = "rerun";
   };
 }

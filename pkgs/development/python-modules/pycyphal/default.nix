@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, can
-, cobs
-, libpcap
-, nunavut
-, numpy
-, pyserial
-, pytestCheckHook
-, pytest-asyncio
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  can,
+  cobs,
+  libpcap,
+  nunavut,
+  numpy,
+  pyserial,
+  pytestCheckHook,
+  pytest-asyncio,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -34,24 +35,18 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    transport-can-pythoncan = [
-      can
-    ] ++ can.optional-dependencies.serial;
+    transport-can-pythoncan = [ can ] ++ can.optional-dependencies.serial;
     transport-serial = [
       cobs
       pyserial
     ];
-    transport-udp = [
-      libpcap
-    ];
+    transport-udp = [ libpcap ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ] ++ builtins.foldl' (x: y: x ++ y) [ ]
-    (builtins.attrValues passthru.optional-dependencies)
-  ;
+  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -82,9 +77,7 @@ buildPythonPackage rec {
     "tests/transport"
   ];
 
-  pythonImportsCheck = [
-    "pycyphal"
-  ];
+  pythonImportsCheck = [ "pycyphal" ];
 
   meta = with lib; {
     description = "A full-featured implementation of the Cyphal protocol stack in Python";

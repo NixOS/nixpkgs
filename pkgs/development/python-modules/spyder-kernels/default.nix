@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, fetchPypi
-, ipykernel
-, ipython
-, jupyter-client
-, packaging
-, pythonOlder
-, pyxdg
-, pyzmq
-, wurlitzer
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  fetchPypi,
+  ipykernel,
+  ipython,
+  jupyter-client,
+  packaging,
+  pythonOlder,
+  pyxdg,
+  pyzmq,
+  wurlitzer,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "spyder_kernels"
-  ];
+  pythonImportsCheck = [ "spyder_kernels" ];
 
   meta = with lib; {
     description = "Jupyter kernels for Spyder's console";

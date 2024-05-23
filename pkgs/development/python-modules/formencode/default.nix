@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchPypi
-, setuptools-scm
-, six
-, dnspython
-, pycountry
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchPypi,
+  setuptools-scm,
+  six,
+  dnspython,
+  pycountry,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

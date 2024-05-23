@@ -1,5 +1,12 @@
-{ lib, fetchPypi, fetchpatch, python, buildPythonPackage
-, mpi, mpiCheckPhaseHook, openssh
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  python,
+  buildPythonPackage,
+  mpi,
+  mpiCheckPhaseHook,
+  openssh,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +49,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
+  nativeCheckInputs = [
+    openssh
+    mpiCheckPhaseHook
+  ];
 
   meta = with lib; {
     description = "Python bindings for the Message Passing Interface standard";

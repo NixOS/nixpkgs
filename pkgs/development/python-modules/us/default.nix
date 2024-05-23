@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jellyfish
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jellyfish,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -25,18 +26,14 @@ buildPythonPackage rec {
       --replace "jellyfish==" "jellyfish>="
   '';
 
-  propagatedBuildInputs = [
-    jellyfish
-  ];
+  propagatedBuildInputs = [ jellyfish ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];
 
-  pythonImportsCheck = [
-    "us"
-  ];
+  pythonImportsCheck = [ "us" ];
 
   meta = with lib; {
     description = "A package for easily working with US and state metadata";

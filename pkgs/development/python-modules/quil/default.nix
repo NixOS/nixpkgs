@@ -8,7 +8,7 @@
   numpy,
   pytestCheckHook,
   syrupy,
-  libiconv
+  libiconv,
 }:
 
 buildPythonPackage rec {

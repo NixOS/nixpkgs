@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, overrides
-, pydantic_1
-, pydantic-yaml-0
-, pyxdg
-, pyyaml
-, requests
-, requests-unixsocket
-, types-pyyaml
-, urllib3
-, pytestCheckHook
-, pytest-check
-, pytest-mock
-, pytest-subprocess
-, requests-mock
-, hypothesis
-, git
-, squashfsTools
-, setuptools
-, setuptools-scm
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  overrides,
+  pydantic_1,
+  pydantic-yaml-0,
+  pyxdg,
+  pyyaml,
+  requests,
+  requests-unixsocket,
+  types-pyyaml,
+  urllib3,
+  pytestCheckHook,
+  pytest-check,
+  pytest-mock,
+  pytest-subprocess,
+  requests-mock,
+  hypothesis,
+  git,
+  squashfsTools,
+  setuptools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-JEf5JYDBH4Pm5ke++7GkpimM8Ec0dFe1GGxruntjmVE=";
   };
 
-  patches = [
-    ./bash-path.patch
-  ];
+  patches = [ ./bash-path.patch ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -64,9 +63,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "craft_parts"
-  ];
+  pythonImportsCheck = [ "craft_parts" ];
 
   nativeCheckInputs = [
     git
@@ -93,22 +90,24 @@ buildPythonPackage rec {
     "test_get_build_packages"
   ];
 
-  disabledTestPaths = [
-    # Relies upon filesystem extended attributes, and suid/guid bits
-    "tests/unit/sources/test_base.py"
-    "tests/unit/packages/test_base.py"
-    "tests/unit/state_manager"
-    "tests/unit/test_xattrs.py"
-    "tests/unit/packages/test_normalize.py"
-    # Relies upon presence of apt/dpkg.
-    "tests/unit/packages/test_apt_cache.py"
-    "tests/unit/packages/test_deb.py"
-    "tests/unit/packages/test_chisel.py"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # These tests have hardcoded "amd64" strings which fail on aarch64
-    "tests/unit/executor/test_environment.py"
-    "tests/unit/features/overlay/test_executor_environment.py"
-  ];
+  disabledTestPaths =
+    [
+      # Relies upon filesystem extended attributes, and suid/guid bits
+      "tests/unit/sources/test_base.py"
+      "tests/unit/packages/test_base.py"
+      "tests/unit/state_manager"
+      "tests/unit/test_xattrs.py"
+      "tests/unit/packages/test_normalize.py"
+      # Relies upon presence of apt/dpkg.
+      "tests/unit/packages/test_apt_cache.py"
+      "tests/unit/packages/test_deb.py"
+      "tests/unit/packages/test_chisel.py"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      # These tests have hardcoded "amd64" strings which fail on aarch64
+      "tests/unit/executor/test_environment.py"
+      "tests/unit/features/overlay/test_executor_environment.py"
+    ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -121,4 +120,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

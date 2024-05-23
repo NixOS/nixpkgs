@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, which
-# runtime dependencies
-, numpy
-, torch
-# check dependencies
-, pytestCheckHook
-, pytest-cov
-# , pytest-mpi
-, pytest-timeout
-# , pytorch-image-models
-, hydra-core
-, fairscale
-, scipy
-, cmake
-, openai-triton
-, networkx
-#, apex
-, einops
-, transformers
-, timm
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  which,
+  # runtime dependencies
+  numpy,
+  torch,
+  # check dependencies
+  pytestCheckHook,
+  pytest-cov,
+  # , pytest-mpi
+  pytest-timeout,
+  # , pytorch-image-models
+  hydra-core,
+  fairscale,
+  scipy,
+  cmake,
+  openai-triton,
+  networkx,
+  #, apex
+  einops,
+  transformers,
+  timm,
 #, flash-attn
 }:
 let
@@ -43,33 +44,34 @@ buildPythonPackage {
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./0001-fix-allow-building-without-git.patch
-  ];
+  patches = [ ./0001-fix-allow-building-without-git.patch ];
 
-  preBuild = ''
-    cat << EOF > ./xformers/version.py
-    # noqa: C801
-    __version__ = "${version}"
-    EOF
-  '' + lib.optionalString cudaSupport ''
-    export CUDA_HOME=${cudaPackages.cuda_nvcc}
-    export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
-  '';
+  preBuild =
+    ''
+      cat << EOF > ./xformers/version.py
+      # noqa: C801
+      __version__ = "${version}"
+      EOF
+    ''
+    + lib.optionalString cudaSupport ''
+      export CUDA_HOME=${cudaPackages.cuda_nvcc}
+      export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
+    '';
 
-  buildInputs = lib.optionals cudaSupport (with cudaPackages; [
-    # flash-attn build
-    cuda_cudart # cuda_runtime_api.h
-    libcusparse.dev # cusparse.h
-    cuda_cccl.dev # nv/target
-    libcublas.dev # cublas_v2.h
-    libcusolver.dev # cusolverDn.h
-    libcurand.dev # curand_kernel.h
-  ]);
+  buildInputs = lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      # flash-attn build
+      cuda_cudart # cuda_runtime_api.h
+      libcusparse.dev # cusparse.h
+      cuda_cccl.dev # nv/target
+      libcublas.dev # cublas_v2.h
+      libcusolver.dev # cusolverDn.h
+      libcurand.dev # curand_kernel.h
+    ]
+  );
 
-  nativeBuildInputs = [
-    which
-  ];
+  nativeBuildInputs = [ which ];
 
   propagatedBuildInputs = [
     numpy

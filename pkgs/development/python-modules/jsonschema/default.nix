@@ -1,29 +1,30 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchPypi
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, importlib-resources
-, jsonschema-specifications
-, pkgutil-resolve-name
-, pip
-, pytestCheckHook
-, pythonOlder
-, referencing
-, rpds-py
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  importlib-resources,
+  jsonschema-specifications,
+  pkgutil-resolve-name,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  referencing,
+  rpds-py,
 
-# optionals
-, fqdn
-, idna
-, isoduration
-, jsonpointer
-, rfc3339-validator
-, rfc3986-validator
-, rfc3987
-, uri-template
-, webcolors
+  # optionals
+  fqdn,
+  idna,
+  isoduration,
+  jsonpointer,
+  rfc3339-validator,
+  rfc3986-validator,
+  rfc3987,
+  uri-template,
+  webcolors,
 }:
 
 buildPythonPackage rec {
@@ -48,15 +49,17 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    jsonschema-specifications
-    referencing
-    rpds-py
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-    pkgutil-resolve-name
-  ];
+  propagatedBuildInputs =
+    [
+      attrs
+      jsonschema-specifications
+      referencing
+      rpds-py
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+      pkgutil-resolve-name
+    ];
 
   passthru.optional-dependencies = {
     format = [
@@ -86,9 +89,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "jsonschema"
-  ];
+  pythonImportsCheck = [ "jsonschema" ];
 
   meta = with lib; {
     description = "An implementation of JSON Schema validation";

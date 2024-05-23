@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, packaging
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  packaging,
 }:
 let
   pname = "lazy-imports";
@@ -20,9 +21,7 @@ buildPythonPackage {
     hash = "sha256-i+VPlBoxNqk56U4oiEgS1Ayhi1t2O8PtLZ/bzEurUY8=";
   };
 
-  pythonImportsCheck = [
-    "lazy_imports"
-  ];
+  pythonImportsCheck = [ "lazy_imports" ];
 
   nativeCheckInputs = [
     pytestCheckHook

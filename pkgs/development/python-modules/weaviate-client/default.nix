@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "weaviate-client";
-  version = "4.6.2";
+  version = "4.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "weaviate";
     repo = "weaviate-python-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BegAiAOhVafH7NWVgayRbdLKBYjWmD5zC6P7tU11XKM=";
+    hash = "sha256-v8I0ovH99q5uYlnbZsQYgL9mg3n9i59W2n6/d9IiKyQ=";
   };
 
   pythonRelaxDeps = [

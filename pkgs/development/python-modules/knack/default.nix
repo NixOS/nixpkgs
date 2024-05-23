@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, argcomplete
-, colorama
-, jmespath
-, pygments
-, pyyaml
-, six
-, tabulate
-, mock
-, vcrpy
-, pytest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  argcomplete,
+  colorama,
+  jmespath,
+  pygments,
+  pyyaml,
+  six,
+  tabulate,
+  mock,
+  vcrpy,
+  pytest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
     HOME=$TMPDIR pytest .
   '';
 
-  pythonImportsCheck = [
-    "knack"
-  ];
+  pythonImportsCheck = [ "knack" ];
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/knack";

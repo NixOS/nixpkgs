@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,13 @@ buildPythonPackage rec {
   # https://github.com/xattr/xattr/issues/43
   doCheck = false;
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
   postBuild = ''
     ${python.pythonOnBuildForHost.interpreter} -m compileall -f xattr
   '';
 
-  pythonImportsCheck = [
-    "xattr"
-  ];
+  pythonImportsCheck = [ "xattr" ];
 
   meta = with lib; {
     description = "Python wrapper for extended filesystem attributes";

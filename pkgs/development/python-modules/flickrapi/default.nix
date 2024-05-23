@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, requests-toolbelt
-, requests-oauthlib
-, six
-, pytestCheckHook
-, responses
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  requests-toolbelt,
+  requests-oauthlib,
+  six,
+  pytestCheckHook,
+  responses,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -55,9 +56,7 @@ buildPythonPackage rec {
     "test_xmlnode_format_error"
   ];
 
-  pythonImportsCheck = [
-    "flickrapi"
-  ];
+  pythonImportsCheck = [ "flickrapi" ];
 
   meta = with lib; {
     description = "A Python interface to the Flickr API";

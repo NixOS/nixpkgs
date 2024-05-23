@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, google-auth
-, google-auth-oauthlib
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  google-auth,
+  google-auth-oauthlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-Wo+tXbzOuz/cW8GuWoSxLA/Lr2S9NMdePa8tIV39mbY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-auth
@@ -30,9 +29,7 @@ buildPythonPackage rec {
   # tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pydata_google_auth"
-  ];
+  pythonImportsCheck = [ "pydata_google_auth" ];
 
   meta = with lib; {
     description = "Helpers for authenticating to Google APIs";

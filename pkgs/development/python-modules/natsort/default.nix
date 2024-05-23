@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fastnumbers
-, fetchPypi
-, glibcLocales
-, hypothesis
-, pyicu
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fastnumbers,
+  fetchPypi,
+  glibcLocales,
+  hypothesis,
+  pyicu,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     "test_string_component_transform_factory"
   ];
 
-  pythonImportsCheck = [
-    "natsort"
-  ];
+  pythonImportsCheck = [ "natsort" ];
 
   meta = with lib; {
     description = "Natural sorting for Python";

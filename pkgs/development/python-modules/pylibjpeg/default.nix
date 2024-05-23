@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, flit-core
-, setuptools
-, numpy
-, pydicom
-, pylibjpeg-libjpeg
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  flit-core,
+  setuptools,
+  numpy,
+  pydicom,
+  pylibjpeg-libjpeg,
 }:
 
 let

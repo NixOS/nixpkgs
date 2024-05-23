@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, gpuctypes
-, numpy
-, tqdm
-, hypothesis
-, librosa
-, onnx
-, pillow
-, pytest-xdist
-, pytestCheckHook
-, safetensors
-, sentencepiece
-, tiktoken
-, torch
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  gpuctypes,
+  numpy,
+  tqdm,
+  hypothesis,
+  librosa,
+  onnx,
+  pillow,
+  pytest-xdist,
+  pytestCheckHook,
+  safetensors,
+  sentencepiece,
+  tiktoken,
+  torch,
+  transformers,
 }:
 
 buildPythonPackage rec {

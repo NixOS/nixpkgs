@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPy3k,
+  python,
+  apr,
+  aprutil,
+  bash,
+  e2fsprogs,
+  expat,
+  gcc,
+  glibcLocales,
+  neon,
+  openssl,
+  pycxx,
+  subversion,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,17 @@ buildPythonPackage rec {
     hash = "sha256-LbAz+KjEY3nkSJAzJNwlnSRYoWr4i1ITRUPV3ZBH7cc=";
   };
 
-  patches = [
-    ./replace-python-first.patch
-  ];
+  patches = [ ./replace-python-first.patch ];
 
-  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  buildInputs = [
+    bash
+    subversion
+    apr
+    aprutil
+    expat
+    neon
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [ e2fsprogs ] ++ lib.optionals stdenv.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, six
-, webencodings
-, mock
-, pytest-expect
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  six,
+  webencodings,
+  mock,
+  pytest-expect,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,9 @@ buildPythonPackage rec {
       major web browsers.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ domenkozar prikhi ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      prikhi
+    ];
   };
 }

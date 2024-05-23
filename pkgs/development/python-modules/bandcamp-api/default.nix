@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, beautifulsoup4
-, demjson3
-, html5lib
-, lxml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beautifulsoup4,
+  demjson3,
+  html5lib,
+  lxml,
+  requests,
 }:
 
 buildPythonPackage rec {

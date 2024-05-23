@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pathlib-abc
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, smart-open
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pathlib-abc,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  smart-open,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "smart-open"
-  ];
+  pythonRelaxDeps = [ "smart-open" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pathlib-abc
@@ -53,9 +48,7 @@ buildPythonPackage rec {
     "pathy/_tests/test_s3.py"
   ];
 
-  pythonImportsCheck = [
-    "pathy"
-  ];
+  pythonImportsCheck = [ "pathy" ];
 
   meta = with lib; {
     description = "A Path interface for local and cloud bucket storage";

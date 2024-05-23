@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, deprecation
-, poetry-core
-, pythonRelaxDepsHook
-, async-timeout
-, cloudevents
-, fastapi
-, grpcio
-, httpx
-, kubernetes
-, numpy
-, orjson
-, pandas
-, prometheus-client
-, protobuf
-, psutil
-, python-dateutil
-, ray
-, six
-, tabulate
-, timing-asgi
-, uvicorn
-, avro
-, azure-storage-blob
-, azure-storage-file-share
-, boto3
-, botocore
-, google-cloud-storage
-, pytestCheckHook
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  deprecation,
+  poetry-core,
+  pythonRelaxDepsHook,
+  async-timeout,
+  cloudevents,
+  fastapi,
+  grpcio,
+  httpx,
+  kubernetes,
+  numpy,
+  orjson,
+  pandas,
+  prometheus-client,
+  protobuf,
+  psutil,
+  python-dateutil,
+  ray,
+  six,
+  tabulate,
+  timing-asgi,
+  uvicorn,
+  avro,
+  azure-storage-blob,
+  azure-storage-file-share,
+  boto3,
+  botocore,
+  google-cloud-storage,
+  pytestCheckHook,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     async-timeout

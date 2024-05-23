@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, colorama
-, fetchFromGitHub
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

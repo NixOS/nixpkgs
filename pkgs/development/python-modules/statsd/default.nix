@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pynose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pynose,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -16,11 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-mXY9qBv+qNr2s9ItEarMsBqND1LqUh2qs351ikyn0Sg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ pynose mock ];
+  nativeCheckInputs = [
+    pynose
+    mock
+  ];
 
   checkPhase = ''
     nosetests -sv
@@ -32,5 +34,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
-
 }

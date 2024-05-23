@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, flit-core
-, flask
-, cachelib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  flit-core,
+  flask,
+  cachelib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-t8w6ZS4gBDpnnKvL3DLtn+rRLQNJbrT2Hxm4f3+a3Xc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     flask
     cachelib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # The rest of the tests require database servers and optional db connector dependencies
   pytestFlagsArray = [
@@ -38,9 +35,7 @@ buildPythonPackage rec {
     "'null_session or filesystem_session'"
   ];
 
-  pythonImportsCheck = [
-    "flask_session"
-  ];
+  pythonImportsCheck = [ "flask_session" ];
 
   meta = with lib; {
     description = "A Flask extension that adds support for server-side sessions";

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, lxml
-, pyproj
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
+  lxml,
+  pyproj,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -41,33 +42,31 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "owslib"
-  ];
+  pythonImportsCheck = [ "owslib" ];
 
   preCheck = ''
     # _pytest.pathlib.ImportPathMismatchError: ('owslib.swe.sensor.sml', '/build/source/build/...
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  disabledTests = [
-    # Tests require network access
-    "test_ows_interfaces_wcs"
-    "test_wfs_110_remotemd"
-    "test_wfs_200_remotemd"
-    "test_wms_130_remotemd"
-    "test_wmts_example_informatievlaanderen"
-    "test_opensearch_creodias"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_ogcapi_processes_pygeoapi"
-    "test_ogcapi_records_pycsw"
-    "test_ogcapi_records_pygeoapi"
-    "test_wms_getfeatureinfo_130"
-  ];
+  disabledTests =
+    [
+      # Tests require network access
+      "test_ows_interfaces_wcs"
+      "test_wfs_110_remotemd"
+      "test_wfs_200_remotemd"
+      "test_wms_130_remotemd"
+      "test_wmts_example_informatievlaanderen"
+      "test_opensearch_creodias"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_ogcapi_processes_pygeoapi"
+      "test_ogcapi_records_pycsw"
+      "test_ogcapi_records_pygeoapi"
+      "test_wms_getfeatureinfo_130"
+    ];
 
   meta = with lib; {
     description = "Client for Open Geospatial Consortium web service interface standards";

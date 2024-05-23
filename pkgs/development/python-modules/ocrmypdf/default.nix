@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, deprecation
-, fetchFromGitHub
-, ghostscript
-, hypothesis
-, img2pdf
-, importlib-resources
-, jbig2enc
-, packaging
-, pdfminer-six
-, pillow-heif
-, pikepdf
-, pillow
-, pluggy
-, pngquant
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rich
-, reportlab
-, setuptools-scm
-, substituteAll
-, tesseract
-, tqdm
-, unpaper
-, installShellFiles
+{
+  lib,
+  buildPythonPackage,
+  deprecation,
+  fetchFromGitHub,
+  ghostscript,
+  hypothesis,
+  img2pdf,
+  importlib-resources,
+  jbig2enc,
+  packaging,
+  pdfminer-six,
+  pillow-heif,
+  pikepdf,
+  pillow,
+  pluggy,
+  pngquant,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  reportlab,
+  setuptools-scm,
+  substituteAll,
+  tesseract,
+  tqdm,
+  unpaper,
+  installShellFiles,
 }:
 
 buildPythonPackage rec {
@@ -60,13 +61,9 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   dependencies = [
     deprecation
@@ -87,9 +84,7 @@ buildPythonPackage rec {
     reportlab
   ];
 
-  pythonImportsCheck = [
-    "ocrmypdf"
-  ];
+  pythonImportsCheck = [ "ocrmypdf" ];
 
   postInstall = ''
     installShellCompletion --cmd ocrmypdf \
@@ -100,8 +95,14 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [ mpl20 mit ];
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    license = with licenses; [
+      mpl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      kiwi
+      dotlambda
+    ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
     mainProgram = "ocrmypdf";
   };

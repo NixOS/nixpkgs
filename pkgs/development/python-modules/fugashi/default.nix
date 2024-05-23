@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, buildPythonPackage
-, cython_0
-, mecab
-, setuptools-scm
-, ipadic
-, unidic
-, unidic-lite
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  buildPythonPackage,
+  cython_0,
+  mecab,
+  setuptools-scm,
+  ipadic,
+  unidic,
+  unidic-lite,
 }:
 
 buildPythonPackage rec {
@@ -24,10 +25,16 @@ buildPythonPackage rec {
     hash = "sha256-4i7Q+TtXTQNSJ1EIcS8KHrVPdCJAgZh86Y6lB8772XU=";
   };
 
-  nativeBuildInputs = [ cython_0 mecab setuptools-scm ];
+  nativeBuildInputs = [
+    cython_0
+    mecab
+    setuptools-scm
+  ];
 
-  nativeCheckInputs = [ ipadic pytestCheckHook ]
-    ++ passthru.optional-dependencies.unidic-lite;
+  nativeCheckInputs = [
+    ipadic
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.unidic-lite;
 
   passthru.optional-dependencies = {
     unidic-lite = [ unidic-lite ];

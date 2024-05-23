@@ -1,9 +1,10 @@
-{ pkgs
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pyqt5
-, asyncua
+{
+  pkgs,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pyqt5,
+  asyncua,
 }:
 
 buildPythonPackage rec {

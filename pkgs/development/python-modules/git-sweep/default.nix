@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gitpython
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gitpython,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-zSnxw3JHsFru9fOZSJZX+XOu144uJ0DaIKYlAtoHV7M=";
   };
 
-  propagatedBuildInputs = [
-    gitpython
-  ];
+  propagatedBuildInputs = [ gitpython ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "gitsweep"
-  ];
+  pythonImportsCheck = [ "gitsweep" ];
 
   meta = with lib; {
     description = "A command-line tool that helps you clean up Git branches";

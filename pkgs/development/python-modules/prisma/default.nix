@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, httpx
-, jinja2
-, nodeenv
-, pydantic
-, pytestCheckHook
-, python-dotenv
-, pythonOlder
-, setuptools
-, strenum
-, tomlkit
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  httpx,
+  jinja2,
+  nodeenv,
+  pydantic,
+  pytestCheckHook,
+  python-dotenv,
+  pythonOlder,
+  setuptools,
+  strenum,
+  tomlkit,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-7pibexiFsyrwC6rVv0CGHRbQU4G3rOXVhQW/7c/vKJA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -42,16 +41,12 @@ buildPythonPackage rec {
     python-dotenv
     tomlkit
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    strenum
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ strenum ];
 
   # Building the client requires network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "prisma"
-  ];
+  pythonImportsCheck = [ "prisma" ];
 
   meta = with lib; {
     description = "Auto-generated and fully type-safe database client for prisma";

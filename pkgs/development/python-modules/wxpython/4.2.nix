@@ -1,42 +1,43 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, setuptools
-, pythonAtLeast
-, fetchPypi
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  setuptools,
+  pythonAtLeast,
+  fetchPypi,
+  substituteAll,
 
-# build
-, autoPatchelfHook
-, attrdict
-, doxygen
-, pkg-config
-, python
-, sip
-, which
+  # build
+  autoPatchelfHook,
+  attrdict,
+  doxygen,
+  pkg-config,
+  python,
+  sip,
+  which,
 
-# runtime
-, cairo
-, gst_all_1
-, gtk3
-, libGL
-, libGLU
-, libSM
-, libXinerama
-, libXtst
-, libXxf86vm
-, libglvnd
-, mesa
-, pango
-, SDL
-, webkitgtk
-, wxGTK
-, xorgproto
+  # runtime
+  cairo,
+  gst_all_1,
+  gtk3,
+  libGL,
+  libGLU,
+  libSM,
+  libXinerama,
+  libXtst,
+  libXxf86vm,
+  libglvnd,
+  mesa,
+  pango,
+  SDL,
+  webkitgtk,
+  wxGTK,
+  xorgproto,
 
-# propagates
-, numpy
-, pillow
-, six
+  # propagates
+  numpy,
+  pillow,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -68,27 +69,27 @@ buildPythonPackage rec {
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
-    wxGTK
-    SDL
-  ] ++ lib.optionals stdenv.isLinux [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    libGL
-    libGLU
-    libSM
-    libXinerama
-    libXtst
-    libXxf86vm
-    libglvnd
-    mesa
-    webkitgtk
-    xorgproto
-  ];
+  buildInputs =
+    [
+      wxGTK
+      SDL
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      libGL
+      libGLU
+      libSM
+      libXinerama
+      libXtst
+      libXxf86vm
+      libglvnd
+      mesa
+      webkitgtk
+      xorgproto
+    ];
 
   propagatedBuildInputs = [
     numpy
@@ -108,7 +109,6 @@ buildPythonPackage rec {
     runHook postBuild
   '';
 
-
   installPhase = ''
     runHook preInstall
 
@@ -125,7 +125,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
 
   meta = with lib; {
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";

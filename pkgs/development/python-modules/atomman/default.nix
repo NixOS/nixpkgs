@@ -1,25 +1,26 @@
-{ lib
-, ase
-, buildPythonPackage
-, cython
-, datamodeldict
-, fetchFromGitHub
-, matplotlib
-, numericalunits
-, numpy
-, pandas
-, phonopy
-, potentials
-, pymatgen
-, pytestCheckHook
-, pythonOlder
-, requests
-, scipy
-, setuptools
-, toolz
-, wheel
-, xmltodict
-, pythonRelaxDepsHook
+{
+  lib,
+  ase,
+  buildPythonPackage,
+  cython,
+  datamodeldict,
+  fetchFromGitHub,
+  matplotlib,
+  numericalunits,
+  numpy,
+  pandas,
+  phonopy,
+  potentials,
+  pymatgen,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  scipy,
+  setuptools,
+  toolz,
+  wheel,
+  xmltodict,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage {
@@ -79,9 +80,7 @@ buildPythonPackage {
     "test_unique_shifts_prototype" # needs network access to download database files
   ];
 
-  pythonImportsCheck = [
-    "atomman"
-  ];
+  pythonImportsCheck = [ "atomman" ];
 
   meta = with lib; {
     description = "Atomistic Manipulation Toolkit";

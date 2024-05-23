@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, geos_3_11
-, pytestCheckHook
-, cython_0
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  geos_3_11,
+  pytestCheckHook,
+  cython_0,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     cython_0
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   # The cythonized extensions are required to exist in the pygeos/ directory
   # for the package to function. Therefore override of buildPhase was
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py bdist_wheel
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pygeos"
-  ];
+  pythonImportsCheck = [ "pygeos" ];
 
   meta = with lib; {
     description = "Wraps GEOS geometry functions in numpy ufuncs";

@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, interegular
-, cloudpickle
-, diskcache
-, joblib
-, jsonschema
-, pydantic
-, lark
-, nest-asyncio
-, numba
-, scipy
-, torch
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  interegular,
+  cloudpickle,
+  diskcache,
+  joblib,
+  jsonschema,
+  pydantic,
+  lark,
+  nest-asyncio,
+  numba,
+  scipy,
+  torch,
+  transformers,
 }:
 
 buildPythonPackage rec {
@@ -49,9 +50,7 @@ buildPythonPackage rec {
     transformers
   ];
 
-  pythonImportsCheck = [
-    "outlines"
-  ];
+  pythonImportsCheck = [ "outlines" ];
 
   meta = with lib; {
     description = "Structured text generation";

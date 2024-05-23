@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, lxml
-, matplotlib
-, networkx
-, pandas
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  lxml,
+  matplotlib,
+  networkx,
+  pandas,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {

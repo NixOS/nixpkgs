@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, urllib3
-, requests
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  urllib3,
+  requests,
+  pytest,
 }:
 buildPythonPackage rec {
   pname = "waybackpy";

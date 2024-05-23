@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cmake
-, setuptools
-, wheel
-, xrootd
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  setuptools,
+  wheel,
+  xrootd,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    xrootd
-  ];
+  buildInputs = [ xrootd ];
 
   dontUseCmakeConfigure = true;
 

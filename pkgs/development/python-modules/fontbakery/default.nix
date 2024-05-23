@@ -1,48 +1,49 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchpatch
-, fetchPypi
-, axisregistry
-, babelfont
-, beautifulsoup4
-, beziers
-, cmarkgfm
-, collidoscope
-, defcon
-, dehinter
-, fonttools
-, font-v
-, freetype-py
-, gflanguages
-, gfsubsets
-, git
-, glyphsets
-, lxml
-, installShellFiles
-, jinja2
-, munkres
-, opentypespec
-, ots-python
-, packaging
-, pip-api
-, protobuf
-, pytestCheckHook
-, pytest-xdist
-, pythonRelaxDepsHook
-, pyyaml
-, requests
-, requests-mock
-, rich
-, setuptools
-, setuptools-scm
-, shaperglot
-, stringbrewer
-, toml
-, unicodedata2
-, ufo2ft
-, ufolint
-, vharfbuzz
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchpatch,
+  fetchPypi,
+  axisregistry,
+  babelfont,
+  beautifulsoup4,
+  beziers,
+  cmarkgfm,
+  collidoscope,
+  defcon,
+  dehinter,
+  fonttools,
+  font-v,
+  freetype-py,
+  gflanguages,
+  gfsubsets,
+  git,
+  glyphsets,
+  lxml,
+  installShellFiles,
+  jinja2,
+  munkres,
+  opentypespec,
+  ots-python,
+  packaging,
+  pip-api,
+  protobuf,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonRelaxDepsHook,
+  pyyaml,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  setuptools-scm,
+  shaperglot,
+  stringbrewer,
+  toml,
+  unicodedata2,
+  ufo2ft,
+  ufolint,
+  vharfbuzz,
 }:
 
 buildPythonPackage rec {
@@ -151,4 +152,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

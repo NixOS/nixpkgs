@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, huggingface-hub
-, pythonOlder
-, pythonRelaxDepsHook
-, poetry-core
-, onnx
-, onnxruntime
-, requests
-, tokenizers
-, tqdm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  huggingface-hub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  poetry-core,
+  onnx,
+  onnxruntime,
+  requests,
+  tokenizers,
+  tqdm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,17 +42,11 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "fastembed"
-  ];
+  pythonImportsCheck = [ "fastembed" ];
 
-  pythonRelaxDeps = [
-    "huggingface-hub"
-  ];
+  pythonRelaxDeps = [ "huggingface-hub" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # there is one test and it requires network
   doCheck = false;

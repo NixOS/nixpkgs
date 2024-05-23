@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, networkx
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, pyparsing
-, torch
-, statsmodels
-, tqdm
-, joblib
-, opt-einsum
-# check inputs
-, pytestCheckHook
-, pytest-cov
-, coverage
-, mock
-, black
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  networkx,
+  numpy,
+  scipy,
+  scikit-learn,
+  pandas,
+  pyparsing,
+  torch,
+  statsmodels,
+  tqdm,
+  joblib,
+  opt-einsum,
+  # check inputs
+  pytestCheckHook,
+  pytest-cov,
+  coverage,
+  mock,
+  black,
 }:
 let
   pname = "pgmpy";
   version = "0.1.25";
-  # optional-dependencies = {
-  #   all = [ daft ];
-  # };
 in
+# optional-dependencies = {
+#   all = [ daft ];
+# };
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";

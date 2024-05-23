@@ -1,14 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, flask
-, itsdangerous
-, wtforms
-, email-validator
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  flask,
+  itsdangerous,
+  wtforms,
+  email-validator,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -39,18 +40,20 @@ buildPythonPackage rec {
     email = [ email-validator ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
     description = "Simple integration of Flask and WTForms.";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mic92 anthonyroussel ];
+    maintainers = with maintainers; [
+      mic92
+      anthonyroussel
+    ];
     homepage = "https://github.com/lepture/flask-wtf/";
     changelog = "https://github.com/wtforms/flask-wtf/releases/tag/v${version}";
   };

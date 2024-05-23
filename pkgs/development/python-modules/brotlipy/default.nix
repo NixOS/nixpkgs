@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cffi
-, enum34
-, construct
-, pytest
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cffi,
+  enum34,
+  construct,
+  pytest,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -18,11 +19,18 @@ buildPythonPackage rec {
     sha256 = "36def0b859beaf21910157b4c33eb3b06d8ce459c942102f16988cca6ea164df";
   };
 
-  propagatedBuildInputs = [ cffi enum34 construct ];
+  propagatedBuildInputs = [
+    cffi
+    enum34
+    construct
+  ];
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  nativeCheckInputs = [ pytest hypothesis ];
+  nativeCheckInputs = [
+    pytest
+    hypothesis
+  ];
 
   checkPhase = ''
     py.test

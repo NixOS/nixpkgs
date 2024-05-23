@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, numpy
-, packaging
-, psutil
-, pyyaml
-, torch
-, transformers
-, accelerate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  numpy,
+  packaging,
+  psutil,
+  pyyaml,
+  torch,
+  transformers,
+  accelerate,
 }:
 
 buildPythonPackage rec {
@@ -38,10 +39,8 @@ buildPythonPackage rec {
     accelerate
   ];
 
-  doCheck = false;  # tries to download pretrained models
-  pythonImportsCheck = [
-    "peft"
-  ];
+  doCheck = false; # tries to download pretrained models
+  pythonImportsCheck = [ "peft" ];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/peft";

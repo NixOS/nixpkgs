@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, commonmark
-, fetchFromGitHub
-, markdown
-, pydash
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, recommonmark
-, setuptools
-, sphinx
-, unify
-, yapf
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  commonmark,
+  fetchFromGitHub,
+  markdown,
+  pydash,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  recommonmark,
+  setuptools,
+  sphinx,
+  unify,
+  yapf,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     commonmark
@@ -45,17 +44,11 @@ buildPythonPackage rec {
     yapf
   ];
 
-  buildInputs = [
-    sphinx
-  ];
+  buildInputs = [ sphinx ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sphinx_markdown_parser"
-  ];
+  pythonImportsCheck = [ "sphinx_markdown_parser" ];
 
   disabledTests = [
     # AssertionError

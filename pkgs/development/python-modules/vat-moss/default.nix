@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,17 +26,11 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "vat_moss"
-  ];
+  pythonImportsCheck = [ "vat_moss" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_fetch"
-  ];
+  disabledTests = [ "test_fetch" ];
 
   disabledTestPaths = [
     # network access

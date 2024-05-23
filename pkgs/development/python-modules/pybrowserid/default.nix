@@ -19,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-bCJ2aeh8wleWrnb2oO9lAlUoyK2C01Jnn6mj5WY6ceM=";
   };
 
-  patches = [
-    ./darwin_fix.patch
-  ];
+  patches = [ ./darwin_fix.patch ];
 
   postPatch = ''
     substituteInPlace browserid/tests/* \

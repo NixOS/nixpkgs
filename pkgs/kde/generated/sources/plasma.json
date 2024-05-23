@@ -1,8 +1,8 @@
 {
   "bluedevil": {
-    "version": "6.0.5",
-    "url": "mirror://kde/stable/plasma/6.0.5/bluedevil-6.0.5.tar.xz",
-    "hash": "sha256-mJHTxteC62ofaevsRO0PSG8sfrkKIUOU0rbMbq/1psc="
+    "version": "6.0.5.1",
+    "url": "mirror://kde/stable/plasma/6.0.5/bluedevil-6.0.5.1.tar.xz",
+    "hash": "sha256-Zvzi1J9qxxa1UeMDD47T9xvuwEKNofma9+lZvJD1POI="
   },
   "breeze": {
     "version": "6.0.5",

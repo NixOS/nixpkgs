@@ -1,22 +1,23 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, blosc2
-, bzip2
-, c-blosc
-, cython
-, hdf5
-, lzo
-, numpy
-, numexpr
-, packaging
-, setuptools
-, sphinx
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  blosc2,
+  bzip2,
+  c-blosc,
+  cython,
+  hdf5,
+  lzo,
+  numpy,
+  numexpr,
+  packaging,
+  setuptools,
+  sphinx,
   # Test inputs
-, python
-, pytest
-, py-cpuinfo
+  python,
+  pytest,
+  py-cpuinfo,
 }:
 
 buildPythonPackage rec {
@@ -79,9 +80,7 @@ buildPythonPackage rec {
     "--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   preCheck = ''
     cd ..

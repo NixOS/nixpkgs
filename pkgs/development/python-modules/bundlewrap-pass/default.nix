@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, bundlewrap
-, pass
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  bundlewrap,
+  pass,
 }:
 
 buildPythonPackage rec {
@@ -18,14 +19,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ bundlewrap pass ];
+  propagatedBuildInputs = [
+    bundlewrap
+    pass
+  ];
 
   # upstream has no checks
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bwpass"
-  ];
+  pythonImportsCheck = [ "bwpass" ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/bundlewrap-pass";

@@ -427,6 +427,11 @@
     dependencies = with self; [ plenary-nvim ];
   };
 
+  compiler-nvim = super.compiler-nvim.overrideAttrs {
+    dependencies = [ self.overseer-nvim ];
+    nvimRequireCheck = "compiler";
+  };
+
   completion-buffers = super.completion-buffers.overrideAttrs {
     dependencies = with self; [ completion-nvim ];
   };

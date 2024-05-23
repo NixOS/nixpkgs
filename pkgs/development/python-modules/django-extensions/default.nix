@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
+  # dependencies
+  django,
 
-# tests
-, factory-boy
-, mock
-, pip
-, pygments
-, pytestCheckHook
-, pytest-django
-, shortuuid
-, vobject
-, werkzeug
+  # tests
+  factory-boy,
+  mock,
+  pip,
+  pygments,
+  pytestCheckHook,
+  pytest-django,
+  shortuuid,
+  vobject,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
@@ -42,13 +43,9 @@ buildPythonPackage rec {
       --replace "--cov=django_extensions --cov-report html --cov-report term" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    django
-  ];
+  dependencies = [ django ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -69,7 +66,6 @@ buildPythonPackage rec {
     "tests/management/commands/test_pipchecker.py"
     # django.db.utils.OperationalError: no such table: django_extensions_permmodel
     "tests/test_dumpscript.py"
-
   ];
 
   meta = with lib; {

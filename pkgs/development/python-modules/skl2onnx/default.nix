@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, protobuf
-, onnx
-, scikit-learn
-, onnxconverter-common
-, onnxruntime
-, pandas
-, unittestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  protobuf,
+  onnx,
+  scikit-learn,
+  onnxconverter-common,
+  onnxruntime,
+  pandas,
+  unittestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     onnxconverter-common
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "scikit-learn" ];
 
@@ -44,7 +43,10 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   # Core dump
   doCheck = false;

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, boto3
-, llama-index-core
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  boto3,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-ZveFCJJT7Qal82cuVTs+3AmSuvdc7GsHqqqNvcDb3CY=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     boto3
     llama-index-core
   ];
 
-  pythonImportsCheck = [
-    "llama_index.graph_stores.neptune"
-  ];
+  pythonImportsCheck = [ "llama_index.graph_stores.neptune" ];
 
   meta = with lib; {
     description = "LlamaIndex Graph Store Integration for Neptune";

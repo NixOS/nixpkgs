@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, elasticsearch
-, python-dateutil
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  elasticsearch,
+  python-dateutil,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,11 @@ buildPythonPackage rec {
     sha256 = "sha256-cy/IEae7B2O8P7WJLk6nzwbTG7o1XoezM1PpLfrNebQ=";
   };
 
-  propagatedBuildInputs = [ elasticsearch python-dateutil six ];
+  propagatedBuildInputs = [
+    elasticsearch
+    python-dateutil
+    six
+  ];
 
   # ImportError: No module named test_elasticsearch_dsl
   # Tests require a local instance of elasticsearch

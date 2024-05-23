@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, asgiref
-, hatchling
-, opentelemetry-api
-, opentelemetry-sdk
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  asgiref,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-sdk,
 }:
 
 buildPythonPackage {
@@ -17,9 +18,7 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-api.src.name}/tests/opentelemetry-test-utils";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     asgiref

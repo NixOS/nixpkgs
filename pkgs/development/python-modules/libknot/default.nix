@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# native dependencies
-, knot-dns
+  # native dependencies
+  knot-dns,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
       --replace "libknot.so%s" "${lib.getLib knot-dns}/lib/libknot.so%s"
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  pythonImportsCheck = [
-    "libknot"
-  ];
+  pythonImportsCheck = [ "libknot" ];
 
   meta = with lib; {
     description = "Python bindings for libknot";

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytest7CheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytest7CheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-ZXEbis37QO8t05JQ2qQQf5rkUSxq3DwzR3khAJkZ5W0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -29,9 +28,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "RangeHTTPServer"
-  ];
+  pythonImportsCheck = [ "RangeHTTPServer" ];
 
   meta = with lib; {
     description = "SimpleHTTPServer with support for Range requests";

@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchFromGitHub
-, mkdocs
-, twine
-, arpeggio
-, click
-, future
-, setuptools
-, callPackage
-, gprof2dot
-, html5lib
-, jinja2
-, psutil
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  mkdocs,
+  twine,
+  arpeggio,
+  click,
+  future,
+  setuptools,
+  callPackage,
+  gprof2dot,
+  html5lib,
+  jinja2,
+  psutil,
+  pytestCheckHook,
 }:
 
 let
@@ -59,9 +60,7 @@ let
       cp -r tests $testout/tests
     '';
 
-    pythonImportsCheck = [
-      "textx"
-    ];
+    pythonImportsCheck = [ "textx" ];
 
     # Circular dependencies, do tests in passthru.tests instead.
     doCheck = false;
@@ -73,8 +72,9 @@ let
           textx-example-project
           textx-flow-codegen
           textx-flow-dsl
-          textx-types-dsl;
-       };
+          textx-types-dsl
+          ;
+      };
     };
 
     meta = with lib; {
@@ -131,9 +131,7 @@ let
     format = "setuptools";
     pathToSourceRoot = "tests/functional/registration/projects/flow_dsl";
     sourceRoot = "${src.name}/" + pathToSourceRoot;
-    propagatedBuildInputs = [
-      textx
-    ];
+    propagatedBuildInputs = [ textx ];
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
@@ -148,9 +146,7 @@ let
     format = "setuptools";
     pathToSourceRoot = "tests/functional/registration/projects/types_dsl";
     sourceRoot = "${src.name}/" + pathToSourceRoot;
-    propagatedBuildInputs = [
-      textx
-    ];
+    propagatedBuildInputs = [ textx ];
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX language for testing";
@@ -165,9 +161,7 @@ let
     format = "setuptools";
     pathToSourceRoot = "tests/functional/subcommands/example_project";
     sourceRoot = "${src.name}/" + pathToSourceRoot;
-    propagatedBuildInputs = [
-      textx
-    ];
+    propagatedBuildInputs = [ textx ];
     meta = with lib; {
       inherit (textx.meta) license maintainers;
       description = "Sample textX sub-command for testing";
@@ -175,4 +169,4 @@ let
     };
   };
 in
-  textx
+textx

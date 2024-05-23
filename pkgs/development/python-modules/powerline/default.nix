@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, socat
-, psutil
-, python-hglib
-, pygit2
-, pyuv
-, i3ipc
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  socat,
+  psutil,
+  python-hglib,
+  pygit2,
+  pyuv,
+  i3ipc,
+  stdenv,
 }:
 
 # TODO: bzr support is missing because nixpkgs switched to `breezy`
 
 buildPythonPackage rec {
-  version  = "2.8.3";
+  version = "2.8.3";
   pname = "powerline";
   format = "setuptools";
 
@@ -49,8 +50,8 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage    = "https://github.com/powerline/powerline";
+    homepage = "https://github.com/powerline/powerline";
     description = "The ultimate statusline/prompt utility";
-    license     = lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 }

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
 
-# build-system
-, cython
-, setuptools
-, setuptools-scm
-, packaging
-, cffi
+  # build-system
+  cython,
+  setuptools,
+  setuptools-scm,
+  packaging,
+  cffi,
 
-# dependencies
+  # dependencies
 
-, py
-, pytestCheckHook
-, python
-, pythonOlder
-, tornado
-, zeromq
-, pytest-asyncio
+  py,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  tornado,
+  zeromq,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -37,19 +38,11 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     packaging
-  ] ++ (if isPyPy then [
-    cffi
-  ] else [
-    cython
-  ]);
+  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
 
-  buildInputs = [
-    zeromq
-  ];
+  buildInputs = [ zeromq ];
 
-  propagatedBuildInputs = lib.optionals isPyPy [
-    cffi
-  ];
+  propagatedBuildInputs = lib.optionals isPyPy [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -57,9 +50,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "zmq"
-  ];
+  pythonImportsCheck = [ "zmq" ];
 
   pytestFlagsArray = [
     "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
@@ -89,7 +80,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
+    license = with licenses; [
+      bsd3 # or
+      lgpl3Only
+    ];
     maintainers = with maintainers; [ ];
   };
 }

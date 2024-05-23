@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, cloudpathlib
-, confection
-, fetchFromGitHub
-, packaging
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, smart-open
-, srsly
-, typer
-, wasabi
+{
+  lib,
+  buildPythonPackage,
+  cloudpathlib,
+  confection,
+  fetchFromGitHub,
+  packaging,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  setuptools,
+  smart-open,
+  srsly,
+  typer,
+  wasabi,
 }:
 
 buildPythonPackage rec {
@@ -55,9 +56,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weasel" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # This test requires internet access

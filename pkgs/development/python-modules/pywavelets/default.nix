@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, meson-python
-, cython
-, pytestCheckHook
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  meson-python,
+  cython,
+  pytestCheckHook,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -56,5 +57,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/PyWavelets/pywt/releases/tag/v${version}";
     license = licenses.mit;
   };
-
 }

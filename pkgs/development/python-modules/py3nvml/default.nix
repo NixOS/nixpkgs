@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-Ce4dBFmKbmZOJEZfgEzjv+EZpv21Ni3xwWj4qpKfvXM=";
   };
 
-  propagatedBuildInputs = [
-    xmltodict
-  ];
+  propagatedBuildInputs = [ xmltodict ];
 
   pythonImportsCheck = [ "py3nvml" ];
 
@@ -24,7 +23,10 @@ buildPythonPackage rec {
     description = "Python 3 Bindings for the NVIDIA Management Library";
     mainProgram = "py3smi";
     homepage = "https://pypi.org/project/py3nvml/";
-    license = with licenses; [ bsd3 bsd2 ];
+    license = with licenses; [
+      bsd3
+      bsd2
+    ];
     maintainers = with maintainers; [ happysalada ];
   };
 }

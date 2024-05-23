@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, f5-icontrol-rest
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  f5-icontrol-rest,
+  six,
 }:
 
 buildPythonPackage rec {

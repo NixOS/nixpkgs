@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, django
-, django-extensions
-, django-js-asset
-, fetchFromGitHub
-, pillow
-, python
-, pythonOlder
-, selenium
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-extensions,
+  django-js-asset,
+  fetchFromGitHub,
+  pillow,
+  python,
+  pythonOlder,
+  selenium,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-mZQ5s3YbumYmT0zRWPFIvzt2TbtDLvVcJjZVAwn31E8=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     django
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "ckeditor"
-  ];
+  pythonImportsCheck = [ "ckeditor" ];
 
   meta = with lib; {
     description = " Django admin CKEditor integration";

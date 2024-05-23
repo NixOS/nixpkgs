@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, eth-utils
-, hypothesis
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  eth-utils,
+  hypothesis,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-8st1nQiGApt+aNl8/cftYk0ZzA+MxbLyGi53UWUlAjM=";
   };
 
-  build-system = [ setuptools];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     eth-utils
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "hexbytes"
-  ];
+  pythonImportsCheck = [ "hexbytes" ];
 
   meta = with lib; {
     description = "`bytes` subclass that decodes hex, with a readable console output";

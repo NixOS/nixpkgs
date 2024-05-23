@@ -1,16 +1,17 @@
-{ buildPythonPackage
-, stdenv
-, fetchFromGitHub
-, lib
-, attrs
-, distro
-, jsonschema
-, six
-, zipfile2
-, hypothesis
-, mock
-, packaging
-, testfixtures
+{
+  buildPythonPackage,
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  attrs,
+  distro,
+  jsonschema,
+  six,
+  zipfile2,
+  hypothesis,
+  mock,
+  packaging,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
@@ -25,17 +26,30 @@ buildPythonPackage rec {
     hash = "sha256-MEll1H7l41m8uz2/WK/Ilm7Dubg0uqYwe+ZgakO1aXQ=";
   };
 
-  propagatedBuildInputs = [ distro attrs jsonschema six zipfile2 ];
+  propagatedBuildInputs = [
+    distro
+    attrs
+    jsonschema
+    six
+    zipfile2
+  ];
 
-  preCheck = ''
-    substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
-      --replace 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
-   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-      --replace 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
-  '';
+  preCheck =
+    ''
+      substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
+        --replace 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
+        --replace 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
+    '';
 
-  checkInputs = [ hypothesis mock packaging testfixtures ];
+  checkInputs = [
+    hypothesis
+    mock
+    packaging
+    testfixtures
+  ];
 
   pythonImportsCheck = [ "okonomiyaki" ];
 

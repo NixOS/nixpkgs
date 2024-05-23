@@ -1,22 +1,30 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, dbus, pytest, pytest-cov, pytest-asyncio, pytest-timeout
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  setuptools,
+  dbus,
+  pytest,
+  pytest-cov,
+  pytest-asyncio,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "dbus-next";
   version = "0.2.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "altdesktop";
     repo = "python-dbus-next";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     dbus

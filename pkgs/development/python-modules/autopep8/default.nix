@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, glibcLocales
-, pycodestyle
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  glibcLocales,
+  pycodestyle,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -24,15 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-psGl9rXxTQGHyXf1VskJ/I/goVH5hRRP5bUXQdaT/8M=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pycodestyle
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = [ pycodestyle ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     glibcLocales

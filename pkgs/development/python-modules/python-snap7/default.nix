@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, snap7
-, fetchFromGitHub
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  snap7,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-90WwgqPHsHbuQUY49cSQblN1jfoLydiG0dm1aMF/NCA=";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   prePatch = ''
     substituteInPlace snap7/common.py \

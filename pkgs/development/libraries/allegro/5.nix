@@ -3,7 +3,6 @@
 , cmake
 , enet
 , fetchFromGitHub
-, fetchpatch
 , flac
 , freetype
 , gtk3

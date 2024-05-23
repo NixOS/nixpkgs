@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chardet
-, attrs
-, commoncode
-, pytestCheckHook
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chardet,
+  attrs,
+  commoncode,
+  pytestCheckHook,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     chardet
@@ -34,18 +33,18 @@ buildPythonPackage rec {
     commoncode
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "debian_inspector"
-  ];
+  pythonImportsCheck = [ "debian_inspector" ];
 
   meta = with lib; {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
-    license = with licenses; [ asl20 bsd3 mit ];
+    license = with licenses; [
+      asl20
+      bsd3
+      mit
+    ];
     maintainers = [ ];
   };
 }

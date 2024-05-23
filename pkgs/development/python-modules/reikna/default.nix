@@ -1,14 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, sphinx
-, pytest-cov
-, pytest
-, mako
-, numpy
-, funcsigs
-, withCuda ? false, pycuda
-, withOpenCL ? true, pyopencl
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  sphinx,
+  pytest-cov,
+  pytest,
+  mako,
+  numpy,
+  funcsigs,
+  withCuda ? false,
+  pycuda,
+  withOpenCL ? true,
+  pyopencl,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
   };
 
-  nativeCheckInputs = [ sphinx pytest-cov pytest ];
+  nativeCheckInputs = [
+    sphinx
+    pytest-cov
+    pytest
+  ];
 
-  propagatedBuildInputs = [ mako numpy funcsigs ]
-    ++ lib.optional withCuda pycuda
-    ++ lib.optional withOpenCL pyopencl;
+  propagatedBuildInputs = [
+    mako
+    numpy
+    funcsigs
+  ] ++ lib.optional withCuda pycuda ++ lib.optional withOpenCL pyopencl;
 
   checkPhase = ''
     py.test
@@ -38,7 +47,5 @@ buildPythonPackage rec {
     description = "GPGPU algorithms for PyCUDA and PyOpenCL";
     homepage = "https://github.com/fjarri/reikna";
     license = licenses.mit;
-
   };
-
 }

@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
   # Modules doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PIL-stubs"
-  ];
+  pythonImportsCheck = [ "PIL-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for Pillow";

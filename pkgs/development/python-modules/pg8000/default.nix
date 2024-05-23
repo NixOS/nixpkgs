@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, passlib
-, python-dateutil
-, pythonOlder
-, scramp
-, hatchling
-, versioningit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  passlib,
+  python-dateutil,
+  pythonOlder,
+  scramp,
+  hatchling,
+  versioningit,
 }:
 
 buildPythonPackage rec {
@@ -31,16 +32,12 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pg8000"
-  ];
+  pythonImportsCheck = [ "pg8000" ];
 
   meta = with lib; {
     description = "Python driver for PostgreSQL";

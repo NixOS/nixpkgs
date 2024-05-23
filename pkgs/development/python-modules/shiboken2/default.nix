@@ -1,11 +1,12 @@
-{ python
-, lib
-, stdenv
-, pyside2
-, cmake
-, qt5
-, libxcrypt
-, llvmPackages_15
+{
+  python,
+  lib,
+  stdenv,
+  pyside2,
+  cmake,
+  qt5,
+  libxcrypt,
+  llvmPackages_15,
 }:
 
 stdenv.mkDerivation {
@@ -13,9 +14,7 @@ stdenv.mkDerivation {
 
   inherit (pyside2) version src;
 
-  patches = [
-    ./nix_compile_cflags.patch
-  ];
+  patches = [ ./nix_compile_cflags.patch ];
 
   postPatch = ''
     cd sources/shiboken2
@@ -25,21 +24,21 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    llvmPackages_15.libclang
-    python
-    python.pkgs.setuptools
-    qt5.qtbase
-    qt5.qtxmlpatterns
-  ] ++ (lib.optionals (python.pythonOlder "3.9") [
-    # see similar issue: 202262
-    # libxcrypt is required for crypt.h for building older python modules
-    libxcrypt
-  ]);
+  buildInputs =
+    [
+      llvmPackages_15.libclang
+      python
+      python.pkgs.setuptools
+      qt5.qtbase
+      qt5.qtxmlpatterns
+    ]
+    ++ (lib.optionals (python.pythonOlder "3.9") [
+      # see similar issue: 202262
+      # libxcrypt is required for crypt.h for building older python modules
+      libxcrypt
+    ]);
 
-  cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
-  ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   dontWrapQtApps = true;
 
@@ -53,7 +52,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Generator for the PySide2 Qt bindings";
     mainProgram = "shiboken2";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [
+      gpl2
+      lgpl21
+    ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
     broken = stdenv.isDarwin;

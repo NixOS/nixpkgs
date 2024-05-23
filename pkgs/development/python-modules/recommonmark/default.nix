@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, commonmark
-, docutils
-, sphinx
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  commonmark,
+  docutils,
+  sphinx,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ commonmark docutils sphinx ];
+  propagatedBuildInputs = [
+    commonmark
+    docutils
+    sphinx
+  ];
 
   dontUseSetuptoolsCheck = true;
 

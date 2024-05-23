@@ -1,9 +1,11 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
-, requests
-, process-tests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  requests,
+  process-tests,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +27,11 @@ buildPythonPackage rec {
   # https://github.com/ionelmc/python-manhole/issues/54 is fixed
   doCheck = false;
 
-  nativeCheckInputs = [ pytest requests process-tests ];
+  nativeCheckInputs = [
+    pytest
+    requests
+    process-tests
+  ];
   checkPhase = ''
     # Based on its tox.ini
     export PYTHONUNBUFFERED=yes

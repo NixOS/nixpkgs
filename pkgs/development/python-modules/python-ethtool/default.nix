@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkg-config
-, libnl
-, nettools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkg-config,
+  libnl,
+  nettools,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parameterized
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parameterized,
+  unittestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "pypika";
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-9HKT1xRu23F5ptiKhIgIR8srLIcpDzpowBNuYOhqMU0=";
   };
 
-  pythonImportsCheck = ["pypika"];
+  pythonImportsCheck = [ "pypika" ];
 
   nativeCheckInputs = [
     parameterized
@@ -30,4 +31,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

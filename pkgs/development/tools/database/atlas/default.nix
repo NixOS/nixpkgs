@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "atlas";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
     rev = "v${version}";
-    hash = "sha256-NsSDNeciHwlc7LZmuTOzoLNVsjAE+4YGThD/omMbjaE=";
+    hash = "sha256-eMYr+U95+xym7PZ02OmZbDG7g/kxE1Nojp3mZM6mf9Q=";
   };
 
   modRoot = "cmd/atlas";
@@ -40,7 +40,7 @@ buildGoModule rec {
     homepage = "https://atlasgo.io/";
     changelog = "https://github.com/ariga/atlas/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "atlas";
   };
 }
