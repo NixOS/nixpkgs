@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  overrideSDK,
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
@@ -14,11 +16,15 @@
   mupdf,
   fontconfig,
   freetype,
-  stdenv,
   darwin,
 }:
 
-buildGoModule rec {
+let
+  buildGoModule' = buildGoModule.override {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
+in
+buildGoModule' rec {
   pname = "gcs";
   version = "5.21.0";
 
@@ -30,11 +36,15 @@ buildGoModule rec {
   };
 
   modPostBuild = ''
-    chmod +w vendor/github.com/richardwilkes/pdf
+    chmod +w vendor/github.com/richardwilkes/{pdf,unison/internal/skia}
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
+
+    # fixes darwin build
+    substituteInPlace vendor/github.com/richardwilkes/{pdf/pdf.go,unison/internal/skia/skia_other.go} \
+        --replace-fail "-ld_classic" ""
   '';
 
-  vendorHash = "sha256-H5GCrrqmDwpCneXawu7kZsRfrQ8hcsbqhpAAG6FCawg=";
+  vendorHash = "sha256-rWiR70/K4OeF/ihKeGBM5LJBFfJGjI2Wt8xEyAtQ5ME=";
 
   frontend = buildNpmPackage {
     name = "${pname}-${version}-frontend";
