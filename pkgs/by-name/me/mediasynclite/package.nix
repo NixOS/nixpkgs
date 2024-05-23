@@ -20,22 +20,22 @@ stdenv.mkDerivation rec {
     repo = "MediaSyncLiteLinux";
     rev = version;
     hash = "sha256-mS2e6zZutSEAr5gCS58t0Nzg8dCJgn/yoFMmbgnIM2I=";
-    };
+  };
 
   buildInputs = [
-   curl
-   glib
-   gtk3
-   openssl
-   jansson
+    curl
+    glib
+    gtk3
+    openssl
+    jansson
   ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
-   gsettings-desktop-schemas
-   pkg-config
-   wrapGAppsHook3
+    gsettings-desktop-schemas
+    pkg-config
+    wrapGAppsHook3
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
