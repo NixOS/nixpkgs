@@ -73,6 +73,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
     stdenv.cc.cc.lib
   ];
 
+  dontAutoPatchelf = true;
+
   postPatch = ''
     mv ./package.json ./package_orig.json
 
@@ -92,13 +94,22 @@ vscode-utils.buildVscodeMarketplaceExtension {
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
     # Patching binaries
-    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp bin/libc.so debugAdapters/bin/OpenDebugAD7
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
   '';
 
-  postFixup = lib.optionalString gdbUseFixed ''
-    wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
-  '';
+  postFixup =
+    ''
+      autoPatchelf $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters
+
+      # cpptools* are distributed by the extension and need to be run through the distributed musl interpretter
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-srv
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-wordexp
+    ''
+    + lib.optionalString gdbUseFixed ''
+      wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
+    '';
 
   meta = {
     description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
