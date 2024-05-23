@@ -1,6 +1,6 @@
 {
   fetchFromSourcehut,
-  hare,
+  hareHook,
   lib,
   stdenv,
 }:
@@ -16,12 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-I43TLPoImBsvkgV3hDy9dw0pXVt4ezINnxFtEV9P2/M=";
   };
 
-  nativeBuildInputs = [ hare ];
+  nativeBuildInputs = [ hareHook ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
@@ -31,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ patwid ];
 
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })
