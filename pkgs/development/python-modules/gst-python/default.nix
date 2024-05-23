@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.8";
+  version = "1.22.12";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-1cuPFEBUoqEQ5mcr1RLksV1bG42YecGSuXI1Ne+3C48=";
+    hash = "sha256-2Y0yJu/qINXEQKKJiKIDGalT98WUiV3yu6RThjMQjp8=";
   };
 
   # Python 2.x is not supported.
