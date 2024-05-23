@@ -10016,6 +10016,8 @@ self: super: with self; {
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
+  pyrympro = callPackage ../development/python-modules/pyrympro { };
+
   pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
