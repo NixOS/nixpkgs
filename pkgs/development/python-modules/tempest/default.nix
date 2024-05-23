@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "38.0.0";
+  version = "39.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2WmSN4NrH5/y5iAuYaaVuZkuh1ym14jFj7OXw8Jfxtc=";
+    hash = "sha256-l4qKbTfQRWiRsoHN9fiAAiGMGP+q3gwRH1pMSXV/eSU=";
   };
 
   nativeBuildInputs = [ setuptools ];
