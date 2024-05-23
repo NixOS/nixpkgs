@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
 }:
@@ -171,5 +172,6 @@ python3.pkgs.buildPythonApplication rec {
       anhdle14
       fab
     ];
+    broken = stdenv.isDarwin;
   };
 }
