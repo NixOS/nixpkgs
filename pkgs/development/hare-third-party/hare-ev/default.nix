@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, hare
-, unstableGitUpdater
+{
+  fetchFromSourcehut,
+  hare,
+  lib,
+  stdenv,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -16,9 +17,7 @@ stdenv.mkDerivation {
     hash = "sha256-SXExwDZKlW/2XYzmJUhkLWj6NF/znrv3vY9V0mD5iFQ=";
   };
 
-  nativeCheckInputs = [
-    hare
-  ];
+  nativeCheckInputs = [ hare ];
 
   makeFlags = [
     "HARECACHE=.harecache"
