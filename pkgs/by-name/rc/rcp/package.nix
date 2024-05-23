@@ -5,6 +5,9 @@
 , darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation IOKit;
+in
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
   version = "0.9.0";
@@ -23,6 +26,11 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-croFSe37yQa9LijaNxKHrZlcJdExz9SweOoG21PPn9E=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    IOKit
+  ];
 
   checkFlags = [
     # this test also sets setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
