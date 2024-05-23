@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchPypi
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchPypi,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,17 +20,11 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '"pytest-runner"' ""
   '';
 
-  pythonRelaxDeps = [
-    "bottle"
-  ];
+  pythonRelaxDeps = [ "bottle" ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   dependencies = with python3Packages; [
     daemonocle
@@ -46,21 +41,23 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # dnswanip connects to an external server to discover the
-    # machine's IP address.
-    "dnswanip"
-    # AssertionError
-    "test_null_dummy"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # The tests that spawn a server using Bottle cannot be run on
-    # macOS or Windows as the default multiprocessing start method
-    # on those platforms is 'spawn', which requires the code to be
-    # run to be picklable, which this code isn't.
-    # Additionaly, other start methods are unsafe and prone to failure
-    # on macOS; see https://bugs.python.org/issue33725.
-    "BottleServer"
-  ];
+  disabledTests =
+    [
+      # dnswanip connects to an external server to discover the
+      # machine's IP address.
+      "dnswanip"
+      # AssertionError
+      "test_null_dummy"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # The tests that spawn a server using Bottle cannot be run on
+      # macOS or Windows as the default multiprocessing start method
+      # on those platforms is 'spawn', which requires the code to be
+      # run to be picklable, which this code isn't.
+      # Additionaly, other start methods are unsafe and prone to failure
+      # on macOS; see https://bugs.python.org/issue33725.
+      "BottleServer"
+    ];
   # Allow tests that bind or connect to localhost on macOS.
   __darwinAllowLocalNetworking = true;
 
