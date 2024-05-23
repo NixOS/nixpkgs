@@ -27,6 +27,7 @@
   qtpositioning,
   qtimageformats,
   tbb_2021_11,
+  tzdata,
   pkg-config,
   python3,
   wrapQtAppsHook,
@@ -55,22 +56,12 @@ in
         map, providing the capability to monitor weather events using
         reflectivity, velocity, and other products.
       '';
-      license = with lib.licenses; [mit];
+      license = lib.licenses.mit;
       mainProgram = "supercell-wx";
       platforms = ["x86_64-linux"];
     };
 
-    nativeBuildInputs = [
-      cmake
-      ninja
-      wrapQtAppsHook
-      pkg-config
-      git
-    ];
-
-    preConfigure = ''
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=restrict"
-    '';
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=restrict";
 
     patches = [
       ./patches/remove-conan.patch
@@ -83,11 +74,21 @@ in
     ];
 
     postPatch = ''
+      substituteInPlace external/date/src/tz.cpp \
+        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
       substituteInPlace external/maplibre-native-qt/src/core/CMakeLists.txt \
         --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
       substituteInPlace scwx-qt/tools/generate_versions.py \
         --replace-fail "@NIX_SRC_REV@" "${src.rev}"
     '';
+
+    nativeBuildInputs = [
+      cmake
+      ninja
+      wrapQtAppsHook
+      pkg-config
+      git
+    ];
 
     buildInputs = [
       zlib

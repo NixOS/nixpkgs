@@ -7,7 +7,7 @@ index 0149e33..ed66072 100644
        if (timeZone != nullptr)
        {
 -         zoned_time zt = {timeZone, timeInSeconds};
-+        date::zoned_time zt = {timeZone, timeInSeconds};
++         date::zoned_time zt = {timeZone, timeInSeconds};
  
           if (clockFormat == ClockFormat::_24Hour)
           {
