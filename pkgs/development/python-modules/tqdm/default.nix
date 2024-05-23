@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , setuptools
 , setuptools-scm
 , wheel
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-2I5lH5242FUaYlVtPP+eMDQnTKXWbpMZfPJJDi3Lacc=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/advisories/GHSA-g7vv-2v7x-gj9p
+      name = "CVE-2024-34062.patch";
+      url = "https://github.com/tqdm/tqdm/commit/4e613f84ed2ae029559f539464df83fa91feb316.patch";
+      hash = "sha256-4HgLKlJfbLDQO81vNJG4SwsEUMc3dr6E9KE/i34OYF8=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
