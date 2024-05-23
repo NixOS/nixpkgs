@@ -15,6 +15,9 @@
 , teams-for-linux
 }:
 
+let
+  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
   version = "1.4.27";
@@ -31,7 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jBwyIyiWeqNmOnxmVOr7c4oMWwHElEjM25sShhTMi78=";
   };
 
-  nativeBuildInputs = [ yarn fixup-yarn-lock nodejs copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    yarn
+    fixup-yarn-lock
+    nodejs
+    makeWrapper
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    copyDesktopItems
+  ];
+
+  # disable code signing on Darwin
+  env.CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.isDarwin "false";
 
   configurePhase = ''
     runHook preConfigure
@@ -48,9 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    # make electron directory writable (requirement for Darwin)
+    cp -r ${electronDist} electron-dist
+    chmod -R u+w electron-dist
+
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -59,23 +76,29 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/{applications,teams-for-linux}
-    cp dist/${if stdenv.isDarwin then "darwin-" else "linux-"}${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked/resources/app.asar $out/share/teams-for-linux/
+    ${lib.optionalString (!stdenv.isDarwin) ''
+      mkdir -p $out/share/{applications,teams-for-linux}
+      cp dist/*-unpacked/resources/app.asar $out/share/teams-for-linux/
 
-    pushd build/icons
-    for image in *png; do
-      mkdir -p $out/share/icons/hicolor/''${image%.png}/apps
-      cp -r $image $out/share/icons/hicolor/''${image%.png}/apps/teams-for-linux.png
-    done
-    popd
+      pushd build/icons
+      for image in *png; do
+        mkdir -p $out/share/icons/hicolor/''${image%.png}/apps
+        cp -r $image $out/share/icons/hicolor/''${image%.png}/apps/teams-for-linux.png
+      done
+      popd
 
-    # Linux needs 'aplay' for notification sounds
-    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
-      ${lib.optionalString stdenv.isLinux ''
+      # Linux needs 'aplay' for notification sounds
+      makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
-      ''} \
-      --add-flags "$out/share/teams-for-linux/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "$out/share/teams-for-linux/app.asar" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+    ''}
+
+    ${lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r dist/mac*/teams-for-linux.app $out/Applications
+      makeWrapper $out/Applications/teams-for-linux.app/Contents/MacOS/teams-for-linux $out/bin/teams-for-linux
+    ''}
 
     runHook postInstall
   '';
@@ -102,6 +125,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ muscaln qjoly chvp ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
   };
 })
