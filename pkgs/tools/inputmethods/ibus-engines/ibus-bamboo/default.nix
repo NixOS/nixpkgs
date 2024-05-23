@@ -1,11 +1,8 @@
 { lib, stdenv
 , fetchFromGitHub
-, glib
-, gettext
 , xorg
 , pkg-config
 , wrapGAppsHook3
-, gtk3
 , go
 }:
 
@@ -21,19 +18,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gettext
     pkg-config
     wrapGAppsHook3
     go
   ];
 
   buildInputs = [
-    glib
-    gtk3
-    xorg.libX11
-    xorg.xorgproto
     xorg.libXtst
-    xorg.libXi
   ];
 
   preConfigure = ''
