@@ -137,10 +137,16 @@ let
       "build-node-api-tests"
       "tooltest"
       "cctest"
+      "test-ci-js"
     ];
 
-    # Do not create __pycache__ when running tests.
-    checkFlags = [ "PYTHONDONTWRITEBYTECODE=1" ];
+    checkFlags = [
+      # Do not create __pycache__ when running tests.
+      "PYTHONDONTWRITEBYTECODE=1"
+      "FLAKY_TESTS=skip"
+      # Skip some tests that are not passing in this context
+      "CI_SKIP_TESTS=test-setproctitle,test-tls-cli-max-version-1.3,test-tls-client-auth,test-child-process-exec-env,test-fs-write-stream-eagain,test-tls-sni-option,test-https-foafssl,test-child-process-uid-gid,test-process-euid-egid,test-process-initgroups,test-process-uid-gid,test-process-setgroups"
+    ];
 
     postInstall = ''
       HOST_PATH=$out/bin patchShebangs --host $out
