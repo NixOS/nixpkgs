@@ -9,7 +9,6 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,7 @@ buildPythonPackage rec {
   version = "116";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Kane610";
@@ -28,17 +27,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov=pydeconz --cov-report term-missing" "" \
-      --replace "setuptools==" "setuptools>=" \
-      --replace "wheel==" "wheel>="
+      --replace-fail "--cov=pydeconz --cov-report term-missing" "" \
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel==" "wheel>="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     orjson
   ];
@@ -53,10 +51,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library wrapping the Deconz REST API";
-    mainProgram = "pydeconz";
     homepage = "https://github.com/Kane610/deconz";
     changelog = "https://github.com/Kane610/deconz/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pydeconz";
   };
 }
