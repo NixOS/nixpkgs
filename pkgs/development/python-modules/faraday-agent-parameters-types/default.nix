@@ -27,9 +27,9 @@ buildPythonPackage rec {
       --replace-warn '"pytest-runner",' ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     marshmallow
     packaging
   ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
     changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ gpl3Plus ];
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }
