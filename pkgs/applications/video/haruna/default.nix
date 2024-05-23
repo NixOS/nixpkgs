@@ -1,4 +1,5 @@
 { lib
+, pkgs
 , stdenv
 , fetchFromGitLab
 , breeze-icons
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/application.cpp \
       --replace '"yt-dlp"' '"${lib.getExe yt-dlp}"'
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/haruna \
+      --set LD_PRELOAD "${pkgs.vulkan-loader}/lib/libvulkan.so"
   '';
 
   buildInputs = [
