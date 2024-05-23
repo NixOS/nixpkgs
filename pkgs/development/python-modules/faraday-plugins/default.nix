@@ -34,12 +34,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-warn "version=version," "version='${version}',"
+      --replace-fail "version=version," "version='${version}',"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     click
     colorama
@@ -73,10 +73,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
-    mainProgram = "faraday-plugins";
     homepage = "https://github.com/infobyte/faraday_plugins";
     changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "faraday-plugins";
   };
 }
