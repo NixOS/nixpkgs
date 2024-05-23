@@ -87,7 +87,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     touch "./install.lock"
 
     # Clang-format from nix package.
-    mv ./LLVM/ ./LLVM_orig
+    rm -rf ./LLVM
     mkdir "./LLVM/"
     find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
