@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "iBroadcastMediaServices";
     repo = "MediaSyncLiteLinux";
     rev = version;
-    hash = "sha256-mS2e6zZutSEAr5gCS58t0Nzg8dCJgn/yoFMmbgnIM2I=";
+    hash = "sha256-ToSkR6tPJMBCcj1NUBAywKjCAPlpmh+ngIopFrT2PIA=";
   };
 
   buildInputs = [
