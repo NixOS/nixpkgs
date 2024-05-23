@@ -20714,6 +20714,12 @@
     githubId = 858790;
     name = "Tobias Mayer";
   };
+  tobz619 = {
+    email = "toloke@yahoo.co.uk";
+    github = "tobz619";
+    githubId = 93312805;
+    name = "Tobi Oloke";
+  };
   tochiaha = {
     email = "tochiahan@proton.me";
     github = "Tochiaha";
