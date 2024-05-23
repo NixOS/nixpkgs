@@ -78,7 +78,9 @@ in
 , pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
 , benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
-, testTarget ? "", testFlags ? []
+, # testTarget is deprecated. Use testTargets instead.
+  testTarget ? ""
+, testTargets ? lib.strings.splitString " " testTarget, testFlags ? []
 , broken ? false
 , preCompileBuildDriver ? null, postCompileBuildDriver ? null
 , preUnpack ? null, postUnpack ? null
@@ -571,7 +573,7 @@ stdenv.mkDerivation ({
       "--show-details=streaming"
       ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
     )
-    ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
+    ${setupCommand} test ${lib.concatStringsSep " " testTargets} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 
