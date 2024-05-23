@@ -1,6 +1,6 @@
 {
   fetchFromSourcehut,
-  hare,
+  hareHook,
   lib,
   stdenv,
   unstableGitUpdater,
@@ -17,12 +17,9 @@ stdenv.mkDerivation {
     hash = "sha256-SXExwDZKlW/2XYzmJUhkLWj6NF/znrv3vY9V0mD5iFQ=";
   };
 
-  nativeCheckInputs = [ hare ];
+  nativeCheckInputs = [ hareHook ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
@@ -33,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "https://sr.ht/~sircmpwn/hare-ev";
     license = licenses.mpl20;
     maintainers = with maintainers; [ colinsane ];
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 }
