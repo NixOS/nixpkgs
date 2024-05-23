@@ -13032,6 +13032,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { };
 
+  raylib-python-cffi = callPackage ../development/python-modules/raylib-python-cffi {};
+
   razdel = callPackage ../development/python-modules/razdel { };
 
   rbtools = callPackage ../development/python-modules/rbtools { };
