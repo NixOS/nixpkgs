@@ -4,6 +4,7 @@
 , lib
 , meta
 , pname
+, revision
 , version
 }:
 stdenv.mkDerivation {
