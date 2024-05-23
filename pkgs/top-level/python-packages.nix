@@ -15169,6 +15169,8 @@ self: super: with self; {
 
   tiny-proxy = callPackage ../development/python-modules/tiny-proxy { };
 
+  tinytag = callPackage ../development/python-modules/tinytag { };
+
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
   tinycss = callPackage ../development/python-modules/tinycss { };
