@@ -5,10 +5,10 @@
 
 let
   pname = "fflogs";
-  version = "8.4.0";
+  version = "8.5.6";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-dj6WUatWJBQZwNc8uHJYTRTpbhAmJowJmfUzbB2qbnw=";
+    hash = "sha256-mLqQ1T5mBNUkTkgbGO/nVkoSy6U7hVBk9EcYAjo3i3k=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in

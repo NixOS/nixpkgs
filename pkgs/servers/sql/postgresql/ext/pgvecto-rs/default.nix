@@ -2,7 +2,6 @@
 , buildPgrxExtension
 , cargo-pgrx_0_11_2
 , clang_16
-, fetchCrate
 , fetchFromGitHub
 , nix-update-script
 , nixosTests
@@ -93,7 +92,9 @@ in
   meta = with lib; {
     # The pgrx 0.11.2 dependency is broken in aarch64-linux: https://github.com/pgcentralfoundation/pgrx/issues/1429
     # It is fixed in pgrx 0.11.3, but upstream is still using pgrx 0.11.2
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    # Additionally, upstream (accidentally) broke support for PostgreSQL 12 and 13 on 0.2.1, but
+    # they are removing it in 0.3.0 either way: https://github.com/tensorchord/pgvecto.rs/issues/343
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin || (versionOlder postgresql.version "14");
     description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
     homepage = "https://github.com/tensorchord/pgvecto.rs";
     license = licenses.asl20;

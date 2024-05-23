@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, markdown-it-py
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, rich
-, syrupy
-, time-machine
-, tree-sitter
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  markdown-it-py,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  syrupy,
+  time-machine,
+  tree-sitter,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -28,16 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-73qEogHe69B66r4EJOj2RAP95O5z7v/UYARTIEPxrcA=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     markdown-it-py
     rich
     typing-extensions
-  ] ++ markdown-it-py.optional-dependencies.plugins
-    ++ markdown-it-py.optional-dependencies.linkify;
+  ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
@@ -69,9 +67,7 @@ buildPythonPackage rec {
     "test_language_binary_missing"
   ];
 
-  pythonImportsCheck = [
-    "textual"
-  ];
+  pythonImportsCheck = [ "textual" ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-, poetry-core
-, pyyaml
-, colorama
-, junit-xml
+  poetry-core,
+  pyyaml,
+  colorama,
+  junit-xml,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     junit-xml
   ];
 
-  pythonImportCheck = [
-    "refery"
-  ];
+  pythonImportCheck = [ "refery" ];
 
   disabled = pythonOlder "3.10";
 

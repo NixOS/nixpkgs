@@ -1,98 +1,88 @@
-{ buildPythonPackage
-, SDL2
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, gym
-, importlib-metadata
-, importlib-resources
-, lib
-, ninja
-, numpy
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, stdenv
-, typing-extensions
-, wheel
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pybind11,
+  setuptools,
+  wheel,
+  SDL2,
+  zlib,
+  importlib-resources,
+  numpy,
+  typing-extensions,
+  importlib-metadata,
+  gymnasium,
+  pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "ale-py";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B2AxhlzvBy1lJ3JttJjImgTjMtEUyZBv+xHU2IC7BVE=";
+    hash = "sha256-obZfNQ0+ppnq/BD4IFeMFAqJnCVV3X/2HeRwbdSKRFk=";
   };
 
   patches = [
     # don't download pybind11, use local pybind11
     ./cmake-pybind11.patch
-    ./patch-sha-check-in-setup.patch
-
-    # The following two patches add the required `include <cstdint>` for compilation to work with GCC 13.
-    # See https://github.com/Farama-Foundation/Arcade-Learning-Environment/pull/503
-    (fetchpatch {
-      name = "fix-gcc13-compilation-1";
-      url = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/commit/ebd64c03cdaa3d8df7da7c62ec3ae5795105e27a.patch";
-      hash = "sha256-NMz0hw8USOj88WryHRkMQNWznnP6+5aWovEYNuocQ2c=";
-    })
-    (fetchpatch {
-      name = "fix-gcc13-compilation-2";
-      url = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/commit/4c99c7034f17810f3ff6c27436bfc3b40d08da21.patch";
-      hash = "sha256-66/bDCyMr1RsKk63T9GnFZGloLlkdr/bf5WHtWbX6VY=";
-    })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
+    pybind11
     setuptools
     wheel
-    pybind11
   ];
 
   buildInputs = [
-    zlib
     SDL2
+    zlib
   ];
 
-  propagatedBuildInputs = [
-    typing-extensions
+  dependencies = [
     importlib-resources
     numpy
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    gym
-  ];
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-    substituteInPlace setup.py \
-      --replace '@sha@' '"${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "ale_py" ];
 
-  meta = with lib; {
-    description = "a simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
+  nativeCheckInputs = [
+    gymnasium
+    pytestCheckHook
+  ];
+
+  # test_atari_env.py::test_check_env fails on the majority of the environments because the ROM are missing.
+  # The user is expected to manually download the roms:
+  # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else
+  disabledTests = [ "test_check_env" ];
+
+  meta = {
+    description = "A simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
     mainProgram = "ale-import-roms";
     homepage = "https://github.com/mgbellemare/Arcade-Learning-Environment";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ billhuang ];
+    changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ billhuang ];
     broken = stdenv.isDarwin; # fails to link with missing library
   };
 }

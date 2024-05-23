@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, gitpython
-, pbr
-, pyyaml
-, rich
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  gitpython,
+  pbr,
+  pyyaml,
+  rich,
+  stevedore,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-Nt5Q9yCFarJKJNuqX+4sZgUO2XwUd+ChFZ3qsXdeq2s=";
   };
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     gitpython
@@ -36,9 +35,7 @@ buildPythonPackage rec {
   #   and this requires Network Connectivity
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bandit"
-  ];
+  pythonImportsCheck = [ "bandit" ];
 
   meta = with lib; {
     description = "Security oriented static analyser for python code";

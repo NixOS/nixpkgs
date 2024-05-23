@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, redis
+  # dependencies
+  redis,
 
-# tests
-, pygments
-, pytestCheckHook
+  # tests
+  pygments,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,18 +37,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    redis
-  ];
+  propagatedBuildInputs = [ redis ];
 
   nativeCheckInputs = [
     pygments
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "portalocker"
-  ];
+  pythonImportsCheck = [ "portalocker" ];
 
   meta = with lib; {
     changelog = "https://github.com/wolph/portalocker/releases/tag/v${version}";

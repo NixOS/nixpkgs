@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , libgit2
 , zlib
@@ -11,30 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.16";
+  version = "0.11.22";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "v${version}";
-    hash = "sha256-ZmGrdAHbU4PQgd9haoVEZ8Wn8Scujm9bJAtvO2+aPoQ=";
+    hash = "sha256-DyYx//KubbRN1zyBoBoL4MRuHZBDngXazC7HiuA+4Sk=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Trim whitespace patch
-      name = "whitespace-trim.patch";
-      url = "https://github.com/Enter-tainer/typstyle/commit/127b7362f5938e091e2e5a33976ad3f63b6e4ee3.patch";
-      hash = "sha256-Xzo51bgpEUKP7WDQ7BFNAZsyofPcPDIJMWOf4S+GGvI=";
-    })
-  ];
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-syntax-0.11.0" = "sha256-BezpRq5O89gLbpRtte539vlJ4G5yJ6VPJ8AaC7rQNc0=";
-    };
-  };
+  cargoHash = "sha256-+Hd1u9mUJ2SPfx0mOYT2KiDY7+/Q3EjkVyS++jgUtFs=";
 
   nativeBuildInputs = [
     pkg-config

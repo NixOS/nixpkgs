@@ -1,9 +1,10 @@
-{ lib
-, aioboto3
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aioboto3,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "AIOAladdinConnect"
-  ];
+  pythonImportsCheck = [ "AIOAladdinConnect" ];
 
   meta = with lib; {
     description = "Library for controlling Genie garage doors connected to Aladdin Connect devices";

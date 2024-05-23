@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/kernel-mstflint-${version}.tar.gz";
-    hash = "sha256-rfZts0m8x6clVazpbAa2xK+dYgRU9Us5rbcWa0uHJ1M=";
+    hash = "sha256-bWYglHJUNCPT13N7aBdjbLPMZIk7vjvF+o9W3abDNr0=";
   };
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
@@ -17,10 +17,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  preConfigure = lib.optionals (lib.versionAtLeast kernel.version "6.4") ''
-    sed -i "s/class_create(THIS_MODULE, dev->name)/class_create(dev->name)/g" mst_main.c
-  '';
 
   installPhase = ''
     runHook preInstall

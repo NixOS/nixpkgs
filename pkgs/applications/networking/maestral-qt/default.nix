@@ -11,6 +11,8 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
   version = "1.9.3";
+  pyproject = true;
+
   disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -20,9 +22,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-7Lt0Neobtofd1JDoz8BhGn+nFKaMLbM/6z0QQmtEKpA=";
   };
 
-  format = "pyproject";
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     click
     markdown2
     maestral

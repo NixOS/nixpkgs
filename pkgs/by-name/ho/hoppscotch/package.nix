@@ -62,9 +62,6 @@ if stdenv.isDarwin then stdenv.mkDerivation
 else appimageTools.wrapType2 {
   inherit pname version src meta;
 
-  extraPkgs = pkgs:
-    appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
-
   extraInstallCommands =
     let
       appimageContents = appimageTools.extractType2 { inherit pname version src; };

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-66MOqcWIiqJrORJDgAH5iUblHyqJvuf9DIBN56XjKwU=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [
-    "derpconf"
-  ];
+  pythonImportsCheck = [ "derpconf" ];
 
   meta = with lib; {
     description = "Module to abstract loading configuration files for your app";

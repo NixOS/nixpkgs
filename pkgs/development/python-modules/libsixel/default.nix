@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, lib
-, stdenv
-, libsixel
+{
+  buildPythonPackage,
+  lib,
+  stdenv,
+  libsixel,
 }:
 
 buildPythonPackage rec {

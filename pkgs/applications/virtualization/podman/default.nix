@@ -19,11 +19,10 @@
 , symlinkJoin
 , substituteAll
 , extraPackages ? [ ]
-, runc
 , crun
-, gvisor
-, youki
+, runc
 , conmon
+, extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
 , slirp4netns
 , fuse-overlayfs
 , util-linux
@@ -59,7 +58,9 @@ let
       netavark
       slirp4netns
       passt
-    ];
+      conmon
+      crun
+    ] ++ extraRuntimes;
   };
 in
 buildGoModule rec {
@@ -74,13 +75,13 @@ buildGoModule rec {
   };
 
   patches = [
-    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
-    ./rm-podman-mac-helper-msg.patch
-  ] ++ lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./hardcode-paths.patch;
-      inherit crun runc gvisor youki conmon;
+      bin_path = helpersBin;
     })
+
+    # we intentionally don't build and install the helper so we shouldn't display messages to users about it
+    ./rm-podman-mac-helper-msg.patch
   ];
 
   vendorHash = null;

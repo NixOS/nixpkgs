@@ -29,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.44.0";
+  version = "2.44.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-41hzjctbXqNAzpAKABXAOuhugE5/9k5HqkYx3e5oHeM=";
+    hash = "sha256-e2CmJMD3AJoWuFYlBiGq/c3YXrjUS7AgYXtlJbhyYeQ=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";

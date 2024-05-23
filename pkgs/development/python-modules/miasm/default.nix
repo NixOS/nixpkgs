@@ -1,14 +1,15 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, future
-, gcc
-, llvmlite
-, parameterized
-, pycparser
-, pyparsing
-, z3-solver
-, setuptools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  future,
+  gcc,
+  llvmlite,
+  parameterized,
+  pycparser,
+  pyparsing,
+  z3-solver,
+  setuptools,
 }:
 let
   commit = "90dc1671b59077ee27c3d44d9d536d6659eb3bbe";

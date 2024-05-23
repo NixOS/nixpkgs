@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-event
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-event,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -20,11 +21,12 @@ buildPythonPackage rec {
     hash = "sha256-6tP7SW52FPm1adFtrUt4BSsKwhh1utjWbKNQNS2bb50=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ zope-event zope-interface ];
+  propagatedBuildInputs = [
+    zope-event
+    zope-interface
+  ];
 
   # namespace colides with local directory
   doCheck = false;

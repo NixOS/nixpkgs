@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, basemap-data
-, cython
-, geos
-, numpy
-, matplotlib
-, pillow
-, pyproj
-, pyshp
-, python
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  basemap-data,
+  cython,
+  geos,
+  numpy,
+  matplotlib,
+  pillow,
+  pyproj,
+  pyshp,
+  python,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -70,6 +71,9 @@ buildPythonPackage rec {
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
     maintainers = with maintainers; [ ];
-    license = with licenses; [ mit lgpl21 ];
+    license = with licenses; [
+      mit
+      lgpl21
+    ];
   };
 }

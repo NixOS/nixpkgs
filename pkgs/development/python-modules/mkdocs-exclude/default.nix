@@ -1,8 +1,9 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchFromGitHub
-, mkdocs
+{
+  lib,
+  callPackage,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mkdocs,
 }:
 
 buildPythonPackage rec {

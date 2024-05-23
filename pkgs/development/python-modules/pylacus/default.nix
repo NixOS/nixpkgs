@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -20,20 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-ytO9wtCkiC6CLWLkmSV/R+Rnx/W4Jv2dsgykZ2GB13U=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylacus"
-  ];
+  pythonImportsCheck = [ "pylacus" ];
 
   meta = with lib; {
     description = "Module to enqueue and query a remote Lacus instance";

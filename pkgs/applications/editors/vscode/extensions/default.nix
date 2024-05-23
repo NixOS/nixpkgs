@@ -406,8 +406,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.8.1";
-          sha256 = "0kqzry0cbvvy1pkbx5rhnk5ry7j91cbf11vz1s1jrqc7j0hq0yx8";
+          version = "1.11.4";
+          hash = "sha256-dAovrYfA5muPNhFIHycxuO0CIWPT4T9hsEzri1JDOUI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -1477,8 +1477,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.21.1";
-          hash = "sha256-z/GhynjkoEcaRp59tYr1lnM5vfV0OaDCcCpC02OdVLE=";
+          version = "0.21.3";
+          hash = "sha256-C6QFlqMIcefQhzBuVd3CnQHHaDdM1de7j+a/06wZ9FQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -2878,8 +2878,8 @@ let
         mktplcRef = {
           name = "debugpy";
           publisher = "ms-python";
-          version = "2023.3.13121011";
-          hash = "sha256-owYUEyQl2FQytApfuI97N4y9p7/dL0lu6EBk/AzSMjw=";
+          version = "2024.6.0";
+          hash = "sha256-VlPe65ViBur5P6L7iRKdGnmbNlSCwYrdZAezStx8Bz8=";
         };
         meta = {
           description = "Python debugger (debugpy) extension for VS Code";
@@ -3700,8 +3700,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.12";
-          hash = "sha256-4Iq6idux029i7cBV3x79ZRAbSk3ymqx+Q2jv0zV9ZTI=";
+          version = "0.8.13";
+          hash = "sha256-DxM7oWAbIonsKTvJjxX4oTaBwvRcxNT2y10ljYAzVeI=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";

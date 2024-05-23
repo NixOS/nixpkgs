@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, syrupy
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-rjC4zWWtaPxuBcjiO9dVsXD4dTa47iwkKuSFx+QXeXw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     "test_invalid_station_id"
   ];
 
-  pythonImportsCheck = [
-    "gios"
-  ];
+  pythonImportsCheck = [ "gios" ];
 
   meta = with lib; {
     description = "Python client for getting air quality data from GIOS";

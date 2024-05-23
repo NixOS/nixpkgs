@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, hatch-jupyter-builder
-, hatchling
-, importlib-metadata
-, ipywidgets
-, psygnal
-, typing-extensions
-, watchfiles
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  hatch-jupyter-builder,
+  hatchling,
+  importlib-metadata,
+  ipywidgets,
+  psygnal,
+  typing-extensions,
+  watchfiles,
 }:
 
 buildPythonPackage rec {
   pname = "anywidget";
-  version = "0.9.10";
+  version = "0.9.11";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OQpigkCYHAmBPHUjJ53cq4L/T9Moet1UM7eLE2kIkGg=";
+    hash = "sha256-WN3tjobsJ84odgyUVzF2YxE9mvYIlH7mqNDstSiyLNw=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -46,6 +47,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     watchfiles
+  ];
+
+  disabledTests = [
+    # requires package.json
+    "test_version"
   ];
 
   pythonImportsCheck = [ "anywidget" ];

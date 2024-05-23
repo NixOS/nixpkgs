@@ -1,43 +1,44 @@
-{ lib
-, aiohttp
-, asgiref
-, buildPythonPackage
-, chalice
-, channels
-, click
-, daphne
-, django
-, email-validator
-, fastapi
-, fetchFromGitHub
-, fetchpatch
-, flask
-, freezegun
-, graphql-core
-, libcst
-, opentelemetry-api
-, opentelemetry-sdk
-, poetry-core
-, pydantic
-, pygments
-, pyinstrument
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-django
-, pytest-emoji
-, pytest-flask
-, pytest-mock
-, pytest-snapshot
-, pytestCheckHook
-, python-dateutil
-, python-multipart
-, pythonOlder
-, rich
-, sanic
-, sanic-testing
-, starlette
-, typing-extensions
-, uvicorn
+{
+  lib,
+  aiohttp,
+  asgiref,
+  buildPythonPackage,
+  chalice,
+  channels,
+  click,
+  daphne,
+  django,
+  email-validator,
+  fastapi,
+  fetchFromGitHub,
+  fetchpatch,
+  flask,
+  freezegun,
+  graphql-core,
+  libcst,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  poetry-core,
+  pydantic,
+  pygments,
+  pyinstrument,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-django,
+  pytest-emoji,
+  pytest-flask,
+  pytest-mock,
+  pytest-snapshot,
+  pytestCheckHook,
+  python-dateutil,
+  python-multipart,
+  pythonOlder,
+  rich,
+  sanic,
+  sanic-testing,
+  starlette,
+  typing-extensions,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
@@ -74,9 +75,7 @@ buildPythonPackage rec {
       --replace "--emoji --mypy-ini-file=mypy.ini" "" \
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     graphql-core
@@ -123,19 +122,13 @@ buildPythonPackage rec {
       opentelemetry-api
       opentelemetry-sdk
     ];
-    pydantic = [
-      pydantic
-    ];
-    sanic = [
-      sanic
-    ];
+    pydantic = [ pydantic ];
+    sanic = [ sanic ];
     fastapi = [
       fastapi
       python-multipart
     ];
-    chalice = [
-      chalice
-    ];
+    chalice = [ chalice ];
     cli = [
       click
       pygments
@@ -145,9 +138,7 @@ buildPythonPackage rec {
     # starlite = [
     #   starlite
     # ];
-    pyinstrument = [
-      pyinstrument
-    ];
+    pyinstrument = [ pyinstrument ];
   };
 
   nativeCheckInputs = [
@@ -162,9 +153,7 @@ buildPythonPackage rec {
     sanic-testing
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "strawberry"
-  ];
+  pythonImportsCheck = [ "strawberry" ];
 
   disabledTestPaths = [
     "tests/benchmarks/"

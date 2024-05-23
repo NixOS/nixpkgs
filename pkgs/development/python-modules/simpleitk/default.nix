@@ -1,18 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cmake
-, swig4
-, elastix
-, itk
-, numpy
-, simpleitk
-, scikit-build
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cmake,
+  swig4,
+  elastix,
+  itk,
+  numpy,
+  simpleitk,
+  scikit-build,
 }:
 
 buildPythonPackage rec {
-  inherit (simpleitk) pname version src meta;
+  inherit (simpleitk)
+    pname
+    version
+    src
+    meta
+    ;
   format = "pyproject";
   disabled = pythonOlder "3.8";
 

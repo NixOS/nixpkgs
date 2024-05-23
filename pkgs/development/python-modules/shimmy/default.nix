@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, wheel
-, gymnasium
-, numpy
-, ale-py
-, bsuite
-, dm-control
-, gym
-, imageio
-, pettingzoo
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  gymnasium,
+  numpy,
+  ale-py,
+  bsuite,
+  dm-control,
+  gym,
+  imageio,
+  pettingzoo,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
+
+    # Broken since ale-py v0.9.0 due to API change
+    # https://github.com/Farama-Foundation/Shimmy/issues/120
+    "tests/test_atari.py"
   ];
 
   preCheck = ''

@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, setuptools
-, setuptools-scm
-, gpib-ctypes
-, pyserial
-, pyusb
-, pyvisa
-, typing-extensions
-, psutil
-, zeroconf
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  setuptools-scm,
+  gpib-ctypes,
+  pyserial,
+  pyusb,
+  pyvisa,
+  typing-extensions,
+  psutil,
+  zeroconf,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     # vicp = [ pyvicp zeroconf ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Module that implements the Virtual Instrument Software Architecture";

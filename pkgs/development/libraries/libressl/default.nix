@@ -103,11 +103,25 @@ in {
   libressl_3_6 = generic {
     version = "3.6.3";
     hash = "sha256-h7G7426e7I0K5fBMg9NrLFsOWBeEx+sIFwJe0p6t6jc=";
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/libressl/portable/commit/86e4965d7f20c3a6afc41d95590c9f6abb4fe788.patch";
+        includes = [ "tests/tlstest.sh" ];
+        hash = "sha256-XmmKTvP6+QaWxyGFCX6/gDfME9GqBWSx4X8RH8QbDXA=";
+      })
+    ];
   };
 
   libressl_3_7 = generic {
     version = "3.7.3";
     hash = "sha256-eUjIVqkMglvXJotvhWdKjc0lS65C4iF4GyTj+NwzXbM=";
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/libressl/portable/commit/86e4965d7f20c3a6afc41d95590c9f6abb4fe788.patch";
+        includes = [ "tests/tlstest.sh" ];
+        hash = "sha256-XmmKTvP6+QaWxyGFCX6/gDfME9GqBWSx4X8RH8QbDXA=";
+      })
+    ];
   };
 
   libressl_3_8 = generic {

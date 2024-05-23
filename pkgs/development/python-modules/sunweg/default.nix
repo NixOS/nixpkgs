@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,20 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-fgNtxCBIuNulCfuDaEsM7kL1WpwNE9O+JQ1DMZrz5jA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sunweg"
-  ];
+  pythonImportsCheck = [ "sunweg" ];
 
   meta = with lib; {
     description = "Module to access the WEG solar energy platform";

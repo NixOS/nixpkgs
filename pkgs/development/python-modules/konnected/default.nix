@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "b8b4e15c3228b01c9fad3651e09fea1654357ae8c333096e759a1b7d0eb4e789";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # no tests implemented
   doCheck = false;

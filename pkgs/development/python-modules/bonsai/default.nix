@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, cyrus_sasl
-, openldap
-, gevent
-, tornado
-, trio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  cyrus_sasl,
+  openldap,
+  gevent,
+  tornado,
+  trio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-h/PbwQ69fDcmUCazMtxXP1iE0fE1on+WoK+wYgQ9jLs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [
     cyrus_sasl
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     trio = [ trio ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # requires running LDAP server

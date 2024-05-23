@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, xvfb-run
-, wrapGAppsHook3
-, gobject-introspection
-, pygobject3
-, graphviz
-, gtk3
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  xvfb-run,
+  wrapGAppsHook3,
+  gobject-introspection,
+  pygobject3,
+  graphviz,
+  gtk3,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     gtk3
     numpy
   ];
-  nativeCheckInputs = [
-    xvfb-run
-  ];
+  nativeCheckInputs = [ xvfb-run ];
 
   dontWrapGApps = true;
   # Arguments to be passed to `makeWrapper`, only used by buildPython*

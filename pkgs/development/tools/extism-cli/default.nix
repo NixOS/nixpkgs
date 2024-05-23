@@ -7,20 +7,20 @@
 
 buildGoModule rec {
   pname = "extism-cli";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "extism";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wHEbTK7bYFOI+I7vQqgku4nkpD87zD7SoU/wpmHqets=";
+    hash = "sha256-F+Kb9ZAgHkw5kcOSt2Q8Lm+B8B4VPkr4FVYbe6HD+is=";
   };
 
-  modRoot = "./extism";
-
-  vendorHash = "sha256-js8A0AQPpcj1nBNUiSFJ0OlrqDD7AbV/UNHvxBfHG6c=";
+  vendorHash = "sha256-/faWWYwY7oxbIOoqpyXC+EU4gECl/o34M+SFyfMOWj8=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  subPackages = [ "./extism" ];
 
   doCheck = false; # Tests require network access
 

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # No native rz_core library
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rzpipe"
-  ];
+  pythonImportsCheck = [ "rzpipe" ];
 
   meta = with lib; {
     description = "Python interface for rizin";

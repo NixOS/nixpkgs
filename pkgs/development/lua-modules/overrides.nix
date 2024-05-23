@@ -709,9 +709,11 @@ in
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail \
-        "TOML_PLUS_PLUS_SRC" \
-        "${tomlplusplus.src}"
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}/include/toml++" \
+        --replace-fail "MAGIC_ENUM_SRC" "${magic-enum.src}/include/magic_enum"
+
+      cat CMakeLists.txt
     '';
   });
 

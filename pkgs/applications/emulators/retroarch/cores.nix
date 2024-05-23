@@ -9,7 +9,6 @@
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
-, ffmpeg_4
 , fluidsynth
 , fmt
 , freetype
@@ -890,11 +889,13 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
-      "-DUSE_SYSTEM_FFMPEG=ON"
+      # USE_SYSTEM_FFMPEG=ON causes several glitches during video playback
+      # See: https://github.com/NixOS/nixpkgs/issues/304616
+      "-DUSE_SYSTEM_FFMPEG=OFF"
       "-DUSE_SYSTEM_SNAPPY=ON"
       "-DUSE_SYSTEM_LIBZIP=ON"
       "-DOpenGL_GL_PREFERENCE=GLVND"

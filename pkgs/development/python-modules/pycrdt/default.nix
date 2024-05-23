@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, libiconv
-, cargo
-, rustPlatform
-, rustc
-, objsize
-, pydantic
-, pytestCheckHook
-, y-py
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libiconv,
+  cargo,
+  rustPlatform,
+  rustc,
+  objsize,
+  pydantic,
+  pytestCheckHook,
+  y-py,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   nativeBuildInputs = [
     cargo
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "pycrdt" ];
 

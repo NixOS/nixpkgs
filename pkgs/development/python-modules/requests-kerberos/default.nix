@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pykerberos
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pykerberos,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     --replace "pyspnego[kerberos]" "pyspnego"
   '';
 
-  pythonImportsCheck = [
-    "requests_kerberos"
-  ];
+  pythonImportsCheck = [ "requests_kerberos" ];
 
   meta = with lib; {
     description = "An authentication handler for using Kerberos with Python Requests";

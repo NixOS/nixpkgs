@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, jsonrpc-base
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonrpc-base,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "jsonrpc_async"
-  ];
+  pythonImportsCheck = [ "jsonrpc_async" ];
 
   meta = with lib; {
     description = "A JSON-RPC client library for asyncio";

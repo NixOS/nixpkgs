@@ -1,4 +1,4 @@
-{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, fetchurl, pkg-config }:
+{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, pkg-config }:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";

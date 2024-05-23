@@ -158,6 +158,8 @@ mkDerivation rec {
     done
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rcljoplin.py \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''

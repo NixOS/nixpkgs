@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, argcomplete
-, colorama
-, halo
-, spinners
-, types-colorama
-, nose2
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  argcomplete,
+  colorama,
+  halo,
+  spinners,
+  types-colorama,
+  nose2,
+  semver,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, debtcollector
-, netaddr
-, oslo-i18n
-, pbr
-, pyyaml
-, requests
-, rfc3986
-, stevedore
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  debtcollector,
+  netaddr,
+  oslo-i18n,
+  pbr,
+  pyyaml,
+  requests,
+  rfc3986,
+  stevedore,
+  callPackage,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +45,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   pythonImportsCheck = [ "oslo_config" ];

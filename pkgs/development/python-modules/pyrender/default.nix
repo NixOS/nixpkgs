@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, freetype-py
-, imageio
-, networkx
-, numpy
-, pillow
-, pyglet
-, pyopengl
-, scipy
-, six
-, trimesh
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  freetype-py,
+  imageio,
+  networkx,
+  numpy,
+  pillow,
+  pyglet,
+  pyopengl,
+  scipy,
+  six,
+  trimesh,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch { # yet to be tagged
+    (fetchpatch {
+      # yet to be tagged
       name = "relax-pyopengl.patch";
       url = "https://github.com/mmatl/pyrender/commit/7c613e8aed7142df9ff40767a8f10b7a19b6255c.patch";
       hash = "sha256-SXRV9RC3PfQGjjIQ+n97HZrSDPae3rAHnTBiHXSFLaY=";
@@ -51,9 +53,7 @@ buildPythonPackage rec {
         'bm = trimesh.load("tests/data/WaterBottle.glb").geometry["WaterBottle"]'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   dependencies = [
     freetype-py
@@ -70,9 +70,7 @@ buildPythonPackage rec {
 
   env.PYOPENGL_PLATFORM = "egl"; # enables headless rendering during check
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # does not work inside sandbox, no GPU

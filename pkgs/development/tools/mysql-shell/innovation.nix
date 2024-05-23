@@ -34,8 +34,8 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "8.3.0";
-  mysqlServerVersion = "8.3.0";
+  mysqlShellVersion = "8.4.0";
+  mysqlServerVersion = "8.4.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   srcs = [
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-HyFJWgt6grJKRT1S4hU6gUs8pwTsz5mXZtVFvOUvOG4=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
+      hash = "sha256-R6VDP83WOduDa5nhtUWcK4E8va0j/ytd1K0n95K6kY4=";
     })
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-O0j/gvS9fR/xp9plytjj249H7LY/+eyst1IsFpy318U=";
+      url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
+      hash = "sha256-QT30FNogn7JR/dQ3V86QaAZaMREMKvTocRTUaNLGVlg=";
     })
   ];
 
@@ -59,10 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
-    substituteInPlace ../mysql/cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace ../mysql/cmake/libutils.cmake --replace-quiet /usr/bin/libtool libtool
+    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace-quiet /usr/bin/libtool libtool
 
-    substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace cmake/libutils.cmake --replace-quiet /usr/bin/libtool libtool
   '';
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
@@ -100,18 +100,18 @@ stdenv.mkDerivation (finalAttrs: {
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
     cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
-  '';
 
-  cmakeFlags = [
-    "-DMYSQL_SOURCE_DIR=../mysql"
-    "-DMYSQL_BUILD_DIR=../mysql/build"
-    "-DMYSQL_CONFIG_EXECUTABLE=../../mysql/build/scripts/mysql_config"
-    "-DWITH_ZSTD=system"
-    "-DWITH_LZ4=system"
-    "-DWITH_ZLIB=system"
-    "-DWITH_PROTOBUF=${protobuf}"
-    "-DHAVE_PYTHON=1"
-  ];
+    cmakeFlagsArray+=(
+      "-DMYSQL_SOURCE_DIR=''${NIX_BUILD_TOP}/mysql"
+      "-DMYSQL_BUILD_DIR=''${NIX_BUILD_TOP}/mysql/build"
+      "-DMYSQL_CONFIG_EXECUTABLE=''${NIX_BUILD_TOP}/mysql/build/scripts/mysql_config"
+      "-DWITH_ZSTD=system"
+      "-DWITH_LZ4=system"
+      "-DWITH_ZLIB=system"
+      "-DWITH_PROTOBUF=system"
+      "-DHAVE_PYTHON=1"
+    )
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"

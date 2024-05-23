@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, inform
-, parametrize-from-file
-, setuptools
-, voluptuous
-, quantiphy-eval
-, rkm-codes
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  inform,
+  parametrize-from-file,
+  setuptools,
+  voluptuous,
+  quantiphy-eval,
+  rkm-codes,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-QXCs93plNSVNiCLEoXx2raH6EbH1rXyjvpBfl+8eXjc=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     quantiphy-eval
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  pythonImportsCheck = [
-    "quantiphy"
-  ];
+  pythonImportsCheck = [ "quantiphy" ];
 
   meta = with lib; {
     description = "Module for physical quantities (numbers with units)";

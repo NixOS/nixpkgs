@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-Hucf3tToYm3P6ebKNlUs5V+X1B95u9P2UC1yOItZOhc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # extras_require contains signify -> circular dependency
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mscerts"
-  ];
+  pythonImportsCheck = [ "mscerts" ];
 
   meta = with lib; {
     description = "Makes the Microsoft Trusted Root Program's Certificate Trust Lists available in Python";

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-kX89fMXqrEvhMAAjqKHzHmrYizKBt1uCWMOJtFNNhy4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   doCheck = stdenv.hostPlatform.system == "x86_64-linux" && stdenv.hostPlatform.isGnu;
 
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     ${python.interpreter} test/run_readelf_tests.py --parallel
   '';
 
-  pythonImportsCheck = [
-    "elftools"
-  ];
+  pythonImportsCheck = [ "elftools" ];
 
   meta = {
     description = "Python library for analyzing ELF files and DWARF debugging information";
@@ -49,7 +46,10 @@ buildPythonPackage rec {
       # See elftools/construct/{LICENSE,README} in the source code.
       mit
     ];
-    maintainers = with lib.maintainers; [ igsha pamplemousse ];
+    maintainers = with lib.maintainers; [
+      igsha
+      pamplemousse
+    ];
     mainProgram = "readelf.py";
   };
 }

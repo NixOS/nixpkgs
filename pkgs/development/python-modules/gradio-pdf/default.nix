@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-fancy-pypi-readme
-, hatch-requirements-txt
-, hatchling
-, gradio
-, gradio-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-fancy-pypi-readme,
+  hatch-requirements-txt,
+  hatchling,
+  gradio,
+  gradio-client,
 }:
 
 buildPythonPackage rec {
@@ -25,16 +26,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [
-    gradio-client
-  ];
+  dependencies = [ gradio-client ];
 
-  buildInputs = [
-    gradio.sans-reverse-dependencies
-  ];
-  disallowedReferences = [
-    gradio.sans-reverse-dependencies
-  ];
+  buildInputs = [ gradio.sans-reverse-dependencies ];
+  disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   pythonImportsCheck = [ "gradio_pdf" ];
 

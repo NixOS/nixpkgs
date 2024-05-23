@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , armadillo
 , cmake
 , gmp

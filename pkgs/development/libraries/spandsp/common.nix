@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , audiofile
 , libtiff
 , buildPackages

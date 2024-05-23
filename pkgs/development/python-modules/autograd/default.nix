@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, future
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  future,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
   # fixed, enable testing. See: https://github.com/HIPS/autograd/issues/404
   doCheck = false;
 
-  pythonImportsCheck = [
-    "autograd"
-  ];
+  pythonImportsCheck = [ "autograd" ];
 
   meta = with lib; {
     homepage = "https://github.com/HIPS/autograd";

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchFromGitHub
 , pkg-config
 , glib
 , expat
@@ -10,7 +10,6 @@
 , ninja
 , perl
 , python3
-, fetchpatch
 , gettext
 , duktape
 , gobject-introspection
@@ -38,26 +37,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "123";
+  version = "124";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   # Tarballs do not contain subprojects.
-  src = fetchFromGitLab {
-    domain = "gitlab.freedesktop.org";
-    owner = "polkit";
+  src = fetchFromGitHub {
+    owner = "polkit-org";
     repo = "polkit";
     rev = version;
-    hash = "sha256-/kjWkh6w2FYgtYWzw3g3GlWJKKpkJ3cqwfE0iDqJctw=";
+    hash = "sha256-Vc9G2xK6U1cX+xW2BnKp3oS/ACbSXS/lztbFP5oJOlM=";
   };
 
   patches = [
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
-      sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
-    })
+    ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
   ];
 
   depsBuildBuild = [
@@ -108,10 +103,14 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+  };
+
   mesonFlags = [
     "--datadir=${system}/share"
     "--sysconfdir=/etc"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
     "-Dintrospection=${lib.boolToString withIntrospection}"
@@ -175,7 +174,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://gitlab.freedesktop.org/polkit/polkit/";
+    homepage = "https://github.com/polkit-org/polkit";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

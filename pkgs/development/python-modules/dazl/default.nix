@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
 
-, poetry-core
+  poetry-core,
 
-, aiohttp
-, googleapis-common-protos
-, grpcio
-, protobuf
-, requests
-, semver
-, toposort
+  aiohttp,
+  googleapis-common-protos,
+  grpcio,
+  protobuf,
+  requests,
+  semver,
+  toposort,
 
-#, async_exit_stack
-#, dataclasses
-, google-auth
-, oauthlib
-, prometheus-client
-, pygments
-, pyopenssl
-, typing-extensions
+  #, async_exit_stack
+  #, dataclasses
+  google-auth,
+  oauthlib,
+  prometheus-client,
+  pygments,
+  pyopenssl,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

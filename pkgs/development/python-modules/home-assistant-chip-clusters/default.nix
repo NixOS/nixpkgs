@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aenum
-, dacite
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aenum,
+  dacite,
 }:
 
 buildPythonPackage rec {

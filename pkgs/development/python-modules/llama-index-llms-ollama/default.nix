@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, llama-index-core
-, poetry-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  llama-index-core,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-llms-ollama";
-  version = "0.1.3";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,23 +17,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
     inherit version;
-    hash = "sha256-x5ZlS3PRA/kyTtTFXHbEm3NzirxuUNAllu1eKxxm3sU=";
+    hash = "sha256-ebwZw9p1rfWrGjYd9aHF3CsubKOL1/Ei/mV4AgQxhtk=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    llama-index-core
-  ];
+  dependencies = [ llama-index-core ];
 
   # Tests are only available in the mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "llama_index.llms.ollama"
-  ];
+  pythonImportsCheck = [ "llama_index.llms.ollama" ];
 
   meta = with lib; {
     description = "LlamaIndex LLMS Integration for ollama";

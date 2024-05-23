@@ -1,4 +1,4 @@
-{ lib, stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsa-lib, atk
+{ lib, stdenv, patchelf, makeWrapper, gtk2, glib, udev, alsa-lib, atk
 , nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg, requireFile }:
 
 stdenv.mkDerivation rec {

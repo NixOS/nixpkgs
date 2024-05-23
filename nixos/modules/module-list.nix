@@ -158,6 +158,7 @@
   ./programs/bash/ls-colors.nix
   ./programs/bash/undistract-me.nix
   ./programs/bcc.nix
+  ./programs/benchexec.nix
   ./programs/browserpass.nix
   ./programs/calls.nix
   ./programs/captive-browser.nix
@@ -167,6 +168,7 @@
   ./programs/chromium.nix
   ./programs/clash-verge.nix
   ./programs/cnping.nix
+  ./programs/cpu-energy-meter.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/coolercontrol.nix
   ./programs/criu.nix
@@ -250,6 +252,7 @@
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
+  ./programs/pqos-wrapper.nix
   ./programs/projecteur.nix
   ./programs/proxychains.nix
   ./programs/qdmr.nix
@@ -1106,6 +1109,7 @@
   ./services/networking/ocserv.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
+  ./services/networking/oink.nix
   ./services/networking/onedrive.nix
   ./services/networking/openconnect.nix
   ./services/networking/openvpn.nix
@@ -1325,6 +1329,7 @@
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/anuko-time-tracker.nix
+  ./services/web-apps/artalk.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -1338,6 +1343,7 @@
   ./services/web-apps/chatgpt-retrieval-plugin.nix
   ./services/web-apps/cloudlog.nix
   ./services/web-apps/code-server.nix
+  ./services/web-apps/commafeed.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/crabfit.nix
   ./services/web-apps/davis.nix
@@ -1348,7 +1354,9 @@
   ./services/web-apps/dolibarr.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ethercalc.nix
+  ./services/web-apps/filesender.nix
   ./services/web-apps/firefly-iii.nix
+  ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/galene.nix
@@ -1420,6 +1428,7 @@
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/silverbullet.nix
+  ./services/web-apps/simplesamlphp.nix
   ./services/web-apps/slskd.nix
   ./services/web-apps/snipe-it.nix
   ./services/web-apps/sogo.nix
@@ -1431,11 +1440,13 @@
   ./services/web-apps/windmill.nix
   ./services/web-apps/wordpress.nix
   ./services/web-apps/writefreely.nix
+  ./services/web-apps/your_spotify.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
   ./services/web-apps/zitadel.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix
+  ./services/web-servers/bluemap.nix
   ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix

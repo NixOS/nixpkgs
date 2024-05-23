@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pybind11
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pybind11,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-rMbf09pCHvVYI9g/aq74+PcsuU2LezpmDz4b/w9vRyc=";
   };
 
-  nativeBuildInputs = [
-    pybind11
-  ];
+  nativeBuildInputs = [ pybind11 ];
 
   # tests are removed from fork
   doCheck = false;

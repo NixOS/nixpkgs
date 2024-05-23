@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, beautifulsoup4
-, requests
-, click
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  beautifulsoup4,
+  requests,
+  click,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-gBJgxpIxE4cH6oiglV5ITbfUDiEMngrg93Ny/9pfS/U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     beautifulsoup4

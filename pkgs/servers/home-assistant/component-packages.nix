@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.5.3";
+  version = "2024.5.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -3802,7 +3802,8 @@
       zeroconf
     ];
     "rympro" = ps: with ps; [
-    ]; # missing inputs: pyrympro
+      pyrympro
+    ];
     "sabnzbd" = ps: with ps; [
       pysabnzbd
     ];
@@ -5777,6 +5778,7 @@
     "ruckus_unleashed"
     "ruuvi_gateway"
     "ruuvitag_ble"
+    "rympro"
     "sabnzbd"
     "samsungtv"
     "sanix"

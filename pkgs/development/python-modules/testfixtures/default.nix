@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, sybil
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sybil,
+  twisted,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-gISJkDBIWcOito3+S8r3e25kJaOSUEe8JaUnVSd7+m0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     "testfixtures/tests/test_django"
   ];
 
-  pytestFlagsArray = [
-    "testfixtures/tests"
-  ];
+  pytestFlagsArray = [ "testfixtures/tests" ];
 
-  pythonImportsCheck = [
-    "testfixtures"
-  ];
+  pythonImportsCheck = [ "testfixtures" ];
 
   meta = with lib; {
     description = "Collection of helpers and mock objects for unit tests and doc tests";

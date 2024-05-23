@@ -5,8 +5,8 @@
 , buildWebExtension ? false
 }:
 let
-  version = "1.8.2";
-  gitHash = "449f955";
+  version = "1.8.4";
+  gitHash = "a5eb55e";
 in
 buildNpmPackage rec {
   pname = "vencord";
@@ -16,7 +16,7 @@ buildNpmPackage rec {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    hash = "sha256-zMiote0b3Uk2P+snjYBOCGEnJEErlSUj9nW/DxFtadY=";
+    hash = "sha256-FbU1Zsz/84oSOCOSWunA5nn5qFGLQ4W3uqsbYytF/7c=";
   };
 
   ESBUILD_BINARY_PATH = lib.getExe (esbuild.overrideAttrs (final: _: {

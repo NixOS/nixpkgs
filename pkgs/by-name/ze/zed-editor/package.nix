@@ -26,13 +26,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.134.4";
+  version = "0.135.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2/onI/tc5FlwyRuu4Yq3xJYqwNXhnIrCebQQpCKGzfs=";
+    hash = "sha256-XnfTrcLKjJH42l9L9KxogMhNQ2u/8G4fyd6i/0dO5S0=";
     fetchSubmodules = true;
   };
 
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-J6mVvMC8u3+8RGp6qSwU/EpvdtUPyIs2Ry9XGGiimB0=";
+      "blade-graphics-0.4.0" = "sha256-U8278YkskWE1E60JVTx4hRv4322EV9jz8fzJkBTG3R8=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
       "heed-0.20.0-alpha.9" = "sha256-8bzoMmfKS+6AmeTzh0/F7WM9OBdIex+NYFER28bpA/s=";
       "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";

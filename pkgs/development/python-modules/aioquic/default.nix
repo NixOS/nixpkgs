@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, certifi
-, cryptography
-, fetchPypi
-, fetchpatch
-, openssl
-, pylsqpack
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, service-identity
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  cryptography,
+  fetchPypi,
+  fetchpatch,
+  openssl,
+  pylsqpack,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  service-identity,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     certifi
@@ -44,17 +43,11 @@ buildPythonPackage rec {
     service-identity
   ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aioquic"
-  ];
+  pythonImportsCheck = [ "aioquic" ];
 
   __darwinAllowLocalNetworking = true;
 

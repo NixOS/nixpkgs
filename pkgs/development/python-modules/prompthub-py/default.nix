@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pyyaml,
+  requests,
 }:
 let
   pname = "prompthub-py";
@@ -24,9 +25,7 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.8";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pyyaml

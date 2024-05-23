@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, langchain-core
-, lxml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  langchain-core,
+  lxml,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.0.1";
+  version = "0.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,14 +18,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "langchain_text_splitters";
     inherit version;
-    hash = "sha256-rEWfqYeZ9RF61UJakzCyGWEyHjC8GaKi+fdh3a3WKqE=";
+    hash = "sha256-rIkn3AugjrpwL2lhye19986tjeGan3EBqyteo0IBs8E=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     langchain-core
     lxml
   ];
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # PyPI source does not have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "langchain_text_splitters"
-  ];
+  pythonImportsCheck = [ "langchain_text_splitters" ];
 
   meta = with lib; {
     description = "Build context-aware reasoning applications";

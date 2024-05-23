@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" pytest --pyargs ephem.tests -k "not JPLTest"
   '';
 
-  pythonImportsCheck = [
-    "ephem"
-  ];
+  pythonImportsCheck = [ "ephem" ];
 
   meta = with lib; {
     description = "Compute positions of the planets and stars";

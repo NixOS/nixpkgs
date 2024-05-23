@@ -12,7 +12,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications

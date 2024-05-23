@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, requests
-, pyjwt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  requests,
+  pyjwt,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-qkgPBIYv9xzGa29RiPAU3zNhcyutTUX1Vkmpd9YdeJU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     requests

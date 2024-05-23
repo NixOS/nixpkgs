@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk3, fetchFromGitHub
+{ lib, stdenv, intltool, pkg-config, gtk3, fetchFromGitHub
 , autoreconfHook, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {

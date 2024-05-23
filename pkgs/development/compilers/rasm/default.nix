@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mainProgram = "rasm";
     # use -n option to display all licenses
     license = licenses.mit; # expat version
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = platforms.all;
   };
 }

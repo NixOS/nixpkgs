@@ -170,6 +170,16 @@
       "source": "hosted",
       "version": "3.1.1"
     },
+    "cross_file": {
+      "dependency": "transitive",
+      "description": {
+        "name": "cross_file",
+        "sha256": "55d7b444feb71301ef6b8838dbc1ae02e63dd48c8773f3810ff53bb1e2945b32",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.3.4+1"
+    },
     "crypto": {
       "dependency": "transitive",
       "description": {
@@ -244,11 +254,11 @@
       "dependency": "transitive",
       "description": {
         "name": "file_picker",
-        "sha256": "4e42aacde3b993c5947467ab640882c56947d9d27342a5b6f2895b23956954a6",
+        "sha256": "29c90806ac5f5fb896547720b73b17ee9aed9bba540dc5d91fe29f8c5745b10a",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "6.1.1"
+      "version": "8.0.3"
     },
     "fixnum": {
       "dependency": "transitive",
@@ -277,7 +287,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flet_audio": {
       "dependency": "direct main",
@@ -286,7 +296,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flet_audio_recorder": {
       "dependency": "direct main",
@@ -295,7 +305,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flet_lottie": {
       "dependency": "direct main",
@@ -304,7 +314,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flet_rive": {
       "dependency": "direct main",
@@ -313,7 +323,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flet_video": {
       "dependency": "direct main",
@@ -322,7 +332,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flet_webview": {
       "dependency": "direct main",
@@ -331,7 +341,7 @@
         "relative": true
       },
       "source": "path",
-      "version": "0.22.0"
+      "version": "0.22.1"
     },
     "flutter": {
       "dependency": "direct main",
@@ -1445,11 +1455,11 @@
       "dependency": "transitive",
       "description": {
         "name": "web",
-        "sha256": "1d9158c616048c38f712a6646e317a3426da10e884447626167240d45209cbad",
+        "sha256": "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.0"
+      "version": "0.5.1"
     },
     "web_socket_channel": {
       "dependency": "transitive",

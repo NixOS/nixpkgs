@@ -1,19 +1,20 @@
-{ lib
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, certvalidator
-, colorama
-, cryptoparser
-, dnspython
-, fetchPypi
-, pathlib2
-, pyfakefs
-, python-dateutil
-, pythonOlder
-, requests
-, setuptools
-, urllib3
+{
+  lib,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  certvalidator,
+  colorama,
+  cryptoparser,
+  dnspython,
+  fetchPypi,
+  pathlib2,
+  pyfakefs,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
       --replace-warn "bs4" "beautifulsoup4"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
@@ -56,9 +55,7 @@ buildPythonPackage rec {
   # Tests require networking
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cryptolyzer"
-  ];
+  pythonImportsCheck = [ "cryptolyzer" ];
 
   meta = with lib; {
     description = "Cryptographic protocol analyzer";

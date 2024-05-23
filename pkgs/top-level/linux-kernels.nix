@@ -269,6 +269,8 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
+    linux_6_8_hardened = hardenedKernelFor kernels.linux_6_8 { };
+    linux_6_9_hardened = hardenedKernelFor kernels.linux_6_9 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -657,6 +659,8 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
+    linux_6_8_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_8_hardened);
+    linux_6_9_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_9_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -681,7 +685,7 @@ in {
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_9;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
-    linux_rt_default = packages.linux_rt_5_4;
+    linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   } // { __attrsFailEvaluation = true; };
 

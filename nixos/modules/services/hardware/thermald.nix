@@ -28,7 +28,13 @@ in
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "the thermald manual configuration file.";
+        description = ''
+          The thermald manual configuration file.
+
+          Leave unspecified to run with the `--adaptive` flag instead which will have thermald use your computer's DPTF adaptive tables.
+
+          See `man thermald` for more information.
+        '';
       };
 
       package = mkPackageOption pkgs "thermald" { };
@@ -49,8 +55,7 @@ in
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
             ${optionalString cfg.ignoreCpuidCheck "--ignore-cpuid-check"} \
-            ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
-            ${optionalString (cfg.configFile == null) "--adaptive"} \
+            ${if cfg.configFile != null then "--config-file ${cfg.configFile}" else "--adaptive"} \
             --dbus-enable
         '';
       };

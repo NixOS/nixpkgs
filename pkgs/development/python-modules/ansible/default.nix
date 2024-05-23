@@ -1,22 +1,23 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, jsonschema
-, jxmlease
-, ncclient
-, netaddr
-, paramiko
-, ansible-pylibssh
-, pynetbox
-, scp
-, textfsm
-, ttp
-, xmltodict
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchPypi,
+  jsonschema,
+  jxmlease,
+  ncclient,
+  netaddr,
+  paramiko,
+  ansible-pylibssh,
+  pynetbox,
+  scp,
+  textfsm,
+  ttp,
+  xmltodict,
 
-# optionals
-, withJunos ? false
-, withNetbox ? false
+  # optionals
+  withJunos ? false,
+  withNetbox ? false,
 }:
 
 let
@@ -39,38 +40,42 @@ buildPythonPackage {
     sed -Ei '/ansible-core/d' setup.py
   '';
 
-  propagatedBuildInputs = lib.unique ([
-    # Support ansible collections by default, make all others optional
-    # ansible.netcommon
-    jxmlease
-    ncclient
-    netaddr
-    paramiko
-    ansible-pylibssh
-    xmltodict
-    # ansible.posix
-    # ansible.utils
-    jsonschema
-    textfsm
-    ttp
-    xmltodict
-    # ansible.windows
+  propagatedBuildInputs = lib.unique (
+    [
+      # Support ansible collections by default, make all others optional
+      # ansible.netcommon
+      jxmlease
+      ncclient
+      netaddr
+      paramiko
+      ansible-pylibssh
+      xmltodict
+      # ansible.posix
+      # ansible.utils
+      jsonschema
+      textfsm
+      ttp
+      xmltodict
+      # ansible.windows
 
-    # lots of collections with dedicated requirements.txt and pyproject.toml files,
-    # add the dependencies for the collections you need conditionally and install
-    # ansible using overrides to enable the collections you need.
-  ] ++ lib.optionals (withJunos) [
-    # ansible_collections/junipernetworks/junos/requirements.txt
-    jxmlease
-    ncclient
-    paramiko
-    ansible-pylibssh
-    scp
-    xmltodict
-  ] ++ lib.optionals (withNetbox) [
-    # ansible_collections/netbox/netbox/pyproject.toml
-    pynetbox
-  ]);
+      # lots of collections with dedicated requirements.txt and pyproject.toml files,
+      # add the dependencies for the collections you need conditionally and install
+      # ansible using overrides to enable the collections you need.
+    ]
+    ++ lib.optionals (withJunos) [
+      # ansible_collections/junipernetworks/junos/requirements.txt
+      jxmlease
+      ncclient
+      paramiko
+      ansible-pylibssh
+      scp
+      xmltodict
+    ]
+    ++ lib.optionals (withNetbox) [
+      # ansible_collections/netbox/netbox/pyproject.toml
+      pynetbox
+    ]
+  );
 
   # don't try and fail to strip 48000+ non strippable files, it takes >5 minutes!
   dontStrip = true;

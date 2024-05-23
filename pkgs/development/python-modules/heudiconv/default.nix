@@ -1,52 +1,51 @@
-{ lib
-, buildPythonPackage
-, datalad
-, dcm2niix
-, dcmstack
-, etelemetry
-, fetchPypi
-, filelock
-, git
-, nibabel
-, nipype
-, pydicom
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, versioningit
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  datalad,
+  dcm2niix,
+  dcmstack,
+  etelemetry,
+  fetchPypi,
+  filelock,
+  git,
+  nibabel,
+  nipype,
+  pydicom,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "heudiconv";
-  version = "1.1.0";
-  format = "pyproject";
+  version = "1.1.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zRLRdP3LpytHCTrehhPYMmJnss5v6ojjkIPuB8fKR5w=";
+    hash = "sha256-ktw/XrvA5G+DunjEB8LeQuQnjs6zQOKsZ+RGpzDZ5DQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "versioningit ~=" "versioningit >="
+      --replace-fail "versioningit ~=" "versioningit >="
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
-  propagatedBuildInputs = [
-    nibabel
-    pydicom
-    nipype
+  dependencies = [
     dcmstack
     etelemetry
     filelock
+    nibabel
+    nipype
+    pydicom
   ];
 
   nativeCheckInputs = [
@@ -60,13 +59,16 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "heudiconv"
+  pythonImportsCheck = [ "heudiconv" ];
+
+  disabledTests = [
+    # No such file or directory
+    "test_bvals_are_zero"
   ];
 
   meta = with lib; {
-    homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
+    homepage = "https://heudiconv.readthedocs.io";
     changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];

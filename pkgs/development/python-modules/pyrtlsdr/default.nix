@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, rtl-sdr
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  rtl-sdr,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-+z5YO6BzuGHo4LxeYvZvBzZekUf102SR3krWLyPkU2I=";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
   postPatch = ''
     sed "s|driver_files =.*|driver_files = ['${rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py

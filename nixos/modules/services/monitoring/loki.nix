@@ -97,8 +97,20 @@ in {
 
       serviceConfig = let
         conf = if cfg.configFile == null
-               then prettyJSON cfg.configuration
+               then
+                 # Config validation may fail when using extraFlags = [ "-config.expand-env=true" ].
+                 # To work around this, we simply skip it when extraFlags is not empty.
+                 if cfg.extraFlags == []
+                 then validateConfig (prettyJSON cfg.configuration)
+                 else prettyJSON cfg.configuration
                else cfg.configFile;
+        validateConfig = file:
+        pkgs.runCommand "validate-loki-conf" {
+          nativeBuildInputs = [ cfg.package ];
+        } ''
+            loki -verify-config -config.file "${file}"
+            ln -s "${file}" "$out"
+          '';
       in
       {
         ExecStart = "${cfg.package}/bin/loki --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";

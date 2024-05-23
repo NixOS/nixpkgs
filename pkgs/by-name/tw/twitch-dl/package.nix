@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "twitch-dl";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     rev = "refs/tags/${version}";
-    hash = "sha256-0uOOc3ANXleQlENB+gdWheafBiOOcyZsFvYj7r+WMCY=";
+    hash = "sha256-ixkIDJbysa3TOJiNmAG2SuJwCv5MaX6nCtUnS4901rg=";
   };
 
   pythonRelaxDeps = [

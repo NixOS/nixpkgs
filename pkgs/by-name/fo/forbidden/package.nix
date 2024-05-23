@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "forbidden";
-  version = "10.9";
+  version = "11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ivan-sincek";
     repo = "forbidden";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LggF9giKKKO2F65zS0lPCshaDauy+s6YyRGr3BL0tJU=";
+    hash = "sha256-XRN5zQgyBbMxDKAutW3XNIAbBVdAeXZtxsNbmjLyKRc=";
   };
 
   build-system = with python3.pkgs; [

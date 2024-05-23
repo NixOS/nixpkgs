@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
       headless one, so it is also possible to run wayvnc without a physical
       display attached.
     '';
+    mainProgram = "wayvnc";
     inherit (src.meta) homepage;
     changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
     license = licenses.isc;

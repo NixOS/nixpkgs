@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,12 @@ buildPythonPackage rec {
     sha256 = "1grvvgzdybhxjydalnsgh2aaz3f48idv5lqs48gr0cn7n18xwhd5";
   };
 
-   propagatedBuildInputs = [ ];
+  propagatedBuildInputs = [ ];
 
-   meta = with lib; {
+  meta = with lib; {
     description = "A python library for the simplenote.com web service";
     homepage = "http://readthedocs.org/docs/simplenotepy/en/latest/api.html";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-   };
-
+  };
 }

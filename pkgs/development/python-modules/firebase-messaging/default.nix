@@ -1,21 +1,22 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, http-ece
-, poetry-core
-, protobuf
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, sphinx
-, sphinx-autodoc-typehints
-, sphinx-rtd-theme
-, sphinxHook
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  http-ece,
+  poetry-core,
+  protobuf,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  sphinx,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
+  sphinxHook,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "firebase_messaging"
-  ];
+  pythonImportsCheck = [ "firebase_messaging" ];
 
   nativeCheckInputs = [
     async-timeout

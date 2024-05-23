@@ -29,8 +29,6 @@ appimageTools.wrapType2 {
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;
-
   extraInstallCommands = ''
     (
       mkdir -p $out/share

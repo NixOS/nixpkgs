@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, substituteAll
-, addOpenGLRunpath
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  substituteAll,
+  addOpenGLRunpath,
 }:
 
 buildPythonPackage rec {

@@ -1,42 +1,43 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, setuptools
-, nodejs
-, yarn
-, fixup-yarn-lock
-, fetchYarnDeps
+  setuptools,
+  nodejs,
+  yarn,
+  fixup-yarn-lock,
+  fetchYarnDeps,
 
-, flask
-, werkzeug
-, plotly
-, dash-html-components
-, dash-core-components
-, dash-table
-, importlib-metadata
-, typing-extensions
-, requests
-, retrying
-, nest-asyncio
+  flask,
+  werkzeug,
+  plotly,
+  dash-html-components,
+  dash-core-components,
+  dash-table,
+  importlib-metadata,
+  typing-extensions,
+  requests,
+  retrying,
+  nest-asyncio,
 
-, celery
-, redis
-, diskcache
-, multiprocess
-, psutil
-, flask-compress
+  celery,
+  redis,
+  diskcache,
+  multiprocess,
+  psutil,
+  flask-compress,
 
-, pytestCheckHook
-, pytest-mock
-, mock
-, pyyaml
+  pytestCheckHook,
+  pytest-mock,
+  mock,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.16.1";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = "dash";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IPyGQXrC2FTTSIC4IFGwKTceyzPYAe4jwDoO5C9YeF0=";
+    hash = "sha256-45nSQ3N7VcPsXthmMj3gMWFPi/i9z0peI1Wc6fUT7So=";
   };
 
   nativeBuildInputs = [
@@ -102,9 +103,7 @@ buildPythonPackage rec {
       multiprocess
       psutil
     ];
-    compress = [
-      flask-compress
-    ];
+    compress = [ flask-compress ];
   };
 
   nativeCheckInputs = [
@@ -127,6 +126,9 @@ buildPythonPackage rec {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ antoinerg tomasajt ];
+    maintainers = with lib.maintainers; [
+      antoinerg
+      tomasajt
+    ];
   };
 }

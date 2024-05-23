@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, fetchurl, fetchpatch }:
+{ stdenv, lib, fetchFromGitHub, kernel, fetchpatch }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";

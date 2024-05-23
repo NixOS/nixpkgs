@@ -172,12 +172,12 @@ in lib.makeExtensible (self: ({
 
   git = common rec {
     version = "2.23.0";
-    suffix = "pre20240510_${lib.substring 0 8 src.rev}";
+    suffix = "pre20240520_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "87ab3c0ea4e6f85e7b902050365bb75cf2836fbb";
-      hash = "sha256-j/PLYYGs+Gjge4JGYxMjOhWQEp+GB4Fdicetbpmp6n0=";
+      rev = "b7709d14a5b3a76d1c5b35b48ea3ed2de6c3dc28";
+      hash = "sha256-v+M9oeOcfgFXVoXqdpaskTHNA0T3Pr/8IOJtCggh+To=";
     };
   };
 

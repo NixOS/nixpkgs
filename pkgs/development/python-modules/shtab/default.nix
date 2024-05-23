@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, bashInteractive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  bashInteractive,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "shtab"
-  ];
+  pythonImportsCheck = [ "shtab" ];
 
   meta = with lib; {
     description = "Module for shell tab completion of Python CLI applications";

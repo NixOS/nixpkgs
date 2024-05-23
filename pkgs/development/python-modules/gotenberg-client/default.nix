@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-, httpx
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  httpx,
+  typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
@@ -20,19 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-38s7XLCh55uXxu/Go04Ku/m4xeqAAa2sRe4SiqIXolU=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     httpx
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ] ++ httpx.optional-dependencies.http2;
+  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ] ++ httpx.optional-dependencies.http2;
 
-  pythonImportsCheck = [
-    "gotenberg_client"
-  ];
+  pythonImportsCheck = [ "gotenberg_client" ];
 
   meta = with lib; {
     description = "A Python client for interfacing with the Gotenberg API";
