@@ -1,37 +1,38 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, setuptools
-, nodejs
-, yarn
-, fixup-yarn-lock
-, fetchYarnDeps
+  setuptools,
+  nodejs,
+  yarn,
+  fixup-yarn-lock,
+  fetchYarnDeps,
 
-, flask
-, werkzeug
-, plotly
-, dash-html-components
-, dash-core-components
-, dash-table
-, importlib-metadata
-, typing-extensions
-, requests
-, retrying
-, nest-asyncio
+  flask,
+  werkzeug,
+  plotly,
+  dash-html-components,
+  dash-core-components,
+  dash-table,
+  importlib-metadata,
+  typing-extensions,
+  requests,
+  retrying,
+  nest-asyncio,
 
-, celery
-, redis
-, diskcache
-, multiprocess
-, psutil
-, flask-compress
+  celery,
+  redis,
+  diskcache,
+  multiprocess,
+  psutil,
+  flask-compress,
 
-, pytestCheckHook
-, pytest-mock
-, mock
-, pyyaml
+  pytestCheckHook,
+  pytest-mock,
+  mock,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -102,9 +103,7 @@ buildPythonPackage rec {
       multiprocess
       psutil
     ];
-    compress = [
-      flask-compress
-    ];
+    compress = [ flask-compress ];
   };
 
   nativeCheckInputs = [
@@ -127,6 +126,9 @@ buildPythonPackage rec {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ antoinerg tomasajt ];
+    maintainers = with lib.maintainers; [
+      antoinerg
+      tomasajt
+    ];
   };
 }

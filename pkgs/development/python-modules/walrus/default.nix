@@ -1,11 +1,12 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, redis
-, unittestCheckHook
-, fetchpatch
+{
+  lib,
+  pkgs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  redis,
+  unittestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    redis
-  ];
+  propagatedBuildInputs = [ redis ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   preCheck = ''
     ${pkgs.redis}/bin/redis-server &
@@ -49,9 +46,7 @@ buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  pythonImportsCheck = [
-    "walrus"
-  ];
+  pythonImportsCheck = [ "walrus" ];
 
   __darwinAllowLocalNetworking = true;
 

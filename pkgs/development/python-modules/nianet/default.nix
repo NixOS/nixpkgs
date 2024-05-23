@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, niapy
-, numpy
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, toml-adapt
-, tomli
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  niapy,
+  numpy,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  toml-adapt,
+  tomli,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  pythonImportsCheck = [
-    "nianet"
-  ];
+  pythonImportsCheck = [ "nianet" ];
 
   meta = with lib; {
     description = "Designing and constructing neural network topologies using nature-inspired algorithms";

@@ -59,7 +59,10 @@ buildPythonPackage {
   meta = {
     description = "A reimplementation of parts of pygame API using SDL2";
     homepage = "https://github.com/renpy/pygame_sdl2";
-    license = with lib.licenses; [ lgpl2 zlib ];
+    license = with lib.licenses; [
+      lgpl2
+      zlib
+    ];
     maintainers = with lib.maintainers; [ raskin ];
   };
 }

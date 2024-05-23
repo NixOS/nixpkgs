@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, appdirs
-, biopython
-, fetchPypi
-, proglog
+{
+  lib,
+  buildPythonPackage,
+  appdirs,
+  biopython,
+  fetchPypi,
+  proglog,
 }:
 
 buildPythonPackage rec {

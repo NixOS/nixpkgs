@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
-, numpy
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  numpy,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -20,26 +21,20 @@ buildPythonPackage rec {
     hash = "sha256-2XuhtWKtmO/8lGaHxdqwdMF6UVEUqw3PUCIC1c7J8rU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     cd $out
   '';
 
-  pythonImportsCheck = [
-    "py_stringmatching"
-  ];
+  pythonImportsCheck = [ "py_stringmatching" ];
 
   meta = with lib; {
     description = "Python string matching library including string tokenizers and string similarity measures";

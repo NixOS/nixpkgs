@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, setuptools
-, regex
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  setuptools,
+  regex,
 }:
 
 buildPythonPackage rec {
@@ -21,20 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-5rlgDnPYTtuVMincG5CgVwNh/IGmZk6ItvzdB/wHmgg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
   # loops forever
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [
-    "somajo"
-  ];
+  pythonImportsCheck = [ "somajo" ];
 
   meta = with lib; {
     description = "Tokenizer and sentence splitter for German and English web texts";

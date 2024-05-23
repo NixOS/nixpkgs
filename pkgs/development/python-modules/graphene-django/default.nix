@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, graphene
-, graphql-core
-, django
-, djangorestframework
-, promise
-, text-unidecode
+  graphene,
+  graphql-core,
+  django,
+  djangorestframework,
+  promise,
+  text-unidecode,
 
-, django-filter
-, mock
-, py
-, pytest-django
-, pytest-random-order
-, pytest7CheckHook
+  django-filter,
+  mock,
+  py,
+  pytest-django,
+  pytest-random-order,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -60,16 +61,18 @@ buildPythonPackage rec {
     pytest7CheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/graphql-python/graphene-django/issues/1510
-    "test_should_filepath_convert_string"
-    "test_should_choice_convert_enum"
-    "test_should_multiplechoicefield_convert_to_list_of_enum"
-    "test_perform_mutate_success_with_enum_choice_field"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # this test touches files in the "/" directory and fails in darwin sandbox
-    "test_should_filepath_convert_string"
-  ];
+  disabledTests =
+    [
+      # https://github.com/graphql-python/graphene-django/issues/1510
+      "test_should_filepath_convert_string"
+      "test_should_choice_convert_enum"
+      "test_should_multiplechoicefield_convert_to_list_of_enum"
+      "test_perform_mutate_success_with_enum_choice_field"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # this test touches files in the "/" directory and fails in darwin sandbox
+      "test_should_filepath_convert_string"
+    ];
 
   meta = with lib; {
     description = "Integrate GraphQL into your Django project";

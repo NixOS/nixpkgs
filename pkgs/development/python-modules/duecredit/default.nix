@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, vcrpy
-, citeproc-py
-, looseversion
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  vcrpy,
+  citeproc-py,
+  looseversion,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
     vcrpy
   ];
-  disabledTests = [ "test_import_doi" ];  # tries to access network
+  disabledTests = [ "test_import_doi" ]; # tries to access network
 
   preCheck = ''
     export HOME=$(mktemp -d)

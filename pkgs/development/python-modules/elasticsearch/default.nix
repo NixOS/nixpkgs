@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, certifi
-, elastic-transport
-, fetchPypi
-, pythonOlder
-, requests
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  certifi,
+  elastic-transport,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     sha256 = "sha256-5Ovrsi0J8O+DnCa2qpjhnM1ja8t38IwStWKwLKzV50Q=";
   };
 
-  nativeBuildInputs = [
-    elastic-transport
-  ];
+  nativeBuildInputs = [ elastic-transport ];
 
   propagatedBuildInputs = [
     urllib3
@@ -31,17 +30,11 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    requests = [
-      requests
-    ];
-    async = [
-      aiohttp
-    ];
+    requests = [ requests ];
+    async = [ aiohttp ];
   };
 
-  pythonImportsCheck = [
-    "elasticsearch"
-  ];
+  pythonImportsCheck = [ "elasticsearch" ];
 
   # Check is disabled because running them destroy the content of the local cluster!
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, jinja2
-, pdoc-pyo3-sample-library
-, pygments
-, markupsafe
-, astunparse
-, pytestCheckHook
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  jinja2,
+  pdoc-pyo3-sample-library,
+  pygments,
+  markupsafe,
+  astunparse,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-lie+lPUVWVgbSGC09gMmy4Z2BdC2CHFYQ60isExvhSk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   dependencies = [
     jinja2

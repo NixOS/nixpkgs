@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, ruamel-base
-, ruamel-yaml-clib
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ruamel-base,
+  ruamel-yaml-clib,
+  isPyPy,
 }:
 
 buildPythonPackage rec {
@@ -18,15 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-iyfmohfnhsb75WNNjz8RvGPg+A9qWJDyiGPZxFqsMRs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Tests use relative paths
   doCheck = false;
 
-  propagatedBuildInputs = [ ruamel-base ]
-    ++ lib.optional (!isPyPy) ruamel-yaml-clib;
+  propagatedBuildInputs = [ ruamel-base ] ++ lib.optional (!isPyPy) ruamel-yaml-clib;
 
   pythonImportsCheck = [ "ruamel.yaml" ];
 

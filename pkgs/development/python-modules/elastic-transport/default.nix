@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, mock
-, opentelemetry-api
-, opentelemetry-sdk
-, orjson
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-, requests
-, respx
-, setuptools
-, trustme
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  mock,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  orjson,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  respx,
+  setuptools,
+  trustme,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace " --cov-report=term-missing --cov=elastic_transport" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     urllib3
@@ -60,9 +59,7 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pythonImportsCheck = [
-    "elastic_transport"
-  ];
+  pythonImportsCheck = [ "elastic_transport" ];
 
   disabledTests = [
     # Tests require network access

@@ -1,18 +1,19 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 
   # propagates
-, click
-, dlib
-, face-recognition-models
-, numpy
-, pillow
+  click,
+  dlib,
+  face-recognition-models,
+  numpy,
+  pillow,
 
   # tests
-, pytestCheckHook
-, config
-, cudaSupport ? config.cudaSupport
+  pytestCheckHook,
+  config,
+  cudaSupport ? config.cudaSupport,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Disables tests when running with cuda due to https://github.com/NixOS/nixpkgs/issues/225912
   doCheck = !config.cudaSupport;

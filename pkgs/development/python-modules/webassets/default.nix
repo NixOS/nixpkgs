@@ -1,4 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, nose, jinja2, mock, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  nose,
+  jinja2,
+  mock,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "webassets";
@@ -11,7 +20,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pyyaml ];
-  nativeCheckInputs = [ nose jinja2 mock pytest ];
+  nativeCheckInputs = [
+    nose
+    jinja2
+    mock
+    pytest
+  ];
 
   # Needs Babel CLI tool
   doCheck = false;

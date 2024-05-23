@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi,
-  blinker, flask, mock, nose, speaklater
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  blinker,
+  flask,
+  mock,
+  nose,
+  speaklater,
 }:
 
 buildPythonPackage rec {
@@ -19,8 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-IuXrmpQL9Ae88wQQ7MNwjzxWzESynDThcm/oUAaTX0E=";
   };
 
-  propagatedBuildInputs = [ blinker flask ];
-  buildInputs = [ blinker mock nose speaklater ];
+  propagatedBuildInputs = [
+    blinker
+    flask
+  ];
+  buildInputs = [
+    blinker
+    mock
+    nose
+    speaklater
+  ];
 
   doCheck = false;
 }

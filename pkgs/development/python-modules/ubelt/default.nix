@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, wheel
-, numpy
-, python-dateutil
-, xxhash
-, pytestCheckHook
-, requests
-, xdoctest
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  wheel,
+  numpy,
+  python-dateutil,
+  xxhash,
+  pytestCheckHook,
+  requests,
+  xdoctest,
 }:
 
 buildPythonPackage rec {

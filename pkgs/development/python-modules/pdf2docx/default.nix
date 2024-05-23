@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python
-, buildPythonPackage
-, pythonRelaxDepsHook
-, imagemagick
-, pip
-, pytestCheckHook
-, pymupdf
-, fire
-, fonttools
-, numpy
-, opencv4
-, tkinter
-, python-docx
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python,
+  buildPythonPackage,
+  pythonRelaxDepsHook,
+  imagemagick,
+  pip,
+  pytestCheckHook,
+  pymupdf,
+  fire,
+  fonttools,
+  numpy,
+  opencv4,
+  tkinter,
+  python-docx,
 }:
 let
   version = "0.5.8";
@@ -61,7 +62,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-v" "./test/test.py::TestConversion" ];
+  pytestFlagsArray = [
+    "-v"
+    "./test/test.py::TestConversion"
+  ];
 
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];

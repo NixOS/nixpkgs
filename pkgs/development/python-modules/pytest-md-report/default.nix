@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytablewriter
-, pytest
-, tcolorpy
-, typepy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytablewriter,
+  pytest,
+  tcolorpy,
+  typepy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

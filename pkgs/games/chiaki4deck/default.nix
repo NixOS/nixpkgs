@@ -17,6 +17,7 @@
 , SDL2
 , libevdev
 , udev
+, curlFull
 , hidapi
 , json_c
 , fftw
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     qtwebengine
     protobuf
     SDL2
+    curlFull
     hidapi
     json_c
     fftw
@@ -82,8 +84,18 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
+  # handle cmake not being able to identify if curl is built with websocket support, and library name discrepancy when curl not built with cmake
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail ' WS WSS' ""
+
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail 'libcurl_shared' 'libcurl'
+  '';
+
   cmakeFlags = [
     "-Wno-dev"
+    (lib.cmakeFeature "CHIAKI_USE_SYSTEM_CURL" "true")
   ];
 
   qtWrapperArgs = [

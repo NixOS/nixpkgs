@@ -1,24 +1,37 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, testers, juju }:
 
 buildGoModule rec {
   pname = "juju";
-  version = "3.3.0";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "juju";
     repo = "juju";
-    rev = "juju-${version}";
-    sha256 = "sha256-8VSSTeN4a1zvMi4L4dR3q+kWKgYq8Jg1jDvFjEBD7jI=";
+    rev = "v${version}";
+    hash = "sha256-sp4KLRKII1oEmdbCHzs5fbE/68NbKrHE3bxO14byYFk=";
   };
 
-  vendorHash = "sha256-3hZywUpJe6g8IujbK0hcp12S6OKswLj/YYJGuPG06Es=";
-
-  # Disable tests because it attempts to use a mongodb instance
-  doCheck = false;
+  vendorHash = "sha256-a50W9V1xxmItHS2DZkkXYEZ7I6aJxDo1+IriOlMPDyw=";
 
   subPackages = [
     "cmd/juju"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # Disable tests because it attempts to use a mongodb instance
+  doCheck = false;
+
+  postInstall = ''
+    for file in etc/bash_completion.d/*; do
+      installShellCompletion --bash "$file"
+    done
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = juju;
+    command = "HOME=\"$(mktemp -d)\" juju --version";
+  };
 
   meta = with lib; {
     description = "Open source modelling tool for operating software in the cloud";

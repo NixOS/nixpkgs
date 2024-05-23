@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pybind11
-, setuptools
-, wheel
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pybind11,
+  setuptools,
+  wheel,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "hnswlib"
-  ];
+  pythonImportsCheck = [ "hnswlib" ];
 
   meta = with lib; {
     description = "Header-only C++/python library for fast approximate nearest neighbors";

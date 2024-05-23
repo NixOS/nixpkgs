@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch2
-, pdm-backend
-, pytz
-, oauthlib
-, requests
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch2,
+  pdm-backend,
+  pytz,
+  oauthlib,
+  requests,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace-fail '"aiohttp_retry",' ""
   '';
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [
     pytz

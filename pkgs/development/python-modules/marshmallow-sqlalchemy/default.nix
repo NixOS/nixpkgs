@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, marshmallow
-, packaging
-, sqlalchemy
-, pytest-lazy-fixture
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  marshmallow,
+  packaging,
+  sqlalchemy,
+  pytest-lazy-fixture,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-IKDy/N1b3chkRPoBRh8X+bahKo3dTKjJs0/i8uNdAKI=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   propagatedBuildInputs = [
     marshmallow
@@ -33,9 +32,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  pythonImportsCheck = [
-    "marshmallow_sqlalchemy"
-  ];
+  pythonImportsCheck = [ "marshmallow_sqlalchemy" ];
 
   nativeCheckInputs = [
     pytest-lazy-fixture

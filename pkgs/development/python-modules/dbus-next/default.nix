@@ -1,10 +1,15 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, setuptools
-, dbus, pytest, pytest-cov, pytest-asyncio, pytest-timeout
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  setuptools,
+  dbus,
+  pytest,
+  pytest-cov,
+  pytest-asyncio,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-EKEQZFRUe+E65Z6DNCJFL5uCI5kbXrN7Tzd4O0X5Cqo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     dbus

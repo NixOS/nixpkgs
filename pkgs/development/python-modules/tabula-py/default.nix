@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.9.1";
+  version = "2.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "chezou";
     repo = "tabula-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C06du4mhpnF2qxcEMZxp5O/8xpNaj9Jp8LFaxBkGF/Q=";
+    hash = "sha256-dEcVIlK3M7zqRMN7W7mnnMPWhM2A4/qvf0aY61ko4yE=";
   };
 
   postPatch = ''

@@ -6100,10 +6100,6 @@ self: super: with self; {
 
   joserfc = callPackage ../development/python-modules/joserfc { };
 
-  journalwatch = callPackage ../tools/system/journalwatch {
-    inherit (self) systemd pytest;
-  };
-
   jplephem = callPackage ../development/python-modules/jplephem { };
 
   jproperties = callPackage ../development/python-modules/jproperties { };
@@ -8863,13 +8859,9 @@ self: super: with self; {
 
   nose3 = callPackage ../development/python-modules/nose3 { };
 
-  nose-exclude = callPackage ../development/python-modules/nose-exclude { };
-
   nose-timer = callPackage ../development/python-modules/nose-timer { };
 
   nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
-
-  nose-randomly = callPackage ../development/python-modules/nose-randomly { };
 
   nose-warnings-filters = callPackage ../development/python-modules/nose-warnings-filters { };
 
@@ -10023,6 +10015,8 @@ self: super: with self; {
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
+
+  pyrympro = callPackage ../development/python-modules/pyrympro { };
 
   pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
 

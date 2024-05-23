@@ -1,28 +1,29 @@
-{ lib
-, fetchurl
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, hatchling
-, beautifulsoup4
-, bleach
-, defusedxml
-, jinja2
-, jupyter-core
-, jupyterlab-pygments
-, markupsafe
-, mistune
-, nbclient
-, packaging
-, pandocfilters
-, pygments
-, tinycss2
-, traitlets
-, importlib-metadata
-, flaky
-, ipykernel
-, ipywidgets
-, pytestCheckHook
+{
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatchling,
+  beautifulsoup4,
+  bleach,
+  defusedxml,
+  jinja2,
+  jupyter-core,
+  jupyterlab-pygments,
+  markupsafe,
+  mistune,
+  nbclient,
+  packaging,
+  pandocfilters,
+  pygments,
+  tinycss2,
+  traitlets,
+  importlib-metadata,
+  flaky,
+  ipykernel,
+  ipywidgets,
+  pytestCheckHook,
 }:
 
 let
@@ -31,7 +32,8 @@ let
     url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
     hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "nbconvert";
   version = "7.16.4";
   pyproject = true;
@@ -45,9 +47,7 @@ in buildPythonPackage rec {
 
   # Add $out/share/jupyter to the list of paths that are used to search for
   # various exporter templates
-  patches = [
-    ./templates.patch
-  ];
+  patches = [ ./templates.patch ];
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
@@ -56,9 +56,7 @@ in buildPythonPackage rec {
     cp ${style-css} share/templates/classic/static/style.css
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -75,9 +73,7 @@ in buildPythonPackage rec {
     pygments
     tinycss2
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# dependencies
-, markupsafe
+  # dependencies
+  markupsafe,
 
-# optional-dependencies
-, watchdog
+  # optional-dependencies
+  watchdog,
 
-# tests
-, cryptography
-, ephemeral-port-reserve
-, greenlet
-, pytest-timeout
-, pytest-xprocess
-, pytestCheckHook
+  # tests
+  cryptography,
+  ephemeral-port-reserve,
+  greenlet,
+  pytest-timeout,
+  pytest-xprocess,
+  pytestCheckHook,
 
-# reverse dependencies
-, moto
-, sentry-sdk
+  # reverse dependencies
+  moto,
+  sentry-sdk,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +39,9 @@ buildPythonPackage rec {
     hash = "sha256-CX5b/anwq6jaa4VFFG3vSB0Gqn0yZudEjizM9n3YvRg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    markupsafe
-  ];
+  propagatedBuildInputs = [ markupsafe ];
 
   passthru.optional-dependencies = {
     watchdog = lib.optionals (!stdenv.isDarwin) [
@@ -53,21 +50,20 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    cryptography
-    ephemeral-port-reserve
-    pytest-timeout
-    pytest-xprocess
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    greenlet
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      cryptography
+      ephemeral-port-reserve
+      pytest-timeout
+      pytest-xprocess
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ greenlet ]
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "werkzeug" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_get_machine_id"
-  ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused
@@ -85,7 +81,9 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }";
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "The comprehensive WSGI web application library";
     longDescription = ''

@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, absl-py
-, chex
-, distrax
-, dm-env
-, jax
-, jaxlib
-, numpy
-, tensorflow-probability
-, dm-haiku
-, optax
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  absl-py,
+  chex,
+  distrax,
+  dm-env,
+  jax,
+  jaxlib,
+  numpy,
+  tensorflow-probability,
+  dm-haiku,
+  optax,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,8 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (fetchpatch {  # Follow chex API change (https://github.com/google-deepmind/chex/pull/52)
+    (fetchpatch {
+      # Follow chex API change (https://github.com/google-deepmind/chex/pull/52)
       name = "replace-deprecated-chex-assertions";
       url = "https://github.com/google-deepmind/rlax/commit/30e7913a1102667137654d6e652a6c4b9e9ba1f4.patch";
       hash = "sha256-OPnuTKEtwZ28hzR1660v3DcktxTYjhR1xYvFbQvOhgs=";
@@ -54,9 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "rlax"
-  ];
+  pythonImportsCheck = [ "rlax" ];
 
   disabledTests = [
     # RuntimeErrors

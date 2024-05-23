@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, click
-, defusedxml
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, respx
+{
+  lib,
+  buildPythonPackage,
+  click,
+  defusedxml,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace 'pydantic = ">=1.10.2"' 'pydantic = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     defusedxml
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    cli = [
-      click
-    ];
+    cli = [ click ];
   };
 
   nativeCheckInputs = [
@@ -53,9 +50,7 @@ buildPythonPackage rec {
     respx
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "sfrbox_api"
-  ];
+  pythonImportsCheck = [ "sfrbox_api" ];
 
   meta = with lib; {
     description = "Module for the SFR Box API";

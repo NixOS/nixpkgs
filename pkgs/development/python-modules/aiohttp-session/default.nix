@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, aiohttp
+  # dependencies
+  aiohttp,
 
-# optional-dependencies
-, aiomcache
-, cryptography
-, pynacl
-, redis
+  # optional-dependencies
+  aiomcache,
+  cryptography,
+  pynacl,
+  redis,
 }:
 
 buildPythonPackage rec {
@@ -27,13 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-7MNah4OIQnoxLoZkLOdeu5uCwSyPMhc6Wsht8dFconc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
   optional-dependencies = {
     aioredis = [ redis ];
@@ -45,9 +42,7 @@ buildPythonPackage rec {
 
   doCheck = false; # runs redis in docker
 
-  pythonImportsCheck = [
-    "aiohttp_session"
-  ];
+  pythonImportsCheck = [ "aiohttp_session" ];
 
   meta = with lib; {
     description = "Web sessions for aiohttp.web";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, parts
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  parts,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,17 +31,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    parts
-  ];
+  propagatedBuildInputs = [ parts ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bitlist"
-  ];
+  pythonImportsCheck = [ "bitlist" ];
 
   meta = with lib; {
     description = "Python library for working with little-endian list representation of bit strings";

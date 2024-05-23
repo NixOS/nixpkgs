@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, requests
-, requests-oauthlib
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  requests,
+  requests-oauthlib,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tellduslive"
-  ];
+  pythonImportsCheck = [ "tellduslive" ];
 
   meta = with lib; {
     description = "Python module to communicate with Telldus Live";

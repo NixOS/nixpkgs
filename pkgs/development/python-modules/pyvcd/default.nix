@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
     changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ sb0 emily ];
+    maintainers = with maintainers; [
+      sb0
+      emily
+    ];
   };
 }

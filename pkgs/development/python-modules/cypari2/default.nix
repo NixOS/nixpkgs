@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchpatch
-, fetchPypi
-, pari
-, gmp
-, cython
-, cysignals
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchpatch,
+  fetchPypi,
+  pari,
+  gmp,
+  cython,
+  cysignals,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +39,9 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
-  nativeBuildInputs = [
-    pari
-  ];
+  nativeBuildInputs = [ pari ];
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
   propagatedBuildInputs = [
     cysignals
@@ -56,7 +53,9 @@ buildPythonPackage rec {
     make check
   '';
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Cython bindings for PARI";

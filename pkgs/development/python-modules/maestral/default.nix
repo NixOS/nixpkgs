@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, makePythonPath
-, pythonOlder
-, python
-, click
-, dbus-python
-, desktop-notifier
-, dropbox
-, fasteners
-, importlib-metadata
-, keyring
-, keyrings-alt
-, packaging
-, pathspec
-, pyro5
-, requests
-, rich
-, rubicon-objc
-, setuptools
-, survey
-, typing-extensions
-, watchdog
-, xattr
-, fetchpatch
-, pytestCheckHook
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  makePythonPath,
+  pythonOlder,
+  python,
+  click,
+  dbus-python,
+  desktop-notifier,
+  dropbox,
+  fasteners,
+  importlib-metadata,
+  keyring,
+  keyrings-alt,
+  packaging,
+  pathspec,
+  pyro5,
+  requests,
+  rich,
+  rubicon-objc,
+  setuptools,
+  survey,
+  typing-extensions,
+  watchdog,
+  xattr,
+  fetchpatch,
+  pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     hash = "sha256-h7RDaCVICi3wl6/b1s01cINhFirDOpOXoxTPZIBH3jE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     click
@@ -66,9 +65,7 @@ buildPythonPackage rec {
     typing-extensions
     watchdog
     xattr
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rubicon-objc
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ rubicon-objc ];
 
   patches = [
     (fetchpatch {
@@ -84,9 +81,7 @@ buildPythonPackage rec {
     "--prefix PYTHONPATH : $out/${python.sitePackages}"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # ModuleNotFoundError: No module named '_watchdog_fsevents'
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
@@ -95,39 +90,39 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTests = [
-    # We don't want to benchmark
-    "test_performance"
-    # Requires systemd
-    "test_autostart"
-    # Requires network access
-    "test_check_for_updates"
-    # Tries to look at /usr
-    "test_filestatus"
-    "test_path_exists_case_insensitive"
-    "test_cased_path_candidates"
-    # AssertionError
-    "test_locking_multiprocess"
-    # OSError: [Errno 95] Operation not supported
-    "test_move_preserves_xattrs"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # maetral daemon does not start but worked in real environment
-    "test_catching_non_ignored_events"
-    "test_connection"
-    "test_event_handler"
-    "test_fs_ignore_tree_creation"
-    "test_lifecycle"
-    "test_notify_level"
-    "test_notify_snooze"
-    "test_receiving_events"
-    "test_remote_exceptions"
-    "test_start_already_running"
-    "test_stop"
-  ];
+  disabledTests =
+    [
+      # We don't want to benchmark
+      "test_performance"
+      # Requires systemd
+      "test_autostart"
+      # Requires network access
+      "test_check_for_updates"
+      # Tries to look at /usr
+      "test_filestatus"
+      "test_path_exists_case_insensitive"
+      "test_cased_path_candidates"
+      # AssertionError
+      "test_locking_multiprocess"
+      # OSError: [Errno 95] Operation not supported
+      "test_move_preserves_xattrs"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # maetral daemon does not start but worked in real environment
+      "test_catching_non_ignored_events"
+      "test_connection"
+      "test_event_handler"
+      "test_fs_ignore_tree_creation"
+      "test_lifecycle"
+      "test_notify_level"
+      "test_notify_snooze"
+      "test_receiving_events"
+      "test_remote_exceptions"
+      "test_start_already_running"
+      "test_stop"
+    ];
 
-  pythonImportsCheck = [
-    "maestral"
-  ];
+  pythonImportsCheck = [ "maestral" ];
 
   passthru.tests.maestral = nixosTests.maestral;
 
@@ -137,6 +132,10 @@ buildPythonPackage rec {
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ natsukium peterhoeg sfrijters ];
+    maintainers = with maintainers; [
+      natsukium
+      peterhoeg
+      sfrijters
+    ];
   };
 }

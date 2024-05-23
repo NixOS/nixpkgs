@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, cbor2
-, click
-, cryptography
-, intelhex
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  cbor2,
+  click,
+  cryptography,
+  intelhex,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-T3+831PETqqmImUEUQzLUvfvAMmXUDz5STSzMMlge2A=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cbor2
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "imgtool"
-  ];
+  pythonImportsCheck = [ "imgtool" ];
 
   meta = with lib; {
     description = "MCUboot's image signing and key management";

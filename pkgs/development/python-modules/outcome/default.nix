@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, attrs
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  attrs,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-nc8C5l8pcbgAR7N3Ro5yomjhXArzzxI45v8U9/kRQ7g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ attrs ];
@@ -27,7 +26,10 @@ buildPythonPackage rec {
   meta = {
     description = "Capture the outcome of Python function calls.";
     homepage = "https://github.com/python-trio/outcome";
-    license = with lib.licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ catern ];
   };
 }

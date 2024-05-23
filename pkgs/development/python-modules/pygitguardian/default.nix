@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, marshmallow-dataclass
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, responses
-, setuptools
-, typing-extensions
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  marshmallow-dataclass,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  responses,
+  setuptools,
+  typing-extensions,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-Uw65+YOnln+IOyT+RgqMEWt5cOZsaeS8Nu8U6ooivWA=";
   };
 
-  pythonRelaxDeps = [
-    "marshmallow-dataclass"
-  ];
+  pythonRelaxDeps = [ "marshmallow-dataclass" ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "pygitguardian"
-  ];
+  pythonImportsCheck = [ "pygitguardian" ];
 
   disabledTests = [
     # Tests require an API key

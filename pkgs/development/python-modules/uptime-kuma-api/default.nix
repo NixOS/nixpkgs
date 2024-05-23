@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, packaging
-, python-socketio
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  python-socketio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     python-socketio.optional-dependencies.client
   ];
 
-  pythonImportsCheck = [
-    "uptime_kuma_api"
-  ];
+  pythonImportsCheck = [ "uptime_kuma_api" ];
 
   # Tests need an uptime-kuma instance to run
   doCheck = false;

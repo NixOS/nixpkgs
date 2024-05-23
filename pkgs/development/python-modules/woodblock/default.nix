@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, click
-, multimethod
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  click,
+  multimethod,
+  numpy,
 }:
 buildPythonPackage rec {
   pname = "woodblock";
@@ -24,9 +25,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "woodblock"
-  ];
+  pythonImportsCheck = [ "woodblock" ];
 
   meta = with lib; {
     description = "A framework to generate file carving test data";
