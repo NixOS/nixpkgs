@@ -1,33 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, writeTextFile, cmake, alsa-lib, OpenAL, CoreAudioKit, freepats }:
+{ lib, stdenv, fetchFromGitHub, writeTextFile, cmake, alsa-lib, darwin, freepats }:
 
 let
   defaultCfgPath = "${placeholder "out"}/etc/wildmidi/wildmidi.cfg";
+
+  inherit (darwin.apple_sdk.frameworks) OpenAL CoreAudio AudioUnit AudioToolbox CoreServices;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wildmidi";
   version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "Mindwerks";
     repo = "wildmidi";
-    rev = "${pname}-${version}";
-    sha256 = "sha256-syjs8y75M2ul7whiZxnWMSskRJd0ixFqnep7qsTbiDE=";
+    rev = "wildmidi-${finalAttrs.version}";
+    hash = "sha256-syjs8y75M2ul7whiZxnWMSskRJd0ixFqnep7qsTbiDE=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = lib.optionals stdenv.buildPlatform.isLinux [
-    alsa-lib stdenv.cc.libc/*couldn't find libm*/
+    alsa-lib
+    stdenv.cc.libc # couldn't find libm
   ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-    OpenAL CoreAudioKit
+    OpenAL
+    CoreAudio
+    AudioUnit
+    AudioToolbox
+    CoreServices
   ];
-
-  preConfigure = ''
-    # https://github.com/Mindwerks/wildmidi/issues/236
-    substituteInPlace src/wildmidi.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
 
   cmakeFlags = [
     "-DWILDMIDI_CFG=${defaultCfgPath}"
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
-}
+})
