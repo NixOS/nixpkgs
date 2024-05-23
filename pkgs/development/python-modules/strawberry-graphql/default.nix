@@ -43,16 +43,16 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.219.2";
+  version = "0.230.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-uIUETjzuDnlQp6wM7uxyLRSMT5uyrXFrI9NilcjP0BU=";
+    hash = "sha256-jhInHoOvPGIEoSddv8+30gY38L6XR5OEATUTdrHbNpA=";
   };
 
   patches = [
@@ -129,9 +129,8 @@ buildPythonPackage rec {
       rich
       libcst
     ];
-    # starlite = [
-    #   starlite
-    # ];
+    # starlite = [ starlite ];
+    # litestar = [ litestar ];
     pyinstrument = [ pyinstrument ];
   };
 
