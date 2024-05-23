@@ -12,6 +12,7 @@
   desktop-file-utils,
   libadwaita,
   openssl,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libadwaita
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [ "-Wno-error=incompatible-function-pointer-types" ]
+  );
 
   meta = {
     description = "Preview and debug websites metadata tags for social media share";
