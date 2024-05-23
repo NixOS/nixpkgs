@@ -1,6 +1,6 @@
 {
   fetchFromGitea,
-  hare,
+  hareHook,
   lib,
   nix-update-script,
   scdoc,
@@ -20,13 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     scdoc
-    hare
+    hareHook
   ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   checkTarget = "check_local";
 
@@ -41,6 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://codeberg.org/lunacb/hare-toml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza ];
-    inherit (hare.meta) platforms badPlatforms;
+    inherit (hareHook.meta) platforms badPlatforms;
   };
 })
