@@ -1271,6 +1271,11 @@ in mkLicense lset) ({
     fullName = "zlib License";
   };
 
+  zsh = {
+    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
+    fulllName = "Zsh License";
+  };
+
   zpl20 = {
     spdxId = "ZPL-2.0";
     fullName = "Zope Public License 2.0";
