@@ -3320,6 +3320,8 @@ self: super: with self; {
 
   django-ranged-response = callPackage ../development/python-modules/django-ranged-response { };
 
+  django-ratelimit = callPackage ../development/python-modules/django-ratelimit { };
+
   django-raster = callPackage ../development/python-modules/django-raster { };
 
   django-redis = callPackage ../development/python-modules/django-redis { };
@@ -13031,6 +13033,8 @@ self: super: with self; {
   rawkit = callPackage ../development/python-modules/rawkit { };
 
   ray = callPackage ../development/python-modules/ray { };
+
+  raylib-python-cffi = callPackage ../development/python-modules/raylib-python-cffi {};
 
   razdel = callPackage ../development/python-modules/razdel { };
 
