@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     help2man
     gzip
+  ] ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
     autoPatchelfHook
   ];
