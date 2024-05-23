@@ -6,30 +6,32 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
   version = "3.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
-    repo = pname;
+    repo = "wapiti";
     rev = "refs/tags/${version}";
     hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
   };
 
   postPatch = ''
-    # Ignore pinned versions
-    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" pyproject.toml
-
     # Remove code coverage checking
     substituteInPlace pyproject.toml \
       --replace "--cov --cov-report=xml" ""
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = true;
+
+  build-system = with python3.pkgs; [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     aiocache
     aiohttp
     aiosqlite
@@ -154,7 +156,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://wapiti-scanner.github.io/";
     changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }
