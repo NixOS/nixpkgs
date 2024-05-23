@@ -23,9 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-MeTOxDrk6pvJ1L9ZOKzWhXK8WXo0jWXGKEKR7y0ejbQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     simpleeval
     wcmatch
   ];
