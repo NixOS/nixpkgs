@@ -28,7 +28,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.14.4.2";
+  version = "1.14.4.3";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "HDFGroup";
     repo = "hdf5";
     rev = "hdf5_${version}";
-    sha256 = "sha256-nKrKGL/bMphJAm8OxvMV5hpBWBhHVNXANqtNv7ouvV0=";
+    hash = "sha256-lvz3x04SS0oZmUn/BIxQEHnugaDOws46kfT3NAw7Hos=";
   };
 
   passthru = {
