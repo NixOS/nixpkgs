@@ -25,7 +25,24 @@ let
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
-  architectures = import ./architectures.nix { inherit lib; };
+
+  architectures = throw "architectures was replaced by `cpuModel` attribute";
+
+  predicates = features: let
+    featureSupport = feature: builtins.elem feature (if (features == null) then [] else features);
+  in {
+    sse3Support    = featureSupport "sse3";
+    ssse3Support   = featureSupport "ssse3";
+    sse4_1Support  = featureSupport "sse4_1";
+    sse4_2Support  = featureSupport "sse4_2";
+    sse4_aSupport  = featureSupport "sse4a";
+    avxSupport     = featureSupport "avx";
+    avx2Support    = featureSupport "avx2";
+    avx512Support  = featureSupport "avx512";
+    aesSupport     = featureSupport "aes";
+    fmaSupport     = featureSupport "fma";
+    fma4Support    = featureSupport "fma4";
+  };
 
   /**
     Elaborated systems contain functions, which means that they don't satisfy
@@ -316,7 +333,7 @@ let
           else throw "Don't know how to run ${final.config} executables.";
 
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
+      // predicates (final.cpuModel.features or [])
       // builtins.removeAttrs args [ "cpuModel" ] // {
         rust = rust // {
           # Once args.rustc.platform.target-family is deprecated and

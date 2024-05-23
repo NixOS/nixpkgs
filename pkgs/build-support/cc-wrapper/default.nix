@@ -152,6 +152,7 @@ let
         x86-64-v2 = versionAtLeast ccVersion "11.0";
         x86-64-v3 = versionAtLeast ccVersion "11.0";
         x86-64-v4 = versionAtLeast ccVersion "11.0";
+        generic   = false;
 
         # Intel
         skylake        = true;
