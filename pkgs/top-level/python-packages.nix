@@ -7174,6 +7174,8 @@ self: super: with self; {
 
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
 
+  mapclassify = callPackage ../development/python-modules/mapclassify { };
+
   mariadb = callPackage ../development/python-modules/mariadb { };
 
   marimo = callPackage ../development/python-modules/marimo { };
