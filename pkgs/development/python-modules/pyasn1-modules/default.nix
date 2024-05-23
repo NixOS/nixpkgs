@@ -17,14 +17,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "pyasn1";
-    repo = pname;
+    repo = "pyasn1-modules";
     rev = "refs/tags/v${version}";
     hash = "sha256-UJycVfj08+3zjHPji5Qlh3yqeS30dEwu1pyrN1yo1Vc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pyasn1 ];
+  dependencies = [ pyasn1 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
