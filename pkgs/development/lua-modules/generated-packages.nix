@@ -2881,16 +2881,16 @@ buildLuarocksPackage {
 sofa = callPackage({ argparse, buildLuarocksPackage, luatext, compat53, fetchFromGitHub, fetchurl, luaAtLeast, luaOlder, lyaml }:
 buildLuarocksPackage {
   pname = "sofa";
-  version = "0.5.0-0";
+  version = "0.5.1-0";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/sofa-0.5.0-0.rockspec";
-    sha256 = "0vimbvnnfwn1vaxz33vgvmrng3l87j970zgzxsmj4g0p5yqkmnsn";
+    url    = "mirror://luarocks/sofa-0.5.1-0.rockspec";
+    sha256 = "1qlg7ba8gxisvcppapvj73n090bmhxrgcxncr9ddjlqw8kbhd4sq";
   }).outPath;
   src = fetchFromGitHub {
     owner = "f4z3r";
     repo = "sofa";
-    rev = "v0.5.0";
-    hash = "sha256-dpYB94yxi/J3b/liy9srbO7wUsZh6FJma79m9uU8hCM=";
+    rev = "v0.5.1";
+    hash = "sha256-xMy1sbgWDtKP0PkfP7X3zP4BzZHbfwSzB1Dvc7hQa+Y=";
   };
 
   disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
