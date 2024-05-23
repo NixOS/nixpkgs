@@ -2372,6 +2372,8 @@ self: super: with self; {
 
   colorful = callPackage ../development/python-modules/colorful { };
 
+  colorgram-py = callPackage ../development/python-modules/colorgram-py { };
+
   colorlog = callPackage ../development/python-modules/colorlog { };
 
   colorlover = callPackage ../development/python-modules/colorlover { };
