@@ -162,6 +162,16 @@ in {
         '';
       };
 
+      onFailure = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [
+          "notify.service"
+        ];
+        description = ''
+          (custom) Systemd Service to run when the automatic upgrade fails.
+        '';
+
     };
 
   };
@@ -259,6 +269,8 @@ in {
 
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
+
+      onFailure = cfg.onFailure;
     };
 
     systemd.timers.nixos-upgrade = {
