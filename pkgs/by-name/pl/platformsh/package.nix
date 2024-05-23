@@ -50,6 +50,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
+  postInstallCheck = ''
+    stat "''${!outputBin}/bin/${finalAttrs.meta.mainProgram}"
+  '';
+
   passthru = {
     tests.version = testers.testVersion {
       inherit (finalAttrs) version;
