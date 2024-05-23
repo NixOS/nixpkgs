@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages }:
+{ lib, stdenv, fetchurl, buildPackages, libintl }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [ ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ libintl ];
 
   makeFlags = [
     "TOPDIR=${placeholder "out"}"
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS+=-DHAVE_SETENV=0"
     "CFLAGS+=-DHAVE_SYMLINK=0"
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "LDLIBS+=-lintl"
   ];
 
   doCheck = true;
