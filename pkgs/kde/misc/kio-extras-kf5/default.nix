@@ -1,6 +1,6 @@
 {
   stdenv,
-  sources,
+  fetchurl,
   kio-extras,
   cmake,
   libsForQt5,
@@ -14,11 +14,16 @@
   taglib,
   libappimage,
 }:
+# kio-extras-kf5 is kind of part of Gear, but also not released all the time,
+# so handle it separately.
 stdenv.mkDerivation rec {
   pname = "kio-extras-kf5";
-  inherit (sources.${pname}) version;
+  version = "24.02.2";
 
-  src = sources.${pname};
+  src = fetchurl {
+    url = "mirror://kde/stable/release-service/${version}/src/kio-extras-kf5-${version}.tar.xz";
+    hash = "sha256-qar1jzuALINBu6HOuVBU+RUFnqRH9Z/8e5M8ynGxKsk=";
+  };
 
   nativeBuildInputs = with libsForQt5; [
     cmake

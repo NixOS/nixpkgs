@@ -1,11 +1,9 @@
 {
   mkKdeDerivation,
   qtsvg,
-  _7zz,
 }:
 mkKdeDerivation {
-  pname = "kfourinline";
+  pname = "francis";
 
-  extraNativeBuildInputs = [_7zz];
   extraBuildInputs = [qtsvg];
 }
