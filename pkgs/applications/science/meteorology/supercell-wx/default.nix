@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  aws-sdk-cpp,
   bzip2,
   cmake,
   conan,
@@ -14,10 +15,12 @@
   git,
   boost185,
   spdlog,
+  stb,
   libcpr,
   libpng,
   libSM,
   geographiclib,
+  howard-hinnant-date,
   re2,
   gtest,
   glm,
@@ -64,18 +67,14 @@ in
     env.NIX_CFLAGS_COMPILE = "-Wno-error=restrict";
 
     patches = [
-      ./patches/remove-conan.patch
-      ./patches/fix-cmake-find-packages.patch
-      ./patches/add-cstdint.patch
-      ./patches/fix-zoned-time.patch
-      ./patches/fix-git-versioning.patch
-      ./patches/add-explicit-libpng.patch
-      ./patches/fix-cmake-install.patch
+       ./patches/use-find-package.patch
+       ./patches/add-cstdint.patch
+       ./patches/fix-zoned-time.patch
+       ./patches/skip-git-versioning.patch
+       ./patches/fix-cmake-install.patch
     ];
 
     postPatch = ''
-      substituteInPlace external/date/src/tz.cpp \
-        --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
       substituteInPlace external/maplibre-native-qt/src/core/CMakeLists.txt \
         --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
       substituteInPlace scwx-qt/tools/generate_versions.py \
@@ -99,15 +98,19 @@ in
       qtmultimedia
       qtpositioning
       qtimageformats
+      aws-sdk-cpp
+      howard-hinnant-date
       boost185
       tbb_2021_11
       glew
       geos
       spdlog
+      stb
       libcpr
       libpng
       libSM
       re2
+      openssl
       geographiclib
       gtest
       glm
