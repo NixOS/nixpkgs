@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iw";
-  version = "5.19";
+  version = "6.7";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/iw/iw-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8We76UfdU7uevAwdzvXbatc6wdYITyxvk3bFw2DMTU4=";
+    hash = "sha256-qs9JwmaynVANcwhnmKHGUudgwZEmqFmf2BGFBDB4mjU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
