@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  fetchpatch,
   fetchFromGitHub,
   python,
   django,
