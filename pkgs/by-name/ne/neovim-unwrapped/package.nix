@@ -89,7 +89,7 @@ in {
     inherit lua;
     treesitter-parsers = treesitter-parsers //
       { markdown = treesitter-parsers.markdown // { location = "tree-sitter-markdown"; }; } //
-      { markdown-inline = treesitter-parsers.markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; }
+      { markdown_inline = treesitter-parsers.markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; }
       ;
 
     buildInputs = [
