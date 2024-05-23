@@ -4,6 +4,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nixosTests
 , installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
+, withGeoIP ? false
 , withImageFilter ? false
 , withKTLS ? true
 , withStream ? true
@@ -65,9 +66,10 @@ stdenv.mkDerivation {
     removeReferencesTo
   ] ++ nativeBuildInputs;
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt geoip perl ]
+  buildInputs = [ openssl zlib pcre libxml2 libxslt perl ]
     ++ buildInputs
     ++ mapModules "inputs"
+    ++ lib.optional withGeoIP geoip
     ++ lib.optional withImageFilter gd;
 
   configureFlags = [
@@ -116,8 +118,7 @@ stdenv.mkDerivation {
     "--with-perl_modules_path=lib/perl5"
   ] ++ lib.optional withImageFilter "--with-http_image_filter_module"
     ++ lib.optional withSlice "--with-http_slice_module"
-    ++ lib.optional (geoip != null) "--with-http_geoip_module"
-    ++ lib.optional (withStream && geoip != null) "--with-stream_geoip_module"
+    ++ lib.optionals withGeoIP ([ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module")
     ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
