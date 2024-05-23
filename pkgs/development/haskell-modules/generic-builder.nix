@@ -97,6 +97,10 @@ in
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
 , enableSeparateIntermediatesOutput ? false
+, # When enabled test suites are not run in the main deriviation.
+  # Instead they are built, installed in the 'test' output, and
+  # passthru.test derivations are created for each test suite.
+  enableSeparateTestOutput ? false
 , # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
@@ -379,7 +383,8 @@ stdenv.mkDerivation ({
          ++ (optional enableSeparateDataOutput "data")
          ++ (optional enableSeparateDocOutput "doc")
          ++ (optional enableSeparateBinOutput "bin")
-         ++ (optional enableSeparateIntermediatesOutput "intermediates");
+         ++ (optional enableSeparateIntermediatesOutput "intermediates")
+         ++ (optional enableSeparateTestOutput "test");
 
   setOutputFlags = false;
 
@@ -565,7 +570,9 @@ stdenv.mkDerivation ({
   # Run test suite(s) and pass `checkFlags` as well as `checkFlagsArray`.
   # `testFlags` are added to `checkFlagsArray` each prefixed with
   # `--test-option`, so Cabal passes it to the underlying test suite binary.
-  checkPhase = ''
+  # Unless `enableSeparateTestOutput` is set, in which case the test suites are
+  # run in a separate derivation in `passthru.test`.
+  ${if enableSeparateTestOutput then null else "checkPhase"} = ''
     runHook preCheck
     checkFlagsArray+=(
       "--show-details=streaming"
@@ -590,6 +597,7 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
+    mkdir $out
     ${if !isLibrary && buildTarget == "" then "${setupCommand} install"
       # ^^ if the project is not a library, and no build target is specified, we can just use "install".
       else if !isLibrary then "${setupCommand} copy ${buildTarget}"
@@ -632,6 +640,13 @@ stdenv.mkDerivation ({
     mkdir -p $doc
     ''}
     ${optionalString enableSeparateDataOutput "mkdir -p $data"}
+
+    ${optionalString enableSeparateTestOutput ''
+    mkdir -p $test/bin
+    for t in ${testTarget}; do
+      install dist/build/$t/$t $test/bin/
+    done
+    ''}
 
     runHook postInstall
   '';
@@ -690,6 +705,22 @@ stdenv.mkDerivation ({
         benchmarkToolDepends
         ;
     };
+
+    tests = passthru.tests or {} // lib.optionalAttrs enableSeparateTestOutput
+      (lib.genAttrs (lib.splitString " " testTarget) (testExe:
+        stdenv.mkDerivation {
+          name = "${pname}-${testExe}-check";
+          inherit src preCheck postCheck;
+          inherit (drv) meta LANG buildInputs;
+          phases = ["unpackPhase" "patchPhase" "buildPhase"];
+          buildPhase = ''
+            mkdir $out
+            runHook preCheck
+            ${drv.test}/bin/${testExe} $checkFlags ${lib.concatStringsSep " " testFlags} 2> >(tee $out/test-stderr) | tee $out/test-stdout
+            runHook postCheck
+          '';
+        } // lib.optionalAttrs (drv ? LOCALE_ARCHIVE) { inherit (drv) LOCALE_ARCHIVE; }
+        ));
 
     # Attributes for the old definition of `shellFor`. Should be removed but
     # this predates the warning at the top of `getCabalDeps`.
