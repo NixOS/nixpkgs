@@ -6692,6 +6692,8 @@ self: super: with self; {
 
   libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
+  libpysal = callPackage ../development/python-modules/libpysal { };
+
   libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
 
   libpwquality = lib.pipe pkgs.libpwquality [
