@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace create-config.mk \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
 
     substituteInPlace multipathd/multipathd.service.in \
-      --replace /sbin/multipathd "$out/bin/multipathd"
+      --replace-fail /sbin/multipathd "$out/bin/multipathd"
 
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   preCheck = ''
     # skip test attempting to access /sys/dev/block
-    substituteInPlace tests/Makefile --replace ' devt ' ' '
+    substituteInPlace tests/Makefile --replace-fail ' devt ' ' '
   '';
   nativeCheckInputs = [ cmocka ];
 
