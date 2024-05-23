@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "graph-tool";
+  version = "2.65";
   format = "other";
-  version = "2.45";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-+S2nrM/aArKXke/k8LPtkzKfJyMq9NOvwHySQh7Ghmg=";
+    hash = "sha256-ozpFv9rri2toG8BeNTqzoJdkwB06GdJ69XjtPkjUKZw=";
   };
 
   configureFlags = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   # https://git.skewed.de/count0/graph-tool/-/wikis/installation-instructions#manual-compilation
-  propagatedBuildInputs = [
+  dependencies = [
     boost
     cairomm
     cgal
