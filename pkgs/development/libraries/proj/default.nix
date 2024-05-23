@@ -1,11 +1,11 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
-, fetchpatch
+
 , cmake
 , pkg-config
 , buildPackages
-, callPackage
 , sqlite
 , libtiff
 , curl
@@ -62,10 +62,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.tests = {
-    python = python3.pkgs.pyproj;
-    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
-  };
+  passthru =
+    let
+      proj = finalAttrs.finalPackage;
+    in
+    {
+      withProjData = gridPackages:
+        let
+          proj-data = callPackage ./proj-data.nix { gridPackages = gridPackages; };
+        in
+        proj.overrideAttrs (final: prev: {
+          pname = prev.pname + "-with-grid-packages";
+          postInstall = ''
+            cp --recursive ${proj-data}/* $out/share/proj/
+          '';
+        });
+
+      tests = {
+        python = python3.pkgs.pyproj;
+        proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
+      };
+    };
 
   meta = with lib; {
     changelog = "https://github.com/OSGeo/PROJ/blob/${finalAttrs.src.rev}/NEWS";
