@@ -249,6 +249,7 @@
   ./programs/oblogout.nix
   ./programs/oddjobd.nix
   ./programs/openvpn3.nix
+  ./programs/obs-studio.nix
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
