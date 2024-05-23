@@ -31961,8 +31961,6 @@ with pkgs;
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
-  imgbrd-grabber = qt5.callPackage ../applications/graphics/imgbrd-grabber { };
-
   imgcat = callPackage ../applications/graphics/imgcat { };
 
   img-cat = callPackage ../applications/graphics/img-cat { };

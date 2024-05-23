@@ -1,77 +1,74 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtmultimedia
-, qttools
-, qtdeclarative
-, qtnetworkauth
-, qtbase
-, makeWrapper
-, catch2
-, nodejs
-, libpulseaudio
-, openssl
-, rsync
-, typescript
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  makeWrapper,
+  catch2,
+  nodejs,
+  libpulseaudio,
+  openssl,
+  rsync,
+  typescript,
+  qt6,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imgbrd-grabber";
-  version = "7.10.0";
+  version = "7.12.2";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
-    rev = "v${version}";
-    sha256 = "sha256-AT6pN2do0LlH6xAXKcFQv+oderD88/EiG1JnCw6kOOg=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-6XfIaASfbvdPovtdDEJtsk4pEL4Dhmyq8ml4X7KZ4DE=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    openssl
-    libpulseaudio
-    typescript
-  ];
+  buildInputs =
+    with qt6;
+    [
+      qtbase
+      qtdeclarative
+      qttools
+      qtnetworkauth
+      qtmultimedia
+    ]
+    ++ [
+      openssl
+      libpulseaudio
+      typescript
+      nodejs
+    ];
 
   nativeBuildInputs = [
     makeWrapper
-    qtmultimedia
-    qtbase
-    qtdeclarative
-    qttools
-    qtnetworkauth
-    nodejs
+    qt6.wrapQtAppsHook
     cmake
-    wrapQtAppsHook
   ];
 
   extraOutputsToLink = [ "doc" ];
 
-  postPatch = ''
+  preBuild = ''
+    export HOME=$TMPDIR
+
     # the package.sh script provides some install helpers
     # using this might make it easier to maintain/less likely for the
     # install phase to fail across version bumps
-    patchShebangs ./scripts/package.sh
+    patchShebangs ../scripts/package.sh
+  '';
+
+  postPatch = ''
 
     # ensure the script uses the rsync package from nixpkgs
-    substituteInPlace ../scripts/package.sh --replace "rsync" "${rsync}/bin/rsync"
+    substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${lib.getExe rsync}"
 
 
     # the npm build step only runs typescript
     # run this step directly so it doesn't try and fail to download the unnecessary node_modules, etc.
-    substituteInPlace ./sites/CMakeLists.txt --replace "npm install" "npm run build"
-
-    # remove the vendored catch2
-    rm -rf tests/src/vendor/catch
+    substituteInPlace ./sites/CMakeLists.txt --replace-fail "npm install" "npm run build"
 
     # link the catch2 sources from nixpkgs
-    ln -sf ${catch2.src} tests/src/vendor/catch
-  '';
-
-  preBuild = ''
-    export HOME=$TMPDIR
+    ln -sf ${catch2.src} tests/src/
   '';
 
   postInstall = ''
@@ -88,13 +85,16 @@ stdenv.mkDerivation rec {
     ln -s $out/share/Grabber/Grabber-cli $out/bin/Grabber-cli
   '';
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  meta = with lib; {
+  meta = {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://bionus.github.io/imgbrd-grabber/";
     mainProgram = "Grabber";
-    maintainers = [ maintainers.evanjs ];
+    maintainers = with lib.maintainers; [
+      evanjs
+      luftmensch-luftmensch
+    ];
   };
-}
+})
