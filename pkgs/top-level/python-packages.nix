@@ -16688,6 +16688,8 @@ self: super: with self; {
 
   virtualenvwrapper = callPackage ../development/python-modules/virtualenvwrapper { };
 
+  visions = callPackage ../development/python-modules/visions { };
+
   visitor = callPackage ../development/python-modules/visitor { };
 
   vispy = callPackage ../development/python-modules/vispy { };
@@ -17214,6 +17216,8 @@ self: super: with self; {
   yattag = callPackage ../development/python-modules/yattag { };
 
   yacs = callPackage ../development/python-modules/yacs { };
+
+  ydata-profiling = callPackage ../development/python-modules/ydata-profiling { };
 
   ydiff = callPackage ../development/python-modules/ydiff { };
 
