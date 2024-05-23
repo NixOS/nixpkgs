@@ -69,6 +69,10 @@ python3.pkgs.buildPythonApplication rec {
     # Fix cross-compilation of proc-macro (and mesa)
     # https://github.com/mesonbuild/meson/issues/12973
     ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
+
+    # Fix extraframework lookup on case-sensitive APFS.
+    # https://github.com/mesonbuild/meson/pull/13038
+    ./007-case-sensitive-fs.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
