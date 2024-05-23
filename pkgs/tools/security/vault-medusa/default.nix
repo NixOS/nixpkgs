@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vault-medusa";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "jonasvinther";
     repo = "medusa";
     rev = "v${version}";
-    sha256 = "sha256-8lbaXcu+o+grbFPJxZ6p/LezxDFCUvOQyX49zX4V/v0=";
+    sha256 = "sha256-4fYtWRWonZC9HSNGMqZZPH3xHi6wPk3vSF+htu34g6A=";
   };
 
-  vendorHash = "sha256-/8wusZt0BQ//HCokjiSpsgsGb19FggrGrEuhCrwm9L0=";
+  vendorHash = "sha256-GdQiPeU5SWZlqWkyk8gU9yVTUQxJlurhY3l1xZXKeJY=";
 
   meta = with lib; {
     description = "A cli tool for importing and exporting Hashicorp Vault secrets";
