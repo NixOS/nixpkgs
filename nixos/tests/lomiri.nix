@@ -312,7 +312,7 @@ in {
             machine.wait_for_text(r"(Flight|Wi-Fi)")
             machine.screenshot("indicators_network")
 
-        with subtest("lomiri indicator sound works"):
+        with subtest("ayatana indicator sound works"):
             machine.send_key("right")
             machine.wait_for_text(r"(Silent|Volume)")
             machine.screenshot("indicators_sound")
