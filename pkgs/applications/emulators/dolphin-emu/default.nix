@@ -154,13 +154,6 @@ stdenv.mkDerivation rec {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
-  # Use nix-provided libraries instead of submodules
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "if(NOT APPLE)" "if(true)" \
-      --replace-fail "if(LIBUSB_FOUND AND NOT APPLE)" "if(LIBUSB_FOUND)"
-  '';
-
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
