@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
    curl
-   openssl.dev
+   glib
+   gtk3
+   openssl
    jansson
   ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
-   gtk3
-   glib
    gsettings-desktop-schemas
    pkg-config
    wrapGAppsHook3
