@@ -1,10 +1,8 @@
 {
-  stdenv,
   lib,
   pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   # C Inputs
   blas,
   catch2,
@@ -26,7 +24,6 @@
   fixtures,
   pytest-timeout,
   qiskit-terra,
-  setuptools,
   testtools,
 }:
 
