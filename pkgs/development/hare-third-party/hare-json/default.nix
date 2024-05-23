@@ -1,8 +1,14 @@
-{ lib, stdenv, hare, harec, fetchFromSourcehut }:
+{
+  fetchFromSourcehut,
+  hare,
+  harec,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-json";
-  version = "unstable-2023-03-13";
+  version = "0-unstable-2023-03-13";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -25,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "This package provides JSON support for Hare";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ starzation ];
-
     inherit (harec.meta) platforms badPlatforms;
   };
 })
