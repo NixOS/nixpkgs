@@ -19784,12 +19784,6 @@
     githubId = 36031171;
     name = "Supa";
   };
-  superbo = {
-    email = "supernbo@gmail.com";
-    github = "SuperBo";
-    githubId = 2666479;
-    name = "Y Nguyen";
-  };
   superherointj = {
     email = "sergiomarcelo@yandex.com";
     github = "superherointj";
