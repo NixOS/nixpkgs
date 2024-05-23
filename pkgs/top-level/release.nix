@@ -82,9 +82,9 @@ let
 
       release-checks = import ./nixpkgs-basic-release-checks.nix { inherit pkgs nixpkgs supportedSystems; };
 
-      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
+      manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
 
-      manual = import ../../doc { inherit pkgs nixpkgs; };
+      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
