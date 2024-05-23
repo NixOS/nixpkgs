@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, arviz
-, formulae
-, graphviz
-, pandas
-, pymc
-, blackjax
-, numpyro
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  arviz,
+  formulae,
+  graphviz,
+  pandas,
+  pymc,
+  blackjax,
+  numpyro,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-9+uTyV3mQlHOKAjXohwkhTzNe/+I5XR/LuH1ZYvhc8I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     arviz
@@ -80,9 +79,7 @@ buildPythonPackage rec {
     "test_with_user_values"
   ];
 
-  pythonImportsCheck = [
-    "bambi"
-  ];
+  pythonImportsCheck = [ "bambi" ];
 
   meta = with lib; {
     homepage = "https://bambinos.github.io/bambi";

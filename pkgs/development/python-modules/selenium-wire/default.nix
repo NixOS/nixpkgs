@@ -1,24 +1,25 @@
-{ lib
-, blinker
-, brotli
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, h2
-, hyperframe
-, kaitaistruct
-, pyasn1
-, httpbin
-, pyopenssl
-, pyparsing
-, pysocks
-, gunicorn
-, pytestCheckHook
-, pythonOlder
-, selenium
-, setuptools
-, wsproto
-, zstandard
+{
+  lib,
+  blinker,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  h2,
+  hyperframe,
+  kaitaistruct,
+  pyasn1,
+  httpbin,
+  pyopenssl,
+  pyparsing,
+  pysocks,
+  gunicorn,
+  pytestCheckHook,
+  pythonOlder,
+  selenium,
+  setuptools,
+  wsproto,
+  zstandard,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-KgaDxHS0dAK6CT53L1qqx1aORMmkeaiXAUtGC82hiIQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     blinker
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "seleniumwire"
-  ];
+  pythonImportsCheck = [ "seleniumwire" ];
 
   disabledTestPaths = [
     # Don't run End2End tests

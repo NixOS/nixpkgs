@@ -6,7 +6,6 @@
 , qtbase
 , qtermwidget
 , qttools
-, qtx11extras
 , wrapQtAppsHook
 , gitUpdater
 , nixosTests
@@ -14,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qterminal";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-nojNx351lYw0jVKEvzAIDP1WrZWcCAlfYMxNG95GcEo=";
+    hash = "sha256-SesKJCiMoiqkvMM29+0IMERozQ9zuD+NJTtaC6j7ubM=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +32,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtermwidget
-    qtx11extras
   ];
 
   passthru.updateScript = gitUpdater { };

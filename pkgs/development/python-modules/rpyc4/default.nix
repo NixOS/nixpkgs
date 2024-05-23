@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, hatchling
-, plumbum
-, pytestCheckHook
-, pythonOlder
-, pythonAtLeast
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  hatchling,
+  plumbum,
+  pytestCheckHook,
+  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    plumbum
-  ];
+  propagatedBuildInputs = [ plumbum ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disable tests that requires network access
@@ -58,9 +55,7 @@ buildPythonPackage rec {
     "tests/test_teleportation.py"
   ];
 
-  pythonImportsCheck = [
-    "rpyc"
-  ];
+  pythonImportsCheck = [ "rpyc" ];
 
   doCheck = !stdenv.isDarwin;
 

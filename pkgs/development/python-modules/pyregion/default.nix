@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-# needed to build
-, cython
-, oldest-supported-numpy
-, setuptools
-, setuptools-scm
-, wheel
-# needed to run
-, astropy
-, numpy
-, pyparsing
-# needed to check
-, pytestCheckHook
-, pytest-astropy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  # needed to build
+  cython,
+  oldest-supported-numpy,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  # needed to run
+  astropy,
+  numpy,
+  pyparsing,
+  # needed to check
+  pytestCheckHook,
+  pytest-astropy,
 }:
 
 buildPythonPackage rec {
@@ -52,7 +53,10 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-astropy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-astropy
+  ];
 
   # Tests must be run in the build directory
   preCheck = ''

@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, docutils
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  docutils,
 }:
 
 buildPythonPackage rec {

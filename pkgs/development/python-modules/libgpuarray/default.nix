@@ -1,18 +1,21 @@
-{ stdenv
-, lib
-, addOpenGLRunpath
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, cython_0
-, numpy
-, six
-, nose
-, mako
-, config
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, openclSupport ? true, ocl-icd, clblas
+{
+  stdenv,
+  lib,
+  addOpenGLRunpath,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  cython_0,
+  numpy,
+  six,
+  nose,
+  mako,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  openclSupport ? true,
+  ocl-icd,
+  clblas,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +36,13 @@ buildPythonPackage rec {
   configurePhase = "cmakeConfigurePhase";
 
   libraryPath = lib.makeLibraryPath (
-    lib.optionals cudaSupport (with cudaPackages; [ cudatoolkit.lib cudatoolkit.out ])
+    lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cudatoolkit.lib
+        cudatoolkit.out
+      ]
+    )
     ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 
@@ -46,18 +55,21 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  postFixup = ''
-    rm $out/lib/libgpuarray-static.a
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    function fixRunPath {
-      p=$(patchelf --print-rpath $1)
-      patchelf --set-rpath "$p:$libraryPath" $1
-    }
+  postFixup =
+    ''
+      rm $out/lib/libgpuarray-static.a
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
+      function fixRunPath {
+        p=$(patchelf --print-rpath $1)
+        patchelf --set-rpath "$p:$libraryPath" $1
+      }
 
-    fixRunPath $out/lib/libgpuarray.so
-  '' + lib.optionalString cudaSupport ''
-    addOpenGLRunpath $out/lib/libgpuarray.so
-  '';
+      fixRunPath $out/lib/libgpuarray.so
+    ''
+    + lib.optionalString cudaSupport ''
+      addOpenGLRunpath $out/lib/libgpuarray.so
+    '';
 
   propagatedBuildInputs = [
     numpy
@@ -68,14 +80,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     cython_0
-  ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
-  ];
+  ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
-
-  buildInputs = [
-    nose
-  ];
+  buildInputs = [ nose ];
 
   meta = with lib; {
     homepage = "https://github.com/Theano/libgpuarray";
@@ -84,5 +91,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.unix;
   };
-
 }

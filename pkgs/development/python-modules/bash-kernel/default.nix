@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, flit-core
-, ipykernel
-, python
-, pexpect
-, bashInteractive
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  flit-core,
+  ipykernel,
+  python,
+  pexpect,
+  bashInteractive,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     ipykernel
@@ -55,7 +54,7 @@ buildPythonPackage rec {
 
     # Evaluate a test notebook with papermill
     cd $(mktemp -d)
-    ${python.withPackages (ps: [ps.papermill])}/bin/papermill --kernel bash ${./test.ipynb} out.ipynb
+    ${python.withPackages (ps: [ ps.papermill ])}/bin/papermill --kernel bash ${./test.ipynb} out.ipynb
 
     runHook postCheck
   '';

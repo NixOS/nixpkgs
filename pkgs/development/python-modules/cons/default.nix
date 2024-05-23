@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, logical-unification
-, py
-, pytestCheckHook
-, pytest-html
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  logical-unification,
+  py,
+  pytestCheckHook,
+  pytest-html,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-XssERKiv4A8x7dZhLeFSciN6RCEfGs0or3PAQiYSPII=";
   };
 
-  propagatedBuildInputs = [
-    logical-unification
-  ];
+  propagatedBuildInputs = [ logical-unification ];
 
   nativeCheckInputs = [
     py

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-cx6fk80awaZGSVdfNRmpn/4LseTPe/X18L5ROjnfc2M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "ed25519_blake2b"
-  ];
+  pythonImportsCheck = [ "ed25519_blake2b" ];
 
   meta = with lib; {
     description = "Ed25519 public-key signatures (BLAKE2b fork)";
@@ -31,6 +28,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/Matoking/python-ed25519-blake2b";
     changelog = "https://github.com/Matoking/python-ed25519-blake2b/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ onny stargate01 ];
+    maintainers = with maintainers; [
+      onny
+      stargate01
+    ];
   };
 }

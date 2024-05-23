@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, beancount-black
-, beancount-parser
-, beanhub-extract
-, jinja2
-, poetry-core
-, pydantic
-, pytz
-, pyyaml
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  beancount-black,
+  beancount-parser,
+  beanhub-extract,
+  jinja2,
+  poetry-core,
+  pydantic,
+  pytz,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-BH+d7cKC83b7T2Z1Xlwpsv3KACo1vDn6v65tElhir/c=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     beancount-black
@@ -41,13 +40,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "beanhub_import"
-  ];
+  pythonImportsCheck = [ "beanhub_import" ];
 
   meta = {
     description = "Declarative idempotent rule-based Beancount transaction import engine in Python";

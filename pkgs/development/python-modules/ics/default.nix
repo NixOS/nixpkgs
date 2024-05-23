@@ -1,13 +1,14 @@
-{ lib
-, arrow
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-flakes
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tatsu
+{
+  lib,
+  arrow,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-flakes,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tatsu,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     "test_many_lines"
   ];
 
-  pythonImportsCheck = [
-    "ics"
-  ];
+  pythonImportsCheck = [ "ics" ];
 
   meta = with lib; {
     description = "Pythonic and easy iCalendar library (RFC 5545)";

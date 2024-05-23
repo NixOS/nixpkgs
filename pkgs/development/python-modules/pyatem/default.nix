@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromSourcehut
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromSourcehut,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, pyusb
-, tqdm
-, zeroconf
+  # dependencies
+  pyusb,
+  tqdm,
+  zeroconf,
 
-# tests
-, pillow
-, pytestCheckHook
+  # tests
+  pillow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-O+f1vVwfGJjLem25hsYE1Q1V4vzjrc0HxTBUCANCEwE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyusb
@@ -53,9 +52,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  pythonImportsCheck = [
-    "pyatem"
-  ];
+  pythonImportsCheck = [ "pyatem" ];
 
   meta = with lib; {
     description = "Library for controlling Blackmagic Design ATEM video mixers";

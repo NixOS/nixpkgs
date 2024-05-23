@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, six
-, lxml
-, pytestCheckHook
-, doFullCheck ? false  # weird filenames cause issues on some filesystems
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  six,
+  lxml,
+  pytestCheckHook,
+  doFullCheck ? false, # weird filenames cause issues on some filesystems
 
-# for passthru.tests
-, jpylyzer
+  # for passthru.tests
+  jpylyzer,
 }:
 
 let
@@ -20,8 +21,8 @@ let
     rev = "0290e98bae9c5480c995954d3f14b4cf0a0395ff";
     hash = "sha256-dr3hC6dGd3HNSE4nRj1xrfFSW9cepQ1mdVH8S3YQdtw=";
   };
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "jpylyzer";
   version = "2.2.1";
   format = "setuptools";
@@ -35,7 +36,10 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [ pytestCheckHook lxml ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    lxml
+  ];
 
   # don't depend on testFiles unless doFullCheck as it may not be extractable
   # on some filesystems due to weird filenames
@@ -43,9 +47,7 @@ in buildPythonPackage rec {
     sed -i '/^testFilesDir = /ctestFilesDir = "${testFiles}/files"' tests/unit/test_testfiles.py
   '';
 
-  disabledTestPaths = lib.optionals (!doFullCheck) [
-    "tests/unit/test_testfiles.py"
-  ];
+  disabledTestPaths = lib.optionals (!doFullCheck) [ "tests/unit/test_testfiles.py" ];
 
   pythonImportsCheck = [ "jpylyzer" ];
 

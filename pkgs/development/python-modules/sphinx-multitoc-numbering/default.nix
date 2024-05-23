@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sphinx
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sphinx,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-yWB2caxREjb6XWGnSRwQMecA6NSYydJBjmxh0SUSCa4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
-  pythonImportsCheck = [
-    "sphinx_multitoc_numbering"
-  ];
+  pythonImportsCheck = [ "sphinx_multitoc_numbering" ];
 
   meta = with lib; {
     description = "Supporting continuous HTML section numbering";

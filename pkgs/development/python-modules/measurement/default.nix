@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, isPy3k
-, flit-core
-, flit-scm
-, sympy
-, pytestCheckHook
-, sphinx
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  flit-core,
+  flit-scm,
+  sympy,
+  pytestCheckHook,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -34,13 +35,9 @@ buildPythonPackage rec {
       --replace "--cov=measurement" ""
   '';
 
-  propagatedBuildInputs = [
-    sympy
-  ];
+  propagatedBuildInputs = [ sympy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Use and manipulate unit-aware measurement objects in Python";

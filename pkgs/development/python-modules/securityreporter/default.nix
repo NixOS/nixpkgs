@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, docker
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  docker,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-mBZVsoDnDRYHdcFzi4kuwmAJDRdpysUbNRcDzIhYRGY=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     docker
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "reporter"
-  ];
+  pythonImportsCheck = [ "reporter" ];
 
   disabledTestPaths = [
     # Test require a running Docker instance

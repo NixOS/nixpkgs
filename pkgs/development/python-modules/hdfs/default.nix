@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, docopt
-, fastavro
-, fetchFromGitHub
-, lib
-, nose
-, pytestCheckHook
-, requests
-, six
+{
+  buildPythonPackage,
+  docopt,
+  fastavro,
+  fetchFromGitHub,
+  lib,
+  nose,
+  pytestCheckHook,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-Pm2E8hB0wbu7npi/sLt9D8jQsH69qNOHLji9CYqST/8=";
   };
 
-  propagatedBuildInputs = [ docopt requests six ];
+  propagatedBuildInputs = [
+    docopt
+    requests
+    six
+  ];
 
-  nativeCheckInputs = [ fastavro nose pytestCheckHook ];
+  nativeCheckInputs = [
+    fastavro
+    nose
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "hdfs" ];
 

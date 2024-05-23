@@ -1,4 +1,13 @@
-{ buildPythonPackage, lib, fetchFromGitHub, numpy, scipy, attrs, cython, nose }:
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  attrs,
+  cython,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "iodata";
@@ -12,8 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-GFTCYE19Re7WLhV8eU+0i8OMp/Tsms/Xj9DRTcgjcz4=";
   };
 
-  nativeBuildInputs = [ cython nose ];
-  propagatedBuildInputs = [ numpy scipy attrs ];
+  nativeBuildInputs = [
+    cython
+    nose
+  ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    attrs
+  ];
 
   pythonImportsCheck = [ "iodata" ];
   doCheck = false; # Requires roberto or nose and a lenghtly setup to find the cython modules

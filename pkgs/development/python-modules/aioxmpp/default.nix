@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiosasl
-, aioopenssl
-, babel
-, dnspython
-, lxml
-, multidict
-, pyasn1
-, pyasn1-modules
-, pyopenssl
-, pytz
-, sortedcollections
-, tzlocal
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiosasl,
+  aioopenssl,
+  babel,
+  dnspython,
+  lxml,
+  multidict,
+  pyasn1,
+  pyasn1-modules,
+  pyopenssl,
+  pytz,
+  sortedcollections,
+  tzlocal,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,13 +53,9 @@ buildPythonPackage rec {
     "aioxmpp.stream"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    "benchmarks"
-  ];
+  disabledTestPaths = [ "benchmarks" ];
 
   disabledTests = [
     # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'

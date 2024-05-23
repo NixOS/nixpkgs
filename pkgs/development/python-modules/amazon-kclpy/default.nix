@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  mock,
+  boto,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "amazon-kclpy";
@@ -18,7 +26,10 @@ buildPythonPackage rec {
       --replace "'argparse'," ""
   '';
 
-  propagatedBuildInputs =  [ mock boto ];
+  propagatedBuildInputs = [
+    mock
+    boto
+  ];
 
   nativeCheckInputs = [ pytest ];
 

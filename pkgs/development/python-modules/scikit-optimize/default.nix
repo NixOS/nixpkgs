@@ -1,13 +1,14 @@
-{ lib
-, isPy27
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, scipy
-, scikit-learn
-, pyaml
-, pytestCheckHook
+{
+  lib,
+  isPy27,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  scipy,
+  scikit-learn,
+  pyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     pyaml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Sequential model-based optimization toolbox";

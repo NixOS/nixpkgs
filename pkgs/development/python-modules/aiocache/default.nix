@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, aiomcache
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, msgpack
-, pkgs
-, pythonOlder
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, redis
-, setuptools
+{
+  lib,
+  aiohttp,
+  aiomcache,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  msgpack,
+  pkgs,
+  pythonOlder,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  redis,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -33,20 +34,12 @@ buildPythonPackage rec {
       --replace-fail "--cov=aiocache --cov=tests/ --cov-report term" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
-    redis = [
-      redis
-    ];
-    memcached = [
-      aiomcache
-    ];
-    msgpack = [
-      msgpack
-    ];
+    redis = [ redis ];
+    memcached = [ aiomcache ];
+    msgpack = [ msgpack ];
   };
 
   nativeCheckInputs = [
@@ -58,7 +51,8 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
     # TypeError: object MagicMock can't be used in 'await' expression
     "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
   ];
@@ -83,9 +77,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "aiocache"
-  ];
+  pythonImportsCheck = [ "aiocache" ];
 
   meta = with lib; {
     description = "Python API Rate Limit Decorator";

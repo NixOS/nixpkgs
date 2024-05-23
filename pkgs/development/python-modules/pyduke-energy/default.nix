@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, jsonpickle
-, paho-mqtt
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonpickle,
+  paho-mqtt,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyduke_energy"
-  ];
+  pythonImportsCheck = [ "pyduke_energy" ];
 
   meta = with lib; {
     description = "Python module for the Duke Energy API";

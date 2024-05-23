@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, absl-py
-, mujoco
-, pyparsing
-, pythonRelaxDepsHook
-, setuptools
-, wheel
-, dm-env
-, dm-tree
-, fsspec
-, glfw
-, h5py
-, lxml
-, mock
-, nose
-, nose-xunitmp
-, numpy
-, pillow
-, protobuf
-, pyopengl
-, requests
-, scipy
-, tqdm
-, etils
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  absl-py,
+  mujoco,
+  pyparsing,
+  pythonRelaxDepsHook,
+  setuptools,
+  wheel,
+  dm-env,
+  dm-tree,
+  fsspec,
+  glfw,
+  h5py,
+  lxml,
+  mock,
+  nose,
+  nose-xunitmp,
+  numpy,
+  pillow,
+  protobuf,
+  pyopengl,
+  requests,
+  scipy,
+  tqdm,
+  etils,
 }:
 
 buildPythonPackage rec {
@@ -78,9 +79,7 @@ buildPythonPackage rec {
     tqdm
   ] ++ etils.optional-dependencies.epath;
 
-  pythonImportsCheck = [
-    "dm_control"
-  ];
+  pythonImportsCheck = [ "dm_control" ];
 
   # The installed library clashes with the `dm_control` directory remaining in the source path.
   # Usually, we get around this by `rm -rf` the python source files to ensure that the installed package is used.

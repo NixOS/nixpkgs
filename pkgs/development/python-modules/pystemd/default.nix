@@ -1,13 +1,15 @@
-{ stdenv
-, buildPythonPackage
-, lib
-, fetchPypi
-, systemd
-, lxml
-, psutil
-, pytest
-, mock
-, pkg-config }:
+{
+  stdenv,
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  systemd,
+  lxml,
+  psutil,
+  pytest,
+  mock,
+  pkg-config,
+}:
 
 buildPythonPackage rec {
   pname = "pystemd";
@@ -22,9 +24,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ lxml psutil ];
+  propagatedBuildInputs = [
+    lxml
+    psutil
+  ];
 
-  nativeCheckInputs = [ mock pytest ];
+  nativeCheckInputs = [
+    mock
+    pytest
+  ];
 
   checkPhase = "pytest tests";
 

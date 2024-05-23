@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gitUpdater
-, pythonOlder
-, pythonRelaxDepsHook
-# pyproject
-, hatchling
-, hatch-requirements-txt
-, hatch-fancy-pypi-readme
-# runtime
-, setuptools
-, fsspec
-, httpx
-, huggingface-hub
-, packaging
-, requests
-, typing-extensions
-, websockets
-# checkInputs
-, pytestCheckHook
-, pytest-asyncio
-, pydub
-, rich
-, tomlkit
-, gradio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gitUpdater,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  # pyproject
+  hatchling,
+  hatch-requirements-txt,
+  hatch-fancy-pypi-readme,
+  # runtime
+  setuptools,
+  fsspec,
+  httpx,
+  huggingface-hub,
+  packaging,
+  requests,
+  typing-extensions,
+  websockets,
+  # checkInputs
+  pytestCheckHook,
+  pytest-asyncio,
+  pydub,
+  rich,
+  tomlkit,
+  gradio,
 }:
 
 buildPythonPackage rec {

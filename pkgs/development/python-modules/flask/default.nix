@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# dependencies
-, blinker
-, click
-, importlib-metadata
-, itsdangerous
-, jinja2
-, werkzeug
+  # dependencies
+  blinker,
+  click,
+  importlib-metadata,
+  itsdangerous,
+  jinja2,
+  werkzeug,
 
-# optional-dependencies
-, asgiref
-, python-dotenv
+  # optional-dependencies
+  asgiref,
+  python-dotenv,
 
-# tests
-, greenlet
-, pytestCheckHook
+  # tests
+  greenlet,
+  pytestCheckHook,
 
-# reverse dependencies
-, flask-limiter
-, flask-restful
-, flask-restx
-, moto
+  # reverse dependencies
+  flask-limiter,
+  flask-restful,
+  flask-restx,
+  moto,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-zrJ7CvOCPqJzeSik2Z0SWgYXW4USxEXL2anOIA73aEI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     click
@@ -49,31 +48,31 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
-    async = [
-      asgiref
-    ];
-    dotenv = [
-      python-dotenv
-    ];
+    async = [ asgiref ];
+    dotenv = [ python-dotenv ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    greenlet
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [ pytestCheckHook ]
+    ++ lib.optionals (pythonOlder "3.11") [ greenlet ]
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   passthru.tests = {
-    inherit flask-limiter flask-restful flask-restx moto;
+    inherit
+      flask-limiter
+      flask-restful
+      flask-restx
+      moto
+      ;
   };
 
   meta = with lib; {
-    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${replaceStrings [ "." ] [ "-" ] version}";
+    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
+      replaceStrings [ "." ] [ "-" ] version
+    }";
     homepage = "https://flask.palletsprojects.com/";
     description = "The Python micro framework for building web applications";
     mainProgram = "flask";

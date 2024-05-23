@@ -1,10 +1,12 @@
-{ buildPythonPackage
-, cryptography
-, django
-, fetchPypi
-, lib
-, poetry-core
-, pythonOlder }:
+{
+  buildPythonPackage,
+  cryptography,
+  django,
+  fetchPypi,
+  lib,
+  poetry-core,
+  pythonOlder,
+}:
 buildPythonPackage rec {
   pname = "django-encrypted-model-fields";
   version = "0.6.5";
@@ -16,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-i9IcVWXA1k7E29N1rTT+potNotuHHew/px/nteQiHJk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     cryptography
