@@ -330,7 +330,14 @@ Container system, boot system and library changes are some examples of the pull 
 ## How to merge pull requests
 [pr-merge]: #how-to-merge-pull-requests
 
-The *Nixpkgs committers* are people who have been given
+To streamline automated updates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge`. The bot will verify if the following conditions are met, refusing to merge otherwise:
+
+- the commenter that issued the command should be among the package maintainers;
+- the package should reside in `pkgs/by-name`.
+
+Further, nixpkgs-merge-bot will ensure all ofBorg checks (except the Darwin-related ones) are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofBorg to finish before attempting the merge again.
+
+For other pull requests, the *Nixpkgs committers* are people who have been given
 permission to merge.
 
 It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.

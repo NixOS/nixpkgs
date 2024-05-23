@@ -10,16 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ViXKGcuDla428mI2Am67gtOxfia5VfR+ry2qyczXO/I=";
+    hash = "sha256-+8JKzKKWPQEanU2mh8p5sRjnoU6DawTQQi43qRXVXIg=";
   };
 
-  cargoHash = "sha256-VVdIWUQaquVX/8szJ30qPGtG6rFfRadeIvDONd8swro=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
+    };
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -47,12 +52,12 @@ rustPlatform.buildRustPackage rec {
     inherit ruff-lsp;
   };
 
-  meta = with lib; {
+  meta = {
     description = "An extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
     changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "ruff";
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

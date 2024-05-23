@@ -2358,6 +2358,8 @@ self: super: with self; {
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
 
+  color-operations = callPackage ../development/python-modules/color-operations { };
+
   colorama = callPackage ../development/python-modules/colorama { };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
@@ -7667,6 +7669,8 @@ self: super: with self; {
 
   more-properties = callPackage ../development/python-modules/more-properties { };
 
+  morecantile = callPackage ../development/python-modules/morecantile { };
+
   moreorless = callPackage ../development/python-modules/moreorless { };
 
   moretools = callPackage ../development/python-modules/moretools { };
@@ -10041,6 +10045,8 @@ self: super: with self; {
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
+
+  pystac = callPackage ../development/python-modules/pystac { };
 
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
@@ -13276,6 +13282,10 @@ self: super: with self; {
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
+
+  rio-tiler = callPackage ../development/python-modules/rio-tiler { };
+
+  rioxarray = callPackage ../development/python-modules/rioxarray { };
 
   ripe-atlas-cousteau = callPackage ../development/python-modules/ripe-atlas-cousteau { };
 
@@ -16678,6 +16688,8 @@ self: super: with self; {
 
   virtualenvwrapper = callPackage ../development/python-modules/virtualenvwrapper { };
 
+  visions = callPackage ../development/python-modules/visions { };
+
   visitor = callPackage ../development/python-modules/visitor { };
 
   vispy = callPackage ../development/python-modules/vispy { };
@@ -17204,6 +17216,8 @@ self: super: with self; {
   yattag = callPackage ../development/python-modules/yattag { };
 
   yacs = callPackage ../development/python-modules/yacs { };
+
+  ydata-profiling = callPackage ../development/python-modules/ydata-profiling { };
 
   ydiff = callPackage ../development/python-modules/ydiff { };
 

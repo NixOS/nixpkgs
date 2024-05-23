@@ -2,7 +2,6 @@
 , lib
 , docbook-xsl-nons
 , fetchurl
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk-doc
