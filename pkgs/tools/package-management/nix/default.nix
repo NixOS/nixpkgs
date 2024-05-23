@@ -138,7 +138,7 @@ in lib.makeExtensible (self: ({
     patches = [
       patch-monitorfdhup
     ];
-    maintainers = with lib.maintainers; [ flokli raitobezarius ];
+    maintainers = with lib.maintainers; [ flokli ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
     # spurious test/add.sh failures
