@@ -446,8 +446,8 @@ rec {
       aarch64 = {
         ampere1 = mkSimpleCpuModel "ampere1";
         ampere1a = mkSimpleCpuModel "ampere1a";
-        apple_m1 = (mkSimpleCpuModel "apple-m1") // { gnu = "generic"; };
-        apple_m2 = (mkSimpleCpuModel "apple-m2") // { gnu = "generic"; };
+        apple_m1 = (mkSimpleCpuModel "apple-m1") // { gnu = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc"; };
+        apple_m2 = (mkSimpleCpuModel "apple-m2") // { gnu = "armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc"; };
         cortex_a53 = mkSimpleCpuModel "cortex-a53";
         neoverse_n1 = mkSimpleCpuModel {
           gnu = "armv8-a";
