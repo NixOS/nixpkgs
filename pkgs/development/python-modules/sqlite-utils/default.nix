@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pythonOlder,
   click,
   click-default-group,

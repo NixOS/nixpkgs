@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   hypothesis,
-  fetchpatch,
   fetchPypi,
   setuptools,
   setuptools-scm,
