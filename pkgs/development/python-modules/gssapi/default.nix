@@ -55,6 +55,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
 
+  # k5test is marked as broken on darwin
+  doCheck = !stdenv.isDarwin;
+
   nativeCheckInputs = [
     k5test
     parameterized
