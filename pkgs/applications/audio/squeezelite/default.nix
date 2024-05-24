@@ -94,7 +94,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm555 -t $out/bin                   ${binName}
-    install -Dm444 -t $out/share/doc/squeezelite *.txt *.md
+    install -Dm444 -t $out/share/man/man1 doc/squeezelite.1
 
     runHook postInstall
   '';
