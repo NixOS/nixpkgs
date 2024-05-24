@@ -57,13 +57,13 @@
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-JSWUzerm7D6AKq6g/9eRrt3EE2movRdM+VLUg07sLHo=";
+    hash = "sha256-BOdXgA+z3sFE4ngAEhSbp1gDbsti1STJY2Yy6Hp+zTE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
