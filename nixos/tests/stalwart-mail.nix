@@ -115,6 +115,6 @@ in import ./make-test-python.nix ({ lib, ... }: {
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ happysalada pacien ];
+    maintainers = with lib.maintainers; [ happysalada pacien onny ];
   };
 })
