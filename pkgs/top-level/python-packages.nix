@@ -14577,69 +14577,15 @@ self: super: with self; {
     inherit (pkgs.config) cudaSupport;
   };
 
-  tensorflow-build = let
-    compat = rec {
-      protobufTF = pkgs.protobuf_21.override {
-        abseil-cpp = pkgs.abseil-cpp_202301;
-      };
-      grpcTF = (pkgs.grpc.overrideAttrs (
-        oldAttrs: rec {
-          # nvcc fails on recent grpc versions, so we use the latest patch level
-          #  of the grpc version bundled by upstream tensorflow to allow CUDA
-          #  support
-          version = "1.27.3";
-          src = pkgs.fetchFromGitHub {
-            owner = "grpc";
-            repo = "grpc";
-            rev = "v${version}";
-            hash = "sha256-PpiOT4ZJe1uMp5j+ReQulC9jpT0xoR2sAl6vRYKA0AA=";
-            fetchSubmodules = true;
-          };
-          patches = [ ];
-          postPatch = ''
-            sed -i "s/-std=c++11/-std=c++17/" CMakeLists.txt
-            echo "set(CMAKE_CXX_STANDARD 17)" >> CMakeLists.txt
-          '';
-        })
-      ).override {
-        protobuf = protobufTF;
-      };
-      protobuf-pythonTF = self.protobuf.override {
-        protobuf = protobufTF;
-      };
-      grpcioTF = self.grpcio.override {
-        protobuf = protobufTF;
-        grpc = grpcTF;
-      };
-      tensorboard-plugin-profileTF = self.tensorboard-plugin-profile.override {
-        protobuf = protobuf-pythonTF;
-      };
-      tensorboardTF = self.tensorboard.override {
-        grpcio = grpcioTF;
-        protobuf = protobuf-pythonTF;
-        tensorboard-plugin-profile = tensorboard-plugin-profileTF;
-      };
-    };
-  in
-  callPackage ../development/python-modules/tensorflow {
+  tensorflow-build = callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.darwin) cctools;
     inherit (pkgs.config) cudaSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
-    protobuf-core = compat.protobufTF;
-    protobuf-python = compat.protobuf-pythonTF;
-    grpc = compat.grpcTF;
-    grpcio = compat.grpcioTF;
-    tensorboard = compat.tensorboardTF;
+    protobuf-core = pkgs.protobuf;
+    protobuf-python = self.protobuf;
     abseil-cpp = pkgs.abseil-cpp_202301;
-
-    # Tensorflow 2.13 doesn't support gcc13:
-    # https://github.com/tensorflow/tensorflow/issues/61289
-    #
-    # We use the nixpkgs' default libstdc++ to stay compatible with other
-    # python modules
-    stdenv = pkgs.stdenvAdapters.useLibsFrom stdenv pkgs.gcc12Stdenv;
   };
 
   tensorflow-datasets = callPackage ../development/python-modules/tensorflow-datasets { };

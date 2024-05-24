@@ -343,6 +343,12 @@ let
         url = "https://raw.githubusercontent.com/conda-forge/tensorflow-feedstock/0a63c5a962451b4da99a9948323d8b3ed462f461/recipe/patches/0001-Omit-linking-to-layout_proto_cc-if-protobuf-linkage-.patch";
         hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
       })
+      # https://github.com/wangjiezhe/gentoo-local/commit/e0d4c42879a45d4d772ba0f2e735ba3cd77dc7ba#diff-1b47c7fc3c0a9ebd0f5e377aa655533743b78b6125f43e1886cac1109570f9c6
+      (fetchpatch {
+        name = "fix-gcc-13-build-issue.patch";
+        url = "https://raw.githubusercontent.com/wangjiezhe/gentoo-local/e0d4c42879a45d4d772ba0f2e735ba3cd77dc7ba/sci-libs/tensorflow/files/tensorflow-2.13.0-0013-Fixing-build-issue-with-Clang-16-and-GCC-13.patch";
+        hash = "sha256-HQ4NlxoiTjvFHlj9qb7zVaDG5uR8sgzzou4tiqD9ZmI=";
+      })
       ./com_google_absl_add_log.patch
       ./absl_py_argparse_flags.patch
       ./protobuf_python.patch
