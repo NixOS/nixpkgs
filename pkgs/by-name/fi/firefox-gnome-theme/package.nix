@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttr: {
 
     install -d $out
     cp -ra ./configuration ./theme ./icon.svg ./userChrome.css ./userContent.css -t $out
-    install -Dm 644 ./README.md -t $doc/share/doc/${finalAttr.pname}/
+    install -Dm 644 ./README.md -t $doc/share/doc/firefox-gnome-theme/
 
     runHook postInstall
   '';
