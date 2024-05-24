@@ -33,6 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
+
   meta = with lib; {
     description = "Build context-aware reasoning applications";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";

@@ -166,6 +166,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
+  passthru = {
+    updateScript = langchain-core.updateScript;
+  };
+
   meta = with lib; {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";

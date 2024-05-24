@@ -13,6 +13,7 @@
   pyyaml,
   requests,
   tenacity,
+  writeScript,
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,19 @@ buildPythonPackage rec {
 
   # PyPI source does not have tests
   doCheck = false;
+
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p nix-update
+
+      set -eu -o pipefail
+      nix-update --commit --version-regex 'langchain-core==(.*)' python3Packages.langchain-core
+      nix-update --commit --version-regex 'langchain-text-splitters==(.*)' python3Packages.langchain-text-splitters
+      nix-update --commit --version-regex 'langchain==(.*)' python3Packages.langchain
+      nix-update --commit --version-regex 'langchain-community==(.*)' python3Packages.langchain-community
+    '';
+  };
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";

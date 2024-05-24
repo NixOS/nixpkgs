@@ -52,6 +52,10 @@ buildPythonPackage rec {
   # PyPI source does not have tests
   doCheck = false;
 
+  passthru = {
+    updateScript = langchain-core.updateScript;
+  };
+
   meta = with lib; {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
