@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conan";
-  version = "2.0.17";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = "refs/tags/${version}";
-    hash = "sha256-liCeGe0WBW+tOjW81cqrFUiOEWYhlqsBVgns6SxjPNM=";
+    hash = "sha256-jFiOFJRe3t7I45I+JliNEAEdEdbr49n2ZcWtITRizAg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -103,6 +103,10 @@ python3.pkgs.buildPythonApplication rec {
     "conans/test/functional/util/test_cmd_args_to_string.py"
     "conans/test/integration/command_v2/list_test.py"
     "conans/test/unittests/tools/env/test_env_files.py"
+    "conans/test/functional/test_local_recipes_index.py" # requires cmake
+    "conans/test/functional/test_profile_detect_api.py" # requires /usr/bin/ldd
+    "conans/test/performance/test_large_graph.py" # can't find default profile
+    "conans/test/integration/command/runner_test.py" # requires docker
   ];
 
   meta = with lib; {
