@@ -287,6 +287,7 @@ let
 
         replacements = lib.pipe propagatedInputs [
           (lib.filter (pkg: pkg != null))
+          lib.flatten
           (map (dep: {
             name = builtins.unsafeDiscardStringContext dep;
             value = getReplacement newPackages dep;
@@ -311,6 +312,7 @@ let
     let
       mapPackageDeps = lib.flip lib.pipe [
         (lib.filter (pkg: pkg != null))
+        lib.flatten
         (map (pkg: {
           key = builtins.unsafeDiscardStringContext pkg;
           package = pkg;
