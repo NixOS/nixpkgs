@@ -3,6 +3,7 @@
 , autoreconfHook
 , docbook_xsl
 , docbook_xml_dtd_43
+, gettext
 , gtk-doc
 , lzip
 , libidn2
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gettext
     libidn2
     libunistring
     libxslt
