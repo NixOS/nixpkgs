@@ -1,33 +1,42 @@
 {
   lib,
-  anyio,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  freezegun,
+  grandalf,
   jsonpatch,
   langsmith,
+  numpy,
   packaging,
   poetry-core,
   pydantic,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
   pythonOlder,
   pythonRelaxDepsHook,
   pyyaml,
-  requests,
+  syrupy,
   tenacity,
   writeScript,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.1.52";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "langchain_core";
-    inherit version;
-    hash = "sha256-CEw/xFL1ppZsKKs+xdvIuNJvw/YzeAc5KPTinZC2OT8=";
+  src = fetchFromGitHub {
+    owner = "langchain-ai";
+    repo = "langchain";
+    rev = "langchain-core==${version}";
+    hash = "sha256-D0y6kW5bWcCKW2TwVPlZcAUxqADgsOm9fWySAjHYYIg=";
   };
+
+  sourceRoot = "${src.name}/libs/core";
 
   pythonRelaxDeps = [
     "langsmith"
@@ -39,20 +48,28 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
-    anyio
     jsonpatch
     langsmith
     packaging
     pydantic
     pyyaml
-    requests
     tenacity
   ];
 
   pythonImportsCheck = [ "langchain_core" ];
 
-  # PyPI source does not have tests
-  doCheck = false;
+  nativeCheckInputs = [
+    freezegun
+    grandalf
+    numpy
+    pytest-asyncio
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+    syrupy
+  ];
+
+  pytestFlagsArray = [ "tests/unit_tests" ];
 
   passthru = {
     updateScript = writeScript "update.sh" ''
@@ -70,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };
