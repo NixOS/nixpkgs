@@ -13,7 +13,7 @@ let
   self = beam;
 
   # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" "25" ];
+  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" ];
 
   interpretersAliases = versionLoop (version: {
     "erlangR${version}" = self.interpreters."erlang_${version}";
