@@ -9,6 +9,7 @@
   setuptools,
   typing-extensions,
 }:
+
 let
   toUnderscore = str: builtins.replaceStrings [ "-" ] [ "_" ] str;
   buildTypesAiobotocorePackage =
@@ -18,8 +19,14 @@ let
       inherit version;
       pyproject = true;
       disabled = pythonOlder "3.7";
+
+      oldStylePackages = [ "gamesparks" "iot-roborunner" "macie" ];
+
       src = fetchPypi {
-        pname = "types_aiobotocore_${toUnderscore serviceName}";
+        pname = if builtins.elem serviceName oldStylePackages then
+            "types-aiobotocore-${serviceName}"
+          else
+            "types_aiobotocore_${toUnderscore serviceName}";
         inherit version hash;
       };
       build-system = [ setuptools ];
