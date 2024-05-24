@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , runCommand
 , writeText
