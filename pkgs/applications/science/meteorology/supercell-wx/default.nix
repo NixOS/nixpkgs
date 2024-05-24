@@ -63,6 +63,7 @@ in
       license = lib.licenses.mit;
       mainProgram = "supercell-wx";
       platforms = ["x86_64-linux"];
+      maintainers = with lib.maintainers; [ aware70 ];
     };
 
     env.NIX_CFLAGS_COMPILE = "-Wno-error=restrict";
