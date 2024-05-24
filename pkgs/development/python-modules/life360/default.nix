@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "life360";
-  version = "7.0.0";
+  version = "7.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pnbruckner";
     repo = "life360";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+fvzZ1IsPsXLTcfR7vrE4n1nF7CdvoL4BzDJMsDBZVY=";
+    hash = "sha256-GkCs479lXcnCvb5guxyc+ZuZdiH4n8uD2VbkC+yijgg=";
   };
 
   build-system = [ setuptools ];
