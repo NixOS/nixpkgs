@@ -19,10 +19,10 @@ stdenv.mkDerivation (finalAttr: {
   # Only copy necessary files
   installPhase = ''
     runHook preInstall
-    
+
     mkdir -p $out
     cp -r ./theme ./icon.svg ./userChrome.css ./userContent.css -t $out
-    
+
     runHook postInstall
   '';
 
