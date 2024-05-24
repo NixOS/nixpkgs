@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   sphinx,
   plantuml,
   pythonOlder,
@@ -9,20 +10,21 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.29";
-  format = "setuptools";
+  version = "0.30";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l6Tyomr5HbiHcMz4o7LgMwW82n7EGn+Wn8jLJ7hKPEQ=";
+    hash = "sha256-KhJmykO930RkCuRBBwA99EkN4rPDFUoNYnz7Y+mhab8=";
   };
 
-  propagatedBuildInputs = [
-    sphinx
-    plantuml
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ sphinx ];
+
+  propagatedBuildInputs = [ plantuml ];
 
   # No tests included.
   doCheck = false;
