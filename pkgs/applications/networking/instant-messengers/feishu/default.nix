@@ -57,8 +57,9 @@
 , wayland
 , wrapGAppsHook3
 , xdg-utils
+, writeScript
 
-# for custom command line arguments, e.g. "--use-gl=desktop"
+  # for custom command line arguments, e.g. "--use-gl=desktop"
 , commandLineArgs ? ""
 }:
 
@@ -198,6 +199,32 @@ stdenv.mkDerivation {
     # so replace it with our own libcurl.so
     ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
+
+  passthru = {
+    inherit sources;
+    updateScript = writeScript "update-feishu.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+
+      for platform in ${lib.escapeShellArgs supportedPlatforms}; do
+        if [ $platform = "x86_64-linux" ]; then
+          platform_id=10
+        elif [ $platform = "aarch64-linux" ]; then
+          platform_id=12
+        else
+          echo "Unsupported platform: $platform"
+          exit 1
+        fi
+        package_info=$(curl -sf "https://www.feishu.cn/api/package_info?platform=$platform_id")
+        update_link=$(echo $package_info | jq -r '.data.download_link' | sed 's/lf[0-9]*-ug-sign.feishucdn.com/sf3-cn.feishucdn.com\/obj/;s/?.*$//')
+        new_version=$(echo $package_info | jq -r '.data.version_number' | sed -n 's/.*@V//p')
+        sha256_hash=$(nix-prefetch-url $update_link)
+        sri_hash=$(nix hash to-sri --type sha256 $sha256_hash)
+        update-source-version feishu 0 ${lib.fakeSha256} --system=$platform --source-key="sources.$platform"
+        update-source-version feishu $new_version $sri_hash $update_link --system=$platform --source-key="sources.$platform"
+      done
+    '';
+  };
 
   meta = with lib; {
     description = "An all-in-one collaboration suite";
