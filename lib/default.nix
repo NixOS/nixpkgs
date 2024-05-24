@@ -127,7 +127,7 @@ let
       canCleanSource pathIsGitRepo;
     inherit (self.modules) evalModules setDefaultModuleLocation
       unifyModuleSyntax applyModuleArgsIfFunction mergeModules
-      mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
+      mergeModules' mergeOptionDecls mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
       mkOptionDefault mkDefault mkImageMediaOverride mkForce mkVMOverride
@@ -137,6 +137,7 @@ let
       mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule mkDerivedConfig doRename
       mkAliasOptionModuleMD;
+    evalOptionValue = lib.warn "External use of `lib.evalOptionValue` is deprecated. If your use case isn't covered by non-deprecated functions, we'd like to know more and perhaps support your use case well, instead of providing access to these low level functions. In this case please open an issue in https://github.com/nixos/nixpkgs/issues/." self.modules.evalOptionValue;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles

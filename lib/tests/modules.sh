@@ -94,6 +94,18 @@ checkConfigOutput '^true$' config.result ./module-argument-default.nix
 # gvariant
 checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
+# types.attrTag
+checkConfigOutput '^true$' config.okChecks ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError. is not of type .attribute-tagged union' config.intStrings.syntaxError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError2. is not of type .attribute-tagged union' config.intStrings.syntaxError2 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError3. is not of type .attribute-tagged union' config.intStrings.syntaxError3 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.syntaxError4. is not of type .attribute-tagged union' config.intStrings.syntaxError4 ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.mergeError. is not of type .attribute-tagged union' config.intStrings.mergeError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagError. is not of type .attribute-tagged union' config.intStrings.badTagError ./types-attrTag.nix
+checkConfigError 'A definition for option .intStrings\.badTagTypeError\.left. is not of type .signed integer.' config.intStrings.badTagTypeError.left ./types-attrTag.nix
+checkConfigError 'A definition for option .nested\.right\.left. is not of type .signed integer.' config.nested.right.left ./types-attrTag.nix
+checkConfigError 'In attrTag, each tag value must be an option, but tag int was a bare type, not wrapped in mkOption.' config.opt.int ./types-attrTag-wrong-decl.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
