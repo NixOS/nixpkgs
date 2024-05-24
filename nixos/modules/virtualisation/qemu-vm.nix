@@ -49,6 +49,11 @@ let
         description = "A name for the drive. Must be unique in the drives list. Not passed to qemu.";
       };
 
+      rootFilesystem = mkOption {
+        type = types.str;
+        description - "The filesystem used to format this drive";
+      };
+
     };
 
   };
@@ -91,14 +96,14 @@ let
 
       set -e
 
-      # Create an empty ext4 filesystem image. A filesystem image does not
+      # Create an empty filesystem image. A filesystem image does not
       # contain a partition table but just a filesystem.
       createEmptyFilesystemImage() {
         local name=$1
         local size=$2
         local temp=$(mktemp)
         ${qemu}/bin/qemu-img create -f raw "$temp" "$size"
-        ${hostPkgs.e2fsprogs}/bin/mkfs.ext4 -L ${rootFilesystemLabel} "$temp"
+        ${hostPkgs.e2fsprogs}/bin/mkfs.${rootFilesystem} -L ${rootFilesystemLabel} "$temp"
         ${qemu}/bin/qemu-img convert -f raw -O qcow2 "$temp" "$name"
         rm "$temp"
       }
@@ -1231,7 +1236,7 @@ in
           fsType = "tmpfs";
         } else {
           device = cfg.rootDevice;
-          fsType = "ext4";
+          fsType = rootFilesystem;
         });
         "/tmp" = lib.mkIf config.boot.tmp.useTmpfs {
           device = "tmpfs";
@@ -1327,6 +1332,7 @@ in
       [ (isEnabled "VIRTIO_BLK")
         (isEnabled "VIRTIO_PCI")
         (isEnabled "VIRTIO_NET")
+        (isEnabled "BCACHEFS_FS")
         (isEnabled "EXT4_FS")
         (isEnabled "NET_9P_VIRTIO")
         (isEnabled "9P_FS")
