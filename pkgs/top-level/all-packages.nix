@@ -11180,6 +11180,8 @@ with pkgs;
     jre = openjdk11;
   };
 
+  nzyme = callPackage ../servers/web-apps/nzyme { };
+
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
   oath-toolkit = callPackage ../tools/security/oath-toolkit { };
