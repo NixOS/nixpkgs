@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch2
 , nixosTests
 }:
 let
