@@ -293,6 +293,7 @@ in {
   eris-server = handleTest ./eris-server.nix {};
   esphome = handleTest ./esphome.nix {};
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
+  etc-cleanup = handleTest ./etc-cleanup.nix {};
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   activation-var = runTest ./activation/var.nix;
   activation-nix-channel = runTest ./activation/nix-channel.nix;
