@@ -335,8 +335,6 @@ mapAliases ({
   enyo-doom = enyo-launcher; # Added 2022-09-09
   epoxy = libepoxy; # Added 2021-11-11
   inherit (beam.interpreters) erlangR26 erlangR25 erlangR24; # added 2023-03-21
-  erlang_21 = throw "erlangR21 has been removed in favor of newer versions."; # added 2023-03-21
-  erlangR21 = erlang_21;
   erlang_22 = throw "erlangR22 has been removed in favor of newer versions."; # added 2023-03-21
   erlangR22 = erlang_22;
   erlang_23 = throw "erlangR23 has been removed in favor of newer versions."; # added 2023-09-11
