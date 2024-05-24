@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kyua";
-  version = "0.13-unstable-2024-01-22"; # Match the commit used in FreeBSD’s port.
+  version = "0.13"; # Match the commit used in FreeBSD’s port.
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "kyua";
     rev = "c85354e09ad93a902c9e8a701c042c045ec2a5b7";
-    hash = "sha256-fZ0WFgOTj8Gw8IT5O8DnuaNyZscKpg6B94m+l5UoZGc";
+    hash = "sha256-fZ0WFgOTj8Gw8IT5O8DnuaNyZscKpg6B94m+l5UoZGc=";
   };
 
   setupHooks = ./kyua-check-hook.sh;
