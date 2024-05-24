@@ -1,50 +1,25 @@
-{ lib, stdenv, fetchurl, appimageTools, makeDesktopItem }:
-
-stdenv.mkDerivation (finalAttrs: let
-  inherit (finalAttrs) pname version src appexec icon desktopItem;
-
-in
 {
+  lib,
+  fetchurl,
+  appimageTools,
+}:
+let
   pname = "remnote";
   version = "1.16.4";
-
   src = fetchurl {
     url = "https://download.remnote.io/remnote-desktop/RemNote-${version}.AppImage";
     hash = "sha256-dgbQ0cbPq7BSQ9VwwH6+GoAxb85HDxRixfjeDJBtOrg=";
   };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
 
-  appexec = appimageTools.wrapType2 {
-    inherit pname version src;
-  };
-
-  icon = fetchurl {
-    url = "https://www.remnote.io/icon.png";
-    hash = "sha256-r5D7fNefKPdjtmV7f/88Gn3tqeEG8LGuD4nHI/sCk94=";
-  };
-
-  desktopItem = makeDesktopItem {
-    type = "Application";
-    name = "remnote";
-    desktopName = "RemNote";
-    comment = "Spaced Repetition";
-    icon = "remnote";
-    exec = "remnote %u";
-    categories = [ "Office" ];
-    mimeTypes = [ "x-scheme-handler/remnote" "x-scheme-handler/rn" ];
-  };
-
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ${appexec}/bin/remnote $out/bin/remnote
-    install -Dm444 "${desktopItem}/share/applications/"* -t $out/share/applications/
-    install -Dm444 ${icon} $out/share/pixmaps/remnote.png
-
-    runHook postInstall
+  extraInstallCommands = ''
+    install -Dm444 ${appimageContents}/remnote.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/remnote.desktop \
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=remnote %u'
+    install -Dm444 ${appimageContents}/remnote.png -t $out/share/pixmaps
   '';
 
   meta = with lib; {
@@ -55,4 +30,4 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";
   };
-})
+}
