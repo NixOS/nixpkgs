@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, flac
-, libgpiod
-, libmad
-, libpulseaudio
-, libvorbis
-, mpg123
-, audioBackend ? if stdenv.isLinux then "alsa" else "portaudio"
-, alsaSupport ? stdenv.isLinux
-, alsa-lib
-, dsdSupport ? true
-, faad2Support ? true
-, faad2
-, ffmpegSupport ? true
-, ffmpeg
-, opusSupport ? true
-, opusfile
-, resampleSupport ? true
-, soxr
-, sslSupport ? true
-, openssl
-, portaudioSupport ? stdenv.isDarwin
-, portaudio
-, slimserver
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  flac,
+  libgpiod,
+  libmad,
+  libpulseaudio,
+  libvorbis,
+  mpg123,
+  audioBackend ? if stdenv.isLinux then "alsa" else "portaudio",
+  alsaSupport ? stdenv.isLinux,
+  alsa-lib,
+  dsdSupport ? true,
+  faad2Support ? true,
+  faad2,
+  ffmpegSupport ? true,
+  ffmpeg,
+  opusSupport ? true,
+  opusfile,
+  resampleSupport ? true,
+  soxr,
+  sslSupport ? true,
+  openssl,
+  portaudioSupport ? stdenv.isDarwin,
+  portaudio,
+  slimserver,
 }:
 
 let
@@ -33,7 +34,6 @@ let
   pulseSupport = audioBackend == "pulse";
 
   binName = "squeezelite${optionalString pulseSupport "-pulse"}";
-
 in
 stdenv.mkDerivation {
   # the nixos module uses the pname as the binary name
@@ -49,11 +49,27 @@ stdenv.mkDerivation {
     hash = "sha256-FGqo/c74JN000w/iRnvYUejqnYGDzHNZu9pEmR7yR3s=";
   };
 
-  buildInputs = [ flac libmad libvorbis mpg123 ]
+  buildInputs =
+    [
+      flac
+      libmad
+      libvorbis
+      mpg123
+    ]
     ++ optional pulseSupport libpulseaudio
     ++ optional alsaSupport alsa-lib
     ++ optional portaudioSupport portaudio
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon ])
+    ++ optionals stdenv.isDarwin (
+      with darwin.apple_sdk_11_0.frameworks;
+      [
+        CoreVideo
+        VideoDecodeAcceleration
+        CoreAudio
+        AudioToolbox
+        AudioUnit
+        Carbon
+      ]
+    )
     ++ optional faad2Support faad2
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
@@ -70,7 +86,11 @@ stdenv.mkDerivation {
 
   EXECUTABLE = binName;
 
-  OPTS = [ "-DLINKALL" "-DGPIO" ]
+  OPTS =
+    [
+      "-DLINKALL"
+      "-DGPIO"
+    ]
     ++ optional dsdSupport "-DDSD"
     ++ optional (!faad2Support) "-DNO_FAAD"
     ++ optional ffmpegSupport "-DFFMPEG"
@@ -81,9 +101,7 @@ stdenv.mkDerivation {
     ++ optional sslSupport "-DUSE_SSL"
     ++ optional (stdenv.isAarch32 or stdenv.isAarch64) "-DRPI";
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    LDADD = "-lportaudio -lpthread";
-  };
+  env = lib.optionalAttrs stdenv.isDarwin { LDADD = "-lportaudio -lpthread"; };
 
   installPhase = ''
     runHook preInstall
@@ -105,6 +123,7 @@ stdenv.mkDerivation {
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
     mainProgram = binName;
     maintainers = with maintainers; [ adamcstephens ];
-    platforms = if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
+    platforms =
+      if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
   };
 }
