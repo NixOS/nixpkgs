@@ -175,12 +175,15 @@ let
   # these will instantiate a new version of allPackages.
   otherPackageSets = let
     # helper function to call nixpkgsFun to make sure each package set
-    # references itself as a no-op.
+    # references itself as a no-op and to prevent nested pkgsCross.
+    # Nested pkgsCross doesn't make sense fundamentally, because it replaces
+    # the full crossSystem argument, thus starting "from scratch".
     createPackageSet = name: { overlays ? [], ... }@args:
       nixpkgsFun (args // {
         overlays = [
           (self: super: {
             "${name}" = super;
+            pkgsCross = throw "Nested pkgsCross not allowed.";
           })
         ] ++ overlays;
       });
@@ -208,7 +211,14 @@ let
     # will refer to the "hello" package built for the ARM6-based
     # Raspberry Pi.
     pkgsCross = lib.mapAttrs (n: crossSystem:
-                              nixpkgsFun { inherit crossSystem; })
+                              nixpkgsFun {
+                                inherit crossSystem;
+                                overlays = [
+                                  (self': super': {
+                                    pkgsCross = throw "Nested pkgsCross not allowed.";
+                                  })
+                                ];
+                              })
                               lib.systems.examples;
 
     pkgsLLVM = createPackageSet "pkgsLLVM" {
