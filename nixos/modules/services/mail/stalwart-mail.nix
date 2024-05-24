@@ -111,6 +111,6 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [ happysalada pacien ];
+    maintainers = with maintainers; [ happysalada pacien onny ];
   };
 }
