@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , gtest
 , doCheck ? true
@@ -27,11 +28,12 @@ let
   # This ensures xgboost gets the correct libstdc++ when
   # built with cuda support. This may be removed once
   # #226165 rewrites cudaStdenv
-  inherit (cudaPackages) backendStdenv;
-  stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+  # Ensures we don't use the stdenv value by accident.
+  stdenv = builtins.throw "Use effectiveStdenv instead of stdenv in xgboost derivation.";
 in
 
-stdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation rec {
   pnameBase = "xgboost";
   # prefix with r when building the R library
   # The R package build results in a special xgboost.so file
@@ -56,8 +58,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-LWco3A6zwdnAf8blU4qjW7PFEeZaTcJlVTwVrs7nwWM=";
   };
 
+  patches = lib.optionals (cudaSupport && cudaPackages.cudaMajorMinorVersion == "12.4") [
+    (fetchpatch {
+      name = "Fix compilation with the ctk 12.4.";
+      url = "https://github.com/dmlc/xgboost/pull/10123.patch";
+      hash = "sha256-iP9mll9pg8T2ztCR7dBPnLP17/x3ImJFrr5G3e2dqHo=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ]
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ]
+    ++ lib.optionals effectiveStdenv.isDarwin [ llvmPackages.openmp ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
@@ -75,13 +85,9 @@ stdenv.mkDerivation rec {
     "-DUSE_CUDA=ON"
     # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
     # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
-    "-DCMAKE_C_COMPILER=${cudaPackages.backendStdenv.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${cudaPackages.backendStdenv.cc}/bin/g++"
-  ] ++ lib.optionals
-    (cudaSupport
-      && lib.versionAtLeast cudaPackages.cudatoolkit.version "11.4.0")
-    [ "-DBUILD_WITH_CUDA_CUB=ON" ]
-    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
+    "-DCMAKE_C_COMPILER=${effectiveStdenv.cc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${effectiveStdenv.cc}/bin/g++"
+  ] ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
 
   preConfigure = lib.optionals rLibrary ''
@@ -104,7 +110,7 @@ stdenv.mkDerivation rec {
   GTEST_FILTER =
     let
       # Upstream Issue: https://github.com/xtensor-stack/xsimd/issues/456
-      filteredTests = lib.optionals stdenv.hostPlatform.isDarwin [
+      filteredTests = lib.optionals effectiveStdenv.hostPlatform.isDarwin [
         "ThreadGroup.TimerThread"
         "ThreadGroup.TimerThreadSimple"
       ];
@@ -112,8 +118,7 @@ stdenv.mkDerivation rec {
     "-${builtins.concatStringsSep ":" filteredTests}";
 
   installPhase =
-    let libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";
-    in ''
+    ''
       runHook preInstall
     ''
     # the R library option builds a completely different binary xgboost.so instead of
