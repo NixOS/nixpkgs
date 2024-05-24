@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
    ++ lib.optional enableSse41 "--with-sse41"
    ++ lib.optional enableSse42 "--with-sse42"
    ++ lib.optional enableAvx "--with-avx"
-   ++ lib.optional enableCuda "--with-cuda=${cudaPackages.cuda_cudart}";
+   ++ lib.optional enableCuda "--with-cuda=${lib.getOutput "stubs" cudaPackages.cuda_cudart}";
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
