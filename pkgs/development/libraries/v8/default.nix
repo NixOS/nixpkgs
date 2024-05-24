@@ -1,7 +1,6 @@
 { stdenv, lib, fetchgit, fetchFromGitHub
 , gn, ninja, python3, glib, pkg-config, icu
 , xcbuild, darwin
-, fetchpatch
 , llvmPackages
 , symlinkJoin
 }:
@@ -9,11 +8,11 @@
 # Use update.sh to update all checksums.
 
 let
-  version = "9.7.106.18";
+  version = "12.5.227.9";
   v8Src = fetchgit {
     url = "https://chromium.googlesource.com/v8/v8";
     rev = version;
-    sha256 = "0cb3w733w1xn6zq9dsr43nx6llcg9hrmb2dkxairarj9c0igpzyh";
+    sha256 = "1c6wayriidnwnbsswjn5sn2slg2kfxc86s4mcqn049x3yyq8d32s";
   };
 
   git_url = "https://chromium.googlesource.com";
@@ -22,46 +21,61 @@ let
   deps = {
     "base/trace_event/common" = fetchgit {
       url    = "${git_url}/chromium/src/base/trace_event/common.git";
-      rev    = "7f36dbc19d31e2aad895c60261ca8f726442bfbb";
-      sha256 = "01b2fhbxznqbakxv42ivrzg6w8l7i9yrd9nf72d6p5xx9dm993j4";
+      rev    = "29ac73db520575590c3aceb0a6f1f58dda8934f6";
+      sha256 = "1c25i8gyz3z36gp192g3cshaj6rd6yxi6m7j8mhw7spaarprzq12";
     };
     "build" = fetchgit {
       url    = "${git_url}/chromium/src/build.git";
-      rev    = "cf325916d58a194a935c26a56fcf6b525d1e2bf4";
-      sha256 = "1ix4h1cpx9bvgln8590xh7lllhsd9w1hd5k9l1gx5yxxrmywd3s4";
+      rev    = "5fb1330b84e1ee6d5bda9bd11602087defc32cd9";
+      sha256 = "0z7d46sdwmd3v32bydv50shfz8a0vk00987ar58mf9v2h3icpjw3";
     };
     "third_party/googletest/src" = fetchgit {
       url    = "${git_url}/external/github.com/google/googletest.git";
-      rev    = "16f637fbf4ffc3f7a01fa4eceb7906634565242f";
-      sha256 = "11012k3c3mxzdwcw2iparr9lrckafpyhqzclsj26hmfbgbdi0rrh";
+      rev    = "b1a777f31913f8a047f43b2a5f823e736e7f5082";
+      sha256 = "1f9kz9wrsmc6kgifjdgkwllcv5bymkwzrlvapcxynzqcc0wzmx77";
+    };
+    "third_party/fuzztest" = fetchgit {
+      url    = "${git_url}/chromium/src/third_party/fuzztest.git";
+      rev    = "ae21d2447b4b312ab22f7462c7f141caff4fa77a";
+      sha256 = "1sy9an2qm72rwaydgckhcg83f6mwyfy5zbgnhsz5finp28h5a11j";
     };
     "third_party/icu" = fetchgit {
       url    = "${git_url}/chromium/deps/icu.git";
-      rev    = "eedbaf76e49d28465d9119b10c30b82906e606ff";
-      sha256 = "0mppvx7wf9zlqjsfaa1cf06brh1fjb6nmiib0lhbb9hd55mqjdjj";
+      rev    = "a622de35ac311c5ad390a7af80724634e5dc61ed";
+      sha256 = "0maw8xbq20202sfm34jdlar4sz2yph28l6lhmlhccnfxn43528gp";
     };
     "third_party/zlib" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/zlib.git";
-      rev    = "6da1d53b97c89b07e47714d88cab61f1ce003c68";
-      sha256 = "0v7ylmbwfwv6w6wp29qdf77kjjnfr2xzin08n0v1yvbhs01h5ppy";
+      rev    = "7d77fb7fd66d8a5640618ad32c71fdeb7d3e02df";
+      sha256 = "1kicapnhky28qib3zyhlsasr00z1sn3n8kndi3h5b2llwcbkpgyb";
     };
     "third_party/jinja2" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/jinja2.git";
-      rev    = "ee69aa00ee8536f61db6a451f3858745cf587de6";
-      sha256 = "1fsnd5h0gisfp8bdsfd81kk5v4mkqf8z368c7qlm1qcwc4ri4x7a";
+      rev    = "c9c77525ea20c871a1d4658f8d312b51266d4bad";
+      sha256 = "1sk83hgp8cl8ndn7h7wdl9x47ajlr83pbfksn0v6i0xz3icg1ddz";
     };
     "third_party/markupsafe" = fetchgit {
       url    = "${git_url}/chromium/src/third_party/markupsafe.git";
-      rev    = "1b882ef6372b58bfd55a3285f37ed801be9137cd";
-      sha256 = "1jnjidbh03lhfaawimkjxbprmsgz4snr0jl06630dyd41zkdw5kr";
+      rev    = "e582d7f0edb9d67499b0f5abd6ae5550e91da7f2";
+      sha256 = "19g7amdyxfa047jznah87wmr19h9kxcmxvfp3zmb1ay5y2qwyld9";
+    };
+    "third_party/abseil-cpp" = fetchgit {
+      url    = "${git_url}/chromium/src/third_party/abseil-cpp.git";
+      rev    = "a64dd87cec79c80c88190265cfea0cbd4027677f";
+      sha256 = "06v7qglh6n7bcl83x97m79xrwbsck0jbgs081p46rdr3mk4nxjg2";
+    };
+    "third_party/fp16/src" = fetchgit {
+      url    = "${git_url}/external/github.com/Maratyszcza/FP16.git";
+      rev    = "581ac1c79dd9d9f6f4e8b2934e7a55c7becf0799";
+      sha256 = "1kw3g0z8pbs2lnqm49r9r1z74ysxj9bklbnjdaymc39lgfvl3yg0";
     };
   };
 
   # See `gn_version` in DEPS.
   gnSrc = fetchgit {
     url = "https://gn.googlesource.com/gn";
-    rev = "8926696a4186279489cc2b8d768533e61bba73d7";
-    sha256 = "1084lnyb0a1khbgjvak05fcx6jy973wqvsf77n0alxjys18sg2yk";
+    rev = "d823fd85da3fb83146f734377da454473b93a2b2";
+    sha256 = "17bnivz3ndzhlph3h58mw5w23yrkp91zfj13a3pcpyfsl9pl1dcn";
   };
 
   myGn = gn.overrideAttrs (oldAttrs: {
@@ -69,6 +83,9 @@ let
     src = gnSrc;
   });
 
+  xcbuild' = xcbuild.override {
+    productBuildVer = "20A2408";
+  };
 in
 
 stdenv.mkDerivation rec {
@@ -76,18 +93,6 @@ stdenv.mkDerivation rec {
   inherit version;
 
   doCheck = true;
-
-  patches = [
-    ./darwin.patch
-
-    # gcc-13 build fix for mixxign <cstdint> includes
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url  = "https://chromium.googlesource.com/v8/v8/+/c2792e58035fcbaa16d0cb70998852fbeb5df4cc^!?format=TEXT";
-      decode = "base64 -d";
-      hash = "sha256-hoPAkSaCmzXflPFXaKUwVPLECMpt6N6/8m8mBSTAHbU=";
-    })
-  ];
 
   src = v8Src;
 
@@ -100,25 +105,26 @@ stdenv.mkDerivation rec {
     chmod u+w -R .
   '';
 
+  patches = [
+    ./llvm-17.patch
+    ./disable-darwin-v8-system-instrumentation.patch
+  ];
+
   postPatch = ''
     ${lib.optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
-        --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+        --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     ''}
     ${lib.optionalString stdenv.isDarwin ''
       substituteInPlace build/config/compiler/compiler.gni \
-        --replace 'strip_absolute_paths_from_debug_symbols = true' \
+        --replace-fail 'strip_absolute_paths_from_debug_symbols = true' \
                   'strip_absolute_paths_from_debug_symbols = false'
-      substituteInPlace build/config/compiler/BUILD.gn \
-        --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
-                  'false'
     ''}
     ${lib.optionalString stdenv.isDarwin ''
       substituteInPlace build/config/compiler/BUILD.gn \
-        --replace "-Wl,-fatal_warnings" ""
+        --replace-fail "-Wl,-fatal_warnings" ""
     ''}
     touch build/config/gclient_args.gni
-    sed '1i#include <utility>' -i src/heap/cppgc/prefinalizer-handler.h # gcc12
   '';
 
   llvmCcAndBintools = symlinkJoin { name = "llvmCcAndBintools"; paths = [ stdenv.cc llvmPackages.llvm ]; };
@@ -147,6 +153,8 @@ stdenv.mkDerivation rec {
     "-O2"
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=enum-constexpr-conversion"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300"
   ]);
   FORCE_MAC_SDK_MIN = stdenv.hostPlatform.sdkVer or "10.12";
 
@@ -156,7 +164,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
   ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild
+    xcbuild'
     llvmPackages.llvm
     python3.pkgs.setuptools
   ];

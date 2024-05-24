@@ -1,6 +1,5 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p curl -p nix-prefetch-git -p jq
-VERSION_OVERVIEW=https://omahaproxy.appspot.com/all?os=linux
 TARGET_CHANNEL=stable
 
 set -eo pipefail
@@ -9,7 +8,8 @@ if [ -n "$1" ]; then
   v8_version="$1"
   shift
 else
-  v8_version=$(curl -s "$VERSION_OVERVIEW" | awk -F "," "\$2 ~ /${TARGET_CHANNEL}/ { print \$11 }")
+  chromium_version=$(curl -s "https://chromiumdash.appspot.com/fetch_releases?platform=linux&channel=${TARGET_CHANNEL}" | jq -r '.[0].version')
+  v8_version=$(curl -s "https://chromiumdash.appspot.com/fetch_version?version=${chromium_version}" | jq -r '.v8_version')
 fi
 
 if [ -n "$1" ]; then

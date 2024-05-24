@@ -1,0 +1,18 @@
+Disable v8 system instrumentation on Darwin
+
+On Darwin, the v8 system instrumentation requires the header "os/signpost.h"
+which is available since apple_sdk 11+.
+
+diff --git a/BUILD.gn b/BUILD.gn
+index 79b95fb517e..57a44a67de3 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -39,7 +39,7 @@ declare_args() {
+   v8_enable_future = false
+ 
+   # Sets -DENABLE_SYSTEM_INSTRUMENTATION. Enables OS-dependent event tracing
+-  v8_enable_system_instrumentation = (is_win || is_mac) && !v8_use_perfetto
++  v8_enable_system_instrumentation = (is_win) && !v8_use_perfetto
+ 
+   # Sets -DV8_ENABLE_ETW_STACK_WALKING. Enables ETW Stack Walking
+   v8_enable_etw_stack_walking = is_win
