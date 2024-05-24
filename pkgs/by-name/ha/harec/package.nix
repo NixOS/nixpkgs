@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
+    # To be kept in sync with the hare package.
+    inherit qbe;
   };
 
   meta = {

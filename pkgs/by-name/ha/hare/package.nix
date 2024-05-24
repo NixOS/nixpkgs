@@ -3,7 +3,6 @@
   stdenv,
   fetchFromSourcehut,
   harec,
-  qbe,
   gitUpdater,
   scdoc,
   tzdata,
@@ -33,6 +32,7 @@ assert
   '';
 
 let
+  inherit (harec) qbe;
   buildArch = stdenv.buildPlatform.uname.processor;
   arch = stdenv.hostPlatform.uname.processor;
   platform = lib.toLower stdenv.hostPlatform.uname.system;
