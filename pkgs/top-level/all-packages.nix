@@ -6855,6 +6855,17 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { };
 
+    mozc-ut = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc { dictionaries = [
+      mozcdic-ut-alt-cannadic
+      mozcdic-ut-edict2
+      mozcdic-ut-jawiki
+      mozcdic-ut-neologd
+      mozcdic-ut-personal-names
+      mozcdic-ut-place-names
+      mozcdic-ut-skk-jisyo
+      mozcdic-ut-sudachidict
+    ]; };
+
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
