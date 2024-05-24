@@ -6,7 +6,7 @@ let
   runtime_paths = lib.makeBinPath (with pkgsHostHost; [
     coreutils file findutils gawk gnugrep gnused jdk python3 which
   ]) + ":${platform-tools}/platform-tools";
-  lib_paths = lib.makeLibraryPath (with pkgs; [ libcxx ]);
+  lib_paths = lib.makeLibraryPath (with pkgs; [ libcxx libxml2 ]);
 in
 deployAndroidPackage rec {
   inherit package os;
