@@ -58,7 +58,7 @@ with lib;
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
       mc = super.mc.override { x11Support = false; };
-      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
+      mpv-unwrapped = super.mpv-unwrapped.override { drmSupport = false; screenSaverSupport = false; sdl2Support = false; vulkanSupport = false; waylandSupport = false; x11Support = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
       mupdf = super.mupdf.override { enableGL = false; enableX11 = false; };
       neofetch = super.neofetch.override { x11Support = false; };
