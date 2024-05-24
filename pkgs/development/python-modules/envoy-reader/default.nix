@@ -4,7 +4,6 @@
   buildPythonPackage,
   envoy-utils,
   fetchFromGitHub,
-  fetchpatch,
   httpx,
   pyjwt,
   pytest-asyncio,

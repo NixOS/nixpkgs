@@ -4,6 +4,7 @@
   fetchpatch,
   fetchPypi,
   ipywidgets,
+  looseversion,
   notebook,
   pandas,
   pytestCheckHook,
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "qgrid";
   version = "1.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,8 +29,14 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace qgrid/grid.py \
+      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
+  '';
+
+  dependencies = [
     ipywidgets
+    looseversion
     notebook
     pandas
   ];
@@ -48,10 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qgrid" ];
 
-  meta = with lib; {
+  meta = {
     description = "An interactive grid for sorting, filtering, and editing DataFrames in Jupyter notebooks";
     homepage = "https://github.com/quantopian/qgrid";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
