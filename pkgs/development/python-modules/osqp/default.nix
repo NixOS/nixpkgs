@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.5";
+  version = "0.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-soEK7nviNzrdi2wL5a2ZuBAoh3SrykIXUcsDLWpa7e8=";
+    hash = "sha256-O3ARmFV6SZxg67U9fyUBkGSFXHMvTz+84gVdeJ5Tph0=";
   };
 
   dontUseCmakeConfigure = true;
