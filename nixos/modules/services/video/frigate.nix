@@ -427,10 +427,6 @@ in
         PrivateTmp = true;
         CacheDirectory = "frigate";
         CacheDirectoryMode = "0750";
-
-        BindPaths = [
-          "${cfg.package}/share/frigate/migrations:/migrations"
-        ];
       };
     };
   };
