@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , expat

@@ -1,7 +1,6 @@
 { buildGoModule
 , dependabot-cli
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , lib
 , testers

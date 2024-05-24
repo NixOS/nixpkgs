@@ -3,7 +3,6 @@
 , cstruct
 , dune-configurator
 , fetchurl
-, fetchpatch
 , fmt
 , optint
 , mdx
