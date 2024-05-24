@@ -31,6 +31,7 @@
   qtimageformats,
   tbb_2021_11,
   tzdata,
+  substituteAll,
   pkg-config,
   python3,
   wrapQtAppsHook,
@@ -70,15 +71,16 @@ in
       ./patches/use-find-package.patch
       ./patches/add-cstdint.patch
       ./patches/fix-zoned-time.patch
-      ./patches/skip-git-versioning.patch
+      (substituteAll {
+        src = ./patches/skip-git-versioning.patch;
+        rev = src.rev;
+      })
       ./patches/fix-cmake-install.patch
     ];
 
     postPatch = ''
       substituteInPlace external/maplibre-native-qt/src/core/CMakeLists.txt \
         --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
-      substituteInPlace scwx-qt/tools/generate_versions.py \
-        --replace-fail "@NIX_SRC_REV@" "${src.rev}"
     '';
 
     nativeBuildInputs = [

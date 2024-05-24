@@ -15,7 +15,7 @@ index e7c470e..dde3e4f 100644
 -    else:
 -        commitString  = commitString + "+dirty"
 -        copyrightYear = datetime.date.today().year
-+    commitString = '@NIX_SRC_REV@'
++    commitString = "@rev@"
 +    copyrightYear = datetime.date.today().year
      
      versionInfo.commitString_  = commitString
