@@ -12,6 +12,7 @@
 , naproche
 , rlwrap
 , perl
+, procps
 , makeDesktopItem
 , isabelle-components
 , symlinkJoin
@@ -21,12 +22,12 @@
 let
   sha1 = stdenv.mkDerivation {
     pname = "isabelle-sha1";
-    version = "2021-1";
+    version = "2024";
 
     src = fetchhg {
       url = "https://isabelle.sketis.net/repos/sha1";
-      rev = "e0239faa6f42";
-      sha256 = "sha256-4sxHzU/ixMAkSo67FiE6/ZqWJq9Nb9OMNhMoXH2bEy4=";
+      rev = "0ce12663fe76";
+      hash = "sha256-DB/ETVZhbT82IMZA97TmHG6gJcGpFavxDKDTwPzIF80=";
     };
 
     buildPhase = (if stdenv.isDarwin then ''
@@ -46,7 +47,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: rec {
   pname = "isabelle";
-  version = "2023";
+  version = "2024";
 
   dirname = "Isabelle${version}";
 
@@ -56,24 +57,24 @@ in stdenv.mkDerivation (finalAttrs: rec {
       fetchurl
         {
           url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-          sha256 = "sha256-0VSW2SrHNI3/k4cCCZ724ruXaq7W1NCPsLrXFZ9l1/Q=";
+          hash = "sha256-IgNfmW9x6h8DBj9vFEGV62oEl01NkW7QdyzXlWmii8c=";
         }
     else if stdenv.hostPlatform.isx86
     then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-        sha256 = "sha256-Go4ZCsDz5gJ7uWG5VLrNJOddMPX18G99FAadpX53Rqg=";
+        hash = "sha256-YDqq+KvqNll687BlHSwWKobAoN1EIHZvR+VyQDljkmc=";
       }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux_arm.tar.gz";
-        hash = "sha256-Tzxxs0gKw6vymbaXIzH8tK5VgUrpOIp9vcWQ/zxnRCc=";
+        hash = "sha256-jXWVv18WwrVnqVX1s4Lnyf7DkOzPa3EdLXYxgtKD+YA=";
       };
 
   nativeBuildInputs = [ java ];
 
   buildInputs = [ polyml veriT vampire eprover-ho nettools ]
-    ++ lib.optionals (!stdenv.isDarwin) [ java ];
+    ++ lib.optionals (!stdenv.isDarwin) [ java procps ];
 
   sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
 
@@ -130,30 +131,29 @@ in stdenv.mkDerivation (finalAttrs: rec {
     done
 
     substituteInPlace lib/Tools/env \
-      --replace /usr/bin/env ${coreutils}/bin/env
+      --replace-fail /usr/bin/env ${coreutils}/bin/env
 
     substituteInPlace src/Tools/Setup/src/Environment.java \
-      --replace 'cmd.add("/usr/bin/env");' "" \
-      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+      --replace-fail 'cmd.add("/usr/bin/env");' "" \
+      --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
 
     substituteInPlace src/Pure/General/sha1.ML \
-      --replace '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
+      --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
 
     rm -r heaps
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
     substituteInPlace lib/scripts/isabelle-platform \
-      --replace 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
+      --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
   '' + lib.optionalString stdenv.isLinux ''
-    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux"
-           else if stdenv.hostPlatform.isx86 then "x86-linux"
-           else "arm64-linux"}
-    for f in contrib/*/$arch/{z3,epclextract,nunchaku,SPASS,zipperposition}; do
+    arch=${if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system}
+    for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.isAarch64 " || true"}
     done
-    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/platform_$arch/bash_process
+    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
     for d in contrib/kodkodi-*/jni/$arch; do
       patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
     done
+  '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
     patchelf --set-rpath "${stdenv.cc.cc.lib}/lib" contrib/z3-*/$arch/z3
   '';
 
