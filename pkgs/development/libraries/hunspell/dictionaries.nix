@@ -971,7 +971,7 @@ rec {
     /*
   Turkish
   */
-  tr_TR = tr_tr;
+  tr_TR = tr-tr;
   tr-tr = mkDict rec {
     pname = "hunspell-dict-tr-tr";
     version = "1.1.1";
