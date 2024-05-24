@@ -26586,23 +26586,6 @@ with pkgs;
 
   thttpd = callPackage ../servers/http/thttpd { };
 
-  stalwart-mail_0_6 = (stalwart-mail.override { rocksdb_8_11 = rocksdb_8_3; }).overrideAttrs (old: rec {
-    pname = "stalwart-mail_0_6";
-    version = "0.6.0";
-    src = fetchFromGitHub {
-      owner = "stalwartlabs";
-      repo = "mail-server";
-      rev = "v${version}";
-      hash = "sha256-OHwUWSUW6ovLQTxnuUrolQGhxbhp4YqKSH+ZTpe2WXc=";
-      fetchSubmodules = true;
-    };
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      name = "${pname}-${version}-vendor.tar.gz";
-      outputHash = "sha256-mW3OXQj6DcIMO1YlTG3G+a1ORRcuvp5/h7BU+b4QbnE=";
-    });
-  });
-
   static-web-server = callPackage ../servers/static-web-server { };
 
   stone = callPackage ../servers/stone { };
