@@ -11,7 +11,7 @@
 
 let
   pname = "edge-runtime";
-  version = "1.53.1";
+  version = "1.53.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,13 +20,12 @@ rustPlatform.buildRustPackage {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qEEFEeAyUOnNvxIBfAmhMDWde3OPOpyaEI2pBYrdCr0=";
+    hash = "sha256-CJT7q1QPpZScTo7MxCrK6dF5EvSVePMh7wgimVn6u/8=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-
     outputHashes = {
       "ort-2.0.0-rc.0" = "sha256-j3g9ES2ZLmAAcPYgszBGDG16HiFJTnohwxSvXypFGTw=";
     };
