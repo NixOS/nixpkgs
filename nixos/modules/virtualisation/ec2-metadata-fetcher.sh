@@ -8,8 +8,9 @@ get_imds_token() {
   curl \
     --silent \
     --show-error \
-    --retry 3 \
+    --retry 5 \
     --retry-delay 1 \
+    --retry-connrefused \
     --fail \
     -X PUT \
     --connect-timeout 1 \
@@ -23,8 +24,9 @@ preflight_imds_token() {
   curl \
     --silent \
     --show-error \
-    --retry 3 \
+    --retry 5 \
     --retry-delay 1 \
+    --retry-connrefused \
     --fail \
     --connect-timeout 1 \
     -H "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
@@ -57,7 +59,15 @@ echo "getting EC2 instance metadata..."
 get_imds() {
   # --fail to avoid populating missing files with 404 HTML response body
   # || true to allow the script to continue even when encountering a 404
-  curl --silent --show-error --fail --header "X-aws-ec2-metadata-token: $IMDS_TOKEN" "$@" || true
+  curl \
+      --silent \
+      --show-error \
+      --retry 3 \
+      --retry-delay 1 \
+      --retry-connrefused \
+      --fail \
+      --header "X-aws-ec2-metadata-token: $IMDS_TOKEN" \
+      "$@" || true
 }
 
 get_imds -o "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
