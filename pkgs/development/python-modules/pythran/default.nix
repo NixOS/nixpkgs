@@ -3,7 +3,6 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   isPy3k,
   substituteAll,
 

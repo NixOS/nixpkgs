@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
+{ lib, stdenv, fetchurl, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
 
 stdenv.mkDerivation rec {
   pname = "libcdr";

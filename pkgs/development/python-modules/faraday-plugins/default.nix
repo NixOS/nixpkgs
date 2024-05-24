@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.17.0";
+  version = "1.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,17 +29,17 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-EE61RPantD1u9NNhyPRjoRkBifM3u16b0BC2aQC8UBA=";
+    hash = "sha256-oYE7Iik0+CbOfxF9IeeZotpGqV8TTz15MxJEC4VBrhk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-warn "version=version," "version='${version}',"
+      --replace-fail "version=version," "version='${version}',"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     click
     colorama
@@ -73,10 +73,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
-    mainProgram = "faraday-plugins";
     homepage = "https://github.com/infobyte/faraday_plugins";
     changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
-    license = with licenses; [ gpl3Only ];
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "faraday-plugins";
   };
 }
