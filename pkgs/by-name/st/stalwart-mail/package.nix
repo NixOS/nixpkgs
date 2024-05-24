@@ -75,6 +75,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/stalwartlabs/mail-server";
     changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada onny ];
   };
 }
