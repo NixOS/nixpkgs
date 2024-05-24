@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "licensure";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "chasinglogic";
     repo = "licensure";
     rev = version;
-    hash = "sha256-rOD2H9TEoZ8JCjlg6feNQiAjvroVGqrlOkDHNZKXDoE=";
+    hash = "sha256-y72+k3AaR6iT99JJpGs6WZAEyG6CrOZHLqKRj19gLs0=";
   };
 
-  cargoHash = "sha256-ku0SI14pZmbhzE7RnK5kJY6tSMjRVKEMssC9e0Hq6hc=";
+  cargoHash = "sha256-75UNzC+8qjm0A82N63i8YY92wCNQccrS3kIqDlR8pkc=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl git gitls ];
 
