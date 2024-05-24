@@ -47,5 +47,12 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch";
       hash = "sha256-TfYal/PikRZHL6zpAlC3SmkYXCe+/8Gs83dLX/X/P/k=";
     })
+    # Remove unused `fdopen` in vendored zlib, which causes compilation failures with clang 18 on Darwin.
+    (fetchpatch2 {
+      url = "https://github.com/madler/zlib/commit/4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9.patch?full_index=1";
+      extraPrefix = "deps/v8/third_party/zlib/";
+      stripLen = 1;
+      hash = "sha256-WVxsoEcJu0WBTyelNrVQFTZxJhnekQb1GrueeRBRdnY=";
+    })
   ] ++ gypPatches;
 }
