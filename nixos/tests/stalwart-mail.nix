@@ -1,147 +1,120 @@
 # Rudimentary test checking that the Stalwart email server can:
 # - receive some message through SMTP submission, then
 # - serve this message through IMAP.
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
 
-  lib ? pkgs.lib,
-}:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
-  makeTest = import ./make-test-python.nix;
-  mkTestName =
-    pkg: "${pkg.pname}_${pkg.version}";
-  stalwartPackages = {
-    inherit (pkgs) stalwart-mail_0_6 stalwart-mail;
-  };
-  stalwartAtLeast = lib.versionAtLeast;
-  makeStalwartTest =
-    {
-      package,
-      name ? mkTestName package,
-    }:
-    makeTest {
-      inherit name;
-      meta.maintainers = with lib.maintainers; [
-        happysalada pacien onny
-      ];
 
-      nodes.machine = { lib, ... }: {
+in import ./make-test-python.nix ({ lib, ... }: {
+  name = "stalwart-mail";
 
-        security.pki.certificateFiles = [ certs.ca.cert ];
+  nodes.main = { pkgs, ... }: {
+    security.pki.certificateFiles = [ certs.ca.cert ];
 
-        services.stalwart-mail = {
+    services.stalwart-mail = {
+      enable = true;
+      settings = {
+        server.hostname = domain;
+
+        certificate."snakeoil" = {
+          cert = "%{file:${certs.${domain}.cert}}%";
+          private-key = "%{file:${certs.${domain}.key}}%";
+        };
+
+        server.tls = {
+          certificate = "snakeoil";
           enable = true;
-          inherit package;
-          settings = {
-            server.hostname = domain;
+          implicit = false;
+        };
 
-            # TODO: Remove backwards compatibility as soon as we drop legacy version 0.6.0
-            certificate."snakeoil" = let
-              certPath = if stalwartAtLeast package.version "0.7.0" then "%{file://${certs.${domain}.cert}}%" else "file://${certs.${domain}.cert}";
-              keyPath = if stalwartAtLeast package.version "0.7.0" then "%{file:${certs.${domain}.key}}%" else "file://${certs.${domain}.key}";
-            in {
-              cert = certPath;
-              private-key = keyPath;
-            };
+        server.listener = {
+          "smtp-submission" = {
+            bind = [ "[::]:587" ];
+            protocol = "smtp";
+          };
 
-            server.tls = {
-              certificate = "snakeoil";
-              enable = true;
-              implicit = false;
-            };
-
-            server.listener = {
-              "smtp-submission" = {
-                bind = [ "[::]:587" ];
-                protocol = "smtp";
-              };
-
-              "imap" = {
-                bind = [ "[::]:143" ];
-                protocol = "imap";
-              };
-            };
-
-            session.auth.mechanisms = "[plain]";
-            session.auth.directory = "'in-memory'";
-            storage.directory = "in-memory";
-
-            session.rcpt.directory = "'in-memory'";
-            queue.outbound.next-hop = "'local'";
-
-            directory."in-memory" = {
-              type = "memory";
-              # TODO: Remove backwards compatibility as soon as we drop legacy version 0.6.0
-              principals = let
-                condition = if stalwartAtLeast package.version "0.7.0" then "class" else "type";
-              in builtins.map (p: p // { ${condition} = "individual"; }) [
-                {
-                  name = "alice";
-                  secret = "foobar";
-                  email = [ "alice@${domain}" ];
-                }
-                {
-                  name = "bob";
-                  secret = "foobar";
-                  email = [ "bob@${domain}" ];
-                }
-              ];
-            };
+          "imap" = {
+            bind = [ "[::]:143" ];
+            protocol = "imap";
           };
         };
 
-        environment.systemPackages = [
-          (pkgs.writers.writePython3Bin "test-smtp-submission" { } ''
-            from smtplib import SMTP
+        session.auth.mechanisms = "[plain]";
+        session.auth.directory = "'in-memory'";
+        storage.directory = "in-memory";
 
-            with SMTP('localhost', 587) as smtp:
-                smtp.starttls()
-                smtp.login('alice', 'foobar')
-                smtp.sendmail(
-                    'alice@${domain}',
-                    'bob@${domain}',
-                    """
-                        From: alice@${domain}
-                        To: bob@${domain}
-                        Subject: Some test message
+        session.rcpt.directory = "'in-memory'";
+        queue.outbound.next-hop = "'local'";
 
-                        This is a test message.
-                    """.strip()
-                )
-          '')
-
-          (pkgs.writers.writePython3Bin "test-imap-read" { } ''
-            from imaplib import IMAP4
-
-            with IMAP4('localhost') as imap:
-                imap.starttls()
-                status, [caps] = imap.login('bob', 'foobar')
-                assert status == 'OK'
-                imap.select()
-                status, [ref] = imap.search(None, 'ALL')
-                assert status == 'OK'
-                [msgId] = ref.split()
-                status, msg = imap.fetch(msgId, 'BODY[TEXT]')
-                assert status == 'OK'
-                assert msg[0][1].strip() == b'This is a test message.'
-          '')
-        ];
-
+        directory."in-memory" = {
+          type = "memory";
+          principals = [
+            {
+              class = "individual";
+              name = "alice";
+              secret = "foobar";
+              email = [ "alice@${domain}" ];
+            }
+            {
+              class = "individual";
+              name = "bob";
+              secret = "foobar";
+              email = [ "bob@${domain}" ];
+            }
+          ];
+        };
       };
-
-      testScript = ''
-        start_all()
-        machine.wait_for_unit("stalwart-mail.service")
-        machine.wait_for_open_port(587)
-        machine.wait_for_open_port(143)
-
-        machine.succeed("test-smtp-submission")
-        machine.succeed("test-imap-read")
-      '';
     };
-in
-lib.mapAttrs (_: package: makeStalwartTest { inherit package; }) stalwartPackages
+
+    environment.systemPackages = [
+      (pkgs.writers.writePython3Bin "test-smtp-submission" { } ''
+        from smtplib import SMTP
+
+        with SMTP('localhost', 587) as smtp:
+            smtp.starttls()
+            smtp.login('alice', 'foobar')
+            smtp.sendmail(
+                'alice@${domain}',
+                'bob@${domain}',
+                """
+                    From: alice@${domain}
+                    To: bob@${domain}
+                    Subject: Some test message
+
+                    This is a test message.
+                """.strip()
+            )
+      '')
+
+      (pkgs.writers.writePython3Bin "test-imap-read" { } ''
+        from imaplib import IMAP4
+
+        with IMAP4('localhost') as imap:
+            imap.starttls()
+            status, [caps] = imap.login('bob', 'foobar')
+            assert status == 'OK'
+            imap.select()
+            status, [ref] = imap.search(None, 'ALL')
+            assert status == 'OK'
+            [msgId] = ref.split()
+            status, msg = imap.fetch(msgId, 'BODY[TEXT]')
+            assert status == 'OK'
+            assert msg[0][1].strip() == b'This is a test message.'
+      '')
+    ];
+  };
+
+  testScript = /* python */ ''
+    main.wait_for_unit("stalwart-mail.service")
+    main.wait_for_open_port(587)
+    main.wait_for_open_port(143)
+
+    main.succeed("test-smtp-submission")
+    main.succeed("test-imap-read")
+  '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ happysalada pacien ];
+  };
+})
