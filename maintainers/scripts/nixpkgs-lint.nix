@@ -1,13 +1,14 @@
 { stdenv, lib, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation {
-  name = "nixpkgs-lint-1";
+  pname = "nixpkgs-lint";
+  version = "1";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl perlPackages.XMLSimple ];
 
   dontUnpack = true;
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase =
     ''
