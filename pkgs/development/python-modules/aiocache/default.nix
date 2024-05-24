@@ -1,17 +1,18 @@
-{ lib
-, aiohttp
-, aiomcache
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, msgpack
-, pkgs
-, pythonOlder
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, redis
-, setuptools
+{
+  lib,
+  aiohttp,
+  aiomcache,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  msgpack,
+  pkgs,
+  pythonOlder,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  redis,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -33,20 +34,12 @@ buildPythonPackage rec {
       --replace-fail "--cov=aiocache --cov=tests/ --cov-report term" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
-    redis = [
-      redis
-    ];
-    memcached = [
-      aiomcache
-    ];
-    msgpack = [
-      msgpack
-    ];
+    redis = [ redis ];
+    memcached = [ aiomcache ];
+    msgpack = [ msgpack ];
   };
 
   nativeCheckInputs = [
@@ -58,14 +51,20 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
     # TypeError: object MagicMock can't be used in 'await' expression
     "--deselect=tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
   ];
 
   disabledTests = [
-    # calls apache benchmark and fails, no usable output
+    # Test calls apache benchmark and fails, no usable output
     "test_concurrency_error_rates"
+  ];
+
+  disabledTestPaths = [
+    # Benchmark and performance tests are not relevant for Nixpkgs
+    "tests/performance/"
   ];
 
   preCheck = ''
@@ -83,15 +82,13 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "aiocache"
-  ];
+  pythonImportsCheck = [ "aiocache" ];
 
   meta = with lib; {
     description = "Python API Rate Limit Decorator";
     homepage = "https://github.com/aio-libs/aiocache";
     changelog = "https://github.com/aio-libs/aiocache/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

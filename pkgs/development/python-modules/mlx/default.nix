@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildPythonPackage
-, python3Packages
-, pybind11
-, cmake
-, xcbuild
-, zsh
-, darwin
-, blas
-, lapack
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python3Packages,
+  pybind11,
+  cmake,
+  xcbuild,
+  zsh,
+  darwin,
+  blas,
+  lapack,
 }:
 
 let
@@ -63,9 +64,19 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs = [ cmake pybind11 xcbuild zsh gguf-tools nlohmann_json ] ++ (with python3Packages; [ setuptools ]);
+  nativeBuildInputs = [
+    cmake
+    pybind11
+    xcbuild
+    zsh
+    gguf-tools
+    nlohmann_json
+  ] ++ (with python3Packages; [ setuptools ]);
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ml-explore/mlx";

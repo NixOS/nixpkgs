@@ -1,14 +1,12 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.iftop;
 in {
   options = {
-    programs.iftop.enable = mkEnableOption "iftop + setcap wrapper";
+    programs.iftop.enable = lib.mkEnableOption "iftop + setcap wrapper";
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.iftop ];
     security.wrappers.iftop = {
       owner = "root";

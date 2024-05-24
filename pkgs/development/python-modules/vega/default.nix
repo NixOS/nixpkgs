@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, altair
-, ipytablewidgets
-, ipywidgets
-, jupyter
-, jupyter-core
-, jupyterlab
-, pandas
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  altair,
+  ipytablewidgets,
+  ipywidgets,
+  jupyter,
+  jupyter-core,
+  jupyterlab,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pandas"
-  ];
+  pythonRelaxDeps = [ "pandas" ];
 
   propagatedBuildInputs = [
     ipytablewidgets
@@ -53,12 +52,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    widget = [
-      ipywidgets
-    ];
-    jupyterlab = [
-      jupyterlab
-    ];
+    widget = [ ipywidgets ];
+    jupyterlab = [ jupyterlab ];
   };
 
   nativeCheckInputs = [

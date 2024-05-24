@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, django
-, scim2-filter-parser
+  # propagates
+  django,
+  scim2-filter-parser,
 
-# tests
-, mock
-, pytest-django
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,18 +35,14 @@ buildPythonPackage rec {
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     django
     scim2-filter-parser
   ];
 
-  pythonImportsCheck = [
-    "django_scim"
-  ];
+  pythonImportsCheck = [ "django_scim" ];
 
   nativeCheckInputs = [
     mock

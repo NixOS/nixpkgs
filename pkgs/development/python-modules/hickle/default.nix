@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "5.0.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,17 +46,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "hickle" ];
-
-  disabledTests = [
-    # broken in 5.0.2 with recent NumPy
-    # see https://github.com/telegraphic/hickle/issues/174
-    "test_scalar_compression"
-    # broken in 5.0.2 with Python 3.11
-    # see https://github.com/telegraphic/hickle/issues/169
-    "test_H5NodeFilterProxy"
-    # broken in 5.0.2
-    "test_slash_dict_keys"
-  ];
 
   meta = with lib; {
     description = "Serialize Python data to HDF5";

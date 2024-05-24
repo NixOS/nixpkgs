@@ -1,18 +1,16 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   enable = config.programs.bash.enableCompletion;
 in
 {
   options = {
-    programs.bash.enableCompletion = mkEnableOption "Bash completion for all interactive bash shells" // {
+    programs.bash.enableCompletion = lib.mkEnableOption "Bash completion for all interactive bash shells" // {
       default = true;
     };
   };
 
-  config = mkIf enable {
+  config = lib.mkIf enable {
     programs.bash.promptPluginInit = ''
       # Check whether we're running a version of Bash that has support for
       # programmable completion. If we do, enable all modules installed in

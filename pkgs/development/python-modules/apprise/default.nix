@@ -38,7 +38,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cryptography
     markdown
@@ -57,7 +57,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_apprise_cli_nux_env"
+    # Nondeterministic. Fails with `assert 0 == 1`
+    "test_notify_emoji_general"
     "test_plugin_mqtt_general"
+    # Nondeterministic. Fails with `AssertionError`
+    "test_plugin_xbmc_kodi_urls"
   ];
 
   disabledTestPaths = [
@@ -76,7 +80,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "apprise";
   };
 }

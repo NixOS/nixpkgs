@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, ply
-, six
-, decorator
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  ply,
+  six,
+  decorator,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,11 @@ buildPythonPackage rec {
     sha256 = "05c471281c45ae113f6103d1268ec7a4831a2e96aa80de45edc89b11fac4fbec";
   };
 
-  propagatedBuildInputs = [ ply six decorator ];
+  propagatedBuildInputs = [
+    ply
+    six
+    decorator
+  ];
 
   # ImportError: No module named tests
   doCheck = false;
@@ -28,5 +33,4 @@ buildPythonPackage rec {
     mainProgram = "jsonpath.py";
     license = licenses.asl20;
   };
-
 }

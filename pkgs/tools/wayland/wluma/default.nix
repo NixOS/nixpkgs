@@ -7,24 +7,23 @@
 , pkg-config
 , udev
 , v4l-utils
+, dbus
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
     rev = version;
-    sha256 = "sha256-FaX87k8LdBhrBX4qvokSHkcNaQZ0+oSbkn9d0dK6FGo=";
+    sha256 = "sha256-Ow3SjeulYiHY9foXrmTtLK3F+B3+DrtDjBUke3bJeDw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "toml-0.5.9" = "sha256-WUQFF9Hfo3JK65AKAF7qNZex6l7F3N8HXmJlu8cJUEE=";
-    };
   };
 
   nativeBuildInputs = [
@@ -37,6 +36,7 @@ rustPlatform.buildRustPackage rec {
     udev
     v4l-utils
     vulkan-loader
+    dbus
   ];
 
   postInstall = ''
@@ -44,12 +44,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Automatic brightness adjustment based on screen contents and ALS";
     homepage = "https://github.com/maximbaz/wluma";
     changelog = "https://github.com/maximbaz/wluma/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ yshym jmc-figueira ];
+    maintainers = with maintainers; [ yshym jmc-figueira atemu ];
     platforms = platforms.linux;
     mainProgram = "wluma";
   };

@@ -1,15 +1,13 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.mtr;
 
 in {
   options = {
     programs.mtr = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add mtr to the global environment and configure a
@@ -17,12 +15,12 @@ in {
         '';
       };
 
-      package = mkPackageOption pkgs "mtr" { };
+      package = lib.mkPackageOption pkgs "mtr" { };
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ cfg.package ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
 
     security.wrappers.mtr-packet = {
       owner = "root";

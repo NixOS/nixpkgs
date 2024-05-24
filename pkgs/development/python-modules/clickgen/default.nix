@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, attrs
-, pillow
-, toml
-, numpy
-, pyyaml
-, python
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  attrs,
+  pillow,
+  toml,
+  numpy,
+  pyyaml,
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
     # Copying scripts directory needed by clickgen script at $out/bin/

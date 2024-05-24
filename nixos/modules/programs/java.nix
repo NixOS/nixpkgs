@@ -3,8 +3,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.java;
 in
@@ -14,7 +12,7 @@ in
 
     programs.java = {
 
-      enable = mkEnableOption "java" // {
+      enable = lib.mkEnableOption "java" // {
         description = ''
           Install and setup the Java development kit.
 
@@ -30,19 +28,19 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "jdk" {
+      package = lib.mkPackageOption pkgs "jdk" {
         example = "jre";
       };
 
-      binfmt = mkEnableOption "binfmt to execute java jar's and classes";
+      binfmt = lib.mkEnableOption "binfmt to execute java jar's and classes";
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    boot.binfmt.registrations = mkIf cfg.binfmt {
+    boot.binfmt.registrations = lib.mkIf cfg.binfmt {
       java-class = {
         recognitionType = "extension";
         magicOrExtension = "class";

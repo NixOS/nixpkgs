@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# tests
-, ipykernel
-, nbconvert
-, pytestCheckHook
-, typing-extensions
+  # tests
+  ipykernel,
+  nbconvert,
+  pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "wasabi"
-  ];
+  pythonImportsCheck = [ "wasabi" ];
 
   meta = with lib; {
     description = "A lightweight console printing and formatting toolkit";

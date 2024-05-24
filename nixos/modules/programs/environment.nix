@@ -4,8 +4,6 @@
 
 { config, lib, ... }:
 
-with lib;
-
 let
 
   cfg = config.environment;
@@ -20,14 +18,14 @@ in
       { NIXPKGS_CONFIG = "/etc/nix/nixpkgs-config.nix";
         # note: many programs exec() this directly, so default options for less must not
         # be specified here; do so in the default value of programs.less.envVariables instead
-        PAGER = mkDefault "less";
-        EDITOR = mkDefault "nano";
+        PAGER = lib.mkDefault "less";
+        EDITOR = lib.mkDefault "nano";
       };
 
     # since we set PAGER to this above, make sure it's installed
     programs.less.enable = true;
 
-    environment.profiles = mkAfter
+    environment.profiles = lib.mkAfter
       [ "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
       ];
@@ -53,7 +51,7 @@ in
     environment.extraInit =
       ''
          export NIX_USER_PROFILE_DIR="/nix/var/nix/profiles/per-user/$USER"
-         export NIX_PROFILES="${concatStringsSep " " (reverseList cfg.profiles)}"
+         export NIX_PROFILES="${builtins.concatStringsSep " " (lib.reverseList cfg.profiles)}"
       '';
 
   };

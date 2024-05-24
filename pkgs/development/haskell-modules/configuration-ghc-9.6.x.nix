@@ -180,6 +180,16 @@ self: super: {
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;
+
+  # This runs into the following GHC bug currently affecting 9.6.* and 9.8.* as
+  # well as 9.10.1: https://gitlab.haskell.org/ghc/ghc/-/issues/24432
+  inherit (lib.mapAttrs (_: overrideCabal (drv: {
+      badPlatforms = drv.badPlatforms or [ ] ++ [ "aarch64-linux" ];
+    })) super)
+    mueval
+    lambdabot
+    lambdabot-haskell-plugins
+    ;
 }
 # super.ghc is required to break infinite recursion as Nix is strict in the attrNames
 // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && lib.versionOlder super.ghc.version "9.6.4") {

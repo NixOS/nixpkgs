@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, setuptools
+  setuptools,
 
-, defusedxml
-, pillow
-, fonttools
+  defusedxml,
+  pillow,
+  fonttools,
 
-, pytestCheckHook
-, qrcode
-, camelot
-, uharfbuzz
-, lxml
+  pytestCheckHook,
+  qrcode,
+  camelot,
+  uharfbuzz,
+  lxml,
 }:
 
 buildPythonPackage rec {

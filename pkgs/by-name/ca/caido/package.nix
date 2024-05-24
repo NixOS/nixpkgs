@@ -16,7 +16,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libthai ];
+  extraPkgs = pkgs: [ pkgs.libthai ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/caido.desktop -t $out/share/applications

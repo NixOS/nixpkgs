@@ -28,7 +28,7 @@
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
 , cargo, rustc, rustPlatform
-, autoSignDarwinBinariesHook, fetchpatch
+, autoSignDarwinBinariesHook
 }@args:
 
 let
@@ -586,7 +586,7 @@ in
     ];
   };
 
-  nokogiri = attrs: {
+  nokogiri = attrs: ({
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-lib=${zlib.out}/lib"
@@ -601,7 +601,9 @@ in
       "--with-iconv-dir=${libiconv}"
       "--with-opt-include=${libiconv}/include"
     ];
-  };
+  } // lib.optionalAttrs stdenv.isDarwin {
+    buildInputs = [ libxml2 ];
+  });
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369

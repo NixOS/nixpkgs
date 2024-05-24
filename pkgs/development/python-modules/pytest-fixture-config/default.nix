@@ -1,17 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools-git, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-git,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.7.1-unstable-2022-10-03";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "13i1qpz22w3x4dmw8vih5jdnbqfqvl7jiqs0dg764s0zf8bp98a1";
+  src = fetchFromGitHub {
+    owner = "man-group";
+    repo = "pytest-plugins";
+    rev = "5f9b88a65a8c1e506885352bbd9b2a47900f5014";
+    hash = "sha256-huN3RzwtfVf4iMJ96VRP/ldOxTUlUMF1wJIdbcGXHn4=";
   };
 
-  nativeBuildInputs = [ setuptools-git ];
+  sourceRoot = "${src.name}/pytest-fixture-config";
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-git
+  ];
 
   buildInputs = [ pytest ];
 

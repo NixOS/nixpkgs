@@ -10,6 +10,7 @@
 , dbus
 , polkit
 , systemdLibs
+, udev
 , dbusSupport ? stdenv.isLinux
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
 , udevSupport ? dbusSupport
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ python3 ]
     ++ lib.optionals systemdSupport [ systemdLibs ]
+    ++ lib.optionals (!systemdSupport && udevSupport) [ udev ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ]
     ++ lib.optionals dbusSupport [ dbus ]
     ++ lib.optionals polkitSupport [ polkit ]

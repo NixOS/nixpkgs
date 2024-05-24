@@ -1,17 +1,18 @@
-{ lib
-, avro
-, buildPythonPackage
-, fastavro
-, fetchFromGitHub
-, jsonschema
-, protobuf
-, pyflakes
-, pyrsistent
-, pytestCheckHook
-, pythonOlder
-, rdkafka
-, requests
-, requests-mock
+{
+  lib,
+  avro,
+  buildPythonPackage,
+  fastavro,
+  fetchFromGitHub,
+  jsonschema,
+  protobuf,
+  pyflakes,
+  pyrsistent,
+  pytestCheckHook,
+  pythonOlder,
+  rdkafka,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-sPlLlp0niR45lQPCvVd6NPtGI1cFbmPeQpIF1RnnY0I=";
   };
 
-  buildInputs = [
-    rdkafka
-  ];
+  buildInputs = [ rdkafka ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   passthru.optional-dependencies = {
     avro = [
@@ -45,9 +42,7 @@ buildPythonPackage rec {
       jsonschema
       pyrsistent
     ];
-    protobuf = [
-      protobuf
-    ];
+    protobuf = [ protobuf ];
   };
 
   nativeCheckInputs = [
@@ -56,9 +51,7 @@ buildPythonPackage rec {
     requests-mock
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "confluent_kafka"
-  ];
+  pythonImportsCheck = [ "confluent_kafka" ];
 
   disabledTestPaths = [
     "tests/integration/"

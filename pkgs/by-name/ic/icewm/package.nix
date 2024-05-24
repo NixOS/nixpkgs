@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , expat
 , flac
@@ -41,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.4.7";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     rev = finalAttrs.version;
-    hash = "sha256-p7qbmR8NcE8mgmlTtkHxVRo4DDUHPMiAUhdF3zm9IEc=";
+    hash = "sha256-n0p8i6v6QreCFiChngHnx+5K4Djj34/+dmIA+bj/0cU=";
   };
 
   nativeBuildInputs = [

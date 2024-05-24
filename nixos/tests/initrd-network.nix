@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "initrd-network";
 
-  meta.maintainers = [ pkgs.lib.maintainers.eelco ];
+  meta.maintainers = [ ];
 
   nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];

@@ -12,15 +12,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mousam";
-  version = "1.1.0";
+  version = "1.2.0";
   # built with meson, not a python format
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "amit9838";
     repo = "mousam";
     rev = "v${version}";
-    hash = "sha256-4NJLJ9aPCufvqZGzqQEjSxryofcg4mwk0UohlgUYcqk=";
+    hash = "sha256-/mOb4Pgdn5DcxwHjlI8L9kKD/Y6a4vROLbsQBb62VXM=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     requests
   ];

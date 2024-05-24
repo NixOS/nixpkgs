@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numba
-, numpy
-, pynose
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, setuptools
-, torchvision
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numba,
+  numpy,
+  pynose,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools,
+  torchvision,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     sed -i '/"nose"/d' setup.py
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numba
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  pythonImportsCheck = [
-    "apricot"
-  ];
+  pythonImportsCheck = [ "apricot" ];
 
   disabledTestPaths = [
     # Tests require nose

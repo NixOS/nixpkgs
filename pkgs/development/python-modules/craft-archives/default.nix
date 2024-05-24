@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, launchpadlib
-, lazr-restfulclient
-, overrides
-, pydantic_1
-, setuptools
-, setuptools-scm
-, tabulate
-, pytest-check
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  launchpadlib,
+  lazr-restfulclient,
+  overrides,
+  pydantic_1,
+  setuptools,
+  setuptools-scm,
+  tabulate,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  pythonImportsCheck = [
-    "craft_archives"
-  ];
+  pythonImportsCheck = [ "craft_archives" ];
 
   nativeCheckInputs = [
     pytest-check
@@ -71,4 +70,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

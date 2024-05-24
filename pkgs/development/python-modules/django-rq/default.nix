@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, django
-, redis
-, rq
-, sentry-sdk
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  django,
+  redis,
+  rq,
+  sentry-sdk,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     sentry-sdk
   ];
 
-  pythonImportsCheck = [
-    "django_rq"
-  ];
+  pythonImportsCheck = [ "django_rq" ];
 
   doCheck = false; # require redis-server
 

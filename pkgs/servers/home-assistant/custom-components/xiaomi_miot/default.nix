@@ -1,22 +1,24 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, hap-python
-, micloud
-, pyqrcode
-, python-miio
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  hap-python,
+  micloud,
+  pyqrcode,
+  python-miio,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "al-one";
   domain = "xiaomi_miot";
-  version = "0.7.17";
+  version = "0.7.18";
 
   src = fetchFromGitHub {
     owner = "al-one";
     repo = "hass-xiaomi-miot";
     rev = "v${version}";
-    hash = "sha256-IpL4e2mKCdtNu8NtI+xpx4FPW/uj1M5Rk6DswXmSJBk=";
+    hash = "sha256-/Zn2jEjwkCHiz48nVjKEPcCpPVajLaZ81DCTNpx1vbk=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +29,8 @@ buildHomeAssistantComponent rec {
   ];
 
   dontBuild = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     changelog = "https://github.com/al-one/hass-xiaomi-miot/releases/tag/${version}";

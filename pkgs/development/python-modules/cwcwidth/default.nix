@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook, setuptools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
@@ -10,7 +17,10 @@ buildPythonPackage rec {
     hash = "sha256-8Z0RoBSNSoys0GTJbpO8qM40FaGGroIEA49F4Qjbdrg=";
   };
 
-  nativeBuildInputs = [ cython setuptools ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''

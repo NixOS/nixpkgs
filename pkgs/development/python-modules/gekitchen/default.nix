@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, bidict
-, buildPythonPackage
-, fetchFromGitHub
-, humanize
-, lxml
-, pytestCheckHook
-, pythonOlder
-, requests
-, slixmpp
-, websockets
+{
+  lib,
+  aiohttp,
+  bidict,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanize,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  slixmpp,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -36,13 +37,9 @@ buildPythonPackage rec {
     websockets
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gekitchen"
-  ];
+  pythonImportsCheck = [ "gekitchen" ];
 
   meta = with lib; {
     description = "Python SDK for GE smart appliances";

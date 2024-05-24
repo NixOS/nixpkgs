@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "ledger-udev-rules";
-  version = "unstable-2021-09-10";
+  version = "0-unstable-2024-02-12";
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
     repo = "udev-rules";
-    rev = "2776324af6df36c2af4d2e8e92a1c98c281117c9";
-    sha256 = "sha256-yTYI81PXMc32lMfI5uhD14nP20zAI7ZF33V1LRDWg2Y=";
+    rev = "f474382e370c9fa2a2207e6e675b9b364441aed7";
+    sha256 = "sha256-5jN9xy3+kk540PAyfsxIqck9hdI3t2CNpgqKxLbAsDg=";
   };
 
   dontBuild = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "udev rules for Ledger devices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ asymmetric toasteruwu ];
     platforms = platforms.linux;
     homepage = "https://github.com/LedgerHQ/udev-rules";
   };

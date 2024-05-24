@@ -210,7 +210,10 @@ buildPythonApplication rec {
     cp -r linux-package/{bin,share,lib} "$out"
     cp linux-package/bin/kitten "$kitten/bin/kitten"
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
+
+    # dereference the `kitty` symlink to make sure the actual executable
+    # is wrapped on macOS as well (and not just the symlink)
+    wrapProgram $(realpath "$out/bin/kitty") --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" +complete setup bash) \

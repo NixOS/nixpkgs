@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipython
-, u-msgpack-python
-, numpy
-, tornado
-, pyzmq
-, pyngrok
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipython,
+  u-msgpack-python,
+  numpy,
+  tornado,
+  pyzmq,
+  pyngrok,
+  pillow,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, envoy-utils
-, fetchFromGitHub
-, fetchpatch
-, httpx
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pytest-raises
-, pythonOlder
-, respx
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  envoy-utils,
+  fetchFromGitHub,
+  httpx,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-raises,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +47,7 @@ buildPythonPackage rec {
       --replace "pyjwt==2.1.0" "pyjwt>=2.1.0"
   '';
 
-  pythonImportsCheck = [
-    "envoy_reader"
-  ];
+  pythonImportsCheck = [ "envoy_reader" ];
 
   meta = with lib; {
     description = "Python module to read from Enphase Envoy units";

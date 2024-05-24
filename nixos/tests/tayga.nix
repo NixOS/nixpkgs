@@ -59,6 +59,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           ];
         };
       };
+      programs.mtr.enable = true;
     };
 
     # The router is configured with static IPv4 addresses towards the server
@@ -120,6 +121,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             prefixLength = 96;
           };
         };
+        mappings = {
+          "192.0.2.42" = "2001:db8::2";
+        };
       };
     };
 
@@ -171,6 +175,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             prefixLength = 96;
           };
         };
+        mappings = {
+          "192.0.2.42" = "2001:db8::2";
+        };
       };
     };
 
@@ -199,7 +206,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           ];
         };
       };
-      environment.systemPackages = [ pkgs.mtr ];
+      programs.mtr.enable = true;
     };
   };
 
@@ -225,10 +232,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       with subtest("Wait for tayga"):
         router.wait_for_unit("tayga.service")
 
-      with subtest("Test ICMP"):
+      with subtest("Test ICMP server -> client"):
+        server.wait_until_succeeds("ping -c 3 192.0.2.42 >&2")
+
+      with subtest("Test ICMP and show a traceroute server -> client"):
+        server.wait_until_succeeds("mtr --show-ips --report-wide 192.0.2.42 >&2")
+
+      with subtest("Test ICMP client -> server"):
         client.wait_until_succeeds("ping -c 3 64:ff9b::100.64.0.2 >&2")
 
-      with subtest("Test ICMP and show a traceroute"):
+      with subtest("Test ICMP and show a traceroute client -> server"):
         client.wait_until_succeeds("mtr --show-ips --report-wide 64:ff9b::100.64.0.2 >&2")
 
       router.log(router.execute("systemd-analyze security tayga.service")[1])

@@ -1,42 +1,69 @@
-{ common-updater-scripts, curl, fetchFromGitHub, jq, lib, php, writeShellScript }:
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  testers,
+  installShellFiles,
+  platformsh
+}:
 
-php.buildComposerProject (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "platformsh";
-  version = "4.17.0";
+  version = "5.0.13";
 
-  src = fetchFromGitHub {
-    owner = "platformsh";
-    repo = "legacy-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8x7Fl1bYZIND4PuxVmPFNO2QOjeLMiIXh409DXG/WMU=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  src =
+    {
+      x86_64-darwin = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
+        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
+      };
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_darwin_all.tar.gz";
+        hash = "sha256-dCo5+de+9hXxrv+uPn0UoAh4UfSv+PyR2z/ytpfby0g=";
+      };
+      x86_64-linux = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_amd64.tar.gz";
+        hash = "sha256-JP0RCqNQ8V4sFP3645MW+Pd9QfPFRAuTbVPIK6WD6PQ=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/platformsh/cli/releases/download/${finalAttrs.version}/platform_${finalAttrs.version}_linux_arm64.tar.gz";
+        hash = "sha256-vpk093kpGAmMevd4SVr3KSIjUXUqt3yWDZFHOVxu9rw=";
+      };
+    }
+    .${stdenvNoCC.system}
+      or (throw "${finalAttrs.pname}-${finalAttrs.version}: ${stdenvNoCC.system} is unsupported.");
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  sourceRoot = ".";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 platform $out/bin/platform
+
+    installShellCompletion completion/bash/platform.bash \
+        completion/zsh/_platform
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit (finalAttrs) version;
+      package = platformsh;
+    };
   };
 
-  vendorHash = "sha256-nXPfFlKYi2qP1bTeurRsopncKWg4zIZnZsSX/i0SF/s=";
-
-  prePatch = ''
-    substituteInPlace config-defaults.yaml \
-      --replace "@version-placeholder@" "${finalAttrs.version}"
-  '';
-
-  passthru.updateScript = writeShellScript "update-${finalAttrs.pname}" ''
-    set -o errexit
-    export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
-    NEW_VERSION=$(curl -s https://api.github.com/repos/platformsh/legacy-cli/releases/latest | jq .tag_name --raw-output)
-
-    if [[ "v${finalAttrs.version}" = "$NEW_VERSION" ]]; then
-      echo "The new version same as the old version."
-      exit 0
-    fi
-
-    update-source-version "platformsh" "$NEW_VERSION"
-  '';
-
   meta = {
-    description = "The unified tool for managing your Platform.sh services from the command line.";
-    homepage = "https://github.com/platformsh/legacy-cli";
+    description = "The unified tool for managing your Platform.sh services from the command line";
+    homepage = "https://github.com/platformsh/cli";
     license = lib.licenses.mit;
     mainProgram = "platform";
     maintainers = with lib.maintainers; [ shyim spk ];
-    platforms = lib.platforms.all;
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

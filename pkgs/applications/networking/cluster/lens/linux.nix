@@ -1,4 +1,4 @@
-{ lib, stdenv, pname, version, src, meta, appimageTools, makeWrapper, nss_latest }:
+{ pname, version, src, meta, appimageTools, makeWrapper }:
 let
 
   name = "${pname}-${version}";
@@ -25,5 +25,5 @@ appimageTools.wrapType2 {
         --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
 
-  extraPkgs = _: [ nss_latest ];
+  extraPkgs = pkgs: [ pkgs.nss_latest ];
 }

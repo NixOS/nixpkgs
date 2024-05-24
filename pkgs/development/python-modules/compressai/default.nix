@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pybind11
-, setuptools
-, wheel
-, numpy
-, matplotlib
-, pytorch-msssim
-, scipy
-, torch
-, torchvision
-, ipywidgets
-, jupyter
-, plotly
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pybind11,
+  setuptools,
+  wheel,
+  numpy,
+  matplotlib,
+  pytorch-msssim,
+  scipy,
+  torch,
+  torchvision,
+  ipywidgets,
+  jupyter,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

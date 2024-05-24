@@ -1,13 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, python
-, substituteAll
-, importlib-resources
-, tzdata
-, hypothesis
-, pytestCheckHook
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  python,
+  substituteAll,
+  importlib-resources,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -50,11 +53,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = [ tzdata ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   pythonImportsCheck = [ "backports.zoneinfo" ];
 

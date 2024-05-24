@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
 , perl
 , perlPackages
 , sharnessExtensions ? {} }:

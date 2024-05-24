@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pynanoleaf";
@@ -17,9 +23,7 @@ buildPythonPackage rec {
   # pynanoleaf does not contain tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pynanoleaf"
-  ];
+  pythonImportsCheck = [ "pynanoleaf" ];
 
   meta = with lib; {
     homepage = "https://github.com/Oro/pynanoleaf";

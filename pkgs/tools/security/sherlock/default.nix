@@ -2,18 +2,19 @@
 , fetchFromGitHub
 , makeWrapper
 , python3
+, unstableGitUpdater
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
-  version = "unstable-2023-10-06";
+  version = "0-unstable-2024-05-22";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
-    repo = pname;
-    rev = "7ec56895a37ada47edd6573249c553379254d14a";
-    hash = "sha256-bK5yEdh830vgKcsU3gLH7TybLncnX6eRIiYPUiVWM74=";
+    repo = "sherlock";
+    rev = "ab5fcbb90f592ea97239ceab5e8ca3a8d3f7f08b";
+    hash = "sha256-F793Co7CdpNrMFM7SHy/hrmzPKo5hiSHF3BqGtjmJbc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -58,6 +59,10 @@ python3.pkgs.buildPythonApplication rec {
 
     runHook postCheck
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     homepage = "https://sherlock-project.github.io/";

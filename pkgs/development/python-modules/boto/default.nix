@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, python
-, nose
-, mock
-, requests
-, httpretty
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  python,
+  nose,
+  mock,
+  requests,
+  httpretty,
 }:
 
 buildPythonPackage rec {
@@ -40,8 +41,14 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  nativeCheckInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  nativeCheckInputs = [
+    nose
+    mock
+  ];
+  propagatedBuildInputs = [
+    requests
+    httpretty
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto";

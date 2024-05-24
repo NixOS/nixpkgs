@@ -1,18 +1,19 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
-, pyee
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, syncer
-, tqdm
-, urllib3
-, websockets
+{
+  lib,
+  appdirs,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
+  pyee,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  syncer,
+  tqdm,
+  urllib3,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace 'websockets = "^10.0"' 'websockets = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -83,9 +82,7 @@ buildPythonPackage rec {
     "TestPDF"
   ];
 
-  pythonImportsCheck = [
-    "pyppeteer"
-  ];
+  pythonImportsCheck = [ "pyppeteer" ];
 
   meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";

@@ -19,9 +19,13 @@ in {
       inherit description password;
     };
 
+    # To control mouse via scripting
+    programs.ydotool.enable = true;
+
     services.desktopManager.lomiri.enable = lib.mkForce true;
     services.displayManager.defaultSession = lib.mkForce "lomiri";
 
+    # Help with OCR
     fonts.packages = [ pkgs.inconsolata ];
 
     environment = {
@@ -114,17 +118,9 @@ in {
   enableOCR = true;
 
   testScript = { nodes, ... }: ''
-    def open_starter():
-        """
-        Open the starter, and ensure it's opened.
-        """
-        machine.send_key("meta_l-a")
-        # Look for any of the default apps
-        machine.wait_for_text(r"(Search|System|Settings|Morph|Browser|Terminal|Alacritty)")
-
     def toggle_maximise():
         """
-        Send the keybind to maximise the current window.
+        Maximise the current window.
         """
         machine.send_key("ctrl-meta_l-up")
 
@@ -135,13 +131,43 @@ in {
         machine.send_key("esc")
         machine.sleep(5)
 
+    def mouse_click(xpos, ypos):
+        """
+        Move the mouse to a screen location and hit left-click.
+        """
+
+        # Need to reset to top-left, --absolute doesn't work?
+        machine.execute("ydotool mousemove -- -10000 -10000")
+        machine.sleep(2)
+
+        # Move
+        machine.execute(f"ydotool mousemove -- {xpos} {ypos}")
+        machine.sleep(2)
+
+        # Click (C0 - left button: down & up)
+        machine.execute("ydotool click 0xC0")
+        machine.sleep(2)
+
+    def open_starter():
+        """
+        Open the starter, and ensure it's opened.
+        """
+
+        # Using the keybind has a chance of instantly closing the menu again? Just click the button
+        mouse_click(20, 30)
+
+        # Look for Search box & GUI-less content-hub examples, highest chances of avoiding false positives
+        machine.wait_for_text(r"(Search|Export|Import|Share)")
+
     start_all()
     machine.wait_for_unit("multi-user.target")
 
     # Lomiri in greeter mode should work & be able to start a session
     with subtest("lomiri greeter works"):
         machine.wait_for_unit("display-manager.service")
-        # Start page shows current tie
+        machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
+
+        # Start page shows current time
         machine.wait_for_text(r"(AM|PM)")
         machine.screenshot("lomiri_greeter_launched")
 
@@ -152,7 +178,6 @@ in {
 
         # Login
         machine.send_chars("${password}\n")
-        # Best way I can think of to differenciate "Lomiri in LightDM greeter mode" from "Lomiri in user shell mode"
         machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
 
     # The session should start, and not be stuck in i.e. a crash loop
@@ -196,6 +221,17 @@ in {
         machine.screenshot("alacritty_opens")
         machine.send_key("alt-f4")
 
+    # Morph is how we go online
+    with subtest("morph browser works"):
+        open_starter()
+        machine.send_chars("Morph\n")
+        machine.wait_for_text(r"(Bookmarks|address|site|visited any)")
+        machine.screenshot("morph_open")
+
+        # morph-browser has a separate VM test, there isn't anything new we could test here
+
+        # Keep it running, we're using it to check content-hub communication from LSS
+
     # LSS provides DE settings
     with subtest("system settings open"):
         open_starter()
@@ -231,64 +267,75 @@ in {
         machine.wait_for_text("Morph") # or Gallery, but Morph is already packaged
         machine.screenshot("settings_content-hub_peers")
 
-        # Sadly, it doesn't seem possible to actually select a peer and attempt a content-hub data exchange with just the keyboard
+        # Select Morph as content source
+        mouse_click(300, 100)
 
-        machine.send_key("alt-f4")
+        # Expect Morph to be brought into the foreground, with its Downloads page open
+        machine.wait_for_text("No downloads")
 
-    # Morph is how we go online
-    with subtest("morph browser works"):
-        open_starter()
-        machine.send_chars("Morph\n")
-        machine.wait_for_text(r"(Bookmarks|address|site|visited any)")
-        machine.screenshot("morph_open")
+        # If content-hub encounters a problem, it may have crashed the original application issuing the request.
+        # Check that it's still alive
+        machine.succeed("pgrep -u ${user} -f lomiri-system-settings")
 
-        # morph-browser has a separate VM test, there isn't anything new we could test here
+        machine.screenshot("content-hub_exchange")
 
-        machine.send_key("alt-f4")
+        # Testing any more would require more applications & setup, the fact that it's already being attempted is a good sign
+        machine.send_key("esc")
+
+        machine.send_key("alt-f4") # LSS
+        machine.sleep(2) # focus is slow to switch to second window, closing it *really* helps with OCR afterwards
+        machine.send_key("alt-f4") # Morph
 
     # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
-    # Reaching them via the intended way requires wayland mouse control, but ydotool lacks a module for its daemon:
-    # https://github.com/NixOS/nixpkgs/issues/183659
-    # Luckily, there's a test app that also displays their contents, but it's abit inconsistent. Hopefully this is *good-enough*.
+    # There's a test app we could use that also displays their contents, but it's abit inconsistent.
     with subtest("ayatana indicators work"):
-        open_starter()
-        machine.send_chars("Indicators\n")
-        machine.wait_for_text(r"(Indicators|Client|List|network|datetime|session)")
+        mouse_click(735, 0) # the cog in the top-right, for the session indicator
+        machine.wait_for_text(r"(Notifications|Rotation|Battery|Sound|Time|Date|System)")
         machine.screenshot("indicators_open")
 
-        # Element tab order within the indicator menus is not fully deterministic
-        # Only check that the indicators are listed & their items load
+        # Indicator order within the menus *should* be fixed based on per-indicator order setting
+        # Session is the one we clicked, but the last we should test (logout). Go as far left as we can test.
+        machine.send_key("left")
+        machine.send_key("left")
+        machine.send_key("left")
+        machine.send_key("left")
+        machine.send_key("left")
+        # Notifications are usually empty, nothing to check there
+
+        with subtest("ayatana indicator display works"):
+            # We start on this, don't go right
+            machine.wait_for_text("Lock")
+            machine.screenshot("indicators_display")
 
         with subtest("lomiri indicator network works"):
-            # Select indicator-network
-            machine.send_key("tab")
-            # Don't go further down, first entry
-            machine.send_key("ret")
+            machine.send_key("right")
             machine.wait_for_text(r"(Flight|Wi-Fi)")
             machine.screenshot("indicators_network")
 
-        machine.send_key("shift-tab")
-        machine.send_key("ret")
-        machine.wait_for_text(r"(Indicators|Client|List|network|datetime|session)")
+        with subtest("ayatana indicator sound works"):
+            machine.send_key("right")
+            machine.wait_for_text(r"(Silent|Volume)")
+            machine.screenshot("indicators_sound")
+
+        with subtest("ayatana indicator power works"):
+            machine.send_key("right")
+            machine.wait_for_text(r"(Charge|Battery settings)")
+            machine.screenshot("indicators_power")
 
         with subtest("ayatana indicator datetime works"):
-            # Select ayatana-indicator-datetime
-            machine.send_key("tab")
-            machine.send_key("down")
-            machine.send_key("ret")
+            machine.send_key("right")
             machine.wait_for_text("Time and Date Settings")
             machine.screenshot("indicators_timedate")
 
-        machine.send_key("shift-tab")
-        machine.send_key("ret")
-        machine.wait_for_text(r"(Indicators|Client|List|network|datetime|session)")
-
         with subtest("ayatana indicator session works"):
-            # Select ayatana-indicator-session
-            machine.send_key("tab")
-            machine.send_key("down")
-            machine.send_key("ret")
+            machine.send_key("right")
             machine.wait_for_text("Log Out")
             machine.screenshot("indicators_session")
+
+            # We should be able to log out and return to the greeter
+            mouse_click(720, 280) # "Log Out"
+            mouse_click(400, 240) # confirm logout
+            machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+            machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
   '';
 })

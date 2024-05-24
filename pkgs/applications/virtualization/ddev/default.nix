@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "ddev";
-  version = "1.23.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "ddev";
     repo = "ddev";
     rev = "v${version}";
-    hash = "sha256-+CyihuSo/ssX8tX2rYi3c41eAwdG58aagAsYiBBjQ48=";
+    hash = "sha256-qGuYH2xYmd3CYoYobjoum+zUImcsiaG5No36FG0H0bA=";
   };
 
   vendorHash = null;

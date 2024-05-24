@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, commentjson
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  commentjson,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,18 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-oxyPn3aFPOyx/2aP7Eg2ThtPbyzrFT1JzWqy6GqNbzM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     commentjson
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "resolvelib"
-  ];
+  pythonImportsCheck = [ "resolvelib" ];
 
   meta = with lib; {
     description = "Resolve abstract dependencies into concrete ones";

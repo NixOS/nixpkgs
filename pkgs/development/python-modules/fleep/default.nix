@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-TaU7njx98nxkhZawGMFqWj4g+yCtIX9aPWQHoamzfMY=";
   };
 
-  patches = [
-    ./0001-Fixing-paths-on-tests.patch
-  ];
+  patches = [ ./0001-Fixing-paths-on-tests.patch ];
 
   checkPhase = ''
     ${python.interpreter} tests/maintest.py

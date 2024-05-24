@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pymongo
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pymongo,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,17 +36,11 @@ buildPythonPackage rec {
         'os.makedirs(current_path)'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  dependencies = [
-    pymongo
-  ];
+  dependencies = [ pymongo ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # new test with insufficient monkey patching, try to remove on next bump
@@ -57,9 +51,7 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  pythonImportsCheck = [
-    "pymongo_inmemory"
-  ];
+  pythonImportsCheck = [ "pymongo_inmemory" ];
 
   meta = {
     homepage = "https://github.com/kaizendorks/pymongo_inmemory";

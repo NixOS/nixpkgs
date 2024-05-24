@@ -10,13 +10,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flye";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "fenderglass";
     repo = "flye";
-    rev = version;
-    hash = "sha256-IALqtIPmvDYoH4w/tk2WB/P/pAcKXxgnsu9PFp+wIes=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lwiY0VTEsLMMXt1VowsS3jj44v30Z766xNRwQtQKr10=";
   };
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];

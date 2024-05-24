@@ -180,9 +180,9 @@
     "hash": "sha256-Mx1v9rnLsOZSGl0HRrFSviWI/WMac9DiSbeM0s2mnM8="
   },
   "kirigami": {
-    "version": "6.2.0",
-    "url": "mirror://kde/stable/frameworks/6.2/kirigami-6.2.0.tar.xz",
-    "hash": "sha256-VyRbUY1kxGr6tCoaYZYJr7YOVGAzoWK3GMdSuINQtAw="
+    "version": "6.2.1",
+    "url": "mirror://kde/stable/frameworks/6.2/kirigami-6.2.1.tar.xz",
+    "hash": "sha256-kQQSdw55ucE92sQhmfp1EXcM2Uhbj1omTh72NjozDJk="
   },
   "kitemmodels": {
     "version": "6.2.0",

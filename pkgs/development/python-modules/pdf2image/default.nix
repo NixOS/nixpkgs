@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
-, poppler_utils
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  poppler_utils,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     sed -i '0,/poppler_path=None/s||poppler_path="${poppler_utils}/bin"|' pdf2image/pdf2image.py
   '';
 
-  propagatedBuildInputs = [
-    pillow
-  ];
+  propagatedBuildInputs = [ pillow ];
 
-  pythonImportsCheck = [
-    "pdf2image"
-  ];
+  pythonImportsCheck = [ "pdf2image" ];
 
   meta = with lib; {
     description = "Module that wraps the pdftoppm utility to convert PDF to PIL Image object";

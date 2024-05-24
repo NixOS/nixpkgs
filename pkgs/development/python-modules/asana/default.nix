@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, certifi
-, six
-, python-dateutil
-, urllib3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  certifi,
+  six,
+  python-dateutil,
+  urllib3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "asana"
-  ];
+  pythonImportsCheck = [ "asana" ];
 
   meta = with lib; {
     description = "Python client library for Asana";

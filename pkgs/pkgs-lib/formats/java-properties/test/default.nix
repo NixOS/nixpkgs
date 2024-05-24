@@ -1,5 +1,4 @@
-{ fetchurl
-, formats
+{ formats
 , glibcLocales
 , jdk
 , lib

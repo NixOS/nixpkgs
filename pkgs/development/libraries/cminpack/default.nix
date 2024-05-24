@@ -3,7 +3,6 @@
 , cmake
 , darwin
 , fetchFromGitHub
-, fetchurl
 , withBlas ? true, blas
 }:
 

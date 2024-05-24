@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   buildInputs = [ sqlite ];
 
-
   # Project uses custom test setup to exclude some tests by default, so using pytest
   # requires more maintenance
   # https://github.com/rogerbinns/apsw/issues/335

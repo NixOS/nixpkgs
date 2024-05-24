@@ -1,28 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, setuptools-scm
-, wheel
-, pytestCheckHook
-, pytest-asyncio
-, pytest-timeout
-, numpy
-, pandas
-, rich
-, tkinter
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-timeout,
+  numpy,
+  pandas,
+  rich,
+  tkinter,
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.66.2";
+  version = "4.66.4";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bNUs3w/vDg9UMpnPyW/skNe4p+iHRfQR7DPrRNXtNTE=";
+    hash = "sha256-5Nk2yd6HJ5KPO+YHlZDpfZq/6NOaWQvmeOtZGf/Bhrs=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +29,6 @@ buildPythonPackage rec {
     setuptools-scm
     wheel
   ];
-
-  # https://github.com/tqdm/tqdm/issues/1537
-  doCheck = pythonOlder "3.12";
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,17 +42,17 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::FutureWarning"
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::FutureWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   # Remove performance testing.
   # Too sensitive for on Hydra.
-  disabledTests = [
-    "perf"
-  ];
+  disabledTests = [ "perf" ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   pythonImportsCheck = [ "tqdm" ];
 

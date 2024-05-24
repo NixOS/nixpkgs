@@ -1,19 +1,19 @@
-{ lib, pkgs, ... }: with lib; {
+{ lib, pkgs, ... }: {
     security = {
       polkit.enable = true;
       pam.services.swaylock = {};
     };
 
-    hardware.opengl.enable = mkDefault true;
-    fonts.enableDefaultPackages = mkDefault true;
+    hardware.opengl.enable = lib.mkDefault true;
+    fonts.enableDefaultPackages = lib.mkDefault true;
 
     programs = {
-      dconf.enable = mkDefault true;
-      xwayland.enable = mkDefault true;
+      dconf.enable = lib.mkDefault true;
+      xwayland.enable = lib.mkDefault true;
     };
 
     xdg.portal = {
-      enable = mkDefault true;
+      enable = lib.mkDefault true;
 
       extraPortals = [
         # For screen sharing

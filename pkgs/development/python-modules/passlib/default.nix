@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, argon2-cffi
-, bcrypt
-, cryptography
-, pytestCheckHook
-, pythonOlder
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  argon2-cffi,
+  bcrypt,
+  cryptography,
+  pytestCheckHook,
+  pythonOlder,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -27,16 +28,16 @@ buildPythonPackage rec {
     totp = [ cryptography ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-xdist
-  ] ++ passthru.optional-dependencies.argon2
-  ++ passthru.optional-dependencies.bcrypt
-  ++ passthru.optional-dependencies.totp;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-xdist
+    ]
+    ++ passthru.optional-dependencies.argon2
+    ++ passthru.optional-dependencies.bcrypt
+    ++ passthru.optional-dependencies.totp;
 
-  pythonImportsCheck = [
-    "passlib"
-  ];
+  pythonImportsCheck = [ "passlib" ];
 
   disabledTests = [
     # timming sensitive

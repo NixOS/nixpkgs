@@ -876,7 +876,7 @@ let
       ZRAM_MULTI_COMP               = whenAtLeast "6.2" yes;
       ZRAM_DEF_COMP_ZSTD            = whenAtLeast "5.11" yes;
       ZSWAP                         = option yes;
-      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" yes;
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (mkOptionDefault yes);
       ZPOOL                         = yes;
       ZSMALLOC                      = option yes;
     };

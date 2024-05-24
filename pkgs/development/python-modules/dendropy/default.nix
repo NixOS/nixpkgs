@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-FP0+fJkkFtSysPxoHXjyMgF8pPin7aRyzmHe9bH8LlM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # FileNotFoundError: [Errno 2] No such file or directory: 'paup'
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     "test_findall_multiple"
   ];
 
-  pythonImportsCheck = [
-    "dendropy"
-  ];
+  pythonImportsCheck = [ "dendropy" ];
 
   meta = with lib; {
     description = "Python library for phylogenetic computing";

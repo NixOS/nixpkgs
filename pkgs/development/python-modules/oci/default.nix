@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, certifi
-, circuitbreaker
-, cryptography
-, fetchFromGitHub
-, pyopenssl
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pytz
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  certifi,
+  circuitbreaker,
+  cryptography,
+  fetchFromGitHub,
+  pyopenssl,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -48,15 +49,16 @@ buildPythonPackage rec {
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164
   doCheck = false;
 
-  pythonImportsCheck = [
-    "oci"
-  ];
+  pythonImportsCheck = [ "oci" ];
 
   meta = with lib; {
     description = "Oracle Cloud Infrastructure Python SDK";
     homepage = "https://github.com/oracle/oci-python-sdk";
     changelog = "https://github.com/oracle/oci-python-sdk/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [ asl20 /* or */ upl ];
+    license = with licenses; [
+      asl20 # or
+      upl
+    ];
     maintainers = with maintainers; [ ilian ];
   };
 }

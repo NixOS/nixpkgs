@@ -101,7 +101,7 @@ For example, a package which requires dynamic linking and cannot be linked stati
 ```nix
 {
   meta.platforms = lib.platforms.all;
-  meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
+  meta.badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
 }
 ```
 

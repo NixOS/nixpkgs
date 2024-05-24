@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, setuptools
-, wheel
-, ipykernel
-, nbclient
-, nbformat
-, pygments
-, pytest
-, pyyaml
-, pytest-xdist
-, pytestCheckHook
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pythonRelaxDepsHook,
+  setuptools,
+  wheel,
+  ipykernel,
+  nbclient,
+  nbformat,
+  pygments,
+  pytest,
+  pyyaml,
+  pytest-xdist,
+  pytestCheckHook,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -47,13 +48,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonRelaxDeps = [
-    "nbclient"
-  ];
+  pythonRelaxDeps = [ "nbclient" ];
 
-  pythonImportsCheck = [
-    "nbmake"
-  ];
+  pythonImportsCheck = [ "nbmake" ];
 
   nativeCheckInputs = [
     pytest-xdist
@@ -62,7 +59,6 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
-
 
   meta = with lib; {
     description = "Pytest plugin for testing notebooks";

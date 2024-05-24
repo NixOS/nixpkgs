@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gobject-introspection
-, gtk3
-, poetry-core
-, pyenchant
-, pygobject3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gobject-introspection,
+  gtk3,
+  poetry-core,
+  pyenchant,
+  pygobject3,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
 
   doCheck = false; # there are no tests
 
-  pythonImportsCheck = [
-    "gtkspellcheck"
-  ];
+  pythonImportsCheck = [ "gtkspellcheck" ];
 
   meta = with lib; {
     homepage = "https://github.com/koehlma/pygtkspellcheck";

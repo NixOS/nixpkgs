@@ -1,16 +1,14 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.liboping;
 in {
   options.programs.liboping = {
-    enable = mkEnableOption "liboping";
+    enable = lib.mkEnableOption "liboping";
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ liboping ];
-    security.wrappers = mkMerge (map (
+    security.wrappers = lib.mkMerge (builtins.map (
       exec: {
         "${exec}" = {
           owner = "root";

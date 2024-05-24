@@ -1,15 +1,13 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.sway;
 
-  wrapperOptions = types.submodule {
+  wrapperOptions = lib.types.submodule {
     options =
       let
-        mkWrapperFeature  = default: description: mkOption {
-          type = types.bool;
+        mkWrapperFeature  = default: description: lib.mkOption {
+          type = lib.types.bool;
           inherit default;
           example = !default;
           description = "Whether to make use of the ${description}";
@@ -50,18 +48,18 @@ let
       };
 in {
   options.programs.sway = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       Sway, the i3-compatible tiling Wayland compositor. You can manually launch
       Sway by executing "exec sway" on a TTY. Copy /etc/sway/config to
       ~/.config/sway/config to modify the default configuration. See
       <https://github.com/swaywm/sway/wiki> and
       "man 5 sway" for more information'';
 
-    package = mkOption {
-      type = with types; nullOr package;
+    package = lib.mkOption {
+      type = with lib.types; nullOr package;
       default = pkgs.sway;
       apply = p: if p == null then null else genFinalPackage p;
-      defaultText = literalExpression "pkgs.sway";
+      defaultText = lib.literalExpression "pkgs.sway";
       description = ''
         Sway package to use. If the package does not contain the override arguments
         `extraSessionCommands`, `extraOptions`, `withBaseWrapper`, `withGtkWrapper`,
@@ -72,7 +70,7 @@ in {
       '';
     };
 
-    wrapperFeatures = mkOption {
+    wrapperFeatures = lib.mkOption {
       type = wrapperOptions;
       default = { };
       example = { gtk = true; };
@@ -81,8 +79,8 @@ in {
       '';
     };
 
-    extraSessionCommands = mkOption {
-      type = types.lines;
+    extraSessionCommands = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         # SDL:
@@ -102,8 +100,8 @@ in {
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [
         "--verbose"
@@ -116,15 +114,15 @@ in {
       '';
     };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
       default = with pkgs; [
         swaylock swayidle foot dmenu wmenu
       ];
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         with pkgs; [ swaylock swayidle foot dmenu wmenu ];
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         with pkgs; [
           i3status i3status-rust
           termite rofi light
@@ -140,8 +138,8 @@ in {
 
   };
 
-  config = mkIf cfg.enable
-    (mkMerge [
+  config = lib.mkIf cfg.enable
+    (lib.mkMerge [
       {
         assertions = [
           {
@@ -154,27 +152,27 @@ in {
         ];
 
         environment = {
-          systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
+          systemPackages = lib.optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
           # Needed for the default wallpaper:
-          pathsToLink = optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
+          pathsToLink = lib.optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
           etc = {
             "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
               # Import the most important environment variables into the D-Bus and systemd
               # user environments (e.g. required for screen sharing and Pinentry prompts):
               exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
             '';
-          } // optionalAttrs (cfg.package != null) {
-            "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
+          } // lib.optionalAttrs (cfg.package != null) {
+            "sway/config".source = lib.mkOptionDefault "${cfg.package}/etc/sway/config";
           };
         };
 
         programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gnome3;
 
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-        xdg.portal.config.sway.default = mkDefault [ "wlr" "gtk" ];
+        xdg.portal.config.sway.default = lib.mkDefault [ "wlr" "gtk" ];
 
         # To make a Sway session available if a display manager like SDDM is enabled:
-        services.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ]; }
+        services.displayManager.sessionPackages = lib.optionals (cfg.package != null) [ cfg.package ]; }
       (import ./wayland-session.nix { inherit lib pkgs; })
     ]);
 

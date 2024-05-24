@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitea, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
+{ lib, stdenv, fetchFromGitea, fetchurl, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl

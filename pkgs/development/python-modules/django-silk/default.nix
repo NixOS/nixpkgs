@@ -1,26 +1,26 @@
-{ lib
-, autopep8
-, buildPythonPackage
-, django
-, factory-boy
-, fetchFromGitHub
-, fetchpatch
-, freezegun
-, gprof2dot
-, jinja2
-, mock
-, networkx
-, pillow
-, pydot
-, pygments
-, python
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, setuptools-scm
-, simplejson
-, sqlparse
+{
+  lib,
+  autopep8,
+  buildPythonPackage,
+  django,
+  factory-boy,
+  fetchFromGitHub,
+  freezegun,
+  gprof2dot,
+  jinja2,
+  mock,
+  networkx,
+  pillow,
+  pydot,
+  pygments,
+  python,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools-scm,
+  simplejson,
+  sqlparse,
 }:
 
 buildPythonPackage rec {
@@ -47,13 +47,9 @@ buildPythonPackage rec {
       --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    mock
-  ];
+  buildInputs = [ mock ];
 
   propagatedBuildInputs = [
     autopep8
@@ -76,9 +72,7 @@ buildPythonPackage rec {
     factory-boy
   ];
 
-  pythonImportsCheck = [
-    "silk"
-  ];
+  pythonImportsCheck = [ "silk" ];
 
   checkPhase = ''
     runHook preCheck

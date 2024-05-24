@@ -166,18 +166,18 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_22 = common {
-    version = "2.22.0";
-    hash = "sha256-Ugcc+lSq8nJP+mddMlGFnoG4Ix1lRFHWOal3299bqR8=";
+    version = "2.22.1";
+    hash = "sha256-5Q1WkpTWH7fkVfYhHDc5r0A+Vc+K5xB1UhzrLzBCrB8=";
   };
 
   git = common rec {
     version = "2.23.0";
-    suffix = "pre20240502_${lib.substring 0 8 src.rev}";
+    suffix = "pre20240520_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "00ca2b05b8fbbef09be5d1e4820857605d4c31b6";
-      hash = "sha256-trTxWfGElp0rkjquqG5I5RYVoxo8foCflxJFUtHwnOQ=";
+      rev = "b7709d14a5b3a76d1c5b35b48ea3ed2de6c3dc28";
+      hash = "sha256-v+M9oeOcfgFXVoXqdpaskTHNA0T3Pr/8IOJtCggh+To=";
     };
   };
 

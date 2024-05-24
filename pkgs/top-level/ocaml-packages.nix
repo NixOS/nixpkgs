@@ -566,7 +566,8 @@ let
 
     gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
-    gd4o = callPackage ../development/ocaml-modules/gd4o { };
+    gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
+    gd = callPackage ../development/ocaml-modules/gd { inherit (pkgs) gd; };
 
     gen = callPackage ../development/ocaml-modules/gen { };
 
@@ -1292,6 +1293,7 @@ let
     ocamlformat_0_25_1 = ocamlformat.override { version = "0.25.1"; };
     ocamlformat_0_26_0 = ocamlformat.override { version = "0.26.0"; };
     ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
+    ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
 
     ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix {};
 
@@ -2010,7 +2012,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_5_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.2.nix { });
 
-  ocamlPackages_latest = ocamlPackages_5_1;
+  ocamlPackages_latest = ocamlPackages_5_2;
 
   ocamlPackages = ocamlPackages_5_1;
 

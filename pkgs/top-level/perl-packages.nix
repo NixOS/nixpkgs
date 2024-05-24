@@ -10397,10 +10397,10 @@ with self; {
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.61";
+    version = "1.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-Qw7p3yLcqjLrYwpNf7V6KFQvn+UHsmawo39nVLTzWgg=";
+      hash = "sha256-DTEzsL89d5WCxWaFDVd/K76OGsvRFJeDHNQ9jzFgZII=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
     propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies HTTPCookieJar JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
@@ -23770,7 +23770,7 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ XSParseKeyword ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "A try/catch/finally syntax for perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -28944,7 +28944,7 @@ with self; {
       hash = "sha256-JQDEeGnPXKjGHdI8Z7rav2a48e+14nkgdlfBzmk+IR4=";
     };
     buildInputs = [ ExtUtilsCChecker Test2Suite ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];

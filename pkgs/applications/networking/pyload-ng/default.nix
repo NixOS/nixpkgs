@@ -1,13 +1,15 @@
 { lib, fetchPypi, nixosTests, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.5.0b3.dev80";
+  version = "0.5.0b3.dev85";
   pname = "pyload-ng";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1vIkEctoj6udowYxFwY42f/zL9Elw2Nl6ZaL2x30k/M=";
+    inherit version;
+    # The uploaded tarball uses an underscore in recent releases
+    pname = "pyload_ng";
+    hash = "sha256-KLpfh53JKqe0kZLcQ1C4fXFFYeO5pPhia9fRxWsbIHY=";
   };
 
   patches = [

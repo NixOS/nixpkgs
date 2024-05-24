@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, deprecation
-, docker
-, wrapt
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  deprecation,
+  docker,
+  wrapt,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.4.0";
+  version = "4.4.1";
   disabled = pythonOlder "3.9";
 
   pyproject = true;
@@ -20,16 +21,14 @@ buildPythonPackage rec {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-1iwbfArEjYxpEpMlmJ8rzVLXA8OSNT7ozkpTVTIL91U=";
+    hash = "sha256-osWppbptWpBSHcrHlAqNpn6j2n/qQ7iCobH3TVqB2bc=";
   };
 
   postPatch = ''
     echo "${version}" > VERSION
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   buildInputs = [
     deprecation
@@ -37,16 +36,12 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   # Tests require various container and database services running
   doCheck = false;
 
-  pythonImportsCheck = [
-    "testcontainers"
-  ];
+  pythonImportsCheck = [ "testcontainers" ];
 
   meta = with lib; {
     description = ''

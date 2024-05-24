@@ -263,6 +263,9 @@ with lib.maintainers; {
 
   docs = {
     members = [ ];
+    githubTeams = [
+      "documentation-team"
+    ];
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
     enableFeatureFreezePing = true;
@@ -340,6 +343,16 @@ with lib.maintainers; {
     members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
     shortName = "freedesktop.org packaging";
+  };
+
+  fslabs = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      greaka
+      lpostula
+    ];
+    scope = "Group registration for packages maintained by Foresight Spatial Labs.";
+    shortName = "Foresight Spatial Labs employees";
   };
 
   gcc = {
@@ -811,6 +824,7 @@ with lib.maintainers; {
       aanderse
       drupol
       ma27
+      patka
       talyz
     ];
     githubTeams = [

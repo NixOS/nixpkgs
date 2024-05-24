@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, packaging
-, pyelftools
-, tlsh
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  packaging,
+  pyelftools,
+  tlsh,
+  nose,
 }:
 buildPythonPackage rec {
   pname = "telfhash";
@@ -33,17 +34,13 @@ buildPythonPackage rec {
     packaging
   ];
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
   '';
 
-  pythonImportsCheck = [
-    "telfhash"
-  ];
+  pythonImportsCheck = [ "telfhash" ];
 
   meta = with lib; {
     description = "Symbol hash for ELF files";

@@ -82,6 +82,26 @@ python3.pkgs.buildPythonApplication {
     qdarkstyle
   ];
 
+  patches = [
+    # electrum-ltc attempts to pin to aiorpcX < 0.23, but nixpkgs
+    # has moved to newer versions.
+    #
+    # electrum-ltc hasn't been updated in some time, so we replicate
+    # the patch from electrum (BTC) and alter it to be usable with
+    # electrum-ltc.
+    #
+    # Similar to the BTC patch, we need to overwrite the symlink
+    # at electrum_ltc/electrum-ltc with the patched run_electrum
+    # in postPatch.
+    ./ltc-aiorpcX-version-bump.patch
+  ];
+
+  postPatch = ''
+    # copy the patched `/run_electrum` over `/electrum/electrum`
+    # so the aiorpcx compatibility patch is used
+    cp run_electrum electrum_ltc/electrum-ltc
+  '';
+
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum_ltc/ecc_fast.py \

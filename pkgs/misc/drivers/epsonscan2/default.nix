@@ -24,25 +24,25 @@
 let
   pname = "epsonscan2";
   description = "Epson Scan 2 scanner driver for many modern Epson scanners and multifunction printers";
-  version = "6.7.61.0";
+  version = "6.7.63.0";
 
   system = stdenv.hostPlatform.system;
 
   src = fetchzip {
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/14/53/67/1a6447b4acc5568dfd970feba0518fabea35bca2/epsonscan2-${version}-1.src.tar.gz";
-    hash = "sha256-xwvdgmV6Mrs1RC18U2mA+HlTYybeYb0V5lz5hCvC7+8=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/15/17/69/0ef02802c476a6564f13cac929859c394f40326a/epsonscan2-6.7.63.0-1.src.tar.gz";
+    hash = "sha256-ZLnbIk0I7g6ext5anPD+/lD4qNlk6f2fL0xdIWLcfbY=";
   };
   bundle = {
     "i686-linux" = fetchzip {
       name = "${pname}-bundle";
-      url = "https://download3.ebz.epson.net/dsc/f/03/00/14/53/69/3151031c0fb4deea3f48781fd051411b983ccee4/epsonscan2-bundle-${version}.i686.deb.tar.gz";
-      hash = "sha256-nq3Nqunt8aMcCf7U7JBYrVscvrhhcwcn8RlhYXLmC2c=";
+      url = "https://download3.ebz.epson.net/dsc/f/03/00/15/17/67/ceae6a02aaa81cb61012899987fbb5ab891b6ab2/epsonscan2-bundle-6.7.63.0.i686.deb.tar.gz";
+      hash = "sha256-h9beAzNdjOhTlZqW0rJbSQXGOpvFRGvTcWw0ZtOqiYY=";
     };
 
     "x86_64-linux" = fetchzip {
       name = "${pname}-bundle";
-      url = "https://download3.ebz.epson.net/dsc/f/03/00/14/53/68/a5e06101ba3f328dd747888e3dddebbb677bb8c8/epsonscan2-bundle-${version}.x86_64.deb.tar.gz";
-      hash = "sha256-cFx54CKkZtvhZ5ABuBwB8+IzhT2lu8D3+GZFaMuWf3Y=";
+      url = "https://download3.ebz.epson.net/dsc/f/03/00/15/17/68/050e5a55ed90f4efb4ca3bdd34e5797b149443ca/epsonscan2-bundle-6.7.63.0.x86_64.deb.tar.gz";
+      hash = "sha256-+S17FfS2h4zZCvE6W+yZvdJb6+OWYTt0ZWCA+pe1NZc=";
     };
   }."${system}" or (throw "Unsupported system: ${system}");
 

@@ -11,14 +11,14 @@
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.15.1";
+  version = "2.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HJzQScEBZjOiPvkuwfx4LaiuB0MULvM/r31Ihy+HSzk=";
+    hash = "sha256-wI6HB4wpwA562WgdxqI0GdxWF9y+bMIFAk70tOfihHU=";
   };
 
   nativeBuildInputs = [

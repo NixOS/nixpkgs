@@ -1,40 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cairocffi
-, dbus-next
-, dbus-python
-, glib
-, iwlib
-, libdrm
-, libinput
-, libxkbcommon
-, mpd2
-, pango
-, pixman
-, pkg-config
-, psutil
-, pulsectl-asyncio
-, pygobject3
-, python-dateutil
-, pywayland
-, pywlroots
-, pyxdg
-, setuptools
-, setuptools-scm
-, wayland
-, wlroots
-, xcbutilcursor
-, xcbutilwm
-, xcffib
-, xkbcommon
-, nixosTests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cairocffi,
+  dbus-next,
+  dbus-python,
+  glib,
+  iwlib,
+  libdrm,
+  libinput,
+  libxkbcommon,
+  mpd2,
+  pango,
+  pixman,
+  pkg-config,
+  psutil,
+  pulsectl-asyncio,
+  pygobject3,
+  python-dateutil,
+  pywayland,
+  pywlroots,
+  pyxdg,
+  setuptools,
+  setuptools-scm,
+  wayland,
+  wlroots,
+  xcbutilcursor,
+  xcbutilwm,
+  xcffib,
+  xkbcommon,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "qtile";
   version = "0.25.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
@@ -59,13 +60,13 @@ buildPythonPackage rec {
         --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
-  nativeBuildInputs = [
-    pkg-config
+  build-system = [
     setuptools
     setuptools-scm
+    pkg-config
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     (cairocffi.override { withXcffib = true; })
     dbus-next
     dbus-python
@@ -102,6 +103,9 @@ buildPythonPackage rec {
     description = "A small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arjan-s ];
+    maintainers = with maintainers; [
+      arjan-s
+      sigmanificient
+    ];
   };
 }

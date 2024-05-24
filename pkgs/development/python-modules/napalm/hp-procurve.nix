@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, napalm
-, netmiko
-, pip
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  napalm,
+  netmiko,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,21 +30,13 @@ buildPythonPackage rec {
       --replace "--cov=napalm_procurve --cov-report term-missing -vs --pylama" ""
   '';
 
-  nativeBuildInputs = [
-    pip
-  ];
+  nativeBuildInputs = [ pip ];
 
-  buildInputs = [
-    napalm
-  ];
+  buildInputs = [ napalm ];
 
-  propagatedBuildInputs = [
-    netmiko
-  ];
+  propagatedBuildInputs = [ netmiko ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: Some methods vary.
@@ -55,9 +48,7 @@ buildPythonPackage rec {
     "test_get_facts"
   ];
 
-  pythonImportsCheck = [
-    "napalm_procurve"
-  ];
+  pythonImportsCheck = [ "napalm_procurve" ];
 
   meta = with lib; {
     description = "HP ProCurve Driver for NAPALM automation frontend";

@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, sqlalchemy
-, sqlbag
-, setuptools
-, poetry-core
-, pytestCheckHook
-, pytest-xdist
-, pytest-sugar
-, postgresql
-, postgresqlTestHook
-,
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  sqlalchemy,
+  sqlbag,
+  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-sugar,
+  postgresql,
+  postgresqlTestHook,
 }:
 buildPythonPackage rec {
   pname = "schemainspect";
@@ -30,17 +30,14 @@ buildPythonPackage rec {
 
   patches = [
     # https://github.com/djrobstep/schemainspect/pull/87
-    (fetchpatch
-      {
-        name = "specify_poetry.patch";
-        url = "https://github.com/djrobstep/schemainspect/commit/bdcd001ef7798236fe0ff35cef52f34f388bfe68.patch";
-        hash = "sha256-/SEmcV9GjjvzfbszeGPkfd2DvYenl7bZyWdC0aI3M4M=";
-      })
+    (fetchpatch {
+      name = "specify_poetry.patch";
+      url = "https://github.com/djrobstep/schemainspect/commit/bdcd001ef7798236fe0ff35cef52f34f388bfe68.patch";
+      hash = "sha256-/SEmcV9GjjvzfbszeGPkfd2DvYenl7bZyWdC0aI3M4M=";
+    })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [
     setuptools # needed for 'pkg_resources'
     sqlalchemy
@@ -100,9 +97,7 @@ buildPythonPackage rec {
     "-svv"
     "tests"
   ];
-  pythonImportsCheck = [
-    "schemainspect"
-  ];
+  pythonImportsCheck = [ "schemainspect" ];
 
   postUnpack = ''
     # this dir is used to bump the version number, having it here fails the build

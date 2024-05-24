@@ -3,7 +3,7 @@
 import ./make-test-python.nix ( { pkgs, nftables, ... } : {
   name = "firewall" + pkgs.lib.optionalString nftables "-nftables";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes =

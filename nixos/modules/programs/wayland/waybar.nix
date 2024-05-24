@@ -1,17 +1,15 @@
 { lib, pkgs, config, ... }:
 
-with lib;
-
 let
   cfg = config.programs.waybar;
 in
 {
   options.programs.waybar = {
-    enable = mkEnableOption "waybar, a highly customizable Wayland bar for Sway and Wlroots based compositors";
-    package = mkPackageOption pkgs "waybar" { };
+    enable = lib.mkEnableOption "waybar, a highly customizable Wayland bar for Sway and Wlroots based compositors";
+    package = lib.mkPackageOption pkgs "waybar" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.user.services.waybar = {
       description = "Waybar as systemd service";
@@ -21,5 +19,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.FlorianFranzen ];
+  meta.maintainers = [ lib.maintainers.FlorianFranzen ];
 }

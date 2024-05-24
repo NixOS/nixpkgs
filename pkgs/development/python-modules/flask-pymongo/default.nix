@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, vcversioner
-, flask
-, pymongo
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  vcversioner,
+  flask,
+  pymongo,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_pymongo" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # requires running MongoDB
   doCheck = false;

@@ -19,7 +19,7 @@
     luksroot
     luksroot-format1
     luksroot-format2
-    # lvm
+    lvm
     separateBoot
     separateBootFat
     separateBootZfs

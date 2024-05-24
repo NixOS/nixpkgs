@@ -9,7 +9,7 @@ in
 {
   name = "rabbitmq";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco offline ];
+    maintainers = [ offline ];
   };
 
   nodes.machine = {

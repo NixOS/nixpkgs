@@ -1,18 +1,16 @@
 { lib, pkgs, config, ... }:
 
-with lib;
-
 let
   cfg = config.programs.yabar;
 
-  mapExtra = v: lib.concatStringsSep "\n" (mapAttrsToList (
-    key: val: "${key} = ${if (isString val) then "\"${val}\"" else "${builtins.toString val}"};"
+  mapExtra = v: lib.concatStringsSep "\n" (lib.mapAttrsToList (
+    key: val: "${key} = ${if (builtins.isString val) then "\"${val}\"" else "${builtins.toString val}"};"
   ) v);
 
-  listKeys = r: concatStringsSep "," (map (n: "\"${n}\"") (attrNames r));
+  listKeys = r: builtins.concatStringsSep "," (builtins.map (n: "\"${n}\"") (builtins.attrNames r));
 
   configFile = let
-    bars = mapAttrsToList (
+    bars = lib.mapAttrsToList (
       name: cfg: ''
         ${name}: {
           font: "${cfg.font}";
@@ -22,7 +20,7 @@ let
 
           block-list: [${listKeys cfg.indicators}]
 
-          ${concatStringsSep "\n" (mapAttrsToList (
+          ${builtins.concatStringsSep "\n" (lib.mapAttrsToList (
             name: cfg: ''
               ${name}: {
                 exec: "${cfg.exec}";
@@ -36,21 +34,21 @@ let
     ) cfg.bars;
   in pkgs.writeText "yabar.conf" ''
     bar-list = [${listKeys cfg.bars}];
-    ${concatStringsSep "\n" bars}
+    ${builtins.concatStringsSep "\n" bars}
   '';
 in
   {
     options.programs.yabar = {
-      enable = mkEnableOption "yabar, a status bar for X window managers";
+      enable = lib.mkEnableOption "yabar, a status bar for X window managers";
 
-      package = mkOption {
+      package = lib.mkOption {
         default = pkgs.yabar-unstable;
-        defaultText = literalExpression "pkgs.yabar-unstable";
-        example = literalExpression "pkgs.yabar";
-        type = types.package;
+        defaultText = lib.literalExpression "pkgs.yabar-unstable";
+        example = lib.literalExpression "pkgs.yabar";
+        type = lib.types.package;
 
         # `yabar-stable` segfaults under certain conditions.
-        apply = x: if x == pkgs.yabar-unstable then x else flip warn x ''
+        apply = x: if x == pkgs.yabar-unstable then x else lib.flip lib.warn x ''
           It's not recommended to use `yabar' with `programs.yabar', the (old) stable release
           tends to segfault under certain circumstances:
 
@@ -70,63 +68,63 @@ in
         '';
       };
 
-      bars = mkOption {
+      bars = lib.mkOption {
         default = {};
-        type = types.attrsOf(types.submodule {
+        type = lib.types.attrsOf(lib.types.submodule {
           options = {
-            font = mkOption {
+            font = lib.mkOption {
               default = "sans bold 9";
               example = "Droid Sans, FontAwesome Bold 9";
-              type = types.str;
+              type = lib.types.str;
 
               description = ''
                 The font that will be used to draw the status bar.
               '';
             };
 
-            position = mkOption {
+            position = lib.mkOption {
               default = "top";
               example = "bottom";
-              type = types.enum [ "top" "bottom" ];
+              type = lib.types.enum [ "top" "bottom" ];
 
               description = ''
                 The position where the bar will be rendered.
               '';
             };
 
-            extra = mkOption {
+            extra = lib.mkOption {
               default = {};
-              type = types.attrsOf types.str;
+              type = lib.types.attrsOf lib.types.str;
 
               description = ''
                 An attribute set which contains further attributes of a bar.
               '';
             };
 
-            indicators = mkOption {
+            indicators = lib.mkOption {
               default = {};
-              type = types.attrsOf(types.submodule {
-                options.exec = mkOption {
+              type = lib.types.attrsOf(lib.types.submodule {
+                options.exec = lib.mkOption {
                   example = "YABAR_DATE";
-                  type = types.str;
+                  type = lib.types.str;
                   description = ''
                      The type of the indicator to be executed.
                   '';
                 };
 
-                options.align = mkOption {
+                options.align = lib.mkOption {
                   default = "left";
                   example = "right";
-                  type = types.enum [ "left" "center" "right" ];
+                  type = lib.types.enum [ "left" "center" "right" ];
 
                   description = ''
                     Whether to align the indicator at the left or right of the bar.
                   '';
                 };
 
-                options.extra = mkOption {
+                options.extra = lib.mkOption {
                   default = {};
-                  type = types.attrsOf (types.either types.str types.int);
+                  type = lib.types.attrsOf (lib.types.either lib.types.str lib.types.int);
 
                   description = ''
                     An attribute set which contains further attributes of a indicator.
@@ -147,7 +145,7 @@ in
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       systemd.user.services.yabar = {
         description = "yabar service";
         wantedBy = [ "graphical-session.target" ];

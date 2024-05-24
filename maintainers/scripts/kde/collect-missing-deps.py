@@ -80,12 +80,20 @@ OK_MISSING_BY_PACKAGE = {
     "plasma-desktop": {
         "scim",  # upstream is dead, not packaged in Nixpkgs
     },
+    "poppler-qt6": {
+        "gobject-introspection-1.0",  # we don't actually want to build the GTK variant
+        "gdk-pixbuf-2.0",
+        "gtk+-3.0",
+    },
     "powerdevil": {
         "DDCUtil",  # cursed, intentionally disabled
     },
     "pulseaudio-qt": {
         "Qt6Qml",  # tests only
         "Qt6Quick",
+    },
+    "skladnik": {
+        "POVRay",  # too expensive to rerender all the assets
     },
     "syntax-highlighting": {
         "XercesC",  # only used for extra validation at build time
