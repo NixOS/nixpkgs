@@ -1,7 +1,6 @@
 { lib
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
@@ -10,21 +9,17 @@
 }:
 
 let
-  version = "1.2.0";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    sha256 = "sha256-Kc49XDWcZLeJaYgiAO2/mHeVSOLMeiPr3U32e0IYfdU=";
+    hash = "sha256-z7kLBDzvzPWY7XmpROMpw3LcDpsl+hA+w1SdhrD/yNU=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages.override {
-    overrides = self: super: {
-      pydantic = python3Packages.pydantic_1;
-    };
-  };
+  pythonpkgs = python3Packages;
   python = pythonpkgs.python;
 
   crfpp = stdenv.mkDerivation {
@@ -37,33 +32,10 @@ let
       hash = "sha256-XNps3ZApU8m07bfPEnvip1w+3hLajdn9+L5+IpEaP0c=";
     };
   };
-
-  mealie_patch = { name, commit, hash }: fetchpatch {
-    inherit name hash;
-    url = "https://github.com/mealie-recipes/mealie/commit/${commit}.patch";
-  };
-
 in pythonpkgs.buildPythonPackage rec {
   pname = "mealie";
   inherit version src;
   pyproject = true;
-
-  patches = [
-    # See https://github.com/mealie-recipes/mealie/pull/3102
-    # Replace hardcoded paths in code with environment variables (meant for inside Docker only)
-    # So we can configure easily where the data is stored on the server
-    (mealie_patch {
-      name = "model-path.patch";
-      commit = "e445705c5d26b895d806b96b2f330d4e9aac3723";
-      hash = "sha256-cf0MwvT81lNBTjvag8UUEbXkBu8Jyi/LFwUcs4lBVcY=";
-    })
-    (mealie_patch {
-      name = "alembic-cfg-path.patch";
-      commit = "06c528bfac0708af66aa0629f2e2232ddf07768f";
-      hash = "sha256-IOgdZK7dmWeX2ox16J9v+bOS7nHgCMvCJy6RNJLj0p8=";
-    })
-    ./mealie-logs-to-stdout.patch
-  ];
 
   nativeBuildInputs = [
     pythonpkgs.poetry-core
@@ -82,6 +54,7 @@ in pythonpkgs.buildPythonPackage rec {
     aniso8601
     appdirs
     apprise
+    authlib
     bcrypt
     extruct
     fastapi
@@ -90,15 +63,16 @@ in pythonpkgs.buildPythonPackage rec {
     httpx
     jinja2
     lxml
+    openai
     orjson
     paho-mqtt
-    passlib
     pillow
+    pillow-heif
     psycopg2
+    pydantic-settings
     pyhumps
-    pytesseract
+    pyjwt
     python-dotenv
-    python-jose
     python-ldap
     python-multipart
     python-slugify
