@@ -40767,6 +40767,11 @@ with pkgs;
     stdenv = crossLibcStdenv;
   };
 
+  openbsd = callPackage ../os-specific/bsd/openbsd {};
+  openbsdCross = callPackage ../os-specific/bsd/openbsd {
+    stdenv = crossLibcStdenv;
+  };
+
   yrd = callPackage ../tools/networking/yrd { };
 
   powershell = callPackage ../shells/powershell { };

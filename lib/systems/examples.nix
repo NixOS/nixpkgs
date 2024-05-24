@@ -342,6 +342,12 @@ rec {
     useLLVM = true;
   };
 
+  x86_64-openbsd = {
+    config = "x86_64-unknown-openbsd";
+    libc = "oblibc";
+    useLLVM = true; # OpenBSD amd64 is build with llvm by default
+  };
+
   #
   # WASM
   #
