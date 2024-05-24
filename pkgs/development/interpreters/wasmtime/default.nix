@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     (isx86_64 -> sse3Support && ssse3Support && sse4_1Support) &&
     # The dependency `wasi-preview1-component-adapter` fails to build because of:
     # error: linker `rust-lld` not found
-    !(isAarch64 && stdenv.isDarwin);
+    !isAarch64;
 
   postInstall = ''
     # move libs from out to dev
