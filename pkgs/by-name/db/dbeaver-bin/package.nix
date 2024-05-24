@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       };
       hash = selectSystem {
         x86_64-linux = "sha256-q6VIr55hXn47kZrE2i6McEOfp2FBOvwB0CcUnRHFMZs=";
-        aarch64-linux = "sha256-CQg2+p1P+Bg1uFM1PMTWtweS0TNElXTP7tI7D5WxixM=";
+        aarch64-linux = "sha256-Xn3X1C31UALBAsZIGyMWdp0HNhJEm5N+7Go7nMs8W64=";
       };
     in
     fetchurl {
