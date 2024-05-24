@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, Security, lib, stdenv }:
+{ rustPlatform, rustfmt, fetchFromGitHub, Security, lib, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
@@ -21,11 +21,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  # SIMD tests are only executed on platforms that support all
-  # required processor features (e.g. SSE3, SSSE3 and SSE4.1 on x86_64):
-  # https://github.com/bytecodealliance/wasmtime/blob/v9.0.0/cranelift/codegen/src/isa/x64/mod.rs#L220
-  doCheck = with stdenv.buildPlatform; (isx86_64 -> sse3Support && ssse3Support && sse4_1Support);
-  cargoTestFlags = ["--package" "wasmtime-runtime"];
+  # rustfmt is brought into scope to fix the following
+  #   warning: cranelift-codegen@0.108.0:
+  #   Failed to run `rustfmt` on ISLE-generated code: Os
+  #   { code: 2, kind: NotFound, message: "No such file or directory" }
+  nativeBuildInputs = [ rustfmt ];
+
+  doCheck = with stdenv.buildPlatform;
+    # SIMD tests are only executed on platforms that support all
+    # required processor features (e.g. SSE3, SSSE3 and SSE4.1 on x86_64):
+    # https://github.com/bytecodealliance/wasmtime/blob/v9.0.0/cranelift/codegen/src/isa/x64/mod.rs#L220
+    (isx86_64 -> sse3Support && ssse3Support && sse4_1Support) &&
+    # The dependency `wasi-preview1-component-adapter` fails to build because of:
+    # error: linker `rust-lld` not found
+    !(isAarch64 && stdenv.isDarwin);
 
   postInstall = ''
     # move libs from out to dev
