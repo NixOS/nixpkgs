@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, darwin
 , fetchFromGitHub
 , flac
 , libgpiod
@@ -24,12 +25,6 @@
 , portaudioSupport ? stdenv.isDarwin
 , portaudio
 , slimserver
-, AudioToolbox
-, AudioUnit
-, Carbon
-, CoreAudio
-, CoreVideo
-, VideoDecodeAcceleration
 }:
 
 let
@@ -58,7 +53,7 @@ stdenv.mkDerivation {
     ++ optional pulseSupport libpulseaudio
     ++ optional alsaSupport alsa-lib
     ++ optional portaudioSupport portaudio
-    ++ optionals stdenv.isDarwin [ CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon ]
+    ++ optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon ])
     ++ optional faad2Support faad2
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
