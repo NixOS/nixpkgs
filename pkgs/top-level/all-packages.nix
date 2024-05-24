@@ -5898,8 +5898,6 @@ with pkgs;
 
   mrkd = callPackage ../tools/text/mrkd { };
 
-  naproche = callPackage ../applications/science/logic/naproche { };
-
   nautilus-open-any-terminal = callPackage ../tools/misc/nautilus-open-any-terminal { };
 
   n2n = callPackage ../tools/networking/n2n { };
