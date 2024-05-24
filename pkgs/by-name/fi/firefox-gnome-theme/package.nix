@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rafaelmardojai/firefox-gnome-theme";
     downloadPage = "https://github.com/rafaelmardojai/firefox-gnome-theme/releases";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [];
+    maintainers = with lib.maintainers; [ ashgoldofficial ];
     platforms = lib.platforms.all;
   };
 })
