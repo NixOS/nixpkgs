@@ -1,36 +1,43 @@
-{ lib
-, buildBazelPackage
-, fetchFromGitHub
-, qt6
-, pkg-config
-, bazel
-, ibus
-, unzip
-, xdg-utils
+{
+  lib,
+  buildBazelPackage,
+  fetchFromGitHub,
+  qt6,
+  pkg-config,
+  bazel,
+  ibus,
+  unzip,
+  xdg-utils,
+  jp-zip-codes,
+  dictionaries ? [ ],
+  merge-ut-dictionaries,
 }:
+
 let
-  zip-codes = fetchFromGitHub {
-    owner = "musjj";
-    repo = "jp-zip-codes";
-    rev = "119c888a38032a92e139c52cd26f45bb495c4d54";
-    hash = "sha256-uyAL2TcFJsYZACFDAxIQ4LE40Hi4PVrQRnJl5O5+RmU=";
-  };
+  ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
 in
 buildBazelPackage rec {
   pname = "ibus-mozc";
-  version = "2.29.5374.102";
+  version = "2.30.5544.102";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mozc";
     rev = version;
-    hash = "sha256-AcIN5sWPBe4JotAUYv1fytgQw+mJzdFhKuVPLR48soA=";
+    hash = "sha256-w0bjoMmq8gL7DSehEG7cKqp5e4kNOXnCYLW31Zl9FRs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook pkg-config unzip ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    pkg-config
+    unzip
+  ];
 
-  buildInputs = [ ibus qt6.qtbase ];
+  buildInputs = [
+    ibus
+    qt6.qtbase
+  ];
 
   dontAddBazelOpts = true;
   removeRulesCC = false;
@@ -38,7 +45,7 @@ buildBazelPackage rec {
   inherit bazel;
 
   fetchAttrs = {
-    sha256 = "sha256-ToBLVJpAQErL/P1bfWJca2FjhDW5XTrwuJQLquwlrhA=";
+    sha256 = "sha256-+N7AhSemcfhq6j0IUeWZ0DyVvr1l5FbAkB+kahTy3pM=";
 
     # remove references of buildInputs and zip code files
     preInstall = ''
@@ -46,7 +53,12 @@ buildBazelPackage rec {
     '';
   };
 
-  bazelFlags = [ "--config" "oss_linux" "--compilation_mode" "opt" ];
+  bazelFlags = [
+    "--config"
+    "oss_linux"
+    "--compilation_mode"
+    "opt"
+  ];
 
   bazelTargets = [ "package" ];
 
@@ -55,13 +67,17 @@ buildBazelPackage rec {
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open" \
       --replace-fail "/usr" "$out"
     substituteInPlace src/WORKSPACE.bazel \
-      --replace-fail "https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip" "file://${zip-codes}/ken_all.zip" \
-      --replace-fail "https://www.post.japanpost.jp/zipcode/dl/jigyosyo/zip/jigyosyo.zip" "file://${zip-codes}/jigyosyo.zip"
+      --replace-fail "https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip" "file://${jp-zip-codes}/ken_all.zip" \
+      --replace-fail "https://www.post.japanpost.jp/zipcode/dl/jigyosyo/zip/jigyosyo.zip" "file://${jp-zip-codes}/jigyosyo.zip"
   '';
 
-  preConfigure = ''
-    cd src
-  '';
+  preConfigure =
+    ''
+      cd src
+    ''
+    + lib.optionalString (dictionaries != [ ]) ''
+      cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
+    '';
 
   buildAttrs.installPhase = ''
     runHook preInstall
@@ -78,10 +94,6 @@ buildBazelPackage rec {
     runHook postInstall
   '';
 
-  passthru = {
-    inherit zip-codes;
-  };
-
   meta = with lib; {
     isIbusEngine = true;
     description = "Japanese input method from Google";
@@ -89,6 +101,10 @@ buildBazelPackage rec {
     homepage = "https://github.com/google/mozc";
     license = licenses.free;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ericsagnes pineapplehunter ];
+    maintainers = with maintainers; [
+      gebner
+      ericsagnes
+      pineapplehunter
+    ];
   };
 }
