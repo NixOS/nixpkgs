@@ -16842,6 +16842,8 @@ self: super: with self; {
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
+  weatherflow4py = callPackage ../development/python-modules/weatherflow4py { };
+
   weaviate-client = callPackage ../development/python-modules/weaviate-client { };
 
   web3 = callPackage ../development/python-modules/web3 { };
