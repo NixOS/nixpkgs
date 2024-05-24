@@ -46,7 +46,7 @@ with lib;
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
         gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
-        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableWayland = false; enableX11 = false; };
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableGl = false; enableWayland = false; enableX11 = false; };
         gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableWayland = false; enableX11 = false; gtkSupport = false; qt5Support = false; qt6Support = false; };
         gst-plugins-rs = super.gst_all_1.gst-plugins-rs.override { withGtkPlugins = false; };
       };
