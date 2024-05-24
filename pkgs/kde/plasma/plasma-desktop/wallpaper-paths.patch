@@ -1,5 +1,5 @@
---- a/lookandfeel/sddm-theme/theme.conf.cmake
-+++ b/lookandfeel/sddm-theme/theme.conf.cmake
+--- a/sddm-theme/theme.conf.cmake
++++ b/sddm-theme/theme.conf.cmake
 @@ -4,5 +4,5 @@ logo=${KDE_INSTALL_FULL_DATADIR}/sddm/themes/breeze/default-logo.svg
  type=image
  color=#1d99f3
