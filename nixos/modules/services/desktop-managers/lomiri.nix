@@ -72,6 +72,7 @@ in {
       enable = true;
       packages = (with pkgs; [
         ayatana-indicator-datetime
+        ayatana-indicator-display
         ayatana-indicator-messages
         ayatana-indicator-power
         ayatana-indicator-session

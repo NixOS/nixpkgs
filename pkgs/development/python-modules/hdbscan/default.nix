@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch,
   cython,
   numpy,
   pytestCheckHook,
