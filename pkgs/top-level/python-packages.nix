@@ -2710,6 +2710,8 @@ self: super: with self; {
 
   dash = callPackage ../development/python-modules/dash { };
 
+  dash-bootstrap-components = callPackage ../development/python-modules/dash-bootstrap-components { };
+
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
 
   dash-html-components = callPackage ../development/python-modules/dash-html-components { };
@@ -9997,6 +9999,8 @@ self: super: with self; {
   pynws = callPackage ../development/python-modules/pynws { };
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
+
+  pyocclient = callPackage ../development/python-modules/pyocclient { };
 
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
