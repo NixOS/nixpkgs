@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "caligula";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "ifd3f";
     repo = "caligula";
     rev = "v${version}";
-    hash = "sha256-nLt+PDPdW7oEMoWqW0iO4nXGlwk7UymWShn0azQt2ro=";
+    hash = "sha256-fi4W7Z32S30kzKNVEDbV8PRyTW9fZxumBGtLn8SkI5Y=";
   };
 
-  cargoHash = "sha256-8K3twPL7lNUmUUjD+nKATGgcjgoCuFO+bvlujVySXj0=";
+  cargoHash = "sha256-ma7JVbWSiKfkCXCDwA8DFm2+KPrWR+8nSdgGSqehNg8=";
 
   buildInputs = lib.optionals stdenv.isDarwin (
     with darwin.apple_sdk.frameworks; [
