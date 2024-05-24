@@ -7,28 +7,12 @@ let
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
   dataDir = "/var/lib/stalwart-mail";
-  stalwartAtLeast = versionAtLeast cfg.package.version;
 
 in {
   options.services.stalwart-mail = {
     enable = mkEnableOption "the Stalwart all-in-one email server";
 
-    package = mkOption {
-      type = types.package;
-      description = ''
-        Which package to use for the Stalwart mail server.
-
-        ::: {.note}
-        Upgrading from version 0.6.0 to version 0.7.0 or higher requires manual
-        intervention. See <https://github.com/stalwartlabs/mail-server/blob/main/UPGRADING.md>
-        for upgrade instructions.
-        :::
-      '';
-      default = pkgs.stalwart-mail_0_6;
-      defaultText = lib.literalExpression "pkgs.stalwart-mail_0_6";
-      example = lib.literalExpression "pkgs.stalwart-mail";
-      relatedPackages = [ "stalwart-mail_0_6" "stalwart-mail" ];
-    };
+    package = mkPackageOption pkgs "stalwart-mail" { };
 
     settings = mkOption {
       inherit (configFormat) type;
@@ -43,17 +27,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
-    warnings = lib.optionals (!stalwartAtLeast "0.7.0") [
-      ''
-        Versions of stalwart-mail < 0.7.0 will get deprecated in NixOS 24.11.
-        Please set services.stalwart-mail.package to pkgs.stalwart-mail to
-        upgrade to the latest version.
-        Please note that upgrading to version >= 0.7 requires manual
-        intervention, see <https://github.com/stalwartlabs/mail-server/blob/main/UPGRADING.md>
-        for upgrade instructions.
-      ''
-    ];
 
     # Default config: all local
     services.stalwart-mail.settings = {
