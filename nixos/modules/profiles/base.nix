@@ -64,4 +64,7 @@
 
   # Configure host id for ZFS to work
   networking.hostId = lib.mkDefault "8425e349";
+
+  # Enable git for important commands like nixos-rebuild
+  programs.git.enable = lib.mkDefault true;
 }
