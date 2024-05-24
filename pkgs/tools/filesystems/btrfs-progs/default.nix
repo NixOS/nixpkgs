@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , buildPackages
 , pkg-config
 , zstd
@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
     hash = "sha256-DkCgaKJsKWnLAqlbqf74iNemNW4/RX/5KtJHfQhzVng=";
   };
+
+  patches = [
+    # backport fix build with e2fsprogs 1.47.1
+    (fetchpatch {
+      url = "https://github.com/kdave/btrfs-progs/commit/bcb887a4de2c56426a7a7de8d440b6ad75579f10.patch";
+      hash = "sha256-Ir5EiiU0E8GBnGex0Q/WTNexW9XTWFNceiLQvXygIoo=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
