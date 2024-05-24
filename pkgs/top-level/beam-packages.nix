@@ -12,18 +12,6 @@
 let
   self = beam;
 
-  # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ ];
-
-  interpretersAliases = versionLoop (version: {
-    "erlangR${version}" = self.interpreters."erlang_${version}";
-    "erlangR${version}_odbc" = self.interpreters."erlang_${version}_odbc";
-    "erlangR${version}_javac" = self.interpreters."erlang_${version}_javac";
-    "erlangR${version}_odbc_javac" = self.interpreters."erlang_${version}_odbc_javac";
-  });
-
-  packagesAliases = versionLoop (version: { "erlangR${version}" = self.packages."erlang_${version}"; });
-
 in
 
 {
@@ -95,7 +83,7 @@ in
     # `beam.packages.erlang_24.elixir`.
     inherit (self.packages.erlang)
       elixir elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir-ls lfe lfe_2_1;
-  } // interpretersAliases;
+  };
 
   # Helper function to generate package set with a specific Erlang version.
   packagesWith = erlang:
@@ -109,7 +97,7 @@ in
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
     erlang_24 = self.packagesWith self.interpreters.erlang_24;
-  } // packagesAliases;
+  };
 
   __attrsFailEvaluation = true;
 }
