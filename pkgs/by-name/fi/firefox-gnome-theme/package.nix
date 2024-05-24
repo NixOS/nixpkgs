@@ -14,14 +14,17 @@ stdenv.mkDerivation (finalAttr: {
     hash = "sha256-jVbj2JD5GRkP8s3vKBtd9PDpftf3kjLR0ZA/ND/c2+Q=";
   };
 
+  outputs = [ "out" "doc" ];
+
   strictDeps = true;
 
   # Only copy necessary files
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r ./theme ./icon.svg ./userChrome.css ./userContent.css -t $out
+    install -d $out
+    cp -ra ./configuration ./theme ./icon.svg ./userChrome.css ./userContent.css -t $out
+    install -Dm 644 ./README.md -t $doc/share/doc/${finalAttr.pname}/
 
     runHook postInstall
   '';
