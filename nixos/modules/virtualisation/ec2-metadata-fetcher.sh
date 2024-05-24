@@ -44,15 +44,26 @@ done
 
 if [ "x$IMDS_TOKEN" == "x" ]; then
   echo "failed to fetch an IMDS2v token."
+  exit 1
 fi
 
 try=1
+last_exit_code=""
 while [ $try -le 10 ]; do
   echo "(attempt $try/10) validating the EC2 instance metadata service v2 token..."
-  preflight_imds_token && break
+  preflight_imds_token
+  last_exit_code="$?"
+  if [ "$last_exit_code" -eq 0 ]; then
+    break
+  fi
   try=$((try + 1))
   sleep 1
 done
+
+if [ "$last_exit_code" -ne 0 ]; then
+  echo "failed to validate the IMDS2v token."
+  exit 1
+fi
 
 echo "getting EC2 instance metadata..."
 
