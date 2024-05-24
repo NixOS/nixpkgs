@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.44";
+  version = "0.4.45";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7a1F7180mnbMiEwRWzDQt2EhRsleSoVhWtTc+5DR/2o=";
+    hash = "sha256-Kpn7Z+LJPZ9rNxQLXFtACJvfpRdDs58cy+1QlbbODLA=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
