@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
       [
         d.CoreServices
         d.Security
+        d.SystemConfiguration
       ]
     );
 
