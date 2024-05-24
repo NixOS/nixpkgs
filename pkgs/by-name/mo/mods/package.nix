@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gitUpdater
-, testers
-, mods
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  mods,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-BL5bxyeVkcm7GO1Kzk9d/hj2wY50UhauEFq9YQ/JbCE=";
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
+
+  # These tests require internet access.
+  checkFlags = [ "-skip=^TestLoad/http_url$|^TestLoad/https_url$" ];
 
   passthru = {
     updateScript = gitUpdater {
