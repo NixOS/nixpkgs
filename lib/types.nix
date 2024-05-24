@@ -15,6 +15,7 @@ let
     isList
     isString
     isStorePath
+    throwIf
     toDerivation
     toList
     ;
@@ -65,6 +66,11 @@ let
     fixupOptionType
     mergeOptionDecls
     ;
+
+  inAttrPosSuffix = v: name:
+    let pos = builtins.unsafeGetAttrPos name v; in
+    if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -146,7 +152,7 @@ rec {
       # If it doesn't, this should be {}
       # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
       emptyValue ? {}
-    , # Return a flat list of sub-options.  Used to generate
+    , # Return a flat attrset of sub-options.  Used to generate
       # documentation.
       getSubOptions ? prefix: {}
     , # List of modules if any, or null if none.
@@ -601,6 +607,100 @@ rec {
         + " https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.";
       nestedTypes.elemType = elemType;
     };
+
+    attrTag = tags:
+      let tags_ = tags; in
+      let
+        tags =
+          mapAttrs
+            (n: opt:
+              builtins.addErrorContext "while checking that attrTag tag ${lib.strings.escapeNixIdentifier n} is an option with a type${inAttrPosSuffix tags_ n}" (
+                throwIf (opt._type or null != "option")
+                  "In attrTag, each tag value must be an option, but tag ${lib.strings.escapeNixIdentifier n} ${
+                    if opt?_type then
+                      if opt._type == "option-type"
+                      then "was a bare type, not wrapped in mkOption."
+                      else "was of type ${lib.strings.escapeNixString opt._type}."
+                    else "was not."}"
+                opt // {
+                  declarations = opt.declarations or (
+                    let pos = builtins.unsafeGetAttrPos n tags_;
+                    in if pos == null then [] else [ pos.file ]
+                  );
+                  declarationPositions = opt.declarationPositions or (
+                    let pos = builtins.unsafeGetAttrPos n tags_;
+                    in if pos == null then [] else [ pos ]
+                  );
+                }
+              ))
+            tags_;
+        choicesStr = concatMapStringsSep ", " lib.strings.escapeNixIdentifier (attrNames tags);
+      in
+      mkOptionType {
+        name = "attrTag";
+        description = "attribute-tagged union";
+        descriptionClass = "noun";
+        getSubOptions = prefix:
+          mapAttrs
+            (tagName: tagOption: {
+              "${lib.showOption prefix}" =
+                tagOption // {
+                  loc = prefix ++ [ tagName ];
+                };
+            })
+            tags;
+        check = v: isAttrs v && length (attrNames v) == 1 && tags?${head (attrNames v)};
+        merge = loc: defs:
+          let
+            choice = head (attrNames (head defs).value);
+            checkedValueDefs = map
+              (def:
+                assert (length (attrNames def.value)) == 1;
+                if (head (attrNames def.value)) != choice
+                then throw "The option `${showOption loc}` is defined both as `${choice}` and `${head (attrNames def.value)}`, in ${showFiles (getFiles defs)}."
+                else { inherit (def) file; value = def.value.${choice}; })
+              defs;
+          in
+            if tags?${choice}
+            then
+              { ${choice} =
+                  (lib.modules.evalOptionValue
+                    (loc ++ [choice])
+                    tags.${choice}
+                    checkedValueDefs
+                  ).value;
+              }
+            else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
+        nestedTypes = tags;
+        functor = defaultFunctor "attrTag" // {
+          type = { tags, ... }: types.attrTag tags;
+          payload = { inherit tags; };
+          binOp =
+            let
+              # Add metadata in the format that submodules work with
+              wrapOptionDecl =
+                option: { options = option; _file = "<attrTag {...}>"; pos = null; };
+            in
+            a: b: {
+              tags = a.tags // b.tags //
+                mapAttrs
+                  (tagName: bOpt:
+                    lib.mergeOptionDecls
+                      # FIXME: loc is not accurate; should include prefix
+                      #        Fortunately, it's only used for error messages, where a "relative" location is kinda ok.
+                      #        It is also returned though, but use of the attribute seems rare?
+                      [tagName]
+                      [ (wrapOptionDecl a.tags.${tagName}) (wrapOptionDecl bOpt) ]
+                    // {
+                      # mergeOptionDecls is not idempotent in these attrs:
+                      declarations = a.tags.${tagName}.declarations ++ bOpt.declarations;
+                      declarationPositions = a.tags.${tagName}.declarationPositions ++ bOpt.declarationPositions;
+                    }
+                  )
+                  (builtins.intersectAttrs a.tags b.tags);
+          };
+        };
+      };
 
     # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
     uniq = elemType: mkOptionType rec {
