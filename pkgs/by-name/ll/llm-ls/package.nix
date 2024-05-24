@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-7McUyQjnCuV0JG65hUoR8TtB4vrjiEO1l7NXYochgG8=";
 
+  buildAndTestSubdir = "crates/llm-ls";
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
