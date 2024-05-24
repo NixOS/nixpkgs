@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "icloudpd";
-  version = "1.17.5";
+  version = "1.17.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
     rev = "v${version}";
-    hash = "sha256-1tyvoDAlh2UuPWDqA7mwC1v5kij3v3aBZBfIG/vluJo=";
+    hash = "sha256-KTMFT6L+5WexKZiMPjga/HzoGYNWVldoRoqBPSj2a/s=";
   };
 
   pythonRelaxDeps = true;
@@ -40,6 +40,7 @@ python3Packages.buildPythonApplication rec {
     certifi
     keyring
     keyrings-alt
+    typing-extensions
   ];
 
   nativeCheckInputs = with python3Packages; [
