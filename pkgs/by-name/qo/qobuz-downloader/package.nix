@@ -3,6 +3,7 @@
 , autoPatchelfHook
 , cairo
 , dpkg
+, ffmpeg
 , gdk-pixbuf
 , glib
 , gtk3
@@ -13,7 +14,7 @@
 , xdg-user-dirs
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qobuz-downloader";
   version = "1.0.32"; # see usr/share/qobuz_downloader/data/flutter_assets/version.json
 
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-atk
     cairo
+    ffmpeg
     gdk-pixbuf
     glib
     gtk3
@@ -40,9 +42,12 @@ stdenv.mkDerivation rec {
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc source";
 
   postPatch = ''
-    sed -i s@Exec=qobuz_downloader@Exec=$out/bin/qobuz_downloader@ usr/share/applications/qobuz_downloader.desktop
+    # reduce closure size
     rm usr/share/qobuz_downloader/data/flutter_assets/assets/tools/{ffmpeg.exe,id3-tag-cli,id3-tag-cli.exe}
-    # TODO: unvendor ffmpeg/id3-tags-cli
+    # unvendor ffmpeg
+    rm usr/share/qobuz_downloader/data/flutter_assets/assets/tools/ffmpeg
+    ln -s ${ffmpeg}/bin/ffmpeg usr/share/qobuz_downloader/data/flutter_assets/assets/tools/ffmpeg
+    # TODO: unvendor id3-tag-cli
   '';
 
   installPhase = ''
