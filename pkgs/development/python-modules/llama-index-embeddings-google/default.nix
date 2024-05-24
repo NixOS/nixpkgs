@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-google";
-  version = "0.1.5";
+  version = "0.1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_google";
     inherit version;
-    hash = "sha256-mJ+H4klmGlpTGXLErlLNWH5IUpGyXnbAhNsgT5fwCHs=";
+    hash = "sha256-XPqZ+4aZfrTGU4sOLxMElG6kuGVJa8/3uxW+icSHpzQ=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];
