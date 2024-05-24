@@ -10,13 +10,10 @@
   chardet,
   clarifai,
   cohere,
-  dataclasses-json,
   esprima,
   fetchFromGitHub,
   freezegun,
   huggingface-hub,
-  jsonpatch,
-  langchain-community,
   langchain-core,
   langchain-text-splitters,
   langsmith,
@@ -51,7 +48,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.52";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -59,8 +56,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-H8rtysRIwyuJEUFI93vid3MsqReyRCER88xztsuYpOc=";
+    rev = "refs/tags/langchain==${version}";
+    hash = "sha256-cLJhdeft9XNLk5njSBaEBSuP31c2VFCJ1ET+ypo6mNY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -71,9 +68,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    dataclasses-json
-    jsonpatch
-    langchain-community
     langchain-core
     langchain-text-splitters
     langsmith
