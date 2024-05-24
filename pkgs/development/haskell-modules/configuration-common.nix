@@ -423,22 +423,22 @@ self: super: {
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
-    version = "1.7.3";
+    version = "1.7.4";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7.3";
-      sha256 = "sha256-BBhOFK4OuCD7ilNrdfeAILBR2snxl29gBk58szZ4460=";
+      rev = "v1.7.4";
+      sha256 = "sha256-lHy5kgx6J8uD+16SO47dPrbob98sh+W1tf4ceSqPVK4=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;
   cachix = (overrideCabal (drv: {
-    version = "1.7.3";
+    version = "1.7.4";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7.3";
-      sha256 = "sha256-BBhOFK4OuCD7ilNrdfeAILBR2snxl29gBk58szZ4460=";
+      rev = "v1.7.4";
+      sha256 = "sha256-lHy5kgx6J8uD+16SO47dPrbob98sh+W1tf4ceSqPVK4=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
   }) (lib.pipe
@@ -448,13 +448,6 @@ self: super: {
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)
          (addBuildTool pkgs.buildPackages.pkg-config)
-         (addBuildDepend self.immortal)
-         # should be removed once hackage packages catch up
-         (addBuildDepend self.crypton)
-         (addBuildDepend self.generic-lens)
-         (addBuildDepend self.amazonka)
-         (addBuildDepend self.amazonka-core)
-         (addBuildDepend self.amazonka-s3)
         ]
   ));
 
