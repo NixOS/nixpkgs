@@ -80,7 +80,7 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "9.0.0";
+  version = "9.0.0-unstable-2024-06-03";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -89,8 +89,8 @@ buildPythonPackage rec {
     name = "ibis-source";
     repo = "ibis";
     owner = "ibis-project";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ebTYCBL1zm2Rmwg998x2kYvKhyQDk8Di1pcx5lR37xo=";
+    rev = "395c8b539bcd541d36892d95f413dcc3f93ca0bc";
+    hash = "sha256-PPjp8HOwM4IaBz7TBGDgkVytHmX9fKO+ZBR33BoB55s=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +98,8 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  dontBypassPoetryDynamicVersioning = true;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = lib.head (lib.strings.splitString "-" version);
 
   propagatedBuildInputs = [
     atpublic
