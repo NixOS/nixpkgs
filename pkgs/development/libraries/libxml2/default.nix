@@ -37,6 +37,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
   };
 
+  # https://gitlab.gnome.org/GNOME/libxml2/-/issues/725
+  postPatch = if stdenv.hostPlatform.isFreeBSD then ''
+    substituteInPlace ./configure.ac --replace-fail pthread_join pthread_create
+  '' else null;
+
   strictDeps = true;
 
   nativeBuildInputs = [
