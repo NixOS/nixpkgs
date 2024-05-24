@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ifd3f sodiboo ];
     platforms = platforms.linux ++ platforms.darwin;
-    # https://github.com/ifd3f/caligula/issues/105
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "caligula";
   };
 }
