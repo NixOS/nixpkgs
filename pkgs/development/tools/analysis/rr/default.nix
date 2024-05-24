@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, which, makeWrapper
 , libpfm, zlib, python3Packages, procps, gdb, capnproto
 }:
