@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation (finalAttr: {
   pname = "firefox-gnome-theme";
@@ -11,7 +15,10 @@ stdenv.mkDerivation (finalAttr: {
     hash = "sha256-nf+0/UR5TZArp3Dn3NS3nB+ZGqecTOTOZRCFM3a1veM=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   strictDeps = true;
 
@@ -33,8 +40,7 @@ stdenv.mkDerivation (finalAttr: {
       This theme follows latest GNOME Adwaita style.
     '';
     homepage = "https://github.com/rafaelmardojai/firefox-gnome-theme";
-    downloadPage =
-      "https://github.com/rafaelmardojai/firefox-gnome-theme/releases";
+    downloadPage = "https://github.com/rafaelmardojai/firefox-gnome-theme/releases";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ ashgoldofficial ];
     platforms = lib.platforms.all;
