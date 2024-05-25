@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   # See INSTALL inside the upstream source for detail.
   configureScript = "./configure2";
 
+  configureFlags = [
+    "--cc=${stdenv.cc.targetPrefix}cc"
+  ];
+
   preConfigure = ''
     mkdir -p $out
   '';
