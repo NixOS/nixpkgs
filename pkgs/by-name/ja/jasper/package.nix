@@ -55,6 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling
+  # https://github.com/jasper-software/jasper/blob/87668487/CMakeLists.txt#L415
+  # workaround taken from
+  # https://github.com/openembedded/meta-openembedded/blob/907b9c0a/meta-oe/recipes-graphics/jasper/jasper_4.1.1.bb#L16
+  preConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    cmakeFlagsArray+=(-DJAS_STDC_VERSION="$(echo __STDC_VERSION__ | $CXX -E -P -)")
+  '';
+
   meta = {
     homepage = "https://jasper-software.github.io/jasper/";
     description = "Image processing/coding toolkit";
@@ -79,9 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "jasper";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    # The value of __STDC_VERSION__ cannot be automatically determined when
-    # cross-compiling.
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
 # TODO: investigate opengl support
