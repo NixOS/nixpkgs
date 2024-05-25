@@ -24,21 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     hareThirdParty.hare-json
   ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-    "HAREFLAGS=-qa${stdenv.hostPlatform.uname.processor}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace 'hare build' 'hare build $(HAREFLAGS)' \
-      --replace 'hare test' 'hare test $(HAREFLAGS)'
-  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
