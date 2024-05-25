@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/libexec/bcachefsck_all \
-      --replace "/usr/bin/python3" "${python3}/bin/python3"
+      --replace-fail "/usr/bin/python3" "${python3}/bin/python3"
   '';
 
   passthru = {
