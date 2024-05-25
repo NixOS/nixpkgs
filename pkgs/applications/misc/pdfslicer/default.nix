@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     qpdf
   ];
 
+  CXXFLAGS =
+    # Pending upstream compatibility with GCC 13
+    lib.optional (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "13") "-Wno-changes-meaning";
+
   meta = with lib; {
     description = "A simple application to extract, merge, rotate and reorder pages of PDF documents";
     homepage = "https://junrrein.github.io/pdfslicer/";
