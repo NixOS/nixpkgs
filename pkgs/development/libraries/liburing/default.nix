@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # Upstream's configure script is not autoconf generated, but a hand written one.
   setOutputFlags = false;
+  dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
   configureFlags = [
     "--includedir=${placeholder "dev"}/include"
     "--mandir=${placeholder "man"}/share/man"
