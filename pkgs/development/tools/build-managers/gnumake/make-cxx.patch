@@ -1,0 +1,64 @@
+Do not search for a C++ compiler and set MAKE_CXX.
+
+Removes unnecessary reference to C++ compiler if CXX is set to an
+absolute path. If CXX is not an absolute path, we avoid defaulting CXX
+to a compiler name that was used to build the package.
+
+Context: GNU Make defines default values for CC, CXX and other
+environment variables. For CXX, it usually defaults to g++, however,
+FreeBSD and OpenBSD no longer ship GCC as a system compiler (and use
+Clang instead). For C compiler, POSIX standardizes the name to be "cc",
+but there is no such standard for C++ compiler name. As a fix, GNU Make
+uses CXX set for build as a default (via MAKE_CXX preprocessor macro in
+the source code).
+
+We revert the change that added this behavior and set the default to c++
+or g++ that does not depend on the build platform.
+
+In stdenv, CXX environment variable is always defined and overrides the
+default value.
+
+References:
+• https://savannah.gnu.org/bugs/?63668
+• https://git.savannah.gnu.org/cgit/make.git/commit/?id=ffa28f3914ff402b3915f75e4fed86ac6fb1449d
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,6 +37,4 @@ AM_INIT_AUTOMAKE([1.16.1 foreign -Werror -Wall])
+ # Checks for programs.
+ AC_USE_SYSTEM_EXTENSIONS
+ AC_PROG_CC
+-AC_PROG_CXX
+-AC_DEFINE_UNQUOTED(MAKE_CXX, ["$CXX"], [Default C++ compiler.])
+
+--- a/src/default.c
++++ b/src/default.c
+@@ -528,22 +528,15 @@ static const char *default_variables[] =
+ #ifdef GCC_IS_NATIVE
+     "CC", "gcc",
+     "OBJC", "gcc",
++# ifdef __MSDOS__
++    "CXX", "gpp",       /* g++ is an invalid name on MSDOS */
++# else
++    "CXX", "g++",
++# endif /* __MSDOS__ */
+ #else
+     "CC", "cc",
+     "OBJC", "cc",
++    "CXX", "c++",
+ #endif
+-#ifdef MAKE_CXX
+-    "CXX", MAKE_CXX,
+-#else
+-# ifdef GCC_IS_NATIVE
+-#  ifdef __MSDOS__
+-    "CXX", "gpp",       /* g++ is an invalid name on MSDOS */
+-#  else
+-    "CXX", "gcc",
+-#  endif /* __MSDOS__ */
+-# else
+-    "CXX", "g++",
+-# endif
+-#endif
+     /* This expands to $(CO) $(COFLAGS) $< $@ if $@ does not exist,
+        and to the empty string if $@ does exist.  */

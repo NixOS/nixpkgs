@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, updateAutotoolsGnuConfigScriptsHook
+, autoreconfHook
 , guileSupport ? false, guile
 # avoid guile depend on bootstrap to prevent dependency cycles
 , inBootstrap ? false
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
   patches = [
+    # See patch message.
+    ./make-cxx.patch
     # Replaces /bin/sh with sh, see patch file for reasoning
     ./0001-No-impure-bin-sh.patch
     # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     ./0002-remove-impure-dirs.patch
   ];
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals guileEnabled [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
   configureFlags = lib.optional guileEnabled "--with-guile"
