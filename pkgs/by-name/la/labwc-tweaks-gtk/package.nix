@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/labwc/labwc-tweaks-gtk";
     description = "Configuration gui app for labwc; gtk fork";
-    mainProgram = "labwc-tweaks";
+    mainProgram = "labwc-tweaks-gtk";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ AndersonTorres romildo ];
