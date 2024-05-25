@@ -35,6 +35,12 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
+    # Always builds both static and dynamic libraries, so we need to remove the
+    # libraries that don't match stdenv type.
+    rm $out/lib/liburing*${
+      if stdenv.hostPlatform.isStatic then ".so*" else ".a"
+    }
+
     # Copy the examples into $bin. Most reverse dependency of
     # this package should reference only the $out output
     for file in $(find ./examples -executable -type f); do
