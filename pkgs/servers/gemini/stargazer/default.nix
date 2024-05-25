@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stargazer";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "stargazer";
     rev = version;
-    hash = "sha256-c0gKvVaMiUOGHlPmtaW6it8J9MusQY7BA/5F9I3ysMc=";
+    hash = "sha256-pYize+MGChi1GxCNaQsNlHELtsPUvfFZMPl0Q+pOTp0=";
   };
 
-  cargoHash = "sha256-8VrEZZNSFLAjUagsiRApvjiXusBHLLn1O/+QKtQY4wg=";
+  cargoHash = "sha256-KmVNRVyKD5q4/vWtnHM4nfiGg+uZvRl+l+Zk5hjWg9E=";
 
   doCheck = false; # Uses external testing framework that requires network
 
