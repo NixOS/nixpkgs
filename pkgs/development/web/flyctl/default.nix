@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.2.55";
+  version = "0.2.58";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-yCRaF600UrDmazsgTRp/grWtkULeSQedE5m69K6h/4Q=";
+    hash = "sha256-aXiBDPl/x/xeu+fNrxs+JejVtSZu8KZKbrSetJj4/Pk=";
   };
 
-  vendorHash = "sha256-1hlWyr41t8J4naN5QbEtfCv3npe/kvMH5NKKaxYvLYk=";
+  vendorHash = "sha256-NmogEh3xWQ/opMm9UarpfuH3MJzJ9+qb0KX/O+i/pcA=";
 
   subPackages = [ "." ];
 
@@ -33,11 +33,6 @@ buildGoModule rec {
   preCheck = ''
     HOME=$(mktemp -d)
   '';
-
-  checkFlags = [
-    # these tests require network
-    "-skip=TestToTestMachineConfig"
-  ];
 
   # We override checkPhase to be able to test ./... while using subPackages
   checkPhase = ''
