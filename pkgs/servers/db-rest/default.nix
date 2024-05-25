@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , nodejs_18
 , nix-update-script
-, fetchpatch
 , nixosTests
 }:
 buildNpmPackage rec {
