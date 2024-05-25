@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libchewing";
-  version = "0.5.1-unstable-2020-06-27";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "chewing";
     repo = "libchewing";
-    rev = "452f6221fbad90c0706a3963b17e226216e40dd7";
-    sha256 = "sha256-w3/K2O/CU+XVzqzVCYJyq1vLgToN6iIUhJ9J7ia4p9E=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-X+4Rr5Mfc4qeJxmHczu4MKgHBvQN1rhqUrJSx8SFnDk=";
   };
 
   buildInputs = [ sqlite ];
