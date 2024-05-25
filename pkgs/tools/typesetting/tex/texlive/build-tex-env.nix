@@ -100,11 +100,7 @@ let
       else otherOutputs.tlpkg or [ ] ++ specifiedOutputs.tlpkg or [ ];
 
     nonbin = if __fromCombineWrapper then builtins.filter (p: p.tlType != "bin" && p.tlType != "tlpkg") all # texlive.combine: legacy filter
-      else (if __combine then # texlive.combine: emulate old input ordering to avoid rebuilds
-        lib.concatMap (p: lib.optional (p ? tex) p.tex
-          ++ lib.optional ((withDocs || p ? man) && p ? texdoc) p.texdoc
-          ++ lib.optional (withSources && p ? texsource) p.texsource) specified.wrong
-        else otherOutputs.tex or [ ]
+      else (otherOutputs.tex or [ ]
           ++ lib.optionals withDocs (otherOutputs.texdoc or [ ])
           ++ lib.optionals withSources (otherOutputs.texsource or [ ]))
         ++ specifiedOutputs.tex or [ ] ++ specifiedOutputs.texdoc or [ ] ++ specifiedOutputs.texsource or [ ];
