@@ -92902,31 +92902,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  textlint-rule-common-misspellings = nodeEnv.buildNodePackage {
-    name = "textlint-rule-common-misspellings";
-    packageName = "textlint-rule-common-misspellings";
-    version = "1.0.1";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/textlint-rule-common-misspellings/-/textlint-rule-common-misspellings-1.0.1.tgz";
-      sha512 = "f5KWhQFJzJBUX3RirAS25aSkAaaOHeSHtBeb7d49O+vxnAX3dZBS5DB/e5M1kR4tifW4qae64oqWZygoGYWkjQ==";
-    };
-    dependencies = [
-      sources."misspellings-1.1.0"
-      sources."textlint-rule-helper-1.2.0"
-      sources."unist-util-is-3.0.0"
-      sources."unist-util-visit-1.4.1"
-      sources."unist-util-visit-parents-2.1.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "textlint rule to check common misspellings";
-      homepage = "https://github.com/io-monad/textlint-rule-common-misspellings";
-      license = "GPL-3.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   thelounge-plugin-closepms = nodeEnv.buildNodePackage {
     name = "thelounge-plugin-closepms";
     packageName = "thelounge-plugin-closepms";
