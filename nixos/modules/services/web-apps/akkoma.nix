@@ -1072,7 +1072,7 @@ in {
 
         ProtectProc = "noaccess";
         ProcSubset = "pid";
-        ProtectSystem = mkIf (!isConfined) "strict";
+        ProtectSystem = "strict";
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
