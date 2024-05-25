@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  ax,
   botorch,
   ipywidgets,
   jinja2,
   pandas,
   plotly,
+  python,
   setuptools,
   setuptools-scm,
   typeguard,
@@ -78,6 +80,11 @@ buildPythonPackage rec {
     "test_convert_observations"
   ];
   pythonImportsCheck = [ "ax" ];
+
+  # Many portions of the test suite fail under Python 3.12
+  doCheck = lib.versions.majorMinor python.version != "3.12";
+
+  passthru.tests.check = ax.overridePythonAttrs { doCheck = true; };
 
   meta = with lib; {
     description = "Ax is an accessible, general-purpose platform for understanding, managing, deploying, and automating adaptive experiments";
