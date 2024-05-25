@@ -38,11 +38,24 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
+  ];
+
+  # Since NIX_CFLAGS_COMPILE affects both C and C++ toolchains, we set CXXFLAGS
+  # directly
+  env.CXXFLAGS = "-std=c++20";
+
   strictDeps = true;
 
-  # Since NIX_CFLAGS_COMPILE does not differentiate C and C++ toolchains, we
-  # set CXXFLAGS directly
-  env.CXXFLAGS = "-std=c++20";
+  enableParallelBuilding = true;
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
@@ -74,19 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postConfigure
   '';
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "C_COMPILER=$(CC)"
-    "CPLUSPLUS_COMPILER=$(CXX)"
-    "LIBRARY_LINK=$(AR) cr "
-    "LINK=$(CXX) -o "
-  ];
-
-  # required for whitespaces in makeFlags
-  __structuredAttrs = true;
-
-  enableParallelBuilding = true;
 
   passthru.tests = {
     # Downstream dependency
