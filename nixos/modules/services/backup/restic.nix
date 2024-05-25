@@ -1,10 +1,11 @@
 { config, lib, pkgs, utils, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types;
+
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
   inherit (utils.systemdUtils.unitOptions) unitOption;
+
 in
 {
   options.services.restic.backups = mkOption {
@@ -103,7 +104,7 @@ in
         paths = mkOption {
           # This is nullable for legacy reasons only. We should consider making it a pure listOf
           # after some time has passed since this comment was added.
-          type = types.nullOr (types.listOf types.str);
+          type = with types; nullOr (listOf str);
           default = [ ];
           description = ''
             Which paths to backup, in addition to ones specified via
@@ -118,7 +119,7 @@ in
         };
 
         exclude = mkOption {
-          type = types.listOf types.str;
+          type = with types; listOf str;
           default = [ ];
           description = ''
             Patterns to exclude when backing up. See
@@ -160,7 +161,7 @@ in
         };
 
         extraBackupArgs = mkOption {
-          type = types.listOf types.str;
+          type = with types; listOf str;
           default = [ ];
           description = ''
             Extra arguments passed to restic backup.
@@ -171,7 +172,7 @@ in
         };
 
         extraOptions = mkOption {
-          type = types.listOf types.str;
+          type = with types; listOf str;
           default = [ ];
           description = ''
             Extra extended options to be passed to the restic --option flag.
@@ -190,7 +191,7 @@ in
         };
 
         pruneOpts = mkOption {
-          type = types.listOf types.str;
+          type = with types; listOf str;
           default = [ ];
           description = ''
             A list of options (--keep-\* et al.) for 'restic forget
@@ -209,13 +210,13 @@ in
         runCheck = mkOption {
           type = types.bool;
           default = (builtins.length config.services.restic.backups.${name}.checkOpts > 0);
-          defaultText = literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+          defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
           description = "Whether to run the `check` command with the provided `checkOpts` options.";
           example = true;
         };
 
         checkOpts = mkOption {
-          type = types.listOf types.str;
+          type = with types; listOf str;
           default = [ ];
           description = ''
             A list of options for 'restic check'.
@@ -252,10 +253,10 @@ in
           '';
         };
 
-        package = mkPackageOption pkgs "restic" { };
+        package = lib.mkPackageOption pkgs "restic" { };
 
         createWrapper = lib.mkOption {
-          type = lib.types.bool;
+          type = types.bool;
           default = true;
           description = ''
             Whether to generate and add a script to the system path, that has the same environment variables set
@@ -289,8 +290,11 @@ in
     };
   };
 
-  config = {
-    assertions = mapAttrsToList (n: v: {
+  config = let
+    inherit (lib) concatStringsSep mapAttrs' nameValuePair optional optionalAttrs optionalString optionals toUpper;
+
+  in {
+    assertions = lib.mapAttrsToList (n: v: { 
       assertion = (v.repository == null) != (v.repositoryFile == null);
       message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
     }) config.services.restic.backups;
@@ -298,7 +302,7 @@ in
       mapAttrs'
         (name: backup:
           let
-            extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+            extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
@@ -310,7 +314,7 @@ in
                 (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
-            rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
+            rcloneRemoteName = builtins.elemAt (lib.splitString ":" backup.repository) 1;
             rcloneAttrToOpt = v: "RCLONE_" + toUpper (builtins.replaceStrings [ "-" ] [ "_" ] v);
             rcloneAttrToConf = v: "RCLONE_CONFIG_" + toUpper (rcloneRemoteName + "_" + v);
             toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
@@ -382,7 +386,7 @@ in
           wantedBy = [ "timers.target" ];
           timerConfig = backup.timerConfig;
         })
-        (filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
+        (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (name: backup: let
