@@ -136,7 +136,11 @@ installtl_do_path_adjustments () {
 }
 
 # run all post install parts
-installtl_do_postinst_stuff () {
+# install-tl: do_postinst_stuff
+# here split across traditional phases
+configurePhase () {
+    runHook preConfigure
+
     installtl_do_texmf_cnf
 
     # create various config files
@@ -168,6 +172,12 @@ installtl_do_postinst_stuff () {
 
         tlutils_update_context_cache
     fi
+
+    runHook postConfigure
+}
+
+buildPhase () {
+    runHook preBuild
 
     # generate formats
     # install-tl would run fmtutil-sys $common_fmtutil_args --no-strict --all
@@ -203,12 +213,20 @@ installtl_do_postinst_stuff () {
         fi
     fi
 
+    runHook postBuild
+}
+
+installPhase () {
+    runHook preInstall
+
     installtl_do_path_adjustments
 
     installtl_do_tlpdb_postactions
 
     # remove log files to improve reproducibility
     find "$TEXMFSYSVAR" -name '*.log' -delete
+
+    runHook postInstall
 }
 
 ### TeXLive::TLUtils
@@ -343,10 +361,25 @@ tlutils_update_context_cache () {
     fi
 }
 
+# replicate buildEnv'
+unpackPhase () {
+    runHook preUnpack
+
+    (
+        postBuild=
+        eval "$buildEnvCommand"
+    )
+
+    runHook postUnpack
+}
+
+# pretend 'out' is the only output or fixupPhase will choke on the otherOutputs links
+getAllOutputNames () {
+    echo out
+}
+
 # init variables (export only the ones that are used in the wrappers)
 export PATH="$out/bin:$PATH"
 TEXMFSYSCONFIG="$out/share/texmf-config"
 TEXMFSYSVAR="$out/share/texmf-var"
 export TEXMFCNF="$TEXMFSYSVAR/web2c"
-
-installtl_do_postinst_stuff
