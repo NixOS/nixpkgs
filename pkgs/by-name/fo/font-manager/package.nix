@@ -16,7 +16,6 @@
 , gtk3
 , gnome
 , desktop-file-utils
-, fetchpatch2
 , nix-update-script
 , wrapGAppsHook3
 , gobject-introspection
@@ -26,24 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "font-manager";
     rev = version;
-    hash = "sha256-M13Q9d2cKhc0tudkvw0zgqPAFTlmXwK+LltXeuDPWxo=";
+    hash = "sha256-LsQry6CjvVcJFRutKOaqA4lLP7Ek09Q/D/TPnSvx59Q=";
   };
-
-  patches = [
-    # see https://github.com/FontManager/font-manager/issues/355
-    # should be removed on next release
-    (fetchpatch2 {
-      name = "fix-build-with-newer-vala.patch";
-      url = "https://github.com/FontManager/font-manager/commit/600f498946c3904064b4e4fdf96e5841f6a827e4.patch";
-      hash = "sha256-DC9+pvG88t+PPdGQ2oemeEYK9PaD0C2yWBYYCh4Wn9g=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
