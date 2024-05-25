@@ -5,7 +5,8 @@
 { lib
 #, stdenv
 , gcc12Stdenv
-, fetchurl, runCommand, writeShellScript, writeText, buildEnv
+, stdenvNoCC
+, fetchurl, runCommand, writeShellScript, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
 , makeWrapper, installShellFiles
 , python3, ruby, perl, tk, jdk, bash, snobol4
@@ -109,8 +110,8 @@ let
   buildTeXEnv = import ./build-tex-env.nix {
     inherit bin tl;
     ghostscript = ghostscript_headless;
-    inherit lib buildEnv libfaketime makeFontsConf makeWrapper runCommand
-      writeShellScript writeText toTLPkgSets bash perl coreutils gawk gnugrep gnused;
+    inherit stdenvNoCC lib buildEnv libfaketime makeFontsConf makeWrapper runCommand
+      toTLPkgSets perl coreutils gawk gnugrep gnused;
   };
 
   ### texlive.combine compatibility layer:

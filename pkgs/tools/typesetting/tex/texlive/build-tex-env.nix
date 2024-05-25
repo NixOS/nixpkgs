@@ -3,6 +3,7 @@
   tl
 , bin
 
+, stdenvNoCC
 , lib
 , buildEnv
 , libfaketime
@@ -10,9 +11,7 @@
 , makeWrapper
 , runCommand
 , writeShellScript
-, writeText
 , toTLPkgSets
-, bash
 , perl
 
   # common runtime dependencies
@@ -40,11 +39,25 @@ lib.fix (self: {
 }@args:
 
 let
-  ### buildEnv with custom attributes
-  buildEnv' = args: (buildEnv
-    ({ inherit (args) name paths; })
-      // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; })
-    .overrideAttrs (removeAttrs args [ "extraOutputsToInstall" "name" "paths" "pkgs" ]);
+
+  ### simplified buildEnv with custom attributes and no outputSpecified logic
+  buildEnvCommand = (buildEnv { name = ""; paths = [ ]; }).buildCommand;
+
+  buildEnv' = { paths, pathsToLink ? [ "/" ], extraPrefix ? "", ... }@args: stdenvNoCC.mkDerivation (args // rec {
+    ignoreCollisions = false;
+    checkCollisionContents = true;
+    inherit pathsToLink extraPrefix;
+    nativeBuildInputs = [ perl ] ++ args.nativeBuildInputs or [ ];
+    pkgs = builtins.toJSON (
+      map (drv: {
+        paths = [ drv ];
+        priority = drv.meta.priority or 5;
+      }) paths
+    );
+    # XXX: The size is somewhat arbitrary
+    passAsFile = if builtins.stringLength pkgs >= 128 * 1024 then [ "pkgs" ] else [ ];
+    buildCommand = buildEnvCommand;
+  });
 
   ### texlive.combine backward compatibility
   # if necessary, convert old style { pkgs = [ ... ]; } packages to attribute sets
