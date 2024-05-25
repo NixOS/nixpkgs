@@ -2,6 +2,7 @@
 , fetchurl
 , makeWrapper
 , xz
+, runtimeShellPackage
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  buildInputs = [ runtimeShellPackage];
   nativeBuildInputs = [ xz.bin makeWrapper ];
 
   makeFlags = [
