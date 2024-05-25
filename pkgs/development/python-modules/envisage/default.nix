@@ -3,7 +3,6 @@
   apptools,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   ipython,
   pytestCheckHook,
   pythonAtLeast,

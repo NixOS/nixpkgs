@@ -5,12 +5,15 @@
   evdev,
   pyudev,
   bluez,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ds4drv";
   version = "0.5.1";
-  format = "setuptools";
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   # PyPi only carries py3 wheel
   src = fetchFromGitHub {
@@ -20,7 +23,12 @@ buildPythonPackage rec {
     sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace ds4drv/config.py \
+      --replace-fail SafeConfigParser ConfigParser
+  '';
+
+  dependencies = [
     evdev
     pyudev
   ];

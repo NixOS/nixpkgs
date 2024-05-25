@@ -4,6 +4,8 @@ let
   cfg = config.programs.steam;
   gamescopeCfg = config.programs.gamescope;
 
+  extraCompatPaths = lib.makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
+
   steam-gamescope = let
     exports = builtins.attrValues (builtins.mapAttrs (n: v: "export ${n}=${v}") cfg.gamescopeSession.env);
   in
@@ -42,7 +44,7 @@ in {
       '';
       apply = steam: steam.override (prev: {
         extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
-          STEAM_EXTRA_COMPAT_TOOLS_PATHS = lib.makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
+          STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
         }) // (lib.optionalAttrs cfg.extest.enable {
           LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
         }) // (prev.extraEnv or {});
@@ -139,6 +141,11 @@ in {
       Load the extest library into Steam, to translate X11 input events to
       uinput events (e.g. for using Steam Input on Wayland)
     '';
+
+    protontricks = {
+      enable = lib.mkEnableOption "protontricks, a simple wrapper for running Winetricks commands for Proton-enabled games";
+      package = lib.mkPackageOption pkgs "protontricks" { };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -169,7 +176,8 @@ in {
     environment.systemPackages = [
       cfg.package
       cfg.package.run
-    ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope;
+    ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
+    ++ lib.optional cfg.protontricks.enable (cfg.protontricks.package.override { inherit extraCompatPaths; });
 
     networking.firewall = lib.mkMerge [
       (lib.mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {

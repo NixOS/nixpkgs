@@ -1,5 +1,6 @@
 declare version
 declare composerStrictValidation
+declare composerGlobal
 
 setComposeRootVersion() {
     set +e # Disable exit on error
@@ -13,7 +14,16 @@ setComposeRootVersion() {
 }
 
 checkComposerValidate() {
-    if ! composer validate --strict --no-ansi --no-interaction --quiet --no-check-all --no-check-lock; then
+    setComposeRootVersion
+
+    if [ "1" == "${composerGlobal-}" ]; then
+      global="global";
+    else
+      global="";
+    fi
+
+    command="composer ${global} validate --strict --quiet --no-interaction --no-check-all --no-check-lock"
+    if ! $command; then
         if [ "1" == "${composerStrictValidation-}" ]; then
             echo
             echo -e "\e[31mERROR: composer files validation failed\e[0m"
@@ -42,7 +52,8 @@ checkComposerValidate() {
         fi
     fi
 
-    if ! composer validate --strict --no-ansi --no-interaction --quiet --no-check-all --check-lock; then
+    command="composer ${global} validate --strict --no-ansi --no-interaction --quiet --no-check-all --check-lock"
+    if ! $command; then
         if [ "1" == "${composerStrictValidation-}" ]; then
             echo
             echo -e "\e[31mERROR: composer files validation failed\e[0m"

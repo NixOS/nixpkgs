@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, m4
+{ lib, stdenv, fetchurl, m4
 , runtimeShell
 , file
 }:

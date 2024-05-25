@@ -19,7 +19,6 @@
 , autoconf
 , automake
 , coreutils
-, fetchpatch
 , fetchurl
 , fetchgit
 , perl

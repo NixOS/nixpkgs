@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libtermkey, libiconv
-, libuv, lua, ncurses, pkg-config
-, unibilium, gperf
+{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libiconv
+, libuv, lua, pkg-config
+, unibilium
 , libvterm-neovim
 , tree-sitter
 , fetchurl
@@ -89,12 +89,10 @@ in {
     inherit lua;
     treesitter-parsers = treesitter-parsers //
       { markdown = treesitter-parsers.markdown // { location = "tree-sitter-markdown"; }; } //
-      { markdown-inline = treesitter-parsers.markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; }
+      { markdown_inline = treesitter-parsers.markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; }
       ;
 
     buildInputs = [
-      gperf
-      libtermkey
       libuv
       libvterm-neovim
       # This is actually a c library, hence it's not included in neovimLuaEnv,
@@ -103,7 +101,6 @@ in {
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
       msgpack-c
-      ncurses
       neovimLuaEnv
       tree-sitter
       unibilium

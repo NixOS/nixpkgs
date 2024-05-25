@@ -18,8 +18,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
         server.hostname = domain;
 
         certificate."snakeoil" = {
-          cert = "file://${certs.${domain}.cert}";
-          private-key = "file://${certs.${domain}.key}";
+          cert = "%{file:${certs.${domain}.cert}}%";
+          private-key = "%{file:${certs.${domain}.key}}%";
         };
 
         server.tls = {
@@ -40,8 +40,6 @@ in import ./make-test-python.nix ({ lib, ... }: {
           };
         };
 
-        resolver.public-suffix = [ ];  # do not fetch from web in sandbox
-
         session.auth.mechanisms = "[plain]";
         session.auth.directory = "'in-memory'";
         storage.directory = "in-memory";
@@ -53,13 +51,13 @@ in import ./make-test-python.nix ({ lib, ... }: {
           type = "memory";
           principals = [
             {
-              type = "individual";
+              class = "individual";
               name = "alice";
               secret = "foobar";
               email = [ "alice@${domain}" ];
             }
             {
-              type = "individual";
+              class = "individual";
               name = "bob";
               secret = "foobar";
               email = [ "bob@${domain}" ];
@@ -117,6 +115,6 @@ in import ./make-test-python.nix ({ lib, ... }: {
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ happysalada pacien ];
+    maintainers = with lib.maintainers; [ happysalada pacien onny ];
   };
 })

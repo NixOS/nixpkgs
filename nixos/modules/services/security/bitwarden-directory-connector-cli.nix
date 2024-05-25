@@ -260,6 +260,7 @@ in {
         description = "Sync timer for Bitwarden Directory Connector";
         wantedBy = ["timers.target"];
         after = ["network-online.target"];
+        wants = ["network-online.target"];
         timerConfig = {
           OnCalendar = cfg.interval;
           Unit = "bitwarden-directory-connector-cli.service";

@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "7.5.1";
+  version = "7.5.2";
 in
 # The output of the derivation is a tool to create bootable images using Limine
 # as bootloader for various platforms and corresponding binary and helper files.
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   # Packaging that in Nix is very cumbersome.
   src = fetchurl {
     url = "https://github.com/limine-bootloader/limine/releases/download/v${version}/limine-${version}.tar.gz";
-    sha256 = "sha256-aWzhUwW4799v0qZDpzzztb2LnfRYwjPXWM2dgpqwYIo=";
+    sha256 = "sha256-l9ax89rNbQs8eNyuljdEXCvY5GRXsN9qzIDrsi76iEg=";
   };
 
   nativeBuildInputs = [
