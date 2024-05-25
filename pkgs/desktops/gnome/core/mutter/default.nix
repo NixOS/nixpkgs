@@ -10,7 +10,6 @@
 , colord
 , lcms2
 , pango
-, json-glib
 , libstartup_notification
 , libcanberra
 , ninja
@@ -59,7 +58,6 @@
 , sysprof
 , libsysprof-capture
 , desktop-file-utils
-, libcap_ng
 , egl-wayland
 , graphene
 , wayland
@@ -91,9 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    # required for pkg-config to detect mutter-clutter
-    json-glib
-    libcap_ng
+    # required for pkg-config to detect mutter-mtk
     graphene
   ];
 
