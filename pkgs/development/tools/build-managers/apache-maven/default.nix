@@ -37,20 +37,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru =
     let
-      makeOverridableMavenPackage = f: origArgs:
+      makeOverridableMavenPackage = mavenRecipe: mavenArgs:
         let
-          ff = f origArgs;
-          overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
+          drv = mavenRecipe mavenArgs;
+          overrideWith = newArgs: mavenArgs //
+            (if lib.isFunction newArgs then newArgs mavenArgs else newArgs);
         in
-        if builtins.isAttrs ff then
-          (ff // {
-            overrideMavenAttrs = newArgs: makeOverridableMavenPackage f (overrideWith newArgs);
+        if builtins.isAttrs drv then
+          (drv // {
+            overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
           })
-        else if builtins.isFunction ff then {
-          overrideMavenAttrs = newArgs: makeOverridableMavenPackage f (overrideWith newArgs);
-          __functor = self: ff;
+        else if builtins.isFunction drv then {
+          overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
+          __functor = self: drv;
         }
-        else ff;
+        else drv;
     in
     {
       buildMavenPackage = makeOverridableMavenPackage (callPackage ./build-package.nix {
