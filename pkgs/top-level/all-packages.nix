@@ -16540,8 +16540,6 @@ with pkgs;
 
   qbe = callPackage ../development/compilers/qbe { };
 
-  rasm = callPackage ../development/compilers/rasm { };
-
   replibyte = callPackage ../development/tools/database/replibyte {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
