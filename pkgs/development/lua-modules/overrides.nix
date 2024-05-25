@@ -734,6 +734,9 @@ in
       hash = "sha256-2P+mokkjdj2PccQG/kAGnIoUPVnK2FqNfYpHPhsp8kw=";
     };
 
+    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
+      (if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo
       rustPlatform.cargoSetupHook
