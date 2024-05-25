@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libchewing";
-  version = "unstable-2020-06-27";
+  version = "0.5.1-unstable-2020-06-27";
 
   src = fetchFromGitHub {
     owner = "chewing";
