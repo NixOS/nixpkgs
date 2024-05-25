@@ -10,6 +10,7 @@
   textlint-plugin-latex2e,
   textlint-rule-abbr-within-parentheses,
   textlint-rule-alex,
+  textlint-rule-common-misspellings,
   textlint-rule-diacritics,
   textlint-rule-en-max-word-count,
   textlint-rule-max-comma,
@@ -109,6 +110,7 @@ buildNpmPackage rec {
         textlint-plugin-latex2e
         textlint-rule-abbr-within-parentheses
         textlint-rule-alex
+        textlint-rule-common-misspellings
         textlint-rule-diacritics
         textlint-rule-en-max-word-count
         textlint-rule-max-comma
