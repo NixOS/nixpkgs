@@ -37,15 +37,15 @@ buildPythonPackage rec {
   dependencies = [
     numba
     numpy
+    scikit-learn
     scipy
+    torchvision
     tqdm
   ];
 
   nativeCheckInputs = [
     pynose
     pytestCheckHook
-    scikit-learn
-    torchvision
   ];
 
   pythonImportsCheck = [ "apricot" ];
