@@ -19,10 +19,7 @@ stdenv.mkDerivation {
 
   nativeCheckInputs = [ hare ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
