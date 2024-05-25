@@ -64,6 +64,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests requires pypdfium2
     "tests/test_display.py"
+    # Tests requires pypdfium2
+    "tests/test_issues.py"
     # Tests require Ghostscript
     "tests/test_repair.py"
   ];
