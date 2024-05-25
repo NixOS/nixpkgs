@@ -25,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Intelligent Chinese phonetic input method";
     homepage = "https://chewing.im/";
     license = licenses.lgpl21Only;
-    maintainers = [ maintainers.ericsagnes ];
+    maintainers = with maintainers; [
+      ericsagnes
+      ShamrockLee
+    ];
     platforms = platforms.linux;
   };
 })
