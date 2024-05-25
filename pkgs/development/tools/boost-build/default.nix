@@ -36,7 +36,11 @@ stdenv.mkDerivation {
   patches = useBoost.boostBuildPatches or []
     ++ lib.optional (useBoost ? version && lib.versionAtLeast useBoost.version "1.81") ./fix-clang-target.patch;
 
-  postPatch = lib.optionalString (useBoost ? version && lib.versionAtLeast useBoost.version "1.82") ''
+  postPatch = ''
+    # Upstream uses arm64, but nixpkgs uses aarch64.
+    substituteInPlace src/tools/clang.jam \
+      --replace-fail 'arch = arm64' 'arch = aarch64'
+  '' + lib.optionalString (useBoost ? version && lib.versionAtLeast useBoost.version "1.82") ''
     patchShebangs --build src/engine/build.sh
   '';
 
