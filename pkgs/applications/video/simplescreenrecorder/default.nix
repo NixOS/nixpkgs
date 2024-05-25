@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg_4, libjack2, libX11, libXext, libXinerama, qtx11extras
-, libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja
+, libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja, nix-update-script
 }:
 
 mkDerivation rec {
@@ -33,6 +33,8 @@ mkDerivation rec {
     alsa-lib ffmpeg_4 libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
     libpulseaudio libv4l qtbase qttools qtx11extras
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A screen recorder for Linux";
