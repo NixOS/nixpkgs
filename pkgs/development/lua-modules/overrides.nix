@@ -735,7 +735,7 @@ in
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.isDarwin
-      (if lib.hasPrefix "luajit" lua.name then "-lluajit-${lua.luaversion}" else "-llua");
+      (if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       cargo
