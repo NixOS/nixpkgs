@@ -1,4 +1,5 @@
 { lib
+, config
 , stdenv
 , fetchFromGitHub
 , cmake
@@ -7,15 +8,17 @@
 , shaderc
 , vulkan-headers
 , wayland
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "2.7.5";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-i/T6gk8ICneW624008eiStgYNv5CE8w0Yx8knk57EFw=";
+    hash = "sha256-aSz37+1K26Xizf4cpV45a2DnSsl959VQok/ppFRk/hs=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
@@ -26,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
   ];
 
   buildInputs = [
@@ -39,12 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
     shaderc
     vulkan-headers
     wayland
-  ];
+  ] ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cccl.dev
+        cuda_cudart.dev
+        cuda_cudart.lib
+        cuda_cudart.static
+        libcublas.dev
+        libcublas.lib
+      ]);
 
   cmakeFlags = [
     "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
     "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
     "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
+  ] ++ lib.optionals (!cudaSupport) [
+    "-DLLMODEL_CUDA=OFF"
   ];
 
   postInstall = ''
