@@ -8,6 +8,7 @@
   poco,
   ocl-icd,
   opencl-clhpp,
+  callPackage,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    run-on-nixos-artwork = callPackage ./tests/run-on-nixos-artwork.nix { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/MCJack123/sanjuuni";
