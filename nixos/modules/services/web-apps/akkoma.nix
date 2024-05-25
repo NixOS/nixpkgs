@@ -119,7 +119,7 @@ let
         -o ${escapeShellArg cfg.user } \
         -g ${escapeShellArg cfg.group} \
         <(hexdump -n 16 -e '"%02x"' /dev/urandom) \
-        "$RUNTIME_DIRECTORY/cookie"
+        "''${RUNTIME_DIRECTORY%%:*}/cookie"
     '';
   };
 
@@ -131,7 +131,7 @@ let
         -o ${escapeShellArg cfg.user} \
         -g ${escapeShellArg cfg.group} \
         ${escapeShellArg cfg.dist.cookie._secret} \
-        "$RUNTIME_DIRECTORY/cookie"
+        "''${RUNTIME_DIRECTORY%%:*}/cookie"
     '';
   };
 
@@ -181,7 +181,7 @@ let
     name = "akkoma-config";
     runtimeInputs = with pkgs; [ coreutils replace-secret ];
     text = ''
-      cd "$RUNTIME_DIRECTORY"
+      cd "''${RUNTIME_DIRECTORY%%:*}"
       tmp="$(mktemp config.exs.XXXXXXXXXX)"
       trap 'rm -f "$tmp"' EXIT TERM
 
@@ -279,7 +279,7 @@ let
         cd "${cfg.package}"
 
         RUNTIME_DIRECTORY="''${RUNTIME_DIRECTORY:-/run/akkoma}"
-        AKKOMA_CONFIG_PATH="$RUNTIME_DIRECTORY/config.exs" \
+        AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
         ERL_FLAGS=${lib.escapeShellArg (lib.escapeShellArgs ([
@@ -287,7 +287,7 @@ let
           "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
           "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
         ] ++ cfg.dist.extraFlags))} \
-        RELEASE_COOKIE="$(<"$RUNTIME_DIRECTORY/cookie")" \
+        RELEASE_COOKIE="$(<"''${RUNTIME_DIRECTORY%%:*}/cookie")" \
         RELEASE_NAME="akkoma" \
           exec "${cfg.package}/bin/$(basename "$0")" "$@"
       '';
@@ -984,7 +984,7 @@ in {
         RemainAfterExit = true;
         UMask = "0077";
 
-        RuntimeDirectory = "akkoma";
+        RuntimeDirectory = mkBefore "akkoma";
 
         ExecStart = mkMerge [
           (mkIf (cfg.dist.cookie == null) [ genScript ])
