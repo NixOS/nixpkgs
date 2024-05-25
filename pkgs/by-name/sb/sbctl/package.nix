@@ -9,16 +9,20 @@
 
 buildGoModule rec {
   pname = "sbctl";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = pname;
     rev = version;
-    hash = "sha256-vxPYWoBU4k2fKWXGaMzIkUdj+EmPWTtCvMwAVmsgKaE=";
+    hash = "sha256-1TprUr+bLPOlMpe4ReV1S/QbVsA8Q7QIOcLczEaSyAQ=";
   };
 
-  vendorHash = "sha256-kVXzHTONPCE1UeAnUiULjubJeZFD0DAxIk+w8/Dqs6c=";
+  patches = [
+    ./fix-go-module.patch
+  ];
+
+  vendorHash = "sha256-LuSewWK/sxaHibJ6a05PM9CPen8J+MJD6lwk4SNOWSA=";
 
   ldflags = [ "-s" "-w" "-X github.com/foxboron/sbctl.DatabasePath=${databasePath}" ];
 

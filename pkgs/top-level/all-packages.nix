@@ -8691,8 +8691,6 @@ with pkgs;
 
   efitools = callPackage ../tools/security/efitools { };
 
-  sbctl = callPackage ../tools/security/sbctl { };
-
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
   sonic-server = callPackage ../servers/search/sonic-server { };
