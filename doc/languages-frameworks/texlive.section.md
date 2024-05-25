@@ -142,13 +142,12 @@ let
       runHook postUnpack
     '';
 
-    nativeBuildInputs = [
-      (texliveSmall.withPackages (ps: with ps; [ cm-super hypdoc latexmk ]))
-      # multiple-outputs.sh fails if $out is not defined
-      (writeShellScript "force-tex-output.sh" ''
-        out="''${tex-}"
-      '')
-    ];
+    nativeBuildInputs = [ (texliveSmall.withPackages (ps: with ps; [ cm-super hypdoc latexmk ])) ];
+
+    # multiple-outputs.sh fails if $out is not defined
+    preHook = ''
+      export out="''${tex-}"
+    '';
 
     dontConfigure = true;
 
