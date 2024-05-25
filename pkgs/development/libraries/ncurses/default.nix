@@ -51,7 +51,16 @@ stdenv.mkDerivation (finalAttrs: {
       ]}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--with-build-cc=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-  ];
+  ] ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; ncurses' `resulting.map` version script references symbols that
+      # aren't present.
+      #
+      # See: https://lists.gnu.org/archive/html/bug-ncurses/2024-05/msg00086.html
+      #
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+  ]);
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
