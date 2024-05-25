@@ -17021,6 +17021,7 @@ with pkgs;
   };
   cargo-bitbake = callPackage ../development/tools/rust/cargo-bitbake { };
   cargo-c = callPackage ../development/tools/rust/cargo-c {
+    inherit (rustPackages_1_76) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
