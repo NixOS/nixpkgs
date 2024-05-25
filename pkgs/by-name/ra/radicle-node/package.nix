@@ -7,6 +7,8 @@
 , lib
 , makeWrapper
 , man-db
+, nixos
+, nixosTests
 , openssh
 , radicle-node
 , runCommand
@@ -86,6 +88,19 @@
 
         touch $out
       '';
+      nixos-build = lib.recurseIntoAttrs {
+        checkConfig-success = (nixos {
+            services.radicle.settings = {
+              node.alias = "foo";
+            };
+          }).config.services.radicle.configFile;
+        checkConfig-failure = testers.testBuildFailure (nixos {
+            services.radicle.settings = {
+              node.alias = null;
+            };
+          }).config.services.radicle.configFile;
+      };
+      nixos-run = nixosTests.radicle;
     };
 
   meta = {
