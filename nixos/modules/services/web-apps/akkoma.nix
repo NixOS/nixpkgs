@@ -336,7 +336,9 @@ let
           exec "${cfg.package}/bin/$(basename "$0")" "$@"
       '';
     };
-  in pkgs.runCommandLocal "akkoma-env" { } ''
+  in pkgs.runCommand "akkoma-env" {
+    preferLocalBuild = true;
+  } ''
     mkdir -p "$out/bin"
 
     ln -r -s ${escapeShellArg script} "$out/bin/pleroma"
@@ -379,7 +381,9 @@ let
   staticDir = ex.":pleroma".":instance".static_dir;
   uploadDir = ex.":pleroma".":instance".upload_dir;
 
-  staticFiles = pkgs.runCommandLocal "akkoma-static" { } ''
+  staticFiles = pkgs.runCommand "akkoma-static" {
+    preferLocalBuild = true;
+  } ''
     ${concatStringsSep "\n" (mapAttrsToList (key: val: ''
       mkdir -p $out/frontends/${escapeShellArg val.name}/
       ln -s ${escapeShellArg val.package} $out/frontends/${escapeShellArg val.name}/${escapeShellArg val.ref}
