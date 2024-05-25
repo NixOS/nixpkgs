@@ -23,7 +23,7 @@ buildGoModule rec {
     stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
   in
     ''
-      for shell in bash zsh; do
+      for shell in bash zsh fish; do
         ${stern}/bin/stern --completion $shell > stern.$shell
         installShellCompletion stern.$shell
       done
