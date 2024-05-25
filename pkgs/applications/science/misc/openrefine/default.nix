@@ -15,12 +15,12 @@ let
     inherit jdk;
   };
 
-  version = "3.7.9";
+  version = "3.8.1";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-wtg0BOGr/aJPZeFQbJSBHtTVfpcSCSHP++8AnpS8pgQ=";
+    hash = "sha256-MnFwFJdKIU7D8GQgnDvCO+P8r8h1Se/wmbt/Z3EX+3Q=";
   };
 
   npmPkg = buildNpmPackage {
@@ -29,7 +29,7 @@ let
     pname = "openrefine-npm";
     sourceRoot = "${src.name}/main/webapp";
 
-    npmDepsHash = "sha256-8GhcL4tohQ5u2HeYN6JyTMMobUOqAL8ETCLiP1SoDSk=";
+    npmDepsHash = "sha256-u9qledNFqGgMmOIsm2T8w3UoaLbb7WtksUw6xLoRgU8=";
 
     # package.json doesn't supply a version, which npm doesn't like - fix this.
     # directly referencing jq because buildNpmPackage doesn't pass
@@ -56,19 +56,11 @@ in maven'.buildMavenPackage {
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
   mvnParameters = "-DskipTests=true -pl !packaging";
-  mvnHash = "sha256-MqE+iloqzBav6E3/rf1LP5BlKhW/FBIt6+6U+S8UJWA=";
+  mvnHash = "sha256-0qsKUMV9M0ZaddR5ust8VikSrsutdxVNNezKqR+F/6M=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = let
-    gitProperties = writeText "git.properties" (builtins.toJSON {
-      "git.build.version" = version;
-      "git.branch" = "none";
-      "git.build.time" = "1970-01-01T00:00:00+0000";
-      "git.commit.id.abbrev" = "none";
-      "git.commit.id.describe" = "none";
-    });
-  in ''
+  installPhase = ''
     mkdir -p $out/lib/server/target/lib
     cp -r server/target/lib/* $out/lib/server/target/lib/
     cp server/target/openrefine-*-server.jar $out/lib/server/target/lib/
@@ -84,8 +76,6 @@ in maven'.buildMavenPackage {
         fi
       done
     )
-
-    cp ${gitProperties} $out/lib/webapp/WEB-INF/classes/git.properties
 
     mkdir -p $out/etc
     cp refine.ini $out/etc/
