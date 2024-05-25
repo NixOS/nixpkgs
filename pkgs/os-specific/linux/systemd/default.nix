@@ -501,6 +501,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "default-hierarchy" "unified")
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
+    # Attempts to check /usr/sbin and that fails in macOS sandbox because
+    # permission is denied. If /usr/sbin is not a symlink, it defaults to true.
+    # We set it to false since stdenv moves sbin/* to bin and creates a symlink,
+    # that is, we do not have split bin.
+    (lib.mesonOption "split-bin" "false")
+
     # D-Bus
     (lib.mesonOption "dbuspolicydir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbussessionservicedir" "${placeholder "out"}/share/dbus-1/services")
@@ -814,6 +820,9 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $out/share/dbus-1/system-services/*.service; do
       substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
     done
+
+    # For compatibility with dependents that use sbin instead of bin.
+    ln -s bin "$out/sbin"
 
     rm -rf $out/etc/rpm
   '' + lib.optionalString (!withKernelInstall) ''
