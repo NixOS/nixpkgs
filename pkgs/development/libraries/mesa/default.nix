@@ -244,8 +244,11 @@ self = stdenv.mkDerivation {
 
     # Enable RT for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
+  ] ++ (if lib.versionAtLeast version "24.1.0" then [
+    (lib.mesonOption "intel-clc" (if stdenv.buildPlatform == stdenv.hostPlatform then "enabled" else "system"))
+  ] else [
     (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform))
-  ] ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.isDarwin [
     # Disable features that are explicitly unsupported on the platform
     (lib.mesonEnable "gbm" false)
     (lib.mesonEnable "xlib-lease" false)
