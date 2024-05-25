@@ -1523,6 +1523,8 @@ self: super: with self; {
 
   biliass = callPackage ../development/python-modules/biliass { };
 
+  bilibili-api-python = callPackage ../development/python-modules/bilibili-api-python { };
+
   billiard = callPackage ../development/python-modules/billiard { };
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
