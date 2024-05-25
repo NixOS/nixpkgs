@@ -4,6 +4,7 @@
 , pkg-config
 , bzip2
 , libgit2
+, nix-update-script
 , zlib
 , zstd
 , zoxide
@@ -44,6 +45,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=functions::tests::test_list_up_contents"
     "--skip=state::tests::test_has_write_permission"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A tui file manager with vim-like key mapping";
