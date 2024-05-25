@@ -93,5 +93,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda gepbird yrd ];
     platforms = platforms.unix;
+    # compiler error since 2023-11-17
+    broken = stdenv.isDarwin;
   };
 }

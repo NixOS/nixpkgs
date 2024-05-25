@@ -8,6 +8,7 @@
   fetchFromGitHub,
   fetchzip,
   fsspec,
+  jsonpath-ng,
   llamaindex-py-client,
   nest-asyncio,
   networkx,
@@ -23,10 +24,11 @@
   pythonOlder,
   pyyaml,
   requests,
-  tree-sitter,
+  spacy,
   sqlalchemy,
   tenacity,
   tiktoken,
+  tree-sitter,
   typing-inspect,
 }:
 
@@ -44,7 +46,7 @@ in
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.10.36";
+  version = "0.10.38";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -53,7 +55,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yP/60DLg43UOOogxbDvb1p5n8dnfBUjGhcfO5g5g0gA=";
+    hash = "sha256-A5wOQE8WK8Mt7TvquSfgPorr39lap2n8AVQP7rr6y/Y=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -80,6 +82,7 @@ buildPythonPackage rec {
     deprecated
     dirtyjson
     fsspec
+    jsonpath-ng
     llamaindex-py-client
     nest-asyncio
     networkx
@@ -90,6 +93,7 @@ buildPythonPackage rec {
     pillow
     pyyaml
     requests
+    spacy
     sqlalchemy
     tenacity
     tiktoken
