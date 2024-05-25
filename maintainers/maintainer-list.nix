@@ -16708,6 +16708,12 @@
     github = "PhilippWoelfel";
     githubId = 19400064;
   };
+  pyle = {
+    name = "Adam Pyle";
+    email = "adam@pyle.dev";
+    github = "pyle";
+    githubId = 7279609;
+  };
   pyrolagus = {
     email = "pyrolagus@gmail.com";
     github = "PyroLagus";
