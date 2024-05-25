@@ -108,7 +108,7 @@ in
       type = types.bool;
       example = true;
       description = ''
-        Set the `persistentTimer` option for the
+        Set the `Persistent` option for the
         {manpage}`systemd.timer(5)`
         which triggers the snapshot immediately if the last trigger
         was missed (e.g. if the system was powered down).
