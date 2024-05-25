@@ -17,6 +17,7 @@
 , gnome
 , desktop-file-utils
 , fetchpatch2
+, nix-update-script
 , wrapGAppsHook3
 , gobject-introspection
 # withWebkit enables the "webkit" feature, also known as Google Fonts
@@ -81,6 +82,8 @@ stdenv.mkDerivation rec {
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://fontmanager.github.io/";
