@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "reproxy";
-  version = "1.1.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "reproxy";
     rev = "v${version}";
-    hash = "sha256-/ydpqi7O4z41YxYb/RngPWk/79h3MIxAopzqIDMgw1g=";
+    hash = "sha256-UQ20mP+7AsrkNN+tvaRb8BcpHu76bpmswtR2PL4/JsE=";
   };
 
   vendorHash = null;
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   checkFlags = [
     # Requires network access or fluky
-    "-skip=^Test(_MainWithPlugin|_MainWithSSL|_Main|Http_matchHandler|Http_withBasicAuth|File_Events|File_Events_BusyListener)$"
+    "-skip=^Test(_MainWithPlugin|_MainWithSSL|_Main|Http_health|Http_matchHandler|Http_withBasicAuth|File_Events|File_Events_BusyListener)$"
   ];
 
   postInstall = ''
