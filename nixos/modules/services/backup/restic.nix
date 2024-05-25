@@ -264,6 +264,16 @@ in
             having to manually specify most options.
           '';
         };
+
+        maxCpuCores = mkOption {
+          type = with types; nullOr ints.positive;
+          description = ''
+            By default, restic uses all available CPU cores. This options uses the environment variable GOMAXPROCS to
+            limit the number of used CPU cores. For example to use a single CPU core, use GOMAXPROCS=1. Limiting
+            the number of usable CPU cores, can slightly reduce the memory usage of restic.
+          '';
+          default = null;
+        };
       };
     }));
     default = { };
@@ -336,7 +346,8 @@ in
               (name: value:
                 nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               )
-              backup.rcloneConfig);
+              backup.rcloneConfig)
+            // optionalAttrs (backup.maxCpuCores != null) { GOMAXPROCS = builtins.toString backup.maxCpuCores; };
             path = [ config.programs.ssh.package ];
             restartIfChanged = false;
             wants = [ "network-online.target" ];
