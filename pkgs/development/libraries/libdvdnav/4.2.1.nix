@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--cc=${stdenv.cc.targetPrefix}cc"
+    # Let's strip the binaries ourselves,
+    # as unprefixed `strip` command is not available during cross compilation.
+    "--disable-strip"
   ];
 
   preConfigure = ''
