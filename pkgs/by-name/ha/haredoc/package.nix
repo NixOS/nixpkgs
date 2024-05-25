@@ -4,9 +4,6 @@
   scdoc,
   stdenv,
 }:
-let
-  arch = stdenv.hostPlatform.uname.processor;
-in
 stdenv.mkDerivation {
   pname = "haredoc";
   outputs = [
@@ -23,15 +20,10 @@ stdenv.mkDerivation {
     hare
   ];
 
-  preBuild = ''
-    HARECACHE="$(mktemp -d)"
-    export HARECACHE
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    hare build -qR -a ${arch} -o haredoc ./cmd/haredoc
+    hare build -o haredoc ./cmd/haredoc
     scdoc <docs/haredoc.1.scd >haredoc.1
     scdoc <docs/haredoc.5.scd >haredoc.5
 
