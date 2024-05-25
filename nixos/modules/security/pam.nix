@@ -99,6 +99,7 @@ let
     }));
   };
 
+  package = config.security.pam.package;
   parentConfig = config;
 
   pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
@@ -731,7 +732,7 @@ let
               { name = "gnupg"; enable = cfg.gnupg.enable; control = "optional"; modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"; settings = {
                 store-only = cfg.gnupg.storeOnly;
               }; }
-              { name = "faildelay"; enable = cfg.failDelay.enable; control = "optional"; modulePath = "${pkgs.pam}/lib/security/pam_faildelay.so"; settings = {
+              { name = "faildelay"; enable = cfg.failDelay.enable; control = "optional"; modulePath = "${package}/lib/security/pam_faildelay.so"; settings = {
                 inherit (cfg.failDelay) delay;
               }; }
               { name = "google_authenticator"; enable = cfg.googleAuthenticator.enable; control = "required"; modulePath = "${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so"; settings = {
@@ -804,18 +805,18 @@ let
           }; }
           { name = "unix"; control = "required"; modulePath = "pam_unix.so"; }
           { name = "loginuid"; enable = cfg.setLoginUid; control = if config.boot.isContainer then "optional" else "required"; modulePath = "pam_loginuid.so"; }
-          { name = "tty_audit"; enable = cfg.ttyAudit.enable; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_tty_audit.so"; settings = {
+          { name = "tty_audit"; enable = cfg.ttyAudit.enable; control = "required"; modulePath = "${package}/lib/security/pam_tty_audit.so"; settings = {
             open_only = cfg.ttyAudit.openOnly;
             enable = cfg.ttyAudit.enablePattern;
             disable = cfg.ttyAudit.disablePattern;
           }; }
           { name = "systemd_home"; enable = config.services.homed.enable; control = "required"; modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so"; }
-          { name = "mkhomedir"; enable = cfg.makeHomeDir; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_mkhomedir.so"; settings = {
+          { name = "mkhomedir"; enable = cfg.makeHomeDir; control = "required"; modulePath = "${package}/lib/security/pam_mkhomedir.so"; settings = {
             silent = true;
             skel = config.security.pam.makeHomeDir.skelDirectory;
             inherit (config.security.pam.makeHomeDir) umask;
           }; }
-          { name = "lastlog"; enable = cfg.updateWtmp; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_lastlog.so"; settings = {
+          { name = "lastlog"; enable = cfg.updateWtmp; control = "required"; modulePath = "${package}/lib/security/pam_lastlog.so"; settings = {
             silent = true;
           }; }
           { name = "ecryptfs"; enable = config.security.pam.enableEcryptfs; control = "optional"; modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"; }
@@ -850,10 +851,10 @@ let
             xauthpath = "${pkgs.xorg.xauth}/bin/xauth";
             systemuser = 99;
           }; }
-          { name = "limits"; enable = cfg.limits != []; control = "required"; modulePath = "${pkgs.pam}/lib/security/pam_limits.so"; settings = {
+          { name = "limits"; enable = cfg.limits != []; control = "required"; modulePath = "${package}/lib/security/pam_limits.so"; settings = {
             conf = "${makeLimitsConf cfg.limits}";
           }; }
-          { name = "motd"; enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); control = "optional"; modulePath = "${pkgs.pam}/lib/security/pam_motd.so"; settings = {
+          { name = "motd"; enable = cfg.showMotd && (config.users.motd != null || config.users.motdFile != null); control = "optional"; modulePath = "${package}/lib/security/pam_motd.so"; settings = {
             inherit motd;
           }; }
           { name = "apparmor"; enable = cfg.enableAppArmor && config.security.apparmor.enable; control = "optional"; modulePath = "${pkgs.apparmor-pam}/lib/security/pam_apparmor.so"; settings = {
@@ -966,6 +967,8 @@ in
   ###### interface
 
   options = {
+
+    security.pam.package = mkPackageOption pkgs "pam" { };
 
     security.pam.loginLimits = mkOption {
       default = [];
@@ -1515,7 +1518,7 @@ in
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
-      [ pkgs.pam ]
+      [ package ]
       ++ optional config.users.ldap.enable pam_ldap
       ++ optional config.services.kanidm.enablePam config.services.kanidm.package
       ++ optional config.services.sssd.enable pkgs.sssd
@@ -1533,7 +1536,7 @@ in
         setuid = true;
         owner = "root";
         group = "root";
-        source = "${pkgs.pam}/bin/unix_chkpwd";
+        source = "${package}/bin/unix_chkpwd";
       };
     };
 
@@ -1575,9 +1578,9 @@ in
         (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
         (attrNames config.security.pam.services) +
       ''
-      mr ${getLib pkgs.pam}/lib/security/pam_filter/*,
-      mr ${getLib pkgs.pam}/lib/security/pam_*.so,
-      r ${getLib pkgs.pam}/lib/security/,
+      mr ${getLib package}/lib/security/pam_filter/*,
+      mr ${getLib package}/lib/security/pam_*.so,
+      r ${getLib package}/lib/security/,
       '' +
       (with lib; pipe config.security.pam.services [
         attrValues
