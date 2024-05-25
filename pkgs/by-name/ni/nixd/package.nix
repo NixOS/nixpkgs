@@ -9,14 +9,18 @@
 , gtest
 , libbacktrace
 , lit
-, llvmPackages
+, llvmPackages_16
 , meson
 , ninja
-, nix
+, nixVersions
 , nixpkgs-fmt
 , pkg-config
 , testers
 }:
+
+let
+  nix = nixVersions.nix_2_19;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixd";
@@ -50,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     gtest
     boost182
-    llvmPackages.llvm
+    llvmPackages_16.llvm
   ];
 
   env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
