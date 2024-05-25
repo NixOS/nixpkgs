@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, sqlite, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libchewing";
   version = "0.5.1-unstable-2020-06-27";
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ericsagnes ];
     platforms = platforms.linux;
   };
-}
+})
