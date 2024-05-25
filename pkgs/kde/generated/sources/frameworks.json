@@ -290,9 +290,9 @@
     "hash": "sha256-gpxS2xXWm5Dm0isI3qze3NE0I8kB5Nq2OJPoFLTnaFg="
   },
   "kwallet": {
-    "version": "6.2.0",
-    "url": "mirror://kde/stable/frameworks/6.2/kwallet-6.2.0.tar.xz",
-    "hash": "sha256-LlgRmmRCywDjAU8BY26HIzfP82LsHvEgyvK6AYE70sE="
+    "version": "6.2.1",
+    "url": "mirror://kde/stable/frameworks/6.2/kwallet-6.2.1.tar.xz",
+    "hash": "sha256-UQxoGPso3ZHCqQxNBWgwEMrxs56a8bOoy7O0t8Yhk7w="
   },
   "kwidgetsaddons": {
     "version": "6.2.0",
