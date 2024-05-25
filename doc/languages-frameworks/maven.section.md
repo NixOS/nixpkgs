@@ -51,12 +51,26 @@ After setting `maven.buildMavenPackage`, we then do standard Java `.jar` install
 
 ### Overriding Maven package attributes {#maven-overriding-package-attributes}
 
-The `buildMavenPackage` function has a `overrideMavenAttrs` method that can be
-used to override the attributes of a maven package. In the following example we
-want to use an older version of jd-cli and disable some flaky test:
+```
+overrideMavenAttrs :: (AttrSet -> Derivation) | ((AttrSet -> Attrset) -> Derivation) -> Derivation
+```
+
+The output of `buildMavenPackage` has an `overrideMavenAttrs` attribute, which is a function that takes either
+- any subset of the attributes that can be passed to `buildMavenPackage`
+
+  or
+- a function that takes the argument passed to the previous invocation of `buildMavenPackage` (conventionally called `old`) and returns an attribute set that can be passed to `buildMavenPackage`
+
+and returns a derivation that builds a Maven package based on the old and new arguments merged.
+
+This is similar to [](#sec-pkg-overrideAttrs), but notably does not allow accessing the final value of the argument to `buildMavenPackage`.
+
+:::{.example}
+
+Use `overrideMavenAttrs` to build `jd-cli` version 1.2.0 and disable some flaky test:
 
 ```nix
-jd-cli.overrideMavenAttrs(old: rec {
+jd-cli.overrideMavenAttrs (old: rec {
   version = "1.2.0";
   src = fetchFromGitHub {
     owner = old.src.owner;
@@ -66,43 +80,41 @@ jd-cli.overrideMavenAttrs(old: rec {
     hash = "sha256-US7j6tQ6mh1libeHnQdFxPGoxHzbZHqehWSgCYynKx8=";
   };
 
-  # tests can be disabled by prefixing it with !
-  # see the docs for more info: https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html#Multiple_Formats_in_One
+  # tests can be disabled by prefixing it with `!`
+  # see Maven documentation for more details:
+  # https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html#Multiple_Formats_in_One
   mvnParameters = lib.escapeShellArgs [
     "-Dsurefire.failIfNoSpecifiedTests=false"
-    "-Dtest=!JavaDecompilerTest#basicTest,
-    !JavaDecompilerTest#patternMatchingTest"
+    "-Dtest=!JavaDecompilerTest#basicTest,!JavaDecompilerTest#patternMatchingTest"
   ];
 
   # old mvnHash of 1.2.0 maven dependencies
   mvnHash = "sha256-N9XC1pg6Y4sUiBWIQUf16QSXCuiAPpXEHGlgApviF4I=";
 });
 ```
+:::
 
 ### Offline build {#maven-offline-build}
 
-The default behaviour of the `buildMavenPackage` does the following:
+By default, `buildMavenPackage` does the following:
 
-1. Runs `mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}` in the
-   `fetchedMavenDeps` fixed output derivation.
-2. Runs `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
+1. Run `mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}` in the
+   `fetchedMavenDeps` [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation).
+2. Run `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
    ${mvnParameters}` again in the main derivation.
 
-As a result, tests are run twice which also means that a failing test
-triggers a new build of the fixed output derivation which re-downloads all
-dependencies again. For bigger Maven projects, this might lead to a slow
-feedback cycle and wastes build time resources by executing the build twice.
+As a result, tests are run twice.
+This also means that a failing test will trigger a new attempt to realise the fixed-output derivation, which in turn downloads all dependencies again.
+For bigger Maven projects, this might lead to a long feedback cycle. 
 
-You can use `buildOffline = true` to change the behaviour of the
-`buildMavenPackage` function to the following:
-1. Runs `mvn de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
-   -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}`
-2. Runs `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
+Use `buildOffline = true` to change the behaviour of `buildMavenPackage to the following:
+1. Run `mvn de.qaware.maven:go-offline-maven-plugin:1.2.8:resolve-dependencies
+   -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}` in the fixed-output derivation.
+2. Run `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
    ${mvnParameters}` in the main derivation.
 
-As a result, all dependencies are downloaded in step 1 and the tests are
-executed in step 2. A failing test only triggers a rebuild of step 2 as it can
-reuse the dependencies of step 1 because they have not changed.
+As a result, all dependencies are downloaded in step 1 and the tests are executed in step 2.
+A failing test only triggers a rebuild of step 2 as it can reuse the dependencies of step 1 because they have not changed.
 
 ::: {.warning}
 Test dependencies are not downloaded in step 1 and are therefore missing in
