@@ -23,10 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hare
   ];
 
-  makeFlags = [
-    "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   checkTarget = "check_local";
 
