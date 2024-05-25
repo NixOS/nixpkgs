@@ -1821,8 +1821,6 @@ with pkgs;
 
   gh-dash = callPackage ../tools/misc/gh-dash { };
 
-  gh-eco = callPackage ../tools/misc/gh-eco { };
-
   gh-markdown-preview = callPackage ../tools/misc/gh-markdown-preview { };
 
   ghostie = callPackage ../tools/misc/ghostie { };
