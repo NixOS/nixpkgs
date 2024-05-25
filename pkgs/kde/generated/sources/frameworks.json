@@ -295,9 +295,9 @@
     "hash": "sha256-UQxoGPso3ZHCqQxNBWgwEMrxs56a8bOoy7O0t8Yhk7w="
   },
   "kwidgetsaddons": {
-    "version": "6.2.0",
-    "url": "mirror://kde/stable/frameworks/6.2/kwidgetsaddons-6.2.0.tar.xz",
-    "hash": "sha256-A87y9mrsa397InbEfnIL2rk5sFt3twNF5/B2096tghE="
+    "version": "6.2.2",
+    "url": "mirror://kde/stable/frameworks/6.2/kwidgetsaddons-6.2.2.tar.xz",
+    "hash": "sha256-ORvVeEatFFHEoa39Cc+/qMI7FL8ra/cQhCNgtX2QBJ0="
   },
   "kwindowsystem": {
     "version": "6.2.0",
