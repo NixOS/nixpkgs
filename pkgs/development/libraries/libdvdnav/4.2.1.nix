@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out
   '';
 
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "LD=${stdenv.cc.targetPrefix}ld"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ];
+
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
     description = "A library that implements DVD navigation features such as DVD menus";
