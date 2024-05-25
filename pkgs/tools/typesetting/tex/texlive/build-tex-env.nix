@@ -54,42 +54,42 @@ let
       in oldPkgLists.wrong ++ lib.concatMap toTLPkgSets oldPkgLists.right
     else ps;
 
+  ### resolve TeX dependencies
+  resolveTeXDeps = reqs:
+    let
+      # order of packages is irrelevant
+      packages = builtins.sort (a: b: a.pname < b.pname) (ensurePkgSets (reqs tl));
+      # resolve dependencies of the packages that affect the runtime
+      runtime = builtins.partition
+        (p: p.outputSpecified or false -> builtins.elem (p.tlOutputName or p.outputName) [ "out" "tex" "tlpkg" ])
+        packages;
+      keySet = p: {
+        key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
+        inherit p;
+        tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
+      };
+    in
+      builtins.catAttrs "p" (builtins.genericClosure {
+        startSet = map keySet runtime.right;
+        operator = p: map keySet p.tlDeps;
+      }) ++ runtime.wrong;
+
+  uniqueStrings = strings: builtins.catAttrs "key" (builtins.genericClosure {
+    startSet = map (key: { inherit key; }) strings;
+    operator = _: [ ];
+  });
+
   pkgList = rec {
-    # resolve dependencies of the packages that affect the runtime
-    all =
-      let
-        # order of packages is irrelevant
-        packages = builtins.sort (a: b: a.pname < b.pname) (ensurePkgSets (requiredTeXPackages tl));
-        runtime = builtins.partition
-          (p: p.outputSpecified or false -> builtins.elem (p.tlOutputName or p.outputName) [ "out" "tex" "tlpkg" ])
-          packages;
-        keySet = p: {
-          key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
-          inherit p;
-          tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
-        };
-      in
-      # texlive.combine: the wrapper already resolves all dependencies
-      if __fromCombineWrapper then requiredTeXPackages null else
-        builtins.catAttrs "p" (builtins.genericClosure {
-          startSet = map keySet runtime.right;
-          operator = p: map keySet p.tlDeps;
-        }) ++ runtime.wrong;
+    # texlive.combine: the wrapper already resolves all dependencies
+    all = if __fromCombineWrapper then requiredTeXPackages null else resolveTeXDeps requiredTeXPackages;
 
     # group the specified outputs
     specified = builtins.partition (p: p.outputSpecified or false) all;
     specifiedOutputs = lib.groupBy (p: p.tlOutputName or p.outputName) specified.right;
-    otherOutputNames = builtins.catAttrs "key" (builtins.genericClosure {
-      startSet = map (key: { inherit key; }) (lib.concatLists (builtins.catAttrs "outputs" specified.wrong));
-      operator = _: [ ];
-    });
+    otherOutputNames = uniqueStrings (lib.concatLists (builtins.catAttrs "outputs" specified.wrong));
     otherOutputs = lib.genAttrs otherOutputNames (n: builtins.catAttrs n specified.wrong);
-    outputsToInstall = builtins.catAttrs "key" (builtins.genericClosure {
-      startSet = map (key: { inherit key; })
-        ([ "out" ] ++ lib.optional (otherOutputs ? man) "man"
-          ++ lib.concatLists (builtins.catAttrs "outputsToInstall" (builtins.catAttrs "meta" specified.wrong)));
-      operator = _: [ ];
-    });
+    outputsToInstall = uniqueStrings ([ "out" ] ++ lib.optional (otherOutputs ? man) "man"
+      ++ lib.concatLists (builtins.catAttrs "outputsToInstall" (builtins.catAttrs "meta" specified.wrong)));
 
     # split binary and tlpkg from tex, texdoc, texsource
     bin = if __fromCombineWrapper
