@@ -19,15 +19,23 @@ let
     (boolFlag "secure" cfg.secure)
     (boolFlag "noupnp" cfg.noUPnP)
   ];
-  stopScript = pkgs.writeScript "terraria-stop" ''
-    #!${pkgs.runtimeShell}
 
+  tmuxCmd = "${lib.getExe pkgs.tmux} -S ${lib.escapeShellArg cfg.dataDir}/terraria.sock";
+
+  stopScript = pkgs.writeShellScript "terraria-stop" ''
     if ! [ -d "/proc/$1" ]; then
       exit 0
     fi
 
-    ${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock send-keys Enter exit Enter
-    ${getBin pkgs.coreutils}/bin/tail --pid="$1" -f /dev/null
+    lastline=$(${tmuxCmd} capture-pane -p | grep . | tail -n1)
+
+    if [[ "$lastline" =~ ^"Choose World" ]]; then
+      ${tmuxCmd} kill-session
+    else
+      ${tmuxCmd} send-keys Enter exit Enter
+    fi
+
+    tail --pid="$1" -f /dev/null
   '';
 in
 {
@@ -152,7 +160,7 @@ in
         Type = "forking";
         GuessMainPID = true;
         UMask = 007;
-        ExecStart = "${getBin pkgs.tmux}/bin/tmux -S ${cfg.dataDir}/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
+        ExecStart = "${tmuxCmd} new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
         ExecStop = "${stopScript} $MAINPID";
       };
     };
