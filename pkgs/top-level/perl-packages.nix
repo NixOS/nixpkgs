@@ -6949,6 +6949,21 @@ with self; {
     };
   };
 
+  DevelCover = buildPerlPackage {
+    pname = "Devel-Cover";
+    version = "1.42";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Devel-Cover-1.42.tar.gz";
+      hash = "";
+    };
+    meta = {
+      description = "Code coverage metrics for Perl";
+      homepage = "https://metacpan.org/pod/Devel::Cover";
+      license = with lib.licenses; [ artistic2 ];
+      maintainers = with maintainers; [ m-dango ];
+    };
+  };
+
   DevelDeprecationsEnvironmental = buildPerlPackage {
     pname = "Devel-Deprecations-Environmental";
     version = "1.101";
