@@ -9,6 +9,8 @@
 , python3Packages
 , rustPlatform
 , stdenv
+, testers
+, uv
 , nix-update-script
 }:
 
@@ -20,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-NwIjuOsf6tv+kVEXA2GvQkVwDznZs5fnnkzcnVoOGpY=";
   };
 
@@ -51,9 +53,6 @@ python3Packages.buildPythonApplication rec {
 
   cargoBuildFlags = [ "--package" "uv" ];
 
-  # Tests require network access
-  doCheck = false;
-
   env = {
     OPENSSL_NO_VENDOR = true;
   };
@@ -70,14 +69,19 @@ python3Packages.buildPythonApplication rec {
     "uv"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = uv;
+    };
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "An extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = with lib.licenses; [ asl20 mit ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "uv";
   };
 }
