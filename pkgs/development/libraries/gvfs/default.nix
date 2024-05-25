@@ -45,13 +45,13 @@
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.54.0";
+  version = "1.54.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
-    hash = "sha256-9T2B34bC6GzdJRgsLYpmmiI3HoNiPe0bnVQW3Pxt42Y=";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-rEo7zLf+FQIVjvD95cl5q0RxJVfQKKjk8wop8PvZ0Z8=";
   };
 
   patches = [
@@ -137,13 +137,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.doCheck;
 
   separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gvfs";
       versionPolicy = "odd-unstable";
     };
   };
@@ -154,4 +154,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})
