@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  configureFlags = [ (lib.enableFeature true "sigstop") ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [ "out" "dev" "man" "doc" ];
