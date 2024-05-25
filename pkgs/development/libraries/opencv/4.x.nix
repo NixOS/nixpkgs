@@ -80,6 +80,9 @@
 , doxygen
 , graphviz-nox
 
+, runAccuracyTests ? true
+, runPerformanceTests ? false
+
 , AVFoundation
 , Cocoa
 , VideoDecodeAcceleration
@@ -234,8 +237,6 @@ let
 
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
-  runAccuracyTests = true;
-  runPerformanceTests = false;
   printEnabled = enabled: if enabled then "ON" else "OFF";
   withOpenblas = (enableBlas && blas.provider.pname == "openblas");
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
@@ -254,6 +255,7 @@ effectiveStdenv.mkDerivation {
   outputs = [
     "out"
     "cxxdev"
+  ] ++ lib.optionals (runAccuracyTests || runPerformanceTests) [
     "package_tests"
   ];
   cudaPropagateToOutput = "cxxdev";
