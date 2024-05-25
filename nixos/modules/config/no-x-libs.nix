@@ -54,6 +54,7 @@ with lib;
       intel-vaapi-driver = super.intel-vaapi-driver.override { enableGui = false; };
       libdevil = super.libdevil-nox;
       libextractor = super.libextractor.override { gtkSupport = false; };
+      libplacebo = super.libplacebo.override { vulkanSupport = false; };
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
       mc = super.mc.override { x11Support = false; };
