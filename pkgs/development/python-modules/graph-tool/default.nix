@@ -2,6 +2,7 @@
   buildPythonPackage,
   lib,
   fetchurl,
+  stdenv,
 
   autoreconfHook,
   boost,
@@ -69,6 +70,7 @@ buildPythonPackage rec {
     description = "Python module for manipulation and statistical analysis of graphs";
     homepage = "https://graph-tool.skewed.de";
     license = licenses.lgpl3Plus;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ ];
   };
 }
