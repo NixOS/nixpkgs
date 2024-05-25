@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "francis";
-  version = "1.1.0";
+  version = "24.05.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "francis";
     owner = "utilities";
     rev = "v${version}";
-    hash = "sha256-TvLFzGWb3RROGywhNzCvnFG00PpKC2k+/w1bgwTCESg=";
+    hash = "sha256-mvB01iFvTmGSGaCdvyMOC8BaIgZgyeyRJEra31w04DI=";
   };
 
   nativeBuildInputs = [
