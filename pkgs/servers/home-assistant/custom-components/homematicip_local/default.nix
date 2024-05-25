@@ -16,9 +16,14 @@ buildHomeAssistantComponent rec {
     hash = "sha256-EJj9zmDdJ+T7yrANmRJuLRCSwvGLy2CkIBsO9H3LIs4=";
   };
 
-  dependencies = [
-    hahomematic
-  ];
+  postPatch = ''
+    # pyhahomematic is maintained by the same person as homematicip_local
+    # homematicip_local has simply a slightly different release cycle
+    substituteInPlace custom_components/homematicip_local/manifest.json \
+      --replace-fail "hahomematic==" "hahomematic>="
+  '';
+
+  dependencies = [ hahomematic ];
 
   meta = {
     changelog = "https://github.com/danielperna84/custom_homematic/blob/${version}/changelog.md";
