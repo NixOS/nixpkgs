@@ -6,15 +6,14 @@
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "himitsu";
   version = "0.7";
 
   src = fetchFromSourcehut {
-    name = pname + "-src";
     owner = "~sircmpwn";
-    repo = pname;
-    rev = version;
+    repo = "himitsu";
+    rev = finalAttrs.version;
     hash = "sha256-jDxQajc8Kyfihm8q3wCpA+WsbAkQEZerLckLQXNhTa8=";
   };
 
@@ -23,14 +22,7 @@ stdenv.mkDerivation rec {
     scdoc
   ];
 
-  preConfigure = ''
-    export HARECACHE=$(mktemp -d)
-  '';
-
-  installFlags = [
-    "PREFIX="
-    "DESTDIR=$(out)"
-  ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://himitsustore.org/";
@@ -39,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ auchter ];
     inherit (hare.meta) platforms badPlatforms;
   };
-}
+})
