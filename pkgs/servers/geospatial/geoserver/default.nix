@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "geoserver";
-  version = "2.25.0";
+  version = "2.25.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    sha256 = "sha256-maWDRRIo5Mqjb6K1NWFplmQwvJ9fLXGnelZcslwp4Oo=";
+    sha256 = "sha256-6F99zHTVRpC64rIPxdrH0ujgoNGQfT53RJ7Rg80ieeA=";
   };
 
   patches = [
