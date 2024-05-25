@@ -18,10 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ hare ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
@@ -30,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SSH client & server protocol implementation for Hare";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ patwid ];
-
     inherit (hare.meta) platforms badPlatforms;
   };
 })
