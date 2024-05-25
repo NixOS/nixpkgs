@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 }:
 
@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
   pname = "miniupnpc";
   version = "2.2.7";
 
-  src = fetchurl {
-    urls = [
-      "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz"
-      "http://miniupnp.free.fr/files/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "sha256-sMOicFaED9DskyilqbrD3F4OxtLoczNJz1d7CqHnCsE=";
+  src = fetchFromGitHub {
+    owner = "miniupnp";
+    repo = "miniupnp";
+    rev = "miniupnpc_${lib.replaceStrings ["."] ["_"] version}";
+    hash = "sha256-cIijY1NcdF169tibfB13845UT9ZoJ/CZ+XLES9ctWTY=";
   };
+
+  sourceRoot = "${src.name}/miniupnpc";
 
   nativeBuildInputs = [ cmake ];
 
