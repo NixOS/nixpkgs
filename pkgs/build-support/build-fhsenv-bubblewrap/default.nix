@@ -45,7 +45,9 @@ let
   # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
   nameAttrs = lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" ]) args;
 
-  buildFHSEnv = callPackage ./buildFHSEnv.nix { };
+  buildFHSEnv = callPackage ./buildFHSEnv.nix {
+    inherit pkgsi686Linux;
+  };
 
   fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
