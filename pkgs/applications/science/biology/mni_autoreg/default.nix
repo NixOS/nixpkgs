@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
-  version = "unstable-2022-05-20";
+  version = "unstable-2023-05-26";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = pname;
-    rev = "be7bd25bf7776974e0f2c1d90b6e7f8ccc0c8874";
-    sha256 = "sGMZbCrdV6yAOgGiqvBFOUr6pGlTCqwy8yNrPxMoKco=";
+    rev = "2959ac5d345084f8480fb195a58c99c702aa7ff3";
+    hash = "sha256-T7pvG1B649sSpOeLl2KizDPX3VVut8nHZ2QwgjcrFrQ=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for prog in autocrop mritoself mritotal xfmtool; do
-      echo $out/bin/$prog
       wrapProgram $out/bin/$prog --prefix PERL5LIB : $PERL5LIB;
     done
   '';
