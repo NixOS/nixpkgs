@@ -12,6 +12,7 @@
   mock,
   packaging,
   testfixtures,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -58,5 +59,6 @@ buildPythonPackage rec {
     description = "An experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
+    broken = pythonAtLeast "3.12"; # multiple tests are failing
   };
 }
