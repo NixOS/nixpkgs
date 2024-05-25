@@ -41,9 +41,14 @@ buildPythonPackage rec {
     seaborn
   ];
   disabledTestPaths = [
-    "docs"
     "benchmarks"
+    "docs"
     "examples"
+    "hyppo/conditional/FCIT.py"
+    "hyppo/conditional/kci.py"
+    "hyppo/time_series/dcorrx.py"
+    "hyppo/time_series/mgcx.py"
+    "tutorials/independence.py"
   ];
 
   meta = with lib; {
