@@ -8,13 +8,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "snipe-it";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = "snipe-it";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7IK5KLdWYcdzsJwzXfHsYvxWiR/R4407gGAGiY9+czY=";
+    hash = "sha256-wNHFFqi1WNTzI3xv1/aXTPpVXe7oxiTqWMEYhplNM9A=";
   };
 
   vendorHash = "sha256-KkFoc/fqYVgA5Vv6oEk+1/Rcj9VA52ZnH5O5qmLhmE4=";
