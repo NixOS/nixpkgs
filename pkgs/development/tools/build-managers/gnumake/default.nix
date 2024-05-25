@@ -32,6 +32,17 @@ stdenv.mkDerivation rec {
     ./0002-remove-impure-dirs.patch
   ];
 
+  # Remove unnecessary reference to C++ compiler. Note that MAKE_CXX is
+  # always set to $CXX when running confugure script. If it is not set,
+  # a reasonable fallback is used.
+  #
+  # See also https://savannah.gnu.org/bugs/?63668 and make commit
+  # ffa28f3914ff402b3915f75e4fed86ac6fb1449d.
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail 'printf "%s\n" "#define MAKE_CXX \"$CXX\"" >>confdefs.h' ""
+  '';
+
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals guileEnabled [ pkg-config ];
   buildInputs = lib.optionals guileEnabled [ guile ];
 
