@@ -1,5 +1,4 @@
-{ corretto17
-, fetchFromGitHub
+{ fetchFromGitHub
 , gradle_7
 , jdk17
 , lib
