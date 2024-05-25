@@ -59,6 +59,8 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test__repr_png_"
+    # requires pydfium2
+    "test_issue_1089"
   ];
 
   disabledTestPaths = [
