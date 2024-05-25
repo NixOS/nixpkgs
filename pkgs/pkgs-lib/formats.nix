@@ -65,6 +65,7 @@ rec {
       nativeBuildInputs = [ jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
+      preferLocalBuild = true;
     } ''
       jq . "$valuePath"> $out
     '') {};
@@ -77,6 +78,7 @@ rec {
       nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
+      preferLocalBuild = true;
     } ''
       json2yaml "$valuePath" "$out"
     '') {};
@@ -270,6 +272,7 @@ rec {
       nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
+      preferLocalBuild = true;
     } ''
       json2toml "$valuePath" "$out"
     '') {};
@@ -467,6 +470,7 @@ rec {
           value = toConf value;
           passAsFile = [ "value" ];
           nativeBuildInputs = [ elixir ];
+          preferLocalBuild = true;
         } ''
         cp "$valuePath" "$out"
         mix format "$out"
@@ -501,6 +505,7 @@ rec {
                 print(f"{key} = {repr(value)}")
       '';
       passAsFile = [ "value" "pythonGen" ];
+      preferLocalBuild = true;
     } ''
       cat "$valuePath"
       python3 "$pythonGenPath" > $out
