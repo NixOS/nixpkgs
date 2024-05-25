@@ -20,10 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ hare ];
   propagatedBuildInputs = [ hareThirdParty.hare-compress ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   doCheck = true;
 
