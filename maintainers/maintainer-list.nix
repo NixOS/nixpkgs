@@ -1787,6 +1787,12 @@
     githubId = 816777;
     name = "Ashley Gillman";
   };
+  ashgoldofficial = {
+    email = "ashley.goldwater@gmail.com";
+    github = "ASHGOLDOFFICIAL";
+    githubId = 104313094;
+    name = "Andrey Shaat";
+  };
   ashkitten = {
     email = "ashlea@protonmail.com";
     github = "ashkitten";
@@ -12442,6 +12448,11 @@
     github = "MalteJanz";
     githubId = 18661391;
     name = "Malte Janz";
+  };
+  malteneuss = {
+    github = "malteneuss";
+    githubId = 5301202;
+    name = "Malte Neuss";
   };
   malte-v = {
     email = "nixpkgs@mal.tc";

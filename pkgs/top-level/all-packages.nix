@@ -1497,8 +1497,6 @@ with pkgs;
 
   abduco = callPackage ../tools/misc/abduco { };
 
-  ablog = callPackage ../applications/misc/ablog { };
-
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
@@ -3928,8 +3926,6 @@ with pkgs;
 
   mobilecoin-wallet = callPackage ../applications/misc/mobilecoin-wallet { };
 
-  mpdevil = callPackage ../applications/audio/mpdevil { };
-
   pacparser = callPackage ../tools/networking/pacparser { };
 
   pairdrop = callPackage ../applications/misc/pairdrop { };
@@ -6193,8 +6189,6 @@ with pkgs;
   snowcat = callPackage ../tools/security/snowcat { };
 
   socklog = callPackage ../tools/system/socklog { };
-
-  soju = callPackage ../applications/networking/soju { };
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
@@ -16540,8 +16534,6 @@ with pkgs;
 
   qbe = callPackage ../development/compilers/qbe { };
 
-  rasm = callPackage ../development/compilers/rasm { };
-
   replibyte = callPackage ../development/tools/database/replibyte {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -25845,7 +25837,7 @@ with pkgs;
   leafnode1 = callPackage ../servers/news/leafnode/1.nix { };
 
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
@@ -39832,7 +39824,6 @@ with pkgs;
     };
     mysql = mysql;
     pcre = pcre-cpp;
-    jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
 
   r128gain = callPackage ../applications/audio/r128gain { };

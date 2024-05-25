@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
   version = "2.2.7";
 
   src = fetchurl {
-    url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
+    urls = [
+      "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz"
+      "http://miniupnp.free.fr/files/${pname}-${version}.tar.gz"
+    ];
     sha256 = "sha256-sMOicFaED9DskyilqbrD3F4OxtLoczNJz1d7CqHnCsE=";
   };
 
