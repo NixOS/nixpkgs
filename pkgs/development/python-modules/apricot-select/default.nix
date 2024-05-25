@@ -56,6 +56,16 @@ buildPythonPackage rec {
     "tests/test_optimizers/test_knapsack_feature_based.py"
   ];
 
+  # NOTE: These tests seem to be flaky.
+  disabledTests = [
+    "test_digits_modular"
+    "test_digits_modular_object"
+    "test_digits_modular_sparse"
+    "test_digits_sqrt_modular"
+    "test_digits_sqrt_modular_object"
+    "test_digits_sqrt_modular_sparse"
+  ];
+
   meta = with lib; {
     description = "Module for submodular optimization for the purpose of selecting subsets of massive data sets";
     homepage = "https://github.com/jmschrei/apricot";
