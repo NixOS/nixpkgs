@@ -12891,6 +12891,8 @@ self: super: with self; {
 
   qrcode = callPackage ../development/python-modules/qrcode { };
 
+  qrcode-terminal = callPackage ../development/python-modules/qrcode-terminal { };
+
   qreactor = callPackage ../development/python-modules/qreactor { };
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
