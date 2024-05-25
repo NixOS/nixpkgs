@@ -4,6 +4,7 @@
 , installShellFiles
 , asciidoc
 , databasePath ? "/etc/secureboot"
+, nix-update-script
 }:
 
 buildGoModule rec {
@@ -35,6 +36,8 @@ buildGoModule rec {
     --fish <($out/bin/sbctl completion fish) \
     --zsh <($out/bin/sbctl completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Secure Boot key manager";
