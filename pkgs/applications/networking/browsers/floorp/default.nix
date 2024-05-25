@@ -7,7 +7,7 @@
 
 ((buildMozillaMach rec {
   pname = "floorp";
-  packageVersion = "11.13.2";
+  packageVersion = "11.13.3";
   applicationName = "Floorp";
   binaryName = "floorp";
   branding = "browser/branding/official";
@@ -22,7 +22,7 @@
     repo = "Floorp";
     fetchSubmodules = true;
     rev = "v${packageVersion}";
-    hash = "sha256-sFtGtxk3vdR5JoZb1yiITybIfGmOYzKLb9NtbhWjBt8=";
+    hash = "sha256-9EDTVckSqv/nyDi4qjMd54I69WiqM8v6om7zQLT+pQc=";
   };
 
   extraConfigureFlags = [
