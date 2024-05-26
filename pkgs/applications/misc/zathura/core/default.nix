@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -28,14 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.5";
+  version = "0.5.6";
 
-  src = fetchFromGitLab {
-    domain = "git.pwmt.org";
+  src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura";
     rev = finalAttrs.version;
-    hash = "sha256-mHEYqgBB55p8nykFtvYtP5bWexp/IqFbeLs7gZmXCeE=";
+    hash = "sha256-lTEBIZ3lkzjJ+L1qecrcL8iseo8AvSIo3Wh65/ikwac=";
   };
 
   outputs = [
