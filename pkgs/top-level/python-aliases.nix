@@ -390,6 +390,7 @@ mapAliases ({
   pyramid_multiauth = pyramid-multiauth; # added 2023-08-24
   pyreadability = readability-lxml; # added 2022-05-24
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
+  pygeos = throw "pygeos has been removed, since it was merged with shapely 2.0"; # added 2024-05-26
   pyRFC3339 = pyrfc3339; # added 2024-01-07
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
