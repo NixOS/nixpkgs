@@ -48,6 +48,7 @@ rustPlatform.buildRustPackage rec {
     #       Which is true most of the time, but not necessarily after overriding.
     ok = callPackage ./tests/ok.nix { };
     fail = callPackage ./tests/fail.nix { };
+    fail-emptyDirectory = callPackage ./tests/fail-emptyDirectory.nix { };
     network = testers.runNixOSTest ./tests/network.nix;
   };
 
