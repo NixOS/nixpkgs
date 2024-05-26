@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "049h8m9swxni7ar6fsbm0hb3fg4ffmjc3m6vyg78ilfi3kayxavi";
+    hash = "sha256-cavu1RzR0YjO89vUwWR1jjw3FgR1aWeyOtF2rlNFMBE=";
   };
 
   nativeBuildInputs = [
