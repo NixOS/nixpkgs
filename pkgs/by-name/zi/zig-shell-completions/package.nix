@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
