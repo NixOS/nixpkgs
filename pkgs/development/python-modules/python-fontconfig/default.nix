@@ -1,12 +1,13 @@
 {
-  lib,
   buildPythonPackage,
-  fetchPypi,
-  fontconfig,
-  python,
   cython,
+  fetchPypi,
+  fetchpatch,
+  fontconfig,
   freefont_ttf,
+  lib,
   makeFontsConf,
+  python,
 }:
 
 let
@@ -24,6 +25,16 @@ buildPythonPackage rec {
 
   buildInputs = [ fontconfig ];
   nativeBuildInputs = [ cython ];
+
+  patches = [
+    # distutils has been removed since python 3.12
+    # See https://github.com/vayn/python-fontconfig/pull/10
+    (fetchpatch {
+      name = "no-distutils.patch";
+      url = "https://github.com/vayn/python-fontconfig/commit/15e1a72c90e93a665569e0ba771ae53c7c8020c8.patch";
+      hash = "sha256-2mAemltWh3+LV4FDOg6uSD09zok3Eyd+v1WJJdouOV8=";
+    })
+  ];
 
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext -i
