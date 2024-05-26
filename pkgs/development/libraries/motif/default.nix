@@ -40,6 +40,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CFLAGS = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-function-pointer-types"
+    ];
+  };
+
   enableParallelBuilding = true;
 
   meta = with lib; {
