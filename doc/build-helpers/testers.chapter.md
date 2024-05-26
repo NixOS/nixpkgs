@@ -67,9 +67,9 @@ This tester produces a package that does not produce useful outputs, but only su
 
 It has two modes:
 
-- Use the returned package directly, and the build process will check that internal hyperlinks are correct. This runs in the sandbox, so it will not check external hyperlinks, but it is quick and reliable.
+- Build the returned derivation; its build process will check that internal hyperlinks are correct. This runs in the sandbox, so it will not check external hyperlinks, but it is quick and reliable.
 
-- Invoke the `.online` attribute with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and check that both internal and external hyperlinks are correct.
+- Invoke the `.online` attribute with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and checks that both internal and external hyperlinks are correct.
   Example:
 
   ```shell
@@ -84,16 +84,19 @@ It has two modes:
 
 `remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
 
-: An attribute set where the attribute names are the URLs to remap.
+: An attribute set where the attribute names are regular expressions.
+  The values should be strings, derivations or path values.
 
-  The values should be store path strings, derivations or path values.
+  In the returned check's default configuration, external URLs are only checked when you run the `.online` attribute.
 
-  Before checking the existence of URLs, if it is equal to the attribute name, it is replaced by the value of the attribute.
-  If it is a subpath of the attribute name, it is replaced by a subpath of the value.
+  By adding remappings, you can check offline that URLs to external resources are correct, by providing a file system based stand-in.
 
-  This is useful for remapping URLs that are not accessible from the build environment.
+  Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
 
-  Example: `{ "https://blog.example.com" = site; }`
+  Example: `{ "https://blog\\.example\\.com" = site; }`
+
+  Store path in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
+  If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
 
 `extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
 
