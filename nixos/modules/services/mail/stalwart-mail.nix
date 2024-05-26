@@ -46,6 +46,11 @@ in {
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
+
+      config.resource = {
+        spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml"
+        webadmin = lib.mkDefault "file://${cfg.package}/share/web/webadmin.zip";
+      };
     };
 
     systemd.services.stalwart-mail = {
