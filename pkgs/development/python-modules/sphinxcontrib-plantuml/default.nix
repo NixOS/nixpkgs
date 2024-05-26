@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ plantuml ];
 
+  pythonImportsCheck = [ "sphinxcontrib.plantuml" ];
+
   # No tests included.
   doCheck = false;
 
