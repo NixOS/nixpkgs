@@ -1,7 +1,7 @@
 deps@{ formats, lib, lychee, stdenv, writeShellApplication }:
 let
-  inherit (lib) isPath mapAttrsToList;
-  inherit (lib.strings) hasPrefix;
+  inherit (lib) mapAttrsToList throwIf;
+  inherit (lib.strings) hasInfix hasPrefix escapeNixString;
 
   toURL = v:
     let s = "${v}";
@@ -9,6 +9,11 @@ let
     then # lychee requires that paths on the file system are prefixed with file://
       "file://${s}"
     else s;
+
+  withCheckedName = name:
+    throwIf
+      (hasInfix " " name)
+      "lycheeLinkCheck: remap patterns must not contain spaces. A space marks the end of the regex in lychee.toml. Please change attribute name remap.${escapeNixString name}";
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
   # or doc/builders/testers.chapter.md
@@ -30,7 +35,10 @@ let
         config = {
           include_fragments = true;
         } // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
-          remap = mapAttrsToList (name: value: "${name} ${toURL value}") finalAttrs.passthru.remap;
+          remap =
+            mapAttrsToList
+              (name: value: withCheckedName name "${name} ${toURL value}")
+              finalAttrs.passthru.remap;
         } // extraConfig;
         online = writeShellApplication {
           name = "run-lychee-online";
