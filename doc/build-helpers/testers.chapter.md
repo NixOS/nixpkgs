@@ -44,7 +44,7 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
 
-You may use Nix to reproducibly build documentation sites and other static sites.
+You may use Nix to reproducibly build static websites, such as for software documentation.
 Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
 
 If you have a static site that can be built with Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
@@ -85,11 +85,11 @@ It has two modes:
 `remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
 
 : An attribute set where the attribute names are regular expressions.
-  The values should be strings, derivations or path values.
+  The values should be strings, derivations, or path values.
 
   In the returned check's default configuration, external URLs are only checked when you run the `.online` attribute.
 
-  By adding remappings, you can check offline that URLs to external resources are correct, by providing a file system based stand-in.
+  By adding remappings, you can check offline that URLs to external resources are correct, by providing a stand-in from the file system.
 
   Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
 
@@ -102,7 +102,7 @@ It has two modes:
   }
   ```
 
-  Store path in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
+  Store paths in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
   If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
 
 `extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
