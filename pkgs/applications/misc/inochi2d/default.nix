@@ -54,13 +54,13 @@ in
   inochi-session = mkGeneric rec {
     pname = "inochi-session";
     appname = "Inochi Session";
-    version = "0.8.3";
+    version = "0.8.4";
 
     src = fetchFromGitHub {
       owner = "Inochi2D";
       repo = "inochi-session";
       rev = "v${version}";
-      hash = "sha256-yq/uMWEeydZun07/7hgUaAw3IruRqrDuGgbe5NzNYxw=";
+      hash = "sha256-BRA5qODHhyHBeZYT5MQwcFmr/zVokfO5SrbcbQa6w7w=";
     };
 
     dubLock = ./session-dub-lock.json;
