@@ -53,6 +53,7 @@ in {
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
         in prevLibs ++ additionalLibs;
+        extraPkgs = p: (cfg.extraPackages ++ lib.optionals (prev ? extraPkgs) (prev.extraPkgs p));
       } // lib.optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
       {
         buildFHSEnv = pkgs.buildFHSEnv.override {
@@ -66,6 +67,19 @@ in {
 
         Use this option to customise the Steam package rather than adding your
         custom Steam to {option}`environment.systemPackages` yourself.
+      '';
+    };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        with pkgs; [
+          gamescope
+        ]
+      '';
+      description = ''
+        Additional packages to add to the Steam environment.
       '';
     };
 
