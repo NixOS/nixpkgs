@@ -82,6 +82,16 @@ rec {
 
   gnome-dark = simple-dark-gray-bottom;
 
+  gradient-grey = mkNixBackground {
+    name = "gradient-grey-2018-10-20";
+    description = "Simple grey gradient background for NixOS";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/3f7695afe75239720a32d6c38df7c9888b5ed581/wallpapers/NixOS-Gradient-grey.png";
+      hash = "sha256-Tf4Xruf608hpl7YwL4Mq9l9egBOCN+W4KFKnqrgosLE=";
+    };
+    # license not clarified
+  };
+
   mosaic-blue = mkNixBackground {
     name = "mosaic-blue-2016-02-19";
     description = "Mosaic blue background for Nix";
