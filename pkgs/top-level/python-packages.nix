@@ -6501,6 +6501,8 @@ self: super: with self; {
 
   latex2mathml = callPackage ../development/python-modules/latex2mathml { };
 
+  latex2pydata = callPackage ../development/python-modules/latex2pydata { };
+
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   latexify-py = callPackage ../development/python-modules/latexify-py { };
