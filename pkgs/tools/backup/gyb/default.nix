@@ -1,22 +1,21 @@
 { lib
 , fetchFromGitHub
 , python3
-, python3Packages
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gyb";
-  version = "1.80";
+  version = "1.81";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "got-your-back";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4xElzhf9R6qnzr4oyZktQy/ym2vEjR9MrHnLYxBiAOg=";
+    hash = "sha256-ViNOEH5wyAQRR56egRhh4JoP1PWOCr+rxFmqxfJiu+0=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3.pkgs; [
     google-api-python-client
     google-auth
     google-auth-oauthlib
@@ -28,14 +27,18 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/{bin,${python3.sitePackages}}
-    mv gyb.py "$out/bin/gyb"
-    mv *.py "$out/${python3.sitePackages}/"
+    mv gyb.py $out/bin/gyb
+    mv *.py $out/${python3.sitePackages}/
 
     runHook postInstall
   '';
 
   checkPhase = ''
-    $out/bin/gyb --help > /dev/null
+    runHook preCheck
+
+    PYTHONPATH="" $out/bin/gyb --help > /dev/null
+
+    runHook postCheck
   '';
 
   meta = with lib; {
@@ -45,6 +48,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://github.com/GAM-team/got-your-back";
     license = licenses.asl20;
+    mainProgram = "gyb";
     maintainers = with maintainers; [ austinbutler ];
   };
 }
