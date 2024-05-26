@@ -1,18 +1,17 @@
 {
-  lib,
   buildPythonPackage,
   fetchPypi,
   flit-core,
+  lib,
   pythonOlder,
   typing-extensions,
-  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pypdf2";
   version = "3.0.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyPDF2";
@@ -22,9 +21,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  # no test
+  doCheck = false;
 
   pythonImportsCheck = [ "PyPDF2" ];
 
