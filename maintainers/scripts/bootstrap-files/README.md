@@ -47,6 +47,30 @@ target:
    who can help you test the updated architecture and once reviewed tag
   `@lovesegfault` to upload the tarballs.
 
+## How to add bootstrap files for a new target
+
+The procedure to add a new target is very similar to the update
+procedure. The only difference is that you need to set up a new job to
+build the `bootstrapFiles`. To do that you will need the following:
+
+1. Add your new target to `lib/systems/examples.nix`
+
+   This will populate `pkgsCross.$target` attribute set. If you are
+   dealing with `bootstrapFiles` upload you probably already have it.
+
+2. Add your new target to
+   `pkgs/stdenv/linux/make-bootstrap-tools-cross.nix`. This will add a
+   new hydra job to `nixpkgs:cross-trunk` jobset.
+
+3. Wait for a hydra to build your bootstrap tarballs.
+
+4. Add your new target to
+   `maintainers/scripts/bootstrap-files/refresh-tarballs.bash` around
+   `CROSS_TARGETS=()`.
+
+5. Add your new target to `pkgs/stdenv/linux/default.nix` and follow
+   standard bootstrap seed update procedure above.
+
 ## Bootstrap files job definitions
 
 There are two types of bootstrap files:
