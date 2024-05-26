@@ -15,8 +15,6 @@
 , netcat-gnu
 , nvme-cli
 , procps
-, pulseaudio
-, python3
 , smartmontools
 , substituteAll
 , touchegg
@@ -104,14 +102,6 @@ super: lib.trivial.pipe super [
         src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
         nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
       })
-    ];
-  }))
-
-  (patchExtension "mullvadindicator@pobega.github.com" (old: {
-    patches = [
-      # Patch from https://github.com/Pobega/gnome-shell-extension-mullvad-indicator/pull/36
-      # tweaked to drop the Makefile changes to fix application
-      ./extensionOverridesPatches/mullvadindicator_at_pobega.github.com.patch
     ];
   }))
 
