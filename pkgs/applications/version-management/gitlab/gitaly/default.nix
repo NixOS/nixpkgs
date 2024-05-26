@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitLab
-, fetchFromGitHub
 , buildGoModule
 , pkg-config
 }:

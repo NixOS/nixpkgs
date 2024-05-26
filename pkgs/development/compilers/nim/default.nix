@@ -1,7 +1,7 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
+{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
 , nim-unwrapped-2, nim-unwrapped-1, nim }:
 

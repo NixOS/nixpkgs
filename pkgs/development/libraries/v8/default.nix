@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchgit
 , gn, ninja, python3, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch

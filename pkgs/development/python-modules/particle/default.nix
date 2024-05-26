@@ -3,7 +3,6 @@
   attrs,
   buildPythonPackage,
   deprecated,
-  fetchFromGitHub,
   fetchPypi,
   hatch-vcs,
   hatchling,

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   capstone,
-  fetchFromGitHub,
   fetchPypi,
   gevent,
   keystone-engine,

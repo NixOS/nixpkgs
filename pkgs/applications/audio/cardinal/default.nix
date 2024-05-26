@@ -1,5 +1,4 @@
 { stdenv
-, fetchFromGitHub
 , fetchurl
 , cmake
 , dbus

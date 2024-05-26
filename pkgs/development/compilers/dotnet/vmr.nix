@@ -2,7 +2,6 @@
 , stdenvNoCC
 , lib
 , fetchurl
-, fetchFromGitHub
 , dotnetCorePackages
 , jq
 , curl

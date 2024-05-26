@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchFromGitHub }:
+{ lib, callPackage }:
 
 rec {
   dockerGen = {
