@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchFromGitHub,
   cmake,
   swig4,
   elastix,

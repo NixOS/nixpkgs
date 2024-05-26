@@ -5,7 +5,6 @@
 , git
 , jq
 , nodejs
-, fetchFromGitHub
 , fetchurl
 , makeFontsConf
 , makeWrapper

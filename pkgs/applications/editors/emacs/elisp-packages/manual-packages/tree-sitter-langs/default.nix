@@ -4,7 +4,6 @@
 , fetchzip
 , melpaBuild
 , stdenv
-, fetchFromGitHub
 , writeText
 , melpaStablePackages
 , runCommand
