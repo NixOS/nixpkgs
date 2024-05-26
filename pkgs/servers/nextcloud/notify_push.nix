@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Kk9l9jowerxh5nsKQ5TOaijSJbs0DgJKaRl9tlAttzI=";
+    hash = "sha256-241p+9gLyEe2Mkc0GQ/Z0BjbxV5OZfbDC6kqfq7ATaE=";
   };
 
-  cargoHash = "sha256-wtmYWQOYy8JmbSxgrXkFtDe6KmJJIMVpcELQj06II4k=";
+  cargoHash = "sha256-fGbRmrOEbs9nGZhcu1w7qOIwYMaTohaUFb7dilPuTHc=";
 
   passthru = rec {
     test_client = rustPlatform.buildRustPackage {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-sPUlke8KI6sX2HneeoZh8RMG7aydC43c37V179ipukU=";
+      cargoHash = "sha256-RJnNwSDwIA0M+BufBKT9a/pyHwpcpJFR//j0fE4U3gE=";
 
       meta = meta // {
         mainProgram = "test_client";
@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
     };
     tests = {
       inherit (nixosTests.nextcloud)
-        with-postgresql-and-redis26
         with-postgresql-and-redis27
-        with-postgresql-and-redis28;
+        with-postgresql-and-redis28
+        with-postgresql-and-redis29;
       inherit test_client;
     };
   };
