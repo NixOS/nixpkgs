@@ -53,6 +53,21 @@ makeBinaryWrapper() {
         -Os \
         -x c \
         -o "$wrapper" -
+
+    recordWrapperLore "$wrapper" "$original"
+}
+
+# document this wrapper in a machine-readable format
+recordWrapperLore(){
+    local wrapper="$1"
+    local original="$2"
+    local ideal_output="${!outputBin}"
+
+    if [[ ! -d "$ideal_output/nix-support" ]]; then
+        mkdir -p "$ideal_output/nix-support"
+    fi
+
+    echo "$wrapper:$original" >> "$ideal_output/nix-support/wrappers"
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
