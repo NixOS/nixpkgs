@@ -2897,8 +2897,6 @@ with pkgs;
     inherit (qt5) wrapQtAppsHook;
   };
 
-  felix-fm = callPackage ../applications/file-managers/felix-fm { };
-
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
   lesscpy = callPackage ../development/compilers/lesscpy { };
