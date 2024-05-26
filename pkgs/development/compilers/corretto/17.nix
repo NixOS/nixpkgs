@@ -30,5 +30,5 @@ corretto.overrideAttrs (final: prev: {
       url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
       sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
     })
-    prev.patches;
+    (prev.patches or [ ]);
 })
