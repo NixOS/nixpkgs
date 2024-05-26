@@ -16,16 +16,16 @@
 , yelp-tools
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aisleriot";
-  version = "3.22.32";
+  version = "3.22.33";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "aisleriot";
-    rev = version;
-    sha256 = "sha256-+U/EsKTZjWa05DbILWAxqIpMcZ0DP0l4LIYxM2wCFdM=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-HylhDBgkAJrrs/r42v3aDNR8mBJaqnJHyY7T3QW1eWg=";
   };
 
   nativeBuildInputs = [
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})
