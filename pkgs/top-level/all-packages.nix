@@ -6080,8 +6080,6 @@ with pkgs;
 
   precice-config-visualizer = callPackage ../tools/misc/precice-config-visualizer { };
 
-  proxmox-auto-install-assistant = callPackage ../by-name/pr/proxmox-auto-install-assistant/package.nix { };
-
   proxmox-backup-client = callPackage ../applications/backup/proxmox-backup-client { };
 
   pueue = darwin.apple_sdk_11_0.callPackage ../applications/misc/pueue {
