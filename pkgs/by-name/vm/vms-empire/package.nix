@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vms-empire";
-  version = "1.16";
+  version = "1.17";
 
   src = fetchurl{
     url = "http://www.catb.org/~esr/vms-empire/vms-empire-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XETIbt/qVU+TpamPc2WQynqqUuZqkTUnItBprjg+gPk=";
+    hash = "sha256-AmHs6ojVcfglvvFvC9JzNWVS2t4Coqg8WwyNCM+sEno=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # when true, can't find XML
-  strictDeps = false;
+  strictDeps = true;
 
   postBuild = ''
     xmlto man vms-empire.xml
@@ -52,8 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage empire.6
     runHook postInstall
   '';
-
-  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = "http://catb.org/~esr/vms-empire/";
