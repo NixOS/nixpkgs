@@ -53,6 +53,33 @@ makeBinaryWrapper() {
         -Os \
         -x c \
         -o "$wrapper" -
+
+    recordWrapperLore "$wrapper" "$original"
+}
+
+findWrapperOutputRoot(){
+    local wrapper="$1"
+
+    for output in $(getAllOutputNames); do
+        if [[ "$wrapper" == "${!output}"* ]]; then
+            echo "${!output}"
+            return
+        fi
+    done
+    die "Wrapper path '$wrapper' not within any output"
+}
+
+# document this wrapper in a machine-readable format
+recordWrapperLore(){
+    local wrapper="$1"
+    local original="$2"
+    local ideal_output="$(findWrapperOutputRoot "$wrapper")"
+
+    if [[ ! -d "$ideal_output/nix-support" ]]; then
+        mkdir -p "$ideal_output/nix-support"
+    fi
+
+    echo "$wrapper:$original" >> "$ideal_output/nix-support/wrappers"
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
