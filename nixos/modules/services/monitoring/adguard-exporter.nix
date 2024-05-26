@@ -79,13 +79,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups.adguard-exporter = { };
-    users.users.adguard-exporter = {
-      description = "adguard-exporter Service User";
-      group = "adguard-exporter";
-      isSystemUser = true;
-    };
-
     systemd.services.adguard-exporter = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "network-online.target" ];
