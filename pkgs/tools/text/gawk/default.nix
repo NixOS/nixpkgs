@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, removeReferencesTo
 , runtimeShellPackage
 # TODO: links -lsigsegv but loses the reference for some reason
 , withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
@@ -36,15 +37,25 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ]
     ++ lib.optional (!interactive) "man";
 
-  # no-pma fix
-  nativeBuildInputs = [ autoreconfHook ]
-    ++ lib.optional (doCheck && stdenv.isLinux) glibcLocales;
+  strictDeps = true;
 
-  buildInputs = [
+  # no-pma fix
+  nativeBuildInputs = [
+    autoreconfHook
+  ] ++ lib.optionals interactive [
+    removeReferencesTo
+  ] ++ lib.optionals (doCheck && stdenv.isLinux) [
+    glibcLocales
+  ];
+
+  buildInputs = lib.optionals interactive [
     runtimeShellPackage
-  ] ++ lib.optional withSigsegv libsigsegv
-    ++ lib.optional interactive readline
-    ++ lib.optional stdenv.isDarwin locale;
+    readline
+  ] ++ lib.optionals withSigsegv [
+    libsigsegv
+  ] ++ lib.optionals stdenv.isDarwin [
+    locale
+  ];
 
   configureFlags = [
     (if withSigsegv then "--with-libsigsegv-prefix=${libsigsegv}" else "--without-libsigsegv")
@@ -57,7 +68,12 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  postInstall = ''
+  postInstall = (if interactive then ''
+    remove-references-to -t "$NIX_CC" "$out"/bin/gawkbug
+    patchShebangs --host "$out"/bin/gawkbug
+  '' else ''
+    rm "$out"/bin/gawkbug
+  '') + ''
     rm "$out"/bin/gawk-*
     ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
   '';
