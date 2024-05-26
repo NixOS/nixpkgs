@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkg-config, zathura_core
-, girara, gettext, libarchive }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  zathura_core,
+  girara,
+  gettext,
+  libarchive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zathura-cb";
@@ -10,8 +20,17 @@ stdenv.mkDerivation rec {
     sha256 = "1j5v32f9ki35v1jc7a067anhlgqplzrp4fqvznlixfhcm0bwmc49";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext ];
-  buildInputs = [ libarchive zathura_core girara ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+  ];
+  buildInputs = [
+    libarchive
+    zathura_core
+    girara
+  ];
 
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
@@ -20,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A zathura CB plugin";
     longDescription = ''
       The zathura-cb plugin adds comic book support to zathura.
-      '';
+    '';
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jlesquembre ];
