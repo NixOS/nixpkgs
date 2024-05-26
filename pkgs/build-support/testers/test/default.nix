@@ -211,22 +211,30 @@ lib.recurseIntoAttrs {
       '';
   };
 
-  testVersion = let inherit (testers) testVersion; in {
-    # Test with default arguments
-    hello = testVersion { package = pkgs.hello; };
+  testVersion = let
+    inherit (lib.attrsets) concatMapAttrs;
+    inherit (testers) testBuildFailure testVersion;
+    positiveTests = {
+      # Test with default arguments
+      hello = { package = pkgs.hello; };
 
-    # Test non-default arguments
-    cat = testVersion {
-      package = pkgs.coreutils;
-      executable = "cat"; # must pet
+      # Test non-default arguments
+      cat = {
+        package = pkgs.coreutils;
+        executable = "cat"; # must pet
+      };
+      ffmpeg = {
+        package = pkgs.ffmpeg;
+        parameter = "-version";
+      };
+      mlterm = {
+        package = pkgs.mlterm;
+        exitCode = 1;
+      };
     };
-    ffmpeg = testVersion {
-      package = pkgs.ffmpeg;
-      parameter = "-version";
-    };
-    mlterm = testVersion {
-      package = pkgs.mlterm;
-      exitCode = 1;
-    };
-  };
+  in concatMapAttrs (n: args: {
+    "${n}" = testVersion args;
+    "${n}-wrong-version" = testBuildFailure (testVersion (args // { version = "0.incorrect"; }));
+    "${n}-wrong-exitCode" = testBuildFailure (testVersion (args // { exitCode = 42; }));
+  }) positiveTests;
 }
