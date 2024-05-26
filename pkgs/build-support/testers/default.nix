@@ -72,20 +72,17 @@
         exitCode=$?
         set -e
 
-        if [ $exitCode == ${toString exitCode} ]; then
-          if grep -Fw -- "${version}" - <<< "$output"; then
-            echo "$output" > $out
-          else
-            echo "Version string '${version}' not found!" >&2
-            echo "The output was:" >&2
-            echo "$output" >&2
-            exit 1
-          fi
-        else
-          echo -n ${lib.escapeShellArg command} >&2
-          echo " returned a non-zero exit code." >&2
+        if [ $exitCode -ne ${toString exitCode} ]; then
+          echo "${lib.escapeShellArg command} returned a non-zero exit code." >&2
           echo "$output" >&2
           exit 1
+        elif ! grep -Fw -- "${version}" - <<< "$output"; then
+          echo "Version string '${version}' not found!" >&2
+          echo "The output was:" >&2
+          echo "$output" >&2
+          exit 1
+        else
+          echo "$output" > $out
         fi
       '';
 
