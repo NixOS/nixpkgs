@@ -7,7 +7,6 @@ let
   cfg  = cfgs.ncdns;
 
   dataDir  = "/var/lib/ncdns";
-  username = "ncdns";
 
   format = pkgs.formats.toml {};
 
@@ -22,7 +21,7 @@ let
   needsKeygen = all id (flip mapAttrsToList cfg.dnssec.keys
     (n: v: v == getAttr n defaultFiles));
 
-  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+  mkDefaultAttrs = mapAttrs (_n: v: mkDefault v);
 
 in
 
