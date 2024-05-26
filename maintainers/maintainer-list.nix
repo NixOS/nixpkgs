@@ -833,6 +833,12 @@
       fingerprint = "F354 FFAB EA89 A49D 33ED  2590 4729 B829 AC5F CC72";
     }];
   };
+  alafranque = {
+    email = "alce@lafranque.net";
+    github = "alcelafranque";
+    githubId = 30702140;
+    name = "Alce Lafranque";
+  };
   alanpearce = {
     email = "alan@alanpearce.eu";
     github = "alanpearce";
