@@ -1,40 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   blinker,
+  flit-core,
   flask,
-  mock,
-  nose,
-  speaklater,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mail";
-  version = "0.9.1";
-  format = "setuptools";
-
+  version = "0.10.0";
   meta = {
     description = "Flask-Mail is a Flask extension providing simple email sending capabilities.";
     homepage = "https://pypi.python.org/pypi/Flask-Mail";
     license = lib.licenses.bsd3;
   };
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "Flask-Mail";
-    inherit version;
-    hash = "sha256-IuXrmpQL9Ae88wQQ7MNwjzxWzESynDThcm/oUAaTX0E=";
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
+    repo = "flask-mail";
+    rev = "refs/tags/${version}";
+    hash = "sha256-G2Z8dj1/IuLsZoNJVrL6LYu0XjTEHtWB9Z058aqG9Ic=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     blinker
     flask
-  ];
-  buildInputs = [
-    blinker
-    mock
-    nose
-    speaklater
   ];
 
   doCheck = false;
