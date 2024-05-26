@@ -138,6 +138,7 @@ in lib.makeExtensible (self: ({
     patches = [
       patch-monitorfdhup
     ];
+    self_attribute_name = "nix_2_3";
     maintainers = with lib.maintainers; [ flokli raitobezarius ];
   }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
@@ -148,26 +149,31 @@ in lib.makeExtensible (self: ({
   nix_2_18 = common {
     version = "2.18.2";
     hash = "sha256-8gNJlBlv2bnffRg0CejiBXc6U/S6YeCLAdHrYvTPyoY=";
+    self_attribute_name = "nix_2_18";
   };
 
   nix_2_19 = common {
     version = "2.19.4";
     hash = "sha256-qXjyVmDm1SFWk1az3GWIsJ0fVG0nWet2FdldFOnUydI=";
+    self_attribute_name = "nix_2_19";
   };
 
   nix_2_20 = common {
     version = "2.20.6";
     hash = "sha256-BSl8Jijq1A4n1ToQy0t0jDJCXhJK+w1prL8QMHS5t54=";
+    self_attribute_name = "nix_2_20";
   };
 
   nix_2_21 = common {
     version = "2.21.2";
     hash = "sha256-ObaVDDPtnOeIE0t7m4OVk5G+OS6d9qYh+ktK67Fe/zE=";
+    self_attribute_name = "nix_2_21";
   };
 
   nix_2_22 = common {
     version = "2.22.1";
     hash = "sha256-5Q1WkpTWH7fkVfYhHDc5r0A+Vc+K5xB1UhzrLzBCrB8=";
+    self_attribute_name = "nix_2_22";
   };
 
   git = common rec {
@@ -179,6 +185,7 @@ in lib.makeExtensible (self: ({
       rev = "b7709d14a5b3a76d1c5b35b48ea3ed2de6c3dc28";
       hash = "sha256-v+M9oeOcfgFXVoXqdpaskTHNA0T3Pr/8IOJtCggh+To=";
     };
+    self_attribute_name = "git";
   };
 
   latest = self.nix_2_22;
