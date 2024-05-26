@@ -3484,8 +3484,6 @@ with pkgs;
 
   bazarr = callPackage ../servers/bazarr { };
 
-  bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
-
   bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
     openjdk11 = openjdk11.override { enableJavaFX = true; };
   };
