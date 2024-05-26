@@ -136,6 +136,7 @@ mapAliases ({
   django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11
   django_silk = django-silk; # added 2023-07-25
+  django-sr = throw "django-sr has been removed since it has been unmaintained for 10 years"; # added 2024-05-26
   django_tagging = django-tagging; # added 2023-07-25
   django_taggit = django-taggit; # added 2021-10-11
   django_treebeard = django-treebeard; # added 2023-07-25

@@ -3364,8 +3364,6 @@ self: super: with self; {
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
-  django-sr = callPackage ../development/python-modules/django-sr { };
-
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
   django-storages = callPackage ../development/python-modules/django-storages { };
