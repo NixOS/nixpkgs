@@ -14,18 +14,18 @@
 
 buildPythonPackage rec {
   pname = "jupyter-client";
-  version = "8.6.1";
+  version = "8.6.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_client";
     inherit version;
-    hash = "sha256-6EJRXiurjhkYbYn9/qer0V453VgflOOZ8A4q9aFlLT8=";
+    hash = "sha256-K9oU1V7lulhVKoxTrkPSFa2YaIU0iSE/N9oGDO1U2N8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyter-core
     python-dateutil
     pyzmq
