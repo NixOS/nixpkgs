@@ -12,9 +12,14 @@ in
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
-  nodes.machine = {
+  nodes.machine = { pkgs, ... }: {
     systemd.sysusers.enable = true;
     users.mutableUsers = false;
+
+    # Prerequisites
+    system.etc.overlay.enable = true;
+    boot.initrd.systemd.enable = true;
+    boot.kernelPackages = pkgs.linuxPackages_latest;
 
     # Override the empty root password set by the test instrumentation
     users.users.root.hashedPasswordFile = lib.mkForce null;
