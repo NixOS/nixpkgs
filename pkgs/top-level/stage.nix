@@ -185,6 +185,23 @@ let
         ] ++ overlays;
       });
   in self: super: {
+    # Extend the package set with zero or more overlays. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    appendOverlays = extraOverlays:
+      if extraOverlays == []
+      then self
+      else nixpkgsFun { overlays = extraOverlays; };
+
+    # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
+    #       of allocations. DO NOT USE THIS IN NIXPKGS.
+    #
+    # Extend the package set with a single overlay. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    # Prefer appendOverlays if used repeatedly.
+    extend = f: self.appendOverlays [f];
+
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.raspberryPi.hello,
@@ -243,23 +260,6 @@ let
       else createPackageSet "pkgsLinux" {
         localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
       };
-
-    # Extend the package set with zero or more overlays. This preserves
-    # preexisting overlays. Prefer to initialize with the right overlays
-    # in one go when calling Nixpkgs, for performance and simplicity.
-    appendOverlays = extraOverlays:
-      if extraOverlays == []
-      then self
-      else nixpkgsFun { overlays = extraOverlays; };
-
-    # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
-    #       of allocations. DO NOT USE THIS IN NIXPKGS.
-    #
-    # Extend the package set with a single overlay. This preserves
-    # preexisting overlays. Prefer to initialize with the right overlays
-    # in one go when calling Nixpkgs, for performance and simplicity.
-    # Prefer appendOverlays if used repeatedly.
-    extend = f: self.appendOverlays [f];
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
