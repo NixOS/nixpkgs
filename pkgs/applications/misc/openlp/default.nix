@@ -31,7 +31,7 @@ let
   baseLib = pythonPackages.callPackage ./lib.nix { };
 in mkDerivation {
   pname = baseLib.pname + lib.optionalString (pdfSupport && presentationSupport && vlcSupport) "-full";
-  inherit (baseLib) version src;
+  inherit (baseLib) version src meta;
 
   nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook3 ];
   buildInputs = [ qtbase ];
@@ -71,10 +71,6 @@ in mkDerivation {
   preFixup = ''
     wrapPythonPrograms
   '';
-
-  meta = baseLib.meta // {
-    hydraPlatforms = [ ]; # this is only the wrapper; baseLib gets built
-  };
 
   passthru = {
     inherit baseLib;
