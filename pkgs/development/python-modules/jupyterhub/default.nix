@@ -9,6 +9,7 @@
   configurable-http-proxy,
   cryptography,
   entrypoints,
+  fetchFromGitHub,
   fetchPypi,
   fetchzip,
   importlib-metadata,
@@ -27,6 +28,7 @@
   pamela,
   playwright,
   prometheus-client,
+  pydantic,
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
@@ -67,14 +69,14 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "4.1.5";
+  version = "5.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y7ofxxhDbBUZRqWKO0A+xP6LP2JPsZW8HY5ww5sz4ZQ=";
+    hash = "sha256-YoR7OLGk9Pb/oPXzVfQRSoYbFrxF3lWg+4LfQo2kO3U=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -130,6 +132,7 @@ buildPythonPackage rec {
     packaging
     pamela
     prometheus-client
+    pydantic
     requests
     selenium
     sqlalchemy
@@ -148,7 +151,18 @@ buildPythonPackage rec {
     mock
     jupyterlab
     playwright
-    pytest-asyncio
+    # require pytest-asyncio<0.23
+    # https://github.com/jupyterhub/jupyterhub/pull/4663
+    (pytest-asyncio.overrideAttrs (
+      final: prev: {
+        version = "0.21.2";
+        src = fetchFromGitHub {
+          inherit (prev.src) owner repo;
+          rev = "refs/tags/v${final.version}";
+          hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
+        };
+      }
+    ))
     pytestCheckHook
     requests-mock
     virtualenv
