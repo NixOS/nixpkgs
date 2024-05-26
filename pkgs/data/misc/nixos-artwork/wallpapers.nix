@@ -70,6 +70,46 @@ in
 
 rec {
 
+  binary-black = mkNixBackground {
+    name = "binary-black-2024-02-15";
+    description = "Black binary wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-black.png";
+      hash = "sha256-mhSh0wz2ntH/kri3PF5ZrFykjjdQLhmlIlDDGFQIYWw=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  binary-blue = mkNixBackground {
+    name = "binary-blue-2024-02-15";
+    description = "Blue binary wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-blue.png";
+      hash = "sha256-oVIRSgool/CsduGingDr0FuJJIkGtfQHXYn0JBI2eho=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  binary-red = mkNixBackground {
+    name = "binary-red-2024-02-15";
+    description = "Red binary wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-red.png";
+      hash = "sha256-18UvtroyuAnluJ3EoLJWJAwN8T83s/ImPtsr5QTqvAA=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  binary-white = mkNixBackground {
+    name = "binary-white-2024-02-15";
+    description = "White binary wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/8957e93c95867faafec7f9988cedddd6837859fa/wallpapers/nix-wallpaper-binary-white.png";
+      hash = "sha256-imj+OmuhTNxRtE54715wWQUA7pe1f32+q3qi2V37i8U=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
   dracula = mkNixBackground {
     name = "dracula-2020-07-02";
     description = "Nix background based on the Dracula color palette";
