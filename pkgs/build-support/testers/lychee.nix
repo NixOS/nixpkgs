@@ -11,9 +11,12 @@ let
     else s;
 
   withCheckedName = name:
-    throwIf
-      (hasInfix " " name)
-      "lycheeLinkCheck: remap patterns must not contain spaces. A space marks the end of the regex in lychee.toml. Please change attribute name remap.${escapeNixString name}";
+    throwIf (hasInfix " " name) ''
+      lycheeLinkCheck: remap patterns must not contain spaces.
+      A space marks the end of the regex in lychee.toml.
+
+      Please change attribute name 'remap.${escapeNixString name}'
+    '';
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
   # or doc/builders/testers.chapter.md
