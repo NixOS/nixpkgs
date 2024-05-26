@@ -16718,6 +16718,8 @@ self: super: with self; {
 
   vncdo = callPackage ../development/python-modules/vncdo { };
 
+  vnoise = callPackage ../development/python-modules/vnoise { };
+
   vobject = callPackage ../development/python-modules/vobject { };
 
   volatile = callPackage ../development/python-modules/volatile { };
