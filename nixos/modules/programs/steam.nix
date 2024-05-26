@@ -102,6 +102,18 @@ in {
       '';
     };
 
+    fontPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = config.fonts.packages;
+      defaultText = lib.literalExpression "fonts.packages";
+      example = lib.literalExpression "with pkgs; [ source-han-sans ]";
+      description = ''
+        Font packages to use in Steam.
+
+        Defaults to system fonts, but could be overridden to use other fonts — useful for users who would like to customize CJK fonts used in Steam. According to the [upstream issue](https://github.com/ValveSoftware/steam-for-linux/issues/10422#issuecomment-1944396010), Steam only follows the per-user fontconfig configuration.
+      '';
+    };
+
     remotePlay.openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
@@ -178,6 +190,8 @@ in {
         setuid = true;
       };
     };
+
+    programs.steam.extraPackages = cfg.fontPackages;
 
     programs.gamescope.enable = lib.mkDefault cfg.gamescopeSession.enable;
     services.displayManager.sessionPackages = lib.mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
