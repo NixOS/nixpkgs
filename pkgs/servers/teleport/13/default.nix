@@ -1,13 +1,13 @@
 args:
 import ../generic.nix (args // {
-  version = "13.4.14";
-  hash = "sha256-g11D5lekI3pUpKf5CLUuNjejs0gN/bEemHkCj3akha0=";
-  vendorHash = "sha256-kiDhlR/P81u/yNq72JuskES/UzMrTFzJT0H3xldGk8I=";
-  yarnHash = "sha256-E9T+7aXVoERdUnVEL4va2fcMnv1jsL9Js/R2LZo4hu4=";
+  version = "13.4.26";
+  hash = "sha256-vtOig4uIyAGC6yraiqLeJZ3X8arHRGc2AAaopgQLCHo=";
+  vendorHash = "sha256-lAPx54vsqXW7WKIi+zFQtVhWYlPX1Is0b5jiWsN3j2E=";
+  yarnHash = "sha256-Os8T4p5/QzZJAvLqJwKgB4XiLg/TYdlXpunStKAc/mk=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rdp-rs-0.1.0" = "sha256-4NbAsEmyUdmBcHuzx+SLQCGKICC4V4FX4GTK2SzyHC0=";
+      "rdp-rs-0.1.0" = "sha256-U52FVuqo2DH/7f0cQ1qcb1GbFZ97yxExVFMX5cs0zw4=";
     };
   };
   extPatches = [
