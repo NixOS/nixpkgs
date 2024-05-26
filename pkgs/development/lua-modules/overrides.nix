@@ -429,6 +429,13 @@ in
     ];
   });
 
+  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs (oa: {
+    src = oa.src.override {
+      hash = "sha256-5lnr0ka6ijfujiRjqwCPb6jzItXx45FIN8CvhR/KiB8=";
+      fetchSubmodules = true;
+    };
+  });
+
   # lua-resty-session =  prev.lua-resty-session.overrideAttrs (oa: {
   #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
   #   meta.broken = true;
