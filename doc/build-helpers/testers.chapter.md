@@ -44,9 +44,10 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
 
-You may use Nix to reproducibly build documentation sites and other static sites. Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator (like [Hugo](https://gohugo.io/), or [mdBook](https://rust-lang.github.io/mdBook/)) in a derivation.
+You may use Nix to reproducibly build documentation sites and other static sites.
+Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
 
-If you have a static site that is buildable in Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
+If you have a static site that can be built with Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
 
 :::{.example #ex-lycheelinkcheck}
 
@@ -64,37 +65,33 @@ testers.lycheeLinkCheck {
 
 This tester produces a package that does not produce useful outputs, but only succeeds if the hyperlinks in your site are correct. The build log will list the broken links.
 
-You may use it in two modes:
+It has two modes:
 
 - Use the returned package directly, and the build process will check that internal hyperlinks are correct. This runs in the sandbox, so it will not check external hyperlinks, but it is quick and reliable.
 
-- Invoke the `.online` with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and check that bith internal and external hyperlinks are correct. Example:
+- Invoke the `.online` attribute with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and check that both internal and external hyperlinks are correct.
+  Example:
 
   ```shell
   nix run nixpkgs#lychee.tests.ok.online
   ```
 
-### Parameters {#tester-lycheeLinkCheck-params}
+### Inputs {#tester-lycheeLinkCheck-inputs}
 
-#### `site` (required) {#tester-lycheeLinkCheck-param-site}
+`site` (path or derivation) {#tester-lycheeLinkCheck-param-site}
 
-The path to the files to check.
+: The path to the files to check.
 
-#### `extraConfig` (optional) {#tester-lycheeLinkCheck-param-extraConfig}
+`extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
 
-Extra configuration to pass to `lychee` in its [config file](https://github.com/lycheeverse/lychee/blob/master/lychee.example.toml). It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
+: Extra configuration to pass to `lychee` in its [configuration file](https://github.com/lycheeverse/lychee/blob/master/lychee.example.toml).
+  It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
 
-Example: `{ "include_verbatim" = true; }`
+  Example: `{ "include_verbatim" = true; }`
 
-#### `lychee` (optional) {#tester-lycheeLinkCheck-param-lychee}
+`lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
 
-The `lychee` package to use.
-
-#### `remapUrl` (optional) {#tester-lycheeLinkCheck-param-remapUrl}
-
-A URL to which the files may be deployed.
-Instead of ignoring this URL because the check is offline, `lychee` will check that the links to this URL are correct, by pretending `site` is deployed there.
-
+: The `lychee` package to use.
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
