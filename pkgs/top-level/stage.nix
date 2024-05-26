@@ -298,23 +298,6 @@ let
         localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
       };
 
-    # Extend the package set with zero or more overlays. This preserves
-    # preexisting overlays. Prefer to initialize with the right overlays
-    # in one go when calling Nixpkgs, for performance and simplicity.
-    appendOverlays = extraOverlays:
-      if extraOverlays == []
-      then self
-      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
-
-    # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
-    #       of allocations. DO NOT USE THIS IN NIXPKGS.
-    #
-    # Extend the package set with a single overlay. This preserves
-    # preexisting overlays. Prefer to initialize with the right overlays
-    # in one go when calling Nixpkgs, for performance and simplicity.
-    # Prefer appendOverlays if used repeatedly.
-    extend = f: self.appendOverlays [f];
-
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun ({
@@ -357,6 +340,23 @@ let
         })
       ] ++ overlays;
     };
+
+    # Extend the package set with zero or more overlays. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    appendOverlays = extraOverlays:
+      if extraOverlays == []
+      then self
+      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+
+    # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
+    #       of allocations. DO NOT USE THIS IN NIXPKGS.
+    #
+    # Extend the package set with a single overlay. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    # Prefer appendOverlays if used repeatedly.
+    extend = f: self.appendOverlays [f];
   };
 
   # The complete chain of package set builders, applied from top to bottom.
