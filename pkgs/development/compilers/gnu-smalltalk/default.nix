@@ -25,6 +25,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1k2ssrapfzhngc7bg1zrnd9n2vyxp9c9m70byvsma6wapbvib6l1";
   };
 
+  patches = [ ./fix_mkorder.patch ];
+
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
   nativeBuildInputs = [ pkg-config ];
