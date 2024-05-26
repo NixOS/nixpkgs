@@ -3,28 +3,16 @@
 { lib, mkDerivation, wrapGAppsHook3, python3Packages
 
 # qt deps
-, qtbase, qtmultimedia
+, qtbase
 
 # optional deps
-, pdfSupport ? false, mupdf  # alternatively could use ghostscript
+, pdfSupport ? false
 , presentationSupport ? false, libreoffice-unwrapped
 , vlcSupport ? false
-, gstreamerSupport ? false, gst_all_1, gstPlugins ? (gst: [
-    gst.gst-plugins-base
-    gst.gst-plugins-good
-    gst.gst-plugins-bad
-    gst.gst-plugins-ugly
-  ])
-
 #, enableMySql ? false      # Untested. If interested, contact maintainer.
 #, enablePostgreSql ? false # Untested. If interested, contact maintainer.
 #, enableJenkinsApi ? false # Untested. If interested, contact maintainer.
 }:
-
-let p = gstPlugins gst_all_1;
-# If gstreamer is activated but no plugins are given, it will at runtime
-# create the false illusion of being usable.
-in assert gstreamerSupport -> (builtins.isList p && builtins.length p > 0);
 
 let
   # optional packages
@@ -34,18 +22,22 @@ let
   inherit (lib.lists) optional optionals;
   wrapSetVar = var: ''--set ${var} "''$${var}"'';
 
+  pythonPackages = python3Packages.overrideScope (final: prev: {
+    pyqt5 = prev.pyqt5.override { withMultimedia = true; };
+    pyqt5-multimedia = final.pyqt5;
+  });
+
   # base pkg/lib
-  baseLib = python3Packages.callPackage ./lib.nix { };
+  baseLib = pythonPackages.callPackage ./lib.nix { };
 in mkDerivation {
-  pname = baseLib.pname + lib.optionalString (pdfSupport && presentationSupport && vlcSupport && gstreamerSupport) "-full";
+  pname = baseLib.pname + lib.optionalString (pdfSupport && presentationSupport && vlcSupport) "-full";
   inherit (baseLib) version src;
 
   nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook3 ];
-  buildInputs = [ qtbase ] ++ optionals gstreamerSupport
-    ([ qtmultimedia.bin gst_all_1.gstreamer ] ++ gstPlugins gst_all_1);
-  propagatedBuildInputs = optional pdfSupport mupdf
+  buildInputs = [ qtbase ];
+  propagatedBuildInputs = optional pdfSupport pythonPackages.pymupdf
     ++ optional presentationSupport libreoffice-unwrapped;
-  pythonPath = [ baseLib ] ++ optional vlcSupport python3Packages.python-vlc;
+  pythonPath = [ baseLib ] ++ optional vlcSupport pythonPackages.python-vlc;
     # ++ optional enableMySql mysql-connector  # Untested. If interested, contact maintainer.
     # ++ optional enablePostgreSql psycopg2    # Untested. If interested, contact maintainer.
     # ++ optional enableJenkinsApi jenkinsapi  # Untested. If interested, contact maintainer.
@@ -64,13 +56,16 @@ in mkDerivation {
     [ "PYTHONPATH" "LD_LIBRARY_PATH" "JAVA_HOME" ];
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
+    # Force the app to use QT_PLUGIN_PATH values from wrapper
+    "--unset QT_PLUGIN_PATH"
     "\${qtWrapperArgs[@]}"
+    #--set QTWEBENGINE_RESOURCES_PATH "${qtwebengine}/resources"
   ] ++ optionals presentationSupport
     ([ "--prefix PATH : ${libreoffice-unwrapped}/bin" ]
       ++ map wrapSetVar [ "URE_BOOTSTRAP" "UNO_PATH" ]);
 
   installPhase = ''
-    install -D openlp.py $out/bin/openlp
+    install -D run_openlp.py $out/bin/openlp
   '';
 
   preFixup = ''

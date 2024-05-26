@@ -37744,7 +37744,6 @@ with pkgs;
     pdfSupport = true;
     presentationSupport = true;
     vlcSupport = true;
-    gstreamerSupport = true;
   };
 
   autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };

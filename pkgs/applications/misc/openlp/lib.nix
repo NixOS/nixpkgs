@@ -1,20 +1,43 @@
 # This file contains the base package, some of which is compiled.
 # Runtime glue to optinal runtime dependencies is in 'default.nix'.
-{ fetchurl, lib, qt5
+{ fetchFromGitLab, lib, qt5
 
 # python deps
-, python, buildPythonPackage
-, alembic, beautifulsoup4, chardet, lxml, mako, pyenchant
-, pyqt5-webkit, pyxdg, sip4, sqlalchemy, sqlalchemy-migrate
+, python, pythonPackages, buildPythonPackage
+, alembic
+, beautifulsoup4
+, chardet
+, dbus-python
+, distro
+, flask
+, flask-cors
+, lxml
+, mako
+, packaging
+, platformdirs
+, pyicu
+, pymediainfo
+, pyenchant
+, pytest-runner
+, pyqt5
+, pyqtwebengine
+, qtawesome
+, qrcode
+, requests
+, sqlalchemy
+, waitress
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "openlp";
-  version = "2.4.6";
+  version = "3.1.2";
 
-  src = fetchurl {
-    url = "https://get.openlp.org/${version}/OpenLP-${version}.tar.gz";
-    sha256 = "f63dcf5f1f8a8199bf55e806b44066ad920d26c9cf67ae432eb8cdd1e761fc30";
+  src = fetchFromGitLab {
+    owner = "openlp";
+    repo = pname;
+    rev = version;
+    hash = "sha256-SdLdgFXTEl1E9zPktnGTzH+qZj7bVZ4QTy1nZuvWc08=";
   };
 
   doCheck = false;
@@ -31,24 +54,31 @@ buildPythonPackage rec {
   # See also https://discourse.nixos.org/t/qt-plugin-path-unset-in-test-phase/
 
   #nativeCheckInputs = [ mock nose ];
-  nativeBuildInputs = [ qt5.qttools ];
+  nativeBuildInputs = [ qt5.qttools pytest-runner ];
   propagatedBuildInputs = [
     alembic
     beautifulsoup4
     chardet
+    dbus-python
+    distro
+    flask
+    flask-cors
     lxml
     mako
+    packaging
+    platformdirs
+    pyicu
+    pymediainfo
     pyenchant
-    pyqt5-webkit
-    pyxdg
-    sip4
+    pyqt5
+    pyqtwebengine
+    qtawesome
+    qrcode
+    requests
     sqlalchemy
-    sqlalchemy-migrate
+    waitress
+    websockets
   ];
-
-  prePatch = ''
-    echo 'from vlc import *' > openlp/core/ui/media/vendor/vlc.py
-  '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
@@ -64,7 +94,6 @@ buildPythonPackage rec {
   '';
 
   preFixup = ''
-    rm -r $out/${python.sitePackages}/tests
     rm -r $out/bin
   '';
 
@@ -87,17 +116,13 @@ buildPythonPackage rec {
       * Quickly and easily import songs from other popular presentation packages
       * Easy enough to use to get up and running in less than 10 minutes
 
-      Remark: This pkg only supports sqlite dbs. If you wish to have support for
-            mysql or postgresql dbs, or Jenkins, please contact the maintainer.
+      Remarks:
 
-      Bugs which affect this software packaged in Nixpkgs:
+      1. The web remote is not installed by Nix. It must be installed by OpenLP,
+         as described here: https://manual.openlp.org/configure.html#web-remote
 
-      1. The package must disable checks, because they are lacking the qt env.
-         (see pkg source and https://discourse.nixos.org/t/qt-plugin-path-unset-in-test-phase/)
-      2. There is a segfault on exit. Not a real problem, according to debug log, everything
-         shuts down correctly. Maybe related to https://forums.openlp.org/discussion/3620/crash-on-exit.
-         Plan: Wait for OpenLP-3, since it is already in beta 1
-         (2021-02-09; news: https://openlp.org/blog/).
+      2. This pkg only supports sqlite dbs. If you wish to have support for
+         mysql or postgresql dbs, or Jenkins, please contact the maintainer.
     '';
   };
 }
