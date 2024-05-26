@@ -1091,19 +1091,18 @@
 
         cargoHash = "sha256-7V4RyWIo9gL3ir4Pay8CMIVn6cXjJi9sgKVOENG4muQ=";
 
-
         preCheck = ''
           mkdir tests/tmp/
         '';
       };
     in
-    (lib.optionalAttrs stdenv.isLinux {
+    {
       dependencies = with self;
         [ plenary-nvim ];
       postInstall = ''
         ln -s ${spectre_oxi}/lib/libspectre_oxi.* $out/lua/spectre_oxi.so
       '';
-    }));
+    });
 
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
