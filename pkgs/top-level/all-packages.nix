@@ -8556,6 +8556,10 @@ with pkgs;
 
   gparted = callPackage ../tools/misc/gparted { };
 
+  gpt4all-cuda = gpt4all.override {
+    cudaSupport = true;
+  };
+
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
   gptcommit = callPackage ../development/tools/gptcommit {
