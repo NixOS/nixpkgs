@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  apricot-select,
   numba,
   numpy,
   pynose,
@@ -65,6 +66,11 @@ buildPythonPackage rec {
     "test_digits_sqrt_modular_object"
     "test_digits_sqrt_modular_sparse"
   ];
+
+  # NOTE: Tests are disabled by default because they can run for hours and timeout on Hydra.
+  doCheck = false;
+
+  passthru.tests.check = apricot-select.overridePythonAttrs { doCheck = true; };
 
   meta = with lib; {
     description = "Module for submodular optimization for the purpose of selecting subsets of massive data sets";
