@@ -173,7 +173,18 @@ let
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages.
-  otherPackageSets = self: super: {
+  otherPackageSets = let
+    # helper function to call nixpkgsFun to make sure each package set
+    # references itself as a no-op.
+    createPackageSet = name: { overlays ? [], ... }@args:
+      nixpkgsFun (args // {
+        overlays = [
+          (self: super: {
+            "${name}" = super;
+          })
+        ] ++ overlays;
+      });
+  in self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.raspberryPi.hello,
@@ -183,12 +194,7 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
-    pkgsLLVM = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVM = super';
-        })
-      ];
+    pkgsLLVM = createPackageSet "pkgsLLVM" {
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
@@ -201,10 +207,7 @@ let
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported. 32-bit is also not supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsMusl = super';
-      })];
+    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then createPackageSet "pkgsMusl" {
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
@@ -213,10 +216,7 @@ let
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsi686Linux = super';
-      })];
+    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then createPackageSet "pkgsi686Linux" {
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
@@ -226,10 +226,7 @@ let
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
     # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsx86_64Darwin = super';
-      })];
+    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then createPackageSet "pkgsx86_64Darwin" {
       localSystem = {
         parsed = stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.x86_64;
@@ -243,7 +240,7 @@ let
     pkgsLinux =
       if stdenv.hostPlatform.isLinux
       then self
-      else nixpkgsFun {
+      else createPackageSet "pkgsLinux" {
         localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
       };
 
@@ -266,10 +263,7 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
-      overlays = [ (self': super': {
-        pkgsStatic = super';
-      })];
+    pkgsStatic = createPackageSet "pkgsStatic" ({
       crossSystem = {
         isStatic = true;
         parsed =
@@ -281,10 +275,9 @@ let
       };
     });
 
-    pkgsExtraHardening = nixpkgsFun {
+    pkgsExtraHardening = createPackageSet "pkgsExtraHardening" {
       overlays = [
         (self': super': {
-          pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
               "stackclashprotection"
