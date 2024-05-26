@@ -84,7 +84,6 @@ import ./make-test-python.nix (
       "dash-to-dock"
       "dash-to-panel"
       "ddterm"
-      "emoji-selector"
       "gsconnect"
       "system-monitor-next"
       "desktop-icons-ng-ding"
