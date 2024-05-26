@@ -24,13 +24,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "2023-05-24";
+  version = "2024-05-22";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "L19pbmJJFr1xi4ZTp0ocxmdMvWmtkK2zquOFfbV+P5Q=";
+    sha256 = "Q9DWBzaLZjwXsYRa/oDIrccypO3TCbSRXTkbXWRmm70=";
   };
 
   nativeBuildInputs = [
