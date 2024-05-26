@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "aws-encryption-sdk";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QwT8+M4qo/qYsaz/ejvzzQUowynAxDe1Xg9Fa79iNH4=";
+    hash = "sha256-6yrboU9IHNg9cWmrjmQplIltOaSmTheWkEprSSVmE7A=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     boto3
     cryptography
