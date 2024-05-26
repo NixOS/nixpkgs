@@ -80,6 +80,16 @@ rec {
     license = lib.licenses.cc-by-sa-40;
   };
 
+  gear = mkNixBackground {
+    name = "gear-2022-04-19";
+    description = "3D wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-gear.png";
+      hash = "sha256-2sT6b49/iClTs9QuUvpmZ5gcIeXI9kebs5IqgQN1RL8=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
   gnome-dark = simple-dark-gray-bottom;
 
   gradient-grey = mkNixBackground {
@@ -90,6 +100,16 @@ rec {
       hash = "sha256-Tf4Xruf608hpl7YwL4Mq9l9egBOCN+W4KFKnqrgosLE=";
     };
     # license not clarified
+  };
+
+  moonscape = mkNixBackground {
+    name = "moonscape-2022-04-19";
+    description = "3D wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-moonscape.png";
+      hash = "sha256-AR3W8avHzQLxMNLfD/A1efyZH+vAdTLKllEhJwBl0xc=";
+    };
+    license = lib.licenses.cc-by-sa-40;
   };
 
   mosaic-blue = mkNixBackground {
@@ -138,6 +158,16 @@ rec {
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f99638d8d1a11d97a99ff7e0e1e7df58c28643ff/wallpapers/nix-wallpaper-nineish-solarized-light.png";
       hash = "sha256-gb5s5ePdw7kuIL3SI8VVhOcLcHu0cHMJJ623vg1kz40=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  recursive = mkNixBackground {
+    name = "recursive-2022-04-19";
+    description = "3D wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-recursive.png";
+      hash = "sha256-YvFrlysNGMwJ7eMFOoz0KI8AjoPN3ao+AVOgnVZzkFE=";
     };
     license = lib.licenses.cc-by-sa-40;
   };
@@ -220,6 +250,26 @@ rec {
       hash = "sha256-o3GqbFZ/18ScLOlAL6GRy54l8P/U6wUeeK4HtPkZw4Q=";
     };
     license = lib.licenses.cc0;
+  };
+
+  waterfall = mkNixBackground {
+    name = "waterfall-2022-04-19";
+    description = "3D wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-waterfall.png";
+      hash = "sha256-ULFNUZPU9khDG6rtkMskLe5sYpUcrJVvcFvEkpvXjMM=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  watersplash = mkNixBackground {
+    name = "watersplash-2022-04-19";
+    description = "3D wallpaper for Nix";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/bcdd2770f5f4839fddc9b503e68db2bc3a87ca4d/wallpapers/nix-wallpaper-watersplash.png";
+      hash = "sha256-6Gdjzq3hTvUH7GeZmZnf+aOQruFxReUNEryAvJSgycQ=";
+    };
+    license = lib.licenses.cc-by-sa-40;
   };
 
 }
