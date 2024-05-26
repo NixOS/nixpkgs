@@ -440,7 +440,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
-  ] ++ optionals static [
+  ] ++ optionals (static && !stdenv.hostPlatform.isDarwin) [
     "LDFLAGS=-static"
   ];
 
