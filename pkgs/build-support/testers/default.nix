@@ -62,28 +62,32 @@
       command ? "${executable} ${parameter}",
       version ? package.version,
       exitCode ? 0,
-    }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
-      set +e
-      output=$(${command} 2>&1)
-      exitCode=$?
-      set -e
+    }@args:
+    if args ? command && (args ? executable || args ? parameter) then
+      throw "testers.testVersion's `command` is incompatible with `executable` and `parameter`"
+    else
+      runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
+        set +e
+        output=$(${command} 2>&1)
+        exitCode=$?
+        set -e
 
-      if [ $exitCode == ${toString exitCode} ]; then
-        if grep -Fw -- "${version}" - <<< "$output"; then
-          echo "$output" > $out
+        if [ $exitCode == ${toString exitCode} ]; then
+          if grep -Fw -- "${version}" - <<< "$output"; then
+            echo "$output" > $out
+          else
+            echo "Version string '${version}' not found!" >&2
+            echo "The output was:" >&2
+            echo "$output" >&2
+            exit 1
+          fi
         else
-          echo "Version string '${version}' not found!" >&2
-          echo "The output was:" >&2
+          echo -n ${lib.escapeShellArg command} >&2
+          echo " returned a non-zero exit code." >&2
           echo "$output" >&2
           exit 1
         fi
-      else
-        echo -n ${lib.escapeShellArg command} >&2
-        echo " returned a non-zero exit code." >&2
-        echo "$output" >&2
-        exit 1
-      fi
-    '';
+      '';
 
   # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
