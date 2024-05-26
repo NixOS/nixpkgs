@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CuEesjGUVdgFWWvzIDNs2pVUtB2Zq5o8Mb+BgL/6MOM=";
+    hash = "sha256-d7d7qF+emI+brYXfNFtRTp5kx/DoIpkqsd9KeKxk/B4=";
   };
 
   propagatedBuildInputs = [
