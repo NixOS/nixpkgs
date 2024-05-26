@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter_client";
     changelog = "https://github.com/jupyter/jupyter_client/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
+    maintainers = lib.teams.jupyter.members;
   };
 }
