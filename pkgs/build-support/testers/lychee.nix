@@ -4,11 +4,11 @@ let
   inherit (lib.strings) hasPrefix;
 
   toURL = v:
-    if builtins.isString v && hasPrefix builtins.storeDir v
-      || isPath v
+    let s = "${v}";
+    in if hasPrefix builtins.storeDir s
     then # lychee requires that paths on the file system are prefixed with file://
-      "file://${v}"
-    else "${v}";
+      "file://${s}"
+    else s;
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
   # or doc/builders/testers.chapter.md

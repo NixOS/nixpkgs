@@ -93,7 +93,14 @@ It has two modes:
 
   Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
 
-  Example: `{ "https://blog\\.example\\.com" = site; }`
+  Example:
+
+  ```nix
+  {
+    "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
+    "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
+  }
+  ```
 
   Store path in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
   If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
