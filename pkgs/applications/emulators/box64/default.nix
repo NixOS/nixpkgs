@@ -4,13 +4,13 @@
 , gitUpdater
 , cmake
 , python3
-, withDynarec ? (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64)
+, withDynarec ? (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64)
 , runCommand
 , hello-x86_64
 }:
 
-# Currently only supported on ARM & RISC-V
-assert withDynarec -> (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64);
+# Currently only supported on specific archs
+assert withDynarec -> (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Arch dynarec
     "-DARM_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isAarch64)}"
     "-DRV64_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isRiscV64)}"
+    "-DLARCH64_DYNAREC=${lib.boolToString (withDynarec && stdenv.hostPlatform.isLoongArch64)}"
   ];
 
   installPhase = ''
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     } ''
       # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
       # tell what problems the emulator has run into.
-      BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${hello-x86_64}/bin/hello --version | tee $out
+      BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version | tee $out
     '';
   };
 
