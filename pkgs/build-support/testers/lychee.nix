@@ -1,12 +1,13 @@
 deps@{ formats, lib, lychee, stdenv, writeShellApplication }:
 let
-  inherit (lib) concatLists isPath mapAttrsToList;
+  inherit (lib) isPath mapAttrsToList;
   inherit (lib.strings) hasPrefix;
 
   toURL = v:
     if builtins.isString v && hasPrefix builtins.storeDir v
       || isPath v
-    then "file://${v}"
+    then # lychee requires that paths on the file system are prefixed with file://
+      "file://${v}"
     else "${v}";
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck

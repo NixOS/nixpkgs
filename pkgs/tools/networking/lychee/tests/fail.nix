@@ -9,7 +9,7 @@ let
 
   linkCheck = testers.lycheeLinkCheck rec {
     site = sitePkg + "/dist";
-    remap = { "https://example.com"= site; };
+    remap = { "https://exampl[e]\\.com" = site; };
   };
 
   failure = testers.testBuildFailure linkCheck;
