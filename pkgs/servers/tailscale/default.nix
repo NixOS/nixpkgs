@@ -18,19 +18,22 @@ buildGoModule {
   pname = "tailscale";
   inherit version;
 
+  outputs = [ "out" "derper" ];
+
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
     hash = "sha256-ETBca3qKO2iS30teIF5sr/oyJdRSKFqLFVO3+mmm7bo=";
   };
+
   vendorHash = "sha256-Hd77xy8stw0Y6sfk3/ItqRIbM/349M/4uf0iNy1xJGw=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
   CGO_ENABLED = 0;
 
-  subPackages = [ "cmd/tailscaled" ];
+  subPackages = [ "cmd/derper" "cmd/tailscaled" ];
 
   ldflags = [
     "-w"
@@ -47,6 +50,7 @@ buildGoModule {
 
   postInstall = ''
     ln -s $out/bin/tailscaled $out/bin/tailscale
+    moveToOutput "bin/derper" "$derper"
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
