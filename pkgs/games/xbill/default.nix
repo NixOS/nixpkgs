@@ -1,10 +1,10 @@
-{ stdenv, lib, makeDesktopItem, copyDesktopItems, fetchurl, libX11, libXpm, libXt, motif, ... }:
+{ stdenv, lib, autoreconfHook, makeDesktopItem, copyDesktopItems, fetchurl, libX11, libXpm, libXt, motif, ... }:
 
 stdenv.mkDerivation rec {
   pname = "xbill";
   version = "2.1";
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [ autoreconfHook copyDesktopItems ];
   buildInputs = [ libX11 libXpm libXt motif ];
 
   NIX_CFLAGS_LINK = "-lXpm";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-x"
     "--enable-motif"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "CFLAGS=-Wno-error=implicit-function-declaration"
   ];
 
   src = fetchurl {
