@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   atf,
+  gperf,
   libiconvReal,
   meson,
   ninja,
@@ -10,6 +11,9 @@
   gitUpdater,
 }:
 
+let
+  inherit (stdenv) hostPlatform;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libiconv";
   version = "99";
@@ -19,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  # Propagate `out` only when there are dylibs to link (i.e., don’t propagate when doing a static build).
+  propagatedBuildOutputs = lib.optionalString (!hostPlatform.isStatic) "out";
+
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "libiconv";
@@ -26,7 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TGt6rsU52ztfW2rCqwnhMAExLbexI/59IoDOGY+XGu0=";
   };
 
-  inherit (libiconvReal) setupHooks;
+  setupHooks =
+    libiconvReal.setupHooks
+    ++ lib.optionals hostPlatform.isStatic [ ./static-setup-hook.sh ];
+
+  patches = lib.optionals hostPlatform.isStatic [ ./0001-Support-static-module-loading.patch ];
 
   postPatch =
     ''
@@ -41,30 +52,42 @@ stdenv.mkDerivation (finalAttrs: {
       header
 
       cp ${./nixpkgs_test.c} tests/libiconv/nixpkgs_test.c
+    ''
+    + lib.optionalString hostPlatform.isStatic ''
+      cp ${./static-modules.gperf} static-modules.gperf
     '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+    ]
+    # Dynamic builds use `dlopen` to load modules, but static builds have to link them all.
+    # `gperf` is used to generate a lookup table from module to ops functions.
+    ++ lib.optionals hostPlatform.isStatic [ gperf ];
 
   mesonBuildType = "release";
 
   mesonFlags = [ (lib.mesonBool "tests" finalAttrs.doInstallCheck) ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    ${stdenv.cc.targetPrefix}install_name_tool "$out/lib/libiconv.2.dylib" \
-      -change '@rpath/libcharset.1.dylib' "$out/lib/libcharset.1.dylib"
-  '';
+  postInstall =
+    lib.optionalString (stdenv.isDarwin && !hostPlatform.isStatic) ''
+      ${stdenv.cc.targetPrefix}install_name_tool "$out/lib/libiconv.2.dylib" \
+        -change '@rpath/libcharset.1.dylib' "$out/lib/libcharset.1.dylib"
+    ''
+    # Move the static library to the `dev` output
+    + lib.optionalString hostPlatform.isStatic ''
+      moveToOutput lib "$dev"
+    '';
 
   # Tests have to be run in `installCheckPhase` because libiconv expects to `dlopen`
   # modules from `$out/lib/i18n`.
   nativeInstallCheckInputs = [ pkg-config ];
   installCheckInputs = [ atf ];
 
-  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doInstallCheck = stdenv.buildPlatform.canExecute hostPlatform;
 
   # Can’t use `mesonCheckPhase` because it runs the wrong hooks for `installCheckPhase`.
   installCheckPhase = ''
