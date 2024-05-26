@@ -40845,8 +40845,6 @@ with pkgs;
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
-  gortr = callPackage ../servers/gortr { };
-
   stayrtr = callPackage ../servers/stayrtr { };
 
   sunshine = callPackage ../servers/sunshine { };
