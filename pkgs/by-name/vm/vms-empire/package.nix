@@ -8,22 +8,34 @@
 , installShellFiles
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vms-empire";
   version = "1.16";
 
   src = fetchurl{
-    url = "http://www.catb.org/~esr/${pname}/${pname}-${version}.tar.gz";
+    url = "http://www.catb.org/~esr/vms-empire/vms-empire-${finalAttrs.version}.tar.gz";
     hash = "sha256-XETIbt/qVU+TpamPc2WQynqqUuZqkTUnItBprjg+gPk=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [
-    ncurses
+  nativeBuildInputs = [
+    installShellFiles
     xmlto
     docbook_xml_dtd_44
     docbook_xsl
   ];
+
+  buildInputs = [
+    ncurses
+  ];
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  # when true, can't find XML
+  strictDeps = false;
 
   postBuild = ''
     xmlto man vms-empire.xml
@@ -33,7 +45,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D vms-empire -t ${placeholder "out"}/bin/
-    install -D vms-empire.html -t ${placeholder "out"}/share/doc/${pname}/
+    install -D vms-empire.html -t ${placeholder "doc"}/share/doc/vms-empire/
     install -D vms-empire.desktop -t ${placeholder "out"}/share/applications/
     install -D vms-empire.png -t ${placeholder "out"}/share/icons/hicolor/48x48/apps/
     install -D vms-empire.xml -t ${placeholder "out"}/share/appdata/
@@ -43,10 +55,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://catb.org/~esr/vms-empire/";
     description = "The ancestor of all expand/explore/exploit/exterminate games";
-    mainProgram = "vms-empire";
     longDescription = ''
       Empire is a simulation of a full-scale war between two emperors, the
       computer and you. Naturally, there is only room for one, so the object of
@@ -55,8 +66,9 @@ stdenv.mkDerivation rec {
       expand/explore/exploit/exterminate games, including Civilization and
       Master of Orion.
     '';
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    mainProgram = "vms-empire";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
