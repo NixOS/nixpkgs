@@ -1,15 +1,16 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildPgrxExtension
 , postgresql
 , nixosTests
-, cargo-pgrx_0_10_2
+, cargo-pgrx_0_11_3
 , fetchCrate
 , nix-update-script
 , stdenv
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_11_3; }) rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
@@ -22,7 +23,16 @@
     hash = "sha256-Lm/LFBkG91GeWlJL9RBqP8W0tlhBEeGQ6kXUzzv4xRE=";
   };
 
-  cargoHash = "sha256-LME8oftHmmiN8GU3eTBTSB6m0CE+KtDFRssL1g2Cjm8=";
+  # TODO: Remove this patch when upstream updates to a newer pgrx version.
+  cargoPatches = [
+    (fetchpatch {
+      name = "cargo-pgrx-0.11.3.patch";
+      url = "https://github.com/sdier/timescaledb-toolkit/commit/c05d87f33516a25a5346fe67ed43e98786204ab1.patch";
+      hash = "sha256-Y2mLI1cDmx47Kgf6f/FS1ziNtcGEju+wSkegl0qwOhE=";
+    })
+  ];
+
+  cargoHash = "sha256-3FJW7y+RH++6dkcs3CskKvPAmqpZX8rsBGoHcxUcQYY=";
   buildAndTestSubdir = "extension";
 
   passthru = {
