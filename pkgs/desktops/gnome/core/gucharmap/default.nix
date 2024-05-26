@@ -43,9 +43,9 @@ let
       unicode-character-database
     ];
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gucharmap";
-  version = "15.1.2";
+  version = "15.1.5";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -53,8 +53,8 @@ in stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gucharmap";
-    rev = version;
-    sha256 = "sha256-tvFw2k5xCl+QE6cHvLj5KKdYFSghN7PVgHPmd27wh7k=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-PG86D8QvqHdmo3aJseCerngmuWUqtSMdWzbixWE2HOQ=";
   };
 
   strictDeps = true;
@@ -107,8 +107,8 @@ in stdenv.mkDerivation rec {
     description = "GNOME Character Map, based on the Unicode Character Database";
     mainProgram = "gucharmap";
     homepage = "https://gitlab.gnome.org/GNOME/gucharmap";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})
