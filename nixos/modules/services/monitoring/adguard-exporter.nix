@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 let
@@ -83,7 +83,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "network-online.target" ];
       serviceConfig = let
-        args = lib.concatStringsSep " " ([
+        args = [
           "-interval ${cfg.interval}"
           "-adguard_protocol ${cfg.protocol}"
           "-adguard_hostname ${cfg.hostname}"
@@ -93,9 +93,11 @@ in {
           "-adguard_port ${toString cfg.port}"
           "-log_limit ${toString cfg.logLimit}"
           "-server_port ${toString cfg.exporterPort}"
-        ] ++ cfg.extraArgs);
+        ] ++ cfg.extraArgs;
       in {
-        ExecStart = "${pkgs.adguard-exporter}/bin/adguard-exporter ${args}";
+        ExecStart = ''
+          ${pkgs.adguard-exporter}/bin/adguard-exporter ${utils.escapeSystemdExecArgs args}
+        '';
         Restart = "always";
         PrivateTmp = true;
         ProtectHome = true;
