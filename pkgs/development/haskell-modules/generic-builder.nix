@@ -370,6 +370,34 @@ let
   '';
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
+
+  # This is a script suitable for --test-wrapper of Setup.hs' test command
+  # (https://cabal.readthedocs.io/en/3.12/setup-commands.html#cmdoption-runhaskell-Setup.hs-test-test-wrapper).
+  # We use it to set some environment variables that the test suite may need,
+  # e.g. GHC_PACKAGE_PATH to invoke GHC(i) at runtime with build dependencies
+  # available. See the comment accompanying checkPhase below on how to customize
+  # this behavior. We need to use a wrapper script since Cabal forbids setting
+  # certain environment variables since they can alter GHC's behavior (e.g.
+  # GHC_PACKAGE_PATH) and cause failures. While building, Cabal will set
+  # GHC_ENVIRONMENT to make the packages picked at configure time available to
+  # GHC, but unfortunately not at test time. The test wrapper script will be
+  # executed after such environment checks, so we can take some liberties which
+  # is unproblematic since we know our synthetic package db matches what Cabal
+  # will see at configure time exactly. See also
+  # <https://github.com/haskell/cabal/issues/7792>.
+  testWrapperScript = buildPackages.writeShellScript
+    "haskell-generic-builder-test-wrapper.sh"
+    ''
+      set -eu
+
+      # We expect this to be either empty or set by checkPhase
+      if [[ -n "''${NIX_GHC_PACKAGE_PATH_FOR_TEST}" ]]; then
+        export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
+      fi
+
+      exec "$@"
+    '';
+
 in lib.fix (drv:
 
 stdenv.mkDerivation ({
@@ -528,8 +556,6 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
-
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
@@ -538,7 +564,6 @@ stdenv.mkDerivation ({
         exit 1
       fi
     ''}
-    export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
   '';
@@ -565,12 +590,22 @@ stdenv.mkDerivation ({
   # Run test suite(s) and pass `checkFlags` as well as `checkFlagsArray`.
   # `testFlags` are added to `checkFlagsArray` each prefixed with
   # `--test-option`, so Cabal passes it to the underlying test suite binary.
+  #
+  # We also take care of setting GHC_PACKAGE_PATH during test suite execution,
+  # so it can run GHC(i) with build dependencies available:
+  # - If NIX_GHC_PACKAGE_PATH_FOR_TEST is set, it become the value of GHC_PACKAGE_PATH
+  #   while the test suite is executed.
+  # - If it is empty, it'll be unset during test suite execution.
+  # - Otherwise GHC_PACKAGE_PATH will have the package db used for configuring
+  #   plus GHC's core packages.
   checkPhase = ''
     runHook preCheck
     checkFlagsArray+=(
       "--show-details=streaming"
+      "--test-wrapper=${testWrapperScript}"
       ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
     )
+    export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
     ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
