@@ -15,6 +15,7 @@
   nixosTests,
   rocksdb_8_11,
   callPackage,
+  fetchurl,
 }:
 
 let
@@ -26,6 +27,10 @@ let
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
   version = "0.8.5";
+  webadmin = fetchurl {
+    url = "https://github.com/stalwartlabs/webadmin/releases/download/v0.1.8/webadmin.zip";
+    hash = "sha256-x0OdfQ/egYsx02kMb7M+KtoJrSYCzvEW4Bv09luTYqc=";
+  };
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -76,12 +81,13 @@ rustPlatform.buildRustPackage {
   };
 
   postInstall = ''
-    mkdir -p $out/etc/stalwart
+    mkdir -p $out/etc/stalwart $out/share/web
     cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
     cp -r resources/config/spamfilter $out/etc/stalwart/
 
-    mkdir -p $out/lib/systemd/system
+    cp ${webadmin} $out/share/web/webadmin.zip
 
+    mkdir -p $out/lib/systemd/system
     substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \
       --replace "__PATH__" "$out"
   '';
