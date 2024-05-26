@@ -6080,7 +6080,7 @@ with pkgs;
 
   precice-config-visualizer = callPackage ../tools/misc/precice-config-visualizer { };
 
-  proxmox-auto-install-assistant = callPackage ../tools/misc/proxmox-auto-install-assistant/package.nix { };
+  proxmox-auto-install-assistant = callPackage ../by-name/pr/proxmox-auto-install-assistant/package.nix { };
 
   proxmox-backup-client = callPackage ../applications/backup/proxmox-backup-client { };
 
