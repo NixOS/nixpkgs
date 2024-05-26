@@ -2,7 +2,7 @@
 
 let
   pname = "p3x-onenote";
-  version = "2023.4.117";
+  version = "2024.4.188";
 
   plat = {
     aarch64-linux = "-arm64";
@@ -13,7 +13,7 @@ let
   sha256 = {
     aarch64-linux = "0plpwymm1bgzbzwk2689lw1fadxdwxzzn5dmayk1ayxz1k3pj9wi";
     armv7l-linux = "1pvr8f1ccl4nyfmshn3v3jfaa5x519rsy57g4pdapffj10vpbkb8";
-    x86_64-linux = "sha256-hr/mPOrliP8Dej3DVE2+wYkb1J789WCkkY3xe9EcM44=";
+    x86_64-linux = "sha256-+Soysbaz7j+GCkWPsQ2xUXcnlYIrq09DZjXB33QdRWk=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
