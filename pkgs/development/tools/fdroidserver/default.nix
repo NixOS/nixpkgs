@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitLab
-, fetchPypi
 , apksigner
 , buildPythonApplication
 , python3
@@ -12,7 +11,6 @@
 , defusedxml
 , gitpython
 , libcloud
-, mwclient
 , paramiko
 , pillow
 , pyasn1
@@ -22,20 +20,24 @@
 , qrcode
 , requests
 , ruamel-yaml
+, sdkmanager
+, setuptools
 , yamllint
 }:
 
 buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "unstable-2023-10-23";
-  format = "setuptools";
+  version = "2.2.2";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = "f4b10cf83935432d19948dac669964384bef0728";
-    hash = "sha256-GmR6Td5pScwEKK9W6m26xQV4XxBdZ7frN2UvwUGY4Dw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fNgm0iw9TbcEISWu33tSi9THOr51qCbKNxoWeJlAex0=";
   };
+
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "pyasn1"
@@ -67,13 +69,12 @@ buildPythonApplication rec {
     babel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     androguard
     clint
     defusedxml
     gitpython
     libcloud
-    mwclient
     paramiko
     pillow
     pyasn1
@@ -82,13 +83,8 @@ buildPythonApplication rec {
     pyyaml
     qrcode
     requests
-    (ruamel-yaml.overrideAttrs (old: {
-      src = fetchPypi {
-        pname = "ruamel.yaml";
-        version = "0.17.21";
-        hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
-      };
-    }))
+    ruamel-yaml
+    sdkmanager
     yamllint
   ];
 
