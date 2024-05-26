@@ -23,6 +23,7 @@ let self = stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ];
 
   patches = [
+    ./remove-cc-reference.patch
     ./5.1.3-CVE-2021-43618.patch
   ] ++ lib.optionals stdenv.isDarwin [
     ./need-size-t.patch
