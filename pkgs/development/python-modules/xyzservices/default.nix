@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "xyzservices";
   version = "2024.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,9 +24,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  disabledTests = [
+  pytestFlagsArray = [
     # requires network connections
-    "test_free_providers"
+    "-m 'not request'"
   ];
 
   pythonImportsCheck = [ "xyzservices.providers" ];
@@ -37,11 +37,11 @@ buildPythonPackage rec {
     requests
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/geopandas/xyzservices/releases/tag/${version}";
     description = "Source of XYZ tiles providers";
     homepage = "https://github.com/geopandas/xyzservices";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.geospatial.members;
   };
 }
