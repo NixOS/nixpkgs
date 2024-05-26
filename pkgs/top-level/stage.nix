@@ -66,7 +66,7 @@ in
 , # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays
-} @args:
+}:
 
 let
   # This is a function from parsed platforms (like
@@ -188,7 +188,7 @@ let
         (self': super': {
           pkgsLLVM = super';
         })
-      ] ++ overlays;
+      ];
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
@@ -204,7 +204,7 @@ let
     pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
       overlays = [ (self': super': {
         pkgsMusl = super';
-      })] ++ overlays;
+      })];
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
@@ -216,7 +216,7 @@ let
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
       overlays = [ (self': super': {
         pkgsi686Linux = super';
-      })] ++ overlays;
+      })];
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
@@ -229,7 +229,7 @@ let
     pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
       overlays = [ (self': super': {
         pkgsx86_64Darwin = super';
-      })] ++ overlays;
+      })];
       localSystem = {
         parsed = stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.x86_64;
@@ -253,7 +253,7 @@ let
     appendOverlays = extraOverlays:
       if extraOverlays == []
       then self
-      else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+      else nixpkgsFun { overlays = extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -269,7 +269,7 @@ let
     pkgsStatic = nixpkgsFun ({
       overlays = [ (self': super': {
         pkgsStatic = super';
-      })] ++ overlays;
+      })];
       crossSystem = {
         isStatic = true;
         parsed =
@@ -292,7 +292,7 @@ let
             ]
           ) super'.stdenv;
         })
-      ] ++ overlays;
+      ];
     };
   };
 
