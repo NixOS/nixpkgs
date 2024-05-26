@@ -21,22 +21,22 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "4.2.0";
+  version = "4.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NW6SBaaiq2icR8j+SRnbpsB243bQPya6rcBXSMJDXdU=";
+    hash = "sha256-oQ+3EIWmkAggxi1DMkAFBGQC/8jw/eaWED43I4qDlQc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-lru
     httpx
     packaging
