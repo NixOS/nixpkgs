@@ -210,4 +210,23 @@ lib.recurseIntoAttrs {
         touch $out
       '';
   };
+
+  testVersion = let inherit (testers) testVersion; in {
+    # Test with default arguments
+    hello = testVersion { package = pkgs.hello; };
+
+    # Test non-default arguments
+    cat = testVersion {
+      package = pkgs.coreutils;
+      executable = "cat"; # must pet
+    };
+    ffmpeg = testVersion {
+      package = pkgs.ffmpeg;
+      parameter = "-version";
+    };
+    mlterm = testVersion {
+      package = pkgs.mlterm;
+      exitCode = 1;
+    };
+  };
 }
