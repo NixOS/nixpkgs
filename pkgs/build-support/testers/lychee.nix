@@ -1,11 +1,19 @@
 deps@{ formats, lib, lychee, stdenv, writeShellApplication }:
 let
+  inherit (lib) concatLists isPath mapAttrsToList;
+  inherit (lib.strings) hasPrefix;
+
+  toURL = v:
+    if builtins.isString v && hasPrefix builtins.storeDir v
+      || isPath v
+    then "file://${v}"
+    else "${v}";
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
   # or doc/builders/testers.chapter.md
   lycheeLinkCheck = {
     site,
-    remapUrl ? null,
+    remap ? { },
     lychee ? deps.lychee,
     extraConfig ? { },
   }:
@@ -17,11 +25,11 @@ let
 
       # These can be overriden with overrideAttrs if needed.
       passthru = {
-        inherit lychee remapUrl;
+        inherit lychee remap;
         config = {
           include_fragments = true;
-        } // lib.optionalAttrs (finalAttrs.passthru.remapUrl != null) {
-          remap = [ "${remapUrl} file://${finalAttrs.site}" ];
+        } // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
+          remap = mapAttrsToList (name: value: "${name} ${toURL value}") finalAttrs.passthru.remap;
         } // extraConfig;
         online = writeShellApplication {
           name = "run-lychee-online";

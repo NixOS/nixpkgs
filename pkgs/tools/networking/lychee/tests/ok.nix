@@ -6,7 +6,7 @@ let
     echo "<html><body><a href=\"https://example.com/foo.html\">foo</a></body></html>" > $dist/index.html
     echo "<html><body><a href=\".\">index</a></body></html>" > $dist/foo.html
   '';
-in testers.lycheeLinkCheck {
+in testers.lycheeLinkCheck rec {
   site = sitePkg + "/dist";
-  remapUrl = "https://example.com";
+  remap = { "https://example.com" = site; };
 }
