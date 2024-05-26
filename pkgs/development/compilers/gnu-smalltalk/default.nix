@@ -25,7 +25,11 @@ in stdenv.mkDerivation rec {
     sha256 = "1k2ssrapfzhngc7bg1zrnd9n2vyxp9c9m70byvsma6wapbvib6l1";
   };
 
-  patches = [ ./fix_mkorder.patch ];
+  patches = [
+    # The awk script incorrectly parsed `glib/glib.h` and was trying to find `glib/gwin32.h`,
+    # that isn't included since we're building only for linux.
+    ./0000-fix_mkorder.patch
+  ];
 
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
