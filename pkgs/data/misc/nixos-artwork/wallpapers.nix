@@ -110,6 +110,46 @@ rec {
     license = lib.licenses.cc-by-sa-40;
   };
 
+  catppuccin-frappe = mkNixBackground {
+    name = "catppuccin-frappe-2024-02-15";
+    description = "Catppuccin Frappé colorscheme wallpaper for NixOS";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-frappe.png";
+      hash = "sha256-wtBffKK9rqSJo8+7Wo8OMruRlg091vdroyUZj5mDPfI=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  catppuccin-latte = mkNixBackground {
+    name = "catppuccin-latte-2024-02-15";
+    description = "Catppuccin Latte colorscheme wallpaper for NixOS";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-latte.png";
+      hash = "sha256-Y6WCwmHOLBStj1D9mcU2082y1fhAFHna01ajfUHxehk=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  catppuccin-macchiato = mkNixBackground {
+    name = "catppuccin-macchiato-2024-02-15";
+    description = "Catppuccin Macchiato colorscheme wallpaper for NixOS";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-macchiato.png";
+      hash = "sha256-SkXrLbHvBOItJ7+8vW+6iXV+2g0f8bUJf9KcCXYOZF0=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
+  catppuccin-mocha = mkNixBackground {
+    name = "catppuccin-mocha-2024-02-15";
+    description = "Catppuccin Mochacolorscheme wallpaper for NixOS";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/97444e18b7fe97705e8caedd29ae05e62cb5d4b7/wallpapers/nixos-wallpaper-catppuccin-mocha.png";
+      hash = "sha256-fmKFYw2gYAYFjOv4lr8IkXPtZfE1+88yKQ4vjEcax1s=";
+    };
+    license = lib.licenses.cc-by-sa-40;
+  };
+
   dracula = mkNixBackground {
     name = "dracula-2020-07-02";
     description = "Nix background based on the Dracula color palette";
