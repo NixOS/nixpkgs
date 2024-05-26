@@ -212,7 +212,7 @@ lib.recurseIntoAttrs {
   };
 
   testVersion = let
-    inherit (lib.attrsets) concatMapAttrs;
+    inherit (lib.attrsets) concatMapAttrs removeAttrs;
     inherit (testers) testBuildFailure testVersion;
     positiveTests = {
       # Test with default arguments
@@ -236,5 +236,13 @@ lib.recurseIntoAttrs {
     "${n}" = testVersion args;
     "${n}-wrong-version" = testBuildFailure (testVersion (args // { version = "0.incorrect"; }));
     "${n}-wrong-exitCode" = testBuildFailure (testVersion (args // { exitCode = 42; }));
+    "${n}-command" =
+      let pkg = args.package; in
+      if testVersion args ==
+        testVersion (removeAttrs args [ "executable" "parameter" ] // {
+          command = "${args.executable or pkg.meta.mainProgram} ${args.parameter or "--version"}";
+        })
+      then {}
+      else throw "`command` argument not strictly equivalent to `executable parameter`";
   }) positiveTests;
 }
