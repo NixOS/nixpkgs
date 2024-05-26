@@ -4,7 +4,6 @@
 , zlib
 , pkg-config
 , autoreconfHook
-, xz
 , libintl
 , python
 , gettext
@@ -37,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
   };
 
+  # https://gitlab.gnome.org/GNOME/libxml2/-/issues/725
+  postPatch = if stdenv.hostPlatform.isFreeBSD then ''
+    substituteInPlace ./configure.ac --replace-fail pthread_join pthread_create
+  '' else null;
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -52,11 +56,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     ncurses
   ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
   ];
 
   propagatedBuildInputs = [
