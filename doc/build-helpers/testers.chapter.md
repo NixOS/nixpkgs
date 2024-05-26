@@ -82,6 +82,19 @@ It has two modes:
 
 : The path to the files to check.
 
+`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+
+: An attribute set where the attribute names are the URLs to remap.
+
+  The values should be store path strings, derivations or path values.
+
+  Before checking the existence of URLs, if it is equal to the attribute name, it is replaced by the value of the attribute.
+  If it is a subpath of the attribute name, it is replaced by a subpath of the value.
+
+  This is useful for remapping URLs that are not accessible from the build environment.
+
+  Example: `{ "https://blog.example.com" = site; }`
+
 `extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
 
 : Extra configuration to pass to `lychee` in its [configuration file](https://github.com/lycheeverse/lychee/blob/master/lychee.example.toml).
@@ -92,6 +105,7 @@ It has two modes:
 `lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
 
 : The `lychee` package to use.
+
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.

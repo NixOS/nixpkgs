@@ -7,9 +7,9 @@ let
     echo "<html><body><a href=\".\">index</a></body></html>" > $dist/foo.html
   '';
 
-  linkCheck = testers.lycheeLinkCheck {
+  linkCheck = testers.lycheeLinkCheck rec {
     site = sitePkg + "/dist";
-    remapUrl = "https://example.com";
+    remap = { "https://example.com"= site; };
   };
 
   failure = testers.testBuildFailure linkCheck;
