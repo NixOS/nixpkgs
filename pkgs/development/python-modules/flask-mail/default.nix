@@ -5,16 +5,12 @@
   blinker,
   flit-core,
   flask,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mail";
   version = "0.10.0";
-  meta = {
-    description = "Flask-Mail is a Flask extension providing simple email sending capabilities.";
-    homepage = "https://pypi.python.org/pypi/Flask-Mail";
-    license = lib.licenses.bsd3;
-  };
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -31,5 +27,14 @@ buildPythonPackage rec {
     flask
   ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "flask_mail" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
+    description = "Flask extension providing simple email sending capabilities";
+    homepage = "https://github.com/pallets-eco/flask-mail";
+    changelog = "https://github.com/pallets-eco/flask-mail/blob/${src.rev}/CHANGES.md";
+    license = lib.licenses.bsd3;
+  };
 }
