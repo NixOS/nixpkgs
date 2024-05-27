@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
-  # [1] https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
+  # [1] https://www.realtek.com/Download/List?cate_id=584
   # I've verified manually (`diff -r`) that the source code for version 8.053.00
   # is the same as the one available on the realtek website.
   src = fetchFromGitHub {
