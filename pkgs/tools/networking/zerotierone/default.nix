@@ -72,8 +72,8 @@ in stdenv.mkDerivation {
   # explicitly defined. The build-system however expects target/release. Hence we just symlink from
   # the latter to the former.
   preBuild = ''
-    mkdir --parent -- rustybits/target/release
-    ln --relative --symbolic -- \
+    mkdir -p rustybits/target/release
+    ln -rs \
       ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
       ./rustybits/target/release/
   '';
