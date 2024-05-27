@@ -276,9 +276,9 @@ let
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ alapshin ];
-        beta = [ alapshin ];
-        canary = [ alapshin ];
+        stable = [ alapshin numinit ];
+        beta = [ alapshin numinit ];
+        canary = [ alapshin numinit ];
         dev = canary;
       }."${channel}";
       mainProgram = pname;
