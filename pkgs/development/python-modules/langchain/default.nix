@@ -10,6 +10,8 @@
   chardet,
   clarifai,
   cohere,
+  dataclasses-json,
+  docarray,
   esprima,
   fetchFromGitHub,
   freezegun,
@@ -45,7 +47,6 @@
   transformers,
   typer,
 }:
-
 buildPythonPackage rec {
   pname = "langchain";
   version = "0.2.1";
@@ -99,9 +100,7 @@ buildPythonPackage rec {
     text_helpers = [ chardet ];
     clarifai = [ clarifai ];
     cohere = [ cohere ];
-    docarray = [
-      # docarray
-    ];
+    docarray = [ docarray ];
     embeddings = [ sentence-transformers ];
     javascript = [ esprima ];
     azure = [
