@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libiconv, bash
+{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+  ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
     bash
   ]
