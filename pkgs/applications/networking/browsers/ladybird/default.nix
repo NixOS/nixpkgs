@@ -22,11 +22,11 @@
 
 let
   inherit (builtins) elemAt;
-  cldr_version = "44.1.0";
+  cldr_version = "45.0.0";
   cldr-json = fetchzip {
     url = "https://github.com/unicode-org/cldr-json/releases/download/${cldr_version}/cldr-${cldr_version}-json-modern.zip";
     stripRoot = false;
-    hash = "sha256-EbbzaaspKgRT/dsJV3Kf0Dfj8LN9zT+Pl4gk5kiOXWk=";
+    hash = "sha256-BPDvYjlvJMudX/YlS7HrwKEABYx+1KzjiFlLYA5+Oew=";
     postFetch = ''
       echo -n ${cldr_version} > $out/version.txt
     '';
@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-03-16";
+  version = "0-unstable-2024-05-26";
 
   src = fetchFromGitHub {
     owner = "SerenityOS";
     repo = "serenity";
-    rev = "3a8bde9ef24dace600484b38992fdc7d17bf92c3";
-    hash = "sha256-r8HYcexrOjDYsXuCtROiNY7Rl60pVQBvVQf190gqNuY=";
+    rev = "1a9d8e8fbe360f2d3b376ca0e13c507bd2cc6e8b";
+    hash = "sha256-+g/1F/v8nTVbvtSrtyvQbeYacjTlfRpg+Htu0lRlkcU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/Ladybird";
