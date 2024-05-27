@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -18,11 +17,10 @@ buildGoModule rec {
     sha256 = "sha256-EBSlufgzT4zgxTO5B0/RHHJJ2GgtU3U9ypd1QjC3knE=";
   };
 
-  excludedPackages = [ "./tools" ];
-
-  preCheck = ''
-    rm -r tests/e2e
-  '';
+  excludedPackages = [
+    "./tests/e2e"
+    "./tools"
+  ];
 
   meta = {
     homepage = "https://github.com/kubernetes/kube-state-metrics";
