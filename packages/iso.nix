@@ -35,8 +35,8 @@ let
         makeUsbBootable = true;
       };
       environment = {
-        systemPackages = with pkgs; [
-          prometheus grafana 
+        systemPackages = [
+          pkgs.prometheus pkgs.grafana pkgs.kubo #pkgs.openmesh-core
         ];
       };
       networking = {
@@ -61,3 +61,4 @@ inputs.nixos-generators.nixosGenerate {
     isoModule
   ];
 }
+  
