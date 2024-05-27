@@ -21,7 +21,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  name = "polychromatic";
+  pname = "polychromatic";
   version = "0.9.1";
   format = "other";
 
