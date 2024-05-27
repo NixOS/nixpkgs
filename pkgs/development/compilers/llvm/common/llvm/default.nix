@@ -527,6 +527,8 @@ stdenv.mkDerivation (
 
     checkTarget = "check-all";
 
+    hardeningDisable = [ "trivialautovarinit" ];
+
     # For the update script:
     passthru.monorepoSrc = monorepoSrc;
 
@@ -657,7 +659,4 @@ stdenv.mkDerivation (
         check_version patch ${patch}
       '';
   }
-  // lib.optionalAttrs (
-    lib.versionOlder release_version "17" || lib.versionAtLeast release_version "18"
-  ) { hardeningDisable = [ "trivialautovarinit" ]; }
 )
