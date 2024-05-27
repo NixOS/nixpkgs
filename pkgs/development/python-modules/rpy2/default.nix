@@ -5,6 +5,7 @@
   fetchPypi,
   isPyPy,
   R,
+  libdeflate,
   rWrapper,
   rPackages,
   pcre,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
       bzip2
       zlib
       icu
+      libdeflate
     ]
     ++ (with rPackages; [
       # packages expected by the test framework
