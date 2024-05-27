@@ -77,6 +77,7 @@ in
         rev = src.rev;
       })
       ./patches/fix-cmake-install.patch
+      ./patches/fix-audio-codec-setup.patch
     ];
 
     postPatch = ''
