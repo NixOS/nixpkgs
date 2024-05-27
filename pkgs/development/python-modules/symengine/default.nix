@@ -42,13 +42,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "\"cmake\"" "\"${lib.getExe' cmake "cmake"}\"" \
       --replace-fail "'cython>=0.29.24'" "'cython'"
 
     export PATH=${cython}/bin:$PATH
   '';
 
-  nativeBuildUnputs = [ cmake ];
+  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ cython ];
 
@@ -58,8 +58,10 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
     mkdir empty && cd empty
     ${python.interpreter} ../bin/test_python.py
+    runHook postCheck
   '';
 
   meta = with lib; {
