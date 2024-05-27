@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
       KDE Plasma plasmoid for supergfxctl
       Built as a C++/QML Plasmoid
     '';
-    mainProgram = "supergfxctl-plasmoid";
     license = licenses.mpl20;
     homepage = "https://gitlab.com/Jhyub/supergfxctl-plasmoid";
     maintainers = with maintainers; [ johnylpm ];
