@@ -12,7 +12,7 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  name = "menulibre";
+  pname = "menulibre";
   version = "2.4.0";
 
   src = fetchFromGitHub {
