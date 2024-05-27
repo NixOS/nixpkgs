@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, bash
-, glib
-, gdk-pixbuf
-, gettext
-, imagemagick
-, ninja
-, meson
-, sassc
-, python3Packages
-, gobject-introspection
-, wrapGAppsHook3
-, libappindicator-gtk3
-, libxcb
-, qt5
-, ibus
-, usbutils
+{
+  lib,
+  fetchFromGitHub,
+  bash,
+  glib,
+  gdk-pixbuf,
+  gettext,
+  imagemagick,
+  ninja,
+  meson,
+  sassc,
+  python3Packages,
+  gobject-introspection,
+  wrapGAppsHook3,
+  libappindicator-gtk3,
+  libxcb,
+  qt5,
+  ibus,
+  usbutils,
 }:
 
 python3Packages.buildPythonApplication rec {
