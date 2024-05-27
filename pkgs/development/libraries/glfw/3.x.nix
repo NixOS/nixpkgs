@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
       --replace "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0"
   '';
 
+  # glfw may dlopen libwayland-client.so:
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf ''${!outputLib}/lib/libglfw.so --add-rpath ${lib.getLib wayland}/lib
+  '';
+
   meta = with lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://www.glfw.org/";
