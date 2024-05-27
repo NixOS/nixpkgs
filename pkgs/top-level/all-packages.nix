@@ -25062,7 +25062,7 @@ with pkgs;
     llvmPackages = llvmPackages_15;
   };
   # requires a newer Apple SDK
-  zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11.nix {
+  zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11 {
     llvmPackages = llvmPackages_16;
   };
   # requires a newer Apple SDK
