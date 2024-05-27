@@ -702,14 +702,6 @@ stdenv.mkDerivation ({
     runHook postInstallIntermediates
   '';
 
-  disallowedRequisites =
-    disallowedRequisites
-    ++ (
-      if disallowGhcReference
-      then [ghc]
-      else []
-    );
-
   passthru = passthru // rec {
 
     inherit pname version disallowGhcReference;
@@ -873,10 +865,19 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
 // optionalAttrs (postPhases != [])              { inherit postPhases; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (disallowedRequisites != [] || disallowGhcReference) {
+  disallowedRequisites =
+    disallowedRequisites
+    ++ (
+      if disallowGhcReference
+      then [ghc]
+      else []
+    );
+}
 
 # Implicit pointer to integer conversions are errors by default since clang 15.
 # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
-// lib.optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
+// optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
   NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 }
 )
