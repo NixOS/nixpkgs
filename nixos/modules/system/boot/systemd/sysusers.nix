@@ -12,7 +12,7 @@ let
     ${lib.concatLines (lib.mapAttrsToList
       (username: opts:
         let
-          uid = if opts.uid == null then "-" else toString opts.uid;
+          uid = if opts.uid == null then "/var/lib/nixos/uid/${username}" else toString opts.uid;
         in
           ''u ${username} ${uid}:${opts.group} "${opts.description}" ${opts.home} ${utils.toShellPath opts.shell}''
       )
@@ -21,7 +21,7 @@ let
 
     # Groups
     ${lib.concatLines (lib.mapAttrsToList
-      (groupname: opts: ''g ${groupname} ${if opts.gid == null then "-" else toString opts.gid}'') userCfg.groups)
+      (groupname: opts: ''g ${groupname} ${if opts.gid == null then "/var/lib/nixos/gid/${groupname}" else toString opts.gid}'') userCfg.groups)
     }
 
     # Group membership
@@ -106,6 +106,23 @@ in
             };
           })
           (lib.filterAttrs (_username: opts: opts.home != "/var/empty") userCfg.users);
+
+        # Create uid/gid marker files for those without an explicit id
+        tmpfiles.settings.nixos-uid = lib.mapAttrs'
+          (username: opts: lib.nameValuePair "/var/lib/nixos/uid/${username}" {
+            f = {
+              user = username;
+            };
+          })
+          (lib.filterAttrs (_username: opts: opts.uid == null) userCfg.users);
+
+        tmpfiles.settings.nixos-gid = lib.mapAttrs'
+          (groupname: opts: lib.nameValuePair "/var/lib/nixos/gid/${groupname}" {
+            f = {
+              group = groupname;
+            };
+          })
+          (lib.filterAttrs (_groupname: opts: opts.gid == null) userCfg.groups);
       })
 
       (lib.mkIf config.users.mutableUsers {
