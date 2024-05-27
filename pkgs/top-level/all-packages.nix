@@ -3484,8 +3484,6 @@ with pkgs;
 
   bazarr = callPackage ../servers/bazarr { };
 
-  bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
-
   bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
     openjdk11 = openjdk11.override { enableJavaFX = true; };
   };
@@ -29665,8 +29663,6 @@ with pkgs;
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
 
-  pulsar = callPackage ../applications/editors/pulsar { };
-
   asap = callPackage ../tools/audio/asap { };
 
   aseprite = callPackage ../applications/editors/aseprite { };
@@ -35443,6 +35439,8 @@ with pkgs;
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
   webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
+
+  webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_29; };
 
   webex = callPackage ../applications/networking/instant-messengers/webex { };
 
