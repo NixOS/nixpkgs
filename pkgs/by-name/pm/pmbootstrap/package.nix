@@ -1,9 +1,18 @@
-{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromGitLab, sudo }:
+{ stdenv
+, lib
+, git
+, openssl
+, ps
+, fetchFromGitLab
+, sudo
+, python3Packages
+, gitUpdater
+}:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
   version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketos";
@@ -17,7 +26,14 @@ buildPythonApplication rec {
   # Tests depend on sudo
   doCheck = stdenv.isLinux;
 
-  nativeCheckInputs = [ pytestCheckHook git openssl ps sudo ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.setuptools
+    git
+    openssl
+    ps
+    sudo
+  ];
 
   # Add test dependency in PATH
   preCheck = "export PYTHONPATH=$PYTHONPATH:${pmb_test}";
@@ -92,6 +108,8 @@ buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description =
