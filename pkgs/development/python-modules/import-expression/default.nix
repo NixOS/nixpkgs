@@ -18,8 +18,8 @@ buildPythonPackage rec {
     hash = "sha256-mVlYj8/I3LFEoHJRds/vbCjH2x/C1oNiUCXmh1FtQME=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [ astunparse ];
+  build-system = [ setuptools ];
+  dependencies = [ astunparse ];
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests.py" ];
 
