@@ -12,23 +12,24 @@
   python3Packages,
   gobject-introspection,
   wrapGAppsHook3,
-  libappindicator-gtk3,
+  libayatana-appindicator,
   libxcb,
-  qt5,
+  qt6,
   ibus,
   usbutils,
+  psmisc,
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "polychromatic";
-  version = "0.8.0";
+  version = "0.9.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
     rev = "v${version}";
-    sha256 = "sha256-ym2pcGUWM5zCUx/lYs+WECj+wbyBtWnx04W/NRXNKlw=";
+    sha256 = "sha256-3Pt1Z8G0xDWlFD7LxJILPUifMBTN4OvPNHZv80umO1s=";
   };
 
   postPatch = ''
@@ -50,23 +51,31 @@ python3Packages.buildPythonApplication rec {
     ninja
     sassc
     wrapGAppsHook3
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
+    qt6.qtbase
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    colour
-    openrazer
-    pyqt5
-    pyqtwebengine
-    requests
-    setproctitle
-    libxcb
-    openrazer-daemon
-    libappindicator-gtk3
-    ibus
-    usbutils
-  ];
+  buildInputs = [ qt6.qtwayland ];
+
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      colorama
+      colour
+      openrazer
+      pyqt6
+      pyqt6-webengine
+      requests
+      setproctitle
+      libxcb
+      openrazer-daemon
+      ibus
+      usbutils
+    ]
+    ++ [
+      libayatana-appindicator
+      psmisc
+    ];
 
   dontWrapGapps = true;
   dontWrapQtApps = true;
