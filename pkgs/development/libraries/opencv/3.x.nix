@@ -15,7 +15,7 @@
 , enableContrib   ? true
 
 , enableCuda      ? config.cudaSupport
-, cudaPackages ? { }
+, cudaPackages
 , enableUnfree    ? false
 , enableIpp       ? false
 , enablePython    ? false, pythonPackages ? null
@@ -295,6 +295,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
+    # OpenCV 3 won't build with CUDA 12+
+    broken = enableCuda && cudaPackages.cudaAtLeast "12";
     license = with licenses; if enableUnfree then unfree else bsd3;
     maintainers = with maintainers; [mdaiter basvandijk];
     platforms = with platforms; linux ++ darwin;
