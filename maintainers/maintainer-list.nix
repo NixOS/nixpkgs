@@ -20833,7 +20833,7 @@
     name = "Tomkoid";
   };
   tomodachi94 = {
-    email = "tomodachi94+nixpkgs@protonmail.com";
+    email = "tomodachi94@protonmail.com";
     matrix = "@tomodachi94:matrix.org";
     github = "tomodachi94";
     githubId = 68489118;
