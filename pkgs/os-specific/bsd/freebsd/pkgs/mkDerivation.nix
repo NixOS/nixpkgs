@@ -2,6 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
+  stdenvNoLibs,
   versionData,
   writeText,
   patches,
@@ -21,7 +22,13 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        stdenvNoLibs
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
