@@ -36,48 +36,44 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = mkMerge [
+      DEBUG_INFO                                                         = mkMerge [
         (whenOlder "5.2" (if (features.debug or false) then yes else no))
         (whenBetween "5.2" "5.18" yes)
       ];
-      DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
+      DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT                                 = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
-      DEBUG_INFO_REDUCED        = whenAtLeast "5.13" (option no);
-      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      DEBUG_INFO_REDUCED                                                 = whenAtLeast "5.13" (option no);
+      DEBUG_INFO_BTF                                                     = whenAtLeast "5.2" (option yes);
       # Allow loading modules with mismatched BTFs
       # FIXME: figure out how to actually make BTFs reproducible instead
       # See https://github.com/NixOS/nixpkgs/pull/181456 for details.
-      MODULE_ALLOW_BTF_MISMATCH = whenAtLeast "5.18" (option yes);
-      BPF_LSM                   = whenAtLeast "5.7" (option yes);
-      DEBUG_KERNEL              = yes;
-      DEBUG_DEVRES              = no;
-      DYNAMIC_DEBUG             = yes;
-      DEBUG_STACK_USAGE         = no;
-      RCU_TORTURE_TEST          = no;
-      SCHEDSTATS                = yes;
-      DETECT_HUNG_TASK          = yes;
-      CRASH_DUMP                = option no;
+      MODULE_ALLOW_BTF_MISMATCH                                          = whenAtLeast "5.18" (option yes);
+      BPF_LSM                                                            = whenAtLeast "5.7" (option yes);
+      DEBUG_KERNEL                                                       = yes;
+      DEBUG_DEVRES                                                       = no;
+      DYNAMIC_DEBUG                                                      = yes;
+      DEBUG_STACK_USAGE                                                  = no;
+      RCU_TORTURE_TEST                                                   = no;
+      SCHEDSTATS                                                         = yes;
+      DETECT_HUNG_TASK                                                   = yes;
+      CRASH_DUMP                                                         = option no;
       # Easier debugging of NFS issues.
-      SUNRPC_DEBUG              = yes;
+      SUNRPC_DEBUG                                                       = yes;
       # Provide access to tunables like sched_migration_cost_ns
-      SCHED_DEBUG               = yes;
-
+      SCHED_DEBUG                                                        = yes;
       # Count IRQ and steal CPU time separately
-      IRQ_TIME_ACCOUNTING       = yes;
-      PARAVIRT_TIME_ACCOUNTING  = yes;
-
+      IRQ_TIME_ACCOUNTING                                                = yes;
+      PARAVIRT_TIME_ACCOUNTING                                           = yes;
       # Enable CPU lockup detection
-      LOCKUP_DETECTOR           = yes;
-      SOFTLOCKUP_DETECTOR       = yes;
-      HARDLOCKUP_DETECTOR       = yes;
-
+      LOCKUP_DETECTOR                                                    = yes;
+      SOFTLOCKUP_DETECTOR                                                = yes;
+      HARDLOCKUP_DETECTOR                                                = yes;
       # Enable streaming logs to a remote device over a network
-      NETCONSOLE                = module;
-      NETCONSOLE_DYNAMIC        = yes;
-
+      NETCONSOLE                                                         = module;
+      NETCONSOLE_DYNAMIC                                                 = yes;
       # Export known printks in debugfs
-      PRINTK_INDEX              = whenAtLeast "5.15" yes;
+      PRINTK_INDEX                                                       = whenAtLeast "5.15" yes;
       # According to Kconfig, this has low performance and memory impact.
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING                                                = whenAtLeast "6.10" yes;
@@ -192,7 +188,8 @@ let
 
       # Collect ECC errors and retire pages that fail too often
       RAS_CEC                   = yes;
-    } // optionalAttrs (stdenv.is32bit) {
+
+        } // optionalAttrs (stdenv.is32bit) {
       # Enable access to the full memory range (aka PAE) on 32-bit architectures
       # This check isn't super accurate but it's close enough
       HIGHMEM                   = option yes;
