@@ -4,7 +4,7 @@
   lib
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "lcrq";
+  pname = "lcrq";
   version = "0.1.2";
 
   src = fetchFromGitea {
