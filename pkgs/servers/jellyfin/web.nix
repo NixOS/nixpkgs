@@ -29,12 +29,14 @@ buildNpmPackage' rec {
   pname = "jellyfin-web";
   version = "10.9.3";
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-web";
-    rev = "v${version}";
-    hash = "sha256-duq2tilUDEzj7o3Nq3Ku5qVJm4XDqVmqkQQIK/dlTpE=";
-  };
+  src =
+    assert version == jellyfin.version;
+    fetchFromGitHub {
+      owner = "jellyfin";
+      repo = "jellyfin-web";
+      rev = "v${version}";
+      hash = "sha256-duq2tilUDEzj7o3Nq3Ku5qVJm4XDqVmqkQQIK/dlTpE=";
+    };
 
   npmDepsHash = "sha256-nKA/mR1ug1yq4+jJGhWGtAL9Zsx3KjDPqt5rkCE4LFU=";
 
