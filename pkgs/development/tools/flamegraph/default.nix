@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doCheck = true;
+
+  checkPhase = ''
+    patchShebangs ./test.sh
+    ./test.sh
+  '';
+
   meta = with lib; {
     license = with licenses; [ asl20 cddl gpl2Plus ];
     homepage = "http://www.brendangregg.com/flamegraphs.html";
