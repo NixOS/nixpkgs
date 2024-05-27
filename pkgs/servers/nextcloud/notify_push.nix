@@ -1,10 +1,10 @@
 { lib
 , fetchFromGitHub
 , nixosTests
-, rustPlatform
+, rustPackages_1_76
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPackages_1_76.rustPlatform.buildRustPackage rec {
   pname = "notify_push";
   version = "0.6.11";
 
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-fGbRmrOEbs9nGZhcu1w7qOIwYMaTohaUFb7dilPuTHc=";
 
   passthru = rec {
-    test_client = rustPlatform.buildRustPackage {
+    test_client = rustPackages_1_76.rustPlatform.buildRustPackage {
       pname = "${pname}-test_client";
       inherit src version;
 
