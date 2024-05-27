@@ -5351,6 +5351,11 @@
     githubId = 5596239;
     keys = [ { fingerprint = "62BC E2BD 49DF ECC7 35C7  E153 875F 2BCF 163F 1B29"; } ];
   };
+  dseelp = {
+    name = "dsee";
+    github = "DSeeLP";
+    githubId = 46624152;
+  };
   dsferruzza = {
     email = "david.sferruzza@gmail.com";
     github = "dsferruzza";
