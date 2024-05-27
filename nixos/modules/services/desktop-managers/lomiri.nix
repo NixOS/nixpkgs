@@ -34,7 +34,7 @@ in {
         morph-browser
         qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
         suru-icon-theme
-        telephony-service
+        # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
       ]);
     };
 
@@ -75,7 +75,7 @@ in {
         ayatana-indicator-power
         ayatana-indicator-session
       ]) ++ (with pkgs.lomiri; [
-        telephony-service
+        # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
       ] ++ lib.optionals config.networking.networkmanager.enable [
         lomiri-indicator-network
       ]);

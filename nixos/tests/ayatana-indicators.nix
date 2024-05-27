@@ -33,7 +33,7 @@ in {
         ayatana-indicator-session
       ] ++ (with pkgs.lomiri; [
         lomiri-indicator-network
-        telephony-service
+        # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
       ]);
     };
 
