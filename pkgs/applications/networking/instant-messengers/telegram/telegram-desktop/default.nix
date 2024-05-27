@@ -15,6 +15,7 @@
 , qtsvg
 , qtimageformats
 , gtk3
+, glib-networking
 , boost
 , fmt
 , libdbusmenu
@@ -137,6 +138,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
+    glib-networking
     fmt
     libdbusmenu
     alsa-lib
