@@ -26,7 +26,7 @@ in
         '';
       };
 
-      enableSSHSupport = lib.mkEnableOption "SSH agent support for GNOME Keyring by setting the SSH_AUTH_SOCK environment variable";
+      SSHSupport.enable = lib.mkEnableOption "SSH agent support for GNOME Keyring by setting the SSH_AUTH_SOCK environment variable";
 
     };
 
