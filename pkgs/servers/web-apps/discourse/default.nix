@@ -409,6 +409,9 @@ let
 
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
+      inherit (pkgs)
+        discourseAllPlugins
+      ;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
