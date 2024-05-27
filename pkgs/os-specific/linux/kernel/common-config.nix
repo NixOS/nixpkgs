@@ -78,6 +78,10 @@ let
 
       # Export known printks in debugfs
       PRINTK_INDEX              = whenAtLeast "5.15" yes;
+      # According to Kconfig, this has low performance and memory impact.
+      # Track memory leaks and performance issues related to allocations.
+      MEM_ALLOC_PROFILING                                                = whenAtLeast "6.10" yes;
+      MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT                             = whenAtLeast "6.10" yes;
     };
 
     power-management = {
