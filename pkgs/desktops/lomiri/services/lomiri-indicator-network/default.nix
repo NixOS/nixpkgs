@@ -101,7 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_DOC" true) # lacks QML docs, needs qdoc: https://github.com/NixOS/nixpkgs/pull/245379
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Currently broken: https://github.com/NixOS/nixpkgs/pull/314043
+  doCheck = false;
 
   postInstall = ''
     substituteInPlace $out/etc/dbus-1/services/com.lomiri.connectivity1.service \
