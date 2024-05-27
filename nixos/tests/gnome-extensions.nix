@@ -137,11 +137,11 @@ import ./make-test-python.nix (
             # Enable and optionally disable
 
             machine.succeed(f"${run "gnome-extensions enable {extension}"}")
-            checkState("ENABLED", extension)
+            checkState("ACTIVE", extension)
 
             if disable:
                 machine.succeed(f"${run "gnome-extensions disable {extension}"}")
-                checkState("DISABLED", extension)
+                checkState("INACTIVE", extension)
     ''
     + lib.concatLines (map (e: ''checkExtension("${e}", False)'') alwaysOnExtensions)
     + lib.concatLines (map (e: ''checkExtension("${e}", True)'') testExtensions)
