@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 cddl gpl2Plus ];
     homepage = "http://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
+    mainProgram = "flamegraph.pl";
     platforms = platforms.unix;
   };
 }
