@@ -17,7 +17,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "errands";
-  version = "46.2";
+  version = "46.2.2";
 
   pyproject = false;
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "mrvladus";
     repo = "Errands";
     rev = "refs/tags/${version}";
-    hash = "sha256-p/2dHLWSdDAe0+xTvOgmGscTUPLG+0ddIVHMcHY86xg=";
+    hash = "sha256-lX0exxZMbq/iC41bByMfT478vhOQadPJAN72PHiznKc=";
   };
 
   nativeBuildInputs = [
@@ -59,12 +59,13 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Manage your tasks";
+    changelog = "https://github.com/mrvladus/Errands/releases/tag/${version}";
     homepage = "https://github.com/mrvladus/Errands";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "errands";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       sund3RRR
     ];
