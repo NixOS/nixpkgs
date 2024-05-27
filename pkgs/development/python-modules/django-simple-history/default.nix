@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  pytest-django,
   python,
   pythonOlder,
   setuptools-scm,
@@ -11,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "django-simple-history";
-  version = "3.5.0";
-  format = "setuptools";
+  version = "3.6.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-simple-history";
     rev = "refs/tags/${version}";
-    hash = "sha256-BW/F+RBf1KvwGRY9IK00+n69Jtx/ndEuvpHSi8/odSE=";
+    hash = "sha256-OML94jOf0GpTM+kcDX8buP+ESk3+4WOeMDuHrax7zMM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
