@@ -7,6 +7,7 @@
 , callPackage
 , makeSetupHook
 , makeWrapper
+, jq
 , dotnet-sdk
 , disabledTests
 , nuget-source
@@ -14,6 +15,7 @@
 , runtimeDeps
 , buildType
 , runtimeId
+, dontSetNugetSource
 }:
 assert (builtins.isString runtimeId);
 
@@ -24,8 +26,9 @@ in
   dotnetConfigureHook = makeSetupHook
     {
       name = "dotnet-configure-hook";
+      deps = [ dotnet-sdk ];
       substitutions = {
-        nugetSource = nuget-source;
+        nugetSource = lib.optional (!dontSetNugetSource) nuget-source;
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
         libPath = lib.makeLibraryPath [
           stdenv.cc.cc.lib
@@ -38,6 +41,12 @@ in
       };
     }
     ./dotnet-configure-hook.sh;
+
+  dotnetValidateLockfileHook =  makeSetupHook
+    {
+      name = "dotnet-validate-lockfile-hook";
+      deps = [ jq ];
+    } ./dotnet-validate-lockfile.sh;
 
   dotnetBuildHook = makeSetupHook
     {
