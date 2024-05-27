@@ -65,6 +65,7 @@
 , zlib
 , makeDesktopItem
 , tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+, androidenv
 }:
 
 let
@@ -253,9 +254,12 @@ let
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
-    passthru = {
-      unwrapped = androidStudio;
+    passthru = let
       withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
+    in {
+      unwrapped = androidStudio;
+      full = withSdk androidenv.androidPkgs.androidsdk;
+      inherit withSdk;
     };
     meta = with lib; {
       description = "The Official IDE for Android (${channel} channel)";
