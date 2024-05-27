@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ imgui ];
   nativeBuildInputs = [ cmake ];
 
+  passthru.tests = {
+    implot-demos = callPackage ./demos { };
+  };
+
   meta = with lib; {
     description = "Immediate Mode Plotting";
     homepage = "https://github.com/epezent/implot";
