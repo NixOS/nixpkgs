@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "holochain-launcher";
+  pname = "holochain-launcher";
   version = "0.11.5";
   prerelease = "beta-2";
 
