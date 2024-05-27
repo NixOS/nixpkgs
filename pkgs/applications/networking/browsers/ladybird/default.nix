@@ -74,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Setup caches for LibLocale, LibUnicode, LibTimezone, LibTLS and LibGfx
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
+
+    # Check that the versions match
+    grep -F 'set(CLDR_VERSION "${cldr_version}")' ../Meta/CMake/locale_data.cmake || (echo cldr_version mismatch && exit 1)
+    grep -F 'set(TZDB_VERSION "${tzdata.version}")' ../Meta/CMake/time_zone_data.cmake || (echo tzdata.version mismatch && exit 1)
+    grep -F 'set(CACERT_VERSION "${cacert_version}")' ../Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
+
     mkdir -p build/Caches
 
     ln -s ${cldr-json} build/Caches/CLDR
