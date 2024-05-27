@@ -114,6 +114,10 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "IMGUI_USE_WCHAR32" IMGUI_USE_WCHAR32)
   ];
 
+  passthru.tests = {
+    demo = callPackage ./demo { };
+  };
+
   meta = with lib; {
     # These flags haven't been tested:
     broken =
