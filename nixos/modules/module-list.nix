@@ -509,6 +509,7 @@
   ./services/development/bloop.nix
   ./services/development/distccd.nix
   ./services/development/gemstash.nix
+  ./services/development/genealogos.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
   ./services/development/jupyterhub/default.nix
