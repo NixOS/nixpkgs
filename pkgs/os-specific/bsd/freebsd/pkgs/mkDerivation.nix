@@ -128,15 +128,17 @@ lib.makeOverridable (
           splitPatch =
             patchFile:
             let
+              allLines' = lib.strings.splitString "\n" (builtins.readFile patchFile);
+              allLines = builtins.filter (
+                line: !((lib.strings.hasPrefix "diff --git" line) || (lib.strings.hasPrefix "index " line))
+              ) allLines';
               foldFunc =
                 a: b:
-                if (lib.strings.hasPrefix "--- " b) then
+                if ((lib.strings.hasPrefix "--- " b) || (lib.strings.hasPrefix "diff --git " b)) then
                   (a ++ [ [ b ] ])
                 else
                   ((lib.lists.init a) ++ (lib.lists.singleton ((lib.lists.last a) ++ [ b ])));
-              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] (
-                lib.strings.splitString "\n" (builtins.readFile patchFile)
-              );
+              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] allLines;
               partitionedPatches =
                 if (builtins.length partitionedPatches' > 1) then
                   (lib.lists.drop 1 partitionedPatches')
