@@ -1,16 +1,16 @@
 { lib,
-  stdenv, 
-  fetchFromGitLab, 
-  cmake, 
-  gcc, 
-  hicolor-icon-theme, 
-  kdePackages 
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  gcc,
+  hicolor-icon-theme,
+  kdePackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "supergfxctl-plasmoid";
   version = "2.0.0";
-  
+
   src = fetchFromGitLab {
     owner = "jhyub";
     repo = pname;
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     kdePackages.extra-cmake-modules
-    gcc	
+    gcc
   ];
 
-  buildInputs = [ 
+  buildInputs = [
     hicolor-icon-theme
-    kdePackages.wrapQtAppsHook 
+    kdePackages.wrapQtAppsHook
     kdePackages.kcoreaddons
     kdePackages.kconfig
     kdePackages.ki18n
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     kdePackages.ksvg
     kdePackages.libplasma
     kdePackages.full
-    kdePackages.frameworkintegration 
+    kdePackages.frameworkintegration
   ];
 
   buildPhase = ''
