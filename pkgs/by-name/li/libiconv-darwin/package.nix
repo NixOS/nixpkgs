@@ -37,7 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
     libiconvReal.setupHooks
     ++ lib.optionals hostPlatform.isStatic [ ./static-setup-hook.sh ];
 
-  patches = lib.optionals hostPlatform.isStatic [ ./0001-Support-static-module-loading.patch ];
+  patches = lib.optionals hostPlatform.isStatic [ ./0001-Support-static-module-loading.patch ] ++ [
+    ./0002-Fix-ISO-2022-out-of-bounds-write-with-encoded-charac.patch
+  ];
 
   postPatch =
     ''
