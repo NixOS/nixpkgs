@@ -2041,6 +2041,12 @@
     githubId = 1217745;
     name = "Aldwin Vlasblom";
   };
+  aveltras = {
+    email = "romain.viallard@outlook.fr";
+    github = "aveltras";
+    githubId = 790607;
+    name = "Romain Viallard";
+  };
   averagebit = {
     email = "averagebit@pm.me";
     github = "averagebit";
@@ -10204,7 +10210,7 @@
     githubId = 27734541;
   };
   jtbx = {
-    email = "jtbx@duck.com";
+    email = "jeremy@baxters.nz";
     name = "Jeremy Baxter";
     github = "jtbx";
     githubId = 92071952;

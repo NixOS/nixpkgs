@@ -1,15 +1,24 @@
-{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromGitLab, sudo }:
+{ stdenv
+, lib
+, git
+, openssl
+, ps
+, fetchFromGitLab
+, sudo
+, python3Packages
+, gitUpdater
+}:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "2.2.0";
+  version = "2.3.1";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketos";
     repo = pname;
     rev = version;
-    hash = "sha256-wRJvvABIUPh79QfS8VcwRueB/vO9oGcqyE/OugfTsd8=";
+    hash = "sha256-0hC84Gyfr1FOpZGAc7pAhz/QBSTA5A/Lu/ZJdzlEcX4=";
   };
 
   pmb_test = "${src}/test";
@@ -17,7 +26,14 @@ buildPythonApplication rec {
   # Tests depend on sudo
   doCheck = stdenv.isLinux;
 
-  nativeCheckInputs = [ pytestCheckHook git openssl ps sudo ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.setuptools
+    git
+    openssl
+    ps
+    sudo
+  ];
 
   # Add test dependency in PATH
   preCheck = "export PYTHONPATH=$PYTHONPATH:${pmb_test}";
@@ -93,12 +109,14 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
     description =
       "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [ onny lucasew ];
     mainProgram = "pmbootstrap";
   };
 }
