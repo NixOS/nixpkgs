@@ -33233,8 +33233,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
-
   smtube = libsForQt5.callPackage ../applications/video/smtube { };
 
   softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix { };
