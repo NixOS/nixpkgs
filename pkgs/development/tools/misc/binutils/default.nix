@@ -170,8 +170,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+  #
+  # for FreeBSD it's more complicated. With -static-libgcc, configure
+  # thinks that limits.h does not exist and the build fails for not finding
+  # LONG_MIN. The configure test itself succeeds but the compiler issues a
+  # warning about -static-libgcc being unused.
   env.NIX_CFLAGS_COMPILE =
-    if hostPlatform.isDarwin
+    if (hostPlatform.isDarwin || hostPlatform.isFreeBSD)
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
