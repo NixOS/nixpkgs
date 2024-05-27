@@ -1,4 +1,5 @@
 { lib
+, pkgs
 , beam
 , callPackage
 , wxGTK32
@@ -12,24 +13,28 @@
 let
   self = beam;
 
+  versionAvailables = [ "25" "26" "24" ];
+
   # Aliases added 2023-03-21
-  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } [ "26" "25" "24" ];
+  versionLoop = f: lib.lists.foldr (version: acc: (f version) // acc) { } versionAvailables;
 
   interpretersAliases = versionLoop (version: {
-    "erlangR${version}" = self.interpreters."erlang_${version}";
-    "erlangR${version}_odbc" = self.interpreters."erlang_${version}_odbc";
-    "erlangR${version}_javac" = self.interpreters."erlang_${version}_javac";
-    "erlangR${version}_odbc_javac" = self.interpreters."erlang_${version}_odbc_javac";
+    "erlangR${version}" = self.interpreters."erlang_${version}" or pkgs."erlang_${version}";
+    "erlangR${version}_odbc" = self.interpreters."erlang_${version}_odbc" or (throw "${pkgs."erlang_${version}"} is available ?");
+    "erlangR${version}_javac" = self.interpreters."erlang_${version}_javac" or (throw "${pkgs."erlang_${version}"} is available ?");
+    "erlangR${version}_odbc_javac" = self.interpreters."erlang_${version}_odbc_javac" or (throw "${pkgs."erlang_${version}"} is available ?");
   });
 
   packagesAliases = versionLoop (version: { "erlangR${version}" = self.packages."erlang_${version}"; });
+
+  packages = versionLoop (version: { "erlang_${version}" = self.packagesWith interpretersAliases."erlangR${version}"; });
 
 in
 
 {
   beamLib = callPackage ../development/beam-modules/lib.nix { };
 
-  latestVersion = "erlang_25";
+  latestVersion = "erlang_${lib.lists.head versionAvailables}";
 
   # Each
   interpreters = {
@@ -105,11 +110,7 @@ in
   # appropriate Erlang/OTP version.
   packages = {
     erlang = self.packages.${self.latestVersion};
-
-    erlang_26 = self.packagesWith self.interpreters.erlang_26;
-    erlang_25 = self.packagesWith self.interpreters.erlang_25;
-    erlang_24 = self.packagesWith self.interpreters.erlang_24;
-  } // packagesAliases;
+  } // packagesAliases // packages;
 
   __attrsFailEvaluation = true;
 }
