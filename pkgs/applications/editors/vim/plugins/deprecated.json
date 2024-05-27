@@ -8,11 +8,11 @@
         "new": "cmp-tmux"
     },
     "fern-vim": {
-        "date": "2024-05-25",
+        "date": "2024-05-27",
         "new": "vim-fern"
     },
     "gina-vim": {
-        "date": "2024-05-25",
+        "date": "2024-05-27",
         "new": "vim-gina"
     },
     "gist-vim": {
@@ -60,7 +60,7 @@
         "new": "vim-suda"
     },
     "vim-fsharp": {
-        "date": "2024-05-25",
+        "date": "2024-05-27",
         "new": "zarchive-vim-fsharp"
     },
     "vim-jade": {
