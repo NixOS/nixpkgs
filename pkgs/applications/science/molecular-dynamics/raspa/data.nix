@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, gzip
 , raspa
 }:
 
@@ -9,8 +8,6 @@ stdenvNoCC.mkDerivation rec {
   inherit (raspa) version src;
 
   outputs = [ "out" "doc" ];
-
-  nativeBuildInpuhs = [ gzip ];
 
   installPhase = ''
     runHook preInstall
