@@ -9620,8 +9620,6 @@ with pkgs;
 
   last-resort = callPackage ../data/fonts/last-resort { };
 
-  ldc = callPackage ../development/compilers/ldc { };
-
   ligo =
     let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
     callPackage ../development/compilers/ligo {
