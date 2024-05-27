@@ -17,7 +17,7 @@ in {
   config = lib.mkIf cfg.socket != null {
     environment.extraInit =   ''
       if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-        export SSH_AUTH_SOCK=${cfg.SSHAgent.socket}
+        export SSH_AUTH_SOCK=${cfg.socket}
       fi
     '';
   };
