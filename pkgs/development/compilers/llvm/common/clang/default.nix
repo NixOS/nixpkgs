@@ -30,7 +30,7 @@ let
       cp -r ${monorepoSrc}/clang-tools-extra "$out"
     '' else src;
 
-  self = stdenv.mkDerivation (finalAttrs: rec {
+in stdenv.mkDerivation (finalAttrs: rec {
     inherit pname version patches;
 
     src = src';
@@ -201,5 +201,4 @@ let
       # 12, but appears to occur only for cross compiles.
       NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";
     };
-  }));
-in self
+  }))
