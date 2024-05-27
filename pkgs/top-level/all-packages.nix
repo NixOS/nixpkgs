@@ -31659,8 +31659,6 @@ with pkgs;
 
   protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
 
-  pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
-
   pokeget-rs = callPackage ../tools/misc/pokeget-rs { };
 
   popura = callPackage ../tools/networking/popura { };
