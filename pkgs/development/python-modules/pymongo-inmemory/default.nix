@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pymongo-inmemory";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "kaizendorks";
     repo = "pymongo_inmemory";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vYWVMSawk+03ie3PtqOyzd6wxiviq+IzyQ8bvEHNHfc=";
+    hash = "sha256-FDHHf9x62EqNcHjDF2vH8w8WG/15efEe+fDqGiiOe4A=";
   };
 
   postPatch = ''
