@@ -44,9 +44,11 @@ stdenv.mkDerivation (
     sourceRoot = if lib.versionOlder release_version "13" then null else "${src.name}/${pname}";
 
     nativeBuildInputs =
-      [ cmake ]
-      ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-      ++ [ python3 ]
+      [
+        cmake
+        ninja
+        python3
+      ]
       ++ lib.optional (lib.versionAtLeast version "18" && enableManpages) python3.pkgs.myst-parser
       ++ lib.optional enableManpages python3.pkgs.sphinx
       ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -220,35 +222,25 @@ stdenv.mkDerivation (
       mainProgram = "clang";
     };
   }
-  // lib.optionalAttrs enableManpages (
-    {
-      pname = "clang-manpages";
+  // lib.optionalAttrs enableManpages {
+    pname = "clang-manpages";
 
-      installPhase = ''
-        mkdir -p $out/share/man/man1
-        # Manually install clang manpage
-        cp docs/man/*.1 $out/share/man/man1/
-      '';
+    installPhase = ''
+      mkdir -p $out/share/man/man1
+      # Manually install clang manpage
+      cp docs/man/*.1 $out/share/man/man1/
+    '';
 
-      outputs = [ "out" ];
+    outputs = [ "out" ];
 
-      doCheck = false;
+    doCheck = false;
 
-      meta = llvm_meta // {
-        description = "man page for Clang ${version}";
-      };
-    }
-    // (
-      if lib.versionOlder release_version "15" then
-        {
-          buildPhase = ''
-            make docs-clang-man
-          '';
-        }
-      else
-        { ninjaFlags = [ "docs-clang-man" ]; }
-    )
-  )
+    meta = llvm_meta // {
+      description = "man page for Clang ${version}";
+    };
+
+    ninjaFlags = [ "docs-clang-man" ];
+  }
   // (lib.optionalAttrs (clang-tools-extra_src != null) { inherit clang-tools-extra_src; })
   // (lib.optionalAttrs (lib.versionOlder release_version "13") {
     unpackPhase = ''
