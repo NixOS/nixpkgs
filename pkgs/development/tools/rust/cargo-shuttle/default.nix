@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.39.0";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-U6C6pUl6Re3fYt5KlBItpErboYXctsotunsUpWmZxiY=";
+    hash = "sha256-bjGyLfeo11Y55WqPwcUxnNkexozlxC61/rSa65gBGZ4=";
   };
 
   cargoLock = {
@@ -24,7 +24,8 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "async-posthog-0.2.3" = "sha256-V0f9+UKZkqh80p7UjINEbAW9y8cKBmJTRjAJZV3no1M=";
       "hyper-reverse-proxy-0.5.2-dev" = "sha256-R1ZXGgWvwHWRHmKX823QLqM6ZJW+tzWUXigKkAyI5OE=";
-      "tokiotest-httpserver-0.2.1" = "sha256-IPUaglIDwCUoczCCnX+R1IBqtc0s8b8toKEL8zN3/i8=";
+      "permit-client-rs-2.0.0" = "sha256-MxsgqPbvWDYDOb3oGuD1I6d3cdcGAhfoWsI7cwfhrb4=";
+      "permit-pdp-client-rs-0.2.0" = "sha256-F9wSvo3WzoRXjZb+We0Bvcwx3rRSG1QxXPsvrmtIN38=";
     };
   };
 

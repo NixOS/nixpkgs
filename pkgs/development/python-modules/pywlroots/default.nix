@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pywlroots";
-  version = "0.16.8";
+  version = "0.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jAkDZKAm75MlAMNuX+21ZV6kHb53zgIOJctJC2bXH1k=";
+    hash = "sha256-cssr4UBIwMvInM8bV4YwE6mXf9USSMMAzMcgAefEPbs=";
   };
 
   nativeBuildInputs = [ pkg-config ];

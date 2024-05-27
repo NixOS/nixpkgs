@@ -5,6 +5,7 @@
   git,
   testers,
   makeWrapper,
+  githooks
 }:
 buildGoModule rec {
   pname = "githooks";
@@ -70,7 +71,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = "githooks-cli";
+    package = githooks;
     command = "githooks-cli --version";
     inherit version;
   };

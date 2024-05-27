@@ -65,6 +65,19 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  # Ensure Rust compiles for the right target
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
+
+  # Cargo won't compile to target/release but to target/<RUST_TARGET>/release when a target is
+  # explicitly defined. The build-system however expects target/release. Hence we just symlink from
+  # the latter to the former.
+  preBuild = ''
+    mkdir -p rustybits/target/release
+    ln -rs \
+      ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
+      ./rustybits/target/release/
+  '';
+
   buildFlags = [ "all" "selftest" ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;

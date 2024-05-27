@@ -19,7 +19,7 @@ in runCommand name {
     description = "A postfix policy server to provide greylisting";
     homepage = "https://postgrey.schweikert.ch/";
     platforms = postfix.meta.platforms;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 } ''
     mkdir -p $out/bin

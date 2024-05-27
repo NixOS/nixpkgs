@@ -5,7 +5,6 @@
   django,
   factory-boy,
   fetchFromGitHub,
-  fetchpatch,
   freezegun,
   gprof2dot,
   jinja2,

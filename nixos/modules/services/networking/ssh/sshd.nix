@@ -5,11 +5,11 @@ with lib;
 let
 
   # The splicing information needed for nativeBuildInputs isn't available
-  # on the derivations likely to be used as `cfgc.package`.
+  # on the derivations likely to be used as `cfg.package`.
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
   validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
-    then cfgc.package
+    then cfg.package
     else pkgs.buildPackages.openssh;
 
   # dont use the "=" operator
@@ -167,6 +167,13 @@ in
           Whether to enable the OpenSSH secure shell daemon, which
           allows secure remote logins.
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = config.programs.ssh.package;
+        defaultText = literalExpression "programs.ssh.package";
+        description = "OpenSSH package to use for sshd.";
       };
 
       startWhenNeeded = mkOption {
@@ -544,8 +551,8 @@ in
       };
     users.groups.sshd = {};
 
-    services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
-    services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
+    services.openssh.moduliFile = mkDefault "${cfg.package}/etc/ssh/moduli";
+    services.openssh.sftpServerExecutable = mkDefault "${cfg.package}/libexec/sftp-server";
 
     environment.etc = authKeysFiles // authPrincipalsFiles //
       { "ssh/moduli".source = cfg.moduliFile;
@@ -559,7 +566,7 @@ in
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
             after = [ "network.target" ];
             stopIfChanged = false;
-            path = [ cfgc.package pkgs.gawk ];
+            path = [ cfg.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
             restartTriggers = optionals (!cfg.startWhenNeeded) [
@@ -593,7 +600,7 @@ in
             serviceConfig =
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
-                  "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "${cfg.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
                   "-D " +  # don't detach into a daemon process
                   "-f /etc/ssh/sshd_config";
                 KillMode = "process";

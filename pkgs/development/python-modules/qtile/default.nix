@@ -4,9 +4,9 @@
   fetchFromGitHub,
   cairocffi,
   dbus-next,
-  dbus-python,
   glib,
   iwlib,
+  libcst,
   libdrm,
   libinput,
   libxkbcommon,
@@ -17,7 +17,7 @@
   psutil,
   pulsectl-asyncio,
   pygobject3,
-  python-dateutil,
+  pytz,
   pywayland,
   pywlroots,
   pyxdg,
@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.25.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j5hpXfUSDUT9nBr6CafIzqdTYQxSWok+ZlQA7bGdVvk=";
+    hash = "sha256-htgrfGBGRlJSm88mmwW92ikXR/M1lr0OTom16TIvdpo=";
   };
 
   patches = [
@@ -50,14 +50,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace libqtile/pangocffi.py \
-      --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
-      --replace libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
-      --replace libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
+      --replace-fail libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
+      --replace-fail libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
+      --replace-fail libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
     substituteInPlace libqtile/backend/x11/xcursors.py \
-      --replace libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
+      --replace-fail libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
     substituteInPlace libqtile/backend/wayland/cffi/build.py \
-        --replace /usr/include/pixman-1 ${lib.getDev pixman}/include \
-        --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
+        --replace-fail /usr/include/pixman-1 ${lib.getDev pixman}/include \
+        --replace-fail /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
   build-system = [
@@ -69,13 +69,13 @@ buildPythonPackage rec {
   dependencies = [
     (cairocffi.override { withXcffib = true; })
     dbus-next
-    dbus-python
     iwlib
+    libcst
     mpd2
     psutil
     pulsectl-asyncio
     pygobject3
-    python-dateutil
+    pytz
     pywayland
     pywlroots
     pyxdg

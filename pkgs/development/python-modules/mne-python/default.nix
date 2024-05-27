@@ -2,20 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   numpy,
   scipy,
   pytestCheckHook,
   pytest-timeout,
-  pytest-harvest,
   matplotlib,
   decorator,
   jinja2,
   pooch,
   tqdm,
   packaging,
-  importlib-resources,
   lazy-loader,
   h5io,
   pymatreader,
@@ -24,27 +22,27 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U1aMqcUZ3BcwqwOYh/qfG5PhacwBVioAgNc52uaoJL0";
+    hash = "sha256-Nrar6Iw/jROuo4QTI7TktJSR5IdPSOQcbR+lycH52LI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml  \
-      --replace "--cov-report=" ""  \
-      --replace "--cov-branch" ""
+      --replace-fail "--cov-report=" ""  \
+      --replace-fail "--cov-branch" ""
   '';
 
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
@@ -57,19 +55,16 @@ buildPythonPackage rec {
     packaging
     jinja2
     lazy-loader
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
-  passthru.optional-dependencies = {
-    hdf5 = [
-      h5io
-      pymatreader
-    ];
-  };
+  passthru.optional-dependencies.hdf5 = [
+    h5io
+    pymatreader
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
-    pytest-harvest
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
