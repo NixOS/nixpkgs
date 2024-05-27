@@ -3,17 +3,6 @@
 
 final: prev:
 {
-  cmp-async-path = buildVimPlugin {
-    pname = "cmp-async-path";
-    version = "2024-03-25";
-    src = fetchgit {
-      url = "https://codeberg.org/FelipeLema/cmp-async-path/";
-      rev = "7df7f3721c45aac26b6e0474087538f4681c9c7a";
-      sha256 = "15k6q1hfv9bggzz8vh9pd5mz9vay2cr6xp7bb4iqhahsgyr9c99d";
-    };
-    meta.homepage = "https://codeberg.org/FelipeLema/cmp-async-path/";
-  };
-
   BetterLua-vim = buildVimPlugin {
     pname = "BetterLua.vim";
     version = "2020-08-14";
@@ -1574,6 +1563,17 @@ final: prev:
       sha256 = "11vi9fwgbcvrb8jnicsnwmggayn0586glfdknlkg43smz2cay3f1";
     };
     meta.homepage = "https://github.com/winston0410/cmd-parser.nvim/";
+  };
+
+  cmp-async-path = buildVimPlugin {
+    pname = "cmp-async-path";
+    version = "2024-03-25";
+    src = fetchgit {
+      url = "https://codeberg.org/FelipeLema/cmp-async-path/";
+      rev = "7df7f3721c45aac26b6e0474087538f4681c9c7a";
+      sha256 = "15k6q1hfv9bggzz8vh9pd5mz9vay2cr6xp7bb4iqhahsgyr9c99d";
+    };
+    meta.homepage = "https://codeberg.org/FelipeLema/cmp-async-path/";
   };
 
   cmp-beancount = buildVimPlugin {
