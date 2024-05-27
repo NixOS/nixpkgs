@@ -49,10 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-n0p8i6v6QreCFiChngHnx+5K4Djj34/+dmIA+bj/0cU=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     perl
     pkg-config
+    gettext # msgmerge
   ];
 
   buildInputs = [
