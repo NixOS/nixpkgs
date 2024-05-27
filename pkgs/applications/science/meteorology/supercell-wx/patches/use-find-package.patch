@@ -36,28 +36,17 @@ index 08b5e82..0063794 100644
  
  set(SCWX_DIR ${PROJECT_SOURCE_DIR})
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index bbc76c6..d017bb1 100644
+index bbc76c6..e242ee4 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -4,17 +4,11 @@ set(PROJECT_NAME scwx-external)
- set_property(DIRECTORY
-              APPEND
-              PROPERTY CMAKE_CONFIGURE_DEPENDS
--             aws-sdk-cpp.cmake
--             date.cmake
--             hsluv-c.cmake
--             imgui.cmake
--             maplibre-native-qt.cmake
--             stb.cmake
--             textflowcpp.cmake
--             units.cmake)
-+             maplibre-native-qt.cmake)
-+
-+#include(aws-sdk-cpp.cmake)
-+find_package(AWSSDK CONFIG REQUIRED)
+@@ -13,8 +13,8 @@ set_property(DIRECTORY
+              textflowcpp.cmake
+              units.cmake)
  
 -include(aws-sdk-cpp.cmake)
 -include(date.cmake)
++find_package(AWSSDK CONFIG REQUIRED)
++
  include(hsluv-c.cmake)
  include(imgui.cmake)
  include(maplibre-native-qt.cmake)
