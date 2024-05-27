@@ -11,8 +11,8 @@
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
-, systemImageTypes ? [ "google_apis_playstore" ]
-, abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
+, systemImageTypes ? [ "google_apis" "google_apis_playstore" ]
+, abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
 , ndkVersion ? "26.3.11579264"
