@@ -7,6 +7,7 @@
   qt5,
   libxcrypt,
   llvmPackages_15,
+  pythonAtLeast,
 }:
 
 stdenv.mkDerivation {
@@ -58,6 +59,6 @@ stdenv.mkDerivation {
     ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin || pythonAtLeast "3.12";
   };
 }
