@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.5.1";
+  version = "6.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    hash = "sha256-SEFIUSxdsqizXIPNmX6ZU3Vf2L+oqvbuDMjHrrdCkhA=";
+    hash = "sha256-ifDW+iy6goH4m1CKf+Sb+5far1XFJ4GH1FowaZceaH8=";
   };
 
   propagatedBuildInputs = [
