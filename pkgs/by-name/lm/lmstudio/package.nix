@@ -11,7 +11,7 @@ let
     homepage = "https://lmstudio.ai/";
     license = lib.licenses.unfree;
     mainProgram = "lmstudio";
-    maintainers = with lib.maintainers; [ drupol eeedean ];
+    maintainers = with lib.maintainers; [ eeedean ];
     platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
