@@ -8,7 +8,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "disko";
+  pname = "disko";
   version = "1.6.1";
   src = fetchFromGitHub {
     owner = "nix-community";
