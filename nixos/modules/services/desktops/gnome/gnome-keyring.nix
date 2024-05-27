@@ -52,11 +52,7 @@ in
       source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
     };
 
-    environment.extraInit = lib.mkIf cfg.enableSSHSupport ''
-      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/keyring/ssh"
-      fi
-    '';
+    security.SSHAgent.socket = lib.mkIf cfg.SSHSupport.enable "$XDG_RUNTIME_DIR/keyring/ssh";  
 
   };
 
