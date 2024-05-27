@@ -1,7 +1,7 @@
 project(ImguiDemo LANGUAGES CXX)
 cmake_minimum_required(VERSION 3.20)
 
-add_executable(demo ./demo.cc)
+add_executable(demo ./main.cpp)
 
 find_package(imgui REQUIRED)
 find_package(glfw3 REQUIRED)
