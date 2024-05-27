@@ -1,0 +1,67 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4a21b94..0ac7911 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -67,10 +67,10 @@ endif()
+ 
+ include_directories(
+   ${PROJECT_SOURCE_DIR}/generated/
+-  ${PROJECT_SOURCE_DIR}/third_party/
+-  ${PROJECT_SOURCE_DIR}/third_party/Catch2/single_include
+-  ${PROJECT_SOURCE_DIR}/third_party/yaml-cpp/include
+-  ${PROJECT_SOURCE_DIR}/third_party/antlr4/runtime/Cpp/runtime/src
++  @libargs@/include
++  @catch2@/include
++  @yaml-cpp@/include
++  @antlr4RuntimeCpp@/include/antlr4-runtime
+   ${PROJECT_SOURCE_DIR}/src/
+   )
+ 
+@@ -92,9 +92,6 @@ file(GLOB_RECURSE yaml-cpp-src
+   ${PROJECT_SOURCE_DIR}/third_party/yaml-cpp/src/*.cpp
+   )
+ 
+-add_library (antlr4-cpp-runtime ${antlr4-cpp-src})
+-add_library (yaml-cpp ${yaml-cpp-src})
+-
+ add_executable(lua-format ${src_dir} src/main.cpp)
+ 
+ if(WIN32)
+@@ -104,7 +101,7 @@ endif()
+ 
+ set_target_properties(lua-format PROPERTIES LINKER_LANGUAGE CXX)
+ 
+-target_link_libraries(lua-format yaml-cpp antlr4-cpp-runtime ${extra-libs})
++target_link_libraries(lua-format yaml-cpp antlr4-runtime ${extra-libs})
+ 
+ install(TARGETS lua-format
+   RUNTIME DESTINATION bin
+@@ -135,7 +132,7 @@ if(BUILD_TESTS)
+   endif()
+ 
+   target_compile_definitions(lua-format-test PUBLIC PROJECT_PATH="${PROJECT_SOURCE_DIR}")
+-  target_link_libraries(lua-format-test yaml-cpp antlr4-cpp-runtime ${extra-libs})
++  target_link_libraries(lua-format-test yaml-cpp antlr4-runtime ${extra-libs})
+ 
+   add_test(NAME args COMMAND lua-format-test [args])
+   add_test(NAME config COMMAND lua-format-test [config])
+diff --git a/src/main.cpp b/src/main.cpp
+index 38962a2..332aad6 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -1,4 +1,4 @@
+-#include <args/args.hxx>
++#include <args.hxx>
+ #include <cstdlib>
+ #include <fstream>
+ #include <iostream>
+diff --git a/test/test_args.cpp b/test/test_args.cpp
+index 69a5746..b988d00 100644
+--- a/test/test_args.cpp
++++ b/test/test_args.cpp
+@@ -1,4 +1,4 @@
+-#include <args/args.hxx>
++#include <args.hxx>
+ #include <catch2/catch.hpp>
+ #include <iostream>
+ #include <tuple>

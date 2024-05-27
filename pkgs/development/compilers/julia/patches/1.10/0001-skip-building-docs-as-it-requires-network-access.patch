@@ -1,0 +1,34 @@
+From da7e7b2c622bcfdc3e6484a64ade50d22d52c4dd Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Wed, 10 Jan 2024 19:48:19 -0500
+Subject: [PATCH 1/2] skip building docs as it requires network access
+
+---
+ Makefile | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 1565014a0f..edd5c65244 100644
+--- a/Makefile
++++ b/Makefile
+@@ -265,7 +265,7 @@ define stringreplace
+ endef
+ 
+ 
+-install: $(build_depsbindir)/stringreplace docs
++install: $(build_depsbindir)/stringreplace
+ 	@$(MAKE) $(QUIET_MAKE) $(JULIA_BUILD_MODE)
+ 	@for subdir in $(bindir) $(datarootdir)/julia/stdlib/$(VERSDIR) $(docdir) $(man1dir) $(includedir)/julia $(libdir) $(private_libdir) $(sysconfdir) $(private_libexecdir); do \
+ 		mkdir -p $(DESTDIR)$$subdir; \
+@@ -368,8 +368,6 @@ endif
+ 	cp -R -L $(JULIAHOME)/base/* $(DESTDIR)$(datarootdir)/julia/base
+ 	cp -R -L $(JULIAHOME)/test/* $(DESTDIR)$(datarootdir)/julia/test
+ 	cp -R -L $(build_datarootdir)/julia/* $(DESTDIR)$(datarootdir)/julia
+-	# Copy documentation
+-	cp -R -L $(BUILDROOT)/doc/_build/html $(DESTDIR)$(docdir)/
+ 	# Remove various files which should not be installed
+ 	-rm -f $(DESTDIR)$(datarootdir)/julia/base/version_git.sh
+ 	-rm -f $(DESTDIR)$(datarootdir)/julia/test/Makefile
+-- 
+2.43.0
+

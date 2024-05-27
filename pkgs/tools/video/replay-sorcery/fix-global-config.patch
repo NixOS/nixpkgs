@@ -1,0 +1,13 @@
+diff --git a/src/rsbuild.h.in b/src/rsbuild.h.in
+index ff0a0f6..5529556 100644
+--- a/src/rsbuild.h.in
++++ b/src/rsbuild.h.in
+@@ -20,7 +20,7 @@
+ #ifndef RS_BUILD_H
+ #define RS_BUILD_H
+ 
+-#define RS_BUILD_GLOBAL_CONFIG "@CMAKE_INSTALL_PREFIX@/etc/replay-sorcery.conf"
++#define RS_BUILD_GLOBAL_CONFIG "/etc/replay-sorcery.conf"
+ #define RS_BUILD_LOCAL_CONFIG "%s/.config/replay-sorcery.conf"
+ 
+ #cmakedefine RS_BUILD_PTHREAD_FOUND

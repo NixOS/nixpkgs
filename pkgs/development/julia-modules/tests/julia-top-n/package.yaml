@@ -1,0 +1,37 @@
+name:                julia-top-n
+version:             0.1.0.0
+license:             BSD-3-Clause
+author:              "Tom McLaughlin"
+maintainer:          "tom@codedown.io"
+
+dependencies:
+- aeson
+- base >= 4.7 && < 5
+- bytestring
+- filepath
+- optparse-applicative
+- sandwich
+- text
+- unliftio
+- vector
+- yaml
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+executables:
+  julia-top-n-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N

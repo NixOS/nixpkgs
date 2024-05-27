@@ -1,0 +1,11 @@
+--- a/curseradio/curseradio.py
++++ b/curseradio/curseradio.py
+@@ -30,7 +30,7 @@ import re
+ 
+ CONFIG_DEFAULT = {
+     'opml': {'root': "http://opml.radiotime.com/"},
+-    'playback': {'command': '/usr/bin/mpv'},
++    'playback': {'command': '@mpv@/bin/mpv'},
+     'interface': {'keymap': 'default'},
+     'keymap.default': {
+         'up': 'KEY_UP',
