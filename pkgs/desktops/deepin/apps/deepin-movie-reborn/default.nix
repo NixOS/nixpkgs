@@ -31,17 +31,18 @@
 , gtest
 , libpulseaudio
 , runtimeShell
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-movie-reborn";
-  version = "6.0.5";
+  version = "6.0.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-dWN2IVVpwYwzEuLtT3JvhzKiBwaBq4lzmaEhA9S1hjE=";
+    hash = "sha256-Ay+2iOOZDIceEvt/aNp1jZ0rmrUifxnh2XEumjiVgqs=";
   };
 
   patches = [
@@ -52,9 +53,6 @@ stdenv.mkDerivation rec {
     # https://github.com/linuxdeepin/deepin-movie-reborn/pull/198
     substituteInPlace src/common/diskcheckthread.cpp \
       --replace "/usr/include/linux/cdrom.h" "linux/cdrom.h"
-    # https://github.com/linuxdeepin/deepin-movie-reborn/pull/337
-    substituteInPlace src/libdmr/playlist_model.cpp \
-      --replace "DGuiApplicationHelper" "Dtk::Gui::DGuiApplicationHelper"
   '';
 
   outputs = [ "out" "dev" ];
@@ -120,6 +118,8 @@ stdenv.mkDerivation rec {
     glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Full-featured video player supporting playing local and streaming media in multiple video formats";
