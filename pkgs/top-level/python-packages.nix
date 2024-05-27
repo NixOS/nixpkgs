@@ -3278,8 +3278,6 @@ self: super: with self; {
 
   django-ninja = callPackage ../development/python-modules/django-ninja { };
 
-  django-nose = callPackage ../development/python-modules/django-nose { };
-
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
   django-otp = callPackage ../development/python-modules/django-otp { };
@@ -4712,6 +4710,8 @@ self: super: with self; {
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
   geocoder = callPackage ../development/python-modules/geocoder { };
+
+  geodatasets = callPackage ../development/python-modules/geodatasets { };
 
   geographiclib = callPackage ../development/python-modules/geographiclib { };
 
@@ -6692,6 +6692,8 @@ self: super: with self; {
 
   libpyfoscam = callPackage ../development/python-modules/libpyfoscam { };
 
+  libpysal = callPackage ../development/python-modules/libpysal { };
+
   libpyvivotek = callPackage ../development/python-modules/libpyvivotek { };
 
   libpwquality = lib.pipe pkgs.libpwquality [
@@ -7171,6 +7173,8 @@ self: super: with self; {
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
+
+  mapclassify = callPackage ../development/python-modules/mapclassify { };
 
   mariadb = callPackage ../development/python-modules/mariadb { };
 
@@ -9998,6 +10002,8 @@ self: super: with self; {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyogrio = callPackage ../development/python-modules/pyogrio { };
+
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
   pyoutbreaksnearme = callPackage ../development/python-modules/pyoutbreaksnearme { };
@@ -11051,8 +11057,6 @@ self: super: with self; {
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
 
   pygeoip = callPackage ../development/python-modules/pygeoip { };
-
-  pygeos = callPackage ../development/python-modules/pygeos { };
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
@@ -12662,6 +12666,8 @@ self: super: with self; {
   pyttsx3 = callPackage ../development/python-modules/pyttsx3 { };
 
   pytube = callPackage ../development/python-modules/pytube { };
+
+  pytubefix = callPackage ../development/python-modules/pytubefix { };
 
   pytun = callPackage ../development/python-modules/pytun { };
 
@@ -16711,6 +16717,8 @@ self: super: with self; {
   vmprof = callPackage ../development/python-modules/vmprof { };
 
   vncdo = callPackage ../development/python-modules/vncdo { };
+
+  vnoise = callPackage ../development/python-modules/vnoise { };
 
   vobject = callPackage ../development/python-modules/vobject { };
 

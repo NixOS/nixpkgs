@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "uni";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "uni";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ij/jUbXl3GkeNZmGJ82i++6VkOW46YFI9m83otY6M7Q=";
+    hash = "sha256-ociPkuRtpBS+x1zSVNYk8oqAsJZGv31/TUUUlBOYhJA=";
   };
 
-  vendorHash = "sha256-88SSrGvZSs6Opi3IKSNNqptuOWMmtTQ4ZDR7ViuGugk=";
+  vendorHash = "sha256-/PvBn2RRYuVpjnrIL1xAcVqAKZuIV2KTSyVtBW1kqj4=";
 
   ldflags = [
     "-s"
