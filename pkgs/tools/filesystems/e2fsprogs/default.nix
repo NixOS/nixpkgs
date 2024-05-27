@@ -30,6 +30,16 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/plain/debian/patches/disable-metadata_csum_seed-and-orphan_file-by-default?h=debian/master&id=3fb3d18baba90e5d48d94f4c0b79b2d271b0c913";
       hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
     })
+    (fetchurl {
+      name = "SIZEOF_SIZE_T.patch";
+      url = "https://lore.kernel.org/linux-ext4/20240527074121.2767083-1-hi@alyssa.is/raw";
+      hash = "sha256-QdsvcvBi0mC/4YErqG0UKl94MH0OZpFVTGszNqBe/qw=";
+    })
+    (fetchurl {
+      name = "unused-parameters.patch";
+      url = "https://lore.kernel.org/linux-ext4/20240527091542.4121237-2-hi@alyssa.is/raw";
+      hash = "sha256-pMoqm2eo5zYaTdU+Ppa4+posCVFb2A9S4uo5oApaaqc=";
+    })
   ];
 
   configureFlags =
