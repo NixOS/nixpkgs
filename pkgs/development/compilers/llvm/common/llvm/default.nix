@@ -107,7 +107,8 @@ let
 in
 
 stdenv.mkDerivation (
-  rec {
+  finalAttrs:
+  {
     inherit pname version;
 
     src = src';
@@ -145,127 +146,14 @@ stdenv.mkDerivation (
       ) ncurses)
       ++ [ zlib ];
 
+    nativeCheckInputs =
+      lib.optional (lib.versionAtLeast release_version "13") which
+      ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast release_version "15") sysctl;
+
     postPatch =
-      optionalString stdenv.isDarwin (
-        ''
-          substituteInPlace cmake/modules/AddLLVM.cmake \
-            --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
-            --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
-        ''
-        +
-          # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
-          # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
-          (optionalString (lib.versionAtLeast release_version "15") (
-            ''
-              rm test/MC/ELF/cfi-version.ll
-
-            ''
-            +
-              # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
-              # and thus fails under the sandbox:
-              (
-                if lib.versionAtLeast release_version "16" then
-                  ''
-                    substituteInPlace unittests/TargetParser/Host.cpp \
-                      --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
-                  ''
-                else
-                  ''
-                    substituteInPlace unittests/Support/Host.cpp \
-                      --replace '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
-                  ''
-              )
-            +
-              # This test tries to call the intrinsics `@llvm.roundeven.f32` and
-              # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
-              # and `roundeven` on macOS and FreeBSD.
-              #
-              # However these functions are glibc specific so the test fails:
-              #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
-              #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
-              #
-              # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
-              # pass there?
-              optionalString (lib.versionAtLeast release_version "16") ''
-                substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-                  --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-                  --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
-              ''
-            +
-              # fails when run in sandbox
-              optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
-                substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                  --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-              ''
-          ))
-      )
-      +
-        # dup of above patch with different conditions
-        optionalString
-          (stdenv.isDarwin && stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "15")
-          (
-            optionalString (lib.versionOlder release_version "16") ''
-              substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-                --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-                --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
-
-            ''
-            +
-              # fails when run in sandbox
-              (
-                (optionalString (lib.versionAtLeast release_version "18") ''
-                  substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                    --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-                '')
-                +
-                  # This test fails on darwin x86_64 because `sw_vers` reports a different
-                  # macOS version than what LLVM finds by reading
-                  # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
-                  # the sandbox on macOS).
-                  #
-                  # The `sw_vers` provided by nixpkgs reports the macOS version associated
-                  # with the `CoreFoundation` framework with which it was built. Because
-                  # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
-                  # `sw_vers` reports is not guaranteed to match the macOS version of the host
-                  # that's building this derivation.
-                  #
-                  # Astute readers will note that we only _patch_ this test on aarch64-darwin
-                  # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
-                  # So why does this test pass on aarch64?
-                  #
-                  # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
-                  # CoreFoundation framework instead of the nixpkgs provided one.
-                  #
-                  # Not entirely sure what the right fix is here. I'm assuming aarch64
-                  # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
-                  # (still digging into how this ends up happening, will follow up) but that
-                  # aside I think the more pertinent question is: should we be patching LLVM's
-                  # macOS version detection logic to use `sw_vers` instead of reading host
-                  # paths? This *is* a way in which details about builder machines can creep
-                  # into the artifacts that are produced, affecting reproducibility, but it's
-                  # not clear to me when/where/for what this even gets used in LLVM.
-                  #
-                  # TODO(@rrbutani): fix/follow-up
-                  (
-                    if lib.versionAtLeast release_version "16" then
-                      ''
-                        substituteInPlace unittests/TargetParser/Host.cpp \
-                          --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-                      ''
-                    else
-                      ''
-                        substituteInPlace unittests/Support/Host.cpp \
-                          --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-                      ''
-                  )
-                +
-                  # This test fails with a `dysmutil` crash; have not yet dug into what's
-                  # going on here (TODO(@rrbutani)).
-                  ''
-                    rm test/tools/dsymutil/ARM/obfuscated.test
-                  ''
-              )
-          )
+      ''
+        patchShebangs test/BugPoint/compile-custom.ll.py
+      ''
       +
         # FileSystem permissions tests fail with various special bits
         ''
@@ -276,6 +164,127 @@ stdenv.mkDerivation (
             --replace "PassBuilderCallbacksTest.cpp" ""
           rm unittests/IR/PassBuilderCallbacksTest.cpp
         ''
+      +
+        # timing-based tests are trouble
+        ''
+          rm utils/lit/tests/googletest-timeout.py
+        ''
+      +
+        # FileSystem permissions tests fail with various special bits
+        ''
+          substituteInPlace unittests/Support/CMakeLists.txt \
+            --replace "Path.cpp" ""
+          rm unittests/Support/Path.cpp
+          substituteInPlace unittests/IR/CMakeLists.txt \
+            --replace "PassBuilderCallbacksTest.cpp" ""
+          rm unittests/IR/PassBuilderCallbacksTest.cpp
+        ''
+      + optionalString stdenv.isDarwin (
+        ''
+          substituteInPlace cmake/modules/AddLLVM.cmake \
+            --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
+            --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
+        ''
+        +
+          # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
+          # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
+          optionalString (lib.versionAtLeast release_version "15") (
+            ''
+              rm test/MC/ELF/cfi-version.ll
+
+            ''
+            +
+              # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
+              # and thus fails under the sandbox:
+              (
+                let
+                  file =
+                    if lib.versionAtLeast release_version "16" then
+                      "unittests/TargetParser/Host.cpp"
+                    else
+                      "unittests/Support/Host.cpp";
+                in
+                ''
+                  substituteInPlace ${file} \
+                    --replace \
+                    '/usr/bin/sw_vers' \
+                    "${builtins.toString darwin.DarwinTools + "/bin/sw_vers"}"
+                ''
+              )
+
+            + optionalString stdenv.hostPlatform.isAarch64 (
+              # This test fails on darwin x86_64 because `sw_vers` reports a different
+              # macOS version than what LLVM finds by reading
+              # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
+              # the sandbox on macOS).
+              #
+              # The `sw_vers` provided by nixpkgs reports the macOS version associated
+              # with the `CoreFoundation` framework with which it was built. Because
+              # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
+              # `sw_vers` reports is not guaranteed to match the macOS version of the host
+              # that's building this derivation.
+              #
+              # Astute readers will note that we only _patch_ this test on aarch64-darwin
+              # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
+              # So why does this test pass on aarch64?
+              #
+              # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
+              # CoreFoundation framework instead of the nixpkgs provided one.
+              #
+              # Not entirely sure what the right fix is here. I'm assuming aarch64
+              # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
+              # (still digging into how this ends up happening, will follow up) but that
+              # aside I think the more pertinent question is: should we be patching LLVM's
+              # macOS version detection logic to use `sw_vers` instead of reading host
+              # paths? This *is* a way in which details about builder machines can creep
+              # into the artifacts that are produced, affecting reproducibility, but it's
+              # not clear to me when/where/for what this even gets used in LLVM.
+              #
+              # TODO(@rrbutani): fix/follow-up
+              (
+                let
+                  file =
+                    if lib.versionAtLeast release_version "16" then
+                      "unittests/TargetParser/Host.cpp"
+                    else
+                      "unittests/Support/Host.cpp";
+                in
+                ''
+                  substituteInPlace ${file} \
+                    --replace "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+                ''
+              )
+              +
+                # This test fails with a `dysmutil` crash; have not yet dug into what's
+                # going on here (TODO(@rrbutani)).
+                ''
+                  rm test/tools/dsymutil/ARM/obfuscated.test
+                ''
+            )
+          )
+        +
+          # This test tries to call the intrinsics `@llvm.roundeven.f32` and
+          # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
+          # and `roundeven` on macOS and FreeBSD.
+          #
+          # However these functions are glibc specific so the test fails:
+          #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
+          #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
+          #
+          # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
+          # pass there?
+          optionalString (lib.versionAtLeast release_version "16") ''
+            substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
+              --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+              --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+          ''
+        +
+          # fails when run in sandbox
+          optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
+            substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+              --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+          ''
+      )
       + lib.optionalString (lib.versionAtLeast release_version "13") ''
         rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
       ''
@@ -290,26 +299,16 @@ stdenv.mkDerivation (
           ''
             rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
           ''
-          + lib.optionalString (lib.versionOlder release_version "17") ''
-
-          ''
+          +
+            # valgrind unhappy with musl or glibc, but fails w/musl only
+            optionalString stdenv.hostPlatform.isMusl ''
+              patch -p1 -i ${./TLI-musl.patch}
+              substituteInPlace unittests/Support/CMakeLists.txt \
+                --replace "add_subdirectory(DynamicLibrary)" ""
+              rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+              rm test/CodeGen/AArch64/wineh4.mir
+            ''
         )
-      +
-        # timing-based tests are trouble
-        lib.optionalString
-          (lib.versionAtLeast release_version "15" && lib.versionOlder release_version "17")
-          ''
-            rm utils/lit/tests/googletest-timeout.py
-          ''
-      +
-        # valgrind unhappy with musl or glibc, but fails w/musl only
-        optionalString stdenv.hostPlatform.isMusl ''
-          patch -p1 -i ${./TLI-musl.patch}
-          substituteInPlace unittests/Support/CMakeLists.txt \
-            --replace "add_subdirectory(DynamicLibrary)" ""
-          rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
-          rm test/CodeGen/AArch64/wineh4.mir
-        ''
       + optionalString stdenv.hostPlatform.isAarch32 ''
         # skip failing X86 test cases on 32-bit ARM
         rm test/DebugInfo/X86/convert-debugloc.ll
@@ -333,9 +332,6 @@ stdenv.mkDerivation (
           rm test/tools/llvm-libtool-darwin/L-and-l.test
           rm test/ExecutionEngine/Interpreter/intrinsics.ll
         ''
-      + ''
-        patchShebangs test/BugPoint/compile-custom.ll.py
-      ''
       +
         # Tweak tests to ignore namespace part of type to support
         # gcc-12: https://gcc.gnu.org/PR103598.
@@ -343,7 +339,7 @@ stdenv.mkDerivation (
         #    CHECK-NEXT: Starting llvm::Function pass manager run.
         # to:
         #    CHECK-NEXT: Starting {{.*}}Function pass manager run.
-        (lib.optionalString (lib.versionOlder release_version "13") (
+        lib.optionalString (lib.versionOlder release_version "13") (
           ''
             for f in \
               test/Other/new-pass-manager.ll \
@@ -372,22 +368,14 @@ stdenv.mkDerivation (
               sed -i '/#include <string>/i#include <cstdint>' \
                 include/llvm/DebugInfo/Symbolize/DIPrinter.h
             ''
-        ));
+        );
 
     # Workaround for configure flags that need to have spaces
-    preConfigure =
-      if lib.versionAtLeast release_version "15" then
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
-          )
-        ''
-      else
-        ''
-          cmakeFlagsArray+=(
-            -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
-          )
-        '';
+    preConfigure = ''
+      cmakeFlagsArray+=(
+        -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+      )
+    '';
 
     # E.g. mesa.drivers use the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
@@ -404,27 +392,24 @@ stdenv.mkDerivation (
         #
         # Some flags don't need to be repassed because LLVM already does so (like
         # CMAKE_BUILD_TYPE), others are irrelevant to the result.
-        flagsForLlvmConfig =
-          (
-            if lib.versionOlder release_version "15" then
-              [ "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/" ]
-            else
-              [ "-DLLVM_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/llvm" ]
-          )
-          ++ [ "-DLLVM_ENABLE_RTTI=ON" ]
-          ++ optionals enableSharedLibraries [ "-DLLVM_LINK_LLVM_DYLIB=ON" ];
+        flagsForLlvmConfig = [
+          "-DLLVM_ENABLE_RTTI=ON"
+          (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
+          (lib.optional (lib.versionOlder release_version "15") "-DLLVM_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake/llvm/")
+        ];
       in
       flagsForLlvmConfig
       ++ [
+        "-DCMAKE_INSTALL_PACKAGEDIR=${placeholder "dev"}/lib/"
         "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
-        "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+        (lib.cmakeBool "LLVM_INCLUDE_TESTS" finalAttrs.doCheck)
+        (lib.cmakeBool "LLVM_BUILD_TESTS" finalAttrs.doCheck)
         "-DLLVM_ENABLE_FFI=ON"
         "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
         "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
         "-DLLVM_ENABLE_DUMP=ON"
         (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
       ]
-      ++ optionals (!doCheck) [ "-DLLVM_INCLUDE_TESTS=OFF" ]
       ++ optionals stdenv.hostPlatform.isStatic [
         # Disables building of shared libs, -fPIC is still injected by cc-wrapper
         "-DLLVM_ENABLE_PIC=OFF"
@@ -450,7 +435,7 @@ stdenv.mkDerivation (
       ++
         optionals
           (
-            (stdenv.hostPlatform != stdenv.buildPlatform)
+            stdenv.hostPlatform != stdenv.buildPlatform
             && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
           )
           [
@@ -603,11 +588,6 @@ stdenv.mkDerivation (
         unpackFile $polly_src
         mv polly-* $sourceRoot/tools/polly
       '';
-  }
-  // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
-    nativeCheckInputs = [
-      which
-    ] ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast release_version "15") sysctl;
   }
   // lib.optionalAttrs (lib.versionOlder release_version "15") {
     # hacky fix: created binaries need to be run before installation

@@ -57,14 +57,12 @@ stdenv.mkDerivation (
     ];
 
     cmakeFlags =
-      (lib.optionals (lib.versionAtLeast release_version "15") [
-        "-DCLANG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/clang"
-      ])
-      ++ [
+      [
+        "-DCMAKE_INSTALL_PACKAGEDIR=${placeholder "dev"}/lib/"
         "-DCLANGD_BUILD_XPC=OFF"
         "-DLLVM_ENABLE_RTTI=ON"
+        (lib.cmakeBool "LLVM_INCLUDE_TESTS" finalAttrs.doCheck)
       ]
-      ++ lib.optionals (lib.versionAtLeast release_version "17") [ "-DLLVM_INCLUDE_TESTS=OFF" ]
       ++ lib.optionals enableManpages [
         "-DCLANG_INCLUDE_DOCS=ON"
         "-DLLVM_ENABLE_SPHINX=ON"
@@ -183,6 +181,8 @@ stdenv.mkDerivation (
             cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen,clang-pseudo-gen} $dev/bin
           ''
       );
+
+    doCheck = false;
 
     passthru =
       {
