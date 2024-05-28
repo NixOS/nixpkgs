@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--with-xerces=${xercesc}" ];
+  configureFlags = [
+    "--with-xerces=${xercesc}"
+    # code uses register storage specifier
+    "CXXFLAGS=-std=c++14"
+  ];
 
   meta = with lib; {
     description = "An XQuery and XPath 2 library and command line utility written in C++, implemented on top of the Xerces-C library";
