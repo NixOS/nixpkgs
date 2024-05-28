@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     for f in ./src/launcher/apps-common.c \
              ./src/launcher/icon-theme-common.c
     do
-      substituteInPlace $f --replace /usr/share/ /run/current-system/sw/share/
+      substituteInPlace $f --replace-fail /usr/share/ /run/current-system/sw/share/
     done
   '';
 
