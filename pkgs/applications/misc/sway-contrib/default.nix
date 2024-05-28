@@ -9,6 +9,7 @@
 , slurp
 , grim
 , jq
+, gnugrep
 , bash
 
 , python3Packages
@@ -57,6 +58,7 @@ grimshot = stdenvNoCC.mkDerivation {
         slurp
         grim
         jq
+        gnugrep
         ] }"
   '';
 
