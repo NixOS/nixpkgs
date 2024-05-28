@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , doxygen
@@ -27,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    (fetchpatch {
+      name = "fix-build-on-qt-6_7_1.patch";
+      url = "https://github.com/linuxdeepin/dtkcore/commit/10bd3842bbde41fbc61c35b81d280075d053119b.patch";
+      hash = "sha256-xZ3BhiMB6S5NJtPUEjtChCB9Jr1BI0mu7AMjyNMqt9w=";
+    })
   ];
 
   nativeBuildInputs = [
