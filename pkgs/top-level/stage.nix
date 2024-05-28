@@ -227,7 +227,7 @@ let
     pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then createPackageSet "pkgsMusl" {
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
       };
     } else throw "Musl libc only supports 64-bit Linux systems.";
 
@@ -236,18 +236,18 @@ let
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then createPackageSet "pkgsi686Linux" {
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
+        config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
-        };
+        });
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
     # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
     pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then createPackageSet "pkgsx86_64Darwin" {
       localSystem = {
-        parsed = stdenv.hostPlatform.parsed // {
+        config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.x86_64;
-        };
+        });
       };
     } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
@@ -266,10 +266,11 @@ let
     pkgsStatic = createPackageSet "pkgsStatic" ({
       crossSystem = {
         isStatic = true;
-        parsed =
+        config = lib.systems.parse.tripleFromSystem (
           if stdenv.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
-          else stdenv.hostPlatform.parsed;
+          else stdenv.hostPlatform.parsed
+        );
         gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
           stdenv.hostPlatform.gcc or {};
       };
