@@ -80,7 +80,7 @@ in phpPackage.buildComposerProject rec {
       --replace '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
       --replace '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
-      --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/libexec",' \
+      --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/bin",' \
       --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
 
     substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
