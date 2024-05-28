@@ -6,7 +6,6 @@
 , gettext
 , cairo
 , pango
-, pcre
 , glib
 , imlib2
 , gtk3
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     pango
-    pcre
     glib
     imlib2
     gtk3
