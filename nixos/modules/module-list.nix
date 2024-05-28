@@ -293,6 +293,7 @@
   ./programs/virt-manager.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
+  ./programs/wayland/hyprlock.nix
   ./programs/wayland/hyprland.nix
   ./programs/wayland/labwc.nix
   ./programs/wayland/river.nix
@@ -1325,6 +1326,7 @@
   ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
+  ./services/wayland/hypridle.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/alps.nix
   ./services/web-apps/anuko-time-tracker.nix
