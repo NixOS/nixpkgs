@@ -29,6 +29,7 @@ buildDotnetModule rec {
   executables = [ "jellyfin" ];
   nugetDeps = ./nuget-deps.nix;
   runtimeDeps = [
+    "/run/opengl-driver"
     ffmpeg
     fontconfig
     freetype
