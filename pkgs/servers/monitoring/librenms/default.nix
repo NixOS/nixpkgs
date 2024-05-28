@@ -38,7 +38,18 @@ in phpPackage.buildComposerProject rec {
   php = phpPackage;
 
   buildInputs = [
+    graphviz
+    ipmitool
+    libvirt
+    monitoring-plugins
+    mtr
+    net-snmp
+    nfdump
+    nmap
+    rrdtool
+    system-sendmail
     unixtools.whereis
+    whois
     (python3.withPackages (ps: with ps; [
       pymysql
       python-dotenv
