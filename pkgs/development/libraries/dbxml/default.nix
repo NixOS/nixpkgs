@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "--with-berkeleydb=${db62.out}"
     "--with-xerces=${xercesc}"
     "--with-xqilla=${xqilla}"
+    # code uses register storage specifier
+    "CXXFLAGS=-std=c++14"
   ];
 
   preConfigure = ''
