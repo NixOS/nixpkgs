@@ -1482,6 +1482,12 @@ let
         '';
     });
 
+    Rdisop = old.Rdisop.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-error=format-security";
+      };
+    });
+
     odbc = old.odbc.overrideAttrs (attrs: {
       preConfigure = ''
         patchShebangs configure
