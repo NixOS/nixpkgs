@@ -150,9 +150,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ners ];
-    # https://hydra.nixos.org/build/249763145, doesn't build since glibc 2.39.
-    # Potential fix is documented in https://github.com/389ds/389-ds-base/issues/5332,
-    # but it doesn't apply here.
-    broken = true;
   };
 }
