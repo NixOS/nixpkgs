@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pytestCheckHook,
+  pythonAtLeast,
   astunparse,
   setuptools,
 }:
@@ -35,6 +35,7 @@ buildPythonPackage rec {
       mit
       psfl
     ];
+    broken = pythonAtLeast "3.12";
     mainProgram = "import-expression";
     maintainers = with lib.maintainers; [ lychee ];
   };
