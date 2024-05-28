@@ -1203,6 +1203,10 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    rGADEM = old.rGADEM.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
    rsgeo = old.rsgeo.overrideAttrs (attrs: {
       nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
