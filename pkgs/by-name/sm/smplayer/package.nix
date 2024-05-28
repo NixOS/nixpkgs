@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, qtscript
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
 }:
 
+let
+  inherit (qt5) qmake qtscript wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
-  version = "23.12.0";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = "smplayer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ip4y9GF2u1yl1Ts8T9XcFg9wdXVTYXfDrrPuHLz6oSs=";
+    hash = "sha256-KblVDlE8EglMMAclGFZm81obipm6/JLUvsn5sLrpKqc=";
   };
 
   nativeBuildInputs = [
@@ -22,15 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtscript
-  ];
+  buildInputs = [ qtscript ];
 
   dontUseQmakeConfigure = true;
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     homepage = "https://www.smplayer.info";
@@ -53,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
-    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
