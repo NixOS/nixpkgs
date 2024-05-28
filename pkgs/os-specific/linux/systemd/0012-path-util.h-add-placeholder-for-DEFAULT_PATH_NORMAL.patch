@@ -6,23 +6,58 @@ Subject: [PATCH] path-util.h: add placeholder for DEFAULT_PATH_NORMAL
 This will be the $PATH used to lookup ExecStart= etc. options, which
 systemd itself uses extensively.
 ---
- src/basic/path-util.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ src/basic/path-util.c | 26 +-------------------------
+ src/basic/path-util.h |  5 +----
+ 2 files changed, 2 insertions(+), 29 deletions(-)
 
+diff --git a/src/basic/path-util.c b/src/basic/path-util.c
+index 068fb42960..966b5198f9 100644
+--- a/src/basic/path-util.c
++++ b/src/basic/path-util.c
+@@ -1462,29 +1462,5 @@ int path_glob_can_match(const char *pattern, const char *prefix, char **ret) {
+ }
+ 
+ const char* default_PATH(void) {
+-#if HAVE_SPLIT_BIN
+-        static int split = -1;
+-        int r;
+-
+-        /* Check whether /usr/sbin is not a symlink and return the appropriate $PATH.
+-         * On error fall back to the safe value with both directories as configured… */
+-
+-        if (split < 0)
+-                STRV_FOREACH_PAIR(bin, sbin, STRV_MAKE("/usr/bin", "/usr/sbin",
+-                                                       "/usr/local/bin", "/usr/local/sbin")) {
+-                        r = inode_same(*bin, *sbin, AT_NO_AUTOMOUNT);
+-                        if (r > 0 || r == -ENOENT)
+-                                continue;
+-                        if (r < 0)
+-                                log_debug_errno(r, "Failed to compare \"%s\" and \"%s\", using compat $PATH: %m",
+-                                                *bin, *sbin);
+-                        split = true;
+-                        break;
+-                }
+-        if (split < 0)
+-                split = false;
+-        if (split)
+-                return DEFAULT_PATH_WITH_SBIN;
+-#endif
+-        return DEFAULT_PATH_WITHOUT_SBIN;
++        return "@defaultPathNormal@";
+ }
 diff --git a/src/basic/path-util.h b/src/basic/path-util.h
-index 6d943e967f..d4380aa7e3 100644
+index 792b8ff2cb..791940b424 100644
 --- a/src/basic/path-util.h
 +++ b/src/basic/path-util.h
-@@ -25,9 +25,9 @@
- #  define PATH_SBIN_BIN_NULSTR(x) PATH_NORMAL_SBIN_BIN_NULSTR(x)
- #endif
+@@ -17,10 +17,7 @@
+ #define PATH_MERGED_BIN(x) x "bin"
+ #define PATH_MERGED_BIN_NULSTR(x) x "bin\0"
  
--#define DEFAULT_PATH PATH_SBIN_BIN("/usr/local/") ":" PATH_SBIN_BIN("/usr/")
--#define DEFAULT_PATH_NULSTR PATH_SBIN_BIN_NULSTR("/usr/local/") PATH_SBIN_BIN_NULSTR("/usr/")
--#define DEFAULT_PATH_COMPAT PATH_SPLIT_SBIN_BIN("/usr/local/") ":" PATH_SPLIT_SBIN_BIN("/usr/") ":" PATH_SPLIT_SBIN_BIN("/")
-+#define DEFAULT_PATH "@defaultPathNormal@"
-+#define DEFAULT_PATH_NULSTR "@defaultPathNormal@\0"
-+#define DEFAULT_PATH_COMPAT DEFAULT_PATH
+-#define DEFAULT_PATH_WITH_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/")
+-#define DEFAULT_PATH_WITHOUT_SBIN PATH_MERGED_BIN("/usr/local/") ":" PATH_MERGED_BIN("/usr/")
+-
+-#define DEFAULT_PATH_COMPAT PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/") ":" PATH_SPLIT_BIN("/")
++#define DEFAULT_PATH_COMPAT "@defaultPathNormal@"
  
- #ifndef DEFAULT_USER_PATH
- #  define DEFAULT_USER_PATH DEFAULT_PATH
+ const char* default_PATH(void);
+ 
