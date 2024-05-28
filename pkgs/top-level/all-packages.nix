@@ -2715,6 +2715,13 @@ with pkgs;
 
   packwiz = callPackage ../tools/games/minecraft/packwiz { };
 
+  PCBox = callPackage ../applications/emulators/pcbox { };
+
+  PCBox-with-roms = PCBox.override {
+    unfreeEnableRoms = true;
+    unfreeEnableDiscord = true;
+  };
+
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
