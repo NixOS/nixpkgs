@@ -15039,8 +15039,6 @@ with pkgs;
 
   ion = callPackage ../shells/ion { };
 
-  jush = callPackage ../shells/jush { };
-
   ksh = callPackage ../shells/ksh { };
 
   liquidprompt = callPackage ../shells/liquidprompt { };
