@@ -1372,10 +1372,6 @@ let
       PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
-    spMC = old.spMC.overrideAttrs (attrs: {
-      patches = [ ./patches/spMC.patch ];
-    });
-
     FLAMES = old.FLAMES.overrideAttrs (attrs: {
       patches = [ ./patches/FLAMES.patch ];
     });
