@@ -70,6 +70,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Standalone ImPlot Demos";
     homepage = "https://github.com/epezent/implot_demos";
+    broken =
+      stdenv.hostPlatform.isAarch64 # Target "mandel" relies on AVX2
+      || stdenv.isDarwin;
     license = licenses.mit;
     maintainers = with maintainers; [ SomeoneSerge ];
     mainProgram = "implot-demos";
