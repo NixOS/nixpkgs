@@ -61,12 +61,18 @@ let
 
   resolveFinalPort =
     netCfg:
-    if netCfg.listen.port == null then
-      if (netCfg.isLighthouse || netCfg.isRelay) then 4242 else 0
+    if (netCfg.listen.port != null) then
+      netCfg.listen.port
+    else if (netCfg.isLighthouse || netCfg.isRelay) then
+      4242
     else
-      netCfg.listen.port;
+      0;
 in
 {
+  # Maintainers
+
+  meta.maintainers = with lib.maintainers; [ pandapip1 ];
+
   # Interface
 
   options = {
