@@ -4,10 +4,11 @@ fetchurl,
 openssl,
 pcre,
 zlib,
-libxcrypt
+libxcrypt,
+stdenv
 }:
 
-pkgs.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nginx-rtmp";
   version = "1.21.4";  # Set the desired Nginx version
 
