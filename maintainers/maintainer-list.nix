@@ -22929,6 +22929,12 @@
     githubId = 3248;
     name = "zimbatm";
   };
+  zimeg = {
+    email = "zim@o526.net";
+    github = "zimeg";
+    githubId = 18134219;
+    name = "zimeg";
+  };
   Zimmi48 = {
     email = "theo.zimmermann@telecom-paris.fr";
     github = "Zimmi48";
