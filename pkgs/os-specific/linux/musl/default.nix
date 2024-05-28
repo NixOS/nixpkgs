@@ -89,6 +89,16 @@ stdenv.mkDerivation rec {
     "--syslibdir=${placeholder "out"}/lib"
   ];
 
+  # Set variables that affect the path used by musl-gcc and musl-clang wrappers.
+  # If $CC ends with gcc, WRAPCC_GCC is set to $CC. Same for clang. Note that
+  # musl-gcc wrapper uses REALGCC environment variable at runtime if it is set.
+  # We want to avoid reference to the $CC, so we force the default values when
+  # building (see Makefile).
+  makeFlags = [
+    "WRAPCC_GCC=gcc"
+    "WRAPCC_CLANG=clang"
+  ];
+
   outputs = [ "out" "bin" "dev" ];
 
   dontDisableStatic = true;
