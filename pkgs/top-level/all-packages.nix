@@ -17060,7 +17060,7 @@ with pkgs;
 
   # BQN interpreters and compilers
 
-  mbqn = callPackage ../development/interpreters/bqn/mlochbaum-bqn { };
+  mbqn = bqn;
 
   cbqn = cbqn-bootstrap.phase2;
   cbqn-replxx = cbqn-bootstrap.phase2-replxx;
