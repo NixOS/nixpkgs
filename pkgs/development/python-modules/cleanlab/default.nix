@@ -3,42 +3,45 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  numpy,
   scikit-learn,
   termcolor,
   tqdm,
   pandas,
   setuptools,
   # test dependencies
-  pytestCheckHook,
-  pytest-lazy-fixture,
-  tensorflow,
-  torch,
   datasets,
-  torchvision,
-  keras,
   fasttext,
   hypothesis,
-  wget,
+  keras,
   matplotlib,
+  pytestCheckHook,
+  pytest-lazy-fixture,
   skorch,
+  tensorflow,
+  torch,
+  torchvision,
+  wget,
 }:
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.6.1";
+  version = "2.6.5";
   pyproject = true;
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cleanlab";
-    repo = pname;
+    repo = "cleanlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+uJtm/t6Ri25V/9N/2fcOgCOBaBy8PrsM/tO1uX7FEY=";
+    hash = "sha256-wehvGh27Ey1YK+eWTjT6jRwa7yqPpx3P0HUNePoljpw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    numpy
     scikit-learn
     termcolor
     tqdm
@@ -53,18 +56,18 @@ buildPythonPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-lazy-fixture
-    tensorflow
-    torch
     datasets
-    torchvision
-    keras
     fasttext
     hypothesis
-    wget
+    keras
     matplotlib
+    pytestCheckHook
+    pytest-lazy-fixture
     skorch
+    tensorflow
+    torch
+    torchvision
+    wget
   ];
 
   disabledTests = [
@@ -77,13 +80,15 @@ buildPythonPackage rec {
     "tests/test_dataset.py"
     # Requires the datasets we just prevented from downloading
     "tests/datalab/test_cleanvision_integration.py"
+    # Fails because of issues with the keras derivation
+    "tests/test_frameworks.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "The standard data-centric AI package for data quality and machine learning with messy, real-world data and labels.";
     homepage = "https://github.com/cleanlab/cleanlab";
     changelog = "https://github.com/cleanlab/cleanlab/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }
