@@ -239,6 +239,16 @@
       "agpl"
     ]
   },
+  "richdocuments": {
+    "sha256": "1gbgygb7ymsg7gjb29r3caglsrimcrk7yn4kka5f8swv9b1k0qx6",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.2/richdocuments-v8.4.2.tar.gz",
+    "version": "8.4.2",
+    "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
+    "homepage": "https://collaboraoffice.com/",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "spreed": {
     "sha256": "106y9mbnwga7pfhydrd8rjpcr89ir3fjrdn81xykyzqwrq29fxgs",
     "url": "https://github.com/nextcloud-releases/spreed/releases/download/v19.0.1/spreed-v19.0.1.tar.gz",

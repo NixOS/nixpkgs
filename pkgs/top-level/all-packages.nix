@@ -1821,8 +1821,6 @@ with pkgs;
 
   gh-dash = callPackage ../tools/misc/gh-dash { };
 
-  gh-eco = callPackage ../tools/misc/gh-eco { };
-
   gh-markdown-preview = callPackage ../tools/misc/gh-markdown-preview { };
 
   ghostie = callPackage ../tools/misc/ghostie { };
@@ -13466,7 +13464,7 @@ with pkgs;
 
   inherit (callPackages ../servers/teleport {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
-  }) teleport_13 teleport_14 teleport_15 teleport;
+  }) teleport_14 teleport_15 teleport;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
