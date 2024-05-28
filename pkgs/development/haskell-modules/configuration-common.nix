@@ -56,7 +56,18 @@ self: super: {
         };
     in
     {
-      cabal-install = super.cabal-install.overrideScope cabalInstallOverlay;
+      cabal-install =
+        let cabal-install = super.cabal-install.overrideScope cabalInstallOverlay;
+            scope = cabal-install.scope;
+        in overrideCabal (old: {
+            postInstall = ''
+              ${old.postInstall or ""}
+              remove-references-to -t ${scope.ghc} "$out/bin/.cabal-wrapped"
+              remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
+              remove-references-to -t ${scope.Cabal} "$out/bin/.cabal-wrapped"
+            '';
+          }) cabal-install;
+
       cabal-install-solver = super.cabal-install-solver.overrideScope cabalInstallOverlay;
 
       # Needs cabal-install >= 3.8 /as well as/ matching Cabal
