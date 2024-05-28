@@ -40,10 +40,9 @@ buildPythonPackage rec {
     [
       # Fix hardcoded `fapi-config.json` configuration path
       ./fapi-config.patch
-      (fetchurl {
-        url = "https://github.com/tpm2-software/tpm2-pytss/pull/571/commits/b02fdc8e259fe977c1065389c042be69e2985bdf.patch";
-        hash = "sha256-+jZFv+s9p52JxtUcNeJx7ayzKDVtPoQSSGgyZqPDuEc=";
-      })
+      # Backport for https://github.com/tpm2-software/tpm2-pytss/pull/576
+      # This is likely to be dropped with the next major release (>= 2.3)
+      ./pr576-backport.patch
     ]
     ++ lib.optionals isCross [
       # pytss will regenerate files from headers of tpm2-tss.
