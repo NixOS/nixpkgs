@@ -1211,6 +1211,10 @@ let
       hardeningDisable = [ "format" ];
     });
 
+    MANOR = old.MANOR.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
     rGADEM = old.rGADEM.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
     });
