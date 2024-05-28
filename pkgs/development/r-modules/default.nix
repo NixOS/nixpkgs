@@ -1207,6 +1207,10 @@ let
       hardeningDisable = [ "format" ];
     });
 
+    HilbertVis = old.HilbertVis.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
     rGADEM = old.rGADEM.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
     });
