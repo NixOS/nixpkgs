@@ -37,7 +37,7 @@ pkgs.stdenv.mkDerivation rec {
     description = "NGINX with nginx-rtmp-module";
     homepage = "https://github.com/arut/nginx-rtmp-module";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ workouse ];
+    maintainers = with maintainers; [ delirehberi ];
     platforms = platforms.unix;
   };
 }

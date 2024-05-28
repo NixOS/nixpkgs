@@ -22940,5 +22940,11 @@
     githubId = 	59917878;
     name = "Mathias Zhang";
   };
+  delirehberi = {
+    email = "z@emre.xyz";
+    github = "delirehberi";
+    githubId = 	803964;
+    name = "Emre Yilmaz";
+  };
 }
 /* Keep the list alphabetically sorted. */
