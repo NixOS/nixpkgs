@@ -104,8 +104,9 @@ in {
 
     fontPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = config.fonts.packages;
-      defaultText = lib.literalExpression "fonts.packages";
+      # `fonts.packages` is a list of paths now, filter out which are not packages
+      default = builtins.filter lib.types.package.check config.fonts.packages;
+      defaultText = lib.literalExpression "builtins.filter lib.types.package.check config.fonts.packages";
       example = lib.literalExpression "with pkgs; [ source-han-sans ]";
       description = ''
         Font packages to use in Steam.
