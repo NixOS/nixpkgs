@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "2.7.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ks5dvKi5iutjM+iovDOYGx3vsr45JWRqGOXV8+Ko4gg=";
+    hash = "sha256-h4NzfS27+jWyHbegxF+pgN6JzJdVAoM16J6G/9uNJc4=";
   };
 
   # example-robot-data models are used in checks.
