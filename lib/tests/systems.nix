@@ -78,6 +78,18 @@ lib.runTests (
     expr = toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux" // { something = "extra"; });
     expected = null;
   };
+  test_elaborate_config_over_system = {
+    expr = (lib.systems.elaborate { config = "i686-unknown-linux-gnu"; system = "x86_64-linux"; }).system;
+    expected = "i686-linux";
+  };
+  test_elaborate_config_over_parsed = {
+    expr = (lib.systems.elaborate { config = "i686-unknown-linux-gnu"; parsed = (lib.systems.elaborate "x86_64-linux").parsed; }).parsed.cpu.arch;
+    expected = "i686";
+  };
+  test_elaborate_system_over_parsed = {
+    expr = (lib.systems.elaborate { system = "i686-linux"; parsed = (lib.systems.elaborate "x86_64-linux").parsed; }).parsed.cpu.arch;
+    expected = "i686";
+  };
 }
 
 # Generate test cases to assert that a change in any non-function attribute makes a platform unequal

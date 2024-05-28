@@ -246,7 +246,7 @@ let
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
       };
     } else throw "Musl libc only supports 64-bit Linux systems.";
 
@@ -258,9 +258,9 @@ let
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
+        config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
-        };
+        });
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
@@ -270,9 +270,9 @@ let
         pkgsx86_64Darwin = super';
       })] ++ overlays;
       localSystem = {
-        parsed = stdenv.hostPlatform.parsed // {
+        config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.x86_64;
-        };
+        });
       };
     } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
@@ -311,10 +311,11 @@ let
       })] ++ overlays;
       crossSystem = {
         isStatic = true;
-        parsed =
+        config = lib.systems.parse.tripleFromSystem (
           if stdenv.hostPlatform.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
-          else stdenv.hostPlatform.parsed;
+          else stdenv.hostPlatform.parsed
+        );
         gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
           stdenv.hostPlatform.gcc or {};
       };
