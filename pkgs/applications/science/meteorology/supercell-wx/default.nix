@@ -89,9 +89,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   # These tests aren't built by 'all', but ctest still tries to run them.
-  cmakeFlags = [
-    "-DCMAKE_CTEST_ARGUMENTS=-E;'test_mln_core|test_mln_widgets'"
-  ];
+  cmakeFlags = [ "-DCMAKE_CTEST_ARGUMENTS=-E;'test_mln_core|test_mln_widgets'" ];
 
   patches = [
     ./patches/use-find-package.patch
