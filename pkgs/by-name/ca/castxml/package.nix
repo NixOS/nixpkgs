@@ -37,13 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libclang
     libffi
     libxml2
     zlib
-  ];
-
-  propagatedBuildInputs = [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libclang
   ];
 
@@ -51,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeOptionType "path" "CLANG_RESOURCE_DIR" "${lib.getDev libclang}")
     (lib.cmakeBool "SPHINX_HTML" withHTML)
     (lib.cmakeBool "SPHINX_MAN" withManual)
+  ] ++ lib.optionals stdenv.isDarwin [
+    (lib.cmakeOptionType "path" "Clang_DIR" "${lib.getDev libclang}/lib/cmake/clang")
   ];
 
   # 97% tests passed, 97 tests failed out of 2881

@@ -58,8 +58,13 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # calls apache benchmark and fails, no usable output
+    # Test calls apache benchmark and fails, no usable output
     "test_concurrency_error_rates"
+  ];
+
+  disabledTestPaths = [
+    # Benchmark and performance tests are not relevant for Nixpkgs
+    "tests/performance/"
   ];
 
   preCheck = ''
@@ -83,7 +88,7 @@ buildPythonPackage rec {
     description = "Python API Rate Limit Decorator";
     homepage = "https://github.com/aio-libs/aiocache";
     changelog = "https://github.com/aio-libs/aiocache/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
 }

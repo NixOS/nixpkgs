@@ -4,13 +4,12 @@
 
 let
   pname = "elixir-ls";
-  version = "0.21.1";
+  version = "0.21.3";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-OBLSj1nqv/p1FYg7DapCnr4EU2EW51MQM+YnZqDkcB4=";
-    fetchSubmodules = true;
+    hash = "sha256-IzHvJQ7UdGXFeSyNYKeHlDuY/o1y/E4fM+lG3t9J2HM=";
   };
 in
 mixRelease {

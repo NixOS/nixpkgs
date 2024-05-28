@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , getent
 , iproute2
@@ -24,6 +25,16 @@ buildGoModule {
     rev = "v${version}";
     hash = "sha256-ETBca3qKO2iS30teIF5sr/oyJdRSKFqLFVO3+mmm7bo=";
   };
+
+  patches = [
+    # Fix "tailscale ssh" when built with ts_include_cli tag
+    # https://github.com/tailscale/tailscale/pull/12109
+    (fetchpatch {
+      url = "https://github.com/tailscale/tailscale/commit/325ca13c4549c1af58273330744d160602218af9.patch";
+      hash = "sha256-SMwqZiGNVflhPShlHP+7Gmn0v4b6Gr4VZGIF/oJAY8M=";
+    })
+  ];
+
   vendorHash = "sha256-Hd77xy8stw0Y6sfk3/ItqRIbM/349M/4uf0iNy1xJGw=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];

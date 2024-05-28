@@ -4,6 +4,7 @@
   fetchFromGitHub,
   copyDesktopItems,
   curl,
+  perl,
   pkg-config,
   protobuf,
   xcbuild,
@@ -26,13 +27,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.135.2";
+  version = "0.136.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XnfTrcLKjJH42l9L9KxogMhNQ2u/8G4fyd6i/0dO5S0=";
+    hash = "sha256-w2g9xkqB98XLED1Z9vIjD1fhOz2p6LxnVgf6xWSFObA=";
     fetchSubmodules = true;
   };
 
@@ -40,13 +41,12 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-U8278YkskWE1E60JVTx4hRv4322EV9jz8fzJkBTG3R8=";
+      "blade-graphics-0.4.0" = "sha256-w5BTv/40Zy94dmoZUpVVWrhzR2IaGAIJ0Ftsw1v/R9Y=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
       "heed-0.20.0-alpha.9" = "sha256-8bzoMmfKS+6AmeTzh0/F7WM9OBdIex+NYFER28bpA/s=";
       "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";
       "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
       "pathfinder_simd-0.5.3" = "sha256-bakBcAQZJdHQPXybe0zoMzE49aOHENQY7/ZWZUMt+pM=";
-      "taffy-0.3.11" = "sha256-0hXOEj6IjSW8e1t+rvxBFX6V9XRum3QO2Des1XlHJEw=";
       "tree-sitter-0.20.100" = "sha256-xZDWAjNIhWC2n39H7jJdKDgyE/J6+MAVSa8dHtZ6CLE=";
       "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
       "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     copyDesktopItems
     curl
+    perl
     pkg-config
     protobuf
     rustPlatform.bindgenHook
@@ -127,11 +128,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    # Fails with "On 2823 Failed to find test1:A"
-    "--skip=test_base_keymap"
-    # Fails with "called `Result::unwrap()` on an `Err` value: Invalid keystroke `cmd-k`"
-    # https://github.com/zed-industries/zed/issues/10427
-    "--skip=test_disabled_keymap_binding"
+    # Fails on certain hosts (including Hydra) for unclear reason
+    "--skip=test_open_paths_action"
   ];
 
   postInstall = ''

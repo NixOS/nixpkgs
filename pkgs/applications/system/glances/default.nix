@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.4.0.5";
+  version = "4.0.6";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ho4vcmTEVja7rkgLSfNkXvnpopYupRxPL1UVlnmdGCg=";
+    hash = "sha256-FkAMsfr/bO7Chemw4hhVt2SKkSyPLECNVuOsOxKWsGE=";
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure

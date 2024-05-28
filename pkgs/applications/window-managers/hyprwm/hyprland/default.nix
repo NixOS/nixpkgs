@@ -53,26 +53,23 @@ assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been remov
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.40.0-unstable-2024-05-12";
+  version = "0.40.0-unstable-2024-05-05";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     fetchSubmodules = true;
-    rev = "2ccd45a84475fab46c6fecd2fe226d3173104743";
-    hash = "sha256-nBCQuRl4sS/G/OUS+txeelFShBEgSk2OrN6kBYMHuOg=";
+    rev = "f15513309b24790099d42974274eb23f66f7c985";
+    hash = "sha256-zKOfgXPTlRqCR+EME4qjN9rgAnC3viI5KWx10dhKszw=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
-
-    # Remove extra @PREFIX@ to fix pkg-config paths
-    sed -i "s#@PREFIX@/##g" hyprland.pc.in
   '';
 
   # used by version.sh
-  DATE = "2024-05-12";
+  DATE = "2024-05-05";
   HASH = finalAttrs.src.rev;
 
   depsBuildBuild = [

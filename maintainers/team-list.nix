@@ -236,7 +236,6 @@ with lib.maintainers; {
     members = [
       cole-h
       grahamc
-      hoverbear
     ];
     scope = "Group registration for packages maintained by Determinate Systems.";
     shortName = "Determinate Systems employees";
@@ -343,6 +342,16 @@ with lib.maintainers; {
     members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
     shortName = "freedesktop.org packaging";
+  };
+
+  fslabs = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      greaka
+      lpostula
+    ];
+    scope = "Group registration for packages maintained by Foresight Spatial Labs.";
+    shortName = "Foresight Spatial Labs employees";
   };
 
   gcc = {

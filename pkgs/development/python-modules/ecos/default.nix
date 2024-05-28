@@ -2,44 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
-  numpy,
+  oldest-supported-numpy,
+  pytestCheckHook,
   pythonOlder,
   scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ecos";
-  version = "2.0.11";
-  format = "setuptools";
+  version = "2.0.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jflmXR7fuGRSyI6NoQrHFvkKqF/D4iq47StNSCdLbqQ=";
+    hash = "sha256-3NcZBZ7fnwiMelGssa74b5PgmXmNZhP4etNRpyrCkpo=";
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [
-    numpy
+  build-system = [ setuptools ];
+
+  dependencies = [
+    oldest-supported-numpy
     scipy
   ];
 
-  nativeCheckInputs = [ nose ];
-
-  checkPhase = ''
-    cd ./src
-    nosetests test_interface.py test_interface_bb.py
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ecos" ];
 
   meta = with lib; {
     description = "Python interface for ECOS";
     homepage = "https://github.com/embotech/ecos-python";
+    changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ drewrisinger ];
   };

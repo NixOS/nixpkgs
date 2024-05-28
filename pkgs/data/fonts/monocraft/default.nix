@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl }:
+{ stdenvNoCC, lib, fetchurl }:
 
 let
-  version = "2.4";
+  version = "3.0";
   relArtifact = name: hash: fetchurl {
     inherit name hash;
     url = "https://github.com/IdreesInc/Monocraft/releases/download/v${version}/${name}";
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "monocraft";
   inherit version;
 
@@ -18,16 +18,14 @@ stdenv.mkDerivation {
     (relArtifact "Monocraft-nerd-fonts-patched.ttf" "sha256-QxMp8UwcRjWySNHWoNeX2sX9teZ4+tCFj+DG41azsXw=")
   ];
 
-  sourceRoot = ".";
-  unpackCmd = ''cp "$curSrc" $(basename $curSrc)'';
-
+  dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 -t $out/share/fonts/opentype *.otf
-    install -Dm644 -t $out/share/fonts/truetype *.ttf
+    find $srcs -name '*.otf' -exec install -Dm644 --target $out/share/fonts/opentype {} +
+    find $srcs -name '*.ttf' -exec install -Dm644 --target $out/share/fonts/truetype {} +
     runHook postInstall
   '';
 

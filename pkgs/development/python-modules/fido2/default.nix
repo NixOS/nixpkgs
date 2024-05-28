@@ -3,38 +3,33 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
-  mock,
   poetry-core,
-  pyfakefs,
+  pyscard,
   pythonOlder,
-  six,
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fido2";
   version = "1.1.3";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JhAPIm0SztYhymGYUozhft9nt430KHruEoX+481aqfw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    cryptography
-    six
-  ];
+  dependencies = [ cryptography ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-    mock
-    pyfakefs
-  ];
+  passthru.optional-dependencies = {
+    pcsc = [ pyscard ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   unittestFlagsArray = [ "-v" ];
 

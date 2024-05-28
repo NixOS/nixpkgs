@@ -1,14 +1,14 @@
 { wasm-bindgen-cli, ... }@args:
 import ../generic.nix (args // {
-  version = "15.2.2";
-  hash = "sha256-LzJaskFaBtWkodeuT4mDNTs4+6FZj2OI+ZtjogU3KzQ=";
-  vendorHash = "sha256-D62Jk6LKdbprvkzAKoQVnEKdGQp5ITJYFf53q6154pU=";
-  yarnHash = "sha256-jpcjO1wT6m8J7LNQVeWo1j2G5P+sexrnNF1ipCZ8lCU=";
+  version = "15.3.7";
+  hash = "sha256-d+lfM1yt0xAWBqAqBCdEFcOHz32VT0EI4LybVbmjW0o=";
+  vendorHash = "sha256-pM6wy1tuMmUg8iNfeSmg8dW1cvP7G3fXa3vYuSEEdOc=";
+  yarnHash = "sha256-eWrR06FVkFxCrk+Z7BrY4dJjvEnUYzYrhSeD8ir3a08=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "boring-4.4.0" = "sha256-4wdl2kIA5oHQ0H6IddKQ+B5kRwrTeMbKe1+tAYZt2uw=";
-      "ironrdp-async-0.1.0" = "sha256-BKaVPr3O4D7DdwNJUjrU1zB7OwmJZnpJeyuMx+FqKjI=";
+      "ironrdp-async-0.1.0" = "sha256-NpBzPsvopu5Te6Ljln5rp1Wxc6O6mRB4lLh0JVnN+Xc=";
       "sspi-0.10.1" = "sha256-fkclC/plTh2d8zcmqthYmr5yXqbPTeFxI1VuaPX5vxk=";
     };
   };

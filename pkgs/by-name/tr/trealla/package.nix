@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libffi
-, openssl
-, readline
-, valgrind
-, xxd
-, gitUpdater
-, checkLeaks ? false
-, enableFFI ? true
-, enableSSL ? true
-, enableThreads ? true
-, lineEditingLibrary ? "isocline"
+{
+  lib,
+  fetchFromGitHub,
+  libffi,
+  openssl,
+  readline,
+  stdenv,
+  testers,
+  valgrind,
+  xxd,
+  # Boolean flags
+  checkLeaks ? false,
+  enableFFI ? true,
+  enableSSL ? true,
+  enableThreads ? true,
+  # Configurable inputs
+  lineEditingLibrary ? "isocline",
 }:
 
-assert lib.elem lineEditingLibrary [ "isocline" "readline" ];
+assert lib.elem lineEditingLibrary [
+  "isocline"
+  "readline"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.34.0";
+  version = "2.52.9";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cqIiPeQO/M8MtpHRomN/fzxIq7TgUwZSvL3PFCVsEnY=";
+    hash = "sha256-fehgNWCH/c0wbnlTpydA9K8FPnvSFpcwum1ThngikGY=";
   };
 
   postPatch = ''
@@ -33,9 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'GIT_VERSION :=' 'GIT_VERSION ?='
   '';
 
-  nativeBuildInputs = [
-    xxd
-  ];
+  nativeBuildInputs = [ xxd ];
 
   buildInputs =
     lib.optionals enableFFI [ libffi ]
@@ -46,13 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  makeFlags = [
-    "GIT_VERSION=\"v${finalAttrs.version}\""
-  ]
-  ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
-  ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
-  ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
-  ++ lib.optionals enableThreads [ "THREADS=1" ];
+  makeFlags =
+    [ "GIT_VERSION=\"v${finalAttrs.version}\"" ]
+    ++ lib.optionals (lineEditingLibrary == "isocline") [ "ISOCLINE=1" ]
+    ++ lib.optionals (!enableFFI) [ "NOFFI=1" ]
+    ++ lib.optionals (!enableSSL) [ "NOSSL=1" ]
+    ++ lib.optionals enableThreads [ "THREADS=1" ];
 
   enableParallelBuilding = true;
 
@@ -64,12 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !valgrind.meta.broken;
 
-  checkFlags = [
-    "test"
-  ] ++ lib.optionals checkLeaks [ "leaks" ];
+  checkFlags = [ "test" ] ++ lib.optionals checkLeaks [ "leaks" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = "v${finalAttrs.version}";
+      };
+    };
   };
 
   meta = {
@@ -88,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/trealla-prolog/trealla/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ siraben AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      siraben
+      AndersonTorres
+    ];
     mainProgram = "tpl";
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin && stdenv.isx86_64;

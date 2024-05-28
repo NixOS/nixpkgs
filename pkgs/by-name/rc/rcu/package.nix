@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , requireFile
-, fetchpatch
 , runCommand
 , rcu
 , testers

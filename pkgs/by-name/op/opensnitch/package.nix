@@ -1,13 +1,11 @@
 { buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , protobuf
 , go-protobuf
 , pkg-config
 , libnetfilter_queue
 , libnfnetlink
 , lib
-, coreutils
 , iptables
 , makeWrapper
 , protoc-gen-go-grpc

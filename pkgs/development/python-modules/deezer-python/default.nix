@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "6.1.1";
+  version = "6.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,26 +23,26 @@ buildPythonPackage rec {
     owner = "browniebroke";
     repo = "deezer-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pzEXiWKMP2Wqme/pqfTMHxWH/4YcCS6u865wslHrUqI=";
+    hash = "sha256-Y1y8FBxpGpNIWCZbel9fdGLGC9VM9h1BvHtUxCZxp/A=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=deezer" ""
+      --replace-fail " --cov=deezer" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    requests
+    tornado
+  ];
 
   nativeCheckInputs = [
     environs
     pytest-mock
     pytest-vcr
     pytestCheckHook
-  ];
-
-  propagatedBuildInputs = [
-    requests
-    tornado
   ];
 
   pythonImportsCheck = [ "deezer" ];

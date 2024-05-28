@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
 , gitUpdater
 , meson

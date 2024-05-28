@@ -53,7 +53,6 @@ class AbstractLogger(ABC):
 
 
 class JunitXMLLogger(AbstractLogger):
-
     class TestCaseState:
         def __init__(self) -> None:
             self.stdout = ""
@@ -227,7 +226,7 @@ class XMLLogger(AbstractLogger):
     def __init__(self, outfile: str) -> None:
         self.logfile_handle = codecs.open(outfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
-        self.queue: "Queue[Dict[str, str]]" = Queue()
+        self.queue: Queue[dict[str, str]] = Queue()
 
         self._print_serial_logs = True
 

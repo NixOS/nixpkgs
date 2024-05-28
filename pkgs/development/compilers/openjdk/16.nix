@@ -11,8 +11,8 @@
 let
   version = {
     feature = "16";
-    interim = "0";
-    build = "36";
+    interim = ".0.2-ga";
+    build = "1";
   };
 
   # when building a headless jdk, also bootstrap it with a headless jdk
@@ -20,13 +20,14 @@ let
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${version.feature}+${version.build}";
+    version = "${version.feature}${version.interim}+${version.build}";
 
     src = fetchFromGitHub {
       owner = "openjdk";
       repo = "jdk${version.feature}u";
-      rev = "jdk-${version.feature}+${version.build}";
-      sha256 = "165nr15dqfcxzsl5z95g4iklln4rlfkgdigdma576mx8813ldi44";
+      rev = "jdk-${version.feature}${version.interim}";
+      # rev = "jdk-${version.feature}${version.interim}+${version.build}";
+      sha256 = "sha256-/8XHNrf9joCCXMCyPncT54JhqlF+KBL7eAf8hUW/BxU=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];

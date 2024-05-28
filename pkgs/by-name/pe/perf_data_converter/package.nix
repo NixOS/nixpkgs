@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  fetchpatch,
   bazel_6,
   jdk,
   elfutils,

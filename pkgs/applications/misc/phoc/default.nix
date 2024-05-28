@@ -13,6 +13,7 @@
 , gnome-desktop
 , glib
 , gtk3
+, json-glib
 , wayland
 , libdrm
 , libxkbcommon
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     # For keybindings settings schemas
     gnome.mutter
+    json-glib
     wayland
     finalAttrs.wlroots
     xorg.xcbutilwm

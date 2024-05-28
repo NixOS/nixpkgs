@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, scdoc, wayland-scanner
 , wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
 }:

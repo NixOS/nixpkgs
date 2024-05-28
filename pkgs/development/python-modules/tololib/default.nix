@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,

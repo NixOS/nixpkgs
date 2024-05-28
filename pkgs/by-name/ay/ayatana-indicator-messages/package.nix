@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-messages";
-  version = "23.10.0";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-messages";
     rev = finalAttrs.version;
-    hash = "sha256-FBJeP5hOXJcOk04cRJpw+oN7L3w3meDX3ivLmFWkhVI=";
+    hash = "sha256-D1181eD2mAVXEa7RLXXC4b2tVGrxbh0WWgtbC1anHH0=";
   };
 
   outputs = [

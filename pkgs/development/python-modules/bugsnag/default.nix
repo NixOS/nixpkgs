@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.7.0";
+  version = "4.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+w0lI2goXYnfX2KB+DNFPXl6UCOhg5o17zggalyYXr8=";
+    hash = "sha256-mECP4X1KfzAKVlNUB6ZEi5hE2bUoxEUnkIho/DZG6HM=";
   };
 
   propagatedBuildInputs = [ webob ];

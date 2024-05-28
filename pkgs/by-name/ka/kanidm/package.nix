@@ -71,6 +71,11 @@ rustPlatform.buildRustPackage rec {
     cp -r server/web_ui/pkg $out/ui
   '';
 
+  # Not sure what pathological case it hits when compiling tests with LTO,
+  # but disabling it takes the total `cargo check` time from 40 minutes to
+  # around 5 on a 16-core machine.
+  cargoTestFlags = ["--config" ''profile.release.lto="off"''];
+
   preFixup = ''
     installShellCompletion \
       --bash $releaseDir/build/completions/*.bash \

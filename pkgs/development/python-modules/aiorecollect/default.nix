@@ -4,7 +4,6 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   freezegun,
   poetry-core,
   pytest-asyncio,

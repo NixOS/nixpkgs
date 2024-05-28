@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
   # build inputs
   networkx,
@@ -41,6 +42,14 @@ buildPythonPackage {
     rev = "refs/tags/v${version}";
     hash = "sha256-d2TNcJQ82XxTWdetLgtKXRpFulAEEzrr+cyRewoA6YI=";
   };
+
+  # TODO: Remove this patch after updating to pgmpy 0.1.26.
+  # The PR https://github.com/pgmpy/pgmpy/pull/1745 will have been merged.
+  # It contains the fix below, among other things, which is why we do not use fetchpatch.
+  postPatch = lib.optionalString (pythonAtLeast "3.12") ''
+    substituteInPlace pgmpy/tests/test_estimators/test_MarginalEstimator.py \
+      --replace-fail 'self.assert_' 'self.assertTrue'
+  '';
 
   propagatedBuildInputs = [
     networkx

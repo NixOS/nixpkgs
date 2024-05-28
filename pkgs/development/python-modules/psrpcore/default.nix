@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -42,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jborean93/psrpcore/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    broken = stdenv.isDarwin;
   };
 }

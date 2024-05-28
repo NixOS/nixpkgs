@@ -5,17 +5,17 @@
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.4.0";
+  version = "0.6.0rc2";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     rev = "v${version}";
-    hash = "sha256-hvAuWCacaWxXwxx5ktj57hnWt8fcnwD6rUuRj1+ZtFA=";
+    hash = "sha256-u+1DkcdXXm/wmKG7yu8nv3OOeG/l5KC+9UcIrYOmsUA=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-4U6zIxK8K+MGxRboTtsKntDMp8/cQWPqXQ3l03AEtBs=";
+  vendorHash = "sha256-jJbXa3xnQXhEhrhmdi+JqdinLuRrFY5Tb9lsnCancFE=";
 
   proxyVendor = true;
 

@@ -4,6 +4,7 @@
   overrideSDK,
   fetchFromGitHub,
   buildNpmPackage,
+  jellyfin,
   nix-update-script,
   pkg-config,
   xcbuild,
@@ -26,16 +27,18 @@ let
 in
 buildNpmPackage' rec {
   pname = "jellyfin-web";
-  version = "10.9.1";
+  version = "10.9.3";
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-web";
-    rev = "v${version}";
-    hash = "sha256-KkPZ8OvGN/0gdoSVh9q0qEilae3tccgHRQQvrTsvycA=";
-  };
+  src =
+    assert version == jellyfin.version;
+    fetchFromGitHub {
+      owner = "jellyfin";
+      repo = "jellyfin-web";
+      rev = "v${version}";
+      hash = "sha256-duq2tilUDEzj7o3Nq3Ku5qVJm4XDqVmqkQQIK/dlTpE=";
+    };
 
-  npmDepsHash = "sha256-LmbygyCYSp0gtjU2pNCV17WEyEoaIzPs7H9UoMFV+PU=";
+  npmDepsHash = "sha256-nKA/mR1ug1yq4+jJGhWGtAL9Zsx3KjDPqt5rkCE4LFU=";
 
   npmBuildScript = [ "build:production" ];
 

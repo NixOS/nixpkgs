@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , llvmPackages, elfutils, bcc
 , libbpf, libbfd, libopcodes
 , cereal, asciidoctor

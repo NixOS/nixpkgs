@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "3.26.0";
+  version = "3.27.0";
   format = "pyproject";
 
   disabled = python3.pythonOlder "3.8";
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "commitizen-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tj+zH94IiFqkmkIqyNmgQgQNjvqWgCviLzfGrrCHX1k=";
+    hash = "sha256-Bfz9MBpFsbAcsyQ7CYyObE14q7UE9ZyeY1GVFb9maKk=";
   };
 
   pythonRelaxDeps = [

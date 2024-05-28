@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kubecolor";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9fL1zuhQ1B8QpJXcGVxg8mqIQoM5ZhwuE000rDcrrw0=";
+    sha256 = "sha256-VGpyYc6YmRr58OSRQvWTo4f8ku8L1/gn0ilbQSotO2k=";
   };
 
   vendorHash = "sha256-Gzz+mCEMQCcLwTiGMB8/nXk7HDAEGkEapC/VOyXrn/Q=";

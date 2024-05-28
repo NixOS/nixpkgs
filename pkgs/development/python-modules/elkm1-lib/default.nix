@@ -3,7 +3,6 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   poetry-core,
   pyserial-asyncio-fast,
   pytest-asyncio,

@@ -90,7 +90,16 @@ rec {
     mkOption ?
       k: v: if v == null
             then []
-            else [ (mkOptionName k) (lib.generators.mkValueStringDefault {} v) ]
+            else if optionValueSeparator == null then
+              [ (mkOptionName k) (lib.generators.mkValueStringDefault {} v) ]
+            else
+              [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault {} v}" ],
+
+    # how to separate an option from its flag;
+    # by default, there is no separator, so option `-c` and value `5`
+    # would become ["-c" "5"].
+    # This is useful if the command requires equals, for example, `-c=5`.
+    optionValueSeparator ? null
     }:
     options:
       let

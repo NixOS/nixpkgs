@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.5.0";
+  version = "4.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,18 +18,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
-    rev = "v${version}";
-    hash = "sha256-RcrzzJQdzn+BXEp5M3ziGL6qSgfUN3wJ3JxwgjzVeuk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P+OQljzp+ZwVOXAgJqK7GNrqBep40MyVtMKDtT4ZUr8=";
   };
 
   # undefined symbol: yr_finalize
   # https://github.com/VirusTotal/yara-python/issues/7
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "include_dirs=['yara/libyara/include', 'yara/libyara/', '.']" "libraries = ['yara']"
+      --replace-fail "include_dirs=['yara/libyara/include', 'yara/libyara/', '.']" "libraries = ['yara']"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   buildInputs = [ yara ];
 
@@ -44,7 +44,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python interface for YARA";
     homepage = "https://github.com/VirusTotal/yara-python";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/VirusTotal/yara-python/releases/tag/v${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

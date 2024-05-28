@@ -4,7 +4,6 @@
   buildPythonPackage,
   dill,
   fetchFromGitHub,
-  fetchpatch,
   fsspec,
   huggingface-hub,
   importlib-metadata,

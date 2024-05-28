@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "malwoverview";
-  version = "5.4.3";
+  version = "5.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {

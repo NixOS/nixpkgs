@@ -902,6 +902,17 @@ in mkLicense lset) ({
     free = false;
   };
 
+  ncbiPd = {
+    spdxId = "NCBI-PD";
+    fullname = "NCBI Public Domain Notice";
+    # Due to United States copyright law, anything with this "license" does not have a copyright in the
+    # jurisdiction of the United States. However, other jurisdictions may assign the United States
+    # government copyright to the work, and the license explicitly states that in such a case, no license
+    # is granted. This is nonfree and nonredistributable in most jurisdictions other than the United States.
+    free = false;
+    redistributable = false;
+  };
+
   ncsa = {
     spdxId = "NCSA";
     fullName = "University of Illinois/NCSA Open Source License";

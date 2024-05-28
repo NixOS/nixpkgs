@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
 , gprbuild-boot
 , which
 , gnat

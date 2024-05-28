@@ -109,6 +109,10 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 # postgresql: move packages.nix to ext/default.nix
 719034f6f6749d624faa28dff259309fc0e3e730
 
+# php ecosystem: reformat with nixfmt-rfc-style
+75ae7621330ff8db944ce4dff4374e182d5d151f
+c759efa5e7f825913f9a69ef20f025f50f56dc4d
+
 # pkgs/os-specific/bsd: Reformat with nixfmt-rfc-style 2024-03-01
 3fe3b055adfc020e6a923c466b6bcd978a13069a
 

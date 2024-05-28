@@ -1,21 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, writeShellApplication
-, curl
-, jq
-, common-updater-scripts
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  writeShellApplication,
+  curl,
+  jq,
+  common-updater-scripts,
+  undmg,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.74.1";
+  version = "1.75.1";
 
   src = fetchurl {
     name = "Raycast.dmg";
     url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
-    hash = "sha256-vIhuXZ9FxpWLPoOciyl4Qe0G8vXY+to+CGxp+nRmyp8=";
+    hash = "sha256-lHGKWj4nn0GsviV83MKgCaQ6HW/CfeP8gg4VXlVXaXg=";
   };
 
   dontPatch = true;
@@ -38,7 +39,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = lib.getExe (writeShellApplication {
     name = "raycast-update-script";
-    runtimeInputs = [ curl jq common-updater-scripts ];
+    runtimeInputs = [
+      curl
+      jq
+      common-updater-scripts
+    ];
     text = ''
       set -eo pipefail
       url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
@@ -47,12 +52,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
   });
 
-  meta = with lib; {
+  meta = {
     description = "Control your tools with a few keystrokes";
     homepage = "https://raycast.app/";
-    license = with licenses; [ unfree ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ lovesegfault stepbrobd donteatoreo ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      stepbrobd
+      donteatoreo
+    ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

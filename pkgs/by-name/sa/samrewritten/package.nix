@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/PaulCombal/SamRewritten";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ludovicopiero ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })

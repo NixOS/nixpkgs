@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-readme";

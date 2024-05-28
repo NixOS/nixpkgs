@@ -1,12 +1,10 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   chardet,
   openpyxl,
   charset-normalizer,
   fetchPypi,
-  fetchpatch,
   pythonOlder,
   pandas,
   tabulate,

@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "headphones";
-  version = "0.6.1";
+  version = "0.6.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "rembo10";
     repo = "headphones";
     rev = "v${version}";
-    sha256 = "1pj6xrcc6g336lb2knlc9l3qxgj3jaaymnbd7bmfjahgq5cp4d4v";
+    sha256 = "195v0ylhqd49bqq3dpig5nh0kivmwgmn0977fknix9j14jpvmd3b";
   };
 
   dontBuild = true;

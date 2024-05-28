@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "xsco";
     repo = "libdjinterop";
-    rev = "0.20.1";
-    hash = "sha256-/iXSRJVFPWqUTVz7z0BNWCq5LOqdNuTI+wx/34JAZfc=";
+    rev = "0.20.2";
+    hash = "sha256-eTr9ax/bZWazLhLLQG6XUgqiM+7LVieh5ruA0EaUaj0=";
   };
 
   nativeBuildInputs = [

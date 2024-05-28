@@ -166,9 +166,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.8.3";
-    hash = "sha256-4W1Cs3PAGn43eGDK15qSvN+gLdkkoFIwhejcJsCqcYA=";
-    vendorHash = "sha256-2+ctm1lJjCHITWV7BqoqgBlXKjNT4lueAt4F3UtoL9Q=";
+    version = "1.8.4";
+    hash = "sha256-YCFmjQ/xlyB0spumw8hBUmr9UVC7ZPNGrxYecFKi3aw=";
+    vendorHash = "sha256-PXA2AWq1IFmnqhhU92S9UaIYTUAAn5lsg3S7h5hBOQE=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

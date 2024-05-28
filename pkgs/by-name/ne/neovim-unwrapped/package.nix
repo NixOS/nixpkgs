@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libtermkey, libiconv
-, libuv, lua, ncurses, pkg-config
-, unibilium, gperf
+{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libiconv
+, libuv, lua, pkg-config
+, unibilium
 , libvterm-neovim
 , tree-sitter
 , fetchurl
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs:
 
 in {
     pname = "neovim-unwrapped";
-    version = "0.9.5";
+    version = "0.10.0";
 
     __structuredAttrs = true;
 
@@ -74,7 +74,7 @@ in {
       owner = "neovim";
       repo = "neovim";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-CcaBqA0yFCffNPmXOJTo8c9v1jrEBiqAl8CG5Dj5YxE=";
+      hash = "sha256-FCOipXHkAbkuFw9JjEpOIJ8BkyMkjkI0Dp+SzZ4yZlw=";
     };
 
     patches = [
@@ -86,11 +86,13 @@ in {
 
     dontFixCmake = true;
 
-    inherit lua treesitter-parsers;
+    inherit lua;
+    treesitter-parsers = treesitter-parsers //
+      { markdown = treesitter-parsers.markdown // { location = "tree-sitter-markdown"; }; } //
+      { markdown_inline = treesitter-parsers.markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; }
+      ;
 
     buildInputs = [
-      gperf
-      libtermkey
       libuv
       libvterm-neovim
       # This is actually a c library, hence it's not included in neovimLuaEnv,
@@ -99,7 +101,6 @@ in {
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
       msgpack-c
-      ncurses
       neovimLuaEnv
       tree-sitter
       unibilium
@@ -169,11 +170,13 @@ in {
     '' + ''
       mkdir -p $out/lib/nvim/parser
     '' + lib.concatStrings (lib.mapAttrsToList
-      (language: src: ''
+      (language: grammar: ''
         ln -s \
           ${tree-sitter.buildGrammar {
-            inherit language src;
+            inherit (grammar) src;
             version = "neovim-${finalAttrs.version}";
+            language = grammar.language or language;
+            location = grammar.location or null;
           }}/parser \
           $out/lib/nvim/parser/${language}.so
       '')

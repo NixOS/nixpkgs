@@ -8,9 +8,7 @@
   testscenarios,
   testtools,
   twine,
-  python,
   pythonOlder,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {

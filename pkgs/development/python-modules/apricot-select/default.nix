@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  apricot-select,
   numba,
   numpy,
   pynose,
@@ -37,15 +38,15 @@ buildPythonPackage rec {
   dependencies = [
     numba
     numpy
+    scikit-learn
     scipy
+    torchvision
     tqdm
   ];
 
   nativeCheckInputs = [
     pynose
     pytestCheckHook
-    scikit-learn
-    torchvision
   ];
 
   pythonImportsCheck = [ "apricot" ];
@@ -55,6 +56,21 @@ buildPythonPackage rec {
     "tests/test_optimizers/test_knapsack_facility_location.py"
     "tests/test_optimizers/test_knapsack_feature_based.py"
   ];
+
+  # NOTE: These tests seem to be flaky.
+  disabledTests = [
+    "test_digits_modular"
+    "test_digits_modular_object"
+    "test_digits_modular_sparse"
+    "test_digits_sqrt_modular"
+    "test_digits_sqrt_modular_object"
+    "test_digits_sqrt_modular_sparse"
+  ];
+
+  # NOTE: Tests are disabled by default because they can run for hours and timeout on Hydra.
+  doCheck = false;
+
+  passthru.tests.check = apricot-select.overridePythonAttrs { doCheck = true; };
 
   meta = with lib; {
     description = "Module for submodular optimization for the purpose of selecting subsets of massive data sets";

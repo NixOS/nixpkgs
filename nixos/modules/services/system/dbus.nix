@@ -128,10 +128,14 @@ in
         contents."/etc/dbus-1".source = pkgs.makeDBusConf {
           inherit (cfg) apparmor;
           suidHelper = "/bin/false";
-          serviceDirectories = [ pkgs.dbus ];
+          serviceDirectories = [ pkgs.dbus config.boot.initrd.systemd.package ];
         };
         packages = [ pkgs.dbus ];
-        storePaths = [ "${pkgs.dbus}/bin/dbus-daemon" ];
+        storePaths = [
+          "${pkgs.dbus}/bin/dbus-daemon"
+          "${config.boot.initrd.systemd.package}/share/dbus-1/system-services"
+          "${config.boot.initrd.systemd.package}/share/dbus-1/system.d"
+        ];
         targets.sockets.wants = [ "dbus.socket" ];
       };
     })

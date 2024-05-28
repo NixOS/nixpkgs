@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  env = {
+    CFLAGS = "-std=gnu89";
+    CXXFLAGS = "-std=c++03";
+  };
+
   configureFlags =
     [ "--disable-multiplatform" "--without-x11" "--without-xdvik"
       "--without-oxdvik" "--without-texinfo" "--without-texi2html"

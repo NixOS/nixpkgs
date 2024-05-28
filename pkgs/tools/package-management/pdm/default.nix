@@ -11,14 +11,14 @@
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.15.2";
+  version = "2.15.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wI6HB4wpwA562WgdxqI0GdxWF9y+bMIFAk70tOfihHU=";
+    hash = "sha256-wifYH2vxCWJqVkOnu1McX1t3eoUMTqyNCLRywRRr7uU=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,6 @@ buildPythonApplication rec {
     unearth
     virtualenv
   ] ++ httpx.optional-dependencies.socks
-  ++ pbs-installer.optional-dependencies.install
   ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ]
@@ -81,11 +80,12 @@ buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [
+    first
     pytestCheckHook
     pytest-mock
     pytest-xdist
     pytest-httpserver
-  ] ++ lib.optional stdenv.isLinux first;
+  ];
 
   pytestFlagsArray = [
     "-m 'not network'"

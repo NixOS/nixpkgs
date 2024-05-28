@@ -5,14 +5,14 @@
   fetchFromGitHub,
   pythonOlder,
   pyserial,
-  pyserial-asyncio,
+  pyserial-asyncio-fast,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "velbus-aio";
-  version = "2024.4.1";
+  version = "2024.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = "velbus-aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-rskWnH5zFvBuNL5eJ8O4D6htRP/XtFcq1xH8ZXzT1I4=";
+    hash = "sha256-rOuw1Iw6mGoXNSqxOlBappARzSGIlii03Hd8/3jWiQg=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   dependencies = [
     backoff
     pyserial
-    pyserial-asyncio
+    pyserial-asyncio-fast
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

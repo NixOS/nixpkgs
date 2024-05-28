@@ -4,6 +4,8 @@ let
   cfg = config.programs.steam;
   gamescopeCfg = config.programs.gamescope;
 
+  extraCompatPaths = lib.makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
+
   steam-gamescope = let
     exports = builtins.attrValues (builtins.mapAttrs (n: v: "export ${n}=${v}") cfg.gamescopeSession.env);
   in
@@ -42,7 +44,7 @@ in {
       '';
       apply = steam: steam.override (prev: {
         extraEnv = (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
-          STEAM_EXTRA_COMPAT_TOOLS_PATHS = lib.makeSearchPathOutput "steamcompattool" "" cfg.extraCompatPackages;
+          STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
         }) // (lib.optionalAttrs cfg.extest.enable {
           LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
         }) // (prev.extraEnv or {});
@@ -53,6 +55,7 @@ in {
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
         in prevLibs ++ additionalLibs;
+        extraPkgs = p: (cfg.extraPackages ++ lib.optionals (prev ? extraPkgs) (prev.extraPkgs p));
       } // lib.optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice)
       {
         buildFHSEnv = pkgs.buildFHSEnv.override {
@@ -66,6 +69,19 @@ in {
 
         Use this option to customise the Steam package rather than adding your
         custom Steam to {option}`environment.systemPackages` yourself.
+      '';
+    };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression ''
+        with pkgs; [
+          gamescope
+        ]
+      '';
+      description = ''
+        Additional packages to add to the Steam environment.
       '';
     };
 
@@ -83,6 +99,18 @@ in {
         https://github.com/ValveSoftware/steam-for-linux/issues/6310.
 
         These packages must be Steam compatibility tools that have a `steamcompattool` output.
+      '';
+    };
+
+    fontPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = config.fonts.packages;
+      defaultText = lib.literalExpression "fonts.packages";
+      example = lib.literalExpression "with pkgs; [ source-han-sans ]";
+      description = ''
+        Font packages to use in Steam.
+
+        Defaults to system fonts, but could be overridden to use other fonts — useful for users who would like to customize CJK fonts used in Steam. According to the [upstream issue](https://github.com/ValveSoftware/steam-for-linux/issues/10422#issuecomment-1944396010), Steam only follows the per-user fontconfig configuration.
       '';
     };
 
@@ -139,6 +167,11 @@ in {
       Load the extest library into Steam, to translate X11 input events to
       uinput events (e.g. for using Steam Input on Wayland)
     '';
+
+    protontricks = {
+      enable = lib.mkEnableOption "protontricks, a simple wrapper for running Winetricks commands for Proton-enabled games";
+      package = lib.mkPackageOption pkgs "protontricks" { };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -158,6 +191,8 @@ in {
       };
     };
 
+    programs.steam.extraPackages = cfg.fontPackages;
+
     programs.gamescope.enable = lib.mkDefault cfg.gamescopeSession.enable;
     services.displayManager.sessionPackages = lib.mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
 
@@ -169,7 +204,8 @@ in {
     environment.systemPackages = [
       cfg.package
       cfg.package.run
-    ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope;
+    ] ++ lib.optional cfg.gamescopeSession.enable steam-gamescope
+    ++ lib.optional cfg.protontricks.enable (cfg.protontricks.package.override { inherit extraCompatPaths; });
 
     networking.firewall = lib.mkMerge [
       (lib.mkIf (cfg.remotePlay.openFirewall || cfg.localNetworkGameTransfers.openFirewall) {

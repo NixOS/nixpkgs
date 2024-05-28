@@ -306,8 +306,8 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
 # Forgejo
-nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
-pkgs/applications/version-management/forgejo @bendlas @emilylange
+nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @IvarWithoutBones

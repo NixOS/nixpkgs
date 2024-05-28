@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   inherit (shiboken6) version src;
 
+  patches = [
+    # stripped down version of https://github.com/pyside/pyside-setup/commit/a0d68856d67ce6e178e3cfc2fccc236707e02fcd
+    # FIXME: remove in next release
+    ./qt-6.7.1.patch
+  ];
+
   sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
 
   # FIXME: cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS

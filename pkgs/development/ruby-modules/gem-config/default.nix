@@ -28,7 +28,7 @@
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
 , cargo, rustc, rustPlatform
-, autoSignDarwinBinariesHook, fetchpatch
+, autoSignDarwinBinariesHook
 }@args:
 
 let

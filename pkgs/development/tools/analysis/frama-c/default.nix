@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
+{ lib, stdenv, fetchurl, writeText
 , graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
 , gdk-pixbuf, wrapGAppsHook3

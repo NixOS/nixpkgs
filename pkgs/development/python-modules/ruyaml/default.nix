@@ -3,7 +3,6 @@
   buildPythonPackage,
   distro,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools-scm,

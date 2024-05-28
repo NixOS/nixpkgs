@@ -6,7 +6,6 @@
   configparser,
   distro,
   fetchFromGitHub,
-  fetchpatch,
   gevent,
   jinja2,
   paramiko,

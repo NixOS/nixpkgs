@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   lib,
 
   # build-system

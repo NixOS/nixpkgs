@@ -6,7 +6,6 @@
   backoff,
   certifi,
   fetchFromGitHub,
-  fetchpatch,
   poetry-core,
   pytest-aiohttp,
   pytest-asyncio,

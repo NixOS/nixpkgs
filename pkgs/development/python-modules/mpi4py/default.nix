@@ -1,7 +1,6 @@
 {
   lib,
   fetchPypi,
-  fetchpatch,
   python,
   buildPythonPackage,
   mpi,

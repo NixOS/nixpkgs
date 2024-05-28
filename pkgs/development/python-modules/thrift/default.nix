@@ -2,20 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "thrift";
   version = "0.20.0";
-  format = "setuptools";
+  pyproject = true;
+
+  # Still uses distutils
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TdZi6t9riuvopBcpUnvWmt9s6qKoaBy+9k0Sc7Po/ro=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # No tests. Breaks when not disabling.
   doCheck = false;

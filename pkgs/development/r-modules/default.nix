@@ -1498,6 +1498,43 @@ let
       buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
 
+
+    immunotation = let
+      MHC41alleleList = fetchurl {
+        url = "https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/allele.list";
+        hash = "sha256-CRZ+0uHzcq5zK5eONucAChXIXO8tnq5sSEAS80Z7jhg=";
+      };
+
+      MHCII40alleleList = fetchurl {
+        url = "https://services.healthtech.dtu.dk/services/NetMHCIIpan-4.0/alleles_name.list";
+        hash = "sha256-K4Ic2NUs3P4IkvOODwZ0c4Yh8caex5Ih0uO5jXRHp40=";
+      };
+
+      # List of valid countries, regions and ethnic groups
+      # The original page is changing a bit every day, but the relevant
+      # content does not. Use archive.org to get a stable snapshot.
+      # It can be updated from time to time, or when the package becomes
+      # deficient. This may be difficult to know.
+      # Update the snapshot date, and add id_ after it, as described here:
+      # https://web.archive.org/web/20130806040521/http://faq.web.archive.org/page-without-wayback-code/
+      validGeographics = fetchurl {
+        url = "https://web.archive.org/web/20240418194005id_/http://www.allelefrequencies.net/hla6006a.asp";
+        hash = "sha256-m7Wkmh/cPxeqn94LwoznIh+fcFXskmSGErUYj6kTqak=";
+      };
+    in old.immunotation.overrideAttrs (attrs: {
+      patches = [ ./patches/immunotation.patch ];
+      postPatch = ''
+        substituteInPlace "R/external_resources_input.R" --replace-fail \
+          "nix-NetMHCpan-4.1-allele-list" ${MHC41alleleList}
+
+        substituteInPlace "R/external_resources_input.R" --replace-fail \
+          "nix-NETMHCIIpan-4.0-alleles-name-list" ${MHCII40alleleList}
+
+        substituteInPlace "R/AFND_interface.R" --replace-fail \
+          "nix-valid-geographics" ${validGeographics}
+      '';
+    });
+
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";

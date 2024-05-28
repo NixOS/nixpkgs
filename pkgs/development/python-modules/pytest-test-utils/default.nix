@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  wheel,
   pytestCheckHook,
   pytest,
   pythonOlder,
@@ -12,22 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pytest-test-utils";
-  version = "0.0.8";
-  format = "pyproject";
+  version = "0.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "pytest-test-utils";
     rev = "refs/tags/${version}";
-    hash = "sha256-5gB+hnJR2+NQd/n7RGrX1bzfKt8Np7IbWw61SZgNVJY=";
+    hash = "sha256-19oNAFff++7ntMdlnMXYc2w5I+EzGwWJh+rB1IjNZGk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   buildInputs = [ pytest ];
@@ -39,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest utilities for tests";
     homepage = "https://github.com/iterative/pytest-test-utils";
+    changelog = "https://github.com/iterative/pytest-test-utils/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

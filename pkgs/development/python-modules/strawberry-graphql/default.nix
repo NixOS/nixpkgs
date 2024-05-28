@@ -43,16 +43,16 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.219.2";
-  format = "pyproject";
+  version = "0.230.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-uIUETjzuDnlQp6wM7uxyLRSMT5uyrXFrI9NilcjP0BU=";
+    hash = "sha256-jhInHoOvPGIEoSddv8+30gY38L6XR5OEATUTdrHbNpA=";
   };
 
   patches = [
@@ -62,22 +62,16 @@ buildPythonPackage rec {
       url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
     })
-    (fetchpatch {
-      # https://github.com/strawberry-graphql/strawberry/pull/3255
-      name = "fix-tests-with-pydantic_2.patch";
-      url = "https://github.com/strawberry-graphql/strawberry/commit/0a0dc284ee6d31d4e82ac7ff1ed9fea4dff39fa6.patch";
-      hash = "sha256-LACWD7XA6YL/apJwhpx3LPCKxKUfa+XWyTLK+Zkxlaw=";
-    })
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--emoji --mypy-ini-file=mypy.ini" "" \
+      --replace-fail "--emoji --mypy-ini-file=mypy.ini" "" \
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     graphql-core
     python-dateutil
     typing-extensions
@@ -135,9 +129,8 @@ buildPythonPackage rec {
       rich
       libcst
     ];
-    # starlite = [
-    #   starlite
-    # ];
+    # starlite = [ starlite ];
+    # litestar = [ litestar ];
     pyinstrument = [ pyinstrument ];
   };
 
@@ -169,16 +162,17 @@ buildPythonPackage rec {
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
+    "tests/litestar/"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A GraphQL library for Python that leverages type annotations";
-    mainProgram = "strawberry";
     homepage = "https://strawberry.rocks";
     changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "strawberry";
   };
 }

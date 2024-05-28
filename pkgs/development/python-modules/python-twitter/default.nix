@@ -1,22 +1,25 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
   filetype,
   future,
   hypothesis,
+  lib,
   pytestCheckHook,
   pythonOlder,
   requests,
   requests-oauthlib,
   responses,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-twitter";
   version = "3.5";
-  format = "setuptools";
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.7";
 
@@ -35,7 +38,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filetype
     future
     requests
@@ -52,6 +55,11 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "'pytest-runner'" ""
   '';
+
+  disabledTests = [
+    # AttributeError: 'FileCacheTest' object has no attribute 'assert_'
+    "test_filecache"
+  ];
 
   pythonImportsCheck = [ "twitter" ];
 

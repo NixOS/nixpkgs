@@ -4,7 +4,6 @@
   buildPythonPackage,
   CoreServices,
   eventlet,
-  fetchpatch,
   fetchPypi,
   flaky,
   pytest-timeout,

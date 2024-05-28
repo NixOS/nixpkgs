@@ -18,6 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-mRestRJukaf7ti3vIs/MM/R+zpGmK551j5HAM2chBsE=";
   };
 
+  patches = [
+    ./remove-typo-in-test-case.patch
+  ];
+
   propagatedBuildInputs = [
     paramiko
     tornado
@@ -26,11 +30,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "webssh" ];
-
-  disabledTests = [
-    # Test fails with AttributeError (possibly related to paramiko update)
-    "test_app_with_bad_host_key"
-  ];
 
   meta = with lib; {
     description = "Web based SSH client";

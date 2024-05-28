@@ -7,17 +7,17 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "aapt";
-  version = "8.0.2-9289358";
+  version = "8.4.1-11315950";
 
   src =
     let
       urlAndHash =
         if stdenvNoCC.isLinux then {
           url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-linux.jar";
-          hash = "sha256-P8eVIS6zaZGPh4Z7SXUiLtZaX1YIsSmGOdvF6Xb1WHI=";
+          hash = "sha256-eSQaZrRtb5aCG320hrXAL256fxa/oMhBC4hcTA1KRxs=";
         } else if stdenvNoCC.isDarwin then {
           url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-osx.jar";
-          hash = "sha256-hDfEPk3IJt+8FbRVEiHQbn24vsuOe6m36UcQsT6tGsQ=";
+          hash = "sha256-LUihNjase79JbUkHDb10A5d6pJ+VXDVfv7m09hkL8kY=";
         } else throw "Unsupport platform: ${stdenvNoCC.system}";
     in
     fetchzip (urlAndHash // {

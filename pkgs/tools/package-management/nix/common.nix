@@ -6,6 +6,7 @@
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
 , maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ma27 ]
+, self_attribute_name
 }@args:
 assert (hash == null) -> (src != null);
 let
@@ -249,7 +250,7 @@ self = stdenv.mkDerivation {
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
     tests = {
-      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
     };
   };
 

@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , stdenv
 , zlib
 , openssl

@@ -3,7 +3,6 @@
   buildPythonPackage,
   deepmerge,
   fetchPypi,
-  fetchpatch,
   isPy27,
   setuptools-scm,
   jsonschema,

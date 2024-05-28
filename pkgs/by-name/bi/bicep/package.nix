@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.26.54";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-Obu9I2FzuYBD466DE9VZnjTHSRX+qeKqTiIJ2433DQc=";
+    hash = "sha256-7yEsxKUG2jhki1u5CObdjN4JMnEcAYR+SoGPaNJ+9Fs=";
   };
 
   projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";

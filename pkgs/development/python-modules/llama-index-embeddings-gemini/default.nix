@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-gemini";
-  version = "0.1.6";
+  version = "0.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_gemini";
     inherit version;
-    hash = "sha256-HYwYA67/7gDxE7ZxQkkyblgwE83gZXuDmUuseXujr5g=";
+    hash = "sha256-0ob6t9pFaIsbDyt9+QOKFQctS6s99tEvdstn39iyVpA=";
   };
 
   pythonRelaxDeps = [ "google-generativeai" ];

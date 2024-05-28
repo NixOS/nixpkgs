@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A host, service and network monitoring program";
     homepage = "https://www.nagios.org/";
     changelog = "https://github.com/NagiosEnterprises/nagioscore/blob/nagios-${finalAttrs.version}/Changelog";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     mainProgram = "nagios";
     maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];

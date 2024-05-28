@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   isPyPy,
   R,
   rWrapper,

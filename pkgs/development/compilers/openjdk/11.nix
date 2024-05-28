@@ -11,8 +11,8 @@
 let
   major = "11";
   minor = "0";
-  update = "19";
-  build = "7";
+  update = "23";
+  build = "9";
 
   # when building a headless jdk, also bootstrap it with a headless jdk
   openjdk-bootstrap = openjdk11-bootstrap.override { gtkSupport = !headless; };
@@ -25,7 +25,7 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "sha256-mp8toB1dWcwOtMqNFd7UwRg8pLJckovqD/LD5p9zUoA=";
+      sha256 = "sha256-6y6wge8ZuSKBpb5QNihvAlD4Pv/0d3AQCPOkxUm/sJk=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];

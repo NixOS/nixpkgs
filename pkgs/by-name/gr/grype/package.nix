@@ -93,6 +93,11 @@ buildGoModule rec {
     substituteInPlace grype/presenter/sarif/presenter_test.go \
       --replace-fail "Test_SarifIsValid" "SkipTest_SarifIsValid"
 
+    # May fail on NixOS, probably due bug in how syft handles tmpfs.
+    # See https://github.com/anchore/grype/issues/1822
+    substituteInPlace grype/distro/distro_test.go \
+      --replace-fail "Test_NewDistroFromRelease_Coverage" "SkipTest_NewDistroFromRelease_Coverage"
+
     # segfault
     rm grype/db/v5/namespace/cpe/namespace_test.go
   '';

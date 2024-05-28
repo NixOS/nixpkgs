@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "ytmusicapi";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "sigma67";
     repo = "ytmusicapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-HMWb9NScT4rRMFsUXw6TW/T0P1eH0a46OegUZ0JceiE=";
+    hash = "sha256-mFjNtZdLpS1jfqF/KZ1p8H0pWUGsIdFDxhc4dZnv6HM=";
   };
 
   build-system = [

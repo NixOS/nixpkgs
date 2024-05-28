@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch2
 , gi-docgen
 , meson
 , ninja
@@ -21,25 +20,17 @@
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
-  version = "1.2.1";
+  version = "1.2.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-EQXuB34hR/KgOc3fphb6XLlDiIPdlAQn4RaZ3NZUnBE=";
+    url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
+    hash = "sha256-b1h1effy1gs40/RyfrGo0v6snL3AGOU/9fdyqGCPpEs=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # Fix tests https://gitlab.gnome.org/GNOME/libshumate/-/merge_requests/236
-      url = "https://gitlab.gnome.org/GNOME/libshumate/-/commit/852615b0df2252ea67f4f82e9ace2fc2794467b3.patch";
-      hash = "sha256-Ksye3zNNYmzP4O+QFDVODXUkFJOLDVMEZNfGXwbxWhs=";
-    })
-  ];
 
   depsBuildBuild = [
     # required to find native gi-docgen when cross compiling
@@ -95,7 +86,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libshumate";
     };
   };
 
@@ -107,4 +98,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

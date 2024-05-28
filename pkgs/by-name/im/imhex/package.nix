@@ -3,7 +3,6 @@
 , cmake
 , llvm
 , fetchFromGitHub
-, fetchpatch
 , mbedtls
 , gtk3
 , pkg-config

@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  fetchpatch2,
   pdm-backend,
   pytz,
   oauthlib,

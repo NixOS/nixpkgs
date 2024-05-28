@@ -1,27 +1,32 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiosasl,
   aioopenssl,
+  aiosasl,
   babel,
+  buildPythonPackage,
   dnspython,
+  fetchFromGitHub,
   lxml,
   multidict,
-  pyasn1,
   pyasn1-modules,
+  pyasn1,
   pyopenssl,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pythonRelaxDepsHook,
   pytz,
+  setuptools,
   sortedcollections,
   tzlocal,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aioxmpp";
   version = "0.13.3";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "horazont";
@@ -30,7 +35,15 @@ buildPythonPackage rec {
     hash = "sha256-bQPKEM5eKhFI3Kx3U1espdxqjnG4yUgOXmYCrd98PDo=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "lxml"
+  ];
+
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     aiosasl
     aioopenssl
     babel
@@ -60,12 +73,23 @@ buildPythonPackage rec {
   disabledTests = [
     # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
     "test_convert_field_datetime_default_locale"
+  ] ++ lib.optionals (pythonAtLeast "3.12") [
+    # asyncio issues
+    "test_is_abstract"
+    "Testbackground"
+    "TestCapturingXSO"
+    "Testcheck_x509"
+    "TestClient"
+    "TestIntegerType"
+    "TestStanzaStream"
+    "TestStanzaToken"
+    "TestXMLStream"
   ];
 
   meta = {
-    changelog = "https://github.com/horazont/aioxmpp/blob/${src.rev}/docs/api/changelog.rst";
     description = "Pure-python XMPP library for asyncio";
     homepage = "https://github.com/horazont/aioxmpp";
+    changelog = "https://github.com/horazont/aioxmpp/blob/${src.rev}/docs/api/changelog.rst";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

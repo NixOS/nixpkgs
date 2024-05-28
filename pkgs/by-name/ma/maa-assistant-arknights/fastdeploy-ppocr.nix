@@ -23,11 +23,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   version = "0-unstable-2023-10-09";
 
   src = fetchFromGitHub {
-    owner = "Cryolitia";
+    owner = "MaaAssistantArknights";
     repo = "FastDeploy";
-    # follows https://github.com/MaaAssistantArknights/MaaDeps/blob/master/vcpkg-overlay/ports/maa-fastdeploy/portfile.cmake#L4
-    rev = "2e68908141f6950bc5d22ba84f514e893cc238ea";
-    hash = "sha256-BWO4lKZhwNG6mbkC70hPgMNjabTnEV5XMo0bLV/gvQs=";
+    # follows but not fully follows https://github.com/MaaAssistantArknights/MaaDeps/blob/master/vcpkg-overlay/ports/maa-fastdeploy/portfile.cmake#L4
+    rev = "0db6000aaac250824266ac37451f43ce272d80a3";
+    hash = "sha256-5TItnPDc5WShpZAgBYeqgI9KKkk3qw/M8HPMlq/H4BM=";
   };
 
   outputs = [ "out" "cmake" ];

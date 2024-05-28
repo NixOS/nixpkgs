@@ -349,7 +349,7 @@ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 
 [[package]]
 name = "crunchy-cli"
-version = "3.6.4"
+version = "3.6.6"
 dependencies = [
  "chrono",
  "clap",
@@ -362,7 +362,7 @@ dependencies = [
 
 [[package]]
 name = "crunchy-cli-core"
-version = "3.6.4"
+version = "3.6.6"
 dependencies = [
  "anyhow",
  "async-speed-limit",
@@ -400,9 +400,9 @@ dependencies = [
 
 [[package]]
 name = "crunchyroll-rs"
-version = "0.11.1"
+version = "0.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58580acc9c0abf96a231ec8b1a4597ea55d9426ea17f684ce3582e2b26437bbb"
+checksum = "1d33b8d77c80dea79e66993cb67963b2171dcf0b8fbc87591c58f2dadfea8da2"
 dependencies = [
  "async-trait",
  "chrono",
@@ -426,9 +426,9 @@ dependencies = [
 
 [[package]]
 name = "crunchyroll-rs-internal"
-version = "0.11.1"
+version = "0.11.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce3c844dec8a3390f8c9853b5cf1d65c3d38fd0657b8b5d0e008db8945dea326"
+checksum = "fa51945265f25c45f7d53bd70e5263dd023c0be45e38eaba886a971cb645d797"
 dependencies = [
  "darling",
  "quote",
@@ -1519,8 +1519,9 @@ checksum = "b833d8d034ea094b1ea68aa6d5c740e0d04bad9d16568d08ba6f76823a114316"
 
 [[package]]
 name = "rsubs-lib"
-version = "0.3.0"
-source = "git+https://github.com/crunchy-labs/rsubs-lib.git?rev=1c51f60#1c51f60b8c48f1a8f7b261372b237d89bdc17dd4"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d01f7609f0b1bc4fe24b352e8d1792c7d71cc43aea797e14b87974cd009ab402"
 dependencies = [
  "regex",
  "serde",

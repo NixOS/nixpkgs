@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   llvmPackages,
   python,
   cmake,
@@ -23,7 +24,16 @@ stdenv'.mkDerivation rec {
 
   sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
 
-  patches = [ ./fix-include-qt-headers.patch ];
+  patches = [
+    ./fix-include-qt-headers.patch
+    # Remove this patch when updating to 6.8.0
+    (fetchpatch {
+      name = "backwards-compatibility-with-6.6.x.patch";
+      url = "https://code.qt.io/cgit/pyside/pyside-setup.git/patch/?id=4f9a20e3635f4f0957e0774588b1d9156e88a572";
+      hash = "sha256-B2jhLWopgaSF/rUXMZFPZArDUNojlBgn7kdVyQull+I=";
+      stripLen = 2;
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

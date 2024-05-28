@@ -83,6 +83,15 @@ in
   } ++ (lib.mapAttrsToList (vhost: conf: {
     virtualHosts.${vhost} = {
       locations = {
+        "/".extraConfig = ''
+          # pass information via X-User and X-Email headers to backend, requires running with --set-xauthrequest flag
+          proxy_set_header X-User  $user;
+          proxy_set_header X-Email $email;
+
+          # if you enabled --cookie-refresh, this is needed for it to work with auth_request
+          add_header Set-Cookie $auth_cookie;
+        '';
+
         "/oauth2/auth" = let
           maybeQueryArg = name: value:
             if value == null then null
@@ -102,6 +111,7 @@ in
             proxy_pass_request_body           off;
           '';
         };
+
         "@redirectToAuth2ProxyLogin" = {
           return = "307 https://${cfg.domain}/oauth2/start?rd=$scheme://$host$request_uri";
           extraConfig = ''
@@ -114,16 +124,10 @@ in
         auth_request /oauth2/auth;
         error_page 401 = @redirectToAuth2ProxyLogin;
 
-        # pass information via X-User and X-Email headers to backend,
-        # requires running with --set-xauthrequest flag
+        # set variables being used in locations."/".extraConfig
         auth_request_set $user   $upstream_http_x_auth_request_user;
         auth_request_set $email  $upstream_http_x_auth_request_email;
-        proxy_set_header X-User  $user;
-        proxy_set_header X-Email $email;
-
-        # if you enabled --cookie-refresh, this is needed for it to work with auth_request
         auth_request_set $auth_cookie $upstream_http_set_cookie;
-        add_header Set-Cookie $auth_cookie;
       '';
     };
   }) cfg.virtualHosts)));

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "oneshot";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "forestnode-io";
     repo = "oneshot";
     rev = "v${version}";
-    hash = "sha256-aIbKXBJNcBbYJRzETT0mkaqTRo+/8o6z882G21V74rg=";
+    hash = "sha256-zGeXc/dzll5fYURufljVBbTyVhrI9pkqLufOB8ZdV0E=";
   };
 
   vendorHash = "sha256-TktSQMIHYXF9eyY6jyfE31WLXEq7VZU3qnVIMGjMMcA=";

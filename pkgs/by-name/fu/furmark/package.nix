@@ -39,7 +39,9 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "furmark";
-  version = versions.${stdenv.hostPlatform.system};
+  version =
+    versions.${stdenv.hostPlatform.system}
+      or (throw "Furmark is not available on ${stdenv.hostPlatform.system}");
 
   src = fetchzip sources.${stdenv.hostPlatform.system};
 

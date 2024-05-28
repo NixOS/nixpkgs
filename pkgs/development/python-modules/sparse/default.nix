@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sparse";
-  version = "0.15.1";
+  version = "0.15.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lzrcuIqNuOPYBHlTMx4m0/ZKVlf5tGprhZxHZjw+75k=";
+    hash = "sha256-1LHFfST/D2Ty/VtalbSbf7hO0geibX1Yzidk3MXHK4Q=";
   };
 
   postPatch = ''

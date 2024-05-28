@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-datetime";
-  version = "24.2.0";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
     rev = finalAttrs.version;
-    hash = "sha256-J3Yp7Dx4UvvdlM8Cp1sPe4Ftm/aAmNzpo4re/jF7pRo=";
+    hash = "sha256-lY49v2uZ7BawQoN/hmN6pbetHlSGjMHbS6S8Wl1bDmQ=";
   };
 
   postPatch = ''

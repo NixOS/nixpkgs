@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A sensu/nagios plugin using WMI to query Windows hosts";
     homepage = "http://edcint.co.nz/checkwmiplus";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

@@ -25,7 +25,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.7";
+  version = "0.5.8";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -34,7 +34,7 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JeecX7rxM3T2WqGFwANI5+HQFWCLLA8ESHy8mEKYUmc=";
+    hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
   };
 
   postPatch = ''

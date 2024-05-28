@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   callPackage,
-  fetchpatch,
   fetchPypi,
   axisregistry,
   babelfont,
