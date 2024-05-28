@@ -4838,6 +4838,12 @@
     githubId = 47436522;
     name = "deliciouslytyped";
   };
+    delirehberi = {
+    email = "z@emre.xyz";
+    github = "delirehberi";
+    githubId = 803964;
+    name = "Emre Yilmaz";
+  };
   delliott = {
     name = "Darragh Elliott";
     github = "delliottxyz";
@@ -22939,12 +22945,6 @@
     github = "zzzsyyy";
     githubId = 	59917878;
     name = "Mathias Zhang";
-  };
-  delirehberi = {
-    email = "z@emre.xyz";
-    github = "delirehberi";
-    githubId = 	803964;
-    name = "Emre Yilmaz";
   };
 }
 /* Keep the list alphabetically sorted. */
