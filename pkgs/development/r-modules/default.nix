@@ -1157,6 +1157,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    Colossus = old.Colossus.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
    gmailr = old.gmailr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
