@@ -31,6 +31,7 @@
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
 , rsync
+, fetchpatch
 , withCockpit ? true
 , withAsan ? false
 }:
@@ -45,6 +46,14 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     hash = "sha256-12JCd2R00L0T5EPUNO/Aw2HRID+z2krNQ09RSX9Qkj8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-32bit.patch";
+      url = "https://github.com/389ds/389-ds-base/commit/1fe029c495cc9f069c989cfbb09d449a078c56e2.patch";
+      hash = "sha256-b0HSaDjuEUKERIXKg8np+lZDdZNmrCTAXybJzF+0hq0=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
