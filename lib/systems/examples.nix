@@ -135,7 +135,7 @@ rec {
   };
 
   riscv32-nommu = {
-    config = "riscv32-unknown-linux-uclibc";
+    config = "riscv32-linux-uclibc";
     libc = "uclibc";
     gcc.arch = "rv32ima";
     gcc.abi = "ilp32";
@@ -144,6 +144,13 @@ rec {
       STATIC_PIE y
       HAVE_SHARED y
     '';
+  };
+
+  riscv32-nommu-musl = {
+    config = "riscv32-linux-musl";
+    libc = "musl";
+    gcc.arch = "rv32ima";
+    gcc.abi = "ilp32";
   };
 
   mips64-embedded = {
