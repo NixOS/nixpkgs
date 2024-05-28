@@ -5,6 +5,7 @@
 , openjdk17
 , gnused
 , autoPatchelfHook
+, wrapGAppsHook3
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -15,6 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     gnused
     autoPatchelfHook
+    wrapGAppsHook3
   ];
 
   src =

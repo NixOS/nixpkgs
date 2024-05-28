@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  testers,
+  mpack,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpack";
@@ -9,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "0k590z96509k96zxmhv72gkwhrlf55jkmyqlzi72m61r7axhhh97";
   };
 
-  patches = [ ./build-fix.patch ./sendmail-via-execvp.diff ./CVE-2011-4919.patch ];
+  patches = [
+    ./build-fix.patch
+    ./sendmail-via-execvp.diff
+    ./CVE-2011-4919.patch
+  ];
 
   postPatch = ''
     for f in *.{c,man,pl,unix} ; do
@@ -28,9 +38,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    version = testers.testVersion {
+      command = ''
+        mpack 2>&1 || echo "mpack exited with error code $?"
+      '';
+      package = mpack;
+      version = "mpack version ${version}";
+    };
+  };
+
   meta = with lib; {
     description = "Utilities for encoding and decoding binary files in MIME";
     license = licenses.free;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ tomodachi94 ];
   };
 }

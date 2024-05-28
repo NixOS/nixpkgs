@@ -46,8 +46,9 @@ with lib;
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
         gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
-        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableWayland = false; enableX11 = false; };
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableGl = false; enableWayland = false; enableX11 = false; };
         gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableWayland = false; enableX11 = false; gtkSupport = false; qt5Support = false; qt6Support = false; };
+        gst-plugins-rs = super.gst_all_1.gst-plugins-rs.override { withGtkPlugins = false; };
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
@@ -71,6 +72,7 @@ with lib;
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
       pinentry-curses = super.pinentry-curses.override { withLibsecret = false; };
+      pinentry-tty = super.pinentry-tty.override { withLibsecret = false; };
       pipewire = super.pipewire.override { vulkanSupport = false; x11Support = false; };
       pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
         (python-final: python-prev: {

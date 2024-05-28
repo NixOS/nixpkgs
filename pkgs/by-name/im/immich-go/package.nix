@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, immich-go }:
 buildGoModule rec {
   pname = "immich-go";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
     rev = "${version}";
-    hash = "sha256-5dgEyg55ffJLH8zxp6mFVsUqAzyPnY18XnX+jMethUc=";
+    hash = "sha256-gZVjs0aFwlx5joX7iqy7uDd23d/4LjP/t6u7z8X/P8o=";
 
     # Inspired by: https://github.com/NixOS/nixpkgs/blob/f2d7a289c5a5ece8521dd082b81ac7e4a57c2c5c/pkgs/applications/graphics/pdfcpu/default.nix#L20-L32
     # The intention here is to write the information into files in the `src`'s

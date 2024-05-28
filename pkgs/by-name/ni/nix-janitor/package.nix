@@ -2,21 +2,32 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-janitor";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "nobbz";
     repo = "nix-janitor";
     rev = "refs/tags/${version}";
-    hash = "sha256-nGtbBNU6xFWXnmL1AaUbSpO0z5Kq2t/Mn8sqwzjNlkE=";
+    hash = "sha256-xoVByI17rt2SCY3ULg12S8QsoXGhQWZlOpPpK2mfcPY=";
   };
 
-  cargoHash = "sha256-j3i4c3KjI8ehg42FqbPp+8M15zT9Bu76P4zv8ApUoeA=";
+  cargoHash = "sha256-QG2hHM4KBSU6+droew2WnOFxWRTpk9griIPMD8MLSbw=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      completionFile=janitor.$shell
+      $out/bin/janitor --completions $shell > $completionFile
+      installShellCompletion $completionFile
+    done
+  '';
 
   passthru.updateScript = nix-update-script { };
 
