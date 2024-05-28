@@ -9397,6 +9397,12 @@
     githubId = 2377;
     name = "Jonathan del Strother";
   };
+  jdev082 = {
+    email = "jdev0894@gmail.com";
+    github = "jdev082";
+    githubId = 92550746;
+    name = "jdev082";
+  };
   jdreaver = {
     email = "johndreaver@gmail.com";
     github = "jdreaver";
