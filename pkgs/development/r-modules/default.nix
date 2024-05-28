@@ -826,6 +826,7 @@ let
     "logmult"
     "loon"
     "loon_ggplot"
+    "loon_tourr"
     "LS2Wstat"
     "MareyMap"
     "memgene"
