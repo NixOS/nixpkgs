@@ -1,10 +1,10 @@
-{ lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  gcc,
-  hicolor-icon-theme,
-  kdePackages
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, gcc
+, hicolor-icon-theme
+, kdePackages
 }:
 
 stdenv.mkDerivation rec {
