@@ -1,6 +1,8 @@
+diff --git a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/sbom/SoftwareBillOfMaterialsImpl.kt b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/sbom/SoftwareBillOfMaterialsImpl.kt
+index c4f3fc0b438b..8bc21a061897 100644
 --- a/platform/build-scripts/src/org/jetbrains/intellij/build/impl/sbom/SoftwareBillOfMaterialsImpl.kt
 +++ b/platform/build-scripts/src/org/jetbrains/intellij/build/impl/sbom/SoftwareBillOfMaterialsImpl.kt
-@@ -162,6 +162,8 @@
+@@ -147,6 +147,8 @@ internal class SoftwareBillOfMaterialsImpl(
    }
  
    override suspend fun generate() {
