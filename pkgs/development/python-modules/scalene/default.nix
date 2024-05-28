@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, hypothesis
-, fetchpatch
-, fetchPypi
-, setuptools
-, setuptools-scm
-, cloudpickle
-, cython
-, jinja2
-, numpy
-, psutil
-, pynvml
-, pytestCheckHook
-, pythonOlder
-, rich
+{
+  lib,
+  buildPythonPackage,
+  hypothesis,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  cloudpickle,
+  cython,
+  jinja2,
+  numpy,
+  psutil,
+  pynvml,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +43,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     hypothesis

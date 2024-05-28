@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, pyyaml
-, setuptools
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  pyyaml,
+  setuptools,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-7JBvrD4WNOcFSVx3xauk4JgiVGKWuUEdUMRlH7mudE4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  pythonImportsCheck = [
-    "snaphelpers"
-  ];
+  pythonImportsCheck = [ "snaphelpers" ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -49,4 +44,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, mock
-, parameterized
-, termcolor
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+  mock,
+  parameterized,
+  termcolor,
 }:
 
 buildPythonPackage rec {

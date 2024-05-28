@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pygments
-, gitMinimal, mercurial, subversion, patchutils, less
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygments,
+  gitMinimal,
+  mercurial,
+  subversion,
+  patchutils,
+  less,
 }:
 
 buildPythonPackage rec {

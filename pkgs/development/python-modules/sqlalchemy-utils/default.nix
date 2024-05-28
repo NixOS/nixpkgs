@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# runtime
-, importlib-metadata
-, sqlalchemy
+  # runtime
+  importlib-metadata,
+  sqlalchemy,
 
-# optionals
-, babel
-, arrow
-, pendulum
-#, intervals
-, phonenumbers
-, passlib
-, colour
-, python-dateutil
-, furl
-, cryptography
+  # optionals
+  babel,
+  arrow,
+  pendulum,
+  #, intervals
+  phonenumbers,
+  passlib,
+  colour,
+  python-dateutil,
+  furl,
+  cryptography,
 
-# tests
-, pytestCheckHook
-, pygments
-, jinja2
-, docutils
-, flexmock
-, psycopg2
-, psycopg2cffi
-, pg8000
-, pytz
-, backports-zoneinfo
-, pymysql
-, pyodbc
+  # tests
+  pytestCheckHook,
+  pygments,
+  jinja2,
+  docutils,
+  flexmock,
+  psycopg2,
+  psycopg2cffi,
+  pg8000,
+  pytz,
+  backports-zoneinfo,
+  pymysql,
+  pyodbc,
 
 }:
 
@@ -47,15 +47,9 @@ buildPythonPackage rec {
     hash = "sha256-vFmcjDszGeU85sXDxHESC9Ml0AcftvOKEOkk49B7mZA=";
   };
 
-  patches = [
-    ./skip-database-tests.patch
-  ];
+  patches = [ ./skip-database-tests.patch ];
 
-  propagatedBuildInputs = [
-    sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ sqlalchemy ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
     babel = [ babel ];
@@ -70,27 +64,26 @@ buildPythonPackage rec {
     encrypted = [ cryptography ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pygments
-    jinja2
-    docutils
-    flexmock
-    psycopg2
-    pg8000
-    pytz
-    python-dateutil
-    pymysql
-    pyodbc
-  ]
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies)
-  ++ lib.optionals (pythonOlder "3.12") [
-    # requires distutils, which were removed in 3.12
-    psycopg2cffi
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pygments
+      jinja2
+      docutils
+      flexmock
+      psycopg2
+      pg8000
+      pytz
+      python-dateutil
+      pymysql
+      pyodbc
+    ]
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies)
+    ++ lib.optionals (pythonOlder "3.12") [
+      # requires distutils, which were removed in 3.12
+      psycopg2cffi
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   pytestFlagsArray = [
     "--deselect tests/functions/test_database.py::TestDatabasePostgresCreateDatabaseCloseConnection::test_create_database_twice"

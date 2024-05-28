@@ -1,14 +1,15 @@
-{ lib
-, async-timeout
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, pympler
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, redis
-, wrapt
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  pympler,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "coredis"
-  ];
+  pythonImportsCheck = [ "coredis" ];
 
   pytestFlagsArray = [
     # All other tests require Docker

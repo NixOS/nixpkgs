@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [
-    nose
-  ];
+  dependencies = [ nose ];
 
-  pythonImportsCheck = [
-    "nose_xunitmp"
-  ];
+  pythonImportsCheck = [ "nose_xunitmp" ];
 
   meta = {
     description = "Xunit output when running multiprocess tests using nose";

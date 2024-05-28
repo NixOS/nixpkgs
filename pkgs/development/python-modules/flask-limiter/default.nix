@@ -1,20 +1,21 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, hiro
-, limits
-, ordered-set
-, pymemcache
-, pymongo
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, rich
-, setuptools
-, typing-extensions
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  hiro,
+  limits,
+  ordered-set,
+  pymemcache,
+  pymongo,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     sed -i "/import flask_restful/d" tests/test_views.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
@@ -85,9 +84,7 @@ buildPythonPackage rec {
     "tests/test_storage.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_limiter"
-  ];
+  pythonImportsCheck = [ "flask_limiter" ];
 
   meta = with lib; {
     description = "Rate limiting for flask applications";

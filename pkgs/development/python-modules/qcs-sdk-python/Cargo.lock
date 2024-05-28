@@ -912,7 +912,7 @@ dependencies = [
  "futures-sink",
  "futures-util",
  "http",
- "indexmap 2.2.5",
+ "indexmap 2.2.6",
  "slab",
  "tokio",
  "tokio-util",
@@ -1180,9 +1180,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.2.5"
+version = "2.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b0b929d511467233429c45a44ac1dcaa21ba0f5ba11e4879e6ed28ddb4f9df4"
+checksum = "168fb715dda47215e360912c096649d23d58bf392ac62f73919e831745e40f26"
 dependencies = [
  "equivalent",
  "hashbrown 0.14.3",
@@ -1901,7 +1901,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e1d3afd2628e69da2be385eb6f2fd57c8ac7977ceeff6dc166ff1657b0e386a9"
 dependencies = [
  "fixedbitset",
- "indexmap 2.2.5",
+ "indexmap 2.2.6",
 ]
 
 [[package]]
@@ -2124,7 +2124,7 @@ dependencies = [
 
 [[package]]
 name = "qcs"
-version = "0.21.4"
+version = "0.21.7"
 dependencies = [
  "assert2",
  "async-trait",
@@ -2136,7 +2136,7 @@ dependencies = [
  "float-cmp",
  "futures",
  "hex",
- "indexmap 1.9.3",
+ "indexmap 2.2.6",
  "insta",
  "itertools 0.11.0",
  "lazy_static",
@@ -2260,7 +2260,7 @@ dependencies = [
 
 [[package]]
 name = "qcs-sdk-python"
-version = "0.17.4"
+version = "0.17.7"
 dependencies = [
  "async-trait",
  "numpy",
@@ -2290,11 +2290,11 @@ checksum = "a1d01941d82fa2ab50be1e79e6714289dd7cde78eba4c074bc5a4374f650dfe0"
 
 [[package]]
 name = "quil-rs"
-version = "0.23.0"
-source = "git+https://github.com/rigetti/quil-rs?tag=quil-py/v0.7.0#3bb618124c2165b7329c58c0f217d8ee9d816e67"
+version = "0.25.1"
+source = "git+https://github.com/rigetti/quil-rs?tag=quil-py/v0.9.1#4179fb03feff6b83edfb7a0448b0b3967ed28212"
 dependencies = [
  "approx",
- "indexmap 2.2.5",
+ "indexmap 2.2.6",
  "itertools 0.12.1",
  "lexical",
  "ndarray",
@@ -3381,7 +3381,7 @@ version = "0.19.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b5bb770da30e5cbfde35a2d7b9b8a2c4b8ef89548a7a6aeab5c9a576e3e7421"
 dependencies = [
- "indexmap 2.2.5",
+ "indexmap 2.2.6",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -3394,7 +3394,7 @@ version = "0.22.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c12219811e0c1ba077867254e5ad62ee2c9c190b0d957110750ac0cda1ae96cd"
 dependencies = [
- "indexmap 2.2.5",
+ "indexmap 2.2.6",
  "serde",
  "serde_spanned",
  "toml_datetime",

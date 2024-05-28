@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, pytest-runner
-# runtime dependencies
-, numpy
-, onnx
-, requests
-, six
-, flatbuffers
-, protobuf
-, tensorflow
-# check dependencies
-, pytestCheckHook
-, graphviz
-, parameterized
-, pytest-cov
-, pyyaml
-, timeout-decorator
-, onnxruntime
-, keras
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  pytest-runner,
+  # runtime dependencies
+  numpy,
+  onnx,
+  requests,
+  six,
+  flatbuffers,
+  protobuf,
+  tensorflow,
+  # check dependencies
+  pytestCheckHook,
+  graphviz,
+  parameterized,
+  pytest-cov,
+  pyyaml,
+  timeout-decorator,
+  onnxruntime,
+  keras,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     pytest-runner
   ];
 
-  pythonRelaxDeps = [
-    "flatbuffers"
-  ];
+  pythonRelaxDeps = [ "flatbuffers" ];
 
   propagatedBuildInputs = [
     numpy
@@ -73,9 +72,7 @@ buildPythonPackage rec {
     "tests/test_einsum_optimizers.py"
   ];
 
-  disabledTests = [
-    "test_profile_conversion_time"
-  ];
+  disabledTests = [ "test_profile_conversion_time" ];
 
   meta = with lib; {
     description = "Convert TensorFlow, Keras, Tensorflow.js and Tflite models to ONNX";

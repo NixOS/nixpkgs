@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, cmake
-, scikit-build-core
-, pybind11
-, pathspec
-, ninja
-, pyproject-metadata
+  # build-system
+  cmake,
+  scikit-build-core,
+  pybind11,
+  pathspec,
+  ninja,
+  pyproject-metadata,
 
-# dependencies
-, numpy
+  # dependencies
+  numpy,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -39,20 +40,19 @@ buildPythonPackage rec {
     pyproject-metadata
   ] ++ scikit-build-core.optional-dependencies.pyproject;
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   dontUseCmakeConfigure = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/scikit-hep/iminuit";
     description = "Python interface for the Minuit2 C++ library";
-    license = with licenses; [ mit lgpl2Only ];
+    license = with licenses; [
+      mit
+      lgpl2Only
+    ];
     maintainers = with maintainers; [ veprbl ];
   };
 }

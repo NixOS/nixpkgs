@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, packaging
-, tomli
-, pytestCheckHook
-, pip
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  packaging,
+  tomli,
+  pytestCheckHook,
+  pip,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     packaging
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     "test_old_example_file_name"
   ];
 
-  pythonImportsCheck = [
-    "argparse_manpage"
-  ];
+  pythonImportsCheck = [ "argparse_manpage" ];
 
   passthru.optional-dependencies = {
     setuptools = [ setuptools ];

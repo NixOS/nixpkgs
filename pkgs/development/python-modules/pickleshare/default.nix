@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, path
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  path,
 }:
 
 buildPythonPackage rec {
@@ -24,5 +25,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/vivainio/pickleshare";
     license = licenses.mit;
   };
-
 }

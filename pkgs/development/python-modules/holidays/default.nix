@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.48";
+  version = "0.49";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "vacanza";
     repo = "python-holidays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PKa4knEUkULeGbwjEViF2J3QyUOOvKHYxy0ChmRQf6A=";
+    hash = "sha256-pO2365FS8Axo+dBSHmlnHtnXIExzSI86BVGD0DCN2KU=";
   };
 
   build-system = [

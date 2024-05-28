@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchurl
 , ocaml, findlib, ocamlbuild, ocaml_oasis
 , bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, mmap, lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
 , utop, libxml2, ncurses

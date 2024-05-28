@@ -1,4 +1,14 @@
-{ lib, buildPythonPackage, fetchpatch, fetchPypi, numpy, scipy, six, decorator, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  numpy,
+  scipy,
+  six,
+  decorator,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "paramz";
@@ -23,13 +33,18 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ numpy scipy six decorator ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    six
+    decorator
+  ];
   nativeCheckInputs = [ nose ];
 
   pythonImportsCheck = [ "paramz" ];
 
   checkPhase = ''
-      nosetests -v paramz/tests
+    nosetests -v paramz/tests
   '';
 
   meta = with lib; {

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, poetry-core
-, keyring
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  poetry-core,
+  keyring,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-WuQXY5OUQe28p2QP00QoDL7kfUkGQc41IGkQqLAed44=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     requests
@@ -28,9 +27,7 @@ buildPythonPackage rec {
   # Requires internet access and an API key
   doCheck = false;
 
-  pythonImportsCheck = [
-    "deepl"
-  ];
+  pythonImportsCheck = [ "deepl" ];
 
   meta = with lib; {
     description = "A language translation API that allows other computer programs to send texts and documents to DeepL's servers and receive high-quality translations";

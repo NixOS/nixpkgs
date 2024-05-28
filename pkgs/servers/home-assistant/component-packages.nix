@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.5.4";
+  version = "2024.5.5";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -3802,7 +3802,8 @@
       zeroconf
     ];
     "rympro" = ps: with ps; [
-    ]; # missing inputs: pyrympro
+      pyrympro
+    ];
     "sabnzbd" = ps: with ps; [
       pysabnzbd
     ];
@@ -4895,7 +4896,8 @@
       pyweatherflowudp
     ];
     "weatherflow_cloud" = ps: with ps; [
-    ]; # missing inputs: weatherflow4py
+      weatherflow4py
+    ];
     "weatherkit" = ps: with ps; [
       apple-weatherkit
     ];
@@ -5777,6 +5779,7 @@
     "ruckus_unleashed"
     "ruuvi_gateway"
     "ruuvitag_ble"
+    "rympro"
     "sabnzbd"
     "samsungtv"
     "sanix"
@@ -5972,6 +5975,7 @@
     "waze_travel_time"
     "weather"
     "weatherflow"
+    "weatherflow_cloud"
     "weatherkit"
     "webhook"
     "webostv"

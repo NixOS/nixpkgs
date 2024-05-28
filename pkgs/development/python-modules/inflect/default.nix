@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, more-itertools
-, setuptools-scm
-, pydantic
-, pytestCheckHook
-, typeguard
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  more-itertools,
+  setuptools-scm,
+  pydantic,
+  pytestCheckHook,
+  typeguard,
 }:
 
 buildPythonPackage rec {

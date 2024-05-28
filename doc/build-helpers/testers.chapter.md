@@ -40,6 +40,82 @@ If the `moduleNames` argument is omitted, `hasPkgConfigModules` will use `meta.p
 
 :::
 
+## `lycheeLinkCheck` {#tester-lycheeLinkCheck}
+
+Check a packaged static site's links with the [`lychee` package](https://search.nixos.org/packages?show=lychee&type=packages&query=lychee).
+
+You may use Nix to reproducibly build static websites, such as for software documentation.
+Some packages will install documentation in their `out` or `doc` outputs, or maybe you have dedicated package where you've made your static site reproducible by running a generator, such as [Hugo](https://gohugo.io/) or [mdBook](https://rust-lang.github.io/mdBook/), in a derivation.
+
+If you have a static site that can be built with Nix, you can use `lycheeLinkCheck` to check that the hyperlinks in your site are correct, and do so as part of your Nix workflow and CI.
+
+:::{.example #ex-lycheelinkcheck}
+
+# Check hyperlinks in the `nix` documentation
+
+```nix
+testers.lycheeLinkCheck {
+  site = nix.doc + "/share/doc/nix/manual";
+}
+```
+
+:::
+
+### Return value {#tester-lycheeLinkCheck-return}
+
+This tester produces a package that does not produce useful outputs, but only succeeds if the hyperlinks in your site are correct. The build log will list the broken links.
+
+It has two modes:
+
+- Build the returned derivation; its build process will check that internal hyperlinks are correct. This runs in the sandbox, so it will not check external hyperlinks, but it is quick and reliable.
+
+- Invoke the `.online` attribute with [`nix run`](https://nixos.org/manual/nix/stable/command-ref/new-cli/nix3-run) ([experimental](https://nixos.org/manual/nix/stable/contributing/experimental-features#xp-feature-nix-command)). This runs outside the sandbox, and checks that both internal and external hyperlinks are correct.
+  Example:
+
+  ```shell
+  nix run nixpkgs#lychee.tests.ok.online
+  ```
+
+### Inputs {#tester-lycheeLinkCheck-inputs}
+
+`site` (path or derivation) {#tester-lycheeLinkCheck-param-site}
+
+: The path to the files to check.
+
+`remap` (attribe set, optional) {#tester-lycheeLinkCheck-param-remap}
+
+: An attribute set where the attribute names are regular expressions.
+  The values should be strings, derivations, or path values.
+
+  In the returned check's default configuration, external URLs are only checked when you run the `.online` attribute.
+
+  By adding remappings, you can check offline that URLs to external resources are correct, by providing a stand-in from the file system.
+
+  Before checking the existence of a URL, the regular expressions are matched and replaced by their corresponding values.
+
+  Example:
+
+  ```nix
+  {
+    "https://nix\\.dev/manual/nix/[a-z0-9.-]*" = "${nix.doc}/share/doc/nix/manual";
+    "https://nixos\\.org/manual/nix/(un)?stable" = "${emptyDirectory}/placeholder-to-disallow-old-nix-docs-urls";
+  }
+  ```
+
+  Store paths in the attribute values are automatically prefixed with `file://`, because lychee requires this for paths in the file system.
+  If this is a problem, or if you need to control the order in which replacements are performed, use `extraConfig.remap` instead.
+
+`extraConfig` (attribute set) {#tester-lycheeLinkCheck-param-extraConfig}
+
+: Extra configuration to pass to `lychee` in its [configuration file](https://github.com/lycheeverse/lychee/blob/master/lychee.example.toml).
+  It is automatically [translated](https://nixos.org/manual/nixos/stable/index.html#sec-settings-nix-representable) to TOML.
+
+  Example: `{ "include_verbatim" = true; }`
+
+`lychee` (derivation, optional) {#tester-lycheeLinkCheck-param-lychee}
+
+: The `lychee` package to use.
+
 ## `testVersion` {#tester-testVersion}
 
 Checks that the output from running a command contains the specified version string in it as a whole word.

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, numpy
-, pytestCheckHook
-, pythonOlder
-, seaborn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  seaborn,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Minor tolerance issues with Python 3.12; should be fixed in next release
@@ -48,9 +47,7 @@ buildPythonPackage rec {
       --replace-fail '=get_requires()' '=[]'
   '';
 
-  pythonImportsCheck = [
-    "pycm"
-  ];
+  pythonImportsCheck = [ "pycm" ];
 
   meta = with lib; {
     description = "Multiclass confusion matrix library";

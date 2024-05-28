@@ -1,12 +1,13 @@
-{ lib
-, blas
-, lapack
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, nose
-, numpy
-, stdenv
+{
+  lib,
+  blas,
+  lapack,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  nose,
+  numpy,
+  stdenv,
 }:
 
 buildPythonPackage {
@@ -21,9 +22,7 @@ buildPythonPackage {
     sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
   };
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   propagatedBuildInputs = [
     numpy
@@ -37,7 +36,10 @@ buildPythonPackage {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   enableParallelBuilding = true;
 

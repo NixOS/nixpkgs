@@ -108,7 +108,7 @@ class Repo:
 
     @property
     def name(self):
-        return self.uri.split("/")[-1]
+        return self.uri.strip("/").split("/")[-1]
 
     @property
     def branch(self):

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, markdown
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  markdown,
 }:
 
 buildPythonPackage rec {
@@ -39,5 +40,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.abigailbuccaneer ];
   };
-
 }

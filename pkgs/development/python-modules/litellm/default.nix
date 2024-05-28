@@ -1,39 +1,40 @@
-{ lib
-, aiohttp
-, apscheduler
-, azure-identity
-, azure-keyvault-secrets
-, backoff
-, buildPythonPackage
-, click
-, fastapi
-, fastapi-sso
-, fetchFromGitHub
-, google-cloud-kms
-, gunicorn
-, importlib-metadata
-, jinja2
-, openai
-, orjson
-, poetry-core
-, prisma
-, pyjwt
-, python-dotenv
-, python-multipart
-, pythonOlder
-, pyyaml
-, requests
-, resend
-, rq
-, streamlit
-, tiktoken
-, tokenizers
-, uvicorn
+{
+  lib,
+  aiohttp,
+  apscheduler,
+  azure-identity,
+  azure-keyvault-secrets,
+  backoff,
+  buildPythonPackage,
+  click,
+  fastapi,
+  fastapi-sso,
+  fetchFromGitHub,
+  google-cloud-kms,
+  gunicorn,
+  importlib-metadata,
+  jinja2,
+  openai,
+  orjson,
+  poetry-core,
+  prisma,
+  pyjwt,
+  python-dotenv,
+  python-multipart,
+  pythonOlder,
+  pyyaml,
+  requests,
+  resend,
+  rq,
+  streamlit,
+  tiktoken,
+  tokenizers,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.37.16";
+  version = "1.38.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,16 +43,14 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WOkblyzncIn1F67qlh8rTosCal6j4zlXsHHrWbwhJOo=";
+    hash = "sha256-JzSAdr238wRAl2HGd6RVEgbHC4b2xw1GsYRCHSVVaQk=";
   };
 
   postPatch = ''
     rm -rf dist
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp

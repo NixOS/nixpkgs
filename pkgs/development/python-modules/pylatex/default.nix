@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, ordered-set
-, pytestCheckHook
-, matplotlib
-, quantities
-, texlive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  ordered-set,
+  pytestCheckHook,
+  matplotlib,
+  quantities,
+  texlive,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-gZKMYGMp7bzDY5+Xx9h1AFP4l0Zd936fDfSXyW5lY1k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ ordered-set ];
 
@@ -39,11 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
     matplotlib
     quantities
-    (texlive.combine { inherit (texlive)
-      scheme-small
-      lastpage
-      collection-fontsrecommended
-    ;})
+    (texlive.combine { inherit (texlive) scheme-small lastpage collection-fontsrecommended; })
   ];
 
   meta = with lib; {

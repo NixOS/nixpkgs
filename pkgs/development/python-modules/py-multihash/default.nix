@@ -1,11 +1,12 @@
-{ lib
-, base58
-, buildPythonPackage
-, fetchFromGitHub
-, morphys
-, pytestCheckHook
-, six
-, varint
+{
+  lib,
+  base58,
+  buildPythonPackage,
+  fetchFromGitHub,
+  morphys,
+  pytestCheckHook,
+  six,
+  varint,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     varint
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "multihash"
-  ];
+  pythonImportsCheck = [ "multihash" ];
 
   meta = with lib; {
     description = "Self describing hashes - for future proofing";

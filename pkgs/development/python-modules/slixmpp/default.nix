@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, aiodns
-, aiohttp
-, fetchPypi
-, gnupg
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, substituteAll
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  aiodns,
+  aiohttp,
+  fetchPypi,
+  gnupg,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
+  substituteAll,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   patches = [
     (substituteAll {
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     "tests/test_xep_0454.py"
   ];
 
-  pythonImportsCheck = [
-    "slixmpp"
-  ];
+  pythonImportsCheck = [ "slixmpp" ];
 
   meta = with lib; {
     description = "Python library for XMPP";

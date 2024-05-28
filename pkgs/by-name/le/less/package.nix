@@ -4,6 +4,7 @@
 , fetchpatch
 , ncurses
 , pcre2
+, withSecure ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Look for 'sysless' in /etc.
     "--sysconfdir=/etc"
     "--with-regex=pcre2"
-  ];
+  ] ++ lib.optional withSecure "--with-secure";
 
   meta = {
     homepage = "https://www.greenwoodsoftware.com/less/";

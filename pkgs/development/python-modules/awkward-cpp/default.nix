@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cmake
-, ninja
-, pybind11
-, scikit-build-core
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cmake,
+  ninja,
+  pybind11,
+  scikit-build-core,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -28,15 +29,11 @@ buildPythonPackage rec {
     scikit-build-core
   ] ++ scikit-build-core.optional-dependencies.pyproject;
 
-  dependencies = [
-    numpy
-  ];
+  dependencies = [ numpy ];
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "awkward_cpp"
-  ];
+  pythonImportsCheck = [ "awkward_cpp" ];
 
   meta = with lib; {
     description = "CPU kernels and compiled extensions for Awkward Array";

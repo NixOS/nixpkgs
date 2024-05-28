@@ -1,13 +1,14 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, requests
-, pyyaml
-, setuptools
-, wheel
-, nodejs
-, ruby
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  requests,
+  pyyaml,
+  setuptools,
+  wheel,
+  nodejs,
+  ruby,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,16 +29,23 @@ buildPythonPackage rec {
       --replace /Users/ces/Desktop/code/naked /build/source
   '';
 
-  nativeBuildInputs = [ wheel setuptools ];
+  nativeBuildInputs = [
+    wheel
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook nodejs ruby ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    nodejs
+    ruby
+  ];
 
-  preCheck =''
+  preCheck = ''
     cd tests
 
     PATH=$PATH:$out/bin

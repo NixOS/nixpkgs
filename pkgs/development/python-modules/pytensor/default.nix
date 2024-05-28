@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, versioneer
-, cons
-, etuples
-, filelock
-, logical-unification
-, minikanren
-, numpy
-, scipy
-, typing-extensions
-, jax
-, jaxlib
-, numba
-, numba-scipy
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, tensorflow-probability
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  versioneer,
+  cons,
+  etuples,
+  filelock,
+  logical-unification,
+  minikanren,
+  numpy,
+  scipy,
+  typing-extensions,
+  jax,
+  jaxlib,
+  numba,
+  numba-scipy,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  tensorflow-probability,
 }:
 
 buildPythonPackage rec {
@@ -69,9 +70,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "pytensor"
-  ];
+  pythonImportsCheck = [ "pytensor" ];
 
   disabledTests = [
     # benchmarks (require pytest-benchmark):
@@ -95,6 +94,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pymc-devs/pytensor";
     changelog = "https://github.com/pymc-devs/pytensor/releases";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ferrine ];
+    maintainers = with maintainers; [
+      bcdarwin
+      ferrine
+    ];
   };
 }

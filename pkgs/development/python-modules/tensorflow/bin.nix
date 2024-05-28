@@ -1,38 +1,42 @@
-{ stdenv
-, lib
-, fetchurl
-, buildPythonPackage
-, isPy3k, pythonOlder, pythonAtLeast, astor
-, gast
-, google-pasta
-, wrapt
-, numpy
-, six
-, termcolor
-, packaging
-, protobuf
-, absl-py
-, grpcio
-, mock
-, scipy
-, wheel
-, jax
-, opt-einsum
-, tensorflow-estimator-bin
-, tensorboard
-, config
-, cudaSupport ? config.cudaSupport
-, cudaPackages
-, zlib
-, python
-, keras-applications
-, keras-preprocessing
-, addOpenGLRunpath
-, astunparse
-, flatbuffers
-, h5py
-, llvmPackages
-, typing-extensions
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildPythonPackage,
+  isPy3k,
+  pythonOlder,
+  pythonAtLeast,
+  astor,
+  gast,
+  google-pasta,
+  wrapt,
+  numpy,
+  six,
+  termcolor,
+  packaging,
+  protobuf,
+  absl-py,
+  grpcio,
+  mock,
+  scipy,
+  wheel,
+  jax,
+  opt-einsum,
+  tensorflow-estimator-bin,
+  tensorboard,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  zlib,
+  python,
+  keras-applications,
+  keras-preprocessing,
+  addOpenGLRunpath,
+  astunparse,
+  flatbuffers,
+  h5py,
+  llvmPackages,
+  typing-extensions,
 }:
 
 # We keep this binary build for two reasons:
@@ -40,26 +44,27 @@
 # - the source build is currently brittle and not easy to maintain
 
 # unsupported combination
-assert ! (stdenv.isDarwin && cudaSupport);
+assert !(stdenv.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
   inherit (cudaPackages) cudatoolkit cudnn;
-in buildPythonPackage {
+in
+buildPythonPackage {
   pname = "tensorflow" + lib.optionalString cudaSupport "-gpu";
   inherit (packages) version;
   format = "wheel";
 
-  src = let
-    pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
-    platform = stdenv.system;
-    cuda = lib.optionalString cudaSupport "_gpu";
-    key = "${platform}_${pyVerNoDot}${cuda}";
-  in fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported system: ${stdenv.system}"));
+  src =
+    let
+      pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+      platform = stdenv.system;
+      cuda = lib.optionalString cudaSupport "_gpu";
+      key = "${platform}_${pyVerNoDot}${cuda}";
+    in
+    fetchurl (packages.${key} or (throw "tensoflow-bin: unsupported system: ${stdenv.system}"));
 
-  buildInputs = [
-    llvmPackages.openmp
-  ];
+  buildInputs = [ llvmPackages.openmp ];
 
   dependencies = [
     astunparse
@@ -208,7 +213,10 @@ in buildPythonPackage {
     homepage = "http://tensorflow.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar ];
+    maintainers = with maintainers; [
+      jyp
+      abbradar
+    ];
     platforms = platforms.all;
     # Cannot import tensortfow on python 3.12 as it still dependends on distutils:
     # ModuleNotFoundError: No module named 'distutils'

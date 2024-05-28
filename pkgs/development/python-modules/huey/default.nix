@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, redis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  redis,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,6 @@ buildPythonPackage rec {
     description = "A little task queue for python";
     homepage = "https://github.com/coleifer/huey";
     license = licenses.mit;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, setuptools-scm
-, dask
-, dask-expr
-, dask-glm
-, distributed
-, multipledispatch
-, numba
-, numpy
-, packaging
-, pandas
-, scikit-learn
-, scipy
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  setuptools-scm,
+  dask,
+  dask-expr,
+  dask-glm,
+  distributed,
+  multipledispatch,
+  numba,
+  numpy,
+  packaging,
+  pandas,
+  scikit-learn,
+  scipy,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -51,8 +52,7 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     scipy
-  ] ++ dask.optional-dependencies.array
-    ++ dask.optional-dependencies.dataframe;
+  ] ++ dask.optional-dependencies.array ++ dask.optional-dependencies.dataframe;
 
   pythonImportsCheck = [
     "dask_ml"

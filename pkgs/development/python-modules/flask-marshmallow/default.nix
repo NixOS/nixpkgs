@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-sqlalchemy
-, flit-core
-, marshmallow
-, marshmallow-sqlalchemy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask-sqlalchemy,
+  flit-core,
+  marshmallow,
+  marshmallow-sqlalchemy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-GQLkt/CJf/QI8emvlW8xSRziGnncwfMSxBccW0Bb8I0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     flask
@@ -40,13 +39,9 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.sqlalchemy;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.sqlalchemy;
 
-  pythonImportsCheck = [
-    "flask_marshmallow"
-  ];
+  pythonImportsCheck = [ "flask_marshmallow" ];
 
   pytestFlagsArray = [
     "-W"

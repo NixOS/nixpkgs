@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, openssh
-, ps
-, psutil
-, pytest-mock
-, pytest-timeout
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  openssh,
+  ps,
+  psutil,
+  pytest-mock,
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

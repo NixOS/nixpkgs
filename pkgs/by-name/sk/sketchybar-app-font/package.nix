@@ -18,7 +18,7 @@ lib.checkListOfEnum "sketchybar-app-font: artifacts" artifacts artifactList
   in
   {
     pname = "sketchybar-app-font";
-    version = "2.0.18";
+    version = "2.0.19";
 
     srcs = selectedSources;
 
@@ -52,15 +52,15 @@ lib.checkListOfEnum "sketchybar-app-font: artifacts" artifacts artifactList
       sources = {
         font = fetchurl {
           url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${finalAttrs.version}/sketchybar-app-font.ttf";
-          hash = "sha256-ajwyBUfgvIUcac8gdFUnzGJCXsUcOJnscIdtrxo7ZqY=";
+          hash = "sha256-AH4Zkaccms1gNt7ZHZRHYPOx/iLpbcA4MiyBStHRDfU=";
         };
         lua = fetchurl {
           url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${finalAttrs.version}/icon_map.lua";
-          hash = "sha256-jxIBLE1UDD1S8nu4b9y7AUYb0XHH/3iknhmBloi1Qrs=";
+          hash = "sha256-AGcHBgOZY2EBR0WEfaQhEsTRdo8QfEawx6Q2rdBuKIg=";
         };
         shell = fetchurl {
           url = "https://github.com/kvndrsslr/sketchybar-app-font/releases/download/v${finalAttrs.version}/icon_map.sh";
-          hash = "sha256-I0t9KbC3Cs73021z9lm7TZUhmwdIaIgPVuLe8IjwkCU=";
+          hash = "sha256-fdKnweYF92zCLVBVXTjLWK9vdzMD8FvOHjEo2vqPbhQ=";
         };
       };
 

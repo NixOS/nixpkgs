@@ -1,17 +1,18 @@
-{ lib
-, black
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, flit-core
-, libcst
-, moreorless
-, pythonOlder
-, tomlkit
-, trailrunner
-, typing-extensions
-, unittestCheckHook
-, usort
+{
+  lib,
+  black,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  flit-core,
+  libcst,
+  moreorless,
+  pythonOlder,
+  tomlkit,
+  trailrunner,
+  typing-extensions,
+  unittestCheckHook,
+  usort,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-eQIbSC0Oxi6JD7/3o2y9f+KhT8GIiFiYiV4A3QBoWl0=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     black
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     usort
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "ufmt"
-  ];
+  pythonImportsCheck = [ "ufmt" ];
 
   meta = with lib; {
     description = "Safe, atomic formatting with black and usort";

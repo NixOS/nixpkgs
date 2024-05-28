@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pyjwt
-, pythonOlder
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pyjwt,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Test require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "elmax_api"
-  ];
+  pythonImportsCheck = [ "elmax_api" ];
 
   meta = with lib; {
     description = "Python library for interacting with the Elmax cloud";

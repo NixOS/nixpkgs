@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, awkward
-, cramjam
-, hatch-vcs
-, hatchling
-, numpy
-, fsspec
-, packaging
-, pandas
-, pytestCheckHook
-, pytest-timeout
-, rangehttpserver
-, scikit-hep-testdata
-, xxhash
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  awkward,
+  cramjam,
+  hatch-vcs,
+  hatchling,
+  numpy,
+  fsspec,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  pytest-timeout,
+  rangehttpserver,
+  scikit-hep-testdata,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -98,9 +99,7 @@ buildPythonPackage rec {
     "tests/test_1043_const_std_string.py"
   ];
 
-  pythonImportsCheck = [
-    "uproot"
-  ];
+  pythonImportsCheck = [ "uproot" ];
 
   meta = with lib; {
     description = "ROOT I/O in pure Python and Numpy";

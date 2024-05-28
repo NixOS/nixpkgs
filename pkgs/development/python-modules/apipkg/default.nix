@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,17 +24,11 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "test_apipkg.py"
-  ];
+  pytestFlagsArray = [ "test_apipkg.py" ];
 
-  pythonImportsCheck = [
-    "apipkg"
-  ];
+  pythonImportsCheck = [ "apipkg" ];
 
   meta = with lib; {
     changelog = "https://github.com/pytest-dev/apipkg/blob/main/CHANGELOG";

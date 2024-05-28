@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# build-system
-, cython
-, krb5
-, setuptools
+  # build-system
+  cython,
+  krb5,
+  setuptools,
 
-# dependencies
-, decorator
+  # dependencies
+  decorator,
 
-# native dependencies
-, GSS
+  # native dependencies
+  GSS,
 
-# tests
-, parameterized
-, k5test
-, pytestCheckHook
+  # tests
+  parameterized,
+  k5test,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -50,13 +51,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies =  [
-    decorator
-  ];
+  dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    GSS
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
+
+  # k5test is marked as broken on darwin
+  doCheck = !stdenv.isDarwin;
 
   nativeCheckInputs = [
     k5test

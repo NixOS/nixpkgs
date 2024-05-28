@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, psycopg2
-, pymysql
-, sqlalchemy
-, six
-, flask
-, pendulum
-, packaging
-, setuptools
-, poetry-core
-, pytestCheckHook
-, pytest-xdist
-, pytest-sugar
-, postgresql
-, postgresqlTestHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  psycopg2,
+  pymysql,
+  sqlalchemy,
+  six,
+  flask,
+  pendulum,
+  packaging,
+  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pytest-xdist,
+  pytest-sugar,
+  postgresql,
+  postgresqlTestHook,
 }:
 buildPythonPackage rec {
   pname = "sqlbag";
@@ -29,21 +30,18 @@ buildPythonPackage rec {
     hash = "sha256-lipgnkqrzjzqwbhtVcWDQypBNzq6Dct/qoM8y/FNiNs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [
+    sqlalchemy
+    six
+    packaging
+
+    psycopg2
+    pymysql
+
+    setuptools # needed for 'pkg_resources'
   ];
-
-  propagatedBuildInputs =
-    [
-      sqlalchemy
-      six
-      packaging
-
-      psycopg2
-      pymysql
-
-      setuptools # needed for 'pkg_resources'
-    ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -78,9 +76,7 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [
-    "sqlbag"
-  ];
+  pythonImportsCheck = [ "sqlbag" ];
 
   meta = with lib; {
     description = "Handy python code for doing database things";

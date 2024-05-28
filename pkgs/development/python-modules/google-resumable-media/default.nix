@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-cloud-testutils
-, google-crc32c
-, mock
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-cloud-testutils,
+  google-crc32c,
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,12 +31,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    requests = [
-      requests
-    ];
-    aiohttp = [
-      aiohttp
-    ];
+    requests = [ requests ];
+    aiohttp = [ aiohttp ];
   };
 
   nativeCheckInputs = [

@@ -17,6 +17,7 @@
 , SDL2
 , libevdev
 , udev
+, curlFull
 , hidapi
 , json_c
 , fftw
@@ -34,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gJafzBryuGDU8ke3JTKkQdSEND+btSZ93Ei7ZRsqchg=";
+    hash = "sha256-dSipQH04NSB6t9ZmDq9cjFTmtabnzPRwL9ssmEEmEws=";
     fetchSubmodules = true;
   };
 
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
     qtwebengine
     protobuf
     SDL2
+    curlFull
     hidapi
     json_c
     fftw
@@ -82,8 +84,18 @@ stdenv.mkDerivation rec {
     xxHash
   ];
 
+  # handle cmake not being able to identify if curl is built with websocket support, and library name discrepancy when curl not built with cmake
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail ' WS WSS' ""
+
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail 'libcurl_shared' 'libcurl'
+  '';
+
   cmakeFlags = [
     "-Wno-dev"
+    (lib.cmakeFeature "CHIAKI_USE_SYSTEM_CURL" "true")
   ];
 
   qtWrapperArgs = [

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, lxml
-, numpy
-, pytestCheckHook
-, scikit-image
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  scikit-image,
 }:
 let
   version = "1.2";
@@ -22,9 +23,7 @@ buildPythonPackage {
     hash = "sha256-NSKaJkJRevTy5gh6/ik8Qe46bOPdznsmXPgh7Xz7vXQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     lxml
@@ -32,13 +31,9 @@ buildPythonPackage {
     scikit-image
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mung"
-  ];
+  pythonImportsCheck = [ "mung" ];
 
   meta = with lib; {
     description = "Music Notation Graph: a data model for optical music recognition";

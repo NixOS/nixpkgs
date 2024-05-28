@@ -3,8 +3,6 @@
   lib,
   pcre2,
   fetchFromGitHub,
-  php,
-  fetchpatch,
 }:
 
 let
