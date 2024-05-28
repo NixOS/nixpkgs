@@ -8274,8 +8274,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "nvim-pack";
       repo = "nvim-spectre";
-      rev = "5690ea46baf08bbc1623980012e14b6239ce582e";
-      sha256 = "14m9hp7rr7qldqsl40k1jiqyk44bndq4pfibb08xcqp8hqn8f3q1";
+      rev = "366f46fdd4a1593cc237aea13d5ef113739a472c";
+      sha256 = "sha256-JS0kfM+uxwC/z8bdkdkaC+MAJIyvlvXsi3BDJuBxADA=";
     };
     meta.homepage = "https://github.com/nvim-pack/nvim-spectre/";
   };

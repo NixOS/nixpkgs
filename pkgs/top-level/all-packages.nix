@@ -1821,8 +1821,6 @@ with pkgs;
 
   gh-dash = callPackage ../tools/misc/gh-dash { };
 
-  gh-eco = callPackage ../tools/misc/gh-eco { };
-
   gh-markdown-preview = callPackage ../tools/misc/gh-markdown-preview { };
 
   ghostie = callPackage ../tools/misc/ghostie { };
@@ -23627,6 +23625,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
     ffmpeg = ffmpeg_4;
+    # OpenCV3 won't build with anything newer than CUDA 11 due to API changes.
+    cudaPackages = cudaPackages_11;
   };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
@@ -33232,8 +33232,6 @@ with pkgs;
   shogun = callPackage ../applications/science/machine-learning/shogun {
     protobuf = protobuf_21;
   };
-
-  smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
   smtube = libsForQt5.callPackage ../applications/video/smtube { };
 
