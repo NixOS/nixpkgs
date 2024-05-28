@@ -369,6 +369,72 @@ runTests {
     expected = "hellohellohellohellohello";
   };
 
+  # Test various strings are trimmed correctly
+  testTrimString = {
+    expr =
+    let
+      testValues = f: mapAttrs (_: f) {
+        empty = "";
+        cr = "\r";
+        lf = "\n";
+        tab = "\t";
+        spaces = "   ";
+        leading = "  Hello, world";
+        trailing = "Hello, world   ";
+        mixed = " Hello, world ";
+        mixed-tabs = " \t\tHello, world \t \t ";
+        multiline = "  Hello,\n  world!  ";
+        multiline-crlf = "  Hello,\r\n  world!  ";
+      };
+    in
+      {
+        leading = testValues (strings.trimWith { start = true; });
+        trailing = testValues (strings.trimWith { end = true; });
+        both = testValues strings.trim;
+      };
+    expected = {
+      leading = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "Hello, world";
+        trailing = "Hello, world   ";
+        mixed = "Hello, world ";
+        mixed-tabs = "Hello, world \t \t ";
+        multiline = "Hello,\n  world!  ";
+        multiline-crlf = "Hello,\r\n  world!  ";
+      };
+      trailing = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "  Hello, world";
+        trailing = "Hello, world";
+        mixed = " Hello, world";
+        mixed-tabs = " \t\tHello, world";
+        multiline = "  Hello,\n  world!";
+        multiline-crlf = "  Hello,\r\n  world!";
+      };
+      both = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "Hello, world";
+        trailing = "Hello, world";
+        mixed = "Hello, world";
+        mixed-tabs = "Hello, world";
+        multiline = "Hello,\n  world!";
+        multiline-crlf = "Hello,\r\n  world!";
+      };
+    };
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
