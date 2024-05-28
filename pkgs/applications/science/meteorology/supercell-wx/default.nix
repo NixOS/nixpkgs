@@ -45,6 +45,22 @@ let
     sha256 = "sha256-HghyRFLKboztQEOsvN2VaSxxcuPPu1GIakBNWRIWBOk=";
     fetchSubmodules = true;
   };
+
+  gtestSkip = [
+    # Skip tests requiring network access
+    "AwsLevel*DataProvider.FindKeyNow"
+    "AwsLevel*DataProvider.FindKeyFixed"
+    "AwsLevel*DataProvider.LoadObjectByKey"
+    "AwsLevel*DataProvider.Refresh"
+    "AwsLevel*DataProvider.GetAvailableProducts"
+    "AwsLevel*DataProvider.GetTimePointsByDate"
+    "AwsLevel*DataProvider.Prune"
+    "UpdateManagerTest.CheckForUpdates"
+    "WarningsProvider*\"https"
+
+    # These tests are failing (can't overwrite a file created by earlier test).
+    "SettingsManager/*"
+  ];
 in
 stdenv.mkDerivation {
   name = "supercell-wx";
@@ -68,6 +84,14 @@ stdenv.mkDerivation {
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=restrict";
+  env.GTEST_FILTER = "-${lib.concatStringsSep ":" gtestSkip}";
+
+  doCheck = true;
+
+  # These tests aren't built by 'all', but ctest still tries to run them.
+  cmakeFlags = [
+    "-DCMAKE_CTEST_ARGUMENTS=-E;'test_mln_core|test_mln_widgets'"
+  ];
 
   patches = [
     ./patches/use-find-package.patch
