@@ -28,6 +28,7 @@
 , gst_all_1
 , gtk4
 , ibus
+, json-glib
 , libgtop
 , libgudev
 , libadwaita
@@ -122,6 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsound
     gtk4
     ibus
+    json-glib
     libepoxy
     libgtop
     libgudev
