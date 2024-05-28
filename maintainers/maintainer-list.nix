@@ -16047,6 +16047,12 @@
     githubId = 43863;
     name = "Philip Taron";
   };
+  philtaken = {
+    email = "philipp.herzog@protonmail.com";
+    github = "philtaken";
+    githubId = 13309623;
+    name = "Philipp Herzog";
+  };
   phip1611 = {
     email = "phip1611@gmail.com";
     github = "phip1611";
