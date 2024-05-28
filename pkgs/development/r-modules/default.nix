@@ -1657,6 +1657,12 @@ let
       };
     });
 
+    oligo = old.oligo.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-error=incompatible-pointer-types -Wno-error=format-security";
+      };
+    });
+
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
       # Pyspark's spark is full featured and better maintained than pkgs.spark
       preConfigure = ''
