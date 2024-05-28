@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     # These flags haven't been tested:
     broken =
       IMGUI_FREETYPE
@@ -134,8 +134,8 @@ stdenv.mkDerivation rec {
       || IMGUI_BUILD_ANDROID_BINDING;
     description = "Bloat-free Graphical User interface for C++ with minimal dependencies";
     homepage = "https://github.com/ocornut/imgui";
-    license = licenses.mit; # vcpkg licensed as MIT too
-    maintainers = with maintainers; [ wolfangaukang ];
-    platforms = platforms.all;
+    license = lib.licenses.mit; # vcpkg licensed as MIT too
+    maintainers = with lib.maintainers; [ wolfangaukang ];
+    platforms = lib.platforms.all;
   };
 }

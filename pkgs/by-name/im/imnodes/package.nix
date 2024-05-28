@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.examples = imnodes.override { withExamples = true; };
 
-  meta = with lib; {
+  meta = {
     description = "A small, dependency-free node editor for dear imgui";
     homepage = "https://github.com/Nelarius/imnodes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
     mainProgram = "imnodes";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

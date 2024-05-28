@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     implot-demos = callPackage ./demos { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Immediate Mode Plotting";
     homepage = "https://github.com/epezent/implot";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SomeoneSerge ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
+    platforms = lib.platforms.all;
   };
 }
