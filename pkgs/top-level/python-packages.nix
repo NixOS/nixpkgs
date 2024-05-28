@@ -980,6 +980,8 @@ self: super: with self; {
 
   attrs = callPackage ../development/python-modules/attrs { };
 
+  attrs-strict = callPackage ../development/python-modules/attrs-strict { };
+
   aubio = callPackage ../development/python-modules/aubio { };
 
   audible = callPackage ../development/python-modules/audible { };
