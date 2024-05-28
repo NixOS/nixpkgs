@@ -335,6 +335,15 @@ self: super: ({
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
+  cabal2nix = overrideCabal (old: {
+    postInstall = ''
+      ${old.postInstall or ""}
+      remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+      # Note: The `data` output is needed at runtime.
+      remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+    '';
+  }) super.cabal2nix;
+
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
   # This is the same issue as above; the rio tests call functions in unliftio
