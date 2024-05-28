@@ -11,6 +11,11 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "ollama" "listenAddress" ]
+      "Use `services.ollama.host` and `services.ollama.port` instead.")
+  ];
+
   options = {
     services.ollama = {
       enable = lib.mkEnableOption "ollama server for local large language models";
@@ -64,12 +69,20 @@ in
           See also `services.ollama.sandbox`.
         '';
       };
-      listenAddress = lib.mkOption {
+      host = lib.mkOption {
         type = types.str;
-        default = "127.0.0.1:11434";
-        example = "0.0.0.0:11111";
+        default = "127.0.0.1";
+        example = "0.0.0.0";
         description = ''
-          The address which the ollama server HTTP interface binds and listens to.
+          The host address which the ollama server HTTP interface listens to.
+        '';
+      };
+      port = lib.mkOption {
+        type = types.nullOr types.ints.u16;
+        default = 11434;
+        example = 11111;
+        description = ''
+          Which port the ollama server listens to. Set to `null` to not specify a port.
         '';
       };
       acceleration = lib.mkOption {
@@ -80,9 +93,9 @@ in
           What interface to use for hardware acceleration.
 
           - `null`: default behavior
-            if `nixpkgs.config.rocmSupport` is enabled, uses `"rocm"`
-            if `nixpkgs.config.cudaSupport` is enabled, uses `"cuda"`
-            otherwise defaults to `false`
+            - if `nixpkgs.config.rocmSupport` is enabled, uses `"rocm"`
+            - if `nixpkgs.config.cudaSupport` is enabled, uses `"cuda"`
+            - otherwise defaults to `false`
           - `false`: disable GPU, only use CPU
           - `"rocm"`: supported by most modern AMD GPUs
           - `"cuda"`: supported by most modern NVIDIA GPUs
@@ -114,7 +127,11 @@ in
       environment = cfg.environmentVariables // {
         HOME = cfg.home;
         OLLAMA_MODELS = cfg.models;
-        OLLAMA_HOST = cfg.listenAddress;
+        OLLAMA_HOST =
+          if cfg.port == null then
+            cfg.host
+          else
+            "${cfg.host}:${toString cfg.port}";
       };
       serviceConfig = {
         ExecStart = "${lib.getExe ollamaPackage} serve";
