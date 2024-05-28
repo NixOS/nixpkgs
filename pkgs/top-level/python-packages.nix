@@ -4874,6 +4874,8 @@ self: super: with self; {
 
   goodwe = callPackage ../development/python-modules/goodwe { };
 
+  gophish = callPackage ../development/python-modules/gophish { };
+
   google = callPackage ../development/python-modules/google { };
 
   google-ai-generativelanguage = callPackage ../development/python-modules/google-ai-generativelanguage { };
