@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "legba";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "legba";
     rev = "v${version}";
-    hash = "sha256-yevQEbDuVaSsSfA3ug9rDeWtGjMvS+uD7qHguRVt4sg=";
+    hash = "sha256-emj2N3S26Nm0UiHGZIraCJN07rJNOMvdWRoUbHneknY=";
   };
 
-  cargoHash = "sha256-UBt4FP5zW+dijneHNaFJ80Ui5R+m+8aSwHTcqKDeEVg=";
+  cargoHash = "sha256-viDfJ214Zf5segjrLSTbHav5T5e219NAF+MvuPow+JQ=";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl.dev samba ];
