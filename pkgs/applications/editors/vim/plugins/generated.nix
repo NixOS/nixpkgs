@@ -4156,8 +4156,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "gitsigns.nvim";
-      rev = "c96e3cf4767ee98030bff855e7a6f07cfc6d427f";
-      sha256 = "1070xjm2xm3n5liv7c5lp0w1525hj57w2ppzb7rzz8qkp7klg244";
+      rev = "af3fdad8ddcadbdad835975204f6503310526fd9";
+      sha256 = "1j66lxqx6rz6k77xgm92npswra4s5hd69adpks75zsmd7crlsnfq";
     };
     meta.homepage = "https://github.com/lewis6991/gitsigns.nvim/";
   };
