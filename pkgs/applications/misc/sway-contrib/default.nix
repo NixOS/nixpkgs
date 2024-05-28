@@ -47,6 +47,7 @@ grimshot = stdenvNoCC.mkDerivation {
   buildInputs = [ bash ];
   installPhase = ''
     installManPage grimshot.1
+    installShellCompletion --cmd grimshot grimshot-completion.bash
 
     install -Dm 0755 grimshot $out/bin/grimshot
     wrapProgram $out/bin/grimshot --set PATH \
