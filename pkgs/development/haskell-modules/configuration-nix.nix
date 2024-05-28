@@ -770,9 +770,12 @@ self: super: builtins.intersectAttrs super {
     preInstall = drv.preInstall or "" + ''
       installTargets="install"
       installFlagsArray+=(
-        "BUILDER=:"
         "PREFIX="
         "DESTDIR=$out"
+        # Prevent Makefile from calling cabal/Setup again
+        "BUILDER=:"
+        # Make Haskell build dependencies available
+        "GHC=${self.buildHaskellPackages.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
       )
     '';
     installPhase = null;
