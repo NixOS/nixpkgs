@@ -418,6 +418,7 @@
   ./services/cluster/kubernetes/scheduler.nix
   ./services/cluster/pacemaker/default.nix
   ./services/cluster/patroni/default.nix
+  ./services/cluster/rke2/default.nix
   ./services/cluster/spark/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
