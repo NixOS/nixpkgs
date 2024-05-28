@@ -13419,8 +13419,6 @@ self: super: with self; {
 
   rpi-gpio = callPackage ../development/python-modules/rpi-gpio { };
 
-  rpi-gpio2 = callPackage ../development/python-modules/rpi-gpio2 { };
-
   rplcd = callPackage ../development/python-modules/rplcd { };
 
   rply = callPackage ../development/python-modules/rply { };
