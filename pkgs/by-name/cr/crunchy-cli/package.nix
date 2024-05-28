@@ -10,20 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crunchy-cli";
-  version = "3.6.4";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "crunchy-labs";
     repo = "crunchy-cli";
     rev = "v${version}";
-    hash = "sha256-ujR/ZTQoNdxVuGd8fie7JwVINqcjwAwyou+iCihYOY0=";
+    hash = "sha256-LVJRv8YUTfavc0ZrK2fIlgc5npQKwEZosoLEYw/V/pw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "native-tls-0.2.11" = "sha256-r+uvpwf1qgOVYuh+3xYOOsDWyCJnyG4Qc8i7RV2nzy4=";
-      "rsubs-lib-0.3.0" = "sha256-hn0/KxUHgmC3hs8sAMkJKxR7WIjc8YGq9DJU2SriO1A=";
     };
   };
 
