@@ -135,7 +135,7 @@ rec {
   };
 
   riscv32-nommu = {
-    config = "riscv32-linux-uclibc";
+    config = "riscv32-unknown-linux-uclibc";
     libc = "uclibc";
     gcc.arch = "rv32ima";
     gcc.abi = "ilp32";
