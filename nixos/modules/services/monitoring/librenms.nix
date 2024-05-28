@@ -32,7 +32,7 @@ let
     if [[ "$USER" != ${cfg.user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
     fi
-    $sudo ${package}/artisan $*
+    $sudo ${package}/artisan "$@"
   '';
 
   lnmsWrapper = pkgs.writeShellScriptBin "lnms" ''
