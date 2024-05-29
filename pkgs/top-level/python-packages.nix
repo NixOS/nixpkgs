@@ -15357,6 +15357,8 @@ self: super: with self; {
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
+  swh-core = callPackage ../development/python-modules/swh-core { };
+
   swh-model = callPackage ../development/python-modules/swh-model { };
 
   switchbot-api = callPackage ../development/python-modules/switchbot-api { };
