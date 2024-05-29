@@ -124,7 +124,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         machine.wait_until_succeeds("test -f /tmp/glxgears-should-fail.stderr")
         wait_until_terminated_or_succeeds(
             termination_check_shell_command="pidof glxgears",
-            success_check_shell_command="grep 'libGL error: failed to load driver: swrast' /tmp/glxgears-should-fail.stderr",
+            success_check_shell_command="grep 'MESA-LOADER: failed to open swrast' /tmp/glxgears-should-fail.stderr",
             get_detail_message_fn=lambda: "Contents of /tmp/glxgears-should-fail.stderr:\n"
             + machine.succeed("cat /tmp/glxgears-should-fail.stderr"),
         )
