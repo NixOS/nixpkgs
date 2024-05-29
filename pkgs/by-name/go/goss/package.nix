@@ -14,8 +14,6 @@
 
 buildGoModule rec {
   pname = "goss";
-
-  # Don't forget to update dgoss to the same version.
   version = "0.4.7";
 
   src = fetchFromGitHub {
