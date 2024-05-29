@@ -8,6 +8,7 @@ in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
+  pname = "linux-rpi";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
