@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     # So that we can ssh into the VM, see e.g.
-    # http://blog.patapon.info/nixos-local-vm/#accessing-the-vm-with-ssh
+    # https://nixos.org/manual/nixos/stable/#sec-nixos-test-port-forwarding
     services.openssh.enable = true;
     users.mutableUsers = false;
     # `test-instrumentation.nix` already sets an empty root password.
