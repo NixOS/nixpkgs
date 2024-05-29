@@ -97,7 +97,7 @@ let
   # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
   basicArgs = builtins.removeAttrs
     args
-    (lib.filter (x: ! (builtins.elem x [ "version" "src" ])) (lib.attrNames args));
+    (lib.filter (x: ! (builtins.elem x [ "version" "pname" "src" ])) (lib.attrNames args));
 
   # Combine the `features' attribute sets of all the kernel patches.
   kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
