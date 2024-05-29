@@ -250,8 +250,6 @@ with pkgs;
 
   ariang = callPackage ../servers/ariang { };
 
-  ani-cli = callPackage ../applications/video/ani-cli { };
-
   dra-cla = callPackage ../applications/video/dra-cla { };
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
