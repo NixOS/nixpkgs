@@ -20,6 +20,7 @@
 , tbb
 , unshield
 , wrapQtAppsHook
+, xz
 , zlib
 , testers
 , vcmi
@@ -27,13 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.4.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
-    hash = "sha256-nyYzG0O7tZwo77r7QwenVgaTffZ3ELEyUrkZmdvwm/w=";
+    fetchSubmodules = true;
+    hash = "sha256-w4SYgc8T57PyezY6UspNCwBcoM6ytnNu6QsxwB4QYDw=";
   };
 
   nativeBuildInputs = [
@@ -57,13 +59,14 @@ stdenv.mkDerivation rec {
     qtbase
     qttools
     tbb
+    xz
     zlib
   ];
 
   cmakeFlags = [
     "-DENABLE_LUA:BOOL=ON"
     "-DENABLE_ERM:BOOL=ON"
-    "-DENABLE_GITVERSION:BOOL=OFF"
+    "-DENABLE_GOLDMASTER:BOOL=ON"
     "-DENABLE_PCH:BOOL=OFF"
     "-DENABLE_TEST:BOOL=OFF" # Tests require HOMM3 data files.
     "-DFORCE_BUNDLED_MINIZIP:BOOL=OFF"
