@@ -3,7 +3,7 @@
 rec {
   gen =
 
-    { version, nativeVersion, hash,
+    { version, hash,
 
       # The default JDK/JRE that will be used for derived Gradle packages.
       # A current LTS version of a JDK is a good choice.
@@ -87,15 +87,17 @@ rec {
 
       fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
       in ''
+        jar_files=($out/lib/gradle/lib/native-platform-linux-${arch}*.jar)
+        nativeVersion=$(echo ''${jar_files[0]} | sed -n 's|.*\/native-platform-linux-${arch}-\(ncurses5-\|ncurses6-\)\{0,1\}\(.*\)\.jar|\2|p')
         for variant in "" "-ncurses5" "-ncurses6"; do
           mkdir "patching$variant"
           pushd "patching$variant"
-          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-${nativeVersion}.jar
+          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-$nativeVersion.jar
           patchelf \
             --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}" \
             net/rubygrapefruit/platform/linux-${arch}$variant/libnative-platform*.so
-          jar cf native-platform-linux-${arch}$variant-${nativeVersion}.jar .
-          mv native-platform-linux-${arch}$variant-${nativeVersion}.jar $out/lib/gradle/lib/
+          jar cf native-platform-linux-${arch}$variant-$nativeVersion.jar .
+          mv native-platform-linux-${arch}$variant-$nativeVersion.jar $out/lib/gradle/lib/
           popd
         done
 
@@ -161,21 +163,18 @@ rec {
 
   gradle_8 = gen {
     version = "8.7";
-    nativeVersion = "0.22-milestone-25";
     hash = "sha256-VEw11r2Emuil7QvOo5umd9xA9J330YNVYVgtogCblh0=";
     defaultJava = jdk21;
   };
 
   gradle_7 = gen {
     version = "7.6.4";
-    nativeVersion = "0.22-milestone-25";
     hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
     version = "6.9.4";
-    nativeVersion = "0.22-milestone-20";
     hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
     defaultJava = jdk11;
   };
