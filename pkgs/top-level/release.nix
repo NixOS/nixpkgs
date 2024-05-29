@@ -8,10 +8,10 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-{ nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
+{ nixpkgs ? { outPath = lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
+, supportedSystems ? lib.systems.doubles.builtOnNixosHydra
   # The platform triples for which we build bootstrap tools.
 , bootstrapConfigs ? [
     "aarch64-apple-darwin"
@@ -50,6 +50,9 @@
   # pkgs/top-level/.
   #
 , attrNamesOnly ? false
+
+# Just the Nixpkgs library functions and data.
+, lib ? (import ../../lib)
 }:
 
 let
