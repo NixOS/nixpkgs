@@ -26,9 +26,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # So that we can ssh into the VM, see e.g.
     # http://blog.patapon.info/nixos-local-vm/#accessing-the-vm-with-ssh
     services.openssh.enable = true;
-    services.openssh.settings.PermitRootLogin = "yes";
     users.extraUsers.root.password = "";
+    users.extraUsers.root.hashedPasswordFile = null; # avoids ambiguity warning during eval (`test-instrumentation.nix` sets it)
     users.mutableUsers = false;
+    # The following have to all be set to allow an empty SSH login password.
+    services.openssh.settings.PermitRootLogin = "yes";
+    services.openssh.settings.PermitEmptyPasswords = "yes";
+    security.pam.services.sshd.allowNullPassword = true; # the default `UsePam yes` makes this necessary
   };
 
   testScript = ''
