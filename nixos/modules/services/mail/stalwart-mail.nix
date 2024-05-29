@@ -30,8 +30,12 @@ in {
 
     # Default config: all local
     services.stalwart-mail.settings = {
-      global.tracing.method = mkDefault "stdout";
-      global.tracing.level = mkDefault "info";
+      tracer.stdout = {
+        type = mkDefault "stdout";
+        level = mkDefault "info";
+        ansi = mkDefault false;  # no colour markers to journald
+        enable = mkDefault true;
+      };
       queue.path = mkDefault "${dataDir}/queue";
       report.path = mkDefault "${dataDir}/reports";
       store.db.type = mkDefault "sqlite";
