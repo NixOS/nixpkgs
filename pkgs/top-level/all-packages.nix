@@ -24909,6 +24909,8 @@ with pkgs;
 
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
+  wren = callPackage ../development/compilers/wren { };
+
   wt = wt4;
   inherit (libsForQt5.callPackage ../development/libraries/wt { })
     wt4;
