@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     substituteInPlace configure \
       --replace -fno-unwind-tables "" \
       --replace -fno-asynchronous-unwind-tables ""
+    mkdir -pv src/process/riscv32/
+    cp -v src/process/riscv{64,32}/vfork.s
   '';
 
   patches = [
