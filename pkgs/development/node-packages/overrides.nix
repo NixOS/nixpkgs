@@ -57,6 +57,17 @@ final: prev: {
     '';
   };
 
+  cbmp = prev.cbmp.override {
+    prePatch = ''
+      export PUPPETEER_SKIP_DOWNLOAD=1
+    '';
+    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
+    postInstall = ''
+      wrapProgram $out/bin/cbmp \
+        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+    '';
+  };
+
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
     dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
