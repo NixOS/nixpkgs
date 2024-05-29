@@ -58,6 +58,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      GaetanLepage
+    ];
   };
 }
