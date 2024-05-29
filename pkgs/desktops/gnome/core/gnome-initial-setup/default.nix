@@ -34,13 +34,13 @@
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "46.0";
+  version = "46.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-+O6dzqfjXnNeqjvI0QQdBrtk6/HhBG5ejkjx+0QVGEc=";
+    url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
+    hash = "sha256-bHktiSrbYLDeC33oglwUlD0c0nmvT5x2So9UEbYKjyc=";
   };
 
   patches = [
@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-initial-setup";
+      attrPath = "gnome.gnome-initial-setup";
     };
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };
-}
+})
