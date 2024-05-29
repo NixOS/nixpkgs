@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "atlantis";
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     rev = "v${version}";
-    hash = "sha256-ROve0R2k65CChu1nlkObvipxi66TA2XTTRmQ8qpJLO8=";
+    hash = "sha256-c9+LPQVgS/nM/SADwTzULEvuB3dAjyAR2VVPQAEHBy0=";
   };
   ldflags = [
     "-X=main.version=${version}"
