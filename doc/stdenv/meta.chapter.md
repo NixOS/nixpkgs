@@ -125,6 +125,8 @@ $ cd path/to/nixpkgs
 $ nix-build -A your-package.tests
 ```
 
+Note that Hydra and [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) don't build these derivations by default, and that ([`@ofborg`](https://github.com/NixOS/ofborg)) only builds them when evaluating PRs for that particular package (or when manually instructed).
+
 #### Package tests {#var-meta-tests-packages}
 
 Tests that are part of the source package are often executed in the `installCheckPhase`.
