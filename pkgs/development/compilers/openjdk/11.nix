@@ -74,9 +74,19 @@ let
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
       "--disable-warnings-as-errors"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+    ]
+    # Cannot be built by recent versions of Clang, as far as I can tell (see
+    # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=260319). Known to
+    # compile with LLVM 12.
+    ++ lib.optionals stdenv.cc.isClang [
+      "--with-toolchain-type=clang"
+      # Explicitly tell Clang to compile C++ files as C++, see
+      # https://github.com/NixOS/nixpkgs/issues/150655#issuecomment-1935304859
+      "--with-extra-cxxflags=-xc++"
+    ]
+    ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
+    ++ lib.optional headless "--enable-headless-only"
+    ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 

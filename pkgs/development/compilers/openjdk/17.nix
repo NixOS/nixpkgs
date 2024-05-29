@@ -98,8 +98,15 @@ let
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "--with-toolchain-type=clang"
+      # Explicitly tell Clang to compile C++ files as C++, see
+      # https://github.com/NixOS/nixpkgs/issues/150655#issuecomment-1935304859
+      "--with-extra-cxxflags=-xc++"
+    ]
+    ++ lib.optional headless "--enable-headless-only"
+    ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
