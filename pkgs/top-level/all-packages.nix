@@ -17116,12 +17116,13 @@ with pkgs;
     };
   };
 
-  dbqn = callPackage ../development/interpreters/bqn/dzaima-bqn {
+  dbqn = callPackage ../by-name/db/dbqn/package.nix {
     buildNativeImage = false;
-    stdenv = stdenvNoCC;
     jdk = jre;
+    stdenv = stdenvNoCC;
   };
-  dbqn-native = callPackage ../development/interpreters/bqn/dzaima-bqn {
+
+  dbqn-native = dbqn.override {
     buildNativeImage = true;
     jdk = graalvm-ce;
   };

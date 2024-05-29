@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , jdk
 , makeWrapper
-, buildNativeImage ? true
+, buildNativeImage ? false
 }:
 
 stdenv.mkDerivation rec {
