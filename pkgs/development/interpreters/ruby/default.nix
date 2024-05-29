@@ -322,19 +322,19 @@ in {
   };
 
   ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "4" "";
-    sha256 = "sha256-o9VYeaDfqx1xQf3xDSKgfb+OXNxEFdob3gYSfVzDx7Y=";
+    version = rubyVersion "3" "1" "5" "";
+    sha256 = "sha256-NoXFHu7hNSwx6gOXBtcZdvU9AKttdzEt5qoauvXNosU=";
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "3" "";
-    sha256 = "sha256-r38XV9ndtjA0WYgTkhHx/VcP9bqDDe8cx8Rorptlybo=";
+    version = rubyVersion "3" "2" "4" "";
+    sha256 = "sha256-xys8XDBILcoYsPhoyQdfP0fYFo6vYm1OaCzltZyFhpI=";
     cargoSha256 = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "0" "preview3";
-    sha256 = "sha256-CWkUG+kuZ+DtuEqPs1SsyY8BvXjmAqI6DxNgRcgvSAk=";
+    version = rubyVersion "3" "3" "1" "";
+    sha256 = "sha256-jcKvKALMcAzRgtVDByY4jM+IWz8KFPzWoPIf8knJqpk=";
     cargoSha256 = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 

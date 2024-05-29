@@ -346,45 +346,45 @@ let
 
   mkPackages = self: {
     postgresql_12 = self.callPackage generic {
-      version = "12.18";
+      version = "12.19";
       psqlSchema = "12";
-      hash = "sha256-T5kZcl2UHOmGjgf+HtHTqGdIWZtIM4ZUdYOSi3TDkYo=";
+      hash = "sha256-YX495Swi6CL09X0B1bIkBQPhmKnsyvWYqFEQm9GOb7s=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
     };
 
     postgresql_13 = self.callPackage generic {
-      version = "13.14";
+      version = "13.15";
       psqlSchema = "13";
-      hash = "sha256-uN8HhVGJiWC9UA3F04oXfpkFN234H+fytmChQH+mpe0=";
+      hash = "sha256-Qu3UFURtM7jCQr520a0FdTGyJksuhpOTObcHXG5OySU=";
       this = self.postgresql_13;
       thisAttr = "postgresql_13";
       inherit self;
     };
 
     postgresql_14 = self.callPackage generic {
-      version = "14.11";
+      version = "14.12";
       psqlSchema = "14";
-      hash = "sha256-pnC9fc4i3K1Cl7JhE2s7HUoJpvVBcZViqhTKY78paKg=";
+      hash = "sha256-YRjQj53cwb2Dzyt8x007WDvc7C835iRaisADuPqoCSM=";
       this = self.postgresql_14;
       thisAttr = "postgresql_14";
       inherit self;
     };
 
     postgresql_15 = self.callPackage generic {
-      version = "15.6";
+      version = "15.7";
       psqlSchema = "15";
-      hash = "sha256-hFUUbtnGnJOlfelUrq0DAsr60DXCskIXXWqh4X68svs=";
+      hash = "sha256-pG/klIWrY4Xjnau7tlT10wSSBvds1pXiJCaHKVIJmPc=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
       inherit self;
     };
 
     postgresql_16 = self.callPackage generic {
-      version = "16.2";
+      version = "16.3";
       psqlSchema = "16";
-      hash = "sha256-RG6IKU28LJCFq0twYaZG+mBLS+wDUh1epnHC5a2bKVI=";
+      hash = "sha256-Mxlj1dPcTK9CFqBJ+kC2bWvLjHMGFYWUEblRh2TmBYU=";
       this = self.postgresql_16;
       thisAttr = "postgresql_16";
       inherit self;
