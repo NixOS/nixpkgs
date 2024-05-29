@@ -36,7 +36,7 @@ let
     '';
     homepage = "https://notesnook.com";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ j0lol ];
+    maintainers = with maintainers; [ cig0 j0lol ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "notesnook";
   };
@@ -59,9 +59,14 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ _7zz ];
 
     sourceRoot = "Notesnook.app";
+
+    # 7zz did not unpack in setup hook for some reason, done manually here
+    unpackPhase = ''
+      7zz x $src
+    '';
 
     installPhase = ''
       mkdir -p $out/Applications/Notesnook.app
