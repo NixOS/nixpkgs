@@ -137,7 +137,7 @@ Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 * we can run `passthru.tests` independently
 * `installCheckPhase` adds overhead to each build
 
-For more on how to write and run package tests, see [](#sec-package-tests).
+For more on how to write and run package tests, see [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
 
 #### NixOS tests {#var-meta-tests-nixos}
 
