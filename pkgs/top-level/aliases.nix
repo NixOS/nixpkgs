@@ -334,14 +334,21 @@ mapAliases ({
   enchant1 = throw "enchant1 has been removed from nixpkgs, as it was unmaintained"; # Added 2023-01-18
   enyo-doom = enyo-launcher; # Added 2022-09-09
   epoxy = libepoxy; # Added 2021-11-11
-  inherit (beam.interpreters) erlangR26 erlangR25 erlangR24; # added 2023-03-21
-  erlang_21 = throw "erlangR21 has been removed in favor of newer versions."; # added 2023-03-21
-  erlangR21 = erlang_21;
-  erlang_22 = throw "erlangR22 has been removed in favor of newer versions."; # added 2023-03-21
-  erlangR22 = erlang_22;
-  erlang_23 = throw "erlangR23 has been removed in favor of newer versions."; # added 2023-09-11
-  erlangR23 = erlang_23;
+
   erlang_27-rc3 = throw "erlang_27-rc3 has been removed in favor of erlang_27"; # added 2024-05-20
+  erlangR24 = throw "erlangR24 has been removed in favor of erlang_24"; # added 2024-05-24
+  erlangR24_odbc = throw "erlangR24_odbc has been removed in favor of erlang_24_odbc"; # added 2024-05-24
+  erlangR24_javac = throw "erlangR24_javac has been removed in favor of erlang_24_javac"; # added 2024-05-24
+  erlangR24_odbc_javac = throw "erlangR24_odbc_javac has been removed in favor of erlang_24_odbc_javac"; # added 2024-05-24
+  erlangR25 = throw "erlangR25 has been removed in favor of erlang_25"; # added 2024-05-24
+  erlangR25_odbc = throw "erlangR25_odbc has been removed in favor of erlang_25_odbc"; # added 2024-05-24
+  erlangR25_javac = throw "erlangR25_javac has been removed in favor of erlang_25_javac"; # added 2024-05-24
+  erlangR25_odbc_javac = throw "erlangR25_odbc_javac has been removed in favor of erlang_25_odbc_javac"; # added 2024-05-24
+  erlangR26 = throw "erlangR26 has been removed in favor of erlang_26"; # added 2024-05-24
+  erlangR26_odbc = throw "erlangR26_odbc has been removed in favor of erlang_26_odbc"; # added 2024-05-24
+  erlangR26_javac = throw "erlangR26_javac has been removed in favor of erlang_26_javac"; # added 2024-05-24
+  erlangR26_odbc_javac = throw "erlangR26_odbc_javac has been removed in favor of erlang_26_odbc_javac"; # added 2024-05-24
+
   etcd_3_3 = throw "etcd_3_3 has been removed because upstream no longer maintains it"; # Added 2023-09-29
   etcher = throw "'etcher' has been removed because it depended on an insecure version of Electron"; # Added 2024-03-14
   eterm = throw "eterm was removed because it is still insecure: https://github.com/mej/Eterm/issues/7"; # Added 2023-09-10

@@ -9,20 +9,20 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.3.1";
+        version = "1.3.2";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           rev = "refs/tags/v${version}";
-          hash = "sha256-XhJecINx8jC6pRzIoM4nC6Aunj40xL8EmYIA4UizfAY=";
+          hash = "sha256-NseigaPmRKDsBk8v7RpYf+uoEGvQHVnqOMO49kP0mQ8=";
         };
 
         # Update by running
         # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
         # at the root directory of the Nixpkgs repository
-        vendorHash = "sha256-MXW1U13uDRAx4tqZvqsuJvoD22nEL2gcxiGaa/6zwU0=";
+        vendorHash = "sha256-W853++SSvkAYYUczbl8vnoBQZnimUdsAEXp4MCkLPBU=";
 
         extraDescription = " (previously known as Singularity)";
         extraMeta.homepage = "https://apptainer.org";

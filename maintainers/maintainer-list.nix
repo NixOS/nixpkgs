@@ -16047,6 +16047,12 @@
     githubId = 43863;
     name = "Philip Taron";
   };
+  philtaken = {
+    email = "philipp.herzog@protonmail.com";
+    github = "philtaken";
+    githubId = 13309623;
+    name = "Philipp Herzog";
+  };
   phip1611 = {
     email = "phip1611@gmail.com";
     github = "phip1611";
@@ -17761,8 +17767,12 @@
   RossComputerGuy = {
     name = "Tristan Ross";
     email = "tristan.ross@midstall.com";
+    matrix = "@rosscomputerguy:matrix.org";
     github = "RossComputerGuy";
     githubId = 19699320;
+    keys = [{
+      fingerprint = "FD5D F7A8 85BB 378A 0157  5356 B09C 4220 3566 9AF8";
+    }];
   };
   rostan-t = {
     name = "Rostan Tabet";
