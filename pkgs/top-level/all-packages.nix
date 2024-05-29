@@ -9940,6 +9940,8 @@ with pkgs;
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
+  mu-editor = libsForQt5.callPackage ../applications/editors/mu { };
+
   mujmap = callPackage ../applications/networking/mujmap {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
