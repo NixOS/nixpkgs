@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: rec {
           '';
         });
       tests.geoserver = nixosTests.geoserver;
-      passthru.updateScript = ./update.sh;
+      updateScript = ./update.sh;
     };
 
   meta = with lib; {

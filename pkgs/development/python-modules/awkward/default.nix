@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.4";
+  version = "2.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hoNxNxWfoSlBg6CsKvgEknM4vd+rN/9EFD5nC2y45OA=";
+    hash = "sha256-HDO626bK5BH/mdLuGkeYIOz8X2N9/rkTLhQNzG1erYA=";
   };
 
   build-system = [
@@ -80,11 +80,11 @@ buildPythonPackage rec {
     # Disable tests dependending on jax on darwin
   ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
     changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

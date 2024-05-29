@@ -7,21 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "2.0.12";
+  version = "2.0.17";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-/55SK/5zBKXmucRQPoYt/8IHxisQlOxNEVMAZVMtCNI=";
+    hash = "sha256-UzPEupmUnph7SjCc/T4sBSGXj8yLVdQlw+X9iM16zD8=";
   };
 
-  cargoHash = "sha256-9U8Y0KaQHIfOZnCKbl94VvjS/7Qmi6UnKMDZDTXcye0=";
+  cargoHash = "sha256-AchVbf+mn4qQtzWu84Dqek+btCm6BA9mcY+8iHWqdiw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];
-
-  # enable nightly features
-  RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
     description = "A massively parallel, optimal functional runtime in Rust";
