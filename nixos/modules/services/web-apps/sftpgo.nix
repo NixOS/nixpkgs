@@ -63,7 +63,7 @@ in
       type = with types; nullOr path;
       description = ''
         Path to a json file containing users and folders to load (or update) on startup.
-        Check the [documentation](https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md)
+        Check the [documentation](https://sftpgo.github.io/latest/config-file/)
         for the `--loaddata-from` command line argument for more info.
       '';
     };
@@ -72,7 +72,7 @@ in
       default = {};
       description = ''
         The primary sftpgo configuration. See the
-        [configuration reference](https://github.com/drakkan/sftpgo/blob/main/docs/full-configuration.md)
+        [configuration reference](https://sftpgo.github.io/latest/config-file/)
         for possible values.
       '';
       type = with types; submodule {
