@@ -9286,6 +9286,12 @@
     githubId = 5579359;
     name = "Jason Yundt";
   };
+  jayrovacsek = {
+    email = "nixpkgs@jay.rovacsek.com";
+    github = "JayRovacsek";
+    githubId = 29395089;
+    name = "Jay Rovacsek";
+  };
   jb55 = {
     email = "jb55@jb55.com";
     github = "jb55";

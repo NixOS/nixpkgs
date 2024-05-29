@@ -1,0 +1,21 @@
+From 3c296e00498e56382fcfa8963df2b8fb9fc97f81 Mon Sep 17 00:00:00 2001
+From: jayrovacsek <jay@rovacsek.com>
+Date: Sat, 6 Apr 2024 07:35:59 +1100
+Subject: [PATCH] no xattr dependency
+
+---
+ requirements.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index af72d9a..0d32e6e 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -28,4 +28,3 @@ libvsgpt-python >= 20211115
+ libvshadow-python >= 20160109
+ libvslvm-python >= 20160109
+ pytsk3 >= 20210419
+-xattr >= 0.7.2 ; platform_system != "Windows"
+-- 
+2.43.2
+
