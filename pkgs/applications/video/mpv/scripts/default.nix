@@ -95,6 +95,7 @@ let
       inherit (callPackage ./occivink.nix { }) blacklistExtensions seekTo;
 
       buildLua = callPackage ./buildLua.nix { };
+      autosubsync-mpv = callPackage ./autosubsync-mpv.nix { };
       chapterskip = callPackage ./chapterskip.nix { };
       convert = callPackage ./convert.nix { };
       cutter = callPackage ./cutter.nix { };
