@@ -1207,7 +1207,7 @@ in
     # value for the `fileSystems' attribute should be disregarded (since those
     # filesystems don't necessarily exist in the VM). You can disable this
     # override by setting `virtualisation.fileSystems = lib.mkForce { };`.
-    fileSystems = lib.mkIf (cfg.fileSystems != { }) (mkVMOverride cfg.fileSystems);
+    fileSystems = lib.mkIf (cfg.fileSystems != { }) (lib.mapAttrs (n: v: mkVMOverride v) cfg.fileSystems);
 
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
