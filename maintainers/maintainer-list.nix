@@ -19108,6 +19108,12 @@
     githubId = 158321;
     name = "Stewart Mackenzie";
   };
+  skamdart = {
+    email = "sigskam@proton.me";
+    github = "SkamDart";
+    githubId = 8763518;
+    name = "skamdart";
+  };
   skovati = {
     github = "skovati";
     githubId = 49844593;
