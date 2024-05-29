@@ -1,11 +1,29 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
+, runCommand
+, dafny
 , writeScript
 , jdk11
 , z3
 }:
 
+let
+  test = runCommand "dafny-test"
+    {
+      src = fetchFromGitHub {
+        owner = "gaberch";
+        repo = "Various-Algorithms-Verified-With-Dafny";
+        rev = "50e451bbcd15e52e27d5bbbf66b0b4c4abbff41c";
+        hash = "sha256-Ng5wve/4gQr/2hsFWUFFcTL3K2xH7dP9w8IrmvWMKyg=";
+      };
+    }
+    ''
+      mkdir $out
+      cp $src/SlowMax.dfy $out
+      ${dafny}/bin/dafny $out/SlowMax.dfy
+    '';
+in
 buildDotnetModule rec {
   pname = "Dafny";
   version = "4.6.0";
@@ -54,6 +72,8 @@ buildDotnetModule rec {
   postFixup = ''
     ln -s "$out/bin/Dafny" "$out/bin/dafny" || true
   '';
+
+  passthru.tests = { inherit test; };
 
   meta = with lib; {
     description = "A programming language with built-in specification constructs";
