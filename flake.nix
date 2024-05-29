@@ -5,8 +5,14 @@
 
   outputs = { self }:
     let
+      # only used by checks and htmlDocs, which assume x86_64-linux.
+      # manually specifying it here allows `nix flake check` to be
+      # run without --impure
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
+        nixpkgsArgs = {
+          system = "x86_64-linux";
+        };
       };
 
       libVersionInfoOverlay = import ./lib/flake-version-info.nix self;
