@@ -129,9 +129,29 @@ Note that Hydra and [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) 
 
 #### Package tests {#var-meta-tests-packages}
 
-Tests that are part of the source package are often executed in the `installCheckPhase`.
+Tests that are part of the source package are often executed in the `installCheckPhase`. This phase is also suitable for performing a `--version` test for packages that support such flag. Here's an example:
 
-Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
+```nix
+# Say the package is git
+stdenv.mkDerivation(finalAttrs: {
+  pname = "git";
+  version = "...";
+  # ...
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo checking if 'git --version' mentions ${finalAttrs.version}
+    $out/bin/git --version | grep ${finalAttrs.version}
+
+    runHook postInstallCheck
+  '';
+  # ...
+})
+```
+
+Most programs distributed by Nixpkgs support such a `--version` flag, and it can help give confidence that the package at least got compiled properly. However, tests that are slightly non trivial will better fit into `passthru.tests`, because:
 
 * `passthru.tests` tests the 'real' package, independently from the environment in which it was built
 * We can run and debug a `passthru.tests` independently, after the package was built (useful if it takes a long time).
