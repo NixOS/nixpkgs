@@ -119,6 +119,8 @@ let
 
     bwd = callPackage ../development/ocaml-modules/bwd { };
 
+    bytestring = callPackage ../development/ocaml-modules/bytestring { };
+
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ### C ###
@@ -231,6 +233,8 @@ let
 
     color = callPackage ../development/ocaml-modules/color { };
 
+    colors = callPackage ../development/ocaml-modules/colors { };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
@@ -240,6 +244,8 @@ let
     conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
 
     conduit-mirage = callPackage ../development/ocaml-modules/conduit/mirage.nix { };
+
+    config = callPackage ../development/ocaml-modules/config { };
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
@@ -600,6 +606,8 @@ let
     github-jsoo = callPackage ../development/ocaml-modules/github/jsoo.nix {  };
     github-unix = callPackage ../development/ocaml-modules/github/unix.nix {  };
 
+    gluon = callPackage ../development/ocaml-modules/gluon { };
+
     gluten = callPackage ../development/ocaml-modules/gluten { };
     gluten-eio = callPackage ../development/ocaml-modules/gluten/eio.nix { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
@@ -949,6 +957,8 @@ let
     letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
 
     letsencrypt-mirage = callPackage ../development/ocaml-modules/letsencrypt/mirage.nix { };
+
+    libc = callPackage ../development/ocaml-modules/libc { };
 
     lilv = callPackage ../development/ocaml-modules/lilv {
       inherit (pkgs) lilv;
@@ -1634,6 +1644,8 @@ let
 
     ringo = callPackage ../development/ocaml-modules/ringo { };
 
+    rio = callPackage ../development/ocaml-modules/rio { };
+
     riot = callPackage ../development/ocaml-modules/riot { };
 
     rock = callPackage ../development/ocaml-modules/rock { };
@@ -1711,6 +1723,8 @@ let
     };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
+
+    spices = callPackage ../development/ocaml-modules/spices { };
 
     srt = callPackage ../development/ocaml-modules/srt {
       inherit (pkgs) srt;

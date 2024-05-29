@@ -1,31 +1,34 @@
 { lib
 , buildDunePackage
 , fetchurl
-, riot
+, colors
 , tty
 }:
 
 buildDunePackage rec {
-  pname = "minttea";
-  version = "0.0.3";
+  pname = "spices";
+  version = "0.0.2";
 
   minimalOCamlVersion = "5.1";
 
   src = fetchurl {
     url = "https://github.com/leostera/minttea/releases/download/${version}/minttea-${version}.tbz";
-    hash = "sha256-WEaJVCCvsmKcF8+yzovljt8dGWaIv4UmAr74jq6Vo9M=";
+    hash = "sha256-0eB7OuxcPdv9bf2aIQEeir44mQfx5W2AJj7Vb4pGtLI=";
   };
 
   propagatedBuildInputs = [
-    riot
+    colors
     tty
   ];
 
+  doCheck = true;
+
   meta = {
-    description = "A fun, functional, and stateful way to build terminal apps in OCaml heavily inspired by Go's BubbleTea";
+    description = "Declarative styles for TUI applications";
     homepage = "https://github.com/leostera/minttea";
     changelog = "https://github.com/leostera/minttea/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sixstring982 ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
+
