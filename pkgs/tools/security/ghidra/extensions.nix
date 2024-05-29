@@ -9,6 +9,8 @@ lib.makeScope newScope (self: {
 
   machinelearning = self.callPackage ./extensions/machinelearning { inherit ghidra; };
 
+  ret-sync = self.callPackage ./extensions/ret-sync { };
+
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 
 })
