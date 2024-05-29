@@ -11,6 +11,10 @@
 , libiconv
 , Security
 , buildPackages
+
+# for passthru.tests
+, ffmpeg
+, libheif
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,6 +54,11 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
+
+  passthru.tests = {
+    inherit libheif;
+    ffmpeg = ffmpeg.override { withRav1e = true; };
+  };
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";
