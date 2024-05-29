@@ -105,6 +105,19 @@ rec {
   # If you add a legacy driver here, also update `top-level/linux-kernels.nix`,
   # adding to the `nvidia_x11_legacy*` entries.
 
+  # Last one without the bug reported here:
+  # https://bbs.archlinux.org/viewtopic.php?pid=2155426#p2155426
+  legacy_535 = generic {
+    version = "535.154.05";
+    sha256_64bit = "sha256-fpUGXKprgt6SYRDxSCemGXLrEsIA6GOinp+0eGbqqJg=";
+    sha256_aarch64 = "sha256-G0/GiObf/BZMkzzET8HQjdIcvCSqB1uhsinro2HLK9k=";
+    openSha256 = "sha256-wvRdHguGLxS0mR06P5Qi++pDJBCF8pJ8hr4T8O6TJIo=";
+    settingsSha256 = "sha256-9wqoDEWY4I7weWW05F4igj1Gj9wjHsREFMztfEmqm10=";
+    persistencedSha256 = "sha256-d0Q3Lk80JqkS1B54Mahu2yY/WocOqFFbZVBh+ToGhaE=";
+
+    patches = [ rcu_patch ];
+  };
+
   # Last one supporting Kepler architecture
   legacy_470 = generic {
     version = "470.239.06";
