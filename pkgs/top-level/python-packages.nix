@@ -17381,8 +17381,6 @@ self: super: with self; {
 
   zipp = callPackage ../development/python-modules/zipp { };
 
-  zipstream = callPackage ../development/python-modules/zipstream { };
-
   zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
   zlib-ng = callPackage ../development/python-modules/zlib-ng {
