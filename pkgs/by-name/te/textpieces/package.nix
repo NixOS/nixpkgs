@@ -1,86 +1,65 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
-, python3
+, fetchFromGitLab
 , meson
 , ninja
 , pkg-config
-, vala
+, cargo
+, rustc
+, rustPlatform
+, blueprint-compiler
 , glib
 , gtk4
-, libgee
 , libadwaita
-, libportal-gtk4
-, json-glib
-, blueprint-compiler
 , gtksourceview5
-, gobject-introspection
 , wrapGAppsHook4
-, appstream-glib
 , desktop-file-utils
 }:
 
-let
-  pythonEnv = python3.withPackages (ps: with ps; [ pyyaml ]);
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "textpieces";
-  version = "3.4.1";
+  version = "4.0.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "liferooter";
     repo = "textpieces";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3ZUHzt3oXYgsnJVDf83JUDhcF+0DLgFfOMtpKI/FTcE=";
+    hash = "sha256-6kbGvCiaoOY+pwSmaDn1N/rbTBzEehNi/j+RI05nn6o=";
+  };
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "textpieces-core-1.0.0" = "sha256-HaLkL2HhH1khwsSdH64pZYtJ/WG+MLiEQPScDte/PAg=";
+    };
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    pythonEnv
-    vala
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
     blueprint-compiler
     wrapGAppsHook4
-    appstream-glib
     desktop-file-utils
-    gobject-introspection
   ];
 
   buildInputs = [
     glib
     gtk4
     libadwaita
-    libportal-gtk4
-    libgee
-    json-glib
     gtksourceview5
   ];
 
-  runtimeDependencies = [
-    pythonEnv
-  ];
-
-  patches = [
-  (fetchpatch {
-    url = "https://github.com/liferooter/textpieces/commit/26348782b9fddc5f2ffb9497cf18ec8ce9592960.patch";
-    hash = "sha256-w86PCeDhoyMPm63GCBa2Ax8KfCdlxtmGeUrmt1ZSz1k=";
-  })
-  ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-    patchShebangs scripts/
-  '';
-
-  meta = with lib; {
-    description = "Quick text processing";
+  meta = {
+    description = "Swiss knife of text processing";
     longDescription = "A small tool for quick text transformations such as checksums, encoding, decoding and so on.";
-    homepage = "https://github.com/liferooter/textpieces";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    homepage = "https://gitlab.com/liferooter/textpieces";
+    mainProgram = "textpieces";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 })
