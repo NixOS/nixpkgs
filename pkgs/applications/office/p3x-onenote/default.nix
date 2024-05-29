@@ -11,8 +11,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    aarch64-linux = "0plpwymm1bgzbzwk2689lw1fadxdwxzzn5dmayk1ayxz1k3pj9wi";
-    armv7l-linux = "1pvr8f1ccl4nyfmshn3v3jfaa5x519rsy57g4pdapffj10vpbkb8";
+    aarch64-linux = "sha256-HFuxmMo0m4UOxEQVd32LGvbFsOS8jwCCCS6K/YJIIBE=";
+    armv7l-linux = "sha256-JMgYvqkaRw5sfjbKybAkk28KT12+c19dMir2DUN7Ub0=";
     x86_64-linux = "sha256-hr/mPOrliP8Dej3DVE2+wYkb1J789WCkkY3xe9EcM44=";
   }.${stdenv.hostPlatform.system};
 
