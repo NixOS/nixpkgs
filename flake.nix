@@ -13,13 +13,46 @@
       lib = (import ./lib).extend libVersionInfoOverlay;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+
+      deprecatedArg =
+        fn: v: attrName: msg: lib.warnIf (v?${attrName}) (
+        let
+          pos = builtins.unsafeGetAttrPos attrName v;
+        in
+          "${fn} was called with argument '${attrName}'${lib.optionalString (pos != null) ", defined at ${pos.file}:${pos.line}:${pos.column}"}, which is deprecated. ${msg}"
+        );
     in
     {
       lib = lib.extend (final: prev: {
 
         nixos = import ./nixos/lib { lib = final; };
 
-        nixosSystem = args:
+        nixosSystem = args@{
+          # required
+          modules,
+          # optional (note the use of null; the actual defaults are controlled by eval-config)
+          specialArgs ? null,
+          # advanced, use with care
+          baseModules ? null, modulesLocation ? null, prefix ? null, lib ? final, extraModules ? null,
+          # deprecated (bindings ignored, but passed to eval-config)
+          check ? null, extraArgs ? null, pkgs ? null, system ? null,
+        }:
+          deprecatedArg "nixpkgs.lib.nixosSystem" args "system"
+            "Define nixpkgs.hostPlatform = ${lib.strings.escapeNixString system}; in your configuration instead, if nixos-generate-config didn't already put it in hardware-configuration.nix for you."
+          deprecatedArg "nixpkgs.lib.nixosSystem" args "check" "Define _module.args.check in your configuration instead."
+          deprecatedArg "nixpkgs.lib.nixosSystem" args "extraArgs" "Define _module.args.args in your configuration instead."
+          deprecatedArg "nixpkgs.lib.nixosSystem" args "pkgs" ''
+            Import nixpkgs.nixosModules.readOnlyPkgs and define nixpkgs.pkgs instead. For example:
+
+                nixpkgs.lib.nixosSystem {
+                  modules = [
+                    ./configuration.nix
+                    nixpkgs.nixosModules.readOnlyPkgs
+                    { nixpkgs.pkgs = nixpkgs.legacyPackages.x86_64-linux; }
+                  ];
+                }
+          ''
+
           import ./nixos/lib/eval-config.nix (
             {
               lib = final;
