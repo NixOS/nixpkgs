@@ -86,7 +86,7 @@ buildGoModule rec {
     description = "Git with a cup of tea";
     homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
+    maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };
