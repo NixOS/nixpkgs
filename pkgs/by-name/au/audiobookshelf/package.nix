@@ -33,6 +33,8 @@ let
       cp -r ${src}/client $out
     '';
 
+    # don't download the Cypress binary
+    CYPRESS_INSTALL_BINARY = 0;
     NODE_OPTIONS = "--openssl-legacy-provider";
 
     npmBuildScript = "generate";
