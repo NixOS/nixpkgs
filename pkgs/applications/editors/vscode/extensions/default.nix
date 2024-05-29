@@ -3094,7 +3094,7 @@ let
         };
         meta = {
           description = "Open any folder or repository inside a Docker container.";
-          downloadPage = "Use a container as your development environment";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers";
           homepage = "https://code.visualstudio.com/docs/devcontainers/containers";
           license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.anthonyroussel ];
