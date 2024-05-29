@@ -4,10 +4,12 @@
 , callPackage
 , gradle_7
 , perl
-, makeWrapper
+, makeBinaryWrapper
 , openjdk17
 , unzip
 , makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
 , icoutils
 , xcbuild
 , protobuf
@@ -52,15 +54,6 @@ let
     # Remove build dates from output filenames for easier reference
     ./0003-Remove-build-datestamp.patch
   ];
-
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-  };
 
   postPatch = ''
     # Set name of release (eg. PUBLIC, DEV, etc.)
@@ -145,9 +138,28 @@ HERE
 in stdenv.mkDerivation (finalAttrs: {
   inherit pname version src patches postPatch;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+      terminal = false;
+    })
+  ];
+
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils protobuf
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+    gradle
+    unzip
+    makeBinaryWrapper
+    copyDesktopItems
+    protobuf
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
+    desktopToDarwinBundle
+  ];
 
   dontStrip = true;
 
@@ -169,6 +181,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p "${pkg_path}" "$out/share/applications"
 
     ZIP=build/dist/$(ls build/dist)
@@ -178,15 +191,13 @@ in stdenv.mkDerivation (finalAttrs: {
     mv "${pkg_path}"/*/* "${pkg_path}"
     rmdir "''${f[@]}"
 
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
-
-    icotool -x "Ghidra/RuntimeScripts/Windows/support/ghidra.ico"
-    rm ghidra_4_40x40x32.png
-    for f in ghidra_*.png; do
-      res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -d"x" -f1-2)
-      mkdir -pv "$out/share/icons/hicolor/$res/apps"
-      mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
+    for f in Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon*.png; do
+      res=$(basename "$f" ".png" | cut -d"_" -f3 | cut -c11-)
+      install -Dm444 "$f" "$out/share/icons/hicolor/''${res}x''${res}/apps/ghidra.png"
     done;
+    # improved macOS icon support
+    install -Dm444 Ghidra/Framework/Gui/src/main/resources/images/GhidraIcon64.png $out/share/icons/hicolor/32x32@2/apps/ghidra.png
+
     runHook postInstall
   '';
 
@@ -206,7 +217,8 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
+    changelog = "https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_${finalAttrs.version}_build/Ghidra/Configurations/Public_Release/src/global/docs/ChangeHistory.html";
+    description = "Software reverse engineering (SRE) suite of tools";
     mainProgram = "ghidra";
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
