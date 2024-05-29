@@ -1,7 +1,7 @@
 use std::{
     cell::RefCell,
     collections::HashMap,
-    io::{BufRead, Write},
+    io::{BufRead, Read, Write},
     os::unix::{fs::PermissionsExt, process::CommandExt},
     path::{Path, PathBuf},
     rc::Rc,
@@ -16,7 +16,7 @@ use dbus::{
     Message,
 };
 use glob::glob;
-use ini::Ini;
+use ini::{Ini, ParseOption};
 use log::LevelFilter;
 use nix::{
     fcntl::{Flock, FlockArg, OFlag},
@@ -216,9 +216,22 @@ fn get_active_units<'a>(
 // Instead of returning the HashMap, this function takes a mutable reference to a HashMap to return
 // the data in. This allows calling the function multiple times with the same Hashmap to parse
 // override files.
-fn parse_systemd_ini(data: &mut UnitInfo, unit_file: &Path) -> Result<()> {
-    let ini = Ini::load_from_file(unit_file)
-        .with_context(|| format!("Failed to load unit file {}", unit_file.display()))?;
+fn parse_systemd_ini(data: &mut UnitInfo, mut unit_file: impl Read) -> Result<()> {
+    let mut unit_file_content = String::new();
+    _ = unit_file
+        .read_to_string(&mut unit_file_content)
+        .context("Failed to read unit file")?;
+
+    let ini = Ini::load_from_str_opt(
+        &unit_file_content,
+        ParseOption {
+            enabled_quote: true,
+            // Allow for escaped characters that won't get interpreted by the INI parser. These
+            // often show up in systemd unit files device/mount/swap unit names (e.g. dev-disk-by\x2dlabel-root.device).
+            enabled_escape: false,
+        },
+    )
+    .context("Failed parse unit file as INI")?;
 
     // Copy over all sections
     for (section, properties) in ini.iter() {
@@ -275,24 +288,33 @@ fn parse_systemd_ini(data: &mut UnitInfo, unit_file: &Path) -> Result<()> {
 //
 // If a directory with the same basename ending in .d exists next to the unit file, it will be
 // assumed to contain override files which will be parsed as well and handled properly.
-fn parse_unit(unit_file: &Path, base_unit_file: &Path) -> Result<UnitInfo> {
+fn parse_unit(unit_file: &Path, base_unit_path: &Path) -> Result<UnitInfo> {
     // Parse the main unit and all overrides
     let mut unit_data = HashMap::new();
 
-    parse_systemd_ini(&mut unit_data, base_unit_file)?;
+    let base_unit_file = std::fs::File::open(base_unit_path)
+        .with_context(|| format!("Failed to open unit file {}", base_unit_path.display()))?;
+    parse_systemd_ini(&mut unit_data, base_unit_file).with_context(|| {
+        format!(
+            "Failed to parse systemd unit file {}",
+            base_unit_path.display()
+        )
+    })?;
 
     for entry in
-        glob(&format!("{}.d/*.conf", base_unit_file.display())).context("Invalid glob pattern")?
+        glob(&format!("{}.d/*.conf", base_unit_path.display())).context("Invalid glob pattern")?
     {
         let Ok(entry) = entry else {
             continue;
         };
 
-        parse_systemd_ini(&mut unit_data, &entry)?;
+        let unit_file = std::fs::File::open(&entry)
+            .with_context(|| format!("Failed to open unit file {}", entry.display()))?;
+        parse_systemd_ini(&mut unit_data, unit_file)?;
     }
 
     // Handle drop-in template-unit instance overrides
-    if unit_file != base_unit_file {
+    if unit_file != base_unit_path {
         for entry in
             glob(&format!("{}.d/*.conf", unit_file.display())).context("Invalid glob pattern")?
         {
@@ -300,7 +322,9 @@ fn parse_unit(unit_file: &Path, base_unit_file: &Path) -> Result<UnitInfo> {
                 continue;
             };
 
-            parse_systemd_ini(&mut unit_data, &entry)?;
+            let unit_file = std::fs::File::open(&entry)
+                .with_context(|| format!("Failed to open unit file {}", entry.display()))?;
+            parse_systemd_ini(&mut unit_data, unit_file)?;
         }
     }
 
@@ -2071,6 +2095,33 @@ invalid
                         HashMap::from([("Type".to_string(), vec!["btrfs".to_string()])])
                     )])
                 ) == super::UnitComparison::UnequalNeedsRestart
+            );
+        }
+    }
+
+    #[test]
+    fn parse_systemd_ini() {
+        // Ensure we don't attempt to unescape content in unit files.
+        // https://github.com/NixOS/nixpkgs/issues/315602
+        {
+            let mut unit_info = HashMap::new();
+
+            let test_unit = std::io::Cursor::new(
+                r#"[Unit]
+After=dev-disk-by\x2dlabel-root.device
+"#,
+            );
+            super::parse_systemd_ini(&mut unit_info, test_unit).unwrap();
+
+            assert_eq!(
+                unit_info
+                    .get("Unit")
+                    .unwrap()
+                    .get("After")
+                    .unwrap()
+                    .first()
+                    .unwrap(),
+                "dev-disk-by\\x2dlabel-root.device"
             );
         }
     }
