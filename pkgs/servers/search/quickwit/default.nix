@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, makeWrapper
 , rustPlatform
 , nix-update-script
 , protobuf
@@ -10,7 +11,7 @@
 
 let
   pname = "quickwit";
-  version = "0.8.0";
+  version = "0.8.1";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "quickwit-oss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FZVGQfDuQYIdRnCsBZvXeLbJBdcLugZeHNm+kf6L9SY=";
+    hash = "sha256-B5U9nzXh6kj3/UnQzM3//h4hn9ippWHbeDMcMTP9XfM=";
   };
 
   postPatch = ''
@@ -33,6 +34,10 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/quickwit";
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [ Security ];
@@ -40,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "chitchat-0.8.0" = "sha256-cjwKaBXoztYUXgnJvtFH+OSQU6tl2U3zKFWX324+9wo=";
+      "chitchat-0.8.0" = "sha256-6K2noPoFaDnOxQIEV1WbmVPfRGwlI/WS1OWSBH2qb1Q=";
       "mrecordlog-0.4.0" = "sha256-9LIVs+BqK9FLSfHL3vm9LL+/FXIXJ6v617QLv4luQik=";
       "ownedbytes-0.6.0" = "sha256-in18/NYYIgUiZ9sm8NgJlebWidRp34DR7AhOD1Nh0aw=";
       "pulsar-5.0.2" = "sha256-j7wpsAro6x4fk3pvSL4fxLkddJFq8duZ7jDj0Edf3YQ=";
@@ -52,6 +57,14 @@ rustPlatform.buildRustPackage rec {
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
+
+  # * Set default config file via `QW_CONFIG`, otherwise `quickwit run`
+  #   will fail to start. See https://github.com/NixOS/nixpkgs/issues/289000
+  postInstall = ''
+    mkdir -p $out/share/quickwit/config
+    cp ../config/quickwit.yaml $out/share/quickwit/config/quickwit.yaml
+    wrapProgram $out/bin/quickwit --set-default QW_CONFIG $out/share/quickwit/config/quickwit.yaml
+  '';
 
   passthru.updateScript = nix-update-script { };
 
