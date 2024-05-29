@@ -35,7 +35,7 @@ in
     };
 
     dataDir = mkOption {
-      type = types.str;
+      type = types.path;
       default = "/var/lib/sftpgo";
       description = ''
         The directory where SFTPGo stores its data files.
