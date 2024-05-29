@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.25.7";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wP2d8cWNg80KUyw1xPQMriNRg3UyXgKaSoJ17U5vqCE=";
+    hash = "sha256-NeUIU+vXML9lP+JL7MJyGNxZB0ggAngOpf8mMgOE+r8=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Scriptable tracker for randomized games";
     longDescription = ''
       Universal, scriptable randomizer tracking solution that is open source. Supports auto-tracking.
@@ -66,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/black-sliver/PopTracker";
     changelog = "https://github.com/black-sliver/PopTracker/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ freyacodes ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ freyacodes pyrox0 ];
     mainProgram = "poptracker";
     platforms = [ "x86_64-linux" ];
   };

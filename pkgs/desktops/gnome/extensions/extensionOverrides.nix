@@ -15,8 +15,6 @@
 , netcat-gnu
 , nvme-cli
 , procps
-, pulseaudio
-, python3
 , smartmontools
 , substituteAll
 , touchegg
@@ -107,19 +105,20 @@ super: lib.trivial.pipe super [
     ];
   }))
 
-  (patchExtension "mullvadindicator@pobega.github.com" (old: {
-    patches = [
-      # Patch from https://github.com/Pobega/gnome-shell-extension-mullvad-indicator/pull/36
-      # tweaked to drop the Makefile changes to fix application
-      ./extensionOverridesPatches/mullvadindicator_at_pobega.github.com.patch
-    ];
-  }))
-
   (patchExtension "pano@elhan.io" (old: {
     patches = [
       (substituteAll {
         src = ./extensionOverridesPatches/pano_at_elhan.io.patch;
         inherit gsound libgda;
+      })
+    ];
+  }))
+
+  (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
       })
     ];
   }))
