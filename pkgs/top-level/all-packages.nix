@@ -16777,7 +16777,8 @@ with pkgs;
 
   ograc = callPackage ../development/tools/rust/ograc { };
 
-  opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
+  inherit (callPackages ../development/compilers/opensmalltalk-vm { })
+    squeak-cog-spur squeak-stack-spur newspeak-cog-spur;
 
   opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };
   opensyclWithRocm = opensycl.override { rocmSupport = true; };
