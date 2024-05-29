@@ -6304,6 +6304,8 @@ self: super: with self; {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     inherit (pkgs.config) cudaSupport;
+    # NOTE: Most recently supported version of CUDA is 12.2.
+    cudaPackages = pkgs.cudaPackages_12_2;
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
