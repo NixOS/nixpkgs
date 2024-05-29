@@ -24,10 +24,6 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
 
-    # adapted from src/doc/Makefile (doc-src target), which tries to call Sage from PATH
-    mkdir -p $SAGE_DOC_SRC_OVERRIDE/en/reference/repl
-    ${sage-with-env}/bin/sage -advanced > $SAGE_DOC_SRC_OVERRIDE/en/reference/repl/options.txt
-
     # needed to link them in the sage docs using intersphinx
     export PPLPY_DOCS=${python3.pkgs.pplpy.doc}/share/doc/pplpy
 
