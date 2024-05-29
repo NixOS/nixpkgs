@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, polkit, gtk3, pkg-config, intltool }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polkit-gnome";
   version = "0.105";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/polkit-gnome/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0sckmcbxyj6sbrnfc5p5lnw27ccghsid6v6wxq09mgxqcd4lk10p";
+    url = "mirror://gnome/sources/polkit-gnome/${finalAttrs.version}/polkit-gnome-${finalAttrs.version}.tar.xz";
+    hash = "sha256-F4RJSWO4v5oA7txs06KGj7EjuKXlFuZsXtpI3xerk2k=";
   };
 
   buildInputs = [ polkit gtk3 ];
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
-}
+})
