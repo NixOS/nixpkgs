@@ -11930,8 +11930,6 @@ with pkgs;
 
   polipo = callPackage ../servers/polipo { };
 
-  polkit_gnome = callPackage ../tools/security/polkit-gnome { };
-
   poly2tri-c = callPackage ../development/libraries/poly2tri-c { };
 
   polypane = callPackage ../applications/networking/browsers/polypane { };
@@ -16278,6 +16276,7 @@ with pkgs;
     choose = platform:
       /**/ if platform.isDarwin then 16
       else if platform.isFreeBSD then 16
+      else if platform.isOpenBSD then 18
       else if platform.isAndroid then 12
       else if platform.isLinux then 17
       else if platform.isWasm then 16
@@ -21016,6 +21015,7 @@ with pkgs;
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
       else targetPackages.darwin.LibsystemCross or (throw "don't yet have a `targetPackages.darwin.LibsystemCross for ${stdenv.targetPlatform.config}`")
     else if name == "fblibc" then targetPackages.freebsdCross.libc or freebsdCross.libc
+    else if name == "oblibc" then targetPackages.openbsdCross.libc or openbsdCross.libc
     else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
@@ -29349,7 +29349,10 @@ with pkgs;
 
   unscii = callPackage ../data/fonts/unscii { };
 
-  utterly-nord-plasma = libsForQt5.callPackage ../data/themes/utterly-nord-plasma { };
+  utterly-nord-plasma = kdePackages.callPackage ../data/themes/utterly-nord-plasma {
+    # renamed in KF6
+    plasma-framework = kdePackages.libplasma;
+  };
 
   utterly-round-plasma-style = callPackage ../data/themes/utterly-round-plasma-style { };
 
@@ -40741,6 +40744,11 @@ with pkgs;
 
   netbsd = callPackage ../os-specific/bsd/netbsd { };
   netbsdCross = callPackage ../os-specific/bsd/netbsd {
+    stdenv = crossLibcStdenv;
+  };
+
+  openbsd = callPackage ../os-specific/bsd/openbsd { };
+  openbsdCross = callPackage ../os-specific/bsd/openbsd {
     stdenv = crossLibcStdenv;
   };
 
