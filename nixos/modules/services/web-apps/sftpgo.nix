@@ -42,6 +42,14 @@ in
       '';
     };
 
+    extraReadWriteDirs = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      description = ''
+        Extra directories where SFTPGo is allowed to write to.
+      '';
+    };
+
     user = mkOption {
       type = types.str;
       default = defaultUser;
@@ -324,7 +332,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.dataDir;
-          ReadWritePaths = [ cfg.dataDir ];
+          ReadWritePaths = [ cfg.dataDir ] ++ cfg.extraReadWriteDirs;
           LimitNOFILE = 8192; # taken from upstream
           KillMode = "mixed";
           ExecStart = "${cfg.package}/bin/sftpgo serve ${utils.escapeSystemdExecArgs cfg.extraArgs}";
