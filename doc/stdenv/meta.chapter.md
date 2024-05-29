@@ -134,7 +134,7 @@ Tests that are part of the source package are often executed in the `installChec
 Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 
 * `passthru.tests` tests the 'real' package, independently from the environment in which it was built
-* we can run `passthru.tests` independently
+* We can run and debug a `passthru.tests` independently, after the package was built (useful if it takes a long time).
 * `installCheckPhase` adds overhead to each build
 
 For more on how to write and run package tests, see [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
