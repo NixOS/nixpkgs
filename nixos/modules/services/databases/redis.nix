@@ -54,7 +54,13 @@ in {
   options = {
 
     services.redis = {
-      package = mkPackageOption pkgs "redis" { };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.valkey;
+        defaultText = literalExpression "pkgs.valkey";
+        description = "Which package to use for the Redis service.";
+        relatedPackages = [ "valkey" "redis" ];
+      };
 
       vmOverCommit = mkEnableOption ''
         set `vm.overcommit_memory` sysctl to 1
