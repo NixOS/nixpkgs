@@ -557,7 +557,7 @@ let
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
     ulid = [ pkgs.zlib.dev ];
-    unrtf = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev ];
+    unrtf = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
