@@ -1310,6 +1310,13 @@
     githubId = 29887;
     name = "Andrew Smith";
   };
+  Andy3153 = {
+    name = "Andrei Dobrete";
+    email = "andy3153@protonmail.com";
+    matrix = "@andy3153:matrix.org";
+    github = "Andy3153";
+    githubId = 53472302;
+  };
   andys8 = {
     github = "andys8";
     githubId = 13085980;
