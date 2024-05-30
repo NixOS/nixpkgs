@@ -4,7 +4,6 @@
 , pkg-config
 , meson
 , ninja
-, fetchFromGitLab
 , python3
 , vala
 , glib

@@ -1,6 +1,5 @@
 { lib
 , callPackage
-, fetchFromGitHub
 , fixDarwinDylibNames
 , libffi
 , mbqn-source

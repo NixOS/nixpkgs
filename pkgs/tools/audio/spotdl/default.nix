@@ -1,6 +1,5 @@
 { lib
 , python3
-, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
