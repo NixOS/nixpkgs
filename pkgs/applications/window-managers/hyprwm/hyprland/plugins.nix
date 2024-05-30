@@ -3,7 +3,6 @@
 , pkg-config
 , stdenv
 , hyprland
-, fetchpatch
 }:
 let
   mkHyprlandPlugin = hyprland:
@@ -25,26 +24,14 @@ let
     hy3 = { fetchFromGitHub, cmake, hyprland }:
       mkHyprlandPlugin hyprland {
         pluginName = "hy3";
-        version = "0.40.0";
+        version = "0.39.1";
 
         src = fetchFromGitHub {
           owner = "outfoxxed";
           repo = "hy3";
-          rev = "hl0.40.0";
-          hash = "sha256-Y9bIML3C5xyKKv+Yel4LUfSkScwGunOVZkg+Z1dPwHI=";
+          rev = "hl0.39.1";
+          hash = "sha256-PqVld+oFziSt7VZTNBomPyboaMEAIkerPQFwNJL/Wjw=";
         };
-
-        patches = [
-          (fetchpatch {
-            url = "https://github.com/outfoxxed/hy3/commit/33c8d761ff1c1d2264f7549a7bcfc010929d153c.patch";
-            hash = "sha256-GcLQ38IVGB6VFMviKqWAM9ayjC2lpWekx3kqrnwsLhk=";
-          })
-
-          (fetchpatch {
-            url = "https://github.com/outfoxxed/hy3/commit/400930e0391a0e13ebbc6a3b9fe162e00aaad89a.patch";
-            hash = "sha256-DVrZSkXE4uKrAceGpUZklqrVRzV1CpNRgjpq0uOz0jk=";
-          })
-        ];
 
         nativeBuildInputs = [ cmake ];
 
