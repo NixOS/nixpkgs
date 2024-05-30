@@ -62,6 +62,13 @@ rustPlatform.buildRustPackage {
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   };
 
+  postInstall = ''
+    mkdir -p $out/etc/stalwart $out/share/web/
+    cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
+    cp -r resources/config/spamfilter $out/etc/stalwart/
+    cp resources/webadmin.zip $out/share/web/
+  '';
+
   # Tests require reading to /etc/resolv.conf
   doCheck = false;
 
