@@ -70,6 +70,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42cd52102d3df161c77a887b608d7a4897d7cc112886a9537b738a887a03aaff"
 dependencies = [
  "cfg-if",
+ "const-random",
  "getrandom 0.2.10",
  "once_cell",
  "version_check",
@@ -360,17 +361,20 @@ dependencies = [
  "project",
  "rand 0.8.5",
  "regex",
+ "rope",
  "schemars",
  "search",
  "serde",
  "serde_json",
  "settings",
  "smol",
+ "strsim 0.11.1",
  "telemetry_events",
  "theme",
  "tiktoken-rs",
  "toml 0.8.10",
  "ui",
+ "unindent",
  "util",
  "uuid",
  "workspace",
@@ -1681,7 +1685,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4c2f7349907b712260e64b0afe2f84692af14a454be26187d9df565c7f69266a"
 dependencies = [
  "memchr",
- "regex-automata 0.3.8",
+ "regex-automata 0.3.9",
  "serde",
 ]
 
@@ -2091,7 +2095,7 @@ dependencies = [
  "bitflags 1.3.2",
  "clap_lex 0.2.4",
  "indexmap 1.9.3",
- "strsim",
+ "strsim 0.10.0",
  "termcolor",
  "textwrap",
 ]
@@ -2115,7 +2119,7 @@ dependencies = [
  "anstream",
  "anstyle",
  "clap_lex 0.5.1",
- "strsim",
+ "strsim 0.10.0",
 ]
 
 [[package]]
@@ -2559,6 +2563,26 @@ name = "const-oid"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28c122c3980598d243d63d9a704629a2d748d101f278052ff068be5a4423ab6f"
+
+[[package]]
+name = "const-random"
+version = "0.1.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87e00182fe74b066627d63b85fd550ac2998d4b0bd86bfed477a0ae4c7c71359"
+dependencies = [
+ "const-random-macro",
+]
+
+[[package]]
+name = "const-random-macro"
+version = "0.1.16"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9d839f2a20b0aee515dc581a6172f2321f96cab76c1a38a4c584a194955390e"
+dependencies = [
+ "getrandom 0.2.10",
+ "once_cell",
+ "tiny-keccak",
+]
 
 [[package]]
 name = "convert_case"
@@ -3949,6 +3973,7 @@ dependencies = [
  "menu",
  "picker",
  "project",
+ "serde",
  "serde_json",
  "settings",
  "text",
@@ -4609,7 +4634,6 @@ name = "go_to_line"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "collections",
  "editor",
  "gpui",
  "indoc",
@@ -4752,6 +4776,7 @@ dependencies = [
  "windows 0.56.0",
  "windows-core 0.56.0",
  "x11rb",
+ "xim",
  "xkbcommon",
 ]
 
@@ -6037,8 +6062,8 @@ dependencies = [
 
 [[package]]
 name = "lsp-types"
-version = "0.94.1"
-source = "git+https://github.com/zed-industries/lsp-types?branch=updated-completion-list-item-defaults#90a040a1d195687bd19e1df47463320a44e93d7a"
+version = "0.95.1"
+source = "git+https://github.com/zed-industries/lsp-types?branch=apply-snippet-edit#853c7881d200777e20799026651ca36727144646"
 dependencies = [
  "bitflags 1.3.2",
  "serde",
@@ -7011,7 +7036,6 @@ dependencies = [
 name = "outline"
 version = "0.1.0"
 dependencies = [
- "collections",
  "editor",
  "fuzzy",
  "gpui",
@@ -7631,6 +7655,7 @@ dependencies = [
  "client",
  "clock",
  "collections",
+ "dev_server_projects",
  "env_logger",
  "fs",
  "futures 0.3.28",
@@ -7658,9 +7683,12 @@ dependencies = [
  "serde_json",
  "settings",
  "sha2 0.10.7",
+ "shlex",
  "similar",
  "smol",
+ "snippet",
  "task",
+ "tempfile",
  "terminal",
  "text",
  "unindent",
@@ -8015,12 +8043,14 @@ name = "recent_projects"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "client",
  "dev_server_projects",
  "editor",
  "feature_flags",
  "fuzzy",
  "gpui",
  "language",
+ "markdown",
  "menu",
  "ordered-float 2.10.0",
  "picker",
@@ -8028,9 +8058,9 @@ dependencies = [
  "rpc",
  "serde",
  "serde_json",
- "settings",
  "smol",
- "theme",
+ "task",
+ "terminal_view",
  "ui",
  "ui_text_field",
  "util",
@@ -8118,9 +8148,9 @@ dependencies = [
 
 [[package]]
 name = "regex-automata"
-version = "0.3.8"
+version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2f401f4955220693b56f8ec66ee9c78abffd8d1c4f23dc41a23839eb88f0795"
+checksum = "59b23e92ee4318893fa3fe3e6fb365258efbfe6ac6ab30f090cdcbb7aa37efa9"
 
 [[package]]
 name = "regex-automata"
@@ -9712,7 +9742,6 @@ name = "storybook"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "assistant2",
  "clap 4.4.4",
  "collab_ui",
  "ctrlc",
@@ -9760,6 +9789,12 @@ name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
+
+[[package]]
+name = "strsim"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
 name = "strum"
@@ -10397,6 +10432,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tiny-keccak"
+version = "2.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
+dependencies = [
+ "crunchy",
+]
+
+[[package]]
 name = "tiny-skia"
 version = "0.11.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10856,8 +10900,8 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-go"
-version = "0.19.1"
-source = "git+https://github.com/tree-sitter/tree-sitter-go?rev=aeb2f33b366fd78d5789ff104956ce23508b85db#aeb2f33b366fd78d5789ff104956ce23508b85db"
+version = "0.20.0"
+source = "git+https://github.com/tree-sitter/tree-sitter-go?rev=b82ab803d887002a0af11f6ce63d72884580bf33#b82ab803d887002a0af11f6ce63d72884580bf33"
 dependencies = [
  "cc",
  "tree-sitter",
@@ -12799,6 +12843,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "xim"
+version = "0.4.0"
+source = "git+https://github.com/npmania/xim-rs?rev=27132caffc5b9bc9c432ca4afad184ab6e7c16af#27132caffc5b9bc9c432ca4afad184ab6e7c16af"
+dependencies = [
+ "ahash 0.8.8",
+ "hashbrown 0.14.0",
+ "log",
+ "x11rb",
+ "xim-ctext",
+ "xim-parser",
+]
+
+[[package]]
+name = "xim-ctext"
+version = "0.3.0"
+source = "git+https://github.com/npmania/xim-rs?rev=27132caffc5b9bc9c432ca4afad184ab6e7c16af#27132caffc5b9bc9c432ca4afad184ab6e7c16af"
+dependencies = [
+ "encoding_rs",
+]
+
+[[package]]
+name = "xim-parser"
+version = "0.2.1"
+source = "git+https://github.com/npmania/xim-rs?rev=27132caffc5b9bc9c432ca4afad184ab6e7c16af#27132caffc5b9bc9c432ca4afad184ab6e7c16af"
+dependencies = [
+ "bitflags 2.4.2",
+]
+
+[[package]]
 name = "xkbcommon"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -12928,13 +13001,12 @@ dependencies = [
 
 [[package]]
 name = "zed"
-version = "0.136.2"
+version = "0.137.2"
 dependencies = [
  "activity_indicator",
  "anyhow",
  "assets",
  "assistant",
- "assistant2",
  "audio",
  "auto_update",
  "backtrace",
@@ -13078,7 +13150,7 @@ dependencies = [
 
 [[package]]
 name = "zed_emmet"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "zed_extension_api 0.0.4",
 ]
@@ -13121,7 +13193,7 @@ dependencies = [
 
 [[package]]
 name = "zed_gleam"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -13142,9 +13214,9 @@ dependencies = [
 
 [[package]]
 name = "zed_html"
-version = "0.0.1"
+version = "0.1.1"
 dependencies = [
- "zed_extension_api 0.0.4",
+ "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -13184,7 +13256,7 @@ dependencies = [
 
 [[package]]
 name = "zed_ruby"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
  "zed_extension_api 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
