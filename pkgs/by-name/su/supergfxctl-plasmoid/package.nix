@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
+    kdePackages.wrapQtAppsHook
     kdePackages.libplasma
   ];
 
