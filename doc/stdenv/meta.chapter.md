@@ -157,6 +157,8 @@ Most programs distributed by Nixpkgs support such a `--version` flag, and it can
 * We can run and debug a `passthru.tests` independently, after the package was built (useful if it takes a long time).
 * `installCheckPhase` adds overhead to each build
 
+It is also possible to still use `passthru.tests` to test the version, with [testVersion](#tester-testVersion).
+
 For more on how to write and run package tests, see [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
 
 #### NixOS tests {#var-meta-tests-nixos}
