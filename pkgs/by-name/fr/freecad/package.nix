@@ -24,6 +24,7 @@
 , python3Packages
 , runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.isLinux
+, ifcSupport ? false
 , stdenv
 , swig
 , vtk
@@ -45,6 +46,7 @@ let
     wrapQtAppsHook;
   inherit (python3Packages)
     gitpython
+    ifcopenshell
     matplotlib
     pivy
     ply
@@ -115,6 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals spaceNavSupport [
     libspnav
     qtx11extras
+  ] ++ lib.optionals ifcSupport [
+    ifcopenshell
   ];
 
   patches = [
