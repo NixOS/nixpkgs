@@ -1303,7 +1303,7 @@ let
       propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.quarto ];
       postPatch = ''
         substituteInPlace "R/quarto.R" \
-          --replace "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = NA)" "path_env <- Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
+          --replace-fail "Sys.getenv(\"QUARTO_PATH\", unset = NA_character_)" "Sys.getenv(\"QUARTO_PATH\", unset = '${lib.getBin pkgs.quarto}/bin/quarto')"
       '';
     });
 
