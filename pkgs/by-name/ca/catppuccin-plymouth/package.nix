@@ -1,6 +1,7 @@
 { stdenvNoCC
 , lib
 , fetchFromGitHub
+, unstableGitUpdater
 , variant ? "macchiato"
 }:
 
@@ -12,13 +13,13 @@ lib.checkListOfEnum "${pname}: color variant" validVariants [ variant ]
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "unstable-2022-12-10";
+  version = "0-unstable-2024-05-28";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "plymouth";
-    rev = "d4105cf336599653783c34c4a2d6ca8c93f9281c";
-    hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
+    rev = "e13c348a0f47772303b2da1e9396027d8cda160d";
+    hash = "sha256-6DliqhRncvdPuKzL9LJec3PJWmK/jo9BrrML7g6YcH0=";
   };
 
   sourceRoot = "${src.name}/themes/catppuccin-${variant}";
@@ -33,11 +34,18 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
+
   meta = with lib; {
     description = "Soothing pastel theme for Plymouth";
     homepage = "https://github.com/catppuccin/plymouth";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.spectre256 ];
+    maintainers = with maintainers; [
+      johnrtitor
+      spectre256
+    ];
   };
 }
