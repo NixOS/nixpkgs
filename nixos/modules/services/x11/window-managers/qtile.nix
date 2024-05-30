@@ -57,9 +57,11 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.qtile.finalPackage = pkgs.python3.withPackages (p:
-      [ (cfg.package.unwrapped or cfg.package) ] ++ (cfg.extraPackages p)
-    );
+    services.xserver.windowManager.qtile.finalPackage = cfg.package.overridePythonAttrs(oldAttrs: {
+      propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or []) ++ [
+        (cfg.extraPackages pkgs.python3Packages)
+      ];
+    });
 
     services.xserver.windowManager.session = [{
       name = "qtile";
