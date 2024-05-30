@@ -46,6 +46,9 @@ in {
       storage.fts = mkDefault "db";
       storage.lookup = mkDefault "db";
       storage.blob = mkDefault "blob";
+      directory.internal.type = mkDefault "internal";
+      directory.internal.store = mkDefault "db";
+      storage.directory = mkDefault "internal";
       resolver.type = mkDefault "system";
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
