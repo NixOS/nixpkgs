@@ -1,4 +1,9 @@
-{ lib, pkgs, xwayland ? true }:
+{
+  lib,
+  pkgs,
+  xwayland ? true,
+  wlr-portal ? true,
+}:
 
 {
   security = {
@@ -14,5 +19,5 @@
     xwayland.enable = lib.mkDefault xwayland;
   };
 
-  xdg.portal.wlr.enable = lib.mkDefault true;
+  xdg.portal.wlr.enable = wlr-portal;
 }
