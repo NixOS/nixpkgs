@@ -30,8 +30,12 @@ in {
 
     # Default config: all local
     services.stalwart-mail.settings = {
-      global.tracing.method = mkDefault "stdout";
-      global.tracing.level = mkDefault "info";
+      tracer.stdout = {
+        type = mkDefault "stdout";
+        level = mkDefault "info";
+        ansi = mkDefault false;  # no colour markers to journald
+        enable = mkDefault true;
+      };
       queue.path = mkDefault "${dataDir}/queue";
       report.path = mkDefault "${dataDir}/reports";
       store.db.type = mkDefault "sqlite";
@@ -42,6 +46,9 @@ in {
       storage.fts = mkDefault "db";
       storage.lookup = mkDefault "db";
       storage.blob = mkDefault "blob";
+      directory.internal.type = mkDefault "internal";
+      directory.internal.store = mkDefault "db";
+      storage.directory = mkDefault "internal";
       resolver.type = mkDefault "system";
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"

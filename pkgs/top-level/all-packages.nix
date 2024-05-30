@@ -11950,7 +11950,11 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray { };
+  povray = callPackage ../tools/graphics/povray {
+    # https://github.com/POV-Ray/povray/issues/460
+    # https://github.com/NixOS/nixpkgs/issues/311017
+    stdenv = gcc12Stdenv;
+  };
 
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
@@ -28310,8 +28314,6 @@ with pkgs;
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
 
-  catppuccin-cursors = callPackage ../data/icons/catppuccin-cursors { };
-
   ccsymbols = callPackage ../data/fonts/ccsymbols { };
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
@@ -34120,7 +34122,15 @@ with pkgs;
 
   rke = callPackage ../applications/networking/cluster/rke { };
 
-  rke2 = callPackage ../applications/networking/cluster/rke2 { };
+  inherit (callPackage ../applications/networking/cluster/rke2 {
+    buildGoModule = buildGo121Module;
+    go = go_1_21;
+  }) rke2_stable;
+  inherit (callPackage ../applications/networking/cluster/rke2 {
+    buildGoModule = buildGo122Module;
+    go = go_1_22;
+  }) rke2_latest rke2_testing;
+  rke2 = rke2_stable;
 
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
@@ -34741,8 +34751,6 @@ with pkgs;
   termimage = callPackage ../tools/graphics/termimage { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier { };
-
-  textpieces = callPackage ../tools/text/textpieces { };
 
   textplots = callPackage ../tools/graphics/textplots { };
 
@@ -37452,8 +37460,6 @@ with pkgs;
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
   vitetris = callPackage ../games/vitetris { };
-
-  vms-empire = callPackage ../games/vms-empire { };
 
   voxelands = callPackage ../games/voxelands { };
 

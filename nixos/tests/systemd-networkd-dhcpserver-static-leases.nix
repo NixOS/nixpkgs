@@ -24,6 +24,8 @@ import ./make-test-python.nix ({ lib, ... }: {
           "01-eth1" = {
             name = "eth1";
             networkConfig = {
+              # IPForward prevents dynamic address configuration
+              IPForward = true;
               DHCPServer = true;
               Address = "10.0.0.1/24";
             };
@@ -39,20 +41,30 @@ import ./make-test-python.nix ({ lib, ... }: {
     client = {
       virtualisation.vlans = [ 1 ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-        firewall.enable = false;
-        interfaces.eth1 = {
-          useDHCP = true;
-          macAddress = "02:de:ad:be:ef:01";
+      systemd.network = {
+        enable = true;
+        links."10-eth1" = {
+          matchConfig.OriginalName = "eth1";
+          linkConfig.MACAddress = "02:de:ad:be:ef:01";
+        };
+        networks."40-eth1" = {
+          matchConfig.Name = "eth1";
+          networkConfig = {
+            DHCP = "ipv4";
+            IPv6AcceptRA = false;
+          };
+          # This setting is important to have the router assign the
+          # configured lease based on the client's MAC address. Also see:
+          # https://github.com/systemd/systemd/issues/21368#issuecomment-982193546
+          dhcpV4Config.ClientIdentifier = "mac";
+          linkConfig.RequiredForOnline = "routable";
         };
       };
-
-      # This setting is important to have the router assign the
-      # configured lease based on the client's MAC address. Also see:
-      # https://github.com/systemd/systemd/issues/21368#issuecomment-982193546
-      systemd.network.networks."40-eth1".dhcpV4Config.ClientIdentifier = "mac";
+      networking = {
+        useDHCP = false;
+        firewall.enable = false;
+        interfaces.eth1 = lib.mkForce {};
+      };
     };
   };
   testScript = ''

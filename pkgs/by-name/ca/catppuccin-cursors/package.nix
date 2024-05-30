@@ -1,35 +1,46 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, unzip
+, inkscape
+, just
+, xcursorgen
 }:
 
 let
   dimensions = {
-    palette = [ "Frappe" "Latte" "Macchiato" "Mocha" ];
+    palette = [ "frappe" "latte" "macchiato" "mocha" ];
     color = [ "Blue" "Dark" "Flamingo" "Green" "Lavender" "Light" "Maroon" "Mauve" "Peach" "Pink" "Red" "Rosewater" "Sapphire" "Sky" "Teal" "Yellow" ];
   };
-  variantName = { palette, color }: (lib.strings.toLower palette) + color;
+  variantName = { palette, color }: palette + color;
   variants = lib.mapCartesianProduct variantName dimensions;
+  version = "0.2.1";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "catppuccin-cursors";
-  version = "0.2.0";
-  dontBuild = true;
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "cursors";
     rev = "v${version}";
-    sha256 = "sha256-TgV5f8+YWR+h61m6WiBMg3aBFnhqShocZBdzZHSyU2c=";
-    sparseCheckout = [ "cursors" ];
+    hash = "sha256-aQfbziN5z62LlgVq4CNMXVMmTrzChFgWUMAmO/2/z3Y=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ just inkscape xcursorgen ];
 
   outputs = variants ++ [ "out" ]; # dummy "out" output to prevent breakage
 
   outputsToInstall = [];
+
+  buildPhase = ''
+    runHook preBuild
+
+    patchShebangs .
+
+    just all
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -43,9 +54,9 @@ stdenvNoCC.mkDerivation rec {
 
         # Convert to kebab case with the first letter of each word capitalized
         local variant=$(sed 's/\([A-Z]\)/-\1/g' <<< "$output")
-        local variant=''${variant^}
+        local variant=''${variant,,}
 
-        unzip "cursors/Catppuccin-$variant-Cursors.zip" -d "$iconsDir"
+        mv "dist/catppuccin-$variant-cursors" "$iconsDir"
       fi
     done
 
@@ -55,11 +66,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Catppuccin cursor theme based on Volantes";
     homepage = "https://github.com/catppuccin/cursors";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dixslyf ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dixslyf ];
   };
 }
