@@ -13,6 +13,7 @@
 , python3
 , substituteAll
 , zlib
+, fetchpatch
 }:
 
 let
@@ -78,6 +79,16 @@ python3.pkgs.buildPythonApplication rec {
     # Fix compilation of Meson using Ninja 1.12
     # FIXME: remove in the next point release
     ./007-Allow-building-via-ninja-12.patch
+
+
+    # Find boost via pkg-config
+    # https://github.com/NixOS/nixpkgs/issues/86131
+    # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
+    (fetchpatch {
+      name = "find-boost-pkg-config.patch";
+      url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
+      hash = "sha256-uSilNuSx9yd1cxs0XVLcLw4MOXEd2uIe2g+wk+SBqeU=";
+    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
