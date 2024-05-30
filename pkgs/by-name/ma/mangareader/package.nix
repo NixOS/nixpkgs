@@ -1,37 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, extra-cmake-modules
-, cmake
-, kio
-, ki18n
-, kxmlgui
-, kconfig
-, karchive
-, kcoreaddons
-, kconfigwidgets
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kdePackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mangareader";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "g-fb";
-    repo = pname;
+    repo = "mangareader";
     rev = version;
-    hash = "sha256-YZZcp+HS/P/GxWYyOpO35nByJSzv4HahzzrZSVRcCRs=";
+    hash = "sha256-XX0VaXVYmAs5vmgwslflKIYx1peITp4VmReLkv1nV3I=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    kdePackages.extra-cmake-modules
+    kdePackages.wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = with kdePackages; [
+    qtbase
     kio
     ki18n
     kxmlgui
@@ -43,12 +37,16 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Qt manga reader for local files";
     homepage = "https://github.com/g-fb/mangareader";
     changelog = "https://github.com/g-fb/mangareader/releases/tag/${src.rev}";
-    platforms = platforms.linux;
-    license = with licenses; [ gpl3Plus cc-by-nc-sa-40 ];
-    maintainers = with maintainers; [ zendo ];
+    mainProgram = "mangareader";
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      gpl3Plus
+      cc-by-sa-40
+    ];
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }
