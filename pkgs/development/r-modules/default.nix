@@ -462,6 +462,7 @@ let
     string2path = [ pkgs.cargo ];
     terra = with pkgs; [ gdal proj geos ];
     tok = [ pkgs.cargo ];
+    arcgisutils = with pkgs; [ cargo rustc ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
