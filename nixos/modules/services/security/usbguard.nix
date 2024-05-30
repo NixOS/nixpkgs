@@ -174,7 +174,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = if cfg.notifierEnable then [ cfg.package pkgs.usbguard-notifier ] else [ cfg.package ];
+    environment.systemPackages = [ cfg.package ] ++ lib.optionals cfg.notifierEnable [ pkgs.usbguard-notifier ];
 
     systemd.services = {
       usbguard = {
