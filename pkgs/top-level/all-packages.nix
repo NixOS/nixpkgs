@@ -3116,8 +3116,9 @@ with pkgs;
 
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
-    ammonite_2_13;
-  ammonite = ammonite_2_13;
+    ammonite_2_13
+    ammonite_3_3;
+  ammonite = ammonite_3_3;
 
   amp = callPackage ../applications/editors/amp { };
 
