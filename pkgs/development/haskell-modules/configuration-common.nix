@@ -1560,11 +1560,6 @@ self: super: {
       doJailbreak
     ];
 
-  jsaddle-dom = overrideCabal (old: {
-    postPatch = old.postPatch or "" + ''
-      rm Setup.hs
-    '';
-  }) super.jsaddle-dom;
   jsaddle-hello = doJailbreak super.jsaddle-hello;
   ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
 
