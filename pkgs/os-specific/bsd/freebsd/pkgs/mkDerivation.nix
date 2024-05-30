@@ -3,6 +3,8 @@
   stdenv,
   stdenvNoCC,
   stdenvNoLibs,
+  overrideCC,
+  buildPackages,
   versionData,
   writeText,
   patches,
@@ -27,6 +29,8 @@ lib.makeOverridable (
         stdenvNoCC
       else if attrs.noLibc or false then
         stdenvNoLibs
+      else if attrs.noLibcxx or false then
+        overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
       else
         stdenv;
   in
