@@ -35092,8 +35092,6 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/office/qpdfview { };
 
-  qtile = callPackage ../development/python-modules/qtile/wrapper.nix { };
-
   vimgolf = callPackage ../games/vimgolf { };
 
   vimpc = callPackage ../applications/audio/vimpc { };

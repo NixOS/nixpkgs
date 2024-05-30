@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ lib, ...} : {
     test-support.displayManager.auto.user = "alice";
 
     services.xserver.windowManager.qtile.enable = true;
-    services.displayManager.defaultSession = lib.mkForce "none+qtile";
+    services.displayManager.defaultSession = lib.mkForce "qtile";
 
     environment.systemPackages = [ pkgs.kitty ];
   };

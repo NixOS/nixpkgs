@@ -30,6 +30,7 @@
   xcffib,
   xkbcommon,
   nixosTests,
+  extraPackages ? [ ],
 }:
 
 buildPythonPackage rec {
@@ -66,7 +67,7 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  dependencies = [
+  dependencies = extraPackages ++ [
     (cairocffi.override { withXcffib = true; })
     dbus-next
     iwlib
@@ -96,6 +97,11 @@ buildPythonPackage rec {
     tests.qtile = nixosTests.qtile;
     providedSessions = [ "qtile" ];
   };
+
+  postInstall = ''
+    install resources/qtile.desktop -Dt $out/share/xsessions
+    install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
+  '';
 
   meta = with lib; {
     homepage = "http://www.qtile.org/";
