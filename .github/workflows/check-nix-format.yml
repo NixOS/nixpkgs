@@ -43,6 +43,7 @@ jobs:
             nixos/modules/services/cluster/k3s
             nixos/tests/k3s
             pkgs/applications/networking/cluster/k3s
+          NIX_FMT_PATHS_LLVM_COMMON: pkgs/development/compilers/llvm/common
           NIX_FMT_PATHS_VSCODE_EXTS: pkgs/applications/editors/vscode/extensions
           NIX_FMT_PATHS_PHP_PACKAGES: pkgs/development/php-packages
           NIX_FMT_PATHS_BUILD_SUPPORT_PHP: pkgs/build-support/php

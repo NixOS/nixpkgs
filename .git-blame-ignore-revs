@@ -121,3 +121,6 @@ c759efa5e7f825913f9a69ef20f025f50f56dc4d
 
 # python3Packages: format with nixfmt
 59b1aef59071cae6e87859dc65de973d2cc595c0
+
+# pkgs/development/compilers/llvm/common: Reformat with nixfmt-rfc-style
+65e2d797a234feb71c787ad3ef0cafc52299bb37
