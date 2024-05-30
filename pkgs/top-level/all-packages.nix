@@ -37451,8 +37451,6 @@ with pkgs;
 
   vitetris = callPackage ../games/vitetris { };
 
-  vms-empire = callPackage ../games/vms-empire { };
-
   voxelands = callPackage ../games/voxelands { };
 
   vvvvvv = callPackage ../by-name/vv/vvvvvv/package.nix {
