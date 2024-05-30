@@ -20,6 +20,7 @@
 # options
 , enableDocs ? true
 , enableGI ? true
+, enableSystemd ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -54,9 +55,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    systemd
     lua5_4
     pipewire
+  ] ++ lib.optionals enableSystemd [
+    systemd
   ];
 
   mesonFlags = [
@@ -64,8 +66,10 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "elogind" false)
     (lib.mesonEnable "doc" enableDocs)
     (lib.mesonEnable "introspection" enableGI)
-    (lib.mesonBool "systemd-system-service" true)
+    (lib.mesonEnable "systemd" enableSystemd)
+    (lib.mesonBool "systemd-system-service" enableSystemd)
     (lib.mesonOption "systemd-system-unit-dir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonBool "systemd-user-service" enableSystemd)
     (lib.mesonOption "sysconfdir" "/etc")
   ];
 
