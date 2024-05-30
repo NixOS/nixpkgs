@@ -553,7 +553,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
-    asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev ];
+    asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
     ulid = [ pkgs.zlib.dev ];
