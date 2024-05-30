@@ -8,25 +8,43 @@
 # must remember to do the check.
 #
 
-{ stdenv
-, pkgs
-, lib
+{ lib
+, stdenv
+, runCommand
+, overrideCC
+, wrapCCWith
 }:
 
-assert stdenv.cc.isGNU;
-with pkgs;
-# rebuild gcc using the "final" stdenv
-let gcc-stageCompare = (gcc-unwrapped.override {
-      reproducibleBuild = true;
-      profiledCompiler = false;
-      stdenv = overrideCC stdenv (wrapCCWith {
-        cc = stdenv.cc;
-      });
-    }).overrideAttrs(_: {
-      NIX_OUTPATH_USED_AS_RANDOM_SEED = stdenv.cc.cc.out;
+let
+  inherit (stdenv.cc) cc;
+in
+
+assert cc.isGNU;
+
+# Rebuild gcc using the "final" stdenv.
+let
+  rebuiltCC = (cc.override {
+    reproducibleBuild = true;
+    profiledCompiler = false;
+    stdenv = overrideCC stdenv (wrapCCWith {
+      inherit cc;
     });
-in (runCommand "gcc-stageCompare" {} ''
-  diff -sr ${pkgs.gcc-unwrapped.checksum}/checksums ${gcc-stageCompare.checksum}/checksums && touch $out
-'').overrideAttrs (a: {
-  meta = (a.meta or { }) // { platforms = lib.platforms.linux; };
-})
+  }).overrideAttrs (_: {
+    # TODO: do we really have to set random seed? This likely won’t work with
+    # content-addressed derivations, and also GCC expects random seed to be
+    # different for each file (but that is an issue with stdenv in general).
+    # https://gcc.gnu.org/onlinedocs/gcc-14.1.0/gcc/Developer-Options.html#index-frandom-seed
+    # >The string should be different for every file you compile.
+    NIX_OUTPATH_USED_AS_RANDOM_SEED = cc.out;
+  });
+
+  cmdArgs = {
+    checksumBefore = cc.checksum;
+    checksumAfter = rebuiltCC.checksum;
+    meta.platforms = lib.platforms.linux;
+  };
+in
+runCommand "gcc-stageCompare" cmdArgs ''
+  diff -sr "$checksumBefore"/checksums "$checksumAfter"/checksums
+  touch $out
+''
