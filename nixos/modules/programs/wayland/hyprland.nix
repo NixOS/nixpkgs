@@ -88,4 +88,6 @@ in
       "Nvidia patches are no longer needed"
     )
   ];
+
+  meta.maintainers = with lib.maintainers; [ fufexan ];
 }
