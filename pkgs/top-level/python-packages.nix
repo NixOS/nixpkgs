@@ -5983,6 +5983,8 @@ self: super: with self; {
 
   iwlib = callPackage ../development/python-modules/iwlib { };
 
+  ixia = callPackage ../development/python-modules/ixia { };
+
   j2cli = callPackage ../development/python-modules/j2cli { };
 
   jaconv = callPackage ../development/python-modules/jaconv { };
