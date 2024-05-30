@@ -190,6 +190,10 @@ let
         hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
       })
       ./qtwebengine-link-pulseaudio.patch
+      # Fixes Chromium build failure with Ninja 1.12.
+      # See: https://bugreports.qt.io/browse/QTBUG-124375
+      # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
+      ./qtwebengine-ninja-1.12.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
