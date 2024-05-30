@@ -66,6 +66,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           settings = {
             interfaces-config.interfaces = [ "eth1" ];
             subnet6 = [ {
+              id = 1;
               interface = "eth1";
               subnet = "2001:DB8::/32";
               pd-pools = [ {
