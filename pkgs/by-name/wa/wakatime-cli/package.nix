@@ -3,11 +3,11 @@
   buildGo122Module,
   fetchFromGitHub,
   testers,
-  wakatime,
+  wakatime-cli,
 }:
 
 buildGo122Module rec {
-  pname = "wakatime";
+  pname = "wakatime-cli";
   version = "1.90.0";
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildGo122Module rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests.version = testers.testVersion {
-    package = wakatime;
+    package = wakatime-cli;
     command = "HOME=$(mktemp -d) wakatime-cli --version";
   };
 
