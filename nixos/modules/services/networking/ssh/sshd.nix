@@ -349,7 +349,7 @@ in
           freeformType = settingsFormat.type;
           options = {
             AuthorizedPrincipalsFile = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               default = "none"; # upstream default
               description = ''
                 Specifies a file that lists principal names that are accepted for certificate authentication. The default
@@ -357,16 +357,18 @@ in
               '';
             };
             LogLevel = mkOption {
-              type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
+              type = types.nullOr (types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ]);
               default = "INFO"; # upstream default
               description = ''
                 Gives the verbosity level that is used when logging messages from sshd(8). Logging with a DEBUG level
                 violates the privacy of users and is not recommended.
               '';
             };
-            UsePAM = mkEnableOption "PAM authentication" // { default = true; };
+            UsePAM =
+              mkEnableOption "PAM authentication"
+              // { default = true; type = types.nullOr types.bool; };
             UseDns = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               # apply if cfg.useDns then "yes" else "no"
               default = false;
               description = ''
@@ -377,14 +379,14 @@ in
               '';
             };
             X11Forwarding = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               default = false;
               description = ''
                 Whether to allow X11 connections to be forwarded.
               '';
             };
             PasswordAuthentication = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               default = true;
               description = ''
                 Specifies whether password authentication is allowed.
@@ -392,20 +394,20 @@ in
             };
             PermitRootLogin = mkOption {
               default = "prohibit-password";
-              type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
+              type = types.nullOr (types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"]);
               description = ''
                 Whether the root user can login using ssh.
               '';
             };
             KbdInteractiveAuthentication = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               default = true;
               description = ''
                 Specifies whether keyboard-interactive authentication is allowed.
               '';
             };
             GatewayPorts = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               default = "no";
               description = ''
                 Specifies whether remote hosts are allowed to connect to
@@ -414,7 +416,7 @@ in
               '';
             };
             KexAlgorithms = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
               default = [
                 "sntrup761x25519-sha512@openssh.com"
                 "curve25519-sha256"
@@ -431,7 +433,7 @@ in
               '';
             };
             Macs = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
               default = [
                 "hmac-sha2-512-etm@openssh.com"
                 "hmac-sha2-256-etm@openssh.com"
@@ -447,14 +449,14 @@ in
               '';
             };
             StrictModes = mkOption {
-              type = types.bool;
+              type = types.nullOr (types.bool);
               default = true;
               description = ''
                 Whether sshd should check file modes and ownership of directories
               '';
             };
             Ciphers = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
               default = [
                 "chacha20-poly1305@openssh.com"
                 "aes256-gcm@openssh.com"
@@ -509,7 +511,9 @@ in
               '';
             };
             # Disabled by default, since pam_motd handles this.
-            PrintMotd = mkEnableOption "printing /etc/motd when a user logs in interactively";
+            PrintMotd =
+              mkEnableOption "printing /etc/motd when a user logs in interactively"
+              // { type = types.nullOr types.bool; };
           };
         });
       };
@@ -646,7 +650,10 @@ in
     security.pam.services.sshd = lib.mkIf cfg.settings.UsePAM
       { startSession = true;
         showMotd = true;
-        unixAuth = cfg.settings.PasswordAuthentication;
+        unixAuth =
+          if cfg.settings.PasswordAuthentication == true
+          then true
+          else false;
       };
 
     # These values are merged with the ones defined externally, see:

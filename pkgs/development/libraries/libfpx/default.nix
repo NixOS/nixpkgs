@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ImageMagick/libfpx/commit/c32b340581ba6c88c5092f374f655c7579b598a6.patch";
       sha256 = "1gbc0qb2ri1mj9r66wx0yn28fsr7zhhlyz2mwbica8wh34xijgz9";
     })
+    # fix clang build: remove register keyword
+    # remove on next update
+    (fetchpatch {
+      name = "remove-register-keyword.patch";
+      url = "https://github.com/ImageMagick/libfpx/commit/5f340b0a490450b40302cc9948c7dfac60d40041.patch";
+      hash = "sha256-6m9MFb1eWGK5cMvPmTu7uh3Pac65r2HPB8wJ8xc1O5o=";
+    })
   ];
 
   meta = with lib; {
