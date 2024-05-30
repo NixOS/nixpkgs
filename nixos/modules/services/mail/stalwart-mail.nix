@@ -55,6 +55,18 @@ in {
       ];
     };
 
+    # This service stores a potentially large amount of data.
+    # Running it as a dynamic user would force chown to be run everytime the
+    # service is restarted on a potentially large number of files.
+    # That would cause unnecessary and unwanted delays.
+    users = {
+      groups.stalwart-mail = { };
+      users.stalwart-mail = {
+        isSystemUser = true;
+        group = "stalwart-mail";
+      };
+    };
+
     systemd.services.stalwart-mail = {
       wantedBy = [ "multi-user.target" ];
       after = [ "local-fs.target" "network.target" ];
@@ -78,8 +90,8 @@ in {
         StandardError = "journal";
         SyslogIdentifier = "stalwart-mail";
 
-        DynamicUser = true;
         User = "stalwart-mail";
+        Group = "stalwart-mail";
         StateDirectory = "stalwart-mail";
 
         # Bind standard privileged ports
