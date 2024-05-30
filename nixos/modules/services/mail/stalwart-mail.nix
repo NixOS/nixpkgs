@@ -7,6 +7,7 @@ let
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
   dataDir = "/var/lib/stalwart-mail";
+  useLegacyStorage = versionOlder config.system.stateVersion "24.11";
 
 in {
   options.services.stalwart-mail = {
@@ -38,14 +39,22 @@ in {
       };
       queue.path = mkDefault "${dataDir}/queue";
       report.path = mkDefault "${dataDir}/reports";
-      store.db.type = mkDefault "sqlite";
-      store.db.path = mkDefault "${dataDir}/data/index.sqlite3";
-      store.blob.type = mkDefault "fs";
-      store.blob.path = mkDefault "${dataDir}/data/blobs";
+      store = if useLegacyStorage then {
+        # structured data in SQLite, blobs on filesystem
+        db.type = mkDefault "sqlite";
+        db.path = mkDefault "${dataDir}/data/index.sqlite3";
+        fs.type = mkDefault "fs";
+        fs.path = mkDefault "${dataDir}/data/blobs";
+      } else {
+        # everything in RocksDB
+        db.type = mkDefault "rocksdb";
+        db.path = mkDefault "${dataDir}/db";
+        db.compression = mkDefault "lz4";
+      };
       storage.data = mkDefault "db";
       storage.fts = mkDefault "db";
       storage.lookup = mkDefault "db";
-      storage.blob = mkDefault "blob";
+      storage.blob = mkDefault (if useLegacyStorage then "fs" else "db");
       directory.internal.type = mkDefault "internal";
       directory.internal.store = mkDefault "db";
       storage.directory = mkDefault "internal";
@@ -71,8 +80,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "local-fs.target" "network.target" ];
 
-      preStart = ''
+      preStart = if useLegacyStorage then ''
         mkdir -p ${dataDir}/{queue,reports,data/blobs}
+      '' else ''
+        mkdir -p ${dataDir}/{queue,reports,db}
       '';
 
       serviceConfig = {
