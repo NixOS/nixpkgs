@@ -426,9 +426,11 @@ stdenv.mkDerivation ({
   # GHC currently ships an edited config.sub so ghcjs is accepted which we can not rollback
   ${if targetPlatform.isGhcjs then "dontUpdateAutotoolsGnuConfigScripts" else null} = true;
 
+  # FreeBSD prebuilts are built for x86_64-portbld-freebsd instead of x86_64-unknown-freebsd
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = lib.optionals (!stdenv.isFreeBSD)
+    ([ "build" "host" ]
+    ++ lib.optional (targetPlatform != hostPlatform) "target");
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
@@ -462,7 +464,11 @@ stdenv.mkDerivation ({
     # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
     # https://github.com/haskell/cabal/issues/8882
     "fp_cv_prog_ar_supports_dash_l=no"
-  ];
+  ] ++ lib.optionals stdenv.isFreeBSD (let unport = (s: builtins.replaceStrings ["unknown"] ["portbld"] s); in [
+    "--build=${unport stdenv.buildPlatform.config}"
+    "--host=${unport stdenv.hostPlatform.config}"
+    "--target=${unport stdenv.targetPlatform.config}"
+  ]);
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
   strictDeps = true;

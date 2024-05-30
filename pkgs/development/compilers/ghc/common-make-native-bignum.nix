@@ -346,8 +346,9 @@ stdenv.mkDerivation (rec {
       'MinBootGhcVersion="8.10"'
   '';
 
+  # FreeBSD prebuilts are built for x86_64-portbld-freebsd instead of x86_64-unknown-freebsd
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
+  configurePlatforms = lib.optionals (!stdenv.isFreeBSD) [ "build" "host" ]
     ++ lib.optional (targetPlatform != hostPlatform) "target";
 
   # `--with` flags for libraries needed for RTS linker
@@ -391,7 +392,11 @@ stdenv.mkDerivation (rec {
     # TODO(@sternenseemann): backport addition of XATTR env var like
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6447
     xattr
-  ];
+  ] ++ lib.optionals stdenv.isFreeBSD (let unport = (s: builtins.replaceStrings ["unknown"] ["portbld"] s); in [
+    "--build=${unport stdenv.buildPlatform.config}"
+    "--host=${unport stdenv.hostPlatform.config}"
+    "--target=${unport stdenv.targetPlatform.config}"
+  ]);
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
