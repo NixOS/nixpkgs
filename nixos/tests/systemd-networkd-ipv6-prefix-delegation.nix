@@ -259,7 +259,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           "01-lo" = {
             name = "lo";
             addresses = [
-              { addressConfig.Address = "FD42::1/128"; }
+              { Address = "FD42::1/128"; }
             ];
           };
         };
