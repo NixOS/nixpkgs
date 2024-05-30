@@ -40,6 +40,7 @@ let
       };
       argsOverride = {
         inherit version;
+        pname = "linux-hardened";
         modDirVersion = modDirVersion' + kernelPatches.hardened.${kernel.meta.branch}.extra;
         src = fetchurl {
           url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
