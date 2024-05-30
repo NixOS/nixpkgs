@@ -2663,6 +2663,12 @@
     githubId = 24254289;
     name = "Payas Relekar";
   };
+  bhasher = {
+    email = "nixpkgs@bhasher.com";
+    github = "BhasherBEL";
+    githubId = 45831883;
+    name = "Brieuc Dubois";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";
