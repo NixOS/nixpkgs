@@ -323,6 +323,10 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  warp = super.warp.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   jsaddle-wkwebview = overrideCabal (drv: {
     libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
     libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps
