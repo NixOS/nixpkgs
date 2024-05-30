@@ -1,41 +1,37 @@
 # GNOME Keyring daemon.
 
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  cfg = config.services.gnome.gnome-keyring;
+in
 {
 
   meta = {
     maintainers = lib.teams.gnome.members;
   };
 
-  ###### interface
-
   options = {
-
     services.gnome.gnome-keyring = {
-
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether to enable GNOME Keyring daemon, a service designed to
-          take care of the user's security credentials,
-          such as user names and passwords.
-        '';
-      };
-
+      enable = lib.mkEnableOption ''
+        GNOME Keyring daemon, a service designed to
+        take care of the user's security credentials,
+        such as user names and passwords
+      '';
     };
-
   };
 
-
-  ###### implementation
-
-  config = lib.mkIf config.services.gnome.gnome-keyring.enable {
-
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
 
-    services.dbus.packages = [ pkgs.gnome.gnome-keyring pkgs.gcr ];
+    services.dbus.packages = [
+      pkgs.gnome.gnome-keyring
+      pkgs.gcr
+    ];
 
     xdg.portal.extraPortals = [ pkgs.gnome.gnome-keyring ];
 
@@ -47,7 +43,5 @@
       capabilities = "cap_ipc_lock=ep";
       source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
     };
-
   };
-
 }
