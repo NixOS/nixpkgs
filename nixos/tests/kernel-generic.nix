@@ -37,6 +37,7 @@ let
       linux_rt_5_10
       linux_rt_5_15
       linux_rt_6_1
+      linux_rt_6_6
       linux_libre
 
       linux_testing;

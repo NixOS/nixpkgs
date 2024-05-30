@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook3
+{ lib, fetchurl, gettext, wrapGAppsHook3
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome

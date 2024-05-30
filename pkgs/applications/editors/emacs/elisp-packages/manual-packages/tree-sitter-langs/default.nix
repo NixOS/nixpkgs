@@ -1,8 +1,4 @@
 { lib
-, pkgs
-, symlinkJoin
-, fetchzip
-, melpaBuild
 , stdenv
 , writeText
 , melpaStablePackages

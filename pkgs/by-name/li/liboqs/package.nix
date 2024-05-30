@@ -4,21 +4,31 @@
   fetchFromGitHub,
   cmake,
   openssl,
+  fetchpatch,
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboqs";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-h3mXoGRYgPg0wKQ1u6uFP7wlEUMQd5uIBt4Hr7vjNtA=";
+    repo = "liboqs";
+    rev = finalAttrs.version;
+    hash = "sha256-BFDa5NUr02lFPcT4Hnb2rjGAi+2cXvh1SHLfqX/zLlI=";
   };
 
-  patches = [ ./fix-openssl-detection.patch ];
+  patches = [
+    ./fix-openssl-detection.patch
+    # liboqs.pc.in path were modified in this commit
+    # causing malformed path with double slashes.
+    (fetchpatch {
+      url = "https://github.com/open-quantum-safe/liboqs/commit/f0e6b8646c5eae0e8052d029079ed3efa498f220.patch";
+      hash = "sha256-tDfWzcDnFGikzq2ADEWiUgcUt1NSLWQ9/HVWA3rKuzc=";
+      revert = true;
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];
@@ -31,6 +41,8 @@ stdenv.mkDerivation rec {
 
   dontFixCmake = true; # fix CMake file will give an error
 
+  outputs = [ "out" "dev" ];
+
   meta = with lib; {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";
     homepage = "https://openquantumsafe.org";
@@ -38,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.sigmanificient ];
   };
-}
+})

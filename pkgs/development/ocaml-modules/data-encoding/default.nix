@@ -1,5 +1,4 @@
 { lib
-, fetchFromGitLab
 , buildDunePackage
 , ppx_hash
 , bigstringaf

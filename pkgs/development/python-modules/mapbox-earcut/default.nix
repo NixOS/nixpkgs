@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   fetchFromGitHub,
   numpy,
   pybind11,

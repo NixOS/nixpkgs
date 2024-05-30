@@ -3668,8 +3668,6 @@ with pkgs;
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
-  dgsh = callPackage ../shells/dgsh { };
-
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
   dl-librescore = callPackage ../tools/audio/dl-librescore { };
@@ -8119,7 +8117,6 @@ with pkgs;
 
   frigate = callPackage ../applications/video/frigate { };
 
-  frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
   ftgl = callPackage ../development/libraries/ftgl { };
@@ -14790,11 +14787,6 @@ with pkgs;
   yeshup = callPackage ../tools/system/yeshup { };
 
   ytfzf = callPackage ../tools/misc/ytfzf { };
-
-  # To expose more packages for Yi, override the extraPackages arg.
-  yi = callPackage ../applications/editors/yi/wrapper.nix {
-    haskellPackages = haskell.packages.ghc810;
-  };
 
   yaydl = callPackage ../tools/video/yaydl {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -22678,8 +22670,6 @@ with pkgs;
   libopus = callPackage ../development/libraries/libopus { };
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
-
-  liboqs = callPackage ../development/libraries/liboqs { };
 
   libosinfo = callPackage ../development/libraries/libosinfo { };
 
@@ -34437,8 +34427,6 @@ with pkgs;
 
   peru = callPackage ../applications/version-management/peru { };
 
-  petrinizer = haskellPackages.callPackage ../applications/science/logic/petrinizer { };
-
   pmidi = callPackage ../applications/audio/pmidi { };
 
   printrun = callPackage ../applications/misc/printrun { };
@@ -36436,8 +36424,6 @@ with pkgs;
   abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
 
   abuse = callPackage ../games/abuse { };
-
-  adom = callPackage ../games/adom { };
 
   airshipper = callPackage ../games/airshipper { };
 
@@ -40757,8 +40743,6 @@ with pkgs;
   openbsdCross = callPackage ../os-specific/bsd/openbsd {
     stdenv = crossLibcStdenv;
   };
-
-  yrd = callPackage ../tools/networking/yrd { };
 
   powershell = callPackage ../shells/powershell { };
 
