@@ -7,7 +7,7 @@ The following example shows a Nim program that depends only on Nim libraries:
 ```nix
 { lib, buildNimPackage, fetchFromGitHub }:
 
-buildNimPackage { } (finalAttrs: {
+buildNimPackage (finalAttrs: {
   pname = "ttop";
   version = "1.2.7";
 
