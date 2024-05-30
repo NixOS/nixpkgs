@@ -141,6 +141,7 @@ mapAliases ({
   django_treebeard = django-treebeard; # added 2023-07-25
   dns = dnspython; # added 2017-12-10
   docker_pycreds = docker-pycreds; # added 2024-01-03
+  docker-py = throw "docker-py was renamed to docker in version 2.0.0 back in 2016"; # added 2024-05-29
   doctest-ignore-unicode = throw "doctest-ignore-unicode has been removed since it has been unmaintained for 11 years"; # added 2024-05-20
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
