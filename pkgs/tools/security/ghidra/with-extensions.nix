@@ -1,7 +1,9 @@
 { lib
+, stdenv
 , callPackage
 , symlinkJoin
 , makeBinaryWrapper
+, desktopToDarwinBundle
 , ghidra
 }:
 
@@ -19,10 +21,14 @@ let
   withExtensions = f: (symlinkJoin {
     name = "${ghidra.pname}-with-extensions-${lib.getVersion ghidra}";
     paths = (f allExtensions);
-    nativeBuildInputs = [ makeBinaryWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
     postBuild = ''
       makeWrapper '${ghidra}/bin/ghidra' "$out/bin/ghidra" \
         --set NIX_GHIDRAHOME "$out/lib/ghidra/Ghidra"
+      ln -s ${ghidra}/share $out/share
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      convertDesktopFiles $prefix
     '';
     inherit (ghidra) meta;
   });

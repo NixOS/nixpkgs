@@ -14,7 +14,18 @@
 , libllvm
 , linuxHeaders
 , libxcrypt
+
+# Some platforms have switched to using compiler-rt, but still want a
+# libgcc.a for ABI compat purposes. The use case would be old code that
+# expects to link `-lgcc` but doesn't care exactly what its contents
+# are, so long as it provides some builtins.
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+
+# In recent releases, the compiler-rt build seems to produce
+# many `libclang_rt*` libraries, but not a single unified
+# `libcompiler_rt` library, at least under certain configurations. Some
+# platforms stil expect this, however, so we symlink one into place.
+, forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
 }:
 
 let
@@ -149,7 +160,9 @@ stdenv.mkDerivation ({
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '' + lib.optionalString doFakeLibgcc ''
-     ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
+     ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libgcc.a
+  '' + lib.optionalString forceLinkCompilerRt ''
+     ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
   '';
 
   meta = llvm_meta // {

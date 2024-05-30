@@ -174,6 +174,16 @@ in lib.makeExtensible (self: ({
     version = "2.22.1";
     hash = "sha256-5Q1WkpTWH7fkVfYhHDc5r0A+Vc+K5xB1UhzrLzBCrB8=";
     self_attribute_name = "nix_2_22";
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/e5f509ef0b5c364544c904faa0bfda57dba03611.patch"; # fix for nix edit
+        sha256 = "sha256-E0QBD4h6MkGj5ye6Ba08MFR3drOOQu36t6xLXukm7a0=";
+      })
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/bb1a4ea21a6af3c37c7d1c948e36678c96c3f499.patch"; # fix for nix edit
+        sha256 = "sha256-rgK+wus9qccVIKdhbKiDcvcngLvFk6SjjAnRQ6fAMno=";
+      })
+    ];
   };
 
   git = common rec {
@@ -207,7 +217,7 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = addFallbackPathsCheck self.nix_2_18;
+  stable = addFallbackPathsCheck self.nix_2_22;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
