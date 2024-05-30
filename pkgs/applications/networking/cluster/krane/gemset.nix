@@ -5,10 +5,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0blbbf2x7dn7ar4g9aij403582zb6zscbj48bz63lvaamsvlb15d";
+      sha256 = "0z8kygxmz99krz9pwp947znkzf0jr64sml28df0vf1gzxlg7y57i";
       type = "gem";
     };
-    version = "7.1.3.2";
+    version = "7.1.3.3";
   };
   addressable = {
     dependencies = ["public_suffix"];
@@ -247,10 +247,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "11jj5fpfsb1sfwgc356xv1vxl8yq65wbbshmawpagk555y0pzbpb";
+      sha256 = "08dkvcmxa869pk6qdpsvljy16lb1kj94cgr4w9bhg93gx3m642v6";
       type = "gem";
     };
-    version = "3.5.3";
+    version = "3.6.0";
   };
   kubeclient = {
     dependencies = ["http" "jsonpath" "recursive-open-struct" "rest-client"];
@@ -300,10 +300,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07lq26b86giy3ha3fhrywk9r1ajhc2pm2mzj657jnpnbj1i6g17a";
+      sha256 = "1gkslxvkhh44s21rbjvka3zsvfxxrf5pcl6f75rv2vyrzzbgis7i";
       type = "gem";
     };
-    version = "5.22.3";
+    version = "5.23.1";
   };
   multi_json = {
     groups = ["default"];
