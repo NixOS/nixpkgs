@@ -16545,11 +16545,11 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_77 = callPackage ../development/compilers/rust/1_77.nix {
+  rust_1_78 = callPackage ../development/compilers/rust/1_78.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
-    llvm_17 = llvmPackages_17.libllvm;
+    llvm_18 = llvmPackages_18.libllvm;
   };
-  rust = rust_1_77;
+  rust = rust_1_78;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -16557,8 +16557,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_77 = rust_1_77.packages.stable;
-  rustPackages = rustPackages_1_77;
+  rustPackages_1_78 = rust_1_78.packages.stable;
+  rustPackages = rustPackages_1_78;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 

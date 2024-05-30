@@ -1,4 +1,4 @@
-From b256fc507d4710287b22077834c16d18cee4ab17 Mon Sep 17 00:00:00 2001
+From 82a754271336c7736fb0350692be85fecb30e38e Mon Sep 17 00:00:00 2001
 From: Miguel Ojeda <ojeda@kernel.org>
 Date: Sat, 17 Feb 2024 01:27:17 +0100
 Subject: [PATCH] rust: upgrade to Rust 1.77.1
@@ -100,6 +100,10 @@ Link: https://lore.kernel.org/r/20240217002717.57507-1-ojeda@kernel.org
   patch. Reworded accordingly. No changes to `alloc` during the beta. ]
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Alyssa Ross <hi@alyssa.is>
+
+# Conflicts:
+#	Documentation/process/changes.rst
+#	rust/kernel/lib.rs
 ---
  Documentation/process/changes.rst |   2 +-
  rust/alloc/alloc.rs               |   6 +-
@@ -115,13 +119,13 @@ Signed-off-by: Alyssa Ross <hi@alyssa.is>
  11 files changed, 158 insertions(+), 88 deletions(-)
 
 diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 7ef8de58f7f8..b5d3107c6734 100644
+index c78ecc1e176f..641d67363b92 100644
 --- a/Documentation/process/changes.rst
 +++ b/Documentation/process/changes.rst
 @@ -31,7 +31,7 @@ you probably needn't concern yourself with pcmciautils.
  ====================== ===============  ========================================
  GNU C                  5.1              gcc --version
- Clang/LLVM (optional)  13.0.1           clang --version
+ Clang/LLVM (optional)  11.0.0           clang --version
 -Rust (optional)        1.76.0           rustc --version
 +Rust (optional)        1.77.1           rustc --version
  bindgen (optional)     0.65.1           bindgen --version
@@ -753,22 +757,22 @@ index 220fb9d6f45b..0be27fff4554 100644
      /// # Examples
      ///
 diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 6858e2f8a3ed..9e9b245ebab5 100644
+index 75efe47522e4..f07bc5a2c6b4 100644
 --- a/rust/kernel/lib.rs
 +++ b/rust/kernel/lib.rs
-@@ -16,7 +16,6 @@
- #![feature(coerce_unsized)]
+@@ -17,7 +17,6 @@
+ #![feature(const_maybe_uninit_zeroed)]
  #![feature(dispatch_from_dyn)]
  #![feature(new_uninit)]
 -#![feature(offset_of)]
+ #![feature(ptr_metadata)]
  #![feature(receiver_trait)]
  #![feature(unsize)]
- 
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 533a7799fdfe..5a6ab6d965bc 100644
+index 1633175846df..0bc7c5fe64b1 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -263,7 +263,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
+@@ -262,7 +262,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
  # Compile Rust sources (.rs)
  # ---------------------------------------------------------------------------
  
@@ -778,7 +782,7 @@ index 533a7799fdfe..5a6ab6d965bc 100644
  # `--out-dir` is required to avoid temporaries being created by `rustc` in the
  # current working directory, which may be not accessible in the out-of-tree
 diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-index 5927cc6b7de3..6086e00e640e 100755
+index e217683b10d6..db2b0bc5866b 100755
 --- a/scripts/min-tool-version.sh
 +++ b/scripts/min-tool-version.sh
 @@ -33,7 +33,7 @@ llvm)
