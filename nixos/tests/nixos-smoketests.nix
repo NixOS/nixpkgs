@@ -20,7 +20,7 @@ let
   let
     foo = pkgs.writeText "foo" "Hello World";
   in {
-    name = "misc";
+    name = "nixos-smoketests";
     meta.maintainers = with lib.maintainers; [ raitobezarius ];
 
     nodes.machine =

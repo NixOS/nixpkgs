@@ -556,7 +556,6 @@ in {
   miniflux = handleTest ./miniflux.nix {};
   minio = handleTest ./minio.nix {};
   miriway = handleTest ./miriway.nix {};
-  misc = handleTest ./misc.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mobilizon = handleTest ./mobilizon.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
@@ -605,6 +604,7 @@ in {
   nebula = handleTest ./nebula.nix {};
   netbird = handleTest ./netbird.nix {};
   nimdow = handleTest ./nimdow.nix {};
+  nixos-smoketests = handleTest ./nixos-smoketests.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
   networking.scripted = handleTest ./networking/networkd-and-scripted.nix { networkd = false; };

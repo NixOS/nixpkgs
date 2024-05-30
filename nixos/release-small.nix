@@ -41,7 +41,7 @@ in rec {
         firewall
         ipv6
         login
-        misc
+        nixos-smoketests
         nat
         nfs4
         openssh
@@ -124,7 +124,7 @@ in rec {
         "nixos.tests.firewall"
         "nixos.tests.ipv6"
         "nixos.tests.login"
-        "nixos.tests.misc.default"
+        "nixos.tests.nixos-smoketests.default"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
         "nixos.tests.nfs4.simple"

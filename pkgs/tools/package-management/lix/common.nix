@@ -260,7 +260,7 @@ let
     passthru = {
       inherit aws-sdk-cpp boehmgc;
       tests = {
-        misc = nixosTests.misc.lix.passthru.override { nixPackage = self; };
+        nixos-smoketests = nixosTests.nixos-smoketests.lix.passthru.override { nixPackage = self; };
       };
     };
 
