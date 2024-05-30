@@ -469,6 +469,7 @@ rec {
               elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
               hasPrefix "freebsd" (elemAt l 2) ||
               hasPrefix "netbsd" (elemAt l 2) ||
+              hasPrefix "openbsd" (elemAt l 2) ||
               hasPrefix "genode" (elemAt l 2)
       then {
         cpu    = elemAt l 0;
