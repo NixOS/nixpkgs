@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   inkscape,
-  fetchFromGitLab,
   poetry-core,
   cssselect,
   lxml,
