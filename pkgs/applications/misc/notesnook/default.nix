@@ -1,4 +1,4 @@
-{ lib, stdenv, appimageTools, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, _7zz }:
 
 let
   pname = "notesnook";
