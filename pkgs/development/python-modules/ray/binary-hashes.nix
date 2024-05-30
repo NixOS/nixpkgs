@@ -1,8 +1,8 @@
 {
   cp310 = {
-    hash = "sha256-y3T30qpaIeX53LMVpPm96CIyjna6lc0Lo3DP2gmKZ/Q=";
+    hash = "sha256-VWEPjq5lzlaGvedaV4LOY+KgESzNImK4rNcHJk2m2+o=";
   };
   cp311 = {
-    hash = "sha256-x9FDjLqHJuyaWclpZOAHtgoHKENmR/SMODIoaSwvLuA=";
+    hash = "sha256-FcEJ/ZlpMmMjyL2wcBzZryHIX0ZQAvdJUGIvmlgOxOU=";
   };
 }
