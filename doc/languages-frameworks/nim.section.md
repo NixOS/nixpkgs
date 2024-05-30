@@ -80,7 +80,6 @@ For example, to propagate a dependency on SDL2 for lockfiles that select the Nim
   /* … */
   sdl2 =
     lockAttrs:
-    finalAttrs:
     { buildInputs ? [ ], ... }:
     {
       buildInputs = buildInputs ++ [ SDL2 ];
@@ -89,9 +88,8 @@ For example, to propagate a dependency on SDL2 for lockfiles that select the Nim
 }
 ```
 
-The annotations in the `nim-overrides.nix` set are functions that take three arguments and return a new attrset to be overlayed on the package being built.
+The annotations in the `nim-overrides.nix` set are functions that take two arguments and return a new attrset to be overlayed on the package being built.
 - lockAttrs: the attrset for this library from within a lockfile. This can be used to implement library version constraints, such as marking libraries as broken or insecure.
-- finalAttrs: the final attrset passed by `buildNimPackage` to `stdenv.mkDerivation`.
 - prevAttrs: the attrset produced by initial arguments to `buildNimPackage` and any preceding lockfile overlays.
 
 ### Overriding an Nim library override {#nim-lock-overrides-overrides}
