@@ -15398,7 +15398,7 @@ with pkgs;
 
   fluidd = callPackage ../applications/misc/fluidd { };
 
-  flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutterPackages = recurseIntoAttrs (callPackages ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
   flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
