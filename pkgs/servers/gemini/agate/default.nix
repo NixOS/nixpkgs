@@ -1,4 +1,15 @@
-{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security, openssl, pkg-config, nix-update-script }:
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  Security,
+  openssl,
+  pkg-config,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
@@ -15,8 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+    ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -29,13 +44,15 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = { inherit (nixosTests) agate; };
+    tests = {
+      inherit (nixosTests) agate;
+    };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mbrubeck/agate";
-    changelog = "https://github.com/mbrubeck/agate/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/mbrubeck/agate/releases/tag/v${version}";
     description = "Very simple server for the Gemini hypertext protocol";
     mainProgram = "agate";
     longDescription = ''
@@ -44,7 +61,10 @@ rustPlatform.buildRustPackage rec {
       static files. It uses async I/O, and should be quite efficient even when
       running on low-end hardware and serving many concurrent requests.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ jk ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [ jk ];
   };
 }
