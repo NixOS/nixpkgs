@@ -214,7 +214,7 @@ let
     pkgsLLVM = createPackageSet "pkgsLLVM" {
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
-      # so we don't need to check hostPlatform != buildPlatform.
+      # so we set crossSystem explicitly.
       crossSystem = {
         useLLVM = true;
         linker = "lld";
@@ -225,8 +225,7 @@ let
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported. 32-bit is also not supported.
     pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then createPackageSet "pkgsMusl" {
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
-        then "localSystem" else "crossSystem"} = {
+      localSystem = {
         config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
       };
     } else throw "Musl libc only supports 64-bit Linux systems.";
@@ -234,8 +233,7 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then createPackageSet "pkgsi686Linux" {
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
-        then "localSystem" else "crossSystem"} = {
+      localSystem = {
         config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
         });
@@ -252,7 +250,7 @@ let
     } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
     # If already linux: the same package set unaltered
-    # Otherwise, return a natively built linux package set for the current cpu architecture string.
+    # Otherwise, return a linux package set for the current cpu architecture string.
     # (ABI and other details will be set to the default for the cpu/os pair)
     pkgsLinux =
       if stdenv.hostPlatform.isLinux

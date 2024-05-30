@@ -44,6 +44,7 @@
 
 let # Rename the function arguments
   config0 = config;
+  isCross = args ? "crossSystem" && crossSystem != null;
   crossSystem0 = if crossSystem == null then localSystem else crossSystem;
   localSystem0 = localSystem;
 
@@ -123,8 +124,13 @@ in let
   # `newArgs`, expect strange very hard to debug errors! (Yes, I'm speaking from
   # experience here.)
   nixpkgsFun = newArgs: import ./. (
-    args // lib.optionalAttrs (newArgs ? "localSystem") {
+    args // lib.optionalAttrs (newArgs ? "localSystem" && !isCross) {
       localSystem = lib.systems.asAttrs localSystem0 // newArgs.localSystem;
+    } // lib.optionalAttrs (newArgs ? "localSystem" && isCross) {
+      # Redirect "localSystem" from stage.nix package sets to crossSystem when we
+      # are already cross. Otherwise pkgsCross.X.pkgsY will modify the localSystem,
+      # which is more than unexpected.
+      crossSystem = lib.systems.asAttrs crossSystem0 // newArgs.localSystem;
     } // lib.optionalAttrs (newArgs ? "crossSystem") {
       crossSystem = lib.systems.asAttrs crossSystem0 // newArgs.crossSystem;
     } // lib.optionalAttrs (newArgs ? "overlays") {
