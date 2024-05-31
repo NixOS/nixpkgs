@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, expat, libaio, boost }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nixosTests }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "thin-provisioning-tools";
-  version = "0.9.0";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
     rev = "v${version}";
-    sha256 = "1iwg04rhmdhijmlk5hfl8wvv83115lzb65if6cc1glkkfva8jfjp";
+    hash = "sha256-wliyTWo3iOonqf4UW50V5co0RQlc75VwLofF9FHV2LI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rio-0.9.4" = "sha256-2l5cm7YLZyf2kuRPMytu7Fdewi6x3+9KyyQBv2F8ZDA=";
+    };
+  };
 
-  buildInputs = [ expat libaio boost ];
-
-  enableParallelBuilding = true;
+  passthru.tests = {
+    inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/jthornber/thin-provisioning-tools/";
