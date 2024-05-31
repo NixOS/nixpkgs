@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,9 @@ buildPythonPackage rec {
     sha256 = "sha256-/FdM0UolVqhJNpS60Q/nra1hSHKL/LiSMX7/Hcipwco=";
   };
 
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   doCheck = true;
 
