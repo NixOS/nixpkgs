@@ -951,6 +951,7 @@ let
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
+    "beer"
     "ceramic"
     "connections"
     "csodata"
