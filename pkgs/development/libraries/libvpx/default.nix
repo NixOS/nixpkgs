@@ -75,13 +75,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-duU1exUg7JiKCtZfNxyb/y40hxsXeTIMShf9YounTWA=";
+    hash = "sha256-Pfg7g4y/dqn2VKDQU1LnTJQSj1Tont9/8Je6ShDb2GQ=";
   };
 
   postPatch = ''
