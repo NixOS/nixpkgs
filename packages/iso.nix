@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 { inputs, sshPubKey ? "", ... }@flakeContext:
 let
   isoModule = { config, lib, pkgs, ... }: {
@@ -54,6 +55,11 @@ let
       };
     };
   };
+=======
+{ inputs, xnode, ... }@flakeContext:
+let
+  isoModule = xnode inputs.xnodepkgs;
+>>>>>>> Stashed changes
 in
 inputs.nixos-generators.nixosGenerate {
   system = "x86_64-linux";

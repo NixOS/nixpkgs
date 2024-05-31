@@ -3,6 +3,7 @@
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixpkgs-unstable";
     nixos-generators.url = "github:nix-community/nixos-generators";
+    xnodepkgs.url = "github:Openmesh-Network/XnodeOS";
   };
   outputs = inputs:
     let

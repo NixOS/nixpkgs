@@ -5,7 +5,6 @@ with lib;
 let
   cfg = config.services.xnode-admin;
   package = cfg.package;
-
 in 
 {
   meta.maintainers = with maintainers; [ harrys522 ];
