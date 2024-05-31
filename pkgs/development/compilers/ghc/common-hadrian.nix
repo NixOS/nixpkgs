@@ -177,7 +177,9 @@
           # These cause problems as they're not eliminated by GHC's dead code
           # elimination on aarch64-darwin. (see
           # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+          (if lib.versionOlder version "9.10"
+           then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+           else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
         ]
         # Prevents passing --hyperlinked-source to haddock. This is a custom
         # workaround as we wait for this to be configurable via userSettings or
