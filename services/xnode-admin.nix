@@ -15,7 +15,7 @@ in
 
     localDir = mkOption {
       type = types.str;
-      default = "/xnode/config";
+      default = "/xnode/config.nix";
       description = "Local repository for nix configurations, typically a cloned git repository.";
     };
 
