@@ -38,6 +38,13 @@ in
   */
 , ename ? null
 , version
+  /*
+    commit: Optional package history commit.
+    Default: src.rev or "unknown"
+    This will be written into the generated package but it is not needed during
+    the build process.
+  */
+, commit ? (args.src.rev or "unknown")
 , recipe
 , meta ? {}
 , ...
@@ -53,7 +60,7 @@ genericBuild ({
   elpa2nix = ./elpa2nix.el;
   melpa2nix = ./melpa2nix.el;
 
-  inherit packageBuild;
+  inherit packageBuild commit;
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
