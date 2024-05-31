@@ -54,10 +54,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
-    "--skip=run_shebang" # test case very rarely fails with "Text file busy"
-    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
+    "--skip=choose::invoke_error_function" # wants JUST_CHOOSER to be fzf
     "--skip=choose::default" # symlinks cat->fzf which fails as coreutils doesn't understand name
+    "--skip=edit::editor_precedence" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
+    "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
   ];
 
   postInstall = ''
