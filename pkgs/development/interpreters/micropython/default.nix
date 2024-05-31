@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.22.2";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-7AA9n6UQchY6POkOp1VWAOAo87uRJSeCBhgvVXLoE04=";
+    sha256 = "sha256-sfJohmsqq5FumUoVE8x3yWv12DiCJJXae62br0j+190=";
     fetchSubmodules = true;
 
     # remove unused libaries from rp2 port's SDK. we leave this and the other
