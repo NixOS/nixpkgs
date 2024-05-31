@@ -115,7 +115,6 @@ let
     pname = "restarter";
     version = buildVer;
     inherit src;
-    patches = [ ../patches/restarter-no-static-crt-override.patch ];
     sourceRoot = "source/native/restarter";
     cargoHash = restarterHash;
   };
@@ -188,11 +187,11 @@ let
       repoUrl = "https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies";
       groupId = builtins.replaceStrings [ "." ] [ "/" ] "org.jetbrains.kotlin";
       artefactId = "kotlin-jps-plugin-classpath";
-      version = "1.9.10";
+      version = "1.9.22";
     in
     fetchurl {
       url = repoUrl + "/" + groupId + "/" + artefactId + "/" + version + "/" + artefactId + "-" + version + ".jar";
-      hash = "sha256-gpB4lg6wailtxSgPyyOrarXCL9+DszojaYGC4ULgU3c=";
+      hash = "sha256-ZPfEceGoIChDmjIAjjhDZpyMWQ7/DtP9Ll4YIrZN+PM=";
     };
 
     targetClass = if buildType == "pycharm" then "intellij.pycharm.community.build" else "intellij.idea.community.build";
@@ -231,7 +230,7 @@ stdenvNoCC.mkDerivation rec {
       -e 's|MAVEN_REPO_HERE|${mvnRepo}/.m2/repository/|' \
       -e 's|MAVEN_PATH_HERE|${maven}/maven|' \
       -i build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
-    echo '${buildVer}' > build.txt
+    echo '${buildVer}.SNAPSHOT' > build.txt
   '';
 
   configurePhase = ''
