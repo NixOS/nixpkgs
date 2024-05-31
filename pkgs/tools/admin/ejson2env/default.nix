@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, callPackage, ejson2env }:
 
 buildGoModule rec {
   pname = "ejson2env";
@@ -19,7 +19,13 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = ejson2env; };
+      decryption = callPackage ./test-decryption.nix {};
+    };
+  };
 
   meta = with lib; {
     description = "Decrypt EJSON secrets and export them as environment variables";
