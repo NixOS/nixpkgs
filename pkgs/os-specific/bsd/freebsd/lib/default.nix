@@ -14,5 +14,5 @@
     }
     .${stdenv'.hostPlatform.parsed.cpu.name} or stdenv'.hostPlatform.parsed.cpu.name;
 
-  install-wrapper = builtins.readFile ./install-wrapper.sh;
+  install-wrapper = builtins.readFile ../../lib/install-wrapper.sh;
 }
