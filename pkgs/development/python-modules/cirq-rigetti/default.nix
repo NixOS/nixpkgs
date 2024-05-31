@@ -1,7 +1,7 @@
 {
   buildPythonPackage,
   cirq-core,
-  requests,
+  lib,
   pytestCheckHook,
   attrs,
   certifi,
@@ -27,7 +27,7 @@
 buildPythonPackage rec {
   pname = "cirq-rigetti";
   format = "setuptools";
-  inherit (cirq-core) version src meta;
+  inherit (cirq-core) version src;
 
   disabled = pythonOlder "3.7";
 
@@ -84,4 +84,9 @@ buildPythonPackage rec {
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_rigetti" ];
+
+  meta = cirq-core.meta // {
+    # ModuleNotFoundError: No module named 'pyquil.parser'
+    broken = lib.versionAtLeast pyquil.version "4";
+  };
 }
