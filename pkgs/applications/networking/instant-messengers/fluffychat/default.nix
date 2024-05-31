@@ -4,7 +4,7 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter
+, flutter319
 , pulseaudio
 , makeDesktopItem
 , gnome
@@ -16,7 +16,7 @@ let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter.buildFlutterApplication (rec {
+flutter319.buildFlutterApplication (rec {
   pname = "fluffychat-${targetFlutterPlatform}";
   version = "1.20.0";
 
