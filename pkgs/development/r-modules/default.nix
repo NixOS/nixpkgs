@@ -1667,6 +1667,15 @@ let
       hardeningDisable = [ "format" ];
     });
 
+    Rbwa = old.Rbwa.overrideAttrs (attrs: {
+      # Parallel build cleans up *.o before they can be packed in a library
+      postPatch = ''
+        substituteInPlace src/Makefile --replace-fail \
+          "all:\$(PROG) ../inst/bwa clean" \
+          "all:\$(PROG) ../inst/bwa" \
+      '';
+    });
+
     ROracle = old.ROracle.overrideAttrs (attrs: {
       configureFlags = [
         "--with-oci-lib=${pkgs.oracle-instantclient.lib}/lib"
