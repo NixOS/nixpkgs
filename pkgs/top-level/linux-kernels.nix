@@ -589,6 +589,8 @@ in {
 
     hid-ite8291r3 = callPackage ../os-specific/linux/hid-ite8291r3 { };
 
+    hid-t150 = callPackage ../os-specific/linux/hid-t150 { };
+
     hid-tmff2 = callPackage ../os-specific/linux/hid-tmff2 { };
 
     drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
