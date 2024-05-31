@@ -9011,8 +9011,6 @@ with pkgs;
 
   hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
 
-  hurl = callPackage ../tools/networking/hurl { };
-
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
