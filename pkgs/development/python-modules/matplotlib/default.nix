@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchPypi,
-  writeText,
   buildPythonPackage,
   isPyPy,
   pythonOlder,
@@ -11,7 +10,7 @@
   certifi,
   pkg-config,
   pybind11,
-  setuptools,
+  meson-python,
   setuptools-scm,
 
   # native libraries
@@ -80,7 +79,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.8.4";
+  version = "3.9.0";
   pname = "matplotlib";
   pyproject = true;
 
@@ -88,7 +87,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iqw5fV6ewViWDjHDgcX/xS3dUr2aR3F+KmlAOBZ9/+o=";
+    hash = "sha256-5tKepsGeNLMPt9iLcIH4aaAwFPZv4G1izHfVpuqI7Xo=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -100,21 +99,16 @@ buildPythonPackage rec {
   # With the following patch we just hard-code these paths into the install
   # script.
   postPatch =
-    let
-      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
-    in
     ''
       substituteInPlace pyproject.toml \
         --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
-    ''
-    + lib.optionalString enableTk ''
-      sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
+      patchShebangs tools
     ''
     + lib.optionalString (stdenv.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
-      substituteInPlace src/_c_internal_utils.c \
-        --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
-        --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+      substituteInPlace src/_c_internal_utils.cpp \
+        --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
+        --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
@@ -144,7 +138,7 @@ buildPythonPackage rec {
     certifi
     numpy
     pybind11
-    setuptools
+    meson-python
     setuptools-scm
   ];
 
@@ -171,23 +165,19 @@ buildPythonPackage rec {
     ++ lib.optionals enableNbagg [ ipykernel ]
     ++ lib.optionals enableTk [ tkinter ];
 
-  passthru.config = {
-    directories = {
-      basedirlist = ".";
-    };
-    libs = {
-      system_freetype = true;
-      system_qhull = true;
-      # LTO not working in darwin stdenv, see #19312
-      enable_lto = !stdenv.isDarwin;
-    };
+  mesonFlags = lib.mapAttrsToList lib.mesonBool {
+    system-freetype = true;
+    system-qhull = true;
+    # Otherwise GNU's `ar` binary fails to put symbols from libagg into the
+    # matplotlib shared objects. See:
+    # -https://github.com/matplotlib/matplotlib/issues/28260#issuecomment-2146243663
+    # -https://github.com/matplotlib/matplotlib/issues/28357#issuecomment-2155350739
+    b_lto = false;
   };
 
   passthru.tests = {
     inherit sage;
   };
-
-  env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI { } passthru.config);
 
   # Encountering a ModuleNotFoundError, as describved and investigated at:
   # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
