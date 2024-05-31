@@ -13,8 +13,8 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = pname;
-    rev = "8a6e20a74ee62ea88d3374d94de3dad7fa1abdb6";
-    sha256 = "1a16kf0rxvjmwhwgmflk3qffjcs82h3svm3z81xm9cqb7mhj4vbq"; # Unfinished commit
+    rev = "572ef943713fda0ef7a90f59b43980b7307f2b15";
+    sha256 = "18bhc64yyrcmbb6fblg1b6a6nmmy01hyalnphl01jawki83mrfbi";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,6 @@ python3Packages.buildPythonPackage rec {
   propagatedBuildInputs = [
     pkgs.python311Packages.gitpython
   ];
-
 
   meta = with lib; {
       homepage = "https://openmesh.network/";
