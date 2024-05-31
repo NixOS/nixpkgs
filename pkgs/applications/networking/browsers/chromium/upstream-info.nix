@@ -15,8 +15,8 @@
         version = "2024-04-10";
       };
     };
-    hash = "sha256-EA8TzemtndFb8qAp4XWNjwWmNRz/P4Keh3k1Cn9qLEU=";
-    version = "125.0.6422.112";
+    hash = "sha256-8Qe1hgDEjvdAf2ao4CIieC7l2pTSIPLTZb+vdctUEo0=";
+    version = "125.0.6422.141";
   };
   ungoogled-chromium = {
     deps = {
