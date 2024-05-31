@@ -17370,5 +17370,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  faster-nvim = buildVimPlugin {
+    pname = "faster-nvim";
+    version = "2024-04-11";
+    src = fetchFromGitHub {
+      owner = "pteroctopus";
+      repo = "faster.nvim";
+      rev = "e85c5bdff0cd1e17cbee855ae23c25e7b8e597cb";
+      sha256 = "sha256-oruxdxoMq46F9lf1JxkbrqdzR0JwDE1y/cVCaTD4SBg=";
+    };
+    meta.homepage = "https://github.com/pteroctopus/faster.nvim";
+  };
+
 
 }

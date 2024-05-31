@@ -59,18 +59,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+g/1F/v8nTVbvtSrtyvQbeYacjTlfRpg+Htu0lRlkcU=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/Ladybird";
+  patches = [
+    ./nixos-font-path.patch
+  ];
 
   postPatch = ''
     sed -i '/iconutil/d' CMakeLists.txt
 
     # Don't set absolute paths in RPATH
-    substituteInPlace ../Meta/CMake/lagom_install_options.cmake \
+    substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
   '';
 
   preConfigure = ''
+    cd Ladybird
+
     # Setup caches for LibLocale, LibUnicode, LibTimezone, LibTLS and LibGfx
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
