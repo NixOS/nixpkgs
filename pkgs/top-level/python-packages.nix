@@ -6242,6 +6242,8 @@ self: super: with self; {
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab { };
 
+  jupyterlab-execute-time = callPackage ../development/python-modules/jupyterlab-execute-time { };
+
   jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
 
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
