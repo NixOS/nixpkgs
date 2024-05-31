@@ -50,27 +50,25 @@ let
 in rec {
   inherit mkTmuxPlugin;
 
-  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
-
   battery = mkTmuxPlugin {
     pluginName = "battery";
-    version = "unstable-2019-07-04";
+    version = "unstable-2023-12-01";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-battery";
-      rev = "f8b8e8451990365e0c98c38c184962e4f83b793b";
-      sha256 = "1bhdzsx3kdjqjmm1q4j8937lrpkzf71irr3fqhdbddsghwrrmwim";
+      rev = "48fae59ba4503cf345d25e4e66d79685aa3ceb75";
+      hash = "sha256-yKMTuRiNnGC3tAbZeWzMEudzhBSJhji8sZh96rFxpb8=";
     };
   };
 
   better-mouse-mode = mkTmuxPlugin {
     pluginName = "better-mouse-mode";
-    version = "unstable-2021-08-02";
+    version = "unstable-2017-10-16";
     src = fetchFromGitHub {
       owner = "NHDaly";
       repo = "tmux-better-mouse-mode";
       rev = "aa59077c635ab21b251bd8cb4dc24c415e64a58e";
-      sha256 = "06346ih3hzwszhkj25g4xv5av7292s6sdbrdpx39p0n3kgf5mwww";
+      hash = "sha256-nPNa3JvDgptGvy2vpo0WSZytyu7kFSEn/Jp/OGA0ZBg=";
     };
     rtpFilePath = "scroll_copy_mode.tmux";
     meta = {
@@ -113,12 +111,12 @@ in rec {
 
   continuum = mkTmuxPlugin {
     pluginName = "continuum";
-    version = "unstable-2022-01-25";
+    version = "unstable-2024-01-20";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-continuum";
-      rev = "fc2f31d79537a5b349f55b74c8ca69abaac1ddbb";
-      sha256 = "06i1jp83iybw76raaxciqz9a7ypgpkvbyjn6jjap8jpqfmj2wmjb";
+      rev = "0698e8f4b17d6454c71bf5212895ec055c578da0";
+      hash = "sha256-W71QyLwC/MXz3bcLR2aJeWcoXFI/A3itjpcWKAdVFJY=";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-continuum";
@@ -165,12 +163,12 @@ in rec {
 
   copycat = mkTmuxPlugin {
     pluginName = "copycat";
-    version = "unstable-2020-01-09";
+    version = "unstable-2020-07-24";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-copycat";
-      rev = "77ca3aab2aed8ede3e2b941079b1c92dd221cf5f";
-      sha256 = "1bchwzhai8k5rk32n4lrmh56rw944jqxr8imjk74hyaa7bbn81ds";
+      rev = "d7f7e6c1de0bc0d6915f4beea5be6a8a42045c09";
+      hash = "sha256-2dMu/kbKLI/+kO05+qmeuJtAvvO7k9SSF+o2MHNllFk=";
     };
   };
 
@@ -203,7 +201,7 @@ in rec {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
+      hash = "sha256-IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -216,19 +214,20 @@ in rec {
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "unstable-2021-04-04";
+    version = "unstable-2024-05-09";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
-      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+      rev = "a3d76b8b94571e13958e433608ffc278ae839d2e";
+      hash = "sha256-/26brPVo8z+0Sq5K/onYndAARn2WBAtQVl3PgTyNaz8=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
-      wrapProgram $target/scripts/$f \
+    for f in scripts/extrakto.sh scripts/helpers.sh scripts/open.sh extrakto.tmux; do
+      chmod +x $target/$f
+      wrapProgram $target/$f \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
+        [ fzf python3 xclip ]
         )}
     done
 
@@ -243,24 +242,20 @@ in rec {
   };
 
   fingers = mkTmuxPlugin rec {
-    pluginName = "tmux-fingers";
-    rtpFilePath = "load-config.tmux";
-    version = "2.1.1";
+    pluginName = "fingers";
+    rtpFilePath = "tmux-fingers.tmux";
+    version = "2.1.5";
     src = fetchFromGitHub {
       owner = "Morantron";
       repo = "tmux-fingers";
-      rev = "${version}";
-      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
+      rev = version;
+      hash = "sha256-gR3u5IVgFxd6uj7l8Ou8GnEvh8AkjRFgIWKCviISweQ=";
+      fetchSubmodules = true;
     };
-    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      shards build --production
-      rm -rf $target/* $target/.*
-      cp -r bin $target/bin
-      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
-      chmod +x $target/${rtpFilePath}
-
-      wrapProgram $target/${rtpFilePath} \
+      chmod +x $target/tmux-fingers.tmux
+      wrapProgram $target/tmux-fingers.tmux \
         --prefix PATH : ${with pkgs; lib.makeBinPath (
           [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
         )}
@@ -269,12 +264,12 @@ in rec {
 
   fpp = mkTmuxPlugin {
     pluginName = "fpp";
-    version = "unstable-2016-03-08";
+    version = "unstable-2024-01-29";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-fpp";
-      rev = "ca125d5a9c80bb156ac114ac3f3d5951a795c80e";
-      sha256 = "1b89s6mfzifi7s5iwf22w7niddpq28w48nmqqy00dv38z4yga5ws";
+      rev = "878302f228ee14f0fa59717f63743d396b327a21";
+      hash = "sha256-ULBwyqXFjA9YACv2oVbni54O8kXpVIERtxIrC6njrUA=";
     };
     postInstall = ''
       sed -i -e 's|fpp |${pkgs.fpp}/bin/fpp |g' $target/fpp.tmux
@@ -283,12 +278,12 @@ in rec {
 
   fuzzback = mkTmuxPlugin {
     pluginName = "fuzzback";
-    version = "unstable-2022-11-21";
+    version = "unstable-2024-01-20";
     src = fetchFromGitHub {
       owner = "roosta";
       repo = "tmux-fuzzback";
-      rev = "bfd9cf0ef1c35488f0080f0c5ca4fddfdd7e18ec";
-      sha256 = "w788xDBkfiLdUVv1oJi0YikFPqVk6LiN6PDfHu8on5E=";
+      rev = "48fa13a2422bab9832543df1c6b4e9c6393e647c";
+      hash = "sha256-T3rHudl9o4AP13Q4poccfXiDg41LRWThFW0r5IZxGjw=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -317,12 +312,6 @@ in rec {
       rev = "28ed7ce3c73a328d8463d4f4aaa6ccb851e520fa";
       hash = "sha256-tl0SjG/CeolrN7OIHj6MgkB9lFmFgEuJevsSuwVs+78=";
     };
-    meta = with lib; {
-      homepage = "https://github.com/wfxr/tmux-fzf-url";
-      description = "Quickly open urls on your terminal screen!";
-      license = licenses.mit;
-      platforms = platforms.unix;
-    };
   };
 
   gruvbox = mkTmuxPlugin {
@@ -339,13 +328,13 @@ in rec {
 
   jump = mkTmuxPlugin {
     pluginName = "jump";
-    version = "2020-06-26";
+    version = "unstable-2023-05-09";
     rtpFilePath = "tmux-jump.tmux";
     src = fetchFromGitHub {
       owner = "schasse";
       repo = "tmux-jump";
-      rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
-      sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
+      rev = "2ff4940f043cd4ad80fa25c6efa33063fb3b386b";
+      hash = "sha256-zgFQKQgESThZGoLRjqZGjxeu/C0HMduUOr7jcgELM7s=";
     };
     postInstall = ''
       sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
@@ -361,23 +350,23 @@ in rec {
 
   logging = mkTmuxPlugin {
     pluginName = "logging";
-    version = "unstable-2019-04-19";
+    version = "2.1.0-unstable-2021-06-10";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-logging";
-      rev = "b085ad423b5d59a2c8b8d71772352e7028b8e1d0";
-      sha256 = "0p0sawysalhi8k2a5hdxniqx6kb24kd8rnvfzkjqigzid5ik37js";
+      rev = "b5c5f7b9bc679ca161a442e932d6186da8d3538f";
+      hash = "sha256-NTDUXxy0Y0dp7qmcH5qqqENGvhzd3lLrIii5u0lYHJk=";
     };
   };
 
-  mode-indicator = mkTmuxPlugin rec {
+  mode-indicator = mkTmuxPlugin {
     pluginName = "mode-indicator";
-    version = "unstable-2021-10-01";
+    version = "unstable-2023-03-24";
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "tmux-mode-indicator";
-      rev = "11520829210a34dc9c7e5be9dead152eaf3a4423";
-      sha256 = "sha256-hlhBKC6UzkpUrCanJehs2FxK5SoYBoiGiioXdx6trC4=";
+      rev = "7027903adca37c54cb8f5fa99fc113b11c23c2c4";
+      hash = "sha256-SAzsn4LoG8Ju5t13/U3/ctlJQPyPgv2FjpPkWSeKbP0=";
     };
     meta = with lib; {
       homepage = "https://github.com/MunifTanjim/tmux-mode-indicator";
@@ -403,34 +392,21 @@ in rec {
     pluginName = "nord";
     version = "0.3.0";
     src = pkgs.fetchFromGitHub {
-      owner = "nordtheme";
-      repo = "tmux";
+      owner = "arcticicestudio";
+      repo = "nord-tmux";
       rev = "v${version}";
-      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
-    };
-    meta = {
-      homepage = "https://www.nordtheme.com/ports/tmux";
-      description = "Nord Tmux theme with plugin support";
-      longDescription =
-        ''
-          > An arctic, north-bluish clean and elegant tmux theme.
-          > Designed for a fluent and clear workflow with support for third-party plugins.
-
-          This plugin requires that tmux be used with a Nord terminal emulator
-          theme in order to work properly.
-      '';
-      license = lib.licenses.mit;
+      sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
     };
   };
 
   maildir-counter = mkTmuxPlugin {
     pluginName = "maildir-counter";
-    version = "unstable-2016-11-25";
+    version = "unstable-2021-03-15";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-maildir-counter";
-      rev = "9415f0207e71e37cbd870c9443426dbea6da78b9";
-      sha256 = "0dwvqhiv9bjwr01hsi5c57n55jyv5ha5m5q1aqgglf4wyhbnfms4";
+      rev = "68136a8020815f99eeba88bc0aae807a465e0e29";
+      hash = "sha256-1kpw2onfmkgl7VWYoDY0vDC0ELrnqg+LN/XzdvPQCac=";
     };
   };
 
@@ -440,42 +416,42 @@ in rec {
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-online-status";
-      rev = "ea86704ced8a20f4a431116aa43f57edcf5a6312";
-      sha256 = "1hy3vg8v2sir865ylpm2r4ip1zgd4wlrf24jbwh16m23qdcvc19r";
+      rev = "82f4fbcaee7ece775f37cf7ed201f9d4beab76b8";
+      hash = "sha256-vsR/OfcXK2YL4VmdVku3XxGbR5exgnbmlPVIQ2LnWBg=";
     };
   };
 
   open = mkTmuxPlugin {
     pluginName = "open";
-    version = "unstable-2019-12-02";
+    version = "3.0.0-unstable-2022-08-22";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-open";
-      rev = "cedb4584908bd8458fadc8d3e64101d3cbb48d46";
-      sha256 = "10s0xdhmg0dhpj13ybcq72pw3xgb2dq5v5h2mwidzqyh9g17wndh";
+      rev = "763d0a852e6703ce0f5090a508330012a7e6788e";
+      hash = "sha256-Thii7D21MKodtjn/MzMjOGbJX8BwnS+fQqAtYv8CjPc=";
     };
   };
 
   onedark-theme = mkTmuxPlugin {
     pluginName = "onedark-theme";
     rtpFilePath = "tmux-onedark-theme.tmux";
-    version = "unstable-2020-06-07";
+    version = "unstable-2020-02-25";
     src = fetchFromGitHub {
       owner = "odedlaz";
       repo = "tmux-onedark-theme";
       rev = "3607ef889a47dd3b4b31f66cda7f36da6f81b85c";
-      sha256 = "19jljshwp2p83b634cd1mw69091x42jj0dg40ipw61qy6642h2m5";
+      hash = "sha256-pQooiDEeB8NvBOQ1IKUgPSSQDK+hMTLMGuiKy6GWVKY=";
     };
   };
 
   pain-control = mkTmuxPlugin {
     pluginName = "pain-control";
-    version = "unstable-2020-02-18";
+    version = "unstable-2021-08-09";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-pain-control";
-      rev = "2db63de3b08fc64831d833240749133cecb67d92";
-      sha256 = "0w7a6n4n86ysiqcqj12j2hg9r5fznvbp3dz8pzas9q1k3avlk0zk";
+      rev = "32b760f6652f2305dfef0acd444afc311cf5c077";
+      hash = "sha256-2VI9w7Naj9OHF3iuV63Ij4QcYhbrtngyJ3GpeyzIKxs=";
     };
   };
 
@@ -496,34 +472,34 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2020-11-18";
+    version = "unstable-2024-04-14";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
-      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
-      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+      rev = "16bbde801378a70512059541d104c5ae35be32b9";
+      hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
     };
   };
 
   prefix-highlight = mkTmuxPlugin {
     pluginName = "prefix-highlight";
-    version = "unstable-2021-03-30";
+    version = "unstable-2024-01-14";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-prefix-highlight";
-      rev = "15acc6172300bc2eb13c81718dc53da6ae69de4f";
-      sha256 = "08rkflfnynxgv2s26b33l199h6xcqdfmlqbyqa1wkw7h85br3dgl";
+      rev = "489a96189778a21d2f5f4dbbbc0ad2cec8f6c854";
+      hash = "sha256-GXqlwl1TPgXX1Je/ORjGFwfCyz17ZgdsoyOK1P3XF18=";
     };
   };
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2022-05-01";
+    version = "unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "ca6468e2deef11efadfe3a62832ae67742505432";
-      sha256 = "0d7jg5dy4jq64679rf2zqmqbvgiqvpcj5jxfljk7d7y86dnqhj3n";
+      rev = "cff343cf9e81983d3da0c8562b01616f12e8d548";
+      hash = "sha256-FcSjYyWjXM1B+WmiK2bqUNJYtH7sJBUsY2IjSur5TjY=";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";
@@ -553,89 +529,39 @@ in rec {
     };
   };
 
-  rose-pine = mkTmuxPlugin {
-    pluginName = "rose-pine";
-    version = "unstable-2024-01-08";
-    rtpFilePath = "rose-pine.tmux";
-    src = fetchFromGitHub {
-      owner = "rose-pine";
-      repo = "tmux";
-      rev = "dd6d01338ac4afeb96542dcf24e4a7fe179b69e6";
-      sha256 = "sha256-Tccb4VjdotOSw7flJV4N0H4557NxRhXiCecZBPU9ICQ=";
-    };
-    meta = {
-      homepage = "https://github.com/rose-pine/tmux";
-      description = "Rosé Pine theme for tmux";
-      license = lib.licenses.mit;
-    };
-  };
-
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
-    version = "unstable-2017-09-05";
+    version = "unstable-2022-08-14";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sensible";
-      rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
-      sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
+      rev = "25cb91f42d020f675bb0a2ce3fbd3a5d96119efa";
+      hash = "sha256-sw9g1Yzmv2fdZFLJSGhx1tatQ+TtjDYNZI5uny0+5Hg=";
     };
     postInstall = lib.optionalString stdenv.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };
 
-  session-wizard = mkTmuxPlugin rec {
-    pluginName = "session-wizard";
-    rtpFilePath = "session-wizard.tmux";
-    version = "1.2.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "27medkamal";
-      repo = "tmux-session-wizard";
-      rev = "V${version}";
-      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
-    };
-    meta = with lib; {
-      homepage = "https://github.com/27medkamal/tmux-session-wizard";
-      description = "Tmux plugin for creating and switching between sessions based on recently accessed directories";
-      longDescription = ''
-        Session Wizard is using fzf and zoxide to do all the magic. Features:
-        * Creating a new session from a list of recently accessed directories
-        * Naming a session after a folder/project
-        * Switching sessions
-        * Viewing current or creating new sessions in one popup
-      '';
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ mandos ];
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postInstall = ''
-      substituteInPlace $target/session-wizard.tmux \
-        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
-      wrapProgram $target/session-wizard.sh \
-        --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
-    '';
-  };
-
   sessionist = mkTmuxPlugin {
     pluginName = "sessionist";
-    version = "unstable-2017-12-03";
+    version = "2.3.0-unstable-2023-05-02";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sessionist";
-      rev = "09ec86be38eae98ffc27bd0dde605ed10ae0dc89";
-      sha256 = "030q2mmj8akbc26jnqn8n7fckg1025p0ildx4wr401b6p1snnlw4";
+      rev = "a315c423328d9bdf5cf796435ce7075fa5e1bffb";
+      hash = "sha256-iC8NvuLujTXw4yZBaenHJ+2uM+HA9aW5b2rQTA8e69s=";
     };
   };
 
   sidebar = mkTmuxPlugin {
     pluginName = "sidebar";
-    version = "unstable-2018-11-30";
+    version = "0.7.0-unstable-2022-12-08";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sidebar";
-      rev = "aacbdb45bc5ab69db448a72de4155d0b8dbac677";
-      sha256 = "1bp90zbv19kbbiik0bgb893ybss1jqsnk3353a631993xjwsih7c";
+      rev = "a41d72c019093fd6a1216b044e111dd300684f1a";
+      hash = "sha256-5+ISvoXXYDDfzSoPBO6v6Wt7IWsRVb9DcPgnO02rYd4=";
     };
   };
 
@@ -671,24 +597,24 @@ in rec {
 
   tmux-colors-solarized = mkTmuxPlugin {
     pluginName = "tmuxcolors";
-    version = "unstable-2019-07-14";
+    version = "unstable-2022-06-10";
     src = fetchFromGitHub {
       owner = "seebi";
       repo = "tmux-colors-solarized";
-      rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
-      sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+      rev = "4d07f3cc1ce2bdc0c8391290c5b0cf098abddddc";
+      hash = "sha256-M1z6tEIs5bI5sNMbuiv1boDD4WOLgCA21reGVJgkj4I=";
     };
   };
 
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2023-10-24";
+    version = "unstable-2024-04-15";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "d62b6865c0e7c956ad1f0396823a6f34cf7452a7";
-      hash = "sha256-hVkSQYvBXrkXbKc98V9hwwvFp6z7/mX1K4N3N9j4NN4=";
+      rev = "231c835681ff47a17a99fb4f73307e67a25f52c0";
+      hash = "sha256-8coYAmthLH5UI2JGKBUpKpYY1FQF5Ztl9c5spLtxGnI=";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
@@ -720,50 +646,14 @@ in rec {
     inherit mkTmuxPlugin;
   };
 
-  t-smart-tmux-session-manager = mkTmuxPlugin rec {
-    pluginName = "t-smart-tmux-session-manager";
-    version = "2.8.0";
-    rtpFilePath = "t-smart-tmux-session-manager.tmux";
-    src = pkgs.fetchFromGitHub {
-      owner = "joshmedeski";
-      repo = "t-smart-tmux-session-manager";
-      rev = "v${version}";
-      sha256 = "sha256-EMDEEIWJ+XFOk0WsQPAwj9BFBVDNwFUCyd1ScceqKpc=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    postInstall = ''
-      wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
-          --prefix PATH : ${with pkgs; lib.makeBinPath (
-            [ pkgs.fzf pkgs.zoxide ]
-          )}
-
-      find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
-      find $target -type f -print0 | xargs -0 sed -i -e 's|zoxide |${pkgs.zoxide}/bin/zoxide |g'
-    '';
-  };
-
-  urlview = mkTmuxPlugin {
-    pluginName = "urlview";
-    version = "unstable-2016-01-06";
-    src = fetchFromGitHub {
-      owner = "tmux-plugins";
-      repo = "tmux-urlview";
-      rev = "b84c876cffdd22990b4ab51247e795cbd7813d53";
-      sha256 = "1jp4jq57cn116b3i34v6yy69izd8s6mp2ijr260cw86g0470k0fn";
-    };
-    postInstall = ''
-      sed -i -e '14,20{s|extract_url|${pkgs.extract_url}/bin/extract_url|g}' $target/urlview.tmux
-    '';
-  };
-
   vim-tmux-focus-events = mkTmuxPlugin {
     pluginName = "vim-tmux-focus-events";
-    version = "unstable-2020-10-05";
+    version = "1.0.0-unstable-2021-04-27";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "vim-tmux-focus-events";
-      rev = "a568192ca0de4ca0bd7b3cd0249aad491625c941";
-      sha256 = "130l73v18md95djkc4s9d0fr018f8f183sjcgy7dgldwdaxlqdi1";
+      rev = "b1330e04ffb95ede8e02b2f7df1f238190c67056";
+      hash = "sha256-R40ggkvFFcHk9lhVm9nw8b174VfUrlDiy+BUgql+KKc=";
     };
 
     meta = with lib; {
@@ -778,12 +668,12 @@ in rec {
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2022-08-21";
+    version = "1.0-unstable-2024-04-13";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
-      rev = "afb45a55b452b9238159047ce7c6e161bd4a9907";
-      hash = "sha256-8A+Yt9uhhAP76EiqUopE8vl7/UXkgU2x000EOcF7pl0=";
+      rev = "a26954a585b02a2ac02f87145e204f8798a7cbc2";
+      hash = "sha256-6StvzZghkv1pv0Mdy3fvYHXfCxeTMNDG4ERwYTXr2AY=";
     };
   };
 
@@ -808,12 +698,12 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2021-06-20";
+    version = "2.3.0-unstable-2023-07-19";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";
-      rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
-      sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+      rev = "acfd36e4fcba99f8310a7dfb432111c242fe7392";
+      hash = "sha256-/5HPaoOx2U2d8lZZJo5dKmemu6hKgHJYq23hxkddXpA=";
     };
   };
 }
