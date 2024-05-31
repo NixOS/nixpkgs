@@ -91,17 +91,24 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DCMAKE_CTEST_ARGUMENTS=-E;'test_mln_core|test_mln_widgets'" ];
 
   patches = [
-    ./patches/use-find-package.patch
-    ./patches/add-cstdint.patch
-    ./patches/fix-zoned-time.patch
-    (substituteAll {
+    # These are for Nix compatibility {{{
+    ./patches/use-find-package.patch               # Replace some vendored dependencies with Nix provided versions
+    (substituteAll {                               # Skip tagging build with git version, and substitute it with the src revision (still uses current year timestamp)
       src = ./patches/skip-git-versioning.patch;
       rev = src.rev;
     })
-    ./patches/fix-cmake-install.patch
-    ./patches/fix-audio-codec-setup.patch
+    ./patches/fix-cmake-install.patch     # prevents using some Qt scripts that seemed to break
+                                          # the install step. Fixes missing link to some targets
+    # }}}
+
+    # These may be submitted upstream {{{
+    ./patches/add-cstdint.patch           # use <cstdint> for GCC 13 compatibility
+    ./patches/fix-zoned-time.patch        # fix ambiguity of some date/chrono functions in GCC 13
+    ./patches/fix-audio-codec-setup.patch # fix apparent logic error when checking for supported audio codecs on launch
+    # }}}
   ];
 
+  # This also may be submitted upstream to maplibre-native-qt, which is currently vendored
   postPatch = ''
     substituteInPlace external/maplibre-native-qt/src/core/CMakeLists.txt \
       --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
