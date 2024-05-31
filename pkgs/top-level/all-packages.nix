@@ -39136,6 +39136,8 @@ with pkgs;
 
   epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };
 
+  tuxedo-touchpad-switch = callPackage ../misc/drivers/tuxedo-touchpad-switch { };
+
   foomatic-db = callPackage ../misc/cups/drivers/foomatic-db { };
   foomatic-db-engine = callPackage ../misc/cups/drivers/foomatic-db-engine { };
   foomatic-db-nonfree = callPackage ../misc/cups/drivers/foomatic-db-nonfree { };
