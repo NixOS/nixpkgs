@@ -40,6 +40,21 @@ let
         type = lib.types.int;
         default = 1000;
       };
+
+      ForwardX11 = lib.mkOption {
+        type = lib.types.nullOr lib.types.bool;
+        default = false;
+        description = ''
+          Whether to request X11 forwarding on outgoing connections by default.
+          If set to null, the option is not set at all.
+          This is useful for running graphical programs on the remote machine and have them display to your local X11 server.
+          Historically, this value has depended on the value used by the local sshd daemon, but there really isn't a relation between the two.
+          Note: there are some security risks to forwarding an X11 connection.
+          NixOS's X server is built with the SECURITY extension, which prevents some obvious attacks.
+          To enable or disable forwarding on a per-connection basis, see the -X and -x options to ssh.
+          The -Y option to ssh enables trusted forwarding, which bypasses the SECURITY extension.
+        '';
+      };
     };
   };
 
@@ -99,6 +114,15 @@ in
 {
   ###### interface
 
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "ssh" "forwardX11" ] [ "programs" "ssh" "hostSettings" "*" "ForwardX11" ])
+    (lib.mkRenamedOptionModule [ "programs" "ssh" "pubkeyAcceptedKeyTypes" ] [ "programs" "ssh" "hostSettings" "*" "PubkeyAcceptedKeyTypes" ])
+    (lib.mkRenamedOptionModule [ "programs" "ssh" "hostKeyAlgorithms" ] [ "programs" "ssh" "hostSettings" "*" "HostKeyAlgorithms" ])
+    (lib.mkRenamedOptionModule [ "programs" "ssh" "kexAlgorithms" ] [ "programs" "ssh" "hostSettings" "*" "KexAlgorithms" ])
+    (lib.mkRenamedOptionModule [ "programs" "ssh" "ciphers" ] [ "programs" "ssh" "hostSettings" "*" "Ciphers" ])
+    (lib.mkRenamedOptionModule [ "programs" "ssh" "macs" ] [ "programs" "ssh" "hostSettings" "*" "MACs" ])
+  ];
+
   options = {
 
     programs.ssh = {
@@ -117,44 +141,11 @@ in
         description = "Program used by SSH to ask for passwords.";
       };
 
-      forwardX11 = lib.mkOption {
-        type = with lib.types; nullOr bool;
-        default = false;
-        description = ''
-          Whether to request X11 forwarding on outgoing connections by default.
-          If set to null, the option is not set at all.
-          This is useful for running graphical programs on the remote machine and have them display to your local X11 server.
-          Historically, this value has depended on the value used by the local sshd daemon, but there really isn't a relation between the two.
-          Note: there are some security risks to forwarding an X11 connection.
-          NixOS's X server is built with the SECURITY extension, which prevents some obvious attacks.
-          To enable or disable forwarding on a per-connection basis, see the -X and -x options to ssh.
-          The -Y option to ssh enables trusted forwarding, which bypasses the SECURITY extension.
-        '';
-      };
-
       setXAuthLocation = lib.mkOption {
         type = lib.types.bool;
         description = ''
           Whether to set the path to {command}`xauth` for X11-forwarded connections.
           This causes a dependency on X11 packages.
-        '';
-      };
-
-      pubkeyAcceptedKeyTypes = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "ssh-ed25519" "ssh-rsa" ];
-        description = ''
-          Specifies the key lib.types that will be used for public key authentication.
-        '';
-      };
-
-      hostKeyAlgorithms = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "ssh-ed25519" "ssh-rsa" ];
-        description = ''
-          Specifies the host key algorithms that the client wants to use in order of preference.
         '';
       };
 
@@ -329,34 +320,6 @@ in
           ]
         '';
       };
-
-      kexAlgorithms = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "curve25519-sha256@libssh.org" "diffie-hellman-group-exchange-sha256" ];
-        description = ''
-          Specifies the available KEX (Key Exchange) algorithms.
-        '';
-      };
-
-      ciphers = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "chacha20-poly1305@openssh.com" "aes256-gcm@openssh.com" ];
-        description = ''
-          Specifies the ciphers allowed and their order of preference.
-        '';
-      };
-
-      macs = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "hmac-sha2-512-etm@openssh.com" "hmac-sha1" ];
-        description = ''
-          Specifies the MAC (message authentication code) algorithms in order of preference. The MAC algorithm is used
-          for data integrity protection.
-        '';
-      };
     };
 
   };
@@ -364,10 +327,10 @@ in
   config = {
 
     programs.ssh.setXAuthLocation =
-      lib.mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 == true || config.services.openssh.settings.X11Forwarding);
+      lib.mkDefault (config.services.xserver.enable || cfg.hostSettings."*".ForwardX11 == true || config.services.openssh.settings.X11Forwarding);
 
     assertions =
-      [ { assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
+      [ { assertion = cfg.hostSettings."*".ForwardX11 == true -> cfg.setXAuthLocation;
           message = "cannot enable X11 forwarding without setting XAuth location";
         }
       ] ++ lib.flip lib.mapAttrsToList cfg.knownHosts (name: data: {
@@ -388,21 +351,16 @@ in
 
         # Generated from the match settings of the OpenSSH module
         ${renderSettingsBlocks "Match" cfg.matchSettings}
-
-        # Generated options from other settings
-        Host *
-        AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-        GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
-
-        ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
-        ${lib.optionalString (cfg.forwardX11 != null) "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"}
-
-        ${lib.optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-        ${lib.optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"}
-        ${lib.optionalString (cfg.kexAlgorithms != null) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"}
-        ${lib.optionalString (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"}
-        ${lib.optionalString (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"}
       '';
+
+    programs.ssh.hostSettings."*" = {
+      priority = lib.mkDefault 2000; # Specific blocks should come first. This is even after `mkAfter`
+
+      GlobalKnownHostsFile = knownHostsFiles;
+      AddressFamily = lib.mkIf (!config.networking.enableIPv6) "inet";
+
+      XAuthLocation = lib.mkIf cfg.setXAuthLocation "${pkgs.xorg.xauth}/bin/xauth";
+    };
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
