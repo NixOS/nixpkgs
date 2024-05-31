@@ -1214,6 +1214,22 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    cisPath = old.cisPath.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    HilbertVis = old.HilbertVis.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    MANOR = old.MANOR.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
+    rGADEM = old.rGADEM.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
    rsgeo = old.rsgeo.overrideAttrs (attrs: {
       nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
