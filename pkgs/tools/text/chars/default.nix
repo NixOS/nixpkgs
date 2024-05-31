@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Commandline tool to display information about unicode characters";
+    mainProgram = "chars";
     homepage = "https://github.com/antifuchs/chars";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];

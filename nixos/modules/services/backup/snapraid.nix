@@ -11,7 +11,7 @@ in
   ];
 
   options.services.snapraid = with types; {
-    enable = mkEnableOption (lib.mdDoc "SnapRAID");
+    enable = mkEnableOption "SnapRAID";
     dataDisks = mkOption {
       default = { };
       example = {
@@ -19,7 +19,7 @@ in
         d2 = "/mnt/disk2/";
         d3 = "/mnt/disk3/";
       };
-      description = lib.mdDoc "SnapRAID data disks.";
+      description = "SnapRAID data disks.";
       type = attrsOf str;
     };
     parityFiles = mkOption {
@@ -32,7 +32,7 @@ in
         "/mnt/diskt/snapraid.5-parity"
         "/mnt/disku/snapraid.6-parity"
       ];
-      description = lib.mdDoc "SnapRAID parity files.";
+      description = "SnapRAID parity files.";
       type = listOf str;
     };
     contentFiles = mkOption {
@@ -42,46 +42,46 @@ in
         "/mnt/disk1/snapraid.content"
         "/mnt/disk2/snapraid.content"
       ];
-      description = lib.mdDoc "SnapRAID content list files.";
+      description = "SnapRAID content list files.";
       type = listOf str;
     };
     exclude = mkOption {
       default = [ ];
       example = [ "*.unrecoverable" "/tmp/" "/lost+found/" ];
-      description = lib.mdDoc "SnapRAID exclude directives.";
+      description = "SnapRAID exclude directives.";
       type = listOf str;
     };
     touchBeforeSync = mkOption {
       default = true;
       example = false;
-      description = lib.mdDoc
+      description =
         "Whether {command}`snapraid touch` should be run before {command}`snapraid sync`.";
       type = bool;
     };
     sync.interval = mkOption {
       default = "01:00";
       example = "daily";
-      description = lib.mdDoc "How often to run {command}`snapraid sync`.";
+      description = "How often to run {command}`snapraid sync`.";
       type = str;
     };
     scrub = {
       interval = mkOption {
         default = "Mon *-*-* 02:00:00";
         example = "weekly";
-        description = lib.mdDoc "How often to run {command}`snapraid scrub`.";
+        description = "How often to run {command}`snapraid scrub`.";
         type = str;
       };
       plan = mkOption {
         default = 8;
         example = 5;
-        description = lib.mdDoc
+        description =
           "Percent of the array that should be checked by {command}`snapraid scrub`.";
         type = int;
       };
       olderThan = mkOption {
         default = 10;
         example = 20;
-        description = lib.mdDoc
+        description =
           "Number of days since data was last scrubbed before it can be scrubbed again.";
         type = int;
       };
@@ -95,7 +95,7 @@ in
         autosave 500
         pool /pool
       '';
-      description = lib.mdDoc "Extra config options for SnapRAID.";
+      description = "Extra config options for SnapRAID.";
       type = lines;
     };
   };

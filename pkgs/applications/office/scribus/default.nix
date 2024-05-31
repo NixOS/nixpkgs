@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       arthsmn
     ];
     description = "Desktop Publishing (DTP) and Layout program";
+    mainProgram = "scribus";
     homepage = "https://www.scribus.net";
     # There are a lot of licenses...
     # https://github.com/scribusproject/scribus/blob/20508d69ca4fc7030477db8dee79fd1e012b52d2/COPYING#L15-L19

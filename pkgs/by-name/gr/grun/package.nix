@@ -32,6 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An application launcher written in C and using GTK for the interface";
+    mainProgram = "grun";
     homepage = "https://github.com/lrgc/grun";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl2Only ];

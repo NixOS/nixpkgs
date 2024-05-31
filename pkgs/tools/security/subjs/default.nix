@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Fetcher for Javascript files";
+    mainProgram = "subjs";
     longDescription = ''
       subjs fetches Javascript files from a list of URLs or subdomains.
       Analyzing Javascript files can help you find undocumented endpoints,

@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, marshmallow
-, mock
-, openapi-spec-validator
-, packaging
-, prance
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  marshmallow,
+  mock,
+  openapi-spec-validator,
+  packaging,
+  prance,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "6.4.0";
-  format = "setuptools";
+  version = "6.6.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QrimgzzxVMnb0i0Aa1a/nEnJctMtJP5xb9c04Pa3Obg=";
+    hash = "sha256-9cqkfO51/gO5xQtVlASLTAUu7KLCEuDawS27YXXZplk=";
   };
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  nativeBuildInputs = [ flit-core ];
+
+  propagatedBuildInputs = [ packaging ];
 
   passthru.optional-dependencies = {
-    marshmallow = [
-      marshmallow
-    ];
-    yaml = [
-      pyyaml
-    ];
+    marshmallow = [ marshmallow ];
+    yaml = [ pyyaml ];
     validation = [
       openapi-spec-validator
       prance
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "apispec"
-  ];
+  pythonImportsCheck = [ "apispec" ];
 
   meta = with lib; {
     changelog = "https://github.com/marshmallow-code/apispec/blob/${version}/CHANGELOG.rst";

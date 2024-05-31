@@ -9,19 +9,19 @@ let
     options = {
       principal = mkOption {
         type = types.str;
-        description = lib.mdDoc "Which principal the rule applies to";
+        description = "Which principal the rule applies to";
       };
       access = mkOption {
         type = types.either
           (types.listOf (types.enum ["add" "cpw" "delete" "get" "list" "modify"]))
           (types.enum ["all"]);
         default = "all";
-        description = lib.mdDoc "The changes the principal is allowed to make.";
+        description = "The changes the principal is allowed to make.";
       };
       target = mkOption {
         type = types.str;
         default = "*";
-        description = lib.mdDoc "The principals that 'access' applies to.";
+        description = "The principals that 'access' applies to.";
       };
     };
   };
@@ -34,7 +34,7 @@ let
           { principal = "*/admin"; access = "all"; }
           { principal = "admin"; access = "all"; }
         ];
-        description = lib.mdDoc ''
+        description = ''
           The privileges granted to a user.
         '';
       };
@@ -51,11 +51,11 @@ in
   ###### interface
   options = {
     services.kerberos_server = {
-      enable = lib.mkEnableOption (lib.mdDoc "the kerberos authentication server");
+      enable = lib.mkEnableOption "the kerberos authentication server";
 
       realms = mkOption {
         type = types.attrsOf (types.submodule realm);
-        description = lib.mdDoc ''
+        description = ''
           The realm(s) to serve keys for.
         '';
       };

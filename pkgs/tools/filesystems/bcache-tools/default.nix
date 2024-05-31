@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bcache-tools";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "g2p";
     repo = "bcache-tools";
     rev = "v${version}";
-    hash = "sha256-Ors2xXRrVTf8Cq3BYnSVSfJy/nyGjT5BGLSNpxOcHR4=";
+    hash = "sha256-6gy0ymecMgEHXbwp/nXHlrUEeDFnmFXWZZPlzP292g4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       tree.
     '';
     homepage = "https://bcache.evilpiepirate.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

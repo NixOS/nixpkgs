@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, parameterized
-, ply
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parameterized,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.7.0";
-  format = "setuptools";
+  version = "6.7.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,21 +20,19 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     rev = "refs/tags/${version}";
-    hash = "sha256-HoTtvda97ghQ0SQBZFGkDAwD2WNtZpIum2m1khivEK4=";
+    hash = "sha256-v3KVb9KZPbUlpRySzJV8dmApScKT06aJc8SULCHcnPI=";
   };
 
-  propagatedBuildInputs = [
-    ply
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ply ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyomo"
-  ];
+  pythonImportsCheck = [ "pyomo" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -53,9 +53,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python Optimization Modeling Objects";
-    homepage = "http://pyomo.org";
+    homepage = "http://www.pyomo.org/";
     changelog = "https://github.com/Pyomo/pyomo/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    mainProgram = "pyomo";
   };
 }

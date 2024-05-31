@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blinker
-, flask
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  blinker,
+  flask,
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "raven" ];
 
   passthru.optional-dependencies = {
-    flask = [ blinker flask ];
+    flask = [
+      blinker
+      flask
+    ];
   };
 
   meta = {
     description = "Legacy Python client for Sentry (getsentry.com) — replaced by sentry-python";
+    mainProgram = "raven";
     homepage = "https://github.com/getsentry/raven-python";
     license = [ lib.licenses.bsd3 ];
     maintainers = with lib.maintainers; [ primeos ];

@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, numpy
-, opencv4
-, lxml
-, xmljson
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  numpy,
+  opencv4,
+  lxml,
+  xmljson,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

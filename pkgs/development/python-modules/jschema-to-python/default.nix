@@ -1,8 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, attrs
-, jsonpickle
-, pbr
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  jsonpickle,
+  pbr,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +25,7 @@ buildPythonPackage rec {
     pbr
   ];
 
-  nativeCheckInputs =[
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jschema_to_python" ];
 

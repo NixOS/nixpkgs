@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A command line tool and shell to manage keycards";
+    mainProgram = "keycard-cli";
     homepage = "https://keycard.status.im";
     license = licenses.mpl20;
     maintainers = [ maintainers.zimbatm ];

@@ -20,7 +20,7 @@ in
 stdenv.mkDerivation {
   inherit version;
   pname = "meteor";
-  src = srcs.${system};
+  src = srcs.${system} or (throw "unsupported system ${system}");
 
   #dontStrip = true;
 

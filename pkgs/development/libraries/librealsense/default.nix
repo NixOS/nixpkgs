@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
   postInstall = ''
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
-    --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+    --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '' + lib.optionalString enablePython  ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';

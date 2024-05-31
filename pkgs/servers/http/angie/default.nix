@@ -3,21 +3,25 @@
 , lib
 , fetchurl
 , nixosTests
+, withAcme ? false
 , withQuic ? false
 , fetchpatch
 , ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
-  version = "1.4.0";
+  version = "1.5.1";
   pname = if withQuic then "angieQuic" else "angie";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-gaQsPwoxtt6oVSDX1JCWvyUwDQaNprya79CCwu4z8b4=";
+    hash = "sha256-pSBy+Gv3rSa0WqQOxLHM0V03/vLqvOYBGxrjY9qsBfQ=";
   };
 
-  configureFlags = lib.optional withQuic [
+  configureFlags = lib.optionals withAcme [
+    "--with-http_acme_module"
+    "--http-acme-client-path=/var/lib/nginx/acme"
+  ] ++ lib.optionals withQuic [
     "--with-http_v3_module"
   ];
 

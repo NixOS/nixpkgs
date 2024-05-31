@@ -1,21 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, msgpack
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, textual
-, time-machine
-, typing-extensions
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  msgpack,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  textual,
+  time-machine,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "textual-dev";
-  version = "1.4.0";
+  version = "1.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,12 +25,10 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "textual-dev";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l8InIStQD7rAHYr2/eA1+Z0goNZoO4t78eODYmwSOrA=";
+    hash = "sha256-QnMKVt1WxnwGnZFNb7Gbus7xewGvyG5xJ0hIKKK5hug=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,12 +44,11 @@ buildPythonPackage rec {
     time-machine
   ];
 
-  pythonImportsCheck = [
-    "textual_dev"
-  ];
+  pythonImportsCheck = [ "textual_dev" ];
 
   meta = with lib; {
     description = "Development tools for Textual";
+    mainProgram = "textual";
     homepage = "https://github.com/Textualize/textual-dev";
     license = licenses.mit;
     maintainers = with maintainers; [ yannip ];

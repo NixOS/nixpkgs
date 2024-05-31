@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27, sphinx }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy27,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "hieroglyph";
@@ -24,4 +30,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ juliendehos ];
   };
 }
-

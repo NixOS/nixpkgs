@@ -1,7 +1,7 @@
 let
-  opensearchTest =
+  opensearchTest = extraSettings:
     import ./make-test-python.nix (
-      { pkgs, lib, extraSettings ? {} }: {
+      { pkgs, lib, ... }: {
         name = "opensearch";
         meta.maintainers = with pkgs.lib.maintainers; [ shyim ];
 
@@ -27,20 +27,18 @@ in
 {
   opensearch = opensearchTest {};
   opensearchCustomPathAndUser = opensearchTest {
-    extraSettings = {
-      services.opensearch.dataDir = "/var/opensearch_test";
-      services.opensearch.user = "open_search";
-      services.opensearch.group = "open_search";
-      systemd.tmpfiles.rules = [
-        "d /var/opensearch_test 0700 open_search open_search -"
-      ];
-      users = {
-        groups.open_search = {};
-        users.open_search = {
-          description = "OpenSearch daemon user";
-          group = "open_search";
-          isSystemUser = true;
-        };
+    services.opensearch.dataDir = "/var/opensearch_test";
+    services.opensearch.user = "open_search";
+    services.opensearch.group = "open_search";
+    systemd.tmpfiles.rules = [
+      "d /var/opensearch_test 0700 open_search open_search -"
+    ];
+    users = {
+      groups.open_search = { };
+      users.open_search = {
+        description = "OpenSearch daemon user";
+        group = "open_search";
+        isSystemUser = true;
       };
     };
   };

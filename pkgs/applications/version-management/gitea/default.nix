@@ -20,12 +20,12 @@
 
 buildGoModule rec {
   pname = "gitea";
-  version = "1.21.5";
+  version = "1.22.0";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://dl.gitea.com/gitea/${version}/gitea-src-${version}.tar.gz";
-    hash = "sha256-VnJF6CSssQYs8yIKmXvxYHh2CfLiJhuKtjRdqKIQGxw=";
+    hash = "sha256-bU4u/RsE12InXjJ2ZvIL31z9AzB7XULyV0+ytAYnyjg=";
   };
 
   vendorHash = null;
@@ -86,7 +86,7 @@ buildGoModule rec {
     description = "Git with a cup of tea";
     homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
+    maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

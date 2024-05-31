@@ -17,10 +17,12 @@
 , makeWrapper
 , runtimeShell
 , symlinkJoin
+, substituteAll
 , extraPackages ? [ ]
-, runc
 , crun
+, runc
 , conmon
+, extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
 , slirp4netns
 , fuse-overlayfs
 , util-linux
@@ -30,6 +32,7 @@
 , gvproxy
 , aardvark-dns
 , netavark
+, passt
 , testers
 , podman
 }:
@@ -37,9 +40,6 @@ let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
   binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
-    runc
-    crun
-    conmon
     fuse-overlayfs
     util-linux
     iptables
@@ -57,21 +57,29 @@ let
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
       slirp4netns
-    ];
+      passt
+      conmon
+      crun
+    ] ++ extraRuntimes;
   };
 in
 buildGoModule rec {
   pname = "podman";
-  version = "4.9.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-6E6Qobkvv6y+Jx+X6Z9wJsGIuP7MXoc+cXRiajj0ojw=";
+    hash = "sha256-PA7mKHPzPDFdwKXAHvHnDvHF+mTmm59jkoeUeiCP6vE=";
   };
 
   patches = [
+    (substituteAll {
+      src = ./hardcode-paths.patch;
+      bin_path = helpersBin;
+    })
+
     # we intentionally don't build and install the helper so we shouldn't display messages to users about it
     ./rm-podman-mac-helper-msg.patch
   ];
@@ -154,6 +162,7 @@ buildGoModule rec {
     '';
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    mainProgram = "podman";
   };
 }

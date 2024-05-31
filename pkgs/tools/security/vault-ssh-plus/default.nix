@@ -42,6 +42,7 @@ buildGoModule rec {
     homepage = "https://github.com/isometry/vault-ssh-plus";
     changelog = "https://github.com/isometry/vault-ssh-plus/releases/tag/v${version}";
     description = "Automatically use HashiCorp Vault SSH Client Key Signing with ssh(1)";
+    mainProgram = "vssh";
     license = licenses.mit;
     maintainers = with maintainers; [ lesuisse ];
   };

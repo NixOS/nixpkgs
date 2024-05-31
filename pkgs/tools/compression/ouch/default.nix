@@ -39,9 +39,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion artifacts/ouch.{bash,fish} --zsh artifacts/_ouch
   '';
 
-  env = { OUCH_ARTIFACTS_FOLDER = "artifacts"; } //
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    lib.optionalAttrs stdenv.cc.isClang { NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}"; };
+  env.OUCH_ARTIFACTS_FOLDER = "artifacts";
 
   meta = with lib; {
     description = "A command-line utility for easily compressing and decompressing files and directories";

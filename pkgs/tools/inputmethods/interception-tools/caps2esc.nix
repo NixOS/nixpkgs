@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";
     description = "Transforming the most useless key ever into the most useful one";
+    mainProgram = "caps2esc";
     license = licenses.mit;
     maintainers = [ maintainers.vyp ];
     platforms = platforms.linux;

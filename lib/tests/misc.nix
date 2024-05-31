@@ -1,21 +1,116 @@
-/*
-Nix evaluation tests for various lib functions.
+/**
+  Nix evaluation tests for various lib functions.
 
-Since these tests are implemented with Nix evaluation, error checking is limited to what `builtins.tryEval` can detect, which is `throw`'s and `abort`'s, without error messages.
-If you need to test error messages or more complex evaluations, see ./modules.sh, ./sources.sh or ./filesystem.sh as examples.
+  Since these tests are implemented with Nix evaluation,
+  error checking is limited to what `builtins.tryEval` can detect,
+  which is `throw`'s and `abort`'s, without error messages.
 
-To run these tests:
+  If you need to test error messages or more complex evaluations, see
+  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
 
-  [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
+  To run these tests:
 
-If the resulting list is empty, all tests passed.
-Alternatively, to run all `lib` tests:
+    [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
 
-  [nixpkgs]$ nix-build lib/tests/release.nix
+  If the resulting list is empty, all tests passed.
+  Alternatively, to run all `lib` tests:
+
+    [nixpkgs]$ nix-build lib/tests/release.nix
 */
-with import ../default.nix;
 
 let
+  lib = import ../default.nix;
+
+  inherit (lib)
+    allUnique
+    and
+    attrNames
+    attrsets
+    attrsToList
+    bitAnd
+    bitOr
+    bitXor
+    boolToString
+    callPackagesWith
+    callPackageWith
+    cartesianProduct
+    cli
+    composeExtensions
+    composeManyExtensions
+    concatLines
+    concatMapAttrs
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    const
+    escapeXML
+    evalModules
+    filter
+    fix
+    fold
+    foldAttrs
+    foldl
+    foldl'
+    foldlAttrs
+    foldr
+    functionArgs
+    generators
+    genList
+    getExe
+    getExe'
+    groupBy
+    groupBy'
+    hasAttrByPath
+    hasInfix
+    id
+    ifilter0
+    isStorePath
+    lazyDerivation
+    length
+    lists
+    listToAttrs
+    makeExtensible
+    makeIncludePath
+    makeOverridable
+    mapAttrs
+    mapCartesianProduct
+    matchAttrs
+    mergeAttrs
+    meta
+    mod
+    nameValuePair
+    optionalDrvAttr
+    optionAttrSetToDocList
+    overrideExisting
+    packagesFromDirectoryRecursive
+    pipe
+    range
+    recursiveUpdateUntil
+    removePrefix
+    replicate
+    runTests
+    setFunctionArgs
+    showAttrPath
+    sort
+    sortOn
+    stringLength
+    strings
+    stringToCharacters
+    systems
+    tail
+    take
+    testAllTrue
+    toBaseDigits
+    toHexString
+    toInt
+    toIntBase10
+    toShellVars
+    types
+    updateManyAttrsByPath
+    versions
+    xor
+    ;
+
   testingThrow = expr: {
     expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
     expected = { success = false; value = false; };
@@ -24,7 +119,6 @@ let
     expr = (builtins.tryEval expr).success;
     expected = true;
   };
-  testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -54,6 +148,24 @@ runTests {
     expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
     expected = { a = false; b = false; c = true; };
   };
+
+  testCallPackageWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: {};
+      f' = callPackageWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.override;
+      expected = functionArgs f;
+    };
+
+  testCallPackagesWithOverridePreservesArguments =
+    let
+      f = { a ? 0, b }: { nested = {}; };
+      f' = callPackagesWith { a = 1; b = 2; } f {};
+    in {
+      expr = functionArgs f'.nested.override;
+      expected = functionArgs f;
+    };
 
 # TRIVIAL
 
@@ -93,15 +205,30 @@ runTests {
   };
 
   /*
-  testOr = {
-    expr = or true false;
-    expected = true;
-  };
+    testOr = {
+      expr = or true false;
+      expected = true;
+    };
   */
 
   testAnd = {
     expr = and true false;
     expected = false;
+  };
+
+  testXor = {
+    expr = [
+      (xor true false)
+      (xor true true)
+      (xor false false)
+      (xor false true)
+    ];
+    expected = [
+      true
+      false
+      false
+      true
+    ];
   };
 
   testFix = {
@@ -189,6 +316,35 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testMakeIncludePathWithPkgs = {
+    expr = (makeIncludePath [
+      # makeIncludePath preferably selects the "dev" output
+      { dev.outPath = "/dev"; out.outPath = "/out"; outPath = "/default"; }
+      # "out" is used if "dev" is not found
+      { out.outPath = "/out"; outPath = "/default"; }
+      # And it returns the derivation directly if there's no "out" either
+      { outPath = "/default"; }
+      # Same if the output is specified explicitly, even if there's a "dev"
+      { dev.outPath = "/dev"; outPath = "/default"; outputSpecified = true; }
+    ]);
+    expected = "/dev/include:/out/include:/default/include:/default/include";
+  };
+
+  testMakeIncludePathWithEmptyList = {
+    expr = (makeIncludePath [ ]);
+    expected = "";
+  };
+
+  testMakeIncludePathWithOneString = {
+    expr = (makeIncludePath [ "/usr" ]);
+    expected = "/usr/include";
+  };
+
+  testMakeIncludePathWithManyString = {
+    expr = (makeIncludePath [ "/usr" "/usr/local" ]);
+    expected = "/usr/include:/usr/local/include";
   };
 
   testReplicateString = {
@@ -495,6 +651,31 @@ runTests {
   testFilter = {
     expr = filter (x: x != "a") ["a" "b" "c" "a"];
     expected = ["b" "c"];
+  };
+
+  testIfilter0Example = {
+    expr = ifilter0 (i: v: i == 0 || v > 2) [ 1 2 3 ];
+    expected = [ 1 3 ];
+  };
+  testIfilter0Empty = {
+    expr = ifilter0 (i: v: abort "shouldn't be evaluated!") [ ];
+    expected = [ ];
+  };
+  testIfilter0IndexOnly = {
+    expr = length (ifilter0 (i: v: mod i 2 == 0) [ (throw "0") (throw "1") (throw "2") (throw "3")]);
+    expected = 2;
+  };
+  testIfilter0All = {
+    expr = ifilter0 (i: v: true) [ 10 11 12 13 14 15 ];
+    expected = [ 10 11 12 13 14 15 ];
+  };
+  testIfilter0First = {
+    expr = ifilter0 (i: v: i == 0) [ 10 11 12 13 14 15 ];
+    expected = [ 10 ];
+  };
+  testIfilter0Last = {
+    expr = ifilter0 (i: v: i == 5) [ 10 11 12 13 14 15 ];
+    expected = [ 15 ];
   };
 
   testFold =
@@ -1162,7 +1343,7 @@ runTests {
     '';
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToJSONSimple =
     let val = {
       foobar = [ "baz" 1 2 3 ];
@@ -1173,7 +1354,7 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  /* right now only invocation check */
+  # right now only invocation check
   testToYAMLSimple =
     let val = {
       list = [ { one = 1; } { two = 2; } ];
@@ -1260,7 +1441,7 @@ runTests {
     };
 
   testToPrettyMultiline = {
-    expr = mapAttrs (const (generators.toPretty { })) rec {
+    expr = mapAttrs (const (generators.toPretty { })) {
       list = [ 3 4 [ false ] ];
       attrs = { foo = null; bar.foo = "baz"; };
       newlinestring = "\n";
@@ -1274,7 +1455,7 @@ runTests {
         there
         test'';
     };
-    expected = rec {
+    expected = {
       list = ''
         [
           3
@@ -1312,13 +1493,10 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist =
-    let
-      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
-    in {
+  testToPlist = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
-        nested.values = rec {
+        nested.values = {
           int = 42;
           float = 0.1337;
           bool = true;
@@ -1461,6 +1639,27 @@ runTests {
     ];
   };
 
+  testToGNUCommandLineSeparator = {
+    expr = cli.toGNUCommandLine { optionValueSeparator = "="; } {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    };
+
+    expected = [
+      "-X=PUT"
+      "--data={\"id\":0}"
+      "--retry=3"
+      "--url=https://example.com/foo"
+      "--url=https://example.com/bar"
+      "--verbose"
+    ];
+  };
+
   testToGNUCommandLineShell = {
     expr = cli.toGNUCommandLineShell {} {
       data = builtins.toJSON { id = 0; };
@@ -1531,17 +1730,17 @@ runTests {
   };
 
   testCartesianProductOfEmptySet = {
-    expr = cartesianProductOfSets {};
+    expr = cartesianProduct {};
     expected = [ {} ];
   };
 
   testCartesianProductOfOneSet = {
-    expr = cartesianProductOfSets { a = [ 1 2 3 ]; };
+    expr = cartesianProduct { a = [ 1 2 3 ]; };
     expected = [ { a = 1; } { a = 2; } { a = 3; } ];
   };
 
   testCartesianProductOfTwoSets = {
-    expr = cartesianProductOfSets { a = [ 1 ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ 1 ]; b = [ 10 20 ]; };
     expected = [
       { a = 1; b = 10; }
       { a = 1; b = 20; }
@@ -1549,12 +1748,12 @@ runTests {
   };
 
   testCartesianProductOfTwoSetsWithOneEmpty = {
-    expr = cartesianProductOfSets { a = [ ]; b = [ 10 20 ]; };
+    expr = cartesianProduct { a = [ ]; b = [ 10 20 ]; };
     expected = [ ];
   };
 
   testCartesianProductOfThreeSets = {
-    expr = cartesianProductOfSets {
+    expr = cartesianProduct {
       a = [   1   2   3 ];
       b = [  10  20  30 ];
       c = [ 100 200 300 ];
@@ -1596,6 +1795,30 @@ runTests {
       { a = 3; b = 30; c = 200; }
       { a = 3; b = 30; c = 300; }
     ];
+  };
+
+  testMapCartesianProductOfOneSet = {
+    expr = mapCartesianProduct ({a}: a * 2) { a = [ 1 2 3 ]; };
+    expected = [ 2 4 6 ];
+  };
+
+  testMapCartesianProductOfTwoSets = {
+    expr = mapCartesianProduct ({a,b}: a + b) { a = [ 1 ]; b = [ 10 20 ]; };
+    expected = [ 11 21 ];
+  };
+
+  testMapCartesianProcutOfTwoSetsWithOneEmpty = {
+    expr = mapCartesianProduct (x: x.a + x.b) { a = [ ]; b = [ 10 20 ]; };
+    expected = [ ];
+  };
+
+  testMapCartesianProductOfThreeSets = {
+    expr = mapCartesianProduct ({a,b,c}: a + b + c) {
+      a = [ 1 2 3 ];
+      b = [ 10 20 30 ];
+      c = [ 100 200 300 ];
+    };
+    expected = [ 111 211 311 121 221 321 131 231 331 112 212 312 122 222 322 132 232 332 113 213 313 123 223 323 133 233 333 ];
   };
 
   # The example from the showAttrPath documentation
@@ -1971,6 +2194,24 @@ runTests {
       name = "foo";
       x = 1;
     }).drvPath;
+  };
+
+  testLazyDerivationMultiOutputReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out" "dev"];
+      dev = "test dev";
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta.position = "/hi:23";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; outputs = ["out" "dev"]; passthru.meta.position = "/hi:23"; };
+    expected = derivation;
   };
 
   testTypeDescriptionInt = {

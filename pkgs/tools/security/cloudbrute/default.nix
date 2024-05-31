@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Cloud enumeration tool";
+    mainProgram = "cloudbrute";
     longDescription = ''
       A tool to find a company (target) infrastructure, files, and apps on
       the top cloud providers (Amazon, Google, Microsoft, DigitalOcean,

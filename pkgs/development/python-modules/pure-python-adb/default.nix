@@ -1,9 +1,10 @@
-{ aiofiles
-, buildPythonPackage
-, fetchPypi
-, lib
-, pythonOlder
-, pytestCheckHook
+{
+  aiofiles,
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,23 +20,14 @@ buildPythonPackage rec {
   };
 
   passthru.optional-dependencies = {
-    async = [
-      aiofiles
-    ];
+    async = [ aiofiles ];
   };
 
   doCheck = pythonOlder "3.10"; # all tests result in RuntimeError on 3.10
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.async;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.async;
 
-  pythonImportsCheck = [
-    "ppadb.client"
-  ] ++ lib.optionals doCheck [
-    "ppadb.client_async"
-  ];
+  pythonImportsCheck = [ "ppadb.client" ] ++ lib.optionals doCheck [ "ppadb.client_async" ];
 
   meta = with lib; {
     description = "Pure python implementation of the adb client";

@@ -19,7 +19,7 @@ in
     services.xserver.desktopManager.lumina.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Enable the Lumina desktop manager";
+      description = "Enable the Lumina desktop manager";
     };
 
   };
@@ -27,7 +27,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.sessionPackages = [
+    services.displayManager.sessionPackages = [
       pkgs.lumina.lumina
     ];
 

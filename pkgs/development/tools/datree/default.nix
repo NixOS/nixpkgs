@@ -44,6 +44,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "CLI tool to ensure K8s manifests and Helm charts follow best practices";
+    mainProgram = "datree";
     longDescription = ''
       Datree provides an E2E policy enforcement solution to run automatic checks
       for rule violations. Datree can be used on the command line, admission

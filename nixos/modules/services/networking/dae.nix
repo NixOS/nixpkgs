@@ -13,8 +13,7 @@ in
 
   options = {
     services.dae = with lib;{
-      enable = mkEnableOption
-        (mdDoc "dae, a Linux high-performance transparent proxy solution based on eBPF");
+      enable = mkEnableOption "dae, a Linux high-performance transparent proxy solution based on eBPF";
 
       package = mkPackageOption pkgs "dae" { };
 
@@ -23,7 +22,7 @@ in
         type = with types;(listOf path);
         default = with pkgs; [ v2ray-geoip v2ray-domain-list-community ];
         defaultText = literalExpression "with pkgs; [ v2ray-geoip v2ray-domain-list-community ]";
-        description = mdDoc ''
+        description = ''
           Assets required to run dae.
         '';
       };
@@ -37,7 +36,7 @@ in
               paths = assets;
           })/share/v2ray
         '';
-        description = mdDoc ''
+        description = ''
           The path which contains geolocation database.
           This option will override `assets`.
         '';
@@ -46,7 +45,7 @@ in
       openFirewall = mkOption {
         type = with types; submodule {
           options = {
-            enable = mkEnableOption (mdDoc "opening {option}`port` in the firewall");
+            enable = mkEnableOption "opening {option}`port` in the firewall";
             port = mkOption {
               type = types.port;
               description = ''
@@ -65,7 +64,7 @@ in
             port = 12345;
           }
         '';
-        description = mdDoc ''
+        description = ''
           Open the firewall port.
         '';
       };
@@ -74,7 +73,7 @@ in
         type = with types; (nullOr path);
         default = null;
         example = "/path/to/your/config.dae";
-        description = mdDoc ''
+        description = ''
           The path of dae config file, end with `.dae`.
         '';
       };
@@ -82,7 +81,7 @@ in
       config = mkOption {
         type = with types; (nullOr str);
         default = null;
-        description = mdDoc ''
+        description = ''
           WARNING: This option will expose store your config unencrypted world-readable in the nix store.
           Config text for dae.
 
@@ -91,7 +90,7 @@ in
       };
 
       disableTxChecksumIpGeneric =
-        mkEnableOption "" // { description = mdDoc "See <https://github.com/daeuniverse/dae/issues/43>"; };
+        mkEnableOption "" // { description = "See <https://github.com/daeuniverse/dae/issues/43>"; };
 
     };
   };

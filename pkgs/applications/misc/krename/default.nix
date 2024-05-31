@@ -1,6 +1,6 @@
 {
   mkDerivation, fetchurl, fetchpatch, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools, wrapGAppsHook3,
   kconfig, kinit, kjsembed, taglib, exiv2, podofo,
   kcrash
 }:
@@ -27,7 +27,7 @@ in mkDerivation rec {
 
   buildInputs = [ taglib exiv2 podofo ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kjsembed ];
 
@@ -35,6 +35,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "A powerful batch renamer for KDE";
+    mainProgram = "krename";
     homepage = "https://kde.org/applications/utilities/krename/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];

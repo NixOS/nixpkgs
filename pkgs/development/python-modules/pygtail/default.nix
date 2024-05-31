@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+}:
 
 buildPythonPackage rec {
   pname = "pygtail";
@@ -20,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library for reading log file lines that have not been read";
+    mainProgram = "pygtail";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/bgreenlee/pygtail";
   };

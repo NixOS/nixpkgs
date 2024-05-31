@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, zetup
-, six
-, moretools
-, path
-, pytestCheckHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zetup,
+  six,
+  moretools,
+  path,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,11 @@ buildPythonPackage rec {
 
   buildInputs = [ zetup ];
 
-  propagatedBuildInputs = [ six moretools path ];
+  propagatedBuildInputs = [
+    six
+    moretools
+    path
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

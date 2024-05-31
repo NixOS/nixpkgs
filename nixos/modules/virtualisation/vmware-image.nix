@@ -21,34 +21,34 @@ in {
         type = with types; either (enum [ "auto" ]) int;
         default = "auto";
         example = 2048;
-        description = lib.mdDoc ''
+        description = ''
           The size of the VMWare base image in MiB.
         '';
       };
       vmDerivationName = mkOption {
         type = types.str;
         default = "nixos-vmware-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-        description = lib.mdDoc ''
+        description = ''
           The name of the derivation for the VMWare appliance.
         '';
       };
       vmFileName = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vmdk";
-        description = lib.mdDoc ''
+        description = ''
           The file name of the VMWare appliance.
         '';
       };
       vmSubformat = mkOption {
         type = types.enum subformats;
         default = "monolithicSparse";
-        description = lib.mdDoc "Specifies which VMDK subformat to use.";
+        description = "Specifies which VMDK subformat to use.";
       };
       vmCompat6 = mkOption {
         type = types.bool;
         default = false;
         example = true;
-        description = lib.mdDoc "Create a VMDK version 6 image (instead of version 4).";
+        description = "Create a VMDK version 6 image (instead of version 4).";
       };
     };
   };
@@ -80,7 +80,6 @@ in {
     boot.growPartition = true;
 
     boot.loader.grub = {
-      version = 2;
       device = "nodev";
       efiSupport = true;
       efiInstallAsRemovable = true;

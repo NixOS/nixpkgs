@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "json-fortran";
-  version = "8.3.0";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "jacobwilliams";
     repo = pname;
     rev = version;
-    hash = "sha256-96W9bzWEZ3EN4wtnDT3G3pvLdcI4SIhGJWBVPU3rNZ4=";
+    hash = "sha256-S5Vn2VjrwdIEPKJDStfgRgOqe8g3kuoi26GODmlKhig=";
   };
 
   nativeBuildInputs = [

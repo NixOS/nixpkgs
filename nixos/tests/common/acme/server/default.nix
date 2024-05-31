@@ -81,7 +81,7 @@ in {
       type = lib.types.str;
       readOnly = true;
       default = domain;
-      description = lib.mdDoc ''
+      description = ''
         A domain name to use with the `nodes` attribute to
         identify the CA server.
       '';
@@ -90,7 +90,7 @@ in {
       type = lib.types.path;
       readOnly = true;
       default = testCerts.ca.cert;
-      description = lib.mdDoc ''
+      description = ''
         A certificate file to use with the `nodes` attribute to
         inject the test CA certificate used in the ACME server into
         {option}`security.pki.certificateFiles`.

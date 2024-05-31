@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tools for i3 users and developers";
-    homepage =  "https://github.com/ziberna/i3-py";
+    homepage = "https://github.com/ziberna/i3-py";
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
-
 }

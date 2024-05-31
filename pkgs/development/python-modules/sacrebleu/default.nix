@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# Propagated build inputs
-, portalocker
-, regex
-, tabulate
-, numpy
-, colorama
-, lxml
+  # Propagated build inputs
+  portalocker,
+  regex,
+  tabulate,
+  numpy,
+  colorama,
+  lxml,
 
-# Check inputs
-, pytestCheckHook
+  # Check inputs
+  pytestCheckHook,
 }:
 let
   pname = "sacrebleu";
@@ -42,9 +43,7 @@ buildPythonPackage {
     lxml
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # require network access
@@ -60,6 +59,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "Hassle-free computation of shareable, comparable, and reproducible BLEU, chrF, and TER scores";
+    mainProgram = "sacrebleu";
     homepage = "https://github.com/mjpost/sacrebleu";
     changelog = "https://github.com/mjpost/sacrebleu/blob/v{version}/CHANGELOG.md";
     license = licenses.asl20;

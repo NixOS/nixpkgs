@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchurl
 , buildDunePackage
 , bos
 , bwd

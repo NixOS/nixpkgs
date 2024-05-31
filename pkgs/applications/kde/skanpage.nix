@@ -25,6 +25,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "KDE utility to scan images and multi-page documents";
+    mainProgram = "skanpage";
     homepage = "https://apps.kde.org/skanpage";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

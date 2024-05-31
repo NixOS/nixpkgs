@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , pkg-config
-, autoconf
-, automake
 , bison
 , flex
 , openssl
@@ -21,12 +20,17 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  postPatch = ''
+    # Drop blanket -Werror to avoid build failure on fresh toolchains
+    # and libraries. Without the cnage build fails on gcc-13 and on
+    # openssl-3.
+    substituteInPlace src/Makefile.am --replace-fail ' -Werror ' ' '
+  '';
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ bison flex openssl ];
 
-  # FIXME: Openssl3 deprecated PEM_read_DHparams and DH_free
-  # https://projects.duckcorp.org/issues/780
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  enableParallelBuilding = true;
 
   meta = {
     description = "An IRC proxy (bouncer)";

@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jsdw/git-backup";
     description = "A tool to help you backup your git repositories from services like GitHub";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "git-backup";
   };
 }

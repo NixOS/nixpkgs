@@ -7,24 +7,24 @@ let
   settingsFormat = pkgs.formats.javaProperties {};
 in {
   options.services.languagetool = {
-    enable = mkEnableOption (mdDoc "the LanguageTool server");
+    enable = mkEnableOption "the LanguageTool server, a multilingual spelling, style, and grammar checker that helps correct or paraphrase texts";
 
     port = mkOption {
       type = types.port;
       default = 8081;
       example = 8081;
-      description = mdDoc ''
+      description = ''
         Port on which LanguageTool listens.
       '';
     };
 
-    public = mkEnableOption (mdDoc "access from anywhere (rather than just localhost)");
+    public = mkEnableOption "access from anywhere (rather than just localhost)";
 
     allowOrigin = mkOption {
       type = types.nullOr types.str;
       default = null;
       example = "https://my-website.org";
-      description = mdDoc ''
+      description = ''
         Set the Access-Control-Allow-Origin header in the HTTP response,
         used for direct (non-proxy) JavaScript-based access from browsers.
         `null` to allow access from all sites.
@@ -39,11 +39,11 @@ in {
           type = types.ints.unsigned;
           default = 1000;
           apply = toString;
-          description = mdDoc "Number of sentences cached.";
+          description = "Number of sentences cached.";
         };
       };
       default = {};
-      description = mdDoc ''
+      description = ''
         Configuration file options for LanguageTool, see
         'languagetool-http-server --help'
         for supported settings.

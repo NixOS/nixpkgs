@@ -31,7 +31,20 @@ stdenv.mkDerivation rec {
       url = "https://github.com/morganstanley/modern-cpp-kafka/pull/222.patch";
       hash = "sha256-OjoSttnpgEwSZjCVKc888xJb5f1Dulu/rQqoGmqXNM4=";
     })
+    # Fix gcc-13 build failure:
+    #   https://github.com/morganstanley/modern-cpp-kafka/pull/229
+    (fetchpatch {
+      name = "add-pkg-config-cmake-config.patch";
+      url = "https://github.com/morganstanley/modern-cpp-kafka/commit/236f8f91f5c3ad6e1055a6f55cd3aebd218e1226.patch";
+      hash = "sha256-cy568TQUu08sadq79hDz9jMvDqiDjfr+1cLMxFWGm1Q=";
+    })
   ];
+
+  postPatch = ''
+    # Blanket -Werror tends to fail on minor unrelated warnings.
+    # Currently this fixes gcc-13 build failure.
+    substituteInPlace CMakeLists.txt --replace-fail '"-Werror"' ' '
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];

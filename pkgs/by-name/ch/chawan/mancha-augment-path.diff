@@ -1,0 +1,15 @@
+Add the -m option to man's command line to augment the list of paths
+searched by man. The string "OUT" must be substituted with chawan's $out
+path after patching.
+The required -m option is only available in the mandoc implementation.
+--- a/adapter/protocol/man
++++ b/adapter/protocol/man
+@@ -75,7 +75,7 @@ EOF
+ 
+   $section =~ s:([^-\w\200-\377.,])::g;
+   $man =~ s:([^-\w\200-\377.,])::g;
+-  open(F, "GROFF_NO_SGR=1 MAN_KEEP_FORMATTING=1 $MAN $section $man 2> /dev/null |");
++  open(F, "GROFF_NO_SGR=1 MAN_KEEP_FORMATTING=1 $MAN -m OUT/share/man $section $man 2> /dev/null |");
+ }
+ 
+ $ok = 0;

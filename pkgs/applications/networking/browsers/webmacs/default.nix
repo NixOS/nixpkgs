@@ -60,6 +60,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Keyboard-based web browser with Emacs/conkeror heritage";
+    mainProgram = "webmacs";
     longDescription = ''
       webmacs is yet another browser for keyboard-based web navigation.
 

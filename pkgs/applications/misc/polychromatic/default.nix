@@ -10,7 +10,7 @@
 , sassc
 , python3Packages
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , libappindicator-gtk3
 , libxcb
 , qt5
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     sassc
-    wrapGAppsHook
+    wrapGAppsHook3
     qt5.wrapQtAppsHook
   ];
 

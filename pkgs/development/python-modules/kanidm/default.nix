@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build
-, poetry-core
+  # build
+  poetry-core,
 
-# propagates
-, aiohttp
-, authlib
-, pydantic
-, toml
+  # propagates
+  aiohttp,
+  authlib,
+  pydantic,
+  toml,
 
-# tests
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 let
   pname = "kanidm";
   version = "0.0.3-unstable-2023-08-23";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   inherit pname version;
   pyproject = true;
 
@@ -35,11 +36,9 @@ buildPythonPackage {
     hash = "sha256-5qQb+Itguw2v1Wdvc2vp00zglfvNd3LFEDvaweRJcOc=";
   };
 
-  sourceRoot = "source/pykanidm";
+  sourceRoot = "${src.name}/pykanidm";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -54,18 +53,17 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
-  pythonImportsCheck = [
-    "kanidm"
-  ];
+  pythonImportsCheck = [ "kanidm" ];
 
   meta = with lib; {
     description = "Kanidm client library";
     homepage = "https://github.com/kanidm/kanidm/tree/master/pykanidm";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ arianvp hexa ];
+    maintainers = with maintainers; [
+      arianvp
+      hexa
+    ];
   };
 }

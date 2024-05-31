@@ -12,11 +12,10 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/pixmaps
-    mv $out/bin/${pname}-${version} $out/bin/firefly-desktop
     cp ${appimageContents}/desktop.desktop $out/share/applications/firefly-desktop.desktop
     substituteInPlace $out/share/applications/firefly-desktop.desktop \
       --replace 'Exec=AppRun' 'Exec=firefly-desktop' \
@@ -30,5 +29,6 @@ in appimageTools.wrapType2 {
     license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "firefly-desktop";
   };
 }

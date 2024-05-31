@@ -17,7 +17,7 @@ buildDunePackage rec {
   meta = with lib; {
     inherit (dune_3.meta) homepage;
     description = "Glob string matching language supported by dune";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

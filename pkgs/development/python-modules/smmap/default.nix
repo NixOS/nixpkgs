@@ -1,8 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools
-, nosexcover
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+  nosexcover,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-jXkCjqbMEx2l6rCZpdlamY1DxneZVv/+O0VQQJEQdto=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    nosexcover
-  ];
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [ nosexcover ];
 
   meta = {
     description = "A pure python implementation of a sliding window memory map manager";

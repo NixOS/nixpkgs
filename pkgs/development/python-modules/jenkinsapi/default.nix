@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, mock
-, pbr
-, pytest-mock
-, pytestCheckHook
-, pytz
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  mock,
+  pbr,
+  pytest-mock,
+  pytestCheckHook,
+  pytz,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-JGqYpj5h9UoV0WEFyxVIjFZwc030HobHrw1dnAryQLk=";
   };
 
+  patches = [ ./pytest-warn-none.patch ];
+
   nativeBuildInputs = [
     flit-core
     pbr
@@ -29,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytz
     requests
+    setuptools
     six
   ];
 
@@ -41,7 +46,11 @@ buildPythonPackage rec {
   # don't run tests that try to spin up jenkins
   disabledTests = [ "systests" ];
 
-  pythonImportsCheck = [ "jenkinsapi" ];
+  pythonImportsCheck = [
+    "jenkinsapi"
+    "jenkinsapi.utils"
+    "jenkinsapi.utils.jenkins_launcher"
+  ];
 
   meta = with lib; {
     description = "A Python API for accessing resources on a Jenkins continuous-integration server";
@@ -49,5 +58,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ drets ] ++ teams.deshaw.members;
     license = licenses.mit;
   };
-
 }

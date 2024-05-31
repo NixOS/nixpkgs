@@ -6,10 +6,12 @@ Ext4 file system on device `/dev/disk/by-label/data` onto the mount
 point `/data`:
 
 ```nix
-fileSystems."/data" =
-  { device = "/dev/disk/by-label/data";
-    fsType = "ext4";
-  };
+{
+  fileSystems."/data" =
+    { device = "/dev/disk/by-label/data";
+      fsType = "ext4";
+    };
+}
 ```
 
 This will create an entry in `/etc/fstab`, which will generate a

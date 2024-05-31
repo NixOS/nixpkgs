@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
 
   # propagates
-, typing-extensions
+  typing-extensions,
 
   # tests
-, unittestCheckHook
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "pyReaderWriterLock";
+  pname = "pyreaderwriterlock";
   version = "1.0.9";
   format = "setuptools";
 
@@ -19,16 +20,14 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "elarivie";
-    repo = pname;
+    repo = "pyReaderWriterLock";
     rev = "refs/tags/v${version}";
     hash = "sha256-8FC+4aDgGpF1BmOdlkFtMy7OfWdSmvn9fjKXSmmeJlg=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "readerwriterlock" ];
 

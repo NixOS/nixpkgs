@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Simple bookmark manager built with Go";
+    mainProgram = "shiori";
     homepage = "https://github.com/go-shiori/shiori";
     license = licenses.mit;
     maintainers = with maintainers; [ minijackson ];

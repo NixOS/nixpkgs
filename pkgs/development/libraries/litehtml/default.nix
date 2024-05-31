@@ -5,15 +5,15 @@
 , gumbo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "litehtml";
-  version = "0.6";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "litehtml";
     repo = "litehtml";
-    rev = "v${version}";
-    hash = "sha256-9571d3k8RkzEpMWPuIejZ7njLmYstSwFUaSqT3sk6uQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZE/HKzo3ejKpW/ih3sJwn2hzCtsBhAXeJWGezYd6Yc4";
   };
 
   # Don't search for non-existant gumbo cmake config
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # Affects build of pkgs that depend on litehtml
   postPatch = ''
     substituteInPlace cmake/litehtmlConfig.cmake \
-      --replace "find_dependency(gumbo)" ""
+      --replace-fail "find_dependency(gumbo)" ""
   '';
 
   nativeBuildInputs = [
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DEXTERNAL_GUMBO=ON"
+    # BuildTesting need to download test data online
+    "-DLITEHTML_BUILD_TESTING=OFF"
   ];
 
   meta = with lib; {
@@ -43,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
   };
-}
+})

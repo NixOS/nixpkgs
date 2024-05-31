@@ -16,6 +16,7 @@ buildNimPackage (final: prev: {
   doCheck = false; # tests will clone repos
   meta = final.src.meta // {
     description = "Nim package cloner";
+    mainProgram = "atlas";
     license = [ lib.licenses.mit ];
   };
 })

@@ -15,14 +15,14 @@
 
 buildPythonApplication rec {
   pname = "nile";
-  version = "unstable-2024-02-05";
+  version = "1.0.3-unstable-2024-05-25";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "nile";
-    rev = "5e878e19f6caba74bfe18369d84476ceb6779ff1";
-    hash = "sha256-sGhceSW1bL5uQ726apfn9BJaO1FxjOBqzAdt2x7us9Q=";
+    rev = "6e6968c37aef59772248de8602374b4831202854";
+    hash = "sha256-0UHXF9It/JjHMfBzQM5GRn4FU9rNrh3EM90M8Ki/fTE=";
   };
 
   disabled = pythonOlder "3.8";
@@ -50,10 +50,13 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Unofficial Amazon Games client";
+    mainProgram = "nile";
     homepage = "https://github.com/imLinguin/nile";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ aidalgol ];
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 }

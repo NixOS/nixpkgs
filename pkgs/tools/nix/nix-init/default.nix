@@ -6,7 +6,7 @@
 , installShellFiles
 , pkg-config
 , bzip2
-, libgit2_1_6
+, libgit2
 , openssl
 , zlib
 , zstd
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     bzip2
     curl
-    libgit2_1_6
+    libgit2
     openssl
     zlib
     zstd
@@ -80,6 +80,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
+    LIBGIT2_NO_VENDOR = 1;
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -87,6 +88,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Command line tool to generate Nix packages from URLs";
+    mainProgram = "nix-init";
     homepage = "https://github.com/nix-community/nix-init";
     changelog = "https://github.com/nix-community/nix-init/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;

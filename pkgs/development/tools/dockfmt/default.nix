@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Dockerfile format";
+    mainProgram = "dockfmt";
     homepage = "https://github.com/jessfraz/dockfmt";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

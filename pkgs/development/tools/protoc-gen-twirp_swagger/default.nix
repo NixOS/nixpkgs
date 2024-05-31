@@ -17,6 +17,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Swagger generator for twirp";
+    mainProgram = "protoc-gen-twirp_swagger";
     homepage = "https://github.com/elliots/protoc-gen-twirp_swagger";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jojosch ];

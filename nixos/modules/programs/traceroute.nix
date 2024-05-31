@@ -1,23 +1,21 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.traceroute;
 in {
   options = {
     programs.traceroute = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure a setcap wrapper for traceroute.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers.traceroute = {
       owner = "root";
       group = "root";

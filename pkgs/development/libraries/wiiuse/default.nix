@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Feature complete cross-platform Wii Remote access library";
+    mainProgram = "wiiuseexample";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/wiiuse/wiiuse";
     maintainers = with maintainers; [ shamilton ];

@@ -18,25 +18,25 @@ in
 
     services.fprintd = {
 
-      enable = mkEnableOption (lib.mdDoc "fprintd daemon and PAM module for fingerprint readers handling");
+      enable = mkEnableOption "fprintd daemon and PAM module for fingerprint readers handling";
 
       package = mkOption {
         type = types.package;
         default = fprintdPkg;
         defaultText = literalExpression "if config.services.fprintd.tod.enable then pkgs.fprintd-tod else pkgs.fprintd";
-        description = lib.mdDoc ''
+        description = ''
           fprintd package to use.
         '';
       };
 
       tod = {
 
-        enable = mkEnableOption (lib.mdDoc "Touch OEM Drivers library support");
+        enable = mkEnableOption "Touch OEM Drivers library support";
 
         driver = mkOption {
           type = types.package;
           example = literalExpression "pkgs.libfprint-2-tod1-goodix";
-          description = lib.mdDoc ''
+          description = ''
             Touch OEM Drivers (TOD) package to use.
           '';
         };

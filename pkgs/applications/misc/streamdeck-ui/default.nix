@@ -4,7 +4,7 @@
 , copyDesktopItems
 , writeText
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 , qt6
 }:
@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.poetry-core
     copyDesktopItems
     qt6.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3Packages; [

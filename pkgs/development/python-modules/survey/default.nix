@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "4.5.4";
-  format = "setuptools";
+  version = "5.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wjpO1+9AXi75uPXOTE5/owEiZgtffkkMAaZ+gDO0t5I=";
+    hash = "sha256-jMTtsrEdt3NPy8NfeNPX4YNwjH2gaQfO89Iag/MBS+A=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 

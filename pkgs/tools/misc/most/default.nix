@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       windows and can scroll left and right. Why settle for less?
     '';
     homepage = "https://www.jedsoft.org/most/index.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "most";
   };

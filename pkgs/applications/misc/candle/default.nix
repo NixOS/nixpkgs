@@ -25,6 +25,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "GRBL controller application with G-Code visualizer written in Qt";
+    mainProgram = "candle";
     homepage = "https://github.com/Denvi/Candle";
     license = licenses.gpl3;
     maintainers = with maintainers; [ matti-kariluoma ];

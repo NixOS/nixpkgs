@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, isPyPy
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  isPyPy,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, libGL
+  # native dependencies
+  libGL,
 
-# dependencies
-, numpy
-, pillow
+  # dependencies
+  numpy,
+  pillow,
 
-# optional-dependencies
-, astropy
-, av
-, imageio-ffmpeg
-, pillow-heif
-, psutil
-, tifffile
+  # optional-dependencies
+  astropy,
+  av,
+  imageio-ffmpeg,
+  pillow-heif,
+  psutil,
+  tifffile,
 
-# tests
-, pytestCheckHook
-, fsspec
+  # tests
+  pytestCheckHook,
+  fsspec,
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.33.1";
+  version = "2.34.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1Q1KKQmla/iHb5KbJZZmkpBT2j9uIwy8YDAJ7qDDC4Q=";
+    hash = "sha256-/VZUifiz8iImq+JLvckFDr7YMIqu0Xro2t3GFj0obg0=";
   };
 
   patches = lib.optionals (!stdenv.isDarwin) [
@@ -50,55 +51,44 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pillow
   ];
 
   passthru.optional-dependencies = {
-    bsdf = [];
-    dicom = [];
-    feisem = [];
+    bsdf = [ ];
+    dicom = [ ];
+    feisem = [ ];
     ffmpeg = [
       imageio-ffmpeg
       psutil
     ];
-    fits = lib.optionals (!isPyPy) [
-      astropy
-    ];
-    freeimage = [];
-    lytro = [];
-    numpy = [];
-    pillow = [];
-    simpleitk = [];
-    spe = [];
-    swf = [];
-    tifffile = [
-      tifffile
-    ];
-    pyav = [
-      av
-    ];
-    heif = [
-      pillow-heif
-    ];
+    fits = lib.optionals (!isPyPy) [ astropy ];
+    freeimage = [ ];
+    lytro = [ ];
+    numpy = [ ];
+    pillow = [ ];
+    simpleitk = [ ];
+    spe = [ ];
+    swf = [ ];
+    tifffile = [ tifffile ];
+    pyav = [ av ];
+    heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs = [
-    fsspec
-    psutil
-    pytestCheckHook
-  ]
-  ++ fsspec.optional-dependencies.github
-  ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      fsspec
+      psutil
+      pytestCheckHook
+    ]
+    ++ fsspec.optional-dependencies.github
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "-m 'not needs_internet'"
-  ];
+  pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
   preCheck = ''
     export IMAGEIO_USERDIR="$TMP"

@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "htmlmin";
@@ -14,8 +18,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A configurable HTML Minifier with safety features";
+    mainProgram = "htmlmin";
     homepage = "https://pypi.python.org/pypi/htmlmin";
     license = licenses.bsd3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

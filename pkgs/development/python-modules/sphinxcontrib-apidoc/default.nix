@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-apidoc";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/lnRWIJHKqk8Jzevvepr7bNM41y9NKpJR5CfXfFQCq0=";
+    hash = "sha256-Ze/NkiEqX4I3FfuV7gmLRYprsJpe5hfZ7T3q2XF3zVU=";
   };
 
   postPatch = ''

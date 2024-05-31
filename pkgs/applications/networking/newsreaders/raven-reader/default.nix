@@ -14,8 +14,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     mkdir -p $out/share/${pname}
     cp -a ${appimageContents}/locales $out/share/${pname}
     cp -a ${appimageContents}/resources $out/share/${pname}
@@ -30,6 +28,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "Open source desktop news reader with flexible settings to optimize your experience";
+    mainProgram = "raven-reader";
     homepage = "https://ravenreader.app/";
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];

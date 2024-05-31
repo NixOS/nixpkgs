@@ -1,7 +1,8 @@
-{ lib
-, bluepy
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  bluepy,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -11,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     pname = "bluepy_devices";
-    inherit  version;
+    inherit version;
     sha256 = "02zzzivxq2vifgs65m2rm8pqlsbzsbc419c032irzvfxjx539mr8";
   };
 

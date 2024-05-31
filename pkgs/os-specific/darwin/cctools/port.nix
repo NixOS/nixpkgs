@@ -186,7 +186,7 @@ stdenv.mkDerivation {
     broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
     homepage = "http://www.opensource.apple.com/source/cctools/";
     description = "MacOS Compiler Tools (cross-platform port)";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.apple-psl20;
     maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

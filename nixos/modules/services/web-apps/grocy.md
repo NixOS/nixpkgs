@@ -6,7 +6,7 @@
 ## Basic usage {#module-services-grocy-basic-usage}
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 {
   services.grocy = {
@@ -29,7 +29,7 @@ of the application.
 
 The configuration for `grocy` is located at `/etc/grocy/config.php`.
 By default, the following settings can be defined in the NixOS-configuration:
-```
+```nix
 { pkgs, ... }:
 {
   services.grocy.settings = {
@@ -56,7 +56,7 @@ By default, the following settings can be defined in the NixOS-configuration:
 
 If you want to alter the configuration file on your own, you can do this manually with
 an expression like this:
-```
+```nix
 { lib, ... }:
 {
   environment.etc."grocy/config.php".text = lib.mkAfter ''

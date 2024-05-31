@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "the name service non-caching daemon";
+    mainProgram = "nsncd";
     longDescription = ''
       nsncd is a nscd-compatible daemon that proxies lookups, without caching.
     '';

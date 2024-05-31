@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.20";
+  version = "5.5.23";
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    hash = "sha256-0vQ6GBBtNA6Phlqhl3NZvEJqoyZ1um7VdkpsIRKhsm4=";
+    hash = "sha256-c/Mx2HXAj6mHH8rElG7+F94sSrVSL1N9HZBvaMWUjlw=";
   };
 
   patches = [
@@ -43,8 +43,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://packages.qa.debian.org/w/whois.html";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
+    mainProgram = "whois";
   };
 }

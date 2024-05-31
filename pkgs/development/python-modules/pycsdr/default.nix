@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, csdr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  csdr,
+}:
 
 buildPythonPackage rec {
   pname = "pycsdr";

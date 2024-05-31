@@ -44,6 +44,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A browser-based frontend for GDB";
+    mainProgram = "gdbgui";
     homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -6,19 +6,24 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "upiano";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eliasdorneles";
     repo = "upiano";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-5WhflvUCjzW4ZJ+PLUTMbKcUnQa3ChkDjl0R5YvjBWk=";
     forceFetchGit = true;
     fetchLFS = true;
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
+  pythonRelaxDeps = [
+    "textual"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -26,7 +31,9 @@ python3.pkgs.buildPythonApplication rec {
     textual
   ];
 
-  pythonImportsCheck = [ "upiano" ];
+  pythonImportsCheck = [
+    "upiano"
+  ];
 
   meta = with lib; {
     description = "A Piano in your terminal";

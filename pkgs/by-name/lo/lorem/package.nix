@@ -14,22 +14,22 @@
 , wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lorem";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World/design";
-    repo = pname;
-    rev = version;
-    hash = "sha256-+Dp/o1rZSHWihLLLe6CzV6c7uUnSsE8Ct3tbLNqlGF0=";
+    repo = "lorem";
+    rev = finalAttrs.version;
+    hash = "sha256-6+kDKKK1bkIOZlqzKWpzpjAS5o7bkbVFITMZVmJijuU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-YYjPhlPp211i+ECPu1xgDumz8nVqWRO8YzcZXy8uunI=";
+    src = finalAttrs.src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-nzP2Jp9l1QgL7Wk9SWlsSVNaeVe3t48MmeX7Xuz+PKM=";
   };
 
   nativeBuildInputs = [
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    changelog = "https://gitlab.gnome.org/World/design/lorem/-/releases/${finalAttrs.version}";
     description = "Generate placeholder text";
-    homepage = "https://gitlab.gnome.org/World/design/lorem";
-    changelog = "https://gitlab.gnome.org/World/design/lorem/-/releases/${version}";
+    homepage = "https://apps.gnome.org/Lorem/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ michaelgrahamevans ];
     mainProgram = "lorem";
+    maintainers = with maintainers; [ michaelgrahamevans ];
     platforms = platforms.linux;
   };
-}
+})

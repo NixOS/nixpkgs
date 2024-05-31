@@ -42,7 +42,7 @@
 , spandsp3
 , speexdsp
 , SystemConfiguration
-, wrapGAppsHook
+, wrapGAppsHook3
 , zlib
 , zstd
 
@@ -54,7 +54,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.2.2";
+  version = "4.2.5";
 
   outputs = [ "out" "dev" ];
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-4SxrlNrVg8Yc1THyRPEQDM/yQzDTLM1ppVwCw9vResE=";
+    hash = "sha256-g0b0YGWQzWsALVnNJl/WQGl9J2QjaLnry2VL6qvN1FQ=";
   };
 
   patches = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     python3
   ] ++ lib.optionals withQt [
     qt6.wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

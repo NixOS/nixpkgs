@@ -1,24 +1,24 @@
 { lib
 , fetchFromGitHub
-, buildGo120Module
+, buildGoModule
 , testers
 , pinact
 }:
 
 let
   pname = "pinact";
-  version = "0.1.2";
+  version = "0.2.0";
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     rev = "v${version}";
-    hash = "sha256-OQo21RHk0c+eARKrA2qB4NAWWanb94DOZm4b9lqDz8o=";
+    hash = "sha256-ndlyfp+neoOEzofIlQEQp/6masnzMQFWAPmhan3hlb0=";
   };
 in
-buildGo120Module {
+buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-g7rdIE+w/pn70i8fOmAo/QGjpla3AUWm7a9MOhNmrgE=";
+  vendorHash = "sha256-qu4CHh2013q7e7mBuymlKEhjpdtSOaWGVutjegoVP7E=";
 
   doCheck = true;
 

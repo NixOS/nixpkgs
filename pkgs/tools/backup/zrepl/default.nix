@@ -44,7 +44,7 @@ buildGoModule rec {
     description = "A one-stop, integrated solution for ZFS replication";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ cole-h danderson mdlayher ];
+    maintainers = with maintainers; [ cole-h mdlayher ];
     mainProgram = "zrepl";
   };
 }

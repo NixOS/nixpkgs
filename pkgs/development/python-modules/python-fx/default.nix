@@ -1,31 +1,32 @@
-{ lib
-, antlr4-python3-runtime
-, asciimatics
-, buildPythonPackage
-, click
-, dacite
-, decorator
-, fetchFromGitHub
-, future
-, first
-, jsonpath-ng
-, loguru
-, overrides
-, pillow
-, ply
-, pyfiglet
-, pyperclip
-, pytestCheckHook
-, pythonOlder
-, antlr4
-, pythonRelaxDepsHook
-, pyyaml
-, setuptools
-, six
-, urwid
-, parameterized
-, wcwidth
-, yamale
+{
+  lib,
+  antlr4-python3-runtime,
+  asciimatics,
+  buildPythonPackage,
+  click,
+  dacite,
+  decorator,
+  fetchFromGitHub,
+  future,
+  first,
+  jsonpath-ng,
+  loguru,
+  overrides,
+  pillow,
+  ply,
+  pyfiglet,
+  pyperclip,
+  pytestCheckHook,
+  pythonOlder,
+  antlr4,
+  pythonRelaxDepsHook,
+  pyyaml,
+  setuptools,
+  six,
+  urwid,
+  parameterized,
+  wcwidth,
+  yamale,
 }:
 
 buildPythonPackage rec {
@@ -92,6 +93,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to view JSON in a TUI";
+    mainProgram = "pyfx";
     homepage = "https://github.com/cielong/pyfx";
     changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
     license = with licenses; [ mit ];

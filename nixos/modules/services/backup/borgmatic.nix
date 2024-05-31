@@ -10,13 +10,13 @@ let
     options = {
       path = mkOption {
         type = str;
-        description = mdDoc ''
+        description = ''
           Path to the repository
         '';
       };
       label = mkOption {
         type = str;
-        description = mdDoc ''
+        description = ''
           Label to the repository
         '';
       };
@@ -28,7 +28,7 @@ let
       source_directories = mkOption {
         type = nullOr (listOf str);
         default = null;
-        description = mdDoc ''
+        description = ''
           List of source directories and files to backup. Globs and tildes are
           expanded. Do not backslash spaces in path names.
         '';
@@ -37,7 +37,7 @@ let
       repositories = mkOption {
         type = nullOr (listOf repository);
         default = null;
-        description = mdDoc ''
+        description = ''
           A required list of local or remote repositories with paths and
           optional labels (which can be used with the --repository flag to
           select a repository). Tildes are expanded. Multiple repositories are
@@ -59,10 +59,10 @@ let
 in
 {
   options.services.borgmatic = {
-    enable = mkEnableOption (mdDoc "borgmatic");
+    enable = mkEnableOption "borgmatic";
 
     settings = mkOption {
-      description = mdDoc ''
+      description = ''
         See https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       default = null;
@@ -70,7 +70,7 @@ in
     };
 
     configurations = mkOption {
-      description = mdDoc ''
+      description = ''
         Set of borgmatic configurations, see https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       default = { };

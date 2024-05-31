@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, fontconfig, autoreconfHook, DiskArbitration
-, withJava ? false, jdk, ant
+{ lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
+, withJava ? false, jdk17, ant, stripJavaArchivesHook
 , withAACS ? false, libaacs
 , withBDplus ? false, libbdplus
 , withMetadata ? true, libxml2
@@ -19,22 +19,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
-    ++ lib.optionals withJava [ ant ];
+    ++ lib.optionals withJava [ jdk17 ant stripJavaArchivesHook ];
 
   buildInputs = [ fontconfig ]
-    ++ lib.optional withJava jdk
     ++ lib.optional withMetadata libxml2
     ++ lib.optional withFonts freetype
     ++ lib.optional stdenv.isDarwin DiskArbitration;
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 
-  NIX_LDFLAGS = lib.optionalString withAACS "-L${libaacs}/lib -laacs"
+  env.NIX_LDFLAGS = lib.optionalString withAACS "-L${libaacs}/lib -laacs"
     + lib.optionalString withBDplus " -L${libbdplus}/lib -lbdplus";
-
-  preConfigure = lib.optionalString withJava ''
-    export JDK_HOME="${jdk.home}"
-  '';
 
   configureFlags = lib.optional (!withJava) "--disable-bdjava-jar"
     ++ lib.optional (!withMetadata) "--without-libxml2"

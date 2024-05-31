@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, starlette
-, brotli
-# check inputs
-, requests
-, mypy
-, brotlipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  starlette,
+  brotli,
+  # check inputs
+  httpx,
+  requests,
+  mypy,
+  brotlipy,
 }:
 let
   pname = "brotli-asgi";
@@ -35,6 +37,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "brotli_asgi" ];
 
   nativeCheckInputs = [
+    httpx
     requests
     mypy
     brotlipy

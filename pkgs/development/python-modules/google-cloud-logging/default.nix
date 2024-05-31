@@ -1,40 +1,39 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, flask
-, google-api-core
-, google-cloud-appengine-logging
-, google-cloud-audit-log
-, google-cloud-core
-, google-cloud-testutils
-, grpc-google-iam-v1
-, mock
-, pandas
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, rich
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  flask,
+  google-api-core,
+  google-cloud-appengine-logging,
+  google-cloud-audit-log,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.9.0";
+  version = "3.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TeyxsL7UoOPA5Yo3ZkbmAC1r58rQOeNGaCLoZlBy6jM=";
+    hash = "sha256-2T00c1EkDdsUz+IBmHotMs+df0eLiy+r7TAVtCWzJ08=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core

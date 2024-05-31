@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Place and route tool for FPGAs";
+    mainProgram = "arachne-pnr";
     longDescription = ''
       Arachne-pnr implements the place and route step of
       the hardware compilation process for FPGAs. It

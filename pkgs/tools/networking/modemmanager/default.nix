@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , glib
-, udev
 , libgudev
 , polkit
 , ppp
@@ -19,6 +19,7 @@
 , vala
 , gobject-introspection
 , dbus
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,15 @@ stdenv.mkDerivation rec {
     # Since /etc is the domain of NixOS, not Nix, we cannot install files there.
     # But these are just placeholders so we do not need to install them at all.
     ./no-dummy-dirs-in-sysconfdir.patch
+
+    (fetchpatch {
+      name = "GI_TYPELIB_PATH.patch";
+      url = "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/daa829287894273879799a383ed4dc373c6111b0.patch";
+      hash = "sha256-tPQokiZO2SpTlX8xMlkWjP1AIXgoLHW3rJwnmG33z/k=";
+    })
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -47,11 +56,11 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     libxslt
+    python3
   ];
 
   buildInputs = [
     glib
-    udev
     libgudev
     polkit
     ppp
@@ -60,6 +69,7 @@ stdenv.mkDerivation rec {
     systemd
     bash-completion
     dbus
+    bash # shebangs in share/ModemManager/fcc-unlock.available.d/
   ];
 
   nativeInstallCheckInputs = [
@@ -84,14 +94,16 @@ stdenv.mkDerivation rec {
   # In Nixpkgs g-ir-scanner is patched to produce absolute paths, and
   # that interferes with ModemManager's tests, causing them to try to
   # load libraries from the install path, which doesn't usually exist
-  # when `make check' is run.  So to work around that, we run it as an
+  # when `meson test' is run.  So to work around that, we run it as an
   # install check instead, when those paths will have been created.
   doInstallCheck = true;
-  preInstallCheck = ''
+  installCheckPhase = ''
+    runHook preInstallCheck
     export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     patchShebangs tools/tests/test-wrapper.sh
+    mesonCheckPhase
+    runHook postInstallCheck
   '';
-  installCheckTarget = "check";
 
   meta = with lib; {
     description = "WWAN modem manager, part of NetworkManager";

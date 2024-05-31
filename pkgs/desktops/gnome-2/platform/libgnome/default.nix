@@ -20,4 +20,5 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [ popt zlib GConf gnome_vfs libcanberra-gtk2 libtool ];
   propagatedBuildInputs = [ glib libbonobo libogg ];
+  meta.mainProgram = "gnome-open";
 }

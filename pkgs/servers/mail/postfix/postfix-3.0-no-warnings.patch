@@ -8,7 +8,7 @@ diff -ru3 postfix-3.0.3/conf/postfix-script postfix-3.0.3-new/conf/postfix-scrip
 -# If this is a secondary instance, don't touch shared files.
 -
 -instances=`test ! -f $def_config_directory/main.cf ||
--    $command_directory/postconf -c $def_config_directory \
+-    $command_directory/postconf -qc $def_config_directory \
 -    -h multi_instance_directories | sed 's/,/ /'` || {
 -	$FATAL cannot execute $command_directory/postconf!
 -	exit 1

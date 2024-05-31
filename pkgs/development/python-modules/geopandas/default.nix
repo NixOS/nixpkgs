@@ -1,21 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fiona
-, packaging
-, pandas
-, pyproj
-, pytestCheckHook
-, pythonOlder
-, rtree
-, shapely
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+
+  fiona,
+  packaging,
+  pandas,
+  pyproj,
+  rtree,
+  shapely,
 }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.14.3";
-  format = "setuptools";
+  version = "0.14.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -23,8 +26,10 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "geopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qAINoqnCVfpg2mQhnu0qT/5EjUB+9a3//H8vJJnyj6A=";
+    hash = "sha256-FBhPcae8bnNnsfr14I1p22VhoOf9USF9DAcrAqx+zso=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     fiona
@@ -50,13 +55,9 @@ buildPythonPackage rec {
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [
-    "geopandas"
-  ];
+  pytestFlagsArray = [ "geopandas" ];
 
-  pythonImportsCheck = [
-    "geopandas"
-  ];
+  pythonImportsCheck = [ "geopandas" ];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";

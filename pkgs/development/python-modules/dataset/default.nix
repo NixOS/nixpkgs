@@ -1,10 +1,11 @@
-{ lib
-, alembic
-, banal
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, sqlalchemy
+{
+  lib,
+  alembic,
+  banal,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # checks attempt to import nonexistent module 'test.test' and fail
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dataset"
-  ];
+  pythonImportsCheck = [ "dataset" ];
 
   meta = with lib; {
     description = "Toolkit for Python-based database access";

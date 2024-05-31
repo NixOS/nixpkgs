@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, buildPythonPackage
-, smbus2
-, poetry-core
+{
+  lib,
+  python3,
+  fetchPypi,
+  buildPythonPackage,
+  smbus2,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-NYBaCXBmuTziT0WYEqrW10HRmRy3jpjH3YWQh5Y/TdQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    smbus2
-  ];
+  propagatedBuildInputs = [ smbus2 ];
 
   meta = with lib; {
     description = "Library for interacting with an I2C LCD screen through Python";

@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, build
-, coverage
-, git
-, packaging
-, pytestCheckHook
-, pytest-rerunfailures
-, pythonOlder
-, setuptools
-, toml
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  build,
+  coverage,
+  git,
+  packaging,
+  pytestCheckHook,
+  pytest-rerunfailures,
+  pythonOlder,
+  setuptools,
+  toml,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-git-versioning";
-  version = "1.13.5";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dolfinus";
     repo = "setuptools-git-versioning";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MAHB6hMAcMo1+HCc6g7xQUD2sG+TLjM/6Oa/BKuXpRc=";
+    hash = "sha256-xugK/JOVA53nCK8bB0gPkhIREmy0+/OthsydfYRCYno=";
   };
 
   nativeBuildInputs = [
@@ -33,13 +34,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    toml
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ toml ];
 
-  pythonImportsCheck = [
-    "setuptools_git_versioning"
-  ];
+  pythonImportsCheck = [ "setuptools_git_versioning" ];
 
   nativeCheckInputs = [
     build
@@ -56,7 +53,10 @@ buildPythonPackage rec {
   '';
 
   # limit tests because the full suite takes several minutes to run
-  pytestFlagsArray = [ "-m" "important" ];
+  pytestFlagsArray = [
+    "-m"
+    "important"
+  ];
 
   disabledTests = [
     # runs an isolated build that uses internet to download dependencies
@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Use git repo data (latest tag, current commit hash, etc) for building a version number according PEP-440";
+    mainProgram = "setuptools-git-versioning";
     homepage = "https://github.com/dolfinus/setuptools-git-versioning";
     changelog = "https://github.com/dolfinus/setuptools-git-versioning/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;

@@ -19,5 +19,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = [ maintainers.joachimschmidt557 ];
     platforms = platforms.linux;
+    mainProgram = "timew-sync-server";
   };
 }

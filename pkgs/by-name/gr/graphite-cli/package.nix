@@ -7,14 +7,14 @@
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.1.2";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-NNBI1S33jD6ZKbztZXSRtYwt3w0T4A5Bg2zxMWw74cY=";
+    hash = "sha256-W/EFhlJeiZrBK9FG4DhR1iyU9YSSbaf/np2vQ8obA0M=";
   };
 
-  npmDepsHash = "sha256-Nk0Aoyv4eEXZD4B9B/B6mJd/UDy8Kc/sHtQWXrLukSk=";
+  npmDepsHash = "sha256-X1FWYAuHouOXuAlgrbwgrbwaxKX5JS8iG0RnCPX5TvM=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -42,6 +42,6 @@ buildNpmPackage rec {
     homepage = "https://graphite.dev/docs/graphite-cli";
     license = lib.licenses.unfree; # no license specified
     mainProgram = "gt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ diegs ];
   };
 }

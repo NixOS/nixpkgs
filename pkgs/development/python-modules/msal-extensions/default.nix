@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msal
-, portalocker
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msal,
+  portalocker,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-ScInTvOgFxP5mgep5FRu6YZHPTtXhrcZGFE7Wdvcm4c=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     msal
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # No tests found
   doCheck = false;
 
-  pythonImportsCheck = [
-    "msal_extensions"
-  ];
+  pythonImportsCheck = [ "msal_extensions" ];
 
   meta = with lib; {
     description = "The Microsoft Authentication Library Extensions (MSAL-Extensions) for Python";

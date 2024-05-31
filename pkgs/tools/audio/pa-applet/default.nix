@@ -27,7 +27,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "";
-    license = licenses.gpl2;
+    mainProgram = "pa-applet";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.linux;
   };

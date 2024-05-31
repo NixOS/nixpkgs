@@ -14,7 +14,7 @@
 , pkg-config
 , python3
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib-networking
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

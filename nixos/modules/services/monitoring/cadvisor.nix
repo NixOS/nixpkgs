@@ -8,49 +8,49 @@ let
 in {
   options = {
     services.cadvisor = {
-      enable = mkEnableOption (lib.mdDoc "Cadvisor service");
+      enable = mkEnableOption "Cadvisor service";
 
       listenAddress = mkOption {
         default = "127.0.0.1";
         type = types.str;
-        description = lib.mdDoc "Cadvisor listening host";
+        description = "Cadvisor listening host";
       };
 
       port = mkOption {
         default = 8080;
         type = types.port;
-        description = lib.mdDoc "Cadvisor listening port";
+        description = "Cadvisor listening port";
       };
 
       storageDriver = mkOption {
         default = null;
         type = types.nullOr types.str;
         example = "influxdb";
-        description = lib.mdDoc "Cadvisor storage driver.";
+        description = "Cadvisor storage driver.";
       };
 
       storageDriverHost = mkOption {
         default = "localhost:8086";
         type = types.str;
-        description = lib.mdDoc "Cadvisor storage driver host.";
+        description = "Cadvisor storage driver host.";
       };
 
       storageDriverDb = mkOption {
         default = "root";
         type = types.str;
-        description = lib.mdDoc "Cadvisord storage driver database name.";
+        description = "Cadvisord storage driver database name.";
       };
 
       storageDriverUser = mkOption {
         default = "root";
         type = types.str;
-        description = lib.mdDoc "Cadvisor storage driver username.";
+        description = "Cadvisor storage driver username.";
       };
 
       storageDriverPassword = mkOption {
         default = "root";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Cadvisor storage driver password.
 
           Warning: this password is stored in the world-readable Nix store. It's
@@ -62,7 +62,7 @@ in {
 
       storageDriverPasswordFile = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           File that contains the cadvisor storage driver password.
 
           {option}`storageDriverPasswordFile` takes precedence over {option}`storageDriverPassword`
@@ -78,13 +78,13 @@ in {
       storageDriverSecure = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Cadvisor storage driver, enable secure communication.";
+        description = "Cadvisor storage driver, enable secure communication.";
       };
 
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Additional cadvisor options.
 
           See <https://github.com/google/cadvisor/blob/master/docs/runtime_options.md> for available options.

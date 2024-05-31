@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
+{ lib, fetchFromGitHub, buildDunePackage
 , angstrom, faraday, result, alcotest
 }:
 

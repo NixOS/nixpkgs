@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Utility to extract Wolfstone data from Wolfenstein II";
+    mainProgram = "wolfstoneextract";
     homepage = "https://bitbucket.org/ecwolf/wolfstoneextract/src/master/";
     platforms = [ "x86_64-linux" ];
     license = with licenses; [ gpl3Only bsd3 ];

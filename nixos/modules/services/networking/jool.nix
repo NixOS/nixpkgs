@@ -47,7 +47,7 @@ let
     options.framework = lib.mkOption {
       type = lib.types.enum [ "netfilter" "iptables" ];
       default = "netfilter";
-      description = lib.mdDoc ''
+      description = ''
         The framework to use for attaching Jool's translation to the exist
         kernel packet processing rules. See the
         [documentation](https://nicmx.github.io/Jool/en/intro-jool.html#design)
@@ -58,7 +58,7 @@ let
       type = lib.types.strMatching "[[:xdigit:]:]+/[[:digit:]]+"
         // { description = "Network prefix in CIDR notation"; };
       default = "64:ff9b::/96";
-      description = lib.mdDoc ''
+      description = ''
         The prefix used for embedding IPv4 into IPv6 addresses.
         Defaults to the well-known NAT64 prefix, defined by
         [RFC 6052](https://datatracker.ietf.org/doc/html/rfc6052).
@@ -126,7 +126,7 @@ in
       type = lib.types.bool;
       default = false;
       relatedPackages = [ "linuxPackages.jool" "jool-cli" ];
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable Jool, an Open Source implementation of IPv4/IPv6
         translation on Linux.
 
@@ -181,7 +181,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Definitions of NAT64 instances of Jool.
         See the
         [documentation](https://nicmx.github.io/Jool/en/config-atomic.html) for
@@ -226,7 +226,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Definitions of SIIT instances of Jool.
         See the
         [documentation](https://nicmx.github.io/Jool/en/config-atomic.html) for

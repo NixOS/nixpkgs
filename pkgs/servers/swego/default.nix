@@ -1,28 +1,34 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, stdenv
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "swego";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
-    rev = "v${version}";
-    sha256 = "sha256-OlaNDXKaIim5n0niqYIpRliVo7lse76vNxPKF6B6yF0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-O/wczHyaMev0CpAXoDxiN7TtHDsthG+jaH31SPMEB34=";
   };
 
-  vendorHash = "sha256-N4HDngQFNCzQ74W52R0khetN6+J7npvBC/bYZBAgLB4=";
+  vendorHash = "sha256-mJWJdwbZq042//hM3WWp2rnLC1GebckUnsIopbF858Q=";
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname
   '';
 
+  ldflags = [
+    "-w"
+    "-s"
+  ];
+
   meta = with lib; {
-    description = "Simple Webserver in Golang";
+    description = "Simple Webserver";
     longDescription = ''
       Swiss army knife Webserver in Golang. Similar to the Python
       SimpleHTTPServer but with many features.

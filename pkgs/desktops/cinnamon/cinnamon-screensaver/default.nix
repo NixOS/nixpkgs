@@ -15,7 +15,7 @@
 , libgnomekbd
 , gnome
 , libtool
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , pam
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     intltool
     dbus # for meson.build

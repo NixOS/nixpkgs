@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, perl, gfortran
 , openssh, hwloc, python3
+, darwin
 # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
 # these libraries currently build so this argument is ignored on Darwin.
 , ch4backend
@@ -20,11 +21,11 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "4.1.2";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "sha256-NJLpitq2K1l+8NKS+yRZthI7yABwqKoKML5pYgdaEvA=";
+    sha256 = "sha256-IzMbIpnyh8NBlyftwt+JItfnq7uf0Kx04DuZZvmtQtc=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -44,10 +45,11 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ gfortran python3 ];
   buildInputs = [ perl openssh hwloc ]
     ++ lib.optional (!stdenv.isDarwin) ch4backend
-    ++ lib.optional pmixSupport pmix;
+    ++ lib.optional pmixSupport pmix
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation;
 
-
-  doCheck = true;
+  # test_double_serializer.test fails on darwin
+  doCheck = !stdenv.isDarwin;
 
   preFixup = ''
     # Ensure the default compilers are the ones mpich was built with

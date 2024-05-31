@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, mock
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  mock,
+  jinja2,
 }:
 
 buildPythonPackage rec {
@@ -32,17 +33,15 @@ buildPythonPackage rec {
     "test/test_languages/testFortran.py"
   ];
 
-  pythonImportsCheck = [
-    "lizard"
-  ];
+  pythonImportsCheck = [ "lizard" ];
 
   meta = with lib; {
     changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
+    mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";
     homepage = "http://www.lizard.ws";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };
 }
-

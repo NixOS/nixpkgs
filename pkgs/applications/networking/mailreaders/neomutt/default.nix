@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A small but very powerful text-based mail client";
+    mainProgram = "neomutt";
     homepage    = "http://www.neomutt.org";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ erikryb vrthra ma27 raitobezarius ];

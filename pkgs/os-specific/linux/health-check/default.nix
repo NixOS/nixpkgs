@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Process monitoring tool";
+    mainProgram = "health-check";
     homepage = "https://github.com/ColinIanKing/health-check";
     license = licenses.gpl2;
     platforms = platforms.linux;

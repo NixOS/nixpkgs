@@ -82,6 +82,10 @@ let
           "dartSdkVersion": "${dart.version}"
         }
         EOF
+
+        # Suppress a small error now that `.gradle`'s location changed.
+        # Location changed because of the patch "gradle-flutter-tools-wrapper.patch".
+        mkdir -p "$out/packages/flutter_tools/gradle/.gradle"
       '';
 
       installPhase = ''
@@ -136,8 +140,10 @@ let
         '';
         homepage = "https://flutter.dev";
         license = licenses.bsd3;
-        platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-        maintainers = with maintainers; [ babariviere ericdallo FlafyDev hacker1024 ];
+        platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+        maintainers = teams.flutter.members ++ (with maintainers; [
+          babariviere ericdallo
+        ]);
       };
     };
 in

@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Python script to control NZXT cooler Kraken X52/X62/X72";
     homepage = "https://github.com/KsenijaS/krakenx";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.willibutz ];
     platforms = platforms.linux;
   };

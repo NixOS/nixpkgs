@@ -45,6 +45,7 @@ let
         meta = with lib; {
           homepage = "https://sourceforge.net/projects/gawkextlib/";
           description = "Dynamically loaded extension libraries for GNU AWK";
+          mainProgram = "xmlgawk";
           longDescription = ''
             The gawkextlib project provides several extension libraries for
             gawk (GNU AWK), as well as libgawkextlib containing some APIs that

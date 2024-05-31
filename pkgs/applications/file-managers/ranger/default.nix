@@ -1,5 +1,6 @@
-{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m, ranger, testers
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m, ranger, imagemagick, testers
 , imagePreviewSupport ? true
+, sixelPreviewSupport ? true
 , neoVimSupport ? true
 , improvedEncodingDetection ? true
 , rightToLeftTextSupport ? false
@@ -7,22 +8,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ranger";
-  version = "1.9.3";
+  version = "1.9.3-unstable-2023-08-23";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
-    rev = "v${version}";
-    sha256= "1rygfryczanvqxn43lmlkgs04sbqznbvbb9hlbm3h5qgdcl0xlw8";
+    rev = "38bb8901004b75a407ffee4b9e176bc0a436cb15";
+    hash = "sha256-NpsrABk95xHNvhlRjKFh326IW83mYj1cmK3aE9JQSRo=";
   };
 
   LC_ALL = "en_US.UTF-8";
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook astroid pylint ];
   propagatedBuildInputs = [
     less
     file
   ] ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
+    ++ lib.optionals sixelPreviewSupport [ imagemagick ]
     ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
     ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
     ++ lib.optionals rightToLeftTextSupport [ python3Packages.python-bidi ];
@@ -48,10 +50,6 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace ranger/config/rc.conf \
       --replace "set preview_images false" "set preview_images true"
   '';
-
-  passthru.tests.version = testers.testVersion {
-    package = ranger;
-  };
 
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";

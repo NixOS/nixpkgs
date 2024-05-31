@@ -1,22 +1,23 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, pyparsing
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  numpy,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "periodictable";
-  version = "1.6.1";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fFAcn3PXex+yjLUehbKEKcLESpnOPRJ0iUVkxy1xJgM=";
+    hash = "sha256-Qg5XwrGdalIbHAteOH2lkKMahFbkzBwAvKXOLcXwXqk=";
   };
 
   propagatedBuildInputs = [
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "periodictable"
-  ];
+  pythonImportsCheck = [ "periodictable" ];
 
   meta = with lib; {
     description = "Extensible periodic table of the elements";

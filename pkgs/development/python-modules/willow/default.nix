@@ -1,32 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# dependencies
-, filetype
-, defusedxml
+  # dependencies
+  filetype,
+  defusedxml,
 
-# optional-dependencies
-, pillow-heif
+  # optional-dependencies
+  pillow-heif,
 
-# tests
-, numpy
-, opencv4
-, pillow
-, pytestCheckHook
-, wand
+  # tests
+  numpy,
+  opencv4,
+  pillow,
+  pytestCheckHook,
+  wand,
 }:
 
 buildPythonPackage rec {
   pname = "willow";
   version = "1.8.0";
   format = "pyproject";
-
-  disabled = pythonOlder "2.7";
 
   src = fetchFromGitHub {
     owner = "wagtail";
@@ -35,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-g9/v56mdo0sJe5Pl/to/R/kXayaKK3qaYbnnPXpFjXE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     filetype
@@ -45,9 +41,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    heif = [
-      pillow-heif
-    ];
+    heif = [ pillow-heif ];
   };
 
   nativeCheckInputs = [
@@ -64,5 +58,4 @@ buildPythonPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

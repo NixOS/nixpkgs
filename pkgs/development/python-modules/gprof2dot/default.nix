@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, graphviz
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  graphviz,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-nIsBO6KTyG2VZZRXrkU/T/a9Ki1x6hda5Vv3rZv/mJM=";
   };
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ graphviz ]}"
-  ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ graphviz ]}" ];
 
   # Needed so dot is on path of the test script
-  nativeCheckInputs = [
-    graphviz
-  ];
+  nativeCheckInputs = [ graphviz ];
 
   checkPhase = ''
     runHook preCheck
@@ -40,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python script to convert the output from many profilers into a dot graph";
+    mainProgram = "gprof2dot";
     homepage = "https://github.com/jrfonseca/gprof2dot";
     changelog = "https://github.com/jrfonseca/gprof2dot/releases/tag/${version}";
     license = licenses.lgpl3Plus;

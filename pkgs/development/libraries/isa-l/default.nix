@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A collection of optimised low-level functions targeting storage applications";
+    mainProgram = "igzip";
     license = licenses.bsd3;
     homepage = "https://github.com/intel/isa-l";
     maintainers = with maintainers; [ jbedo ];

@@ -71,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Phabricator CLI from Mozilla to support submission of a series of commits";
+    mainProgram = "moz-phab";
     longDescription = ''
       moz-phab is a custom command-line tool, which communicates to
       Phabricator’s API, providing several conveniences, including support for

@@ -1,11 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, audiofile
-, libtiff
-, autoreconfHook
-, fetchpatch
-, buildPackages
+{ fetchFromGitHub
 , callPackage
 }:
 

@@ -4,7 +4,7 @@
 , fetchpatch
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , libnotify
 , libayatana-appindicator
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

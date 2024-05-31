@@ -1,32 +1,22 @@
-{ lib, rustPlatform, fetchgit, fetchpatch
+{ lib, rustPlatform, fetchgit
 , pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "120.0";
+  version = "124.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "0a9d1cb8be29e49c355ea8b18cd58506dbbaf6e5";
-    sha256 = "BbCcsxJU25VgWVday4rGPXaJSuAWebNGo3MiYPIBBto=";
+    rev = "bc2900b9ccbdf37b780a63888ca94437fd7dd6af";
+    hash = "sha256-t/47u5BlSC5vbRc7OQSbGBF+wnhcDFOMjrRQc/p2HcQ=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "test-page-size-fix.patch";
-      url = "https://chromium.googlesource.com/crosvm/crosvm/+/d9bc6e99ff5ac31d7d88b684c938af01a0872fc1%5E%21/?format=TEXT";
-      decode = "base64 -d";
-      includes = [ "src/crosvm/config.rs" ];
-      hash = "sha256-3gfNzp0WhtNr+8CWSISCJau208EMIo3RJhM+4SyeV3o=";
-    })
-  ];
-
   separateDebugInfo = true;
 
-  cargoHash = "sha256-YXfKZeRL3gfWztf36lVNbCCwUqW+0w3q7X7v0arCrvk=";
+  cargoHash = "sha256-7zx0k7HXequpwcURHx+Ml3cDhdvLkXTg+V71F6TO/d0=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
@@ -40,9 +30,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
+  CROSVM_USE_SYSTEM_MINIGBM = true;
   CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
-  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
+  buildFeatures = [ "virgl_renderer" ];
 
   passthru.updateScript = ./update.py;
 

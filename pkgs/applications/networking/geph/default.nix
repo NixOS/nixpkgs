@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.10.1";
+  version = "4.11.0";
   geph-meta = with lib; {
     description = "A modular Internet censorship circumvention system designed specifically to deal with national filtering.";
     homepage = "https://geph.io";
@@ -36,10 +36,10 @@ in
       owner = "geph-official";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-e0Pdg4pQ5s1wvTnFm1rKuAwkYtCtu2Uacd7yH3EHeCo=";
+      hash = "sha256-6zii8WxJp++yqTkxejNDta7IW+SG0uPgmnWqX5Oa9PU=";
     };
 
-    cargoHash = "sha256-Kwc+EOH2pJJVvIcTUfL39Xrv/7YmTPUDge7mmjDs9pQ=";
+    cargoHash = "sha256-WI525ufJxuepRZHyx8tO4K+7WZuM/NlTVNqVMJH6avg=";
 
     nativeBuildInputs = [ perl ];
 
@@ -55,8 +55,8 @@ in
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = "gephgui-pkg";
-      rev = "4163e12188dd679ba548e127fc9771cb5e87bab0";
-      hash = "sha256-wBvhfgp5sZTRCBR9HZqs1G0VaIt9DW2e9CWMAp/T5WI=";
+      rev = "3a6d2fa85603e9ac3d5d6286685d8a8ca792a508";
+      hash = "sha256-SE1TwYvR3+zwdPxlanq4hovmJsOdCJQzWfSJ6sSyJ5k=";
       fetchSubmodules = true;
     };
 
@@ -64,7 +64,7 @@ in
       pname = "${pname}-pnpm-deps";
       inherit src version;
 
-      sourceRoot = "source/gephgui-wry/gephgui";
+      sourceRoot = "${src.name}/gephgui-wry/gephgui";
 
       nativeBuildInputs = [
         jq
@@ -95,7 +95,7 @@ in
       pname = "gephgui-wry";
       inherit version src;
 
-      sourceRoot = "source/gephgui-wry";
+      sourceRoot = "${src.name}/gephgui-wry";
 
       cargoLock = {
         lockFile = ./Cargo.lock;

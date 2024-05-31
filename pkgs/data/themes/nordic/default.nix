@@ -10,70 +10,70 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nordic";
-  version = "2.2.0-unstable-2024-01-20";
+  version = "2.2.0-unstable-2024-05-24";
 
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "218a1a8679fdb97aa0aa7997fdf8c5344d68fb2f";
-      hash = "sha256-a315U4HsQP1omluTJjq9U76L3ANP7uN831mCY54vZnk=";
+      rev = "2f6b72b7b6d7112bb147a5adeca307631dd698cb";
+      hash = "sha256-4GNEJTAS6EAPYyaNOZS1lGu67nobGmMOHoq8I5WaPcA=";
       name = "Nordic";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "59873a54c8524adb36411d17d473eb7b7c910eac";
-      hash = "sha256-RisW5W0onNrtsSPHtFW66OdrQWOQX3uDmLiM+5ckzSY=";
+      rev = "d92b503cdabb4cf263de4c3fd9afba889c65aad1";
+      hash = "sha256-foCWcKNdk9S1MijJOuw8jFV4gnDSNWmTjgSCU9GefzE=";
       name = "Nordic-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "6e2b8fb8017c34344ec6b70884f09ebb44863efb";
-      hash = "sha256-B4qH8L5r16gaPS1wpiIHPyS3g/g53Xi2C6F0rcZKgWk=";
+      rev = "b76c48252c9dc6171cccf63c0c412b9afe7fa89c";
+      hash = "sha256-q/duyEin377J1cxD5+uXlEbPN/S27ht2es/02wKoiEY=";
       name = "Nordic-darker";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "2160a7bc69f55dd0b9efa64f029344256a4ef086";
-      hash = "sha256-1WdorWByZE4sXTfwsjFxvvSI0qQcAcfFoPXN5fGhEpc=";
+      rev = "b8b16b451bf5fcfada98a92682a6ff97d93fc36f";
+      hash = "sha256-959P2xdpCLhNRedoakMiHXzj+H4SWX1Lb9w6yYRzGds=";
       name = "Nordic-darker-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "63e0844bc04e1500e4b0ef8031cb3812e15e12fb";
-      hash = "sha256-b0Zs2WsD913Ai8wvi7mPraFme93WZXm+7rnwhDvGuZM=";
+      rev = "c45681eca7fce4c129063a0aae727d42b570fcfd";
+      hash = "sha256-8a4pMkyGt+WIVXLSsLKbxCP9i4RdZKX5lvwZB+BemSY=";
       name = "Nordic-bluish-accent";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "53e44ca5045a57903c0024197fa7a7a267432afb";
-      hash = "sha256-vF2f4PuQP0QkmPT6kR35eWYvQ9xLCYihEsobERURuBk=";
+      rev = "b07b6450ff2389f88ef5ad980a1ead47071b1d63";
+      hash = "sha256-+o46apK051UH6GbG/ugSgxI212MWEnYaVlDK9rWqPMU=";
       name = "Nordic-bluish-accent-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "4ec6f09782394d24d4d8cc78ac53c4692ec28985";
-      hash = "sha256-Z50ciafgfTHBahjpcVTapnsU88ioPUZ1RjggNpruJP0=";
+      rev = "bc3e7554ab8e8d94e978691054b1b062696eb688";
+      hash = "sha256-tJX/oTEp/9pmzrINBWrnhS9n8JR40T1C0A4LhRLWU9A=";
       name = "Nordic-Polar";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "c6c7ee8e642a9df07f7d69ed048a6ef37a26153c";
-      hash = "sha256-e+B9oUKbPr2MKmaz+l5GTOP4iVmw24vVpS98mAxEekA=";
+      rev = "26b44080c2dbd1a9b576a24d1b14ae01b98519d0";
+      hash = "sha256-5gGiBL7ZKFSPZtnikfrdvrWKG9RkIHdPyWdHYnmSTvg=";
       name = "Nordic-Polar-standard-buttons";
     })
   ];
@@ -121,9 +121,13 @@ stdenvNoCC.mkDerivation rec {
     mv -v $out/share/themes/Nordic/kde/colorschemes/* $out/share/color-schemes/
     mv -v $out/share/themes/Nordic/kde/konsole $out/share/
     mv -v $out/share/themes/Nordic/kde/kvantum/* $out/share/Kvantum/
-    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
+    cp -vr $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/look-and-feel/
+    mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/desktoptheme/
     mv -v $out/share/themes/Nordic/kde/folders/* $out/share/icons/
     mv -v $out/share/themes/Nordic/kde/cursors/*-cursors $out/share/icons/
+
+    rm -rf $out/share/plasma/look-and-feel/*/contents/{logout,osd,components}
+    rm -rf $out/share/plasma/desktoptheme/*/contents/{{defaults,splash,previews}
 
     mkdir -p $sddm/share/sddm/themes
     mv -v $out/share/themes/Nordic/kde/sddm/* $sddm/share/sddm/themes/

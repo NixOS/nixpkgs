@@ -1,11 +1,12 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, aiohttp
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, packaging
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  aiohttp,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  packaging,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-bMxWrapFX689yvC6+9NUunEtTe79+QNauFa1ZjG9ON4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "switchbee"
-  ];
+  pythonImportsCheck = [ "switchbee" ];
 
   meta = with lib; {
     description = "Library to control SwitchBee smart home device";

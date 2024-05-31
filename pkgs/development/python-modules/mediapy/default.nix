@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
-, ipython
-, matplotlib
-, numpy
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
+  ipython,
+  matplotlib,
+  numpy,
+  pillow,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-enxOx0hZ+fksk8ibsDWg0Bl/cJeSBHE37bN/D1ucECg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     ipython
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  pythonImportsCheck = [
-    "mediapy"
-  ];
+  pythonImportsCheck = [ "mediapy" ];
 
   meta = with lib; {
     description = "Read/write/show images and videos in an IPython notebook";

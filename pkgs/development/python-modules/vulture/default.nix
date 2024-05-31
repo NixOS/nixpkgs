@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pint
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, toml
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pint,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  toml,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
       --replace " --cov vulture --cov-report=html --cov-report=term --cov-report=xml --cov-append" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pint
@@ -40,12 +37,11 @@ buildPythonPackage rec {
     toml
   ];
 
-  pythonImportsCheck = [
-    "vulture"
-  ];
+  pythonImportsCheck = [ "vulture" ];
 
   meta = with lib; {
     description = "Finds unused code in Python programs";
+    mainProgram = "vulture";
     homepage = "https://github.com/jendrikseipp/vulture";
     changelog = "https://github.com/jendrikseipp/vulture/releases/tag/v${version}";
     license = licenses.mit;

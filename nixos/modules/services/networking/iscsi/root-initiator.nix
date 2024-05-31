@@ -19,7 +19,7 @@ in
   # machines to be up.
   options.boot.iscsi-initiator = with types; {
     name = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Name of the iSCSI initiator to boot from. Note, booting from iscsi
         requires networkd based networking.
       '';
@@ -29,7 +29,7 @@ in
     };
 
     discoverPortal = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         iSCSI portal to boot from.
       '';
       default = null;
@@ -38,7 +38,7 @@ in
     };
 
     target = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Name of the iSCSI target to boot from.
       '';
       default = null;
@@ -47,7 +47,7 @@ in
     };
 
     logLevel = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Higher numbers elicits more logs.
       '';
       default = 1;
@@ -56,7 +56,7 @@ in
     };
 
     loginAll = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Do not log into a specific target on the portal, but to all that we discover.
         This overrides setting target.
       '';
@@ -65,19 +65,19 @@ in
     };
 
     extraIscsiCommands = mkOption {
-      description = lib.mdDoc "Extra iscsi commands to run in the initrd.";
+      description = "Extra iscsi commands to run in the initrd.";
       default = "";
       type = lines;
     };
 
     extraConfig = mkOption {
-      description = lib.mdDoc "Extra lines to append to /etc/iscsid.conf";
+      description = "Extra lines to append to /etc/iscsid.conf";
       default = null;
       type = nullOr lines;
     };
 
     extraConfigFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Append an additional file's contents to `/etc/iscsid.conf`. Use a non-store path
         and store passwords in this file. Note: the file specified here must be available
         in the initrd, see: `boot.initrd.secrets`.

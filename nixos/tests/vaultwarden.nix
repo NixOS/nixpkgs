@@ -106,7 +106,7 @@ let
 
                   wait = WebDriverWait(driver, 10)
 
-                  wait.until(EC.title_contains("Create account"))
+                  wait.until(EC.title_contains("Vaultwarden Web"))
 
                   driver.find_element(By.CSS_SELECTOR, 'input#register-form_input_email').send_keys(
                       '${userEmail}'

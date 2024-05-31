@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, py
-, pytest-benchmark
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  py,
+  pytest-benchmark,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -41,12 +42,11 @@ buildPythonPackage rec {
     "test_initialize_method_cache_valid_types"
   ];
 
-  pythonImportsCheck = [
-    "getmac"
-  ];
+  pythonImportsCheck = [ "getmac" ];
 
   meta = with lib; {
     description = "Python package to get the MAC address of network interfaces and hosts on the local network";
+    mainProgram = "getmac";
     homepage = "https://github.com/GhostofGoes/getmac";
     changelog = "https://github.com/GhostofGoes/getmac/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

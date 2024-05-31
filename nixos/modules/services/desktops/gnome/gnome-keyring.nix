@@ -2,21 +2,11 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  # Added 2021-05-07
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "gnome-keyring" "enable" ]
-      [ "services" "gnome" "gnome-keyring" "enable" ]
-    )
-  ];
 
   ###### interface
 
@@ -24,10 +14,10 @@ with lib;
 
     services.gnome.gnome-keyring = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable GNOME Keyring daemon, a service designed to
           take care of the user's security credentials,
           such as user names and passwords.
@@ -41,7 +31,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome.gnome-keyring.enable {
+  config = lib.mkIf config.services.gnome.gnome-keyring.enable {
 
     environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
 

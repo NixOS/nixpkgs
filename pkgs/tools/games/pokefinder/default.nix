@@ -4,6 +4,7 @@
 , makeDesktopItem
 , fetchFromGitHub
 , cmake
+, python3
 , qtbase
 , qttools
 , qtwayland
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems imagemagick ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook python3 ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems imagemagick ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -66,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Admiral-Fish/PokeFinder";
     description = "Cross platform Pokémon RNG tool";
+    mainProgram = "PokeFinder";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ leo60228 ];

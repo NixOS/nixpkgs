@@ -7,13 +7,13 @@ let
 in
 {
   options.services.endlessh-go = {
-    enable = mkEnableOption (mdDoc "endlessh-go service");
+    enable = mkEnableOption "endlessh-go service";
 
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
       example = "[::]";
-      description = mdDoc ''
+      description = ''
         Interface address to bind the endlessh-go daemon to SSH connections.
       '';
     };
@@ -22,7 +22,7 @@ in
       type = types.port;
       default = 2222;
       example = 22;
-      description = mdDoc ''
+      description = ''
         Specifies on which port the endlessh-go daemon listens for SSH
         connections.
 
@@ -31,13 +31,13 @@ in
     };
 
     prometheus = {
-      enable = mkEnableOption (mdDoc "Prometheus integration");
+      enable = mkEnableOption "Prometheus integration";
 
       listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
         example = "[::]";
-        description = mdDoc ''
+        description = ''
           Interface address to bind the endlessh-go daemon to answer Prometheus
           queries.
         '';
@@ -47,7 +47,7 @@ in
         type = types.port;
         default = 2112;
         example = 9119;
-        description = mdDoc ''
+        description = ''
           Specifies on which port the endlessh-go daemon listens for Prometheus
           queries.
         '';
@@ -58,7 +58,7 @@ in
       type = with types; listOf str;
       default = [ ];
       example = [ "-conn_type=tcp4" "-max_clients=8192" ];
-      description = mdDoc ''
+      description = ''
         Additional command line options to pass to the endlessh-go daemon.
       '';
     };
@@ -66,7 +66,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open a firewall port for the SSH listener.
       '';
     };

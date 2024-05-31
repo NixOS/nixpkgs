@@ -65,5 +65,6 @@ buildGoModule rec {
     description = "A utility to generate SPDX-compliant Bill of Materials manifests";
     license = licenses.asl20;
     maintainers = with maintainers; [ developer-guy ];
+    mainProgram = "bom";
   };
 }

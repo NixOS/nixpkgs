@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud28` which is also the latest
+The current default by NixOS is `nextcloud29` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -25,7 +25,7 @@ to `true`, Nextcloud will automatically be configured to connect to it through
 socket.
 
 A very basic configuration may look like this:
-```
+```nix
 { pkgs, ... }:
 {
   services.nextcloud = {
@@ -130,7 +130,7 @@ settings `listen.owner` &amp; `listen.group` in the
 [corresponding `phpfpm` pool](#opt-services.phpfpm.pools).
 
 An exemplary configuration may look like this:
-```
+```nix
 { config, lib, pkgs, ... }: {
   services.nginx.enable = false;
   services.nextcloud = {
@@ -184,6 +184,27 @@ Alternatively, extra apps can also be declared with the [](#opt-services.nextclo
 When using this setting, apps can no longer be managed statefully because this can lead to Nextcloud updating apps
 that are managed by Nix. If you want automatic updates it is recommended that you use web interface to install apps.
 
+## Known warnings {#module-services-nextcloud-known-warnings}
+
+### Failed to get an iterator for log entries: Logreader application only supports "file" log_type {#module-services-nextcloud-warning-logreader}
+
+This is because
+
+* our module writes logs into the journal (`journalctl -t Nextcloud`)
+* the Logreader application that allows reading logs in the admin panel is enabled
+  by default and requires logs written to a file.
+
+The logreader application doesn't work, as it was the case before. The only change is that
+it complains loudly now. So nothing actionable here by default. Alternatively you can
+
+* disable the logreader application to shut up the "error".
+
+  We can't really do that by default since whether apps are enabled/disabled is part
+  of the application's state and tracked inside the database.
+
+* set [](#opt-services.nextcloud.settings.log_type) to "file" to be able to view logs
+  from the admin panel.
+
 ## Maintainer information {#module-services-nextcloud-maintainer-info}
 
 As stated in the previous paragraph, we must provide a clean upgrade-path for Nextcloud
@@ -205,7 +226,7 @@ If major-releases will be abandoned by upstream, we should check first if those 
 in NixOS for a safe upgrade-path before removing those. In that case we should keep those
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/servers/nextcloud/default.nix>`):
-```
+```nix
 /* ... */
 {
   nextcloud17 = generic {

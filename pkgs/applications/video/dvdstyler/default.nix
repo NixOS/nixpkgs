@@ -16,7 +16,7 @@
 , libexif
 , libjpeg
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK32
 , wxSVG
 , xine-ui
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
     zip
   ];

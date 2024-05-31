@@ -1,5 +1,21 @@
-with import ../../.. { };
-with vmTools;
+let
+  pkgs = import ../../.. { };
+
+  inherit (pkgs)
+    hello
+    patchelf
+    pcmanfm
+    stdenv
+    ;
+
+  inherit (pkgs.vmTools)
+    buildRPM
+    diskImages
+    makeImageTestScript
+    runInLinuxImage
+    runInLinuxVM
+    ;
+in
 
 {
 

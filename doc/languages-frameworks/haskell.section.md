@@ -113,7 +113,7 @@ Each of those compiler versions has a corresponding attribute set built using
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` is just an alias
-for `haskell.packages.ghc927`:
+for `haskell.packages.ghc964`:
 
 ```console
 $ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc927
@@ -230,7 +230,7 @@ completely incompatible with packages from `haskellPackages`.
 
 Every haskell package set has its own haskell-aware `mkDerivation` which is used
 to build its packages. Generally you won't have to interact with this builder
-since [cabal2nix][cabal2nix] can generate packages
+since [cabal2nix](#haskell-cabal2nix) can generate packages
 using it for an arbitrary cabal package definition. Still it is useful to know
 the parameters it takes when you need to
 [override](#haskell-overriding-haskell-packages) a generated Nix expression.
@@ -1020,6 +1020,11 @@ failing because of e.g. a syntax error in the Haddock documentation.
 : Sets `doCheck` to `false` for `drv`. Useful if a package has a broken,
 flaky or otherwise problematic test suite breaking the build.
 
+`dontCheckIf condition drv`
+: Sets `doCheck` to `false` for `drv`, but only if `condition` applies.
+Otherwise it's a no-op. Useful to conditionally disable tests for a package
+without interfering with previous overrides or default values.
+
 <!-- Purposefully omitting the non-list variants here. They are a bit
 ugly, and we may want to deprecate them at some point. -->
 
@@ -1118,17 +1123,74 @@ for [this to work][optparse-applicative-completions].
 Note that this feature is automatically disabled when cross-compiling, since it
 requires executing the binaries in question.
 
+## Import-from-Derivation helpers {#haskell-import-from-derivation}
+
+### cabal2nix {#haskell-cabal2nix}
+
+[`cabal2nix`][cabal2nix] can generate Nix package definitions for arbitrary
+Haskell packages using [import from derivation][import-from-derivation].
+`cabal2nix` will generate Nix expressions that look like this:
+
+```nix
+# cabal get mtl-2.2.1 && cd mtl-2.2.1 && cabal2nix .
+{ mkDerivation, base, lib, transformers }:
+mkDerivation {
+  pname = "mtl";
+  version = "2.2.1";
+  src = ./.;
+  libraryHaskellDepends = [ base transformers ];
+  homepage = "http://github.com/ekmett/mtl";
+  description = "Monad classes, using functional dependencies";
+  license = lib.licenses.bsd3;
+}
+```
+
+This expression should be called with `haskellPackages.callPackage`, which will
+supply [`haskellPackages.mkDerivation`](#haskell-mkderivation) and the Haskell
+dependencies as arguments.
+
+`callCabal2nix name src args`
+: Create a package named `name` from the source derivation `src` using
+  `cabal2nix`.
+
+  `args` are extra arguments provided to `haskellPackages.callPackage`.
+
+`callCabal2nixWithOptions name src opts args`
+: Create a package named `name` from the source derivation `src` using
+  `cabal2nix`.
+
+  `opts` are extra options for calling `cabal2nix`. If `opts` is a string, it
+  will be used as extra command line arguments for `cabal2nix`, e.g. `--subpath
+  path/to/dir/containing/cabal-file`. Otherwise, `opts` should be an AttrSet
+  which can contain the following attributes:
+
+  `extraCabal2nixOptions`
+  : Extra command line arguments for `cabal2nix`.
+
+  `srcModifier`
+  : A function which is used to modify the given `src` instead of the default
+    filter.
+
+    The default source filter will remove all files from `src` except for
+    `.cabal` files and `package.yaml` files.
+
+<!--
+
+`callHackage`
+: TODO
+
+`callHackageDirect`
+: TODO
+
+`developPackage`
+: TODO
+
+-->
+
 <!--
 
 TODO(@NixOS/haskell): finish these planned sections
 ### Overriding the entire package set
-
-
-## Import-from-Derivation helpers
-
-* `callCabal2nix`
-* `callHackage`, `callHackageDirect`
-* `developPackage`
 
 ## Contributing {#haskell-contributing}
 
@@ -1304,3 +1366,4 @@ relevant.
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
 [turtle]: https://hackage.haskell.org/package/turtle
+[import-from-derivation]: https://nixos.org/manual/nix/stable/language/import-from-derivation

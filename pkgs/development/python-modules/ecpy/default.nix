@@ -1,11 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, future }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  future,
+}:
 
 buildPythonPackage rec {
-  pname = "ECPy";
+  pname = "ecpy";
   version = "1.2.5";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ECPy";
+    inherit version;
     sha256 = "9635cffb9b6ecf7fd7f72aea1665829ac74a1d272006d0057d45a621aae20228";
   };
 

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, httpcore
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, starlette
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  httpcore,
+  httpx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  starlette,
+  trio,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-OiBKNK8V9WNQDe29Q5+E/jjBWD0qFcYUzhYUWA+7oFc=";
   };
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   nativeCheckInputs = [
     httpcore
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     sed -i "/--cov/d" setup.cfg
   '';
 
-  disabledTests = [
-    "test_pass_through"
-  ];
+  disabledTests = [ "test_pass_through" ];
 
-  pythonImportsCheck = [
-    "respx"
-  ];
+  pythonImportsCheck = [ "respx" ];
 
   meta = with lib; {
     description = "Python library for mocking HTTPX";

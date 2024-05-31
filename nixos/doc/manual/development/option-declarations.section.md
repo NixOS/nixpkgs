@@ -6,14 +6,16 @@ hasn't been declared in any module. An option declaration generally
 looks like this:
 
 ```nix
-options = {
-  name = mkOption {
-    type = type specification;
-    default = default value;
-    example = example value;
-    description = lib.mdDoc "Description for use in the NixOS manual.";
+{
+  options = {
+    name = mkOption {
+      type = type specification;
+      default = default value;
+      example = example value;
+      description = "Description for use in the NixOS manual.";
+    };
   };
-};
+}
 ```
 
 The attribute names within the `name` attribute path must be camel
@@ -56,12 +58,9 @@ The function `mkOption` accepts the following arguments.
 
 `description`
 
-:   A textual description of the option, in [Nixpkgs-flavored Markdown](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format, that will be
-    included in the NixOS manual. During the migration process from DocBook
-    it is necessary to mark descriptions written in CommonMark with `lib.mdDoc`.
-    The description may still be written in DocBook (without any marker), but this
-    is discouraged and will be deprecated in the future.
+:   A textual description of the option in [Nixpkgs-flavored Markdown](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format that will be
+    included in the NixOS manual.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -79,13 +78,13 @@ For example:
 ::: {#ex-options-declarations-util-mkEnableOption-magic .example}
 ### `mkEnableOption` usage
 ```nix
-lib.mkEnableOption (lib.mdDoc "magic")
+lib.mkEnableOption "magic"
 # is like
 lib.mkOption {
   type = lib.types.bool;
   default = false;
   example = true;
-  description = lib.mdDoc "Whether to enable magic.";
+  description = "Whether to enable magic.";
 }
 ```
 :::
@@ -133,7 +132,7 @@ lib.mkOption {
   type = lib.types.package;
   default = pkgs.hello;
   defaultText = lib.literalExpression "pkgs.hello";
-  description = lib.mdDoc "The hello package to use.";
+  description = "The hello package to use.";
 }
 ```
 :::
@@ -151,7 +150,7 @@ lib.mkOption {
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
   example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
-  description = lib.mdDoc "The GHC package to use.";
+  description = "The GHC package to use.";
 }
 ```
 :::
@@ -174,7 +173,7 @@ lib.mkOption {
 
 ## Extensible Option Types {#sec-option-declarations-eot}
 
-Extensible option types is a feature that allow to extend certain types
+Extensible option types is a feature that allows to extend certain types
 declaration through multiple module files. This feature only work with a
 restricted set of types, namely `enum` and `submodules` and any composed
 forms of them.
@@ -221,28 +220,34 @@ enforces that there can only be a single display manager enabled.
 ::: {#ex-option-declaration-eot-service .example}
 ### Extensible type placeholder in the service module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  description = "Display manager to use";
-  type = with types; nullOr (enum [ ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    description = "Display manager to use";
+    type = with types; nullOr (enum [ ]);
+  };
+}
 ```
 :::
 
 ::: {#ex-option-declaration-eot-backend-gdm .example}
 ### Extending `services.xserver.displayManager.enable` in the `gdm` module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "gdm" ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    type = with types; nullOr (enum [ "gdm" ]);
+  };
+}
 ```
 :::
 
 ::: {#ex-option-declaration-eot-backend-sddm .example}
 ### Extending `services.xserver.displayManager.enable` in the `sddm` module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "sddm" ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    type = with types; nullOr (enum [ "sddm" ]);
+  };
+}
 ```
 :::
 

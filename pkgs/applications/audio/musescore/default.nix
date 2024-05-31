@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , wrapQtAppsHook
 , pkg-config
@@ -48,13 +47,13 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YCeO/ijxA+tZxNviqmlIBkAdjPTrKoOoo1QyMIOqhWU=";
+    sha256 = "sha256-X3zvrIf5DOC5PWcnuw0aClm++IWUED1ZzAyjnp7Mo+g=";
   };
 
   cmakeFlags = [
@@ -84,11 +83,6 @@ in stdenv'.mkDerivation (finalAttrs: {
     # https://musescore.org/en/node/321936
     "--set-default QT_QPA_PLATFORM xcb"
   ];
-
-  # HACK `propagatedSandboxProfile` does not appear to actually propagate the
-  # sandbox profile from `qtbase`, see:
-  # https://github.com/NixOS/nixpkgs/issues/237458
-  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -129,7 +123,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications"
     mv "$out/mscore.app" "$out/Applications/mscore.app"
     mkdir -p $out/bin
-    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore.
+    ln -s $out/Applications/mscore.app/Contents/MacOS/mscore $out/bin/mscore
   '';
 
   # Don't run bundled upstreams tests, as they require a running X window system.
@@ -142,9 +136,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ vandenoever doronbehar ];
-    # on aarch64-linux:
-    # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     mainProgram = "mscore";
+    platforms = platforms.unix;
   };
 })

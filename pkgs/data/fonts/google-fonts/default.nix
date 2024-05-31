@@ -40,12 +40,10 @@ stdenvNoCC.mkDerivation {
 
   dontBuild = true;
 
-  # The font files are in the fonts directory and use two naming schemes:
-  # FamilyName-StyleName.ttf and FamilyName[param1,param2,...].ttf
-  # This installs all fonts if fonts is empty and otherwise only
-  # the specified fonts by FamilyName. To do this, it invokes
-  # `find` 2 times for every font, anyone is free to do this
-  # in a more efficient way.
+  # The font files are in the fonts directory and use three naming schemes:
+  # FamilyName-StyleName.ttf, FamilyName[param1,param2,...].ttf, and
+  # FamilyName.ttf. This installs all fonts if fonts is empty and otherwise
+  # only the specified fonts by FamilyName.
   fonts = map (font: builtins.replaceStrings [" "] [""] font) fonts;
   installPhase = ''
     adobeBlankDest=$adobeBlank/share/fonts/truetype
@@ -56,8 +54,7 @@ stdenvNoCC.mkDerivation {
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '' else ''
     for font in $fonts; do
-      find . -name "$font-*.ttf" -exec install -m 444 -Dt $dest '{}' +
-      find . -name "$font[*.ttf" -exec install -m 444 -Dt $dest '{}' +
+      find . \( -name "$font-*.ttf" -o -name "$font[*.ttf" -o -name "$font.ttf" \) -exec install -m 444 -Dt $dest '{}' +
     done
   '');
 

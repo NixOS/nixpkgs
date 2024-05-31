@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A stealth coffee-break roguelike game";
+    mainProgram = "harmonist";
     longDescription = ''
       Harmonist is a stealth coffee-break roguelike game. The game has a heavy
       focus on tactical positioning, light and noise mechanisms, making use of

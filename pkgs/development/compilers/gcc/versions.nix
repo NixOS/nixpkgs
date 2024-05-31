@@ -1,5 +1,6 @@
 let
   majorMinorToVersionMap = {
+    "14" = "14.1.0";
     "13" = "13.2.0";
     "12" = "12.3.0";
     "11" = "11.4.0";
@@ -19,6 +20,7 @@ let
   srcHashForVersion = version: {
     # NOTE: there is no need to remove hashes of obsolete minor
     # versions when adding a new minor version.
+    "14.1.0" = "sha256-4oPGVJh6/j3p2AgLwL15U0tcoNaBpzoR/ytdN2dCaEA=";
     "13.2.0" = "sha256-4nXnZEKmBnNBon8Exca4PYYTFEAEwEE1KIY9xrXHQ9o=";
     "12.3.0" = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
     "11.4.0" = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";

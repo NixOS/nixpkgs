@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folks";
-  version = "0.15.7";
+  version = "0.15.9";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
-    sha256 = "Eg8hnvYyEsqpWuf2rrZOKZKLCxqLlFIFQwSgDQ80eHE=";
+    hash = "sha256-IxGzc1XDUfM/Fj/cOUh0oioKBoLDGUk9bYpuQgcRQV8=";
   };
 
   nativeBuildInputs = [
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
-    homepage = "https://wiki.gnome.org/Projects/Folks";
+    homepage = "https://gitlab.gnome.org/GNOME/folks";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

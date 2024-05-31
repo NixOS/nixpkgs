@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, bluez
-, gattlib
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bluez,
+  gattlib,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-GA58DfCFaVzZQA1HYpGQ68bznrt4SX1ojyOVn8hyCGo=";
   };
 
-  buildInputs = [
-    bluez
-  ];
+  buildInputs = [ bluez ];
 
-  propagatedBuildInputs = [
-    gattlib
-  ];
+  propagatedBuildInputs = [ gattlib ];
 
   # there are no tests
   doCheck = false;
@@ -41,5 +38,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ leenaars ];
     broken = stdenv.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
   };
-
 }

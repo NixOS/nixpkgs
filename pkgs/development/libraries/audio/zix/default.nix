@@ -47,9 +47,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/drobilla/zix/-/blob/${src.rev}/NEWS";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [
-      fogti
-      yuu
-    ];
+    maintainers = with maintainers; [ yuu ];
   };
 }

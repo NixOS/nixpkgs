@@ -9,7 +9,7 @@ in {
       enable = lib.mkOption {
         default = false;
         type = lib.types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enables the daemon for `lorri`, a nix-shell replacement for project
           development. The socket-activated daemon starts on the first request
           issued by the `lorri` command.
@@ -18,7 +18,7 @@ in {
       package = lib.mkOption {
         default = pkgs.lorri;
         type = lib.types.package;
-        description = lib.mdDoc ''
+        description = ''
           The lorri package to use.
         '';
         defaultText = lib.literalExpression "pkgs.lorri";
@@ -44,8 +44,7 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/lorri daemon";
         PrivateTmp = true;
-        ProtectSystem = "strict";
-        ProtectHome = "read-only";
+        ProtectSystem = "full";
         Restart = "on-failure";
       };
     };

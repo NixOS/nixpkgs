@@ -6,23 +6,23 @@
 , libpulseaudio
 , pkg-config
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.05";
+  version = "6.4.12";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ctCDxE//vH4i22bKYBs14pdmp+1M6K+w7Tm22ZoGOf8=";
+    hash = "sha256-nriw/nP73m27QWdhC5ooTuVMul+GdOUsnVroM/CZiiY=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Doing phonetics by computer";
+    mainProgram = "praat";
     homepage = "https://www.fon.hum.uva.nl/praat/";
     license = lib.licenses.gpl2Plus; # Has some 3rd-party code in it though
     maintainers = with lib.maintainers; [ orivej ];

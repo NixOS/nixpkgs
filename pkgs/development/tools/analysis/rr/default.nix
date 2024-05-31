@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, which, makeWrapper
 , libpfm, zlib, python3Packages, procps, gdb, capnproto
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.7.0";
+  version = "5.8.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    hash = "sha256-n1Jbhr77bI0AXncY/RquNVSwwnnAXt31RmKtAa1/oHg=";
+    hash = "sha256-FudAAkWIe6gv4NYFoe9E0hlgTM70lymBE5Fw/vbehps=";
   };
 
   patches = [ ];

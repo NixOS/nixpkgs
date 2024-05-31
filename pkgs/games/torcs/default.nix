@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postInstall = ''
+    install -D -m644 Ticon.png $out/share/pixmaps/torcs.png
+    install -D -m644 torcs.desktop $out/share/applications/torcs.desktop
+  '';
+
   postPatch = ''
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';

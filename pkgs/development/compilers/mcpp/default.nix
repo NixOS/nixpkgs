@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/museoa/mcpp";
     description = "Matsui's C preprocessor";
+    mainProgram = "mcpp";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

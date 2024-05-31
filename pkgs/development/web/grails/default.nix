@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Full stack, web application framework for the JVM";
+    mainProgram = "grails";
     longDescription = ''
       Grails is an Open Source, full stack, web application framework for the
       JVM. It takes advantage of the Groovy programming language and convention

@@ -47,6 +47,9 @@ let
       "rescue.target"
       "rescue.service"
 
+      # systemd-debug-generator
+      "debug-shell.service"
+
       # Udev.
       "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
@@ -97,6 +100,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      ] ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service") ++ [
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -591,18 +595,17 @@ in
     };
 
     systemd.units =
-         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
-      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+      let
+        withName = cfgToUnit: cfg: lib.nameValuePair cfg.name (cfgToUnit cfg);
+      in
+         mapAttrs' (_: withName pathToUnit) cfg.paths
+      // mapAttrs' (_: withName serviceToUnit) cfg.services
+      // mapAttrs' (_: withName sliceToUnit) cfg.slices
+      // mapAttrs' (_: withName socketToUnit) cfg.sockets
+      // mapAttrs' (_: withName targetToUnit) cfg.targets
+      // mapAttrs' (_: withName timerToUnit) cfg.timers
+      // listToAttrs (map (withName mountToUnit) cfg.mounts)
+      // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
       # Environment of PID 1
       systemd.managerEnvironment = {
@@ -667,7 +670,6 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

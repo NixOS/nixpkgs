@@ -5,6 +5,7 @@
 , makeWrapper
 # graphs will not sync without matching upstream's major electron version
 , electron_27
+, autoPatchelfHook
 , git
 , nix-update-script
 }:
@@ -14,11 +15,11 @@ stdenv.mkDerivation (finalAttrs: let
 
 in {
   pname = "logseq";
-  version = "0.10.6";
+  version = "0.10.9";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-OUQh+6HRnzxw8Nn/OkU+DkjPKWKpMN0xchD1vPU3KV8=";
+    hash = "sha256-XROuY2RlKnGvK1VNvzauHuLJiveXVKrIYPppoz8fCmc=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -30,7 +31,8 @@ in {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
@@ -60,8 +62,7 @@ in {
     makeWrapper ${electron_27}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -74,5 +75,6 @@ in {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "logseq";
   };
 })

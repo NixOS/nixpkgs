@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, nose
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pynose,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -16,17 +17,15 @@ buildPythonPackage rec {
     hash = "sha256-mXY9qBv+qNr2s9ItEarMsBqND1LqUh2qs351ikyn0Sg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [
+    pynose
+    mock
   ];
 
-  nativeCheckInputs = [ nose mock ];
-
-  patchPhase = ''
-    # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
-    sed -i 's/test_ipv6_resolution_udp/noop/' statsd/tests.py
-    # well this is a noop, but so it was before
-    sed -i 's/assert_called_once()/called/' statsd/tests.py
+  checkPhase = ''
+    nosetests -sv
   '';
 
   meta = with lib; {
@@ -35,5 +34,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };
-
 }

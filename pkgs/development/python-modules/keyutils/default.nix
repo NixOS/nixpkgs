@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, keyutils
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  keyutils,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
 
   buildInputs = [ keyutils ];
   nativeBuildInputs = [ cython ];
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "A set of python bindings for keyutils";

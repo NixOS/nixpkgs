@@ -5,4 +5,5 @@ callPackage ./generic.nix (args // {
   sha256 = "sha256-iHWwll/jPeYriQ9s15O+f6/kGk5VLtv2QfH+1eu/Re0=";
   # for gitdiff
   extraBuildInputs = [ python3 ];
+  patches = [ ./Revert-Fix-grepdiff-test.patch ];
 })

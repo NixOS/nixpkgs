@@ -35,13 +35,13 @@ in
           "net.core.rmem_max" = mkOption {
             type = types.nullOr highestValueType;
             default = null;
-            description = lib.mdDoc "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
+            description = "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
           };
 
           "net.core.wmem_max" = mkOption {
             type = types.nullOr highestValueType;
             default = null;
-            description = lib.mdDoc "The maximum send socket buffer size in bytes. In case of conflicting values, the highest will be used.";
+            description = "The maximum send socket buffer size in bytes. In case of conflicting values, the highest will be used.";
           };
         };
       };
@@ -49,7 +49,7 @@ in
       example = literalExpression ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Runtime parameters of the Linux kernel, as set by
         {manpage}`sysctl(8)`.  Note that sysctl
         parameters names must be enclosed in quotes

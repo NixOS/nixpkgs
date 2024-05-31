@@ -1,14 +1,15 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, boost-histogram
-, histoprint
-, hatchling
-, hatch-vcs
-, numpy
-, pytestCheckHook
-, pytest-mpl
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  boost-histogram,
+  histoprint,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  pytestCheckHook,
+  pytest-mpl,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -41,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Histogramming for analysis powered by boost-histogram";
+    mainProgram = "hist";
     homepage = "https://hist.readthedocs.io/";
     changelog = "https://github.com/scikit-hep/hist/releases/tag/v${version}";
     license = licenses.bsd3;

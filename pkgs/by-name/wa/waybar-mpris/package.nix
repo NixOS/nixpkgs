@@ -1,6 +1,7 @@
 { lib
 , fetchgit
 , buildGoModule
+, unstableGitUpdater
 }:
 
 buildGoModule {
@@ -19,6 +20,8 @@ buildGoModule {
     "-s"
     "-w"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "A waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";

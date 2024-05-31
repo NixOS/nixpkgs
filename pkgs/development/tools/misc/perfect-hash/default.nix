@@ -20,6 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Minimal perfect hash function generator";
+    mainProgram = "perfect-hash";
     longDescription = ''
       Generate a minimal perfect hash function for a given set of keys.
       A given code template is filled with parameters, such that the

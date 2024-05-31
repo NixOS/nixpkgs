@@ -1,8 +1,17 @@
-{ buildPecl, lib, gpgme, file, gnupg, php, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  gpgme,
+  file,
+  gnupg,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   version = "1.5.1";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "gnupg";
 

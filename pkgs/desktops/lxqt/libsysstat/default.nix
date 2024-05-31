@@ -1,27 +1,28 @@
 { stdenv
 , lib
-, mkDerivation
 , fetchFromGitHub
 , cmake
 , qtbase
 , lxqt-build-tools
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libsysstat";
-  version = "0.4.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-dk3I+bkU2ztqIe33rTYneSUd8VFzrElTqVrjHQhAWXw=";
+    hash = "sha256-2rdhw67TPvy/QmyzbtStgiIuIgZ7ZSt07xjCvOywKF4=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    wrapQtAppsHook
   ];
 
   buildInputs = [

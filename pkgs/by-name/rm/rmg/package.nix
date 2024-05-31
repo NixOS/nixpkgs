@@ -20,12 +20,13 @@
 , which
 , xdg-user-dirs
 , zlib
+, withWayland ? false
 # Affects final license
 , withAngrylionRdpPlus ? false
 }:
 
 let
-  inherit (qt6Packages) qtbase qtsvg wrapQtAppsHook;
+  inherit (qt6Packages) qtbase qtsvg qtwayland wrapQtAppsHook;
 in
 stdenv.mkDerivation rec {
   pname = "rmg";
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
     xdg-user-dirs
     zlib
-  ];
+  ] ++ lib.optional withWayland qtwayland;
 
   cmakeFlags = [
     "-DPORTABLE_INSTALL=OFF"
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = lib.optionals stdenv.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-  ];
+  ] ++ lib.optional withWayland "--set RMG_WAYLAND 1";
 
   meta = with lib; {
     homepage = "https://github.com/Rosalie241/RMG";

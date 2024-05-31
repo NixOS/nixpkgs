@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Simple library to speed up or slow down speech";
+    mainProgram = "sonic";
     homepage = "https://github.com/waywardgeek/sonic";
     license = licenses.asl20;
     maintainers = with maintainers; [ aske ];

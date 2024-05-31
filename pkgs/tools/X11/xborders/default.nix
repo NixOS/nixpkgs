@@ -4,7 +4,7 @@
 , libwnck
 , gtk3
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , substituteAll
 }:
@@ -27,7 +27,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

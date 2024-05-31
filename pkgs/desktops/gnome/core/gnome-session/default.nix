@@ -30,13 +30,13 @@
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "45.0";
+  version = "46.0";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cG0v/KysOFU6PAGFeT9aK0qslAu154nZU8mAgWO+8vE=";
+    hash = "sha256-xuFiSvYJC8ThoZH+Imir+nqN4HgxynpX8hfmeb97mlQ=";
   };
 
   patches = [
@@ -74,11 +74,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     systemd
     libepoxy
-  ];
-
-  mesonFlags = [
-    "-Dsystemd=true"
-    "-Dsystemd_session=default"
   ];
 
   postPatch = ''
@@ -132,7 +127,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME session manager";
-    homepage = "https://wiki.gnome.org/Projects/SessionManagement";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-session";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

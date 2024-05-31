@@ -40,10 +40,14 @@ rec {
         ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
         ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
         ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libpthread.so.* \
+        ${pkgs.zstd.out}/lib/libzstd.so.* \
+        ${pkgs.xz.out}/lib/liblzma.so.* \
         $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
+      cp -pd ${pkgs.kmod}/bin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -53,6 +57,11 @@ rec {
               echo "patching $i..."
               patchelf --set-interpreter $out/lib/ld-*.so.? --set-rpath $out/lib $i || true
           fi
+      done
+
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
       done
     ''; # */
 
@@ -72,8 +81,8 @@ rec {
 
     for o in $(cat /proc/cmdline); do
       case $o in
-        mountDisk=1)
-          mountDisk=1
+        mountDisk=*)
+          mountDisk=''${mountDisk#mountDisk=}
           ;;
         command=*)
           set -- $(IFS==; echo $o)
@@ -103,6 +112,8 @@ rec {
 
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
+    elif [[ -e "$mountDisk" ]]; then
+      mount "$mountDisk" /fs
     else
       mount /dev/${hd} /fs
     fi
@@ -388,7 +399,7 @@ rec {
      filesystem containing a non-NixOS Linux distribution. */
 
   runInLinuxImage = drv: runInLinuxVM (lib.overrideDerivation drv (attrs: {
-    mountDisk = true;
+    mountDisk = attrs.mountDisk or true;
 
     /* Mount `image' as the root FS, but use a temporary copy-on-write
        image since we don't want to (and can't) write to `image'. */
@@ -576,9 +587,9 @@ rec {
 
   fillDiskWithDebs =
     { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
-    runInLinuxVM (stdenv.mkDerivation {
+    runInLinuxVM (stdenv.mkDerivation ({
       inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
@@ -647,7 +658,6 @@ rec {
 
         echo "running post-install script..."
         eval "$postInstall"
-        ln -sf dash /mnt/bin/sh
 
         rm /mnt/.debug
 
@@ -658,7 +668,7 @@ rec {
       '';
 
       passthru = { inherit fullName; };
-    });
+    } // args));
 
 
   /* Generate a Nix expression containing fetchurl calls for the
@@ -727,9 +737,6 @@ rec {
         esac
       done
 
-      # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
-      sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
-
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
@@ -744,7 +751,7 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
     , extraDebs ? [], createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    , QEMU_OPTS ? "", memSize ? 512, ... }@args:
 
     let
       expr = debClosureGenerator {
@@ -752,10 +759,10 @@ rec {
         packages = packages ++ extraPackages;
       };
     in
-      (fillDiskWithDebs {
+      (fillDiskWithDebs ({
         inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;} ++ extraDebs;
-      }) // {inherit expr;};
+      } // args)) // {inherit expr;};
 
 
   /* The set of supported RPM-based distributions. */

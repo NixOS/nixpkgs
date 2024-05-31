@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, aiohttp }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+}:
 
 buildPythonPackage rec {
   pname = "sockjs";

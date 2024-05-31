@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python3Packages
-, poetry-core
-, tkinter
-, pythonRelaxDepsHook
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python3Packages,
+  poetry-core,
+  tkinter,
+  typing-extensions,
+  pythonRelaxDepsHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,15 +28,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     tkinter
+    typing-extensions
   ];
 
-  pythonRemoveDeps = [
-    "asyncio"
-  ];
+  pythonRemoveDeps = [ "asyncio" ];
 
-  pythonImportsCheck = [
-    "async_tkinter_loop"
-  ];
+  pythonImportsCheck = [ "async_tkinter_loop" ];
 
   meta = with lib; {
     description = "Implementation of asynchronous mainloop for tkinter, the use of which allows using async handler functions";

@@ -13,6 +13,7 @@ let
   haskellModifications =
     lib.flip lib.pipe [
       addCompletions
+      haskell.lib.doJailbreak
       haskell.lib.justStaticExecutables
     ];
 

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, libev, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libev,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "bjoern";

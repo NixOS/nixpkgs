@@ -109,6 +109,8 @@ stdenv.mkDerivation rec {
     "--disable-monolithic"
     "--enable-mediactrl"
     "--with-nanosvg"
+    "--disable-rpath"
+    "--enable-repro-build"
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
   ] ++ lib.optional unicode "--enable-unicode"

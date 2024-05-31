@@ -6,22 +6,23 @@
 
 buildGoModule rec {
   pname = "monsoon";
-  version = "0.8.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7cfy8dYhiReFVz10wui3qqxlXOX7wheREkvSnj2KyOw=";
+    hash = "sha256-5aV4/JEtaUEtE/csvch/JooeWNLpysqrI2hwVWMJhnI=";
   };
 
-  vendorHash = "sha256-SZDX61iPwT/mfxJ+n2nlvzgEvUu6h3wVkmeqZtxQ9KE=";
+  vendorHash = "sha256-gdoOBW5MD94RiKINVtTDvBQRZaJ9tlgu0eh7MxuMezg=";
 
   # Tests fails on darwin
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Fast HTTP enumerator";
+    mainProgram = "monsoon";
     longDescription = ''
       A fast HTTP enumerator that allows you to execute a large number of HTTP
       requests, filter the responses and display them in real-time.

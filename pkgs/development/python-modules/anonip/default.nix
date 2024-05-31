@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,25 +20,20 @@ buildPythonPackage rec {
     sha256 = "0cssdcridadjzichz1vv1ng7jwphqkn8ihh83hpz9mcjmxyb94qc";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace " --cov=anonip --cov-report=term-missing --no-cov-on-fail" ""
   '';
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "anonip"
-  ];
+  pythonImportsCheck = [ "anonip" ];
 
   meta = with lib; {
     description = "Tool to anonymize IP addresses in log files";
+    mainProgram = "anonip";
     homepage = "https://github.com/DigitaleGesellschaft/Anonip";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmahut ];

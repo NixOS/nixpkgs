@@ -1,12 +1,12 @@
 { lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "10.13.0";
+  version = "10.17.0";
   pname = "checkstyle";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-VhEMyn20ubXbsDMHnNS4/E2Aeeyby3U3OV29/uXEQw4=";
+    sha256 = "sha256-UcNNc4UgwTidcZmKmrDm2r4NfPJiFJ8+AacpRJYGLkI=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Checks Java source against a coding standard";
+    mainProgram = "checkstyle";
     longDescription = ''
       checkstyle is a development tool to help programmers write Java code that
       adheres to a coding standard. By default it supports the Sun Code

@@ -9,7 +9,7 @@ let
 in
 {
   options.services.systemd-lock-handler = {
-    enable = mkEnableOption (lib.mdDoc "systemd-lock-handler");
+    enable = mkEnableOption "systemd-lock-handler";
     package = mkPackageOption pkgs "systemd-lock-handler" { };
   };
 

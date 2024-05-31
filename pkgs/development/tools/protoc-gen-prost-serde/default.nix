@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A protoc plugin that generates serde serialization implementations for `protoc-gen-prost`";
+    mainProgram = "protoc-gen-prost-serde";
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
     license = licenses.asl20;

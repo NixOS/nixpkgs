@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/arnoldrobbins/9menu";
     description = "Simple X11 menu program for running commands";
+    mainProgram = "9menu";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = libX11.meta.platforms;

@@ -12,12 +12,12 @@ in
   {
     options = {
       services.zerobin = {
-        enable = mkEnableOption (lib.mdDoc "0bin");
+        enable = mkEnableOption "0bin";
 
         dataDir = mkOption {
           type = types.str;
           default = "/var/lib/zerobin";
-          description = lib.mdDoc ''
+          description = ''
           Path to the 0bin data directory
           '';
         };
@@ -25,7 +25,7 @@ in
         user = mkOption {
           type = types.str;
           default = "zerobin";
-          description = lib.mdDoc ''
+          description = ''
           The user 0bin should run as
           '';
         };
@@ -33,7 +33,7 @@ in
         group = mkOption {
           type = types.str;
           default = "zerobin";
-          description = lib.mdDoc ''
+          description = ''
           The group 0bin should run as
           '';
         };
@@ -42,7 +42,7 @@ in
           type = types.int;
           default = 8000;
           example = 1357;
-          description = lib.mdDoc ''
+          description = ''
           The port zerobin should listen on
           '';
         };
@@ -51,7 +51,7 @@ in
           type = types.str;
           default = "localhost";
           example = "127.0.0.1";
-          description = lib.mdDoc ''
+          description = ''
           The address zerobin should listen to
           '';
         };
@@ -65,7 +65,7 @@ in
           )
           COMPRESSED_STATIC_FILE = True
           '';
-          description = lib.mdDoc ''
+          description = ''
           Extra configuration to be appended to the 0bin config file
           (see https://0bin.readthedocs.org/en/latest/en/options.html)
           '';

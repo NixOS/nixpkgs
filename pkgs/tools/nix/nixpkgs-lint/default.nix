@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A fast semantic linter for Nix using tree-sitter";
+    mainProgram = "nixpkgs-lint";
     homepage = "https://github.com/nix-community/nixpkgs-lint";
     changelog = "https://github.com/nix-community/nixpkgs-lint/releases/tag/${src.rev}";
     license = licenses.mit;

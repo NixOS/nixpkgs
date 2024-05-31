@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, regex
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  regex,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
       --replace ", 'datetime'" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     regex
@@ -38,12 +37,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysuez"
-  ];
+  pythonImportsCheck = [ "pysuez" ];
 
   meta = with lib; {
     description = "Module to get water consumption data from Suez";
+    mainProgram = "pysuez";
     homepage = "https://github.com/ooii/pySuez";
     changelog = "https://github.com/ooii/pySuez/releases/tag/v${version}";
     license = licenses.asl20;

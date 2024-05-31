@@ -11,7 +11,7 @@ with lib;
 
     services.clickhouse = {
 
-      enable = mkEnableOption (lib.mdDoc "ClickHouse database server");
+      enable = mkEnableOption "ClickHouse database server";
 
       package = mkPackageOption pkgs "clickhouse" { };
 

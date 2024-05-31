@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools
-, jinja2
-, sphinx
-, tabulate
-, pytestCheckHook
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  setuptools,
+  jinja2,
+  sphinx,
+  tabulate,
+  pytestCheckHook,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = isPy27;
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname;
     inherit version;
-    hash = "sha256-rnpTgPCgY3PDr+FszRW9ebxrB/JwTLxvHn7MlLT1/A0=";
+    hash = "sha256-hm5a5bZQnc+HP8Y4ESD1wxrPE7E1Y2wagdaMFmqV+SE=";
   };
 
   postPatch = ''
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace "--cov=numpydoc" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jinja2
@@ -51,14 +50,13 @@ buildPythonPackage rec {
     "test_reference"
   ];
 
-  pythonImportsCheck = [
-    "numpydoc"
-  ];
+  pythonImportsCheck = [ "numpydoc" ];
 
   meta = {
     changelog = "https://github.com/numpy/numpydoc/releases/tag/v${version}";
     description = "Sphinx extension to support docstrings in Numpy format";
+    mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
-   };
+  };
 }

@@ -36,6 +36,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A terminal emulator from the C Suite";
+    mainProgram = "coreterminal";
     homepage = "https://gitlab.com/cubocore/coreapps/coreterminal";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

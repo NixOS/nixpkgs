@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.xl-project.com/";
     description = "An enhanced, cycle-accurated Atari emulator";
+    mainProgram = "atari++";
     longDescription = ''
       The Atari++ Emulator is a Unix based emulator of the Atari eight bit
       computers, namely the Atari 400 and 800, the Atari 400XL, 800XL and 130XE,

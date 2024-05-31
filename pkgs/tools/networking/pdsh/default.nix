@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/chaos/pdsh";
     description = "High-performance, parallel remote shell utility";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       Pdsh is a high-performance, parallel remote shell utility. It has

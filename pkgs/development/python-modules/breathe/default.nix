@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonOlder
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  docutils,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -36,16 +38,15 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "breathe"
-  ];
+  checkInputs = [ defusedxml ];
+
+  pythonImportsCheck = [ "breathe" ];
 
   meta = with lib; {
     description = "Sphinx Doxygen renderer";
+    mainProgram = "breathe-apidoc";
     homepage = "https://github.com/michaeljones/breathe";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

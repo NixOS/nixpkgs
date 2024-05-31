@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pythonRelaxDepsHook
-, requests
-, urllib3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pythonRelaxDepsHook,
+  requests,
+  urllib3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -39,23 +40,20 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
+  pythonRelaxDeps = [ "urllib3" ];
 
   propagatedBuildInputs = [
     requests
     urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "synology_dsm" ];
 
   meta = with lib; {
     description = "Python API for communication with Synology DSM";
+    mainProgram = "synologydsm-api";
     homepage = "https://github.com/hacf-fr/synologydsm-api";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

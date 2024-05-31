@@ -13,13 +13,13 @@ in
     ];
 
     options.hardware.ckb-next = {
-      enable = mkEnableOption (lib.mdDoc "the Corsair keyboard/mouse driver");
+      enable = mkEnableOption "the Corsair keyboard/mouse driver";
 
       gid = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 100;
-        description = lib.mdDoc ''
+        description = ''
           Limit access to the ckb daemon to a particular group.
         '';
       };

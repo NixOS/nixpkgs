@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "KeePass Command Line Interface";
+    mainProgram = "kpcli";
     longDescription = ''
       KeePass Command Line Interface (CLI) / interactive shell.
       Use this program to access and manage your KeePass 1.x or 2.x databases from a Unix-like command line.

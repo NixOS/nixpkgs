@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, notation }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, notation }:
 
 buildGoModule rec {
   pname = "notation";
@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-USkufc1dG4eyRfRJHSX4mVZHnvOc5onHenF98Aedac4=";
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   # This is a Go sub-module and cannot be built directly (e2e tests).
   excludedPackages = [ "./test" ];
 
@@ -22,6 +26,13 @@ buildGoModule rec {
     "-X github.com/notaryproject/notation/internal/version.Version=${version}"
     "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd notation \
+      --bash <($out/bin/notation completion bash) \
+      --fish <($out/bin/notation completion fish) \
+      --zsh <($out/bin/notation completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = notation;

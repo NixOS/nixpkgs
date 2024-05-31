@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Console app for measuring typing speed in words per minute (WPM)";
+    mainProgram = "wpm";
     homepage = "https://pypi.org/project/wpm";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ alejandrosame ];

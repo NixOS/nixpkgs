@@ -20,6 +20,7 @@
 , protobufc
 , pcre
 , paho-mqtt-c
+, python3Packages
 , libnet
 , json_c
 , libuuid
@@ -58,18 +59,18 @@ let
   ];
   py = python3.withPackages python-deps;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.6.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
-    rev = "syslog-ng-${version}";
-    hash = "sha256-B9s7mprPpS4xc7mfJbsDaq2hB1rjYmuOnOnpu+NnMRs=";
+    rev = "syslog-ng-${finalAttrs.version}";
+    hash = "sha256-runFMUxQv7B023I38QfGqn89ZbzA5vMXHOOkYwMxArI=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config which bison flex libxslt perl gperf python3Packages.setuptools ];
 
   buildInputs = [
     libcap
@@ -116,11 +117,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ vifino ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus ];
+    maintainers = with lib.maintainers; [ vifino ];
+    platforms = lib.platforms.linux;
   };
-}
+})

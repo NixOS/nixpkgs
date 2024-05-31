@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       specification.
     '';
     homepage = "https://sourceforge.net/projects/mtx/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.redvers ];
     platforms = lib.platforms.linux;
   };

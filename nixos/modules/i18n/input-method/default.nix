@@ -32,7 +32,7 @@ in
         type    = types.nullOr (types.enum [ "ibus" "fcitx5" "nabi" "uim" "hime" "kime" ]);
         default = null;
         example = "fcitx5";
-        description = lib.mdDoc ''
+        description = ''
           Select the enabled input method. Input methods is a software to input symbols that are not available on standard input devices.
 
           Input methods are specially used to input Chinese, Japanese and Korean characters.
@@ -52,7 +52,7 @@ in
         internal = true;
         type     = types.nullOr types.path;
         default  = null;
-        description = lib.mdDoc ''
+        description = ''
           The input method method package.
         '';
       };

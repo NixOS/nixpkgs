@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,15 +20,13 @@ buildPythonPackage rec {
   # Infinite recursion with Scrapy
   doCheck = false;
 
-  pythonImportsCheck = [
-    "itemadapter"
-  ];
+  pythonImportsCheck = [ "itemadapter" ];
 
   meta = with lib; {
     description = "Common interface for data container classes";
     homepage = "https://github.com/scrapy/itemadapter";
     changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

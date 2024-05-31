@@ -25,6 +25,7 @@ clangStdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "d-SEAMS: Deferred Structural Elucidation Analysis for Molecular Simulations";
+    mainProgram = "yodaStruct";
     longDescription = ''
       d-SEAMS, is a free and open-source postprocessing engine for the analysis
       of molecular dynamics trajectories, which is specifically able to

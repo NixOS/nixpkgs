@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, pytestCheckHook
-, pytest-click
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pytestCheckHook,
+  pytest-click,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-4QpQzg0yFuOFymGiTI+A8o6LyX78iTJMqr0ernYbilI=";
   };
 
-  propagatedBuildInputs = [
-    click
-  ];
+  propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [
     pytest-click
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "click_shell"
-  ];
+  pythonImportsCheck = [ "click_shell" ];
 
   preCheck = "export HOME=$(mktemp -d)";
 

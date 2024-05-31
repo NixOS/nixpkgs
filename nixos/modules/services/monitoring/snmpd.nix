@@ -15,7 +15,7 @@ in {
     listenAddress = lib.mkOption {
       type = lib.types.str;
       default = "0.0.0.0";
-      description = lib.mdDoc ''
+      description = ''
         The address to listen on for SNMP and AgentX messages.
       '';
       example = "127.0.0.1";
@@ -24,7 +24,7 @@ in {
     port = lib.mkOption {
       type = lib.types.port;
       default = 161;
-      description = lib.mdDoc ''
+      description = ''
         The port to listen on for SNMP and AgentX messages.
       '';
     };
@@ -32,7 +32,7 @@ in {
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open port in firewall for snmpd.
       '';
     };
@@ -40,7 +40,7 @@ in {
     configText = lib.mkOption {
       type = lib.types.lines;
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         The contents of the snmpd.conf. If the {option}`configFile` option
         is set, this value will be ignored.
 
@@ -54,7 +54,7 @@ in {
       type = lib.types.path;
       default = configFile;
       defaultText = lib.literalMD "The value of {option}`configText`.";
-      description = lib.mdDoc ''
+      description = ''
         Path to the snmpd.conf file. By default, if {option}`configText` is set,
         a config file will be automatically generated.
       '';

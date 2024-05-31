@@ -6,7 +6,7 @@
 
 let
   inherit (lib) boolToString concatMapStringsSep concatStringsSep filter
-    isAttrs isBool isList mapAttrsToList mdDoc mkOption singleton splitString;
+    isAttrs isBool isList mapAttrsToList mkOption singleton splitString;
   inherit (lib.types) attrsOf bool coercedTo either int listOf oneOf path
     str submodule;
 in
@@ -21,21 +21,21 @@ in
     options = {
       include = mkOption {
         default = [ ];
-        description = mdDoc ''
+        description = ''
           Files to include in the Kerberos configuration.
         '';
         type = coercedTo path singleton (listOf path);
       };
       includedir = mkOption {
         default = [ ];
-        description = mdDoc ''
+        description = ''
           Directories containing files to include in the Kerberos configuration.
         '';
         type = coercedTo path singleton (listOf path);
       };
       module = mkOption {
         default = [ ];
-        description = mdDoc ''
+        description = ''
           Modules to obtain Kerberos configuration from.
         '';
         type = coercedTo path singleton (listOf path);

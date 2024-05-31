@@ -29,6 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "F-Droid command line interface written in Go";
+    mainProgram = "fdroidcl";
     homepage = "https://github.com/mvdan/fdroidcl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aleksana ];

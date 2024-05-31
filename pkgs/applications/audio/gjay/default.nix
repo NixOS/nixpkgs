@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
+    mainProgram = "gjay";
   };
 }

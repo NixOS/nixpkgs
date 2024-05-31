@@ -9,9 +9,12 @@ deployAndroidPackage {
       libcxx
       libGL
       libpulseaudio
+      libtiff
       libuuid
       zlib
+      libbsd
       ncurses5
+      libdrm
       stdenv.cc.cc
       pkgsi686Linux.glibc
       expat
@@ -30,6 +33,9 @@ deployAndroidPackage {
       libXi
       libXrender
       libXtst
+      libICE
+      libSM
+      libxkbfile
     ]);
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib
@@ -37,6 +43,12 @@ deployAndroidPackage {
     addAutoPatchelfSearchPath $packageBaseDir/lib64/qt/lib
     # autoPatchelf is not detecting libuuid :(
     addAutoPatchelfSearchPath ${pkgs.libuuid.out}/lib
+
+    # This library is linked against a version of libtiff that nixpkgs doesn't have
+    for file in $out/libexec/android-sdk/emulator/*/qt/plugins/imageformats/libqtiffAndroidEmu.so; do
+      patchelf --replace-needed libtiff.so.5 libtiff.so "$file" || true
+    done
+
     autoPatchelf $out
 
     # Wrap emulator so that it can load required libraries at runtime

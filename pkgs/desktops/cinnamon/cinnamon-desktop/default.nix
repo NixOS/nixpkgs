@@ -13,7 +13,7 @@
 , systemd
 , xkeyboard_config
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     pkg-config
     gobject-introspection

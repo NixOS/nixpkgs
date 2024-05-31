@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
+{ stdenv, lib, fetchFromGitLab, bundlerEnv
 , ruby_3_1, tzdata, git, nettools, nixosTests, nodejs, openssl
 , defaultGemConfig, buildRubyGem
 , gitlabEnterprise ? false, callPackage, yarn
-, prefetch-yarn-deps, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
+, fixup-yarn-lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 , cargo, rustc, rustPlatform
 }:
 
@@ -49,7 +49,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-I5w/roDgnRe5eyXo0wiRcoWPpXEtpL3kOl9eDg99t/w=";
+            hash = "sha256-7q2xWAsFkXHxkYNzIjPwJRy72xMXF278cpVzqGLt/9Y=";
           };
 
           dontBuild = false;
@@ -94,7 +94,7 @@ let
       sha256 = data.yarn_hash;
     };
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert prefetch-yarn-deps ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert fixup-yarn-lock ];
 
     patches = [
       # Since version 12.6.0, the rake tasks need the location of git,
@@ -111,6 +111,8 @@ let
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
     FOSS_ONLY = !gitlabEnterprise;
+
+    SKIP_YARN_INSTALL = 1;
 
     configurePhase = ''
       runHook preConfigure
@@ -142,11 +144,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      bundle exec rake gettext:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
       runHook postBuild
     '';

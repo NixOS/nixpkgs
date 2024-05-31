@@ -10,13 +10,13 @@ in
       automatic = lib.mkOption {
         default = false;
         type = lib.types.bool;
-        description = lib.mdDoc "Automatically run the nix store optimiser at a specific time.";
+        description = "Automatically run the nix store optimiser at a specific time.";
       };
 
       dates = lib.mkOption {
         default = ["03:45"];
         type = with lib.types; listOf str;
-        description = lib.mdDoc ''
+        description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
           which the optimiser will run.
@@ -42,9 +42,11 @@ in
         startAt = lib.optionals cfg.automatic cfg.dates;
       };
 
-      timers.nix-optimise.timerConfig = {
-        Persistent = true;
-        RandomizedDelaySec = 1800;
+      timers.nix-optimise = lib.mkIf cfg.automatic {
+        timerConfig = {
+          Persistent = true;
+          RandomizedDelaySec = 1800;
+        };
       };
     };
   };

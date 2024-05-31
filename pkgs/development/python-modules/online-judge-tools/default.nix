@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, online-judge-api-client
-, requests
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  online-judge-api-client,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,18 @@ buildPythonPackage rec {
     sha256 = "0zkzmmjgjb6lyrzq1ip54cpnp7al9a7mcyjyi5vx58bvnx3q0c6m";
   };
 
-  propagatedBuildInputs = [ colorama online-judge-api-client requests ];
+  propagatedBuildInputs = [
+    colorama
+    online-judge-api-client
+    requests
+  ];
 
   # Requires internet access
   doCheck = false;
 
   meta = with lib; {
     description = "Tools for various online judges. Download sample cases, generate additional test cases, test your code, and submit it.";
+    mainProgram = "oj";
     homepage = "https://github.com/online-judge-tools/oj";
     license = licenses.mit;
     maintainers = with maintainers; [ sei40kr ];

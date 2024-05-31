@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "http://dag.wieers.com/home-made/dstat/";
     description = "Versatile resource statistics tool";
+    mainProgram = "dstat";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

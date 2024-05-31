@@ -11,9 +11,10 @@
 , openssl
 , pkg-config
 , zlib
+, zstd
 , libpcap
 , libnl
-, libelf
+, elfutils
 , jansson
 , ensureNewerSourcesForZipFilesHook
 }:
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     jansson
     libaio
     libbsd
-    libelf
+    elfutils
     libuuid
     libpcap
     libnl
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     openssl
     ncurses
     zlib
+    zstd
   ];
 
   patches = [

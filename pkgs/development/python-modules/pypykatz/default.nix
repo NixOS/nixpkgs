@@ -1,14 +1,15 @@
-{ lib
-, aesedb
-, aiosmb
-, aiowinreg
-, buildPythonPackage
-, fetchPypi
-, minidump
-, minikerberos
-, msldap
-, pythonOlder
-, winsspi
+{
+  lib,
+  aesedb,
+  aiosmb,
+  aiowinreg,
+  buildPythonPackage,
+  fetchPypi,
+  minidump,
+  minikerberos,
+  msldap,
+  pythonOlder,
+  winsspi,
 }:
 
 buildPythonPackage rec {
@@ -36,12 +37,11 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pypykatz"
-  ];
+  pythonImportsCheck = [ "pypykatz" ];
 
   meta = with lib; {
     description = "Mimikatz implementation in Python";
+    mainProgram = "pypykatz";
     homepage = "https://github.com/skelsec/pypykatz";
     changelog = "https://github.com/skelsec/pypykatz/releases/tag/${version}";
     license = with licenses; [ mit ];

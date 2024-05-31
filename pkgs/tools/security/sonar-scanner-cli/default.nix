@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   inherit version;
   pname = "sonar-scanner-cli";
 
-  src = fetchurl sonarScannerArchPackage.${stdenv.hostPlatform.system};
+  src = fetchurl sonarScannerArchPackage.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ unzip ];
 

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomrunner";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Youda008";
     repo = "DoomRunner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mUtUXDcQXs5zTh9Msb3dXFicIsfbZpE9M8OPqtajDhw=";
+    hash = "sha256-IUc7qGW4ni/6IwEfY4wpQxKiR14uzKuvTZvHZ3aF++s=";
   };
 
   buildInputs = [ qtbase ];
@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Graphical launcher of ZDoom and derivatives";
+    mainProgram = "DoomRunner";
     homepage = "https://github.com/Youda008/DoomRunner/";
     changelog = "https://github.com/Youda008/DoomRunner/blob/${finalAttrs.src.rev}/changelog.txt";
     license = licenses.gpl3Only;

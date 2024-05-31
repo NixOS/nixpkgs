@@ -37,6 +37,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line tool for querying Sybase/MSSQL databases";
+    mainProgram = "sqsh";
     longDescription = ''
       Sqsh (pronounced skwish) is short for SQshelL (pronounced s-q-shell),
       it is intended as a replacement for the venerable 'isql' program supplied

@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 let
-  inherit (lib) mdDoc mkIf mkOption mkPackageOption mkRemovedOptionModule;
+  inherit (lib) mkIf mkOption mkPackageOption mkRemovedOptionModule;
   inherit (lib.types) bool;
 
   mkRemovedOptionModule' = name: reason: mkRemovedOptionModule ["krb5" name] reason;
@@ -30,7 +30,7 @@ in {
     security.krb5 = {
       enable = mkOption {
         default = false;
-        description = mdDoc "Enable and configure Kerberos utilities";
+        description = "Enable and configure Kerberos utilities";
         type = bool;
       };
 
@@ -41,7 +41,7 @@ in {
       settings = mkOption {
         default = { };
         type = format.type;
-        description = mdDoc ''
+        description = ''
           Structured contents of the {file}`krb5.conf` file. See
           {manpage}`krb5.conf(5)` for details about configuration.
         '';

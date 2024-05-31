@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A TCP port redirector for UNIX";
     homepage = "https://github.com/troglobit/redir";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
+    mainProgram = "redir";
   };
 }

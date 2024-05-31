@@ -1,44 +1,55 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# build-system
-, setuptools
-, setuptools-git-versioning
+  # build-system
+  setuptools,
 
-# dependencies
-, async-timeout
-, bellows
-, click
-, coloredlogs
-, crc
-, libgpiod
-, typing-extensions
-, zigpy
+  # dependencies
+  async-timeout,
+  bellows,
+  click,
+  coloredlogs,
+  crc,
+  libgpiod,
+  typing-extensions,
+  zigpy,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, pytest-timeout
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.15";
+  version = "0.0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
-    rev = "v${version}";
-    hash = "sha256-5hA1i2XzKzQDRrZfOaA6I3X7hU+nSd7HpcHHNIzZO7g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VoO9B27CNY2Cnt/Q2HsU6DVYkukQMgbIHc6xqfN0P7w=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-git-versioning
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
+    "gpiod"
   ];
 
   propagatedBuildInputs = [
@@ -49,9 +60,7 @@ buildPythonPackage rec {
     crc
     typing-extensions
     zigpy
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    libgpiod
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -65,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
+    mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hexa ];

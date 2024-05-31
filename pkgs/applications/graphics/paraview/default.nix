@@ -6,13 +6,13 @@
 }:
 
 let
-  version = "5.11.2";
+  version = "5.12.0";
 
   docFiles = [
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewTutorial-${version}.pdf";
       name = "Tutorial.pdf";
-      hash = "sha256-KIcd5GG+1L3rbj4qdLbc+eDa5Wy4+nqiVIxfHu5Tdpg=";
+      hash = "sha256-ETA799peqP9RAjcqPBwVb8egKfQJAuIXNgso+k8o50Q=";
     })
     (fetchurl {
       url = "https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v${lib.versions.majorMinor version}&type=data&os=Sources&downloadFile=ParaViewGettingStarted-${version}.pdf";
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    hash = "sha256-fe/4xxxlkal08vE971FudTnESFfGMYzuvSyAMS6HSxI=";
+    hash = "sha256-PAD48IlOU39TosjfTiDz7IjEeYEP/7F75M+8dYBIUxI=";
     fetchSubmodules = true;
   };
 
@@ -85,12 +85,6 @@ in stdenv.mkDerivation rec {
     qtxmlpatterns
     qtsvg
   ];
-
-  patches = [
-    ./dont-redefine-strlcat.patch
-  ];
-
-  env.CXXFLAGS = "-include cstdint";
 
   postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
     lib.optionalString withDocs ''

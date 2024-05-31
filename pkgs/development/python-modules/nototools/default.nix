@@ -1,9 +1,38 @@
-{ fetchFromGitHub, lib, buildPythonPackage, pythonOlder
-, afdko, appdirs, attrs, booleanoperations, brotlipy, click
-, defcon, fontmath, fontparts, fontpens, fonttools, lxml
-, mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
-, toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
-, pillow, six, bash, setuptools-scm }:
+{
+  fetchFromGitHub,
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  afdko,
+  appdirs,
+  attrs,
+  booleanoperations,
+  brotlipy,
+  click,
+  defcon,
+  fontmath,
+  fontparts,
+  fontpens,
+  fonttools,
+  lxml,
+  mutatormath,
+  pathspec,
+  psautohint,
+  pyclipper,
+  pytz,
+  regex,
+  scour,
+  toml,
+  typed-ast,
+  ufonormalizer,
+  ufoprocessor,
+  unicodedata2,
+  zopfli,
+  pillow,
+  six,
+  bash,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "nototools";

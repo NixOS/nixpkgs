@@ -123,6 +123,6 @@ in buildGoModule {
     description = "An open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ abbradar danderson ];
+    maintainers = with maintainers; [ abbradar ];
   };
 }

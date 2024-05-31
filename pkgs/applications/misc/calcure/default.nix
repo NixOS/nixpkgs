@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Modern TUI calendar and task manager with minimal and customizable UI";
+    mainProgram = "calcure";
     homepage = "https://github.com/anufrievroman/calcure";
     changelog = "https://github.com/anufrievroman/calcure/releases/tag/${version}";
     license = licenses.mit;

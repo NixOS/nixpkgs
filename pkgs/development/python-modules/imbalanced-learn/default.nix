@@ -1,35 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, joblib
-, keras
-, numpy
-, pandas
-, scikit-learn
-, scipy
-, tensorflow
-, threadpoolctl
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  joblib,
+  keras,
+  numpy,
+  pandas,
+  scikit-learn,
+  scipy,
+  tensorflow,
+  threadpoolctl,
+  pytest-xdist,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.12.0";
+  version = "0.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uczZqqMChpkHnUOm1Nn8nQOfVTdnM7Mfh8fZsSXcwWU=";
+    hash = "sha256-qAxWztywcSTyZr5i06XSq1tXeZCac0P98bmTR5Zi9sE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     joblib
@@ -47,11 +46,12 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "imblearn"
-  ];
+  pythonImportsCheck = [ "imblearn" ];
 
-  nativeCheckInputs = [ pytestCheckHook pandas ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pandas
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR

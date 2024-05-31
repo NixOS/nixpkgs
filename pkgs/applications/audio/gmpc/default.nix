@@ -16,7 +16,7 @@
 , libICE
 , sqlite
 , hicolor-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b3bnxf98i5lhjyljvgxgx9xmb6p46cn3a9cccrng14nagri9556";
   };
 
-  nativeBuildInputs = [ pkg-config libtool intltool gob2 vala wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config libtool intltool gob2 vala wrapGAppsHook3 ];
   buildInputs = [
     glib
     gtk2

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -24,46 +23,32 @@
 , python3
 , systemd
 , tzdata
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
+let
+  edsDataDir = "${evolution-data-server}/share";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-datetime";
-  version = "23.10.1";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
-    # Release wasn't tagged?
-    # https://github.com/AyatanaIndicators/ayatana-indicator-datetime/issues/121
-    rev = "d8debd706fe92de09e5c654c4ea2cc5dd5ce0529";
-    hash = "sha256-cm1zhG9TODGe79n/fGuyVnWL/sjxUc3ZCu9FhqA1NLE=";
+    rev = finalAttrs.version;
+    hash = "sha256-lY49v2uZ7BawQoN/hmN6pbetHlSGjMHbS6S8Wl1bDmQ=";
   };
 
-  patches = [
-    # Fix test-menus building & running
-    # Remove when https://github.com/AyatanaIndicators/ayatana-indicator-datetime/pull/122 merged & in release
-    (fetchpatch {
-      name = "0001-ayatana-indicator-datetime-tests-test-menu-Fix-build.patch";
-      url = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/a6527e90d855d43f43e1ff9bccda2fa22d3c60ab.patch";
-      hash = "sha256-RZY51UnrMcXbZbwyuCHSxY6toGByaObSEntVnIMz7+w=";
-    })
-    (fetchpatch {
-      name = "0002-ayatana-indicator-datetime-tests-Fix-show_alarms-tests.patch";
-      url = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/5186b51c004ec25e8a44fe5918bceb3d45abb108.patch";
-      hash = "sha256-goVcpN0MNOic8mpdJdhjgS9LHQLVEZT6ZEg1PqLvmsE=";
-    })
-  ];
-
   postPatch = ''
-    # Queries systemd user unit dir via pkg_get_variable, can't override prefix
+    # Override systemd prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_DIR ''${CMAKE_INSTALL_PREFIX}/lib/systemd/user)' \
-      --replace '/etc' "\''${CMAKE_INSTALL_SYSCONFDIR}"
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})' \
+      --replace-fail 'XDG_AUTOSTART_DIR "/etc' 'XDG_AUTOSTART_DIR "''${CMAKE_INSTALL_FULL_SYSCONFDIR}'
 
     # Looking for Lomiri schemas for code generation
     substituteInPlace src/CMakeLists.txt \
-      --replace '/usr/share/accountsservice' '${lomiri.lomiri-schemas}/share/accountsservice'
+      --replace-fail '/usr/share/accountsservice' '${lomiri.lomiri-schemas}/share/accountsservice'
   '';
 
   strictDeps = true;
@@ -73,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # for schema hook
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -116,15 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # evolution-data-server tests have been silently failing on upstream CI for awhile,
-        # 23.10.0 release has fixed the silentness but left the tests broken.
-        # https://github.com/AyatanaIndicators/ayatana-indicator-datetime/commit/3e65062b5bb0957b5bb683ff04cb658d9d530477
-        "^test-eds-ics"
-      ]})")
-    ]))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -132,7 +108,20 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   preCheck = ''
-    export XDG_DATA_DIRS=${glib.passthru.getSchemaDataDirPath libayatana-common}
+    export XDG_DATA_DIRS=${lib.strings.concatStringsSep ":" [
+      # org.ayatana.common schema
+      (glib.passthru.getSchemaDataDirPath libayatana-common)
+
+      # loading EDS engines to handle ICS-loading
+      edsDataDir
+    ]}
+  '';
+
+  # schema is already added automatically by wrapper, EDS needs to be added explicitly
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${edsDataDir}"
+    )
   '';
 
   passthru = {
@@ -142,8 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) ayatana-indicators;
     };
-    # Latest release wasn't tagged, Don't try to bump down
-    #updateScript = gitUpdater { };
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {
@@ -153,9 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       event management tool.
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime";
-    # Latest release wasn't tagged
-    # changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.version}/ChangeLog";
-    changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.finalPackage.src.rev}/ChangeLog";
+    changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-datetime/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;

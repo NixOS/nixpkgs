@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, easyprocess
-, entrypoint2
-, patool
-, cabextract
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  easyprocess,
+  entrypoint2,
+  patool,
+  cabextract,
 }:
 
 buildPythonPackage rec {
@@ -23,14 +24,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyunpack/__init__.py \
-      --replace \
+      --replace-fail \
        '_exepath("patool")' \
        '"${lib.getBin patool}/bin/.patool-wrapped"'
   '';
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     easyprocess
     entrypoint2
   ];

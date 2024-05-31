@@ -10,7 +10,7 @@ with lib;
     xdg.icons.enable = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
         [XDG Icon Theme specification](https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html).
       '';

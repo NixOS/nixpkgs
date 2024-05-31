@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       in its input stream
     '';
     homepage = "https://github.com/tomclegg/mp3cat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.omnipotententity ];
     platforms = platforms.all;
     mainProgram = "mp3cat";

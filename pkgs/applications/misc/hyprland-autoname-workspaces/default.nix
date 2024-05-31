@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-autoname-workspaces";
-  version = "1.1.13";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprland-autoname-workspaces";
     rev = version;
-    hash = "sha256-JEzsbJcDX/qx1CMy+3UwcHOwFLPqyAG58MpGMtdSyYY=";
+    hash = "sha256-RTx4fmamjydrQzC1CpgbuvV6kg0S6Jyj/0Q9FrfrMlU=";
   };
 
-  cargoHash = "sha256-Rpivw4VCVHjZywDwr4pajfGv/mkOdVrXVT/9Oe2Hw44=";
+  cargoHash = "sha256-Te3nBgr3uq8km8lX3AkCAS28leolZLXEF68phIEpg5k=";
 
   meta = with lib; {
     description = "Automatically rename workspaces with icons of started applications";

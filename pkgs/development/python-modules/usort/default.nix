@@ -1,18 +1,19 @@
-{ lib
-, attrs
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, libcst
-, moreorless
-, pythonOlder
-, stdlibs
-, toml
-, trailrunner
-, unittestCheckHook
-, volatile
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  libcst,
+  moreorless,
+  pythonOlder,
+  stdlibs,
+  toml,
+  trailrunner,
+  unittestCheckHook,
+  volatile,
 }:
 
 buildPythonPackage rec {
@@ -49,12 +50,11 @@ buildPythonPackage rec {
     volatile
   ];
 
-  pythonImportsCheck = [
-    "usort"
-  ];
+  pythonImportsCheck = [ "usort" ];
 
   meta = with lib; {
     description = "Safe, minimal import sorting for Python projects";
+    mainProgram = "usort";
     homepage = "https://github.com/facebook/usort";
     changelog = "https://github.com/facebook/usort/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     cd src
   '';
-  makeFlags = [ "CC=cc" ];
+
+  makeFlags = [ "CC:=$(CC)" ];
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     prefab = runCommand "ploticus-prefab-test" {
-      buildInputs = [ finalAttrs.finalPackage ];
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
     } ''
       # trivial test to see if the prefab path munging works
       mkdir $out/

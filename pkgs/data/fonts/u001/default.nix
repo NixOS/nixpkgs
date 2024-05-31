@@ -5,8 +5,11 @@ stdenvNoCC.mkDerivation rec {
   version = "unstable-2016-08-01"; # date in the zip file, actual creation date unknown
 
   src = fetchzip {
-    url = "https://fontlibrary.org/assets/downloads/u001/3ea00b3c0c8fa6ce4373e5766fafd651/u001.zip";
-    sha256 = "sha256-7H32pfr0g68XP5B48VUY99e6fbd7rhH6fEnCKNXWEkU=";
+    urls = [
+      "https://fontlibrary.org/assets/downloads/u001/3ea00b3c0c8fa6ce4373e5766fafd651/u001.zip"
+      "https://web.archive.org/web/20220830085803/https://fontlibrary.org/assets/downloads/u001/3ea00b3c0c8fa6ce4373e5766fafd651/u001.zip"
+    ];
+    hash = "sha256-7H32pfr0g68XP5B48VUY99e6fbd7rhH6fEnCKNXWEkU=";
     stripRoot = false;
   };
 

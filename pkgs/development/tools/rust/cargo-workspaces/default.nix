@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
-, libgit2_1_6
 , libssh2
 , openssl
 , zlib
@@ -26,7 +25,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    libgit2_1_6
     libssh2
     openssl
     zlib

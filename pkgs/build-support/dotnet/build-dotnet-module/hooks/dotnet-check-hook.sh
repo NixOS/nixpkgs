@@ -22,7 +22,7 @@ dotnetCheckHook() {
             runtimeIdFlags=("--runtime @runtimeId@")
         fi
 
-        env "LD_LIBRARY_PATH=@libraryPath@" \
+        LD_LIBRARY_PATH="@libraryPath@" \
             dotnet test "$project" \
               -maxcpucount:$maxCpuFlag \
               -p:ContinuousIntegrationBuild=true \

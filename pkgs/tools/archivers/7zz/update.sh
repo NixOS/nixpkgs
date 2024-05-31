@@ -1,14 +1,12 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils gnused curl jq nix-prefetch
+#! nix-shell -i bash -p curl xq-xml nix-prefetch
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 DRV_DIR="$PWD"
 
 OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
-# The best_release.json is not always up-to-date
-# In those cases you can force the version by calling `./update.sh <newer_version>`
-NEW_VERSION="${1:-$(curl -H "Accept: application/json" 'https://sourceforge.net/projects/sevenzip/best_release.json' | jq '.platform_releases.linux.filename' -r | cut -d/ -f3)}"
+NEW_VERSION="$(curl -H 'Accept: application/rss+xml' 'https://sourceforge.net/projects/sevenzip/rss?path=/7-Zip' | xq -x "substring((/rss/channel/item[link[contains(., 'src.tar.xz')]])[1]/title, 8, 5)")"
 
 echo "comparing versions $OLD_VERSION => $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
@@ -26,10 +24,11 @@ OLD_UNFREE_HASH="$(nix-instantiate --eval --strict -E "with import $NIXPKGS_ROOT
 NEW_VERSION_FORMATTED="$(echo "$NEW_VERSION" | tr -d '.')"
 URL="https://7-zip.org/a/7z${NEW_VERSION_FORMATTED}-src.tar.xz"
 
+# `nix-prefetch` is broken without flakes
+# see https://github.com/msteen/nix-prefetch/issues/51
+NEW_FREE_HASH=$(nix-prefetch -f "$NIXPKGS_ROOT" -E "_7zz.src" --url "$URL" --option extra-experimental-features flakes)
 
-NEW_FREE_HASH=$(nix-prefetch -f "$NIXPKGS_ROOT" -E "_7zz.src" --url "$URL")
-
-NEW_UNFREE_OUT=$(nix-prefetch -f "$NIXPKGS_ROOT" -E "(_7zz.override { enableUnfree = true; }).src" --url "$URL" --output raw --print-path)
+NEW_UNFREE_OUT=$(nix-prefetch -f "$NIXPKGS_ROOT" -E "(_7zz.override { enableUnfree = true; }).src" --url "$URL" --output raw --print-path --option extra-experimental-features flakes)
 # first line of raw output is the hash
 NEW_UNFREE_HASH="$(echo "$NEW_UNFREE_OUT" | sed -n 1p)"
 # second line of raw output is the src path

@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, cython
-, setuptools
-, wheel
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  cython_0,
+  setuptools,
+  wheel,
+  numpy,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "daqp";
   version = "0.5.1";
   format = "pyproject";
@@ -20,7 +20,7 @@ buildPythonPackage {
     hash = "sha256-in7Ci/wM7i0csJ4XVfo1lboWOyfuuU+8E+TzGmMV3x0=";
   };
 
-  sourceRoot = "source/interfaces/daqp-python";
+  sourceRoot = "${src.name}/interfaces/daqp-python";
 
   postPatch = ''
     sed -i 's|../../../daqp|../..|' setup.py
@@ -29,17 +29,21 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" "-p" "'*.py'" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-p"
+    "'*.py'"
+    "-v"
+  ];
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "daqp" ];
 

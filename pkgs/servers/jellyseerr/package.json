@@ -1,6 +1,6 @@
 {
   "name": "jellyseerr",
-  "version": "1.7.0",
+  "version": "1.8.1",
   "private": true,
   "scripts": {
     "dev": "nodemon -e ts --watch server --watch overseerr-api.yml -e .json,.ts,.yml -x ts-node -r tsconfig-paths/register --files --project server/tsconfig.json server/index.ts",

@@ -23,7 +23,7 @@ let
     };
 
     nativeBuildInputs = with python3.pkgs; [
-      cython
+      cython_0
       pkg-config
       SDL2
     ];
@@ -128,6 +128,7 @@ python3.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "SteamOS Devkit Client";
+    mainProgram = "steamos-devkit";
     homepage = "https://gitlab.steamos.cloud/devkit/steamos-devkit";
     license = licenses.mit;
     maintainers = with maintainers; [ myaats ];

@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A single TUI-based registry for drm-free, wine and steam games on linux, accessed through a rofi launch menu";
+    mainProgram = "eidolon";
     homepage = "https://github.com/nicohman/eidolon";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ _0x4A6F ];

@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,17 @@ buildPythonPackage rec {
       --replace " --cov=charset_normalizer --cov-report=term-missing" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "charset_normalizer"
-  ];
+  pythonImportsCheck = [ "charset_normalizer" ];
 
-  passthru.tests = { inherit aiohttp requests; };
+  passthru.tests = {
+    inherit aiohttp requests;
+  };
 
   meta = with lib; {
     description = "Python module for encoding and language detection";
+    mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
     changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

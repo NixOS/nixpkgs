@@ -80,7 +80,7 @@ index c20a1a05e..5354bac7f 100644
 @@ -56,12 +56,12 @@ configure_file(
    output: 'vendor.conf',
    configuration: con2,
-   install: true,
+   install: get_option('vendor_metadata'),
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )

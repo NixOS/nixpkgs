@@ -63,5 +63,6 @@ buildGoModule rec {
     homepage = "https://mgmtconfig.com";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];
+    mainProgram = "mgmt";
   };
 }

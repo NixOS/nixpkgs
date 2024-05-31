@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "ansiconv";
@@ -20,5 +25,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
-
 }

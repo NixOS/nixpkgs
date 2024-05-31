@@ -1,51 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pythonRelaxDepsHook,
   # Mitmproxy requirements
-, aioquic
-, asgiref
-, blinker
-, brotli
-, certifi
-, cryptography
-, flask
-, h11
-, h2
-, hyperframe
-, kaitaistruct
-, ldap3
-, mitmproxy-macos
-, mitmproxy-rs
-, msgpack
-, passlib
-, protobuf
-, publicsuffix2
-, pyopenssl
-, pyparsing
-, pyperclip
-, ruamel-yaml
-, setuptools
-, sortedcontainers
-, tornado
-, urwid-mitmproxy
-, wsproto
-, zstandard
+  aioquic,
+  asgiref,
+  blinker,
+  brotli,
+  certifi,
+  cryptography,
+  flask,
+  h11,
+  h2,
+  hyperframe,
+  kaitaistruct,
+  ldap3,
+  mitmproxy-macos,
+  mitmproxy-rs,
+  msgpack,
+  passlib,
+  protobuf,
+  publicsuffix2,
+  pyopenssl,
+  pyparsing,
+  pyperclip,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  tornado,
+  urwid-mitmproxy,
+  wsproto,
+  zstandard,
   # Additional check requirements
-, hypothesis
-, parver
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, requests
+  hypothesis,
+  parver,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.2.2";
+  version = "10.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,15 +55,14 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/${version}";
-    hash = "sha256-oxhpaFW++on3eRXm0anXZDRo6g/X5IflTcZkFF8Kcps=";
+    hash = "sha256-YjvGsnpQQ8GWLyKmnd3lOxesnr+F2xCNXyahZh0JQnc=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "aioquic"
+    "cryptography"
   ];
 
   propagatedBuildInputs = [
@@ -93,9 +93,7 @@ buildPythonPackage rec {
     urwid-mitmproxy
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [
-    mitmproxy-macos
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis
@@ -121,7 +119,9 @@ buildPythonPackage rec {
     "test_commands_exist"
     "test_contentview_flowview"
     "test_flowview"
+    "test_get_hex_editor"
     "test_integration"
+    "test_spawn_editor"
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox

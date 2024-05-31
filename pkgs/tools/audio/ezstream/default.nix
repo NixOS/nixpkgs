@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       very little CPU resources.
     '';
     homepage = "https://icecast.org/ezstream/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.barrucadu ];
     platforms = platforms.all;
   };

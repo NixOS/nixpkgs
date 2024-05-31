@@ -25,13 +25,16 @@
 , jq
 
 , studioVariant ? false
+
+, common-updater-scripts
+, writeShellApplication
 }:
 
 let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "18.6.4";
+      version = "18.6.6";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
@@ -52,8 +55,8 @@ let
           outputHashAlgo = "sha256";
           outputHash =
             if studioVariant
-            then "sha256-Us8DsxdGwBxUL+yUHT9DNJFIV7EO+J9CSN2Juyf8VQ4="
-            else "sha256-yPdfmS42ID7MOTB3XlGXfOqp46kRLR8martJ9gWqDjA=";
+            then "sha256-9iTdIjHH8uoXlVr6miyqmHuzbbpbqdJPEbPGycsccoI="
+            else "sha256-WrIQ1FHm65MOGb5HfFl2WzXYJRlqktuZdrtzcjWp1gI=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -181,7 +184,6 @@ let
 in
 buildFHSEnv {
   inherit (davinci) pname version;
-  name = null;
 
   targetPkgs = pkgs: with pkgs; [
     alsa-lib
@@ -252,13 +254,34 @@ buildFHSEnv {
     ''
   }";
 
-  passthru = { inherit davinci; };
+  passthru = {
+    inherit davinci;
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-davinci-resolve";
+      runtimeInputs = [ curl jq common-updater-scripts ];
+      text = ''
+        set -o errexit
+        drv=pkgs/applications/video/davinci-resolve/default.nix
+        currentVersion=${lib.escapeShellArg davinci.version}
+        downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
+
+        latestLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve \K\d+\.\d+\.\d+' | sort | tail -n 1)"
+        update-source-version davinci-resolve "$latestLinuxVersion" --source-key=davinci.src
+
+        # Since the standard and studio both use the same version we need to reset it before updating studio
+        sed -i -e "s/""$latestLinuxVersion""/""$currentVersion""/" "$drv"
+
+        latestStudioLinuxVersion="$(echo "$downloadsJSON" | jq '[.downloads[] | select(.urls.Linux) | .urls.Linux[] | select(.downloadTitle | test("DaVinci Resolve")) | .downloadTitle]' | grep -oP 'DaVinci Resolve Studio \K\d+\.\d+\.\d+' | sort | tail -n 1)"
+        update-source-version davinci-resolve-studio "$latestStudioLinuxVersion" --source-key=davinci.src
+      '';
+    });
+  };
 
   meta = with lib; {
     description = "Professional video editing, color, effects and audio post-processing";
     homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll orivej ];
+    maintainers = with maintainers; [ amarshall jshcmpbll orivej ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "davinci-resolve";

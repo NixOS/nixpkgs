@@ -7,7 +7,7 @@ in
 {
   options = {
     documentation.man.man-db = {
-      enable = lib.mkEnableOption (lib.mdDoc "man-db as the default man page viewer") // {
+      enable = lib.mkEnableOption "man-db as the default man page viewer" // {
         default = config.documentation.man.enable;
         defaultText = lib.literalExpression "config.documentation.man.enable";
         example = false;
@@ -17,7 +17,7 @@ in
         type = lib.types.listOf lib.types.package;
         default = [];
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Packages to *not* include in the man-db.
           This can be useful to avoid unnecessary rebuilds due to packages that change frequently, like nixos-version.
         '';
@@ -34,7 +34,7 @@ in
           ignoreCollisions = true;
         };
         defaultText = lib.literalMD "all man pages in {option}`config.environment.systemPackages`";
-        description = lib.mdDoc ''
+        description = ''
           The manual pages to generate caches for if {option}`documentation.man.generateCaches`
           is enabled. Must be a path to a directory with man pages under
           `/share/man`; see the source for an example.
@@ -46,7 +46,7 @@ in
         type = lib.types.package;
         default = pkgs.man-db;
         defaultText = lib.literalExpression "pkgs.man-db";
-        description = lib.mdDoc ''
+        description = ''
           The `man-db` derivation to use. Useful to override
           configuration options used for the package.
         '';

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools-scm
-, click
-, help2man
-, markdown-it-py
-, shtab
-, tomli
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools-scm,
+  click,
+  help2man,
+  markdown-it-py,
+  shtab,
+  tomli,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,22 +26,16 @@ buildPythonPackage rec {
     hash = "sha256-xDjxkWy/n0jStI9eLcM6WduyU9vGjtBOmJ86dpXjceQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     click
     help2man
     markdown-it-py
     shtab
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "setuptools_generate" ];
 

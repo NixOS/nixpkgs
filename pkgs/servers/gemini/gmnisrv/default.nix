@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple Gemini protocol server";
+    mainProgram = "gmnisrv";
     homepage = "https://git.sr.ht/~sircmpwn/gmnisrv";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bsima jb55 ];

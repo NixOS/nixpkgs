@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , meson
 , ninja
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     meson
     ninja

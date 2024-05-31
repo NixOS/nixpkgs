@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     platforms = with platforms; linux;
     description = "A simple wayland native screenshot tool";
+    mainProgram = "watershot";
     homepage = "https://github.com/Kirottu/watershot";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lord-valen ];

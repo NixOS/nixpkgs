@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Gerber (RS-274X) viewer";
+    mainProgram = "gerbv";
     homepage = "https://gerbv.github.io/";
     changelog = "https://github.com/gerbv/gerbv/releases/tag/v${version}";
     license = licenses.gpl2Plus;

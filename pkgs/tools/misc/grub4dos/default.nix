@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     # Needs a port to modern binutils:
     #   https://github.com/chenall/grub4dos/issues/160
     broken = true;

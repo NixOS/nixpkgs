@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://celestia.space/";
     description = "Real-time 3D simulation of space";
+    mainProgram = "celestia";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hjones2199 ];

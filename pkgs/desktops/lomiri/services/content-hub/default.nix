@@ -24,19 +24,20 @@
 , qtdeclarative
 , qtfeedback
 , qtgraphicaleffects
-, wrapGAppsHook
+, validatePkgConfig
+, wrapGAppsHook3
 , xvfb-run
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "content-hub";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/content-hub";
     rev = finalAttrs.version;
-    hash = "sha256-IntEpgPCBmOL6K6TU+UhgGb6OHVA9pYurK5VN3woIIw=";
+    hash = "sha256-sQeyJV+Wc6PHKGIefl/dfU06XqTdICsn+Xamjx3puiI=";
   };
 
   outputs = [
@@ -83,15 +84,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace import/*/Content/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # Look for peer files in running system
     substituteInPlace src/com/lomiri/content/service/registry-updater.cpp \
-      --replace '/usr' '/run/current-system/sw'
+      --replace-fail '/usr' '/run/current-system/sw'
 
     # Don't override default theme search path (which honours XDG_DATA_DIRS) with a FHS assumption
     substituteInPlace import/Lomiri/Content/contenthubplugin.cpp \
-      --replace 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
+      --replace-fail 'QIcon::setThemeSearchPaths(QStringList() << ("/usr/share/icons/"));' ""
   '';
 
   strictDeps = true;
@@ -101,7 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     pkg-config
     qtdeclarative # qmlplugindump
-    wrapGAppsHook
+    validatePkgConfig
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -159,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput share/applications/$exampleExe.desktop $examples
     done
     moveToOutput share/icons $examples
+    moveToOutput share/content-hub/peers $examples
   '';
 
   postFixup = ''
@@ -179,6 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
       even if they are not running at the same time.
     '';
     homepage = "https://gitlab.com/ubports/development/core/content-hub";
+    changelog = "https://gitlab.com/ubports/development/core/content-hub/-/blob/${finalAttrs.version}/ChangeLog";
     license = with licenses; [ gpl3Only lgpl3Only ];
     mainProgram = "content-hub-service";
     maintainers = teams.lomiri.members;

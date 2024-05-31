@@ -9,4 +9,6 @@ xdtAutogenPhase() {
     NOCONFIGURE=1 xdt-autogen
 }
 
-preConfigurePhases+=(xdtAutogenPhase)
+if [ -z "${dontUseXdtAutogenPhase-}" ]; then
+    preConfigurePhases+=(xdtAutogenPhase)
+fi

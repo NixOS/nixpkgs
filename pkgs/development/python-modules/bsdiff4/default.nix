@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-HXEpqBIYYHMejM4pAdMYPhSuxwJE9k6PdFYyddw4gGc=";
   };
 
-  pythonImportsCheck = [
-    "bsdiff4"
-  ];
+  pythonImportsCheck = [ "bsdiff4" ];
 
   checkPhase = ''
     mv bsdiff4 _bsdiff4

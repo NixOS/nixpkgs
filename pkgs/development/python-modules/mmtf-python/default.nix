@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msgpack
-, numpy
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msgpack,
+  numpy,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,14 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [
     "-s mmtf/tests"
     "-p \"*_tests.py\""
   ];
 
-  pythonImportsCheck = [
-    "mmtf"
-  ];
+  pythonImportsCheck = [ "mmtf" ];
 
   meta = {
     description = "The python implementation of the MMTF API, decoder and encoder";

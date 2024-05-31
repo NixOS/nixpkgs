@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , ncurses
 , pcre2
+, withSecure ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,6 +18,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KRG1QyyDb6CEyKLmj2zWMSNywCalj6qpiGJzHItgUug=";
   };
 
+  patches = [
+    (fetchpatch {
+      # https://www.openwall.com/lists/oss-security/2024/04/12/5
+      name = "sec-issue-newline-path.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/less/-/raw/1d570db0c84fe95799f460526492e45e24c30ad0/backport-007521ac3c95bc76.patch";
+      hash = "sha256-BT8DLIu7oVhL5XL50uFVUp97qjklcvRHy85UQwVKAmc=";
+    })
+  ];
+
   buildInputs = [
     ncurses
     pcre2
@@ -27,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Look for 'sysless' in /etc.
     "--sysconfdir=/etc"
     "--with-regex=pcre2"
-  ];
+  ] ++ lib.optional withSecure "--with-secure";
 
   meta = {
     homepage = "https://www.greenwoodsoftware.com/less/";

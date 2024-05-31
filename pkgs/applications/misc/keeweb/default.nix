@@ -4,7 +4,7 @@
 , undmg
 , dpkg
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , alsa-lib
 , at-spi2-atk
@@ -65,6 +65,7 @@ let
 
   meta = with lib; {
     description = "Free cross-platform password manager compatible with KeePass";
+    mainProgram = "keeweb";
     homepage = "https://keeweb.info/";
     changelog = "https://github.com/keeweb/keeweb/blob/v${version}/release-notes.md";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
@@ -91,7 +92,7 @@ else stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     makeWrapper
   ];
 

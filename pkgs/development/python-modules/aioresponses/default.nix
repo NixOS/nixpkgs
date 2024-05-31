@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, pbr
-, setuptools
+  # build-system
+  pbr,
+  setuptools,
 
-# dependencies
-, aiohttp
+  # dependencies
+  aiohttp,
 
-# tests
-, ddt
-, pytestCheckHook
+  # tests
+  ddt,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "aioresponses"
-  ];
+  pythonImportsCheck = [ "aioresponses" ];
 
   nativeCheckInputs = [
     ddt

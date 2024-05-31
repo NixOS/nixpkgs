@@ -116,7 +116,7 @@ symlinkJoin rec {
   meta = with lib; {
     description = "MacOS Compiler Tools";
     homepage = "http://www.opensource.apple.com/source/cctools/";
-    license = licenses.apsl20;
+    license = licenses.apple-psl20;
     platforms = platforms.darwin;
   };
 }

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://htmlcxx.sourceforge.net/";
     description = "A simple non-validating css1 and html parser for C++";
+    mainProgram = "htmlcxx";
     license = licenses.lgpl2;
     platforms = platforms.all;
   };

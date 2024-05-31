@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://bashdb.sourceforge.net/remake/";
     license = lib.licenses.gpl3Plus;
     description = "GNU Make with comprehensible tracing and a debugger";
+    mainProgram = "remake";
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ bjornfor shamilton ];
   };

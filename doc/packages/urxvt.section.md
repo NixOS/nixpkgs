@@ -65,7 +65,9 @@ A plugin can be any kind of derivation, the only requirement is that it should a
 If the plugin is itself a Perl package that needs to be imported from other plugins or scripts, add the following passthrough:
 
 ```nix
-passthru.perlPackages = [ "self" ];
+{
+  passthru.perlPackages = [ "self" ];
+}
 ```
 
 This will make the urxvt wrapper pick up the dependency and set up the Perl path accordingly.

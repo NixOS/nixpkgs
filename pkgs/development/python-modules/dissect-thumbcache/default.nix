@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
-  version = "1.6";
+  version = "1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,26 +21,22 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.thumbcache";
     rev = "refs/tags/${version}";
-    hash = "sha256-q35VL3BUZrxNBB5mHegqVObG76BYG4FAk/KIAvdm6B8=";
+    hash = "sha256-LcuuRVSnZVFtht03MD8qVNNPljVUzGa8vXu9GQPOgjs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.thumbcache"
-  ];
+  pythonImportsCheck = [ "dissect.thumbcache" ];
 
   disabledTests = [
     # Don't run Windows related tests

@@ -1,9 +1,13 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.pihole;
+  inherit (lib)
+    mkOption
+    types
+    mkRemovedOptionModule
+    optionalString
+    ;
 in
 {
   imports = [
@@ -17,7 +21,7 @@ in
       type = types.str;
       default = "";
       example = "580a770cb40511eb85290242ac130003580a770cb40511eb85290242ac130003";
-      description = lib.mdDoc ''
+      description = ''
         Pi-Hole API token which can be used instead of a password
       '';
     };
@@ -25,7 +29,7 @@ in
       type = types.str;
       default = "";
       example = "password";
-      description = lib.mdDoc ''
+      description = ''
         The password to login into Pi-Hole. An api token can be used instead.
       '';
     };
@@ -33,7 +37,7 @@ in
       type = types.str;
       default = "pihole";
       example = "127.0.0.1";
-      description = lib.mdDoc ''
+      description = ''
         Hostname or address where to find the Pi-Hole webinterface
       '';
     };
@@ -41,7 +45,7 @@ in
       type = types.port;
       default = 80;
       example = 443;
-      description = lib.mdDoc ''
+      description = ''
         The port Pi-Hole webinterface is reachable on
       '';
     };
@@ -49,14 +53,14 @@ in
       type = types.enum [ "http" "https" ];
       default = "http";
       example = "https";
-      description = lib.mdDoc ''
+      description = ''
         The protocol which is used to connect to Pi-Hole
       '';
     };
     timeout = mkOption {
       type = types.str;
       default = "5s";
-      description = lib.mdDoc ''
+      description = ''
         Controls the timeout to connect to a Pi-Hole instance
       '';
     };

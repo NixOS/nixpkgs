@@ -1,30 +1,31 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, datashader
-, fetchFromGitHub
-, holoviews
-, matplotlib
-, numba
-, numpy
-, pandas
-, pynndescent
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, scikit-learn
-, scipy
-, seaborn
-, tbb
-, tensorflow
-, tensorflow-probability
-, tqdm
+{
+  lib,
+  bokeh,
+  buildPythonPackage,
+  colorcet,
+  datashader,
+  fetchFromGitHub,
+  holoviews,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pynndescent,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  seaborn,
+  tbb,
+  tensorflow,
+  tensorflow-probability,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "lmcinnes";
     repo = "umap";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-bXAQjq7xBYn34tIZF96Sr5jDUii3s4FGkNx65rGKXkY=";
+    hash = "sha256-fqYl8T53BgCqsquY6RJHqpDFsdZA0Ihja69E/kG3YGU=";
   };
 
   propagatedBuildInputs = [
@@ -62,16 +63,12 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [
-      tbb
-    ];
+    tbb = [ tbb ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR

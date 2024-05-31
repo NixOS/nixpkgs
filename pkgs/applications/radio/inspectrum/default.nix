@@ -36,6 +36,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for analysing captured signals from sdr receivers";
+    mainProgram = "inspectrum";
     homepage = "https://github.com/miek/inspectrum";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;

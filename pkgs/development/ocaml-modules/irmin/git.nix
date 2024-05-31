@@ -9,8 +9,7 @@ buildDunePackage {
 
   pname = "irmin-git";
 
-  inherit (irmin) version src strictDeps;
-  duneVersion = "3";
+  inherit (irmin) version src;
 
   propagatedBuildInputs = [
     git

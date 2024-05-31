@@ -5,7 +5,7 @@
 , pkg-config
 , gtk3
 , gtk-layer-shell
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 buildGoModule rec {
   pname = "nwg-bar";
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-/kqhZcIuoN/XA0i1ua3lzVGn4ghkekFYScL1o3kgBX4=";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
   buildInputs = [ gtk3 gtk-layer-shell librsvg ];
 
@@ -38,6 +38,7 @@ buildGoModule rec {
   meta = with lib; {
     description =
       "GTK3-based button bar for sway and other wlroots-based compositors";
+    mainProgram = "nwg-bar";
     homepage = "https://github.com/nwg-piotr/nwg-bar";
     license = licenses.mit;
     platforms = platforms.linux;

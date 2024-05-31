@@ -1,9 +1,10 @@
-{ setuptools
-, mkdocs
-, mkdocs-macros
-, mkdocs-material
-, runCommand
-, callPackage
+{
+  setuptools,
+  mkdocs,
+  mkdocs-macros,
+  mkdocs-material,
+  runCommand,
+  callPackage,
 }:
 
 let

@@ -1,11 +1,12 @@
-{ lib
-, autoit-ripper
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, malduck
-, pythonOlder
-, regex
+{
+  lib,
+  autoit-ripper,
+  buildPythonPackage,
+  fetchFromGitHub,
+  karton-core,
+  malduck,
+  pythonOlder,
+  regex,
 }:
 
 buildPythonPackage rec {
@@ -39,12 +40,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "karton.autoit_ripper"
-  ];
+  pythonImportsCheck = [ "karton.autoit_ripper" ];
 
   meta = with lib; {
     description = "AutoIt script ripper for Karton framework";
+    mainProgram = "karton-autoit-ripper";
     homepage = "https://github.com/CERT-Polska/karton-autoit-ripper";
     changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];

@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.redis = nixosTests.redis;
+  passthru.serverBin = "redis-server";
 
   meta = with lib; {
     homepage = "https://redis.io";
@@ -92,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     platforms = platforms.all;
     changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";
-    maintainers = with maintainers; [ berdario globin marsam ];
+    maintainers = with maintainers; [ berdario globin ];
     mainProgram = "redis-cli";
   };
 })

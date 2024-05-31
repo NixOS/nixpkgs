@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , xorg
 }:
@@ -29,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ danc86 ];
+    mainProgram = "rlaunch";
   };
 }

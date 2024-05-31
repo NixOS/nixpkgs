@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "klipper-estimator";
-  version = "3.6.0";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "Annex-Engineering";
     repo = "klipper_estimator";
     rev = "v${version}";
-    hash = "sha256-1Od4sIHrg52DezV5DCg2NVv/2nbXQW3fK6f9aqVmlTk=";
+    hash = "sha256-EjfW2qeq0ehGhjE2Psz5g/suYMZPvtQi2gaYb+NCa2U=";
   };
 
-  cargoHash = "sha256-5O2KUTegK5ArTalJ57/Kn9lzlkmAIXnzluljvfrIc5U=";
+  cargoHash = "sha256-bboXG2nBrK2hVzB43um6EUgLPlSa8huyPH7VOJ48Nkk=";
 
   buildInputs =
     [ openssl ]

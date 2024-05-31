@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/woodruffw/ff2mpv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Enzime ];
+    mainProgram = "ff2mpv.py";
   };
 }

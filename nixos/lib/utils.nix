@@ -1,9 +1,45 @@
-{ lib, config, pkgs }: with lib;
+{ lib, config, pkgs }:
 
-rec {
+let
+  inherit (lib)
+    any
+    attrNames
+    concatMapStringsSep
+    concatStringsSep
+    elem
+    escapeShellArg
+    filter
+    flatten
+    getName
+    hasPrefix
+    hasSuffix
+    imap0
+    imap1
+    isAttrs
+    isDerivation
+    isFloat
+    isInt
+    isList
+    isPath
+    isString
+    listToAttrs
+    nameValuePair
+    optionalString
+    removePrefix
+    removeSuffix
+    replaceStrings
+    stringToCharacters
+    types
+    ;
+
+  inherit (lib.strings) toJSON normalizePath escapeC;
+in
+
+let
+utils = rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (baseNameOf filePath)) {} ''
     cp ${filePath} $out
   '';
 
@@ -46,11 +82,11 @@ rec {
   escapeSystemdPath = s: let
     replacePrefix = p: r: s: (if (hasPrefix p s) then r + (removePrefix p s) else s);
     trim = s: removeSuffix "/" (removePrefix "/" s);
-    normalizedPath = strings.normalizePath s;
+    normalizedPath = normalizePath s;
   in
     replaceStrings ["/"] ["-"]
-    (replacePrefix "." (strings.escapeC ["."] ".")
-    (strings.escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-")
+    (replacePrefix "." (escapeC ["."] ".")
+    (escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-")
     (if normalizedPath == "/" then normalizedPath else trim normalizedPath)));
 
   # Quotes an argument for use in Exec* service lines.
@@ -62,12 +98,12 @@ rec {
   # substitution for the directive.
   escapeSystemdExecArg = arg:
     let
-      s = if builtins.isPath arg then "${arg}"
-        else if builtins.isString arg then arg
-        else if builtins.isInt arg || builtins.isFloat arg then toString arg
-        else throw "escapeSystemdExecArg only allows strings, paths and numbers";
+      s = if isPath arg then "${arg}"
+        else if isString arg then arg
+        else if isInt arg || isFloat arg || isDerivation arg then toString arg
+        else throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations";
     in
-      replaceStrings [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
+      replaceStrings [ "%" "$" ] [ "%%" "$$" ] (toJSON s);
 
   # Quotes a list of arguments into a single string for use in a Exec*
   # line.
@@ -197,7 +233,7 @@ rec {
                (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' "
-    + lib.escapeShellArg (stringOrDefault
+    + escapeShellArg (stringOrDefault
           (concatStringsSep
             " | "
             (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
@@ -205,7 +241,7 @@ rec {
           ".")
     + ''
        <<'EOF'
-      ${builtins.toJSON set}
+      ${toJSON set}
       EOF
       (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
     '';
@@ -222,16 +258,17 @@ rec {
   */
   removePackagesByName = packages: packagesToRemove:
     let
-      namesToRemove = map lib.getName packagesToRemove;
+      namesToRemove = map getName packagesToRemove;
     in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
+      filter (x: !(elem (getName x) namesToRemove)) packages;
 
   systemdUtils = {
-    lib = import ./systemd-lib.nix { inherit lib config pkgs; };
+    lib = import ./systemd-lib.nix { inherit lib config pkgs utils; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
     network = {
       units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
     };
   };
-}
+};
+in utils

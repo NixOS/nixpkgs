@@ -14,6 +14,7 @@ cuda.section.md
 cuelang.section.md
 dart.section.md
 dhall.section.md
+dlang.section.md
 dotnet.section.md
 emscripten.section.md
 gnome.section.md

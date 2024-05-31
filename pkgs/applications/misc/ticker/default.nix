@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "4.5.14";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WpU0fxkdNqr8zF6eGOlbaV9dp6sZyNZ1J7Uq+yGBnUs=";
+    hash = "sha256-bNqwQwYuaWThpVVlZji0uiNKf8Ynxs00bAD+iSnbtm8=";
   };
 
-  vendorHash = "sha256-c7wU9LLRlS9kOhE4yAiKAs/npQe8lvSwPcd+/D8o9rk=";
+  vendorHash = "sha256-cTJa170oFFPRQSg3njZk26XvzsRRdJqcsFokKUWJr6Q=";
 
   ldflags = [
     "-s"
@@ -31,5 +31,6 @@ buildGoModule rec {
     changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben sarcasticadmin ];
+    mainProgram = "ticker";
   };
 }

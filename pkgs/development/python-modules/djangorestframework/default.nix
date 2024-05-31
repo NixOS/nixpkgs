@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, coreapi
-, django
-, django-guardian
-, pythonOlder
-, pytest-django
-, pytestCheckHook
-, pytz
-, pyyaml
-, uritemplate
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  coreapi,
+  django,
+  django-guardian,
+  pythonOlder,
+  pytest-django,
+  pytest7CheckHook,
+  pytz,
+  pyyaml,
+  uritemplate,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-django
-    pytestCheckHook
+    pytest7CheckHook
 
     # optional tests
     coreapi

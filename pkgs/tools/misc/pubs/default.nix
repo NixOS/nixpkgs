@@ -72,6 +72,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Command-line bibliography manager";
+    mainProgram = "pubs";
     homepage = "https://github.com/pubs/pubs";
     changelog = "https://github.com/pubs/pubs/blob/v${version}/changelog.md";
     license = licenses.lgpl3Only;

@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, lib
-, python
-, fetchPypi
-, msrest
+{
+  buildPythonPackage,
+  lib,
+  python,
+  fetchPypi,
+  msrest,
 }:
 
 buildPythonPackage rec {

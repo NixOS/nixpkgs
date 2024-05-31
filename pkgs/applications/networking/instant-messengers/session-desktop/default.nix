@@ -44,8 +44,6 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mv bin/session-desktop-${version} bin/session-desktop
-
     mkdir -p $out/
     cp -r bin $out/bin
 
@@ -57,6 +55,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     description = "Onion routing based messenger";
+    mainProgram = "session-desktop";
     homepage = "https://getsession.org/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexnortung ];

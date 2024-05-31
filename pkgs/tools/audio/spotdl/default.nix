@@ -1,6 +1,5 @@
 { lib
 , python3
-, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
@@ -9,24 +8,24 @@ let
   python = python3;
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.2.4";
+  version = "4.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U0UA94t7WdCeU9Y86rcnT8BzXVx8ryhD3MTJxmNBYcc=";
+    hash = "sha256-vxMhFs2mLbVQndlC2UpeDP+M4pwU9Y4cZHbZ8y3vWbI=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     spotipy
     ytmusicapi
     pytube
@@ -43,10 +42,8 @@ in python.pkgs.buildPythonApplication rec {
     platformdirs
     pykakasi
     syncedlyrics
-    typing-extensions
     soundcloud-v2
     bandcamp-api
-    setuptools # for pkg_resources
   ] ++ python-slugify.optional-dependencies.unidecode;
 
   nativeCheckInputs = with python.pkgs; [
@@ -91,6 +88,7 @@ in python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Download your Spotify playlists and songs along with album art and metadata";
+    mainProgram = "spotdl";
     homepage = "https://github.com/spotDL/spotify-downloader";
     changelog = "https://github.com/spotDL/spotify-downloader/releases/tag/v${version}";
     license = licenses.mit;

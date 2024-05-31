@@ -1,44 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-auth
-, google-auth-httplib2
-, google-api-core
-, httplib2
-, uritemplate
-, oauth2client
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-auth-httplib2,
+  google-api-core,
+  httplib2,
+  uritemplate,
+  oauth2client,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.109.0";
-  format = "setuptools";
+  version = "2.126.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0GOQwlR3w2HVJjn+AO+RLD+rja/H+/KVgMEUTpJSOnk=";
+    hash = "sha256-l8BBBjDivr0ZTZnpG9Yg2rW8a27AvwM/mpEJtwC4Oss=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-auth
     google-auth-httplib2
     google-api-core
     httplib2
     uritemplate
     oauth2client
-    setuptools
   ];
 
   # No tests included in archive
   doCheck = false;
 
-  pythonImportsCheck = [
-    "googleapiclient"
-  ];
+  pythonImportsCheck = [ "googleapiclient" ];
 
   meta = with lib; {
     description = "The official Python client library for Google's discovery based APIs";

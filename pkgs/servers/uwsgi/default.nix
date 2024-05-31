@@ -71,13 +71,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsgi";
-  version = "2.0.23";
+  version = "2.0.25.1";
 
   src = fetchFromGitHub {
     owner = "unbit";
     repo = "uwsgi";
     rev = finalAttrs.version;
-    hash = "sha256-gyYsgPF6eGa3D7bjmhhVER+uM0yPLfZiwSUzZ2mGcHg=";
+    hash = "sha256-hAjwn5sZynMNBPw2dAtuf0xIbnDSraIWas6OEGdJlfc=";
   };
 
   patches = [
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ abbradar schneefux globin ];
     platforms = lib.platforms.unix;
     mainProgram = "uwsgi";

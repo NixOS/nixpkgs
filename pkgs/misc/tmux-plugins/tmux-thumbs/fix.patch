@@ -1,19 +1,18 @@
-diff --git a/tmux-thumbs.sh b/tmux-thumbs.sh
-index 34dd528..8c05d54 100755
---- a/tmux-thumbs.sh
-+++ b/tmux-thumbs.sh
-@@ -1,22 +1,8 @@
+diff --git i/tmux-thumbs.sh w/tmux-thumbs.sh
+index 7e060e8..e7f0c57 100755
+--- i/tmux-thumbs.sh
++++ w/tmux-thumbs.sh
+@@ -1,22 +1,6 @@
  #!/usr/bin/env bash
  set -Eeu -o pipefail
  
--VERSION=$(grep 'version =' Cargo.toml | grep -oe "[0-9]\+.[0-9]\+.[0-9]\+")
--
- # Setup env variables to be compatible with compiled and bundled installations
- CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+-# Setup env variables to be compatible with compiled and bundled installations
+-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 -RELEASE_DIR="${CURRENT_DIR}/target/release"
 -
 -THUMBS_BINARY="${RELEASE_DIR}/thumbs"
 -TMUX_THUMBS_BINARY="${RELEASE_DIR}/tmux-thumbs"
+-VERSION=$(grep 'version =' "${CURRENT_DIR}/Cargo.toml" | grep -o "\".*\"" | sed 's/"//g')
 -
 -if [ ! -f "$THUMBS_BINARY" ]; then
 -  tmux split-window "cd ${CURRENT_DIR} && bash ./tmux-thumbs-install.sh"
@@ -22,10 +21,11 @@ index 34dd528..8c05d54 100755
 -  tmux split-window "cd ${CURRENT_DIR} && bash ./tmux-thumbs-install.sh update"
 -  exit
 -fi
- 
+-
  function get-opt-value() {
    tmux show -vg "@thumbs-${1}" 2> /dev/null
-@@ -36,7 +22,7 @@ function get-opt-arg() {
+ }
+@@ -35,7 +19,7 @@ function get-opt-arg() {
    fi
  }
  
@@ -34,12 +34,9 @@ index 34dd528..8c05d54 100755
  
  function add-param() {
    local type opt arg
-@@ -51,4 +37,4 @@ add-param upcase-command string
+@@ -50,4 +34,4 @@ add-param upcase-command string
  add-param multi-command  string
  add-param osc52          boolean
  
 -"${TMUX_THUMBS_BINARY}" "${PARAMS[@]}" || true
 +@tmuxThumbsDir@/tmux-thumbs "${PARAMS[@]}" || true
-
-
-

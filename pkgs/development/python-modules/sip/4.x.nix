@@ -1,11 +1,21 @@
-{ lib, fetchurl, fetchpatch, buildPythonPackage, python, isPyPy, pythonAtLeast, sip-module ? "sip" }:
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildPythonPackage,
+  python,
+  isPyPy,
+  pythonAtLeast,
+  sip-module ? "sip",
+}:
 
 buildPythonPackage rec {
   pname = sip-module;
   version = "4.19.25";
   format = "other";
 
-  disabled = isPyPy;
+  # relies on distutils
+  disabled = isPyPy || pythonAtLeast "3.12";
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
@@ -29,15 +39,22 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pythonImportsCheck = [ sip-module "sipconfig" ];
+  pythonImportsCheck = [
+    sip-module
+    "sipconfig"
+  ];
 
   doCheck = true;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
+    mainProgram = "sip";
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      lovek323
+      sander
+    ];
+    platforms = platforms.all;
   };
 }

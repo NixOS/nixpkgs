@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "unstable-2024-02-07";
+  version = "1.0-unstable-2024-05-10";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "300a3d7b3ed399721cef59e9ed9efe8a1d4e0f6f";
-    hash = "sha256-uwHXa4GhXNJHroQG8t3VQggvdCA3G4/1d/XVfsgeI7E=";
+    rev = "bb57b85f5724ccabdb081ff83080c2e3e0e122f7";
+    hash = "sha256-S/lTa6nQ7qIIibYaLfaS4l2dEKgOwXuMryvK9j7FD9Y=";
   };
 
   outputs = [ "out" "projects" ];
@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
+    broken = stdenv.isDarwin;
   };
 })

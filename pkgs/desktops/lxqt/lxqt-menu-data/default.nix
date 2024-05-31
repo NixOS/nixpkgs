@@ -1,27 +1,29 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , lxqt-build-tools
 , qttools
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-menu-data";
-  version = "1.4.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-I9jb2e57ZBvND27F5C1zMaoFtij5TetmN9zbJSjxiS4=";
+    hash = "sha256-CNY23xdFiDQKKJf9GccwDOuBWXwfc7WNI7vMv/zOM9U=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
     qttools
+    wrapQtAppsHook
   ];
 
   passthru.updateScript = gitUpdater { };

@@ -9,15 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-health";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchCrate {
     inherit version;
     pname = "nix_health";
-    hash = "sha256-WdzzEFk9VPld6AFTNRsaQbMymw1+mNn/TViGO/Qv0so=";
+    hash = "sha256-u5ipQnux/ulllfPFyUdeLj7gAf3Vu7KL2Q4uYxtv1q4=";
   };
 
-  cargoHash = "sha256-xmuosy9T/52D90uXMQAIxtaYDOlCekNCtzpu/3GyQXE=";
+  cargoHash = "sha256-oTO9V+zGmMgDXrt6w1fB81b+WmK3MRI/eCTNEuVM0hk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libiconv openssl ]
@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Check the health of your Nix setup";
-    homepage = "https://zero-to-flakes.com/health/";
+    homepage = "https://github.com/juspay/nix-health";
     license = licenses.asl20;
-    maintainers = with maintainers; [ srid ];
+    maintainers = with maintainers; [ srid shivaraj-bh ];
     mainProgram = "nix-health";
   };
 }

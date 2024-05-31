@@ -1,7 +1,6 @@
 { autoreconfHook
 , cmake
 , fetchFromGitLab
-, fetchpatch
 , mediastreamer
 , openh264
 , pkg-config

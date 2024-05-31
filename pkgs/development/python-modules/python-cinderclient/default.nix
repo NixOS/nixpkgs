@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, keystoneauth1
-, oslo-i18n
-, oslo-serialization
-, oslo-utils
-, pbr
-, requests
-, prettytable
-, requests-mock
-, simplejson
-, stestr
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  keystoneauth1,
+  oslo-i18n,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  requests,
+  prettytable,
+  requests-mock,
+  simplejson,
+  stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
-  version = "9.4.0";
+  version = "9.5.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pT5kcKUWYntZ0iUFIioMhXlL4afyd06HeWEFvUfulpU=";
+    hash = "sha256-G51xev+TytQgBF+2xS9jdqty8IX4GTEwiSAg7EbJNVU=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenStack Block Storage API Client Library";
+    mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

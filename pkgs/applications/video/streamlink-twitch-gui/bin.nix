@@ -1,10 +1,11 @@
 { autoPatchelfHook
 , fetchurl
 , lib
+, copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , atk
 , alsa-lib
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     autoPatchelfHook
     cairo
+    copyDesktopItems
     cups.lib
     dbus.lib
     expat
@@ -77,7 +79,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libXtst
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [ streamlink ];
@@ -92,8 +94,12 @@ stdenv.mkDerivation rec {
     # Install all files, remove unnecessary ones
     cp -a . $out/opt/${basename}/
     rm -r $out/opt/${basename}/{{add,remove}-menuitem.sh,credits.html,icons/}
-    ln -s "$out/opt/${basename}/${basename}" $out/bin/
-    cp -r "${desktopItem}/share/applications" $out/share/
+    ln -s $out/opt/${basename}/${basename} $out/bin/
+    for res in 16 32 48 64 128 256; do
+      install -Dm644 \
+        icons/icon-"$res".png \
+        $out/share/icons/hicolor/"$res"x"$res"/apps/${basename}.png
+    done
     runHook postInstall
   '';
 
@@ -105,14 +111,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [(makeDesktopItem {
     name = basename;
     exec = basename;
     icon = basename;
     desktopName = "Streamlink Twitch GUI";
     genericName = meta.description;
     categories = [ "AudioVideo" "Network" ];
-  };
+  })];
 
   meta = with lib; {
     description = "Twitch.tv browser for Streamlink";

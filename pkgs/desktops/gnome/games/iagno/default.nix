@@ -6,7 +6,7 @@
 , gnome
 , gdk-pixbuf
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , gsound
 , libxml2
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     vala
     desktop-file-utils
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
     libxml2
   ];
@@ -68,8 +68,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Iagno";
+    homepage = "https://gitlab.gnome.org/GNOME/iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
+    mainProgram = "iagno";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

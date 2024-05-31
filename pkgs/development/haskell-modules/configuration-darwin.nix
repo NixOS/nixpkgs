@@ -82,6 +82,17 @@ self: super: ({
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = dontCheck super.system-fileio;
 
+  git-annex = overrideCabal (drv: {
+    # We can't use testFlags since git-annex side steps the Cabal test mechanism
+    preCheck = drv.preCheck or "" + ''
+      checkFlagsArray+=(
+        # The addurl test cases require security(1) to be in PATH which we can't
+        # provide from nixpkgs to my (@sternenseemann) knowledge.
+        "-p" "!/addurl/"
+      )
+    '';
+  }) super.git-annex;
+
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
   #
@@ -214,20 +225,6 @@ self: super: ({
     ] ++ (drv.libraryHaskellDepends or []);
   }) super.cas-store;
 
-  # 2021-05-25: Tests fail and I have no way to debug them.
-  hls-class-plugin = dontCheck super.hls-class-plugin;
-  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
-  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
-  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
-  hls-splice-plugin = dontCheck super.hls-splice-plugin;
-  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
-  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
-  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
-  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
-  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
-  # 2022-05-05: Tests fail and I have no way to debug them.
-  hls-rename-plugin = dontCheck super.hls-rename-plugin;
-
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
 
@@ -316,6 +313,25 @@ self: super: ({
     revert = true;
     stripLen = 1;
   }) super.inline-c-cpp;
+
+  # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
+  zip = dontCheck super.zip;
+
+  jsaddle-wkwebview = overrideCabal (drv: {
+    libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
+    libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps
+  }) super.jsaddle-wkwebview;
+  reflex-dom = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ base bytestring jsaddle-wkwebview reflex reflex-dom-core text ]; # cabal2nix doesn't add darwin-only deps
+  }) super.reflex-dom;
+
+  # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
+  di-core = overrideCabal (drv: {
+    preConfigure = ''
+      substituteInPlace test/Main.hs --replace \
+        "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
+    '';
+  }) super.di-core;
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 

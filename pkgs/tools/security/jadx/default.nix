@@ -156,6 +156,6 @@ in stdenv.mkDerivation (finalAttrs: {
     ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ delroth emilytrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 })

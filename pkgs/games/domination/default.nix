@@ -26,7 +26,7 @@ let
 
 in stdenv.mkDerivation {
   pname = "domination";
-  version = "1.2.9";
+  version = "1.3.1";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -34,8 +34,8 @@ in stdenv.mkDerivation {
     # There are no tags in the repository.
     # Look for commits like "new version x.y.z info on website"
     # or "website update for x.y.z".
-    rev = "2470";
-    hash = "sha256-ghq7EGg++mTOzA3ASzXhk97fzy5/n9vyaRzxp12X3/4=";
+    rev = "2538";
+    hash = "sha256-wsLBHkQc1SW+PToyCXIek6qRrRga2nLLkM+5msrnsBo=";
   };
 
   nativeBuildInputs = [

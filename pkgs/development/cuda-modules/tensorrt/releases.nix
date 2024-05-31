@@ -3,9 +3,9 @@
 {
   tensorrt.releases = {
     # jetson
-    linux-aarch64 = [];
+    linux-aarch64 = [ ];
     # powerpc
-    linux-ppc64le = [];
+    linux-ppc64le = [ ];
     # server-grade arm
     linux-sbsa = [
       {

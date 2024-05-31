@@ -5,12 +5,12 @@
 , llvm
 , pkg-config
 , makeWrapper
+, elfutils
 , file
 , hyperscan
 , jansson
 , libbpf
 , libcap_ng
-, libelf
 , libevent
 , libmaxminddb
 , libnet
@@ -33,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "7.0.2";
+  version = "7.0.5";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    hash = "sha256-tOtgSDjvmag5a8i3u1TK0R8kQsvXy7MA5/WqsZCXvE0=";
+    hash = "sha256-H/tWgVjyZcCFVEZL+4VOZWjvaDvwMxKSO1HyjFB5Ck4=";
   };
 
   nativeBuildInputs = [
@@ -49,11 +49,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
 
+  propagatedBuildInputs = with python.pkgs; [
+    pyyaml
+  ];
+
   buildInputs = [
+    elfutils
     jansson
     libbpf
     libcap_ng
-    libelf
     libevent
     libmagic
     libmaxminddb

@@ -4,7 +4,7 @@
 , pciutils
 , python3Packages
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , cairo
 , desktop-file-utils
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec  {
     gobject-introspection
     desktop-file-utils
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.pip
   ];
 

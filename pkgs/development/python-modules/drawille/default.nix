@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
 
   doCheck = false; # pypi package has no tests, git has no tags
 
-  pythonImportsCheck = [
-    "drawille"
-  ];
+  pythonImportsCheck = [ "drawille" ];
 
   meta = with lib; {
     description = "Drawing in terminal with unicode braille characters";

@@ -1,30 +1,11 @@
 { lib
 , python3
-, fetchPypi
 , fetchFromGitHub
 }:
 
-let
-  python = python3.override {
-    # FlexGet doesn't support transmission-rpc>=5 yet
-    # https://github.com/NixOS/nixpkgs/issues/258504
-    # https://github.com/Flexget/Flexget/issues/3847
-    packageOverrides = self: super: {
-      transmission-rpc = super.transmission-rpc.overridePythonAttrs (old: rec {
-        version = "4.3.1";
-        src = fetchPypi {
-          pname = "transmission_rpc";
-          inherit version;
-          hash = "sha256-Kh2eARIfM6MuXu7RjPPVhvPZ+bs0AXkA4qUCbfu5hHU=";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.11.8";
+  version = "3.11.34";
   pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -32,7 +13,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kJLcOk1ci4agSoBO7L1JacVq5G2jTjOj1mh7J8S2D+Y=";
+    hash = "sha256-g5TmjR3N/21JgXoRy56PN5A+Jbow2DFaAu0ammLtPxw=";
   };
 
   postPatch = ''
@@ -40,12 +21,12 @@ python.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
     apscheduler
     beautifulsoup4
@@ -60,7 +41,7 @@ python.pkgs.buildPythonApplication rec {
     loguru
     more-itertools
     packaging
-    pendulum_3
+    pendulum
     psutil
     pynzb
     pyrsistent
@@ -103,6 +84,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
     description = "Multipurpose automation tool for all of your media";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ pbsds ];
   };
 }

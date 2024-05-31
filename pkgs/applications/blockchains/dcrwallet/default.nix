@@ -2,18 +2,25 @@
 
 buildGoModule rec {
   pname = "dcrwallet";
-  version = "1.8.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
     rev = "release-v${version}";
-    hash = "sha256-Pz25jExqbvy8fgiZy9vaYuVp8kuE6deGLlBEjxTnYGQ=";
+    hash = "sha256-vFh3+FDN1+7HiP9fFyW8p1LJkW0lfwAiyLhZjqxQ6J4=";
   };
 
-  vendorHash = "sha256-lvN7OcDoEzb9LyH9C5q8pd0BOnF2VKuh4O82U+tQ6fI=";
+  vendorHash = "sha256-rVkQsr14yqATLGxevl8PLBOhVnTCrM4Yo2G5NvX/59g=";
 
   subPackages = [ "." ];
+
+  checkFlags = [
+    # Test fails with:
+    # 'x509_test.go:201: server did not report bad certificate error;
+    # instead errored with [...] tls: unknown certificate authority (*url.Error)'
+    "-skip=^TestUntrustedClientCert$"
+  ];
 
   meta = {
     homepage = "https://decred.org";

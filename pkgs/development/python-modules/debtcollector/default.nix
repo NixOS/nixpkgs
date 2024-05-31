@@ -1,18 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pbr, six, wrapt, callPackage }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  six,
+  wrapt,
+  callPackage,
+}:
 
 buildPythonPackage rec {
   pname = "debtcollector";
-  version = "2.5.0";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3J0a0/dFxD9LvtvKMPn/6JBajAKMmSbmEHeEfV6iV6s=";
+    hash = "sha256-KokX0lsOHx0NNl08HG7Px6UiselxbooaSpFRJvfM6m8=";
   };
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [ six wrapt ];
+  propagatedBuildInputs = [
+    six
+    wrapt
+  ];
 
   # check in passthru.tests.pytest to escape infinite recursion with other oslo components
   doCheck = false;

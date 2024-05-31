@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Docker garbage collection of containers and images";
+    mainProgram = "docker-gc";
     license = licenses.asl20;
     homepage = "https://github.com/spotify/docker-gc";
     maintainers = with maintainers; [offline];

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-XoN4z2cSv/Z/vnqDB9mfqMGgyyiqR3BW+Pw3Tw3/JK0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Requires `pytest-md-report`, causing infinite recursion.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pathvalidate"
-  ];
+  pythonImportsCheck = [ "pathvalidate" ];
 
   meta = with lib; {
     description = "Library to sanitize/validate a string such as filenames/file-paths/etc";

@@ -1,11 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonAtLeast
-, setuptools
-, tzlocal
-, six
-, pyjsparser
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonAtLeast,
+  setuptools,
+  tzlocal,
+  six,
+  pyjsparser,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-OfOmqoRpGA77o8hncnHfJ8MTMv0bRx3xryr1i4e4ly8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyjsparser

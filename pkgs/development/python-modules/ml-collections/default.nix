@@ -1,10 +1,11 @@
-{ absl-py
-, buildPythonPackage
-, contextlib2
-, fetchPypi
-, fetchurl
-, lib
-, pyyaml
+{
+  absl-py,
+  buildPythonPackage,
+  contextlib2,
+  fetchPypi,
+  fetchurl,
+  lib,
+  pyyaml,
 }:
 
 let
@@ -36,7 +37,11 @@ buildPythonPackage rec {
     cp ${requirements-test} requirements-test.txt
   '';
 
-  propagatedBuildInputs = [ absl-py contextlib2 pyyaml ];
+  propagatedBuildInputs = [
+    absl-py
+    contextlib2
+    pyyaml
+  ];
 
   # The official test suite uses bazel. With pytestCheckHook there are name
   # conflicts between files and tests have assumptions that are broken by the

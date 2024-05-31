@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pathable
-, pyyaml
-, referencing
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  pythonRelaxDepsHook,
+  pathable,
+  pyyaml,
+  referencing,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +33,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "referencing" ];
 
   propagatedBuildInputs = [
     pathable

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, pyserial
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pynose,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,22 +28,19 @@ buildPythonPackage rec {
       --replace "version = version," "version = '${version}',"
   '';
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
   nativeCheckInputs = [
     mock
-    nose
+    pynose
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pylacrosse"
-  ];
+  pythonImportsCheck = [ "pylacrosse" ];
 
   meta = with lib; {
     description = "Python library for Jeelink LaCrosse";
+    mainProgram = "pylacrosse";
     homepage = "https://github.com/hthiery/python-lacrosse";
     license = with licenses; [ lgpl2Plus ];
     maintainers = with maintainers; [ fab ];

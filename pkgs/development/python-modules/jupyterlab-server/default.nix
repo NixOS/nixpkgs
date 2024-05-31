@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, babel
-, importlib-metadata
-, jinja2
-, json5
-, jsonschema
-, jupyter-server
-, packaging
-, requests
-, openapi-core
-, pytest-jupyter
-, pytestCheckHook
-, requests-mock
-, ruamel-yaml
-, strict-rfc3339
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatchling,
+  babel,
+  importlib-metadata,
+  jinja2,
+  json5,
+  jsonschema,
+  jupyter-server,
+  packaging,
+  requests,
+  openapi-core,
+  pytest-jupyter,
+  pytestCheckHook,
+  requests-mock,
+  ruamel-yaml,
+  strict-rfc3339,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.25.2";
+  version = "2.27.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,16 +30,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-vQ7HqZ687ci8/5Oe+G5Sw3jkTCcH4FP82B0EbOl57mM=";
+    hash = "sha256-CXtaxwm2dscoSsnF43PxGTClYfUs1ahuT8flqcioYx0=";
   };
 
   postPatch = ''
     sed -i "/timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     babel
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
     openapi = [
@@ -69,6 +66,11 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   disabledTestPaths = [
     # require optional language pack packages for tests

@@ -12,7 +12,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable OpenTabletDriver udev rules, user service and blacklist kernel
           modules known to conflict with OpenTabletDriver.
         '';
@@ -21,7 +21,7 @@ in
       blacklistedKernelModules = mkOption {
         type = types.listOf types.str;
         default = [ "hid-uclogic" "wacom" ];
-        description = lib.mdDoc ''
+        description = ''
           Blacklist of kernel modules known to conflict with OpenTabletDriver.
         '';
       };
@@ -32,7 +32,7 @@ in
         enable = mkOption {
           default = true;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Whether to start OpenTabletDriver daemon as a systemd user service.
           '';
         };

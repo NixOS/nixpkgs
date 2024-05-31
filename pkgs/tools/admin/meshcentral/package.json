@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "1.1.20",
+  "version": "1.1.24",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -37,12 +37,12 @@
     "sample-config-advanced.json"
   ],
   "dependencies": {
-    "archiver": "5.3.2",
+    "archiver": "7.0.0",
     "body-parser": "1.20.2",
     "cbor": "5.2.0",
     "compression": "1.7.4",
     "cookie-session": "2.0.0",
-    "express": "4.18.2",
+    "express": "4.19.2",
     "express-handlebars": "5.3.5",
     "express-ws": "4.0.0",
     "ipcheck": "0.1.0",
@@ -55,7 +55,7 @@
     "yauzl": "2.10.0"
   },
   "engines": {
-    "node": ">=11.0.0"
+    "node": ">=16.0.0"
   },
   "repository": {
     "type": "git",
@@ -67,19 +67,17 @@
     "passport-twitter": "*",
     "passport-google-oauth20": "*",
     "passport-github2": "*",
-    "passport-reddit": "*",
     "passport-azure-oauth2": "*",
     "jwt-simple": "*",
-    "@mstrhakr/passport-openidconnect": "*",
     "openid-client": "*",
     "connect-flash": "*",
     "passport-saml": "*",
-    "archiver": "5.3.2",
+    "archiver": "7.0.0",
     "body-parser": "1.20.2",
     "cbor": "5.2.0",
     "compression": "1.7.4",
     "cookie-session": "2.0.0",
-    "express": "4.18.2",
+    "express": "4.19.2",
     "express-handlebars": "5.3.5",
     "express-ws": "4.0.0",
     "ipcheck": "0.1.0",

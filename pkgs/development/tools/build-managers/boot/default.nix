@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Build tooling for Clojure";
+    mainProgram = "boot";
     homepage = "https://boot-clj.github.io/";
     license = licenses.epl10;
     platforms = platforms.linux ++ platforms.darwin;

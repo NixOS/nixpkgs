@@ -193,5 +193,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
+    mainProgram = "azuredatastudio";
   };
 }

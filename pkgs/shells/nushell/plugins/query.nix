@@ -4,18 +4,15 @@
 , nushell
 , IOKit
 , CoreFoundation
-, libclang
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage {
   pname = "nushell_plugin_query";
   inherit (nushell) version src;
-  cargoHash = "sha256-IAMfd76+Sx01d4axn3qcLvXZW6nxu0fjy9CvupUTHBM=";
+  cargoHash = "sha256-cu7gSEr5xOpBpkv++YpOMUf/UtvFYuQMDWrGphb6V/0=";
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    LIBCLANG_PATH = "${libclang.lib}/lib";
-  };
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit CoreFoundation ];
   cargoBuildFlags = [ "--package nu_plugin_query" ];
 
@@ -30,6 +27,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "A Nushell plugin to query JSON, XML, and various web data";
+    mainProgram = "nu_plugin_query";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_query";
     license = licenses.mpl20;
     maintainers = with maintainers; [ happysalada aidalgol ];

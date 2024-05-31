@@ -2,7 +2,7 @@
 , stdenv
 , python3Packages
 , fetchPypi
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , gobject-introspection
 , libcanberra-gtk3
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -42,6 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";
+    mainProgram = "pympress";
     license = licenses.gpl2Plus;
     homepage = "https://cimbali.github.io/pympress/";
     maintainers = [ maintainers.tbenst ];

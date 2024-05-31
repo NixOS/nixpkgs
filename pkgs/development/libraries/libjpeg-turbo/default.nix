@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , nasm
 , openjdk
@@ -33,22 +32,16 @@ assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "libjpeg-turbo";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     rev = finalAttrs.version;
-    hash = "sha256-xHjd0WHN50b75wdWPHUwfmJGsiWKmj+zA59UwakIo74=";
+    hash = "sha256-w2wJaVf4sjJ9pPPqc9R4TE6Q6Yl0U6+fI5KLpQKwEXI=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "CMAKE_CROSSCOMPILING_EMULATOR=env-fix.patch";
-      url = "https://github.com/libjpeg-turbo/libjpeg-turbo/compare/36c51dd3eb60ebde3ca77d3cfa7df3422f1aaaf1..b6ee1016abbc55116304ad396cf88aa19391e10a.patch";
-      hash = "sha256-dNwXicvZEsG02TBaM5nYMlZ+VczT/Dfx6ZM/6huZpwE=";
-    })
-
     # This is needed by freeimage
     ./0001-Compile-transupp.c-as-part-of-the-library.patch
   ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [

@@ -33,7 +33,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "unstable-2024-01-19";
+  version = "1.21.1-unstable-2024-04-17";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "de8a0821c7bc737e724fa3dfb6d89dc36f591d7a";
-    hash = "sha256-bVFr1fTulww6swWPKupWRGfQOAiXp2oP1/VC5GpzLnY=";
+    rev = "d7e58c5a812988c341ec4ad19f79faf067388d58";
+    hash = "sha256-OIisRd2o2zrTqH1Xv3FDhQWDqhKNeGhPkHWyYZzbtTU=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -101,7 +101,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib;
     { description = "Network boot firmware";

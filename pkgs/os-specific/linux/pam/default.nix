@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch
+{ lib, stdenv, buildPackages, fetchurl
 , flex, cracklib, db4, gettext, audit, libxcrypt
 , nixosTests
 , autoreconfHook269, pkg-config-unwrapped
@@ -6,22 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    hash = "sha256-//SjTlu+534ujxmS8nYx4jKby/igVj3etcM4m04xaa0=";
+    hash = "sha256-+JI8dAFZBS1xnb/CovgZQtaN00/K9hxwagLJuA/u744=";
   };
 
   patches = [
     ./suid-wrapper-path.patch
-
-    # Backport fix for missing include breaking musl builds.
-    (fetchpatch {
-      name = "pam_namespace-stdint.h.patch";
-      url = "https://github.com/linux-pam/linux-pam/commit/cc9d40b7cdbd3e15ccaa324a0dda1680ef9dea13.patch";
-      hash = "sha256-tCnH2yPO4dBbJOZA0fP2gm1EavHRMEJyfzB5Vy7YjAA=";
-    })
   ];
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569

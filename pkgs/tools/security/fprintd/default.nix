@@ -92,6 +92,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  mesonCheckFlags = [
+    # PAM related checks are timing out
+    "--no-suite" "fprintd:TestPamFprintd"
+  ];
+
   postPatch = ''
     patchShebangs \
       po/check-translations.sh \

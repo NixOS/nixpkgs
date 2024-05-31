@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, djvulibre
-, ghostscript_headless
-, packaging
-, pkg-config
-, requests
-, setuptools
-, unittestCheckHook
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  djvulibre,
+  ghostscript_headless,
+  packaging,
+  pkg-config,
+  requests,
+  setuptools,
+  unittestCheckHook,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -43,7 +44,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "tests" "-v" ];
+  unittestFlagsArray = [
+    "tests"
+    "-v"
+  ];
 
   meta = with lib; {
     description = "Python support for the DjVu image format";

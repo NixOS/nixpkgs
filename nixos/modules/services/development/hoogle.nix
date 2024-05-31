@@ -14,12 +14,12 @@ let
 in {
 
   options.services.hoogle = {
-    enable = mkEnableOption (lib.mdDoc "Haskell documentation server");
+    enable = mkEnableOption "Haskell documentation server";
 
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = lib.mdDoc ''
+      description = ''
         Port number Hoogle will be listening to.
       '';
     };
@@ -29,7 +29,7 @@ in {
       default = hp: [];
       defaultText = literalExpression "hp: []";
       example = literalExpression "hp: with hp; [ text lens ]";
-      description = lib.mdDoc ''
+      description = ''
         The Haskell packages to generate documentation for.
 
         The option value is a function that takes the package set specified in
@@ -39,7 +39,7 @@ in {
     };
 
     haskellPackages = mkOption {
-      description = lib.mdDoc "Which haskell package set to use.";
+      description = "Which haskell package set to use.";
       type = types.attrs;
       default = pkgs.haskellPackages;
       defaultText = literalExpression "pkgs.haskellPackages";
@@ -47,14 +47,24 @@ in {
 
     home = mkOption {
       type = types.str;
-      description = lib.mdDoc "Url for hoogle logo";
+      description = "Url for hoogle logo";
       default = "https://hoogle.haskell.org";
     };
 
     host = mkOption {
       type = types.str;
-      description = lib.mdDoc "Set the host to bind on.";
+      description = "Set the host to bind on.";
       default = "127.0.0.1";
+    };
+
+    extraOptions = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "--no-security-headers" ];
+      description = ''
+        Additional command-line arguments to pass to
+        {command}`hoogle server`
+      '';
     };
   };
 
@@ -66,7 +76,10 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host}'';
+        ExecStart = ''
+          ${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host} \
+            ${concatStringsSep " " cfg.extraOptions}
+        '';
 
         DynamicUser = true;
 

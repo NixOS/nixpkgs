@@ -62,7 +62,7 @@ Allow linking arbitrary place in the text (e.g. individual list items, sentences
 They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
 
 ```markdown
-- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGAppsHook` will prepend it to `XDG_DATA_DIRS`.
+- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGApps*` hook will prepend it to `XDG_DATA_DIRS`.
 ```
 
 #### Automatic links
@@ -106,12 +106,12 @@ This is a warning
 
 The following are supported:
 
-- [`caution`](https://tdg.docbook.org/tdg/5.0/caution.html)
-- [`important`](https://tdg.docbook.org/tdg/5.0/important.html)
-- [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
-- [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
-- [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
-- [`example`](https://tdg.docbook.org/tdg/5.0/example.html)
+- `caution`
+- `important`
+- `note`
+- `tip`
+- `warning`
+- `example`
 
 Example admonitions require a title to work.
 If you don't provide one, the manual won't be built.
@@ -345,4 +345,4 @@ Typographic replacements are enabled. Check the [list of possible replacement pa
 
 ## Getting help
 
-If you need documentation-specific help or reviews, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on your pull request.
+If you need documentation-specific help or reviews, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on your pull request.

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, graphql-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  graphql-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
   };
 
   passthru.optional-dependencies = {
-    graphql = [
-      graphql-core
-    ];
+    graphql = [ graphql-core ];
   };
 
   nativeCheckInputs = [
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "apischema"
-  ];
+  pythonImportsCheck = [ "apischema" ];
 
   meta = with lib; {
     description = "JSON (de)serialization, GraphQL and JSON schema generation using typing";

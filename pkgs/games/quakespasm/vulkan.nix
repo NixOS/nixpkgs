@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
+    mainProgram = "vkquake";
     homepage = src.meta.homepage;
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.

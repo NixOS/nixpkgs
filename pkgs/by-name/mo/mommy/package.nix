@@ -4,7 +4,6 @@
 , makeWrapper
 , writeText
 , shellspec
-, fetchpatch
   # usage:
   # pkgs.mommy.override {
   #  mommySettings.sweetie = "catgirl";
@@ -23,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mommy";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "FWDekker";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9i/xKkMKGnRO6u8O2oKn5z1PZhMrwaK9f/BDzusH474=";
+    hash = "sha256-kNhoEIzrPjCe6RA/GHFB/NtKjYFByM5TpxAwCLo5TDo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

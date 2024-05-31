@@ -64,5 +64,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/axodotdev/slippy/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "slippy";
   };
 }

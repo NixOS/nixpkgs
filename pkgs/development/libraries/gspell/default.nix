@@ -71,7 +71,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A spell-checking library for GTK applications";
-    homepage = "https://wiki.gnome.org/Projects/gspell";
+    mainProgram = "gspell-app1";
+    homepage = "https://gitlab.gnome.org/GNOME/gspell";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

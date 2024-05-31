@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, pbr
-, setuptools
+  # build-system
+  pbr,
+  setuptools,
 
-# tests
-, pytestCheckHook
-, pyyaml
+  # tests
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -40,5 +41,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/Infinidat/munch";
   };
-
 }

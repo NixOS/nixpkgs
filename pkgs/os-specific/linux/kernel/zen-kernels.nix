@@ -4,16 +4,16 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "6.7.4"; #zen
+    version = "6.9.2"; #zen
     suffix = "zen1"; #zen
-    sha256 = "1vk2xfvqx4kplngw8n2c4xxqwxjyiij0dvbynm2y35nf04l6p9bx"; #zen
+    sha256 = "1fsmpryk7an6xqppvilcf3bmxs41mqpc3v4f4c81jgrikg21gxbb"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.7.4"; #lqx
+    version = "6.8.11"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "1p8vgz3qsrpv1fbil2nkdlfzq4mfmjy9kvh264ckmwn4iay0kxmw"; #lqx
+    sha256 = "1dj4znir4wp6jqs680dcxn8z6p02d518993rmrx54ch04jyy5brj"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
@@ -84,8 +84,8 @@ let
       SCHED_PDS = yes;
 
       # Swap storage is compressed with LZ4 using zswap
-      ZSWAP_COMPRESSOR_DEFAULT_LZ4 = yes;
-      ZSWAP_COMPRESSOR_DEFAULT = freeform "lz4";
+      ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
+      ZSWAP_COMPRESSOR_DEFAULT_ZSTD = lib.mkDefault no;
 
       # Fix error: unused option: XXX.
       CFS_BANDWIDTH = lib.mkForce (option no);
@@ -93,6 +93,8 @@ let
       RT_GROUP_SCHED = lib.mkForce (option no);
       SCHED_AUTOGROUP = lib.mkForce (option no);
       SCHED_CORE = lib.mkForce (option no);
+      UCLAMP_TASK = lib.mkForce (option no);
+      UCLAMP_TASK_GROUP = lib.mkForce (option no);
 
       # ERROR: modpost: "sched_numa_hop_mask" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
       MLX5_CORE = no;

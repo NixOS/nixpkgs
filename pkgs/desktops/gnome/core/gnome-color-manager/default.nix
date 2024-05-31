@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "gnome.${pname}";
+      freeze = true;
     };
   };
 

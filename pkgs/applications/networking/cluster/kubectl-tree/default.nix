@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "kubectl plugin to browse Kubernetes object hierarchies as a tree";
+    mainProgram = "kubectl-tree";
     homepage = "https://github.com/ahmetb/kubectl-tree";
     changelog = "https://github.com/ahmetb/kubectl-tree/releases/tag/v${version}";
     license = licenses.asl20;

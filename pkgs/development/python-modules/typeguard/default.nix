@@ -1,28 +1,29 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, lib
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, typing-extensions
-, importlib-metadata
-, sphinxHook
-, sphinx-autodoc-typehints
-, sphinx-rtd-theme
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  typing-extensions,
+  importlib-metadata,
+  sphinxHook,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
+  glibcLocales,
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "4.1.5";
+  version = "4.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6goRO7wRG8/8kHieuyFWJcljQR9wlqfpBi1ORjDBVf0=";
+    hash = "sha256-xVahuVlIIwUQBwylP6A0H7CWRhG9BdWY2H+1IRXWX+4=";
   };
 
   outputs = [
@@ -41,15 +42,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   env.LC_ALL = "en_US.utf-8";
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "typeguard" ];
 
   disabledTestPaths = [
     # mypy tests aren't passing with latest mypy
@@ -68,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
+    changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

@@ -13,7 +13,7 @@ let
       hash = "sha256-Ihk3InHB3/tEYRqH2ozhokz2GN8Gfig5DJkO/8P1LJs=";
     };
   };
-  src = srcs.${stdenv.hostPlatform.system};
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   meta = with lib; {
     description = "User-friendly Desktop Internet GIS";

@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   meta = {
     maintainers = with lib.maintainers; [ eelco ];
     description = "Utility to generate a Nix expression for a Perl package from CPAN";
+    mainProgram = "nix-generate-from-cpan";
     platforms = lib.platforms.unix;
   };
 }

@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool for programming Tock onto hardware boards";
+    mainProgram = "tockloader";
     homepage = "https://github.com/tock/tockloader";
     changelog = "https://github.com/tock/tockloader/releases/tag/v${version}";
     license = licenses.mit;

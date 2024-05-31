@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "framework-laptop-kmod";
-  version = "unstable-2023-12-03";
+  version = "0-unstable-2024-01-02";
 
   src = fetchFromGitHub {
     owner = "DHowett";
     repo = "framework-laptop-kmod";
-    rev = "d5367eb9e5b5542407494d04ac1a0e77f10cc89d";
-    hash = "sha256-t8F4XHPkuCjWBrsEjW97ielYtf3V6hlLsrasvyab198=";
+    rev = "a9e8db9ba2959b75c1fb820ffac8fa189f0f63c3";
+    hash = "sha256-Ai/OxvkaKPltri8R0oyfmxQLUVfaj6Q8vebrhmWYhUU=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

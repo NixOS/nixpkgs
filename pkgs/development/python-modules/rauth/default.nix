@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, requests
-, pytestCheckHook
-, mock
-, nose
-, pycrypto
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  requests,
+  pytestCheckHook,
+  mock,
+  nose,
+  pycrypto,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   pythonImportsCheck = [ "rauth" ];
 
@@ -51,4 +50,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

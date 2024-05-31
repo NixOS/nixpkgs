@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sites.google.com/site/infraarcana";
     description = "A Lovecraftian single-player roguelike game";
+    mainProgram = "infra-arcana";
     longDescription = ''
       Infra Arcana is a Roguelike set in the early 20th century. The goal is to
       explore the lair of a dreaded cult called The Church of Starry Wisdom.

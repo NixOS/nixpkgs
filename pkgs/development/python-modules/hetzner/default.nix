@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -18,6 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/RedMoonStudios/hetzner";
     description = "High-level Python API for accessing the Hetzner robot";
+    mainProgram = "hetznerctl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aszlig ];
   };

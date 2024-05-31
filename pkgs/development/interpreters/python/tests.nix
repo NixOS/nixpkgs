@@ -38,8 +38,10 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
       # Use virtualenv from a Nix env.
+      # Fails on darwin with
+      #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
       nixenv-virtualenv = rec {
         env = runCommand "${python.name}-virtualenv" {} ''
           ${pythonVirtualEnv.interpreter} -m virtualenv venv

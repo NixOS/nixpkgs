@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
     platforms = [ "i686-linux" ];
+    mainProgram = "wibo";
   };
 }

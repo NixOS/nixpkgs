@@ -12,17 +12,18 @@
 , yad
 , pytestCheckHook
 , nix-update-script
+, extraCompatPaths ? ""
 }:
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "sha256-5FpcIaQodvNjdqUfD9hvXlrdhszr98j0zm3MCCpZFoc=";
+    sha256 = "sha256-a40IAFrzQ0mogMoXKb+Lp0fPc1glYophqtftigk3nAc=";
   };
 
   patches = [
@@ -51,7 +52,7 @@ buildPythonApplication rec {
     ]}"
     # Steam Runtime does not work outside of steam-run, so don't use it
     "--set STEAM_RUNTIME 0"
-  ];
+  ] ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
 
   nativeCheckInputs = [ pytestCheckHook ];
 

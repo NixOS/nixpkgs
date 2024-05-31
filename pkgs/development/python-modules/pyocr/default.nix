@@ -1,14 +1,18 @@
-{ lib
-, fetchFromGitLab
-, buildPythonPackage
-, pillow
-, tesseract
-, cuneiform
-, isPy3k
-, substituteAll
-, pytestCheckHook
-, setuptools
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  buildPythonPackage,
+  pillow,
+  tesseract,
+  cuneiform,
+  isPy3k,
+  substituteAll,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
+  withTesseractSupport ? true,
+  withCuneiformSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 buildPythonPackage rec {
@@ -27,16 +31,24 @@ buildPythonPackage rec {
     hash = "sha256-gE0+qbHCwpDdxXFY+4rjVU2FbUSfSVrvrVMcWUk+9FU=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./paths.patch;
-      inherit cuneiform tesseract;
-    })
-  ];
+  patches =
+    [ ]
+    ++ (lib.optional withTesseractSupport (substituteAll {
+      src = ./paths-tesseract.patch;
+      inherit tesseract;
+      tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
+    }))
+    ++ (lib.optional stdenv.hostPlatform.isLinux (substituteAll {
+      src = ./paths-cuneiform.patch;
+      inherit cuneiform;
+    }));
 
   propagatedBuildInputs = [ pillow ];
 
-  nativeBuildInputs = [ setuptools setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -45,6 +57,9 @@ buildPythonPackage rec {
     changelog = "https://gitlab.gnome.org/World/OpenPaperwork/pyocr/-/blob/${version}/ChangeLog";
     description = "A Python wrapper for Tesseract and Cuneiform";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ symphorien ];
+    maintainers = with maintainers; [
+      symphorien
+      tomodachi94
+    ];
   };
 }

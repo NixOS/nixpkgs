@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# build inputs
-, jupyter-client
-, nbformat
-, nbconvert
-# check inputs
-, unittestCheckHook
-, ipykernel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # build inputs
+  jupyter-client,
+  nbformat,
+  nbconvert,
+  # check inputs
+  unittestCheckHook,
+  ipykernel,
 }:
 let
   pname = "nbexec";
@@ -44,15 +45,16 @@ buildPythonPackage {
   '';
 
   unittestFlagsArray = [
-    "-s" "test" "-v"
+    "-s"
+    "test"
+    "-v"
   ];
 
-  pythonImportsCheck = [
-    "nbexec"
-  ];
+  pythonImportsCheck = [ "nbexec" ];
 
   meta = with lib; {
     description = "A dead-simple tool for executing Jupyter notebooks from the command line.";
+    mainProgram = "nbexec";
     homepage = "https://github.com/jsvine/nbexec";
     changelog = "https://github.com/jsvine/nbexec/releases/tag/v${version}";
     license = licenses.mit;

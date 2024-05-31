@@ -72,5 +72,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    # error: wcwidth-0.2.13 not supported for interpreter python2.7
+    broken = true; # Added 2024-03-17
   };
 }

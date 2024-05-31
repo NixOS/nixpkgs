@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pkginfo
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkginfo,
+  pytestCheckHook,
 }:
-
 
 buildPythonPackage rec {
   pname = "colorzero";
@@ -23,17 +23,11 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    pkginfo
-  ];
+  nativeBuildInputs = [ pkginfo ];
 
-  pythonImportsCheck = [
-    "colorzero"
-  ];
+  pythonImportsCheck = [ "colorzero" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Yet another Python color library";

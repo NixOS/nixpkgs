@@ -105,13 +105,21 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
-  buildPhase = ''
+  buildPhase = let
+    pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
+    pythonSection = with lib.strings; replaceStrings
+      [ "@python-interpreter-table@" ]
+      [ pythonInterpreterTable ]
+      (readFile ./languages-frameworks/python.section.md);
+  in ''
+    cp ${builtins.toFile "python.section.md" pythonSection} ./languages-frameworks/python.section.md
+
     cat \
       ./functions/library.md.in \
       ${lib-docs}/index.md \
       > ./functions/library.md
     substitute ./manual.md.in ./manual.md \
-      --replace '@MANUAL_VERSION@' '${pkgs.lib.version}'
+      --replace-fail '@MANUAL_VERSION@' '${pkgs.lib.version}'
 
     mkdir -p out/media
 
@@ -122,16 +130,17 @@ in pkgs.stdenv.mkDerivation {
       ${pkgs.documentation-highlighter}/mono-blue.css \
       ${pkgs.documentation-highlighter}/loader.js
 
-    cp -t out ./overrides.css ./style.css
+    cp -t out ./style.css ./anchor.min.js ./anchor-use.js
 
     nixos-render-docs manual html \
       --manpage-urls ./manpage-urls.json \
       --revision ${pkgs.lib.trivial.revisionWithDefault (pkgs.rev or "master")} \
       --stylesheet style.css \
-      --stylesheet overrides.css \
       --stylesheet highlightjs/mono-blue.css \
       --script ./highlightjs/highlight.pack.js \
       --script ./highlightjs/loader.js \
+      --script ./anchor.min.js \
+      --script ./anchor-use.js \
       --toc-depth 1 \
       --section-toc-depth 1 \
       manual.md \

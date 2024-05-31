@@ -19,12 +19,12 @@ let
 
     stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.22";
+      version = "24.05";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
         rev = finalAttrs.version;
-        hash = "sha256-OCEBt3YYyfXpnskFojBn/JoWTkNJ4XAI58BG4pyscGc=";
+        hash = "sha256-jTfMFvl3sG3BIVVkpZ81BQ20Bs+2ESE6RMh0fW86rKE=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
@@ -63,7 +63,7 @@ let
         homepage = "https://www.coreboot.org";
         description = "coreboot toolchain for ${arch} targets";
         license = with licenses; [ bsd2 bsd3 gpl2 lgpl2Plus gpl3Plus ];
-        maintainers = with maintainers; [ felixsinger ];
+        maintainers = with maintainers; [ felixsinger jmbaur ];
         platforms = platforms.linux;
       };
     })

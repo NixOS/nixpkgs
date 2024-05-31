@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "river-bnf";
-  version = "unstable-2023-10-10";
+  version = "0-unstable-2023-10-10";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";

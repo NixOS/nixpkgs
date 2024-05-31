@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , ibus
 , glib
 , gobject-introspection
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     gettext
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   # Upstream builds Python packages as a part of a non-python
@@ -66,6 +66,7 @@ stdenv.mkDerivation {
   meta = {
     isIbusEngine = true;
     description = "An IBus engine for users of the Cangjie and Quick input methods";
+    mainProgram = "ibus-setup-cangjie";
     homepage = "https://github.com/Cangjians/ibus-cangjie";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

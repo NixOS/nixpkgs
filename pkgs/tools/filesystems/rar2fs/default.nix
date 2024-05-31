@@ -2,8 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
-, fuse
-, unrar
+, fuse2
+, unrar_6
 }:
 
 stdenv.mkDerivation rec {
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ fuse unrar ];
+  buildInputs = [ fuse2 unrar_6 ];
 
   configureFlags = [
-    "--with-unrar=${unrar.src}/unrar"
+    "--with-unrar=${unrar_6.src}/unrar"
     "--disable-static-unrar"
   ];
 

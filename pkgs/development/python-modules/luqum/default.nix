@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, elastic-transport
-, elasticsearch-dsl
-, fetchFromGitHub
-, ply
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  elastic-transport,
+  elasticsearch-dsl,
+  fetchFromGitHub,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
       --replace '--doctest-modules --doctest-glob="test_*.rst" --cov=luqum --cov-branch --cov-report html --no-cov-on-fail' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    ply
-  ];
+  propagatedBuildInputs = [ ply ];
 
   nativeCheckInputs = [
     elastic-transport
@@ -42,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "luqum"
-  ];
+  pythonImportsCheck = [ "luqum" ];
 
   disabledTestPaths = [
     # Tests require an Elasticsearch instance

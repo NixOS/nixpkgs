@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, gtk3, libepoxy, wayland, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, gtk3, libepoxy, wayland, wrapGAppsHook3 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wdisplays";
   version = "1.1.1";
 
-  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config wrapGAppsHook3 ];
 
   buildInputs = [ gtk3 libepoxy wayland ];
 

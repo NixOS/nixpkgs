@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A nagios/icinga/sensu check plugin for OpenVPN";
+    mainProgram = "check_openvpn";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

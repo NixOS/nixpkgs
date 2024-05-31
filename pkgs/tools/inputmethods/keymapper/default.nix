@@ -8,17 +8,20 @@
 , pkg-config
 , udev
 , wayland
+, libxkbcommon
+, gtk3
+, libayatana-appindicator
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keymapper";
-  version = "3.0.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "houmain";
     repo = "keymapper";
     rev = finalAttrs.version;
-    hash = "sha256-X2Qk/cAczdkteB+6kyURGjvm1Ryio6WHj3Ga2POosCA=";
+    hash = "sha256-SjYPkcXBEHjK7zgwL6U4ltjvhKuGMZWbp55LtndU400=";
   };
 
   # all the following must be in nativeBuildInputs
@@ -30,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     udev
     libusb1
+    libxkbcommon
+    gtk3
+    libayatana-appindicator
   ];
 
   meta = {
@@ -38,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/houmain/keymapper";
     license = lib.licenses.gpl3Only;
     mainProgram = "keymapper";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya spitulax ];
     platforms = lib.platforms.linux;
   };
 })

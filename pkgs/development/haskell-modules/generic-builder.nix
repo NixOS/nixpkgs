@@ -1,13 +1,24 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, nodejs
+, jailbreak-cabal, hscolour, cpphs
 , ghcWithHoogle, ghcWithPackages
+, nodejs
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  # Pass the "wrong" C compiler rather than none at all so packages that just
+  # use the C preproccessor still work, see
+  # https://github.com/haskell/cabal/issues/6466 for details.
+  cc =
+    if stdenv.hasCC then "$CC"
+    else if stdenv.hostPlatform.isGhcjs then "${emscripten}/bin/emcc"
+    else "$CC_FOR_BUILD";
+
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkg-config coreutils gnugrep glibcLocales;
+    pkg-config coreutils gnugrep glibcLocales
+    emscripten;
 in
 
 { pname
@@ -27,10 +38,10 @@ in
 , buildFlags ? []
 , haddockFlags ? []
 , description ? null
-, doCheck ? !isCross && lib.versionOlder "7.4" ghc.version
+, doCheck ? !isCross
 , doBenchmark ? false
 , doHoogle ? true
-, doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
+, doHaddockQuickjump ? doHoogle
 , doInstallIntermediates ? false
 , editedCabalFile ? null
 , enableLibraryProfiling ? !(ghc.isGhcjs or false)
@@ -40,8 +51,9 @@ in
 , enableSharedExecutables ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows or stdenv.hostPlatform.isWasm)
-, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && lib.versionAtLeast ghc.version "8.4"
+# Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
+, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs)
+, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 # On macOS, statically linking against system frameworks is not supported;
 # see https://developer.apple.com/library/content/qa/qa1118/_index.html
@@ -125,23 +137,17 @@ assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
 
 let
 
-  inherit (lib) optional optionals optionalString versionOlder versionAtLeast
+  inherit (lib) optional optionals optionalString versionAtLeast
                        concatStringsSep enableFeature optionalAttrs;
 
   isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
-  packageDbFlag = if isGhcjs || isHaLVM || versionOlder "7.6" ghc.version
-                  then "package-db"
-                  else "package-conf";
 
   # GHC used for building Setup.hs
   #
   # Same as our GHC, unless we're cross, in which case it is native GHC with the
   # same version, or ghcjs, in which case its the ghc used to build ghcjs.
   nativeGhc = buildHaskellPackages.ghc;
-  nativePackageDbFlag = if versionOlder "7.6" nativeGhc.version
-                        then "package-db"
-                        else "package-conf";
 
   # the target dir for haddock documentation
   docdir = docoutput: docoutput + "/share/doc/" + pname + "-" + version;
@@ -194,10 +200,7 @@ let
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
-    # Pass the "wrong" C compiler rather than none at all so packages that just
-    # use the C preproccessor still work, see
-    # https://github.com/haskell/cabal/issues/6466 for details.
-    "--with-gcc=${if stdenv.hasCC then "$CC" else "$CC_FOR_BUILD"}"
+    "--with-gcc=${cc}"
   ] ++ optionals stdenv.hasCC [
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
     "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
@@ -233,23 +236,20 @@ let
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature (enableDeadCodeElimination && !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
-    (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
+    (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
+    (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
-    (optionalString (versionAtLeast ghc.version "7.10") (enableFeature doCoverage "coverage"))
-    (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
-    (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
-    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (enableFeature doCoverage "coverage")
+    (enableFeature enableStaticLibraries "static")
+    (enableFeature enableSharedExecutables "executable-dynamic")
+    (enableFeature doCheck "tests")
     (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     (enableFeature enableLibraryForGhci "library-for-ghci")
-  ] ++ optionals (enableDeadCodeElimination && (lib.versionOlder "8.0.1" ghc.version)) [
-     "--ghc-option=-split-sections"
-  ] ++ optionals dontStrip [
-    "--disable-library-stripping"
-    "--disable-executable-stripping"
+    (enableFeature enableDeadCodeElimination "split-sections")
+    (enableFeature (!dontStrip) "library-stripping")
+    (enableFeature (!dontStrip) "executable-stripping")
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
@@ -264,7 +264,7 @@ let
   postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
+    (optionalString (!coreSetup) "-package-db=$setupPackageConfDir")
     (optionalString enableParallelBuilding parallelBuildingFlags)
     "-threaded"       # https://github.com/haskell/cabal/issues/2398
     "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
@@ -324,7 +324,7 @@ let
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
     [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) (assert pkg-config != null; pkg-config) ++
-    setupHaskellDepends ++ collectedToolDepends;
+    setupHaskellDepends ++ collectedToolDepends ++ optional stdenv.hostPlatform.isGhcjs nodejs;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
     optionals doCheck (testDepends ++ testHaskellDepends) ++
@@ -433,7 +433,7 @@ stdenv.mkDerivation ({
     for p in "''${pkgsBuildBuild[@]}" "''${pkgsBuildHost[@]}" "''${pkgsBuildTarget[@]}"; do
       ${buildPkgDb nativeGhc "$setupPackageConfDir"}
     done
-    ${nativeGhcCommand}-pkg --${nativePackageDbFlag}="$setupPackageConfDir" recache
+    ${nativeGhcCommand}-pkg --package-db="$setupPackageConfDir" recache
   ''
   # For normal components
   + ''
@@ -445,15 +445,17 @@ stdenv.mkDerivation ({
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
-    ''
-    # It is not clear why --extra-framework-dirs does work fine on Linux
-    + optionalString (!stdenv.buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
       if [[ -d "$p/Library/Frameworks" ]]; then
         configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
       fi
   '' + ''
     done
   ''
+  + (optionalString stdenv.hostPlatform.isGhcjs ''
+    export EM_CACHE="$(realpath "$(mktemp -d emcache.XXXXXXXXXX)")"
+    cp -Lr ${emscripten}/share/emscripten/cache/* "$EM_CACHE/"
+    chmod u+rwX -R "$EM_CACHE"
+  '')
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
@@ -490,7 +492,7 @@ stdenv.mkDerivation ({
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," "$f"
     done
   '') + ''
-    ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
+    ${ghcCommand}-pkg --package-db="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
   '';
@@ -622,11 +624,6 @@ stdenv.mkDerivation ({
       done
     ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
-    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && lib.versionOlder ghc.version "7.10") ''
-      for exe in "${binDir}/"* ; do
-        install_name_tool -add_rpath "$out/${ghcLibdir}/${pname}-${version}" "$exe"
-      done
-    ''}
 
     ${optionalString enableSeparateDocOutput ''
     for x in ${docdir "$doc"}"/html/src/"*.html; do
@@ -816,13 +813,6 @@ stdenv.mkDerivation ({
 # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
 // lib.optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
   NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
-}
-
-# Ensure libc++abi is linked even when clang is invoked as just `clang` or `cc`.
-# Works around https://github.com/NixOS/nixpkgs/issues/166205.
-# This can be dropped once a fix has been committed to cc-wrapper.
-// lib.optionalAttrs (stdenv.hasCC && stdenv.cc.isClang && stdenv.cc.libcxx != null) {
-  NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
 }
 )
 )

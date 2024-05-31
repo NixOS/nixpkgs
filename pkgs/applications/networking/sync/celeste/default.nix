@@ -86,6 +86,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     changelog = "https://github.com/hwittenborn/celeste/blob/${src.rev}/CHANGELOG.md";
     description = "GUI file synchronization client that can sync with any cloud provider";
+    mainProgram = "celeste";
     homepage = "https://github.com/hwittenborn/celeste";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ dotlambda ];

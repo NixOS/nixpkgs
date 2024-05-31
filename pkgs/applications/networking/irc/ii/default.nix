@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tools.suckless.org/ii/";
     license = lib.licenses.mit;
     description = "Irc it, simple FIFO based irc client";
+    mainProgram = "ii";
     platforms = lib.platforms.unix;
   };
 }

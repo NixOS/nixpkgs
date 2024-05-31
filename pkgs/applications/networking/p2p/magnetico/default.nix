@@ -36,9 +36,11 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) magnetico; };
 
   meta = with lib; {
+    # Build fails with Go >=1.21, couldn't be fixed by updating module dependencies.
+    broken = true;
     description  = "Autonomous (self-hosted) BitTorrent DHT search engine suite";
-    homepage     = "https://github.com/boramalper/magnetico";
-    license      = licenses.agpl3;
+    homepage     = "https://github.com/ireun/magnetico";
+    license      = licenses.agpl3Only;
     badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };

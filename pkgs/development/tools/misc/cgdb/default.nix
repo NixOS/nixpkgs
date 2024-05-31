@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A curses interface to gdb";
+    mainProgram = "cgdb";
 
     homepage = "https://cgdb.github.io/";
 

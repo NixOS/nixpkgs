@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, fastapi
-, httpx
-, markdown2
-, nh3
-, numpy
-, prompt-toolkit
-, pydantic
-, requests
-, rich
-, shortuuid
-, tiktoken
-, uvicorn
-, anthropic
-, openai
-, ray
-, wandb
-, einops
-, gradio
-, accelerate
-, peft
-, sentencepiece
-, torch
-, transformers
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  fastapi,
+  httpx,
+  markdown2,
+  nh3,
+  numpy,
+  prompt-toolkit,
+  pydantic,
+  requests,
+  rich,
+  shortuuid,
+  tiktoken,
+  uvicorn,
+  anthropic,
+  openai,
+  ray,
+  wandb,
+  einops,
+  gradio,
+  accelerate,
+  peft,
+  sentencepiece,
+  torch,
+  transformers,
+  protobuf,
 }:
 let
-  version = "0.2.34";
+  version = "0.2.36";
 in
 buildPythonPackage {
   pname = "fschat";
@@ -40,12 +41,10 @@ buildPythonPackage {
     owner = "lm-sys";
     repo = "FastChat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4dnKrLQYkd2uQh2K2yaQ7EgrkgX8bO4QXfjIOqpzCE8=";
+    hash = "sha256-tQuvQXzQbQjU16DfS1o55VHW6eklngEvIigzZGgrKB8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -61,7 +60,7 @@ buildPythonPackage {
     shortuuid
     tiktoken
     uvicorn
-  # ] ++ markdown2.optional-dependencies.all;
+    # ] ++ markdown2.optional-dependencies.all;
   ];
 
   passthru.optional-dependencies = {
@@ -75,9 +74,7 @@ buildPythonPackage {
       wandb
       einops
     ];
-    webui = [
-      gradio
-    ];
+    webui = [ gradio ];
     model_worker = [
       accelerate
       peft

@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2024-02-05";
+  version = "2024-04-23";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-MTlRa7uyJqU98nhADsAwJ3BjlMvijAWIcTJO8GO+6tY=";
+    hash = "sha256-PqmkQcpxuYJGZJs2qemv0hshvO4KTiKc1ZY0//Gq0pY=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
+    mainProgram = "vcpkg";
     homepage = "https://github.com/microsoft/vcpkg-tool";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka gracicot ];

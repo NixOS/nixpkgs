@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A command-line pager for JSON data";
+    mainProgram = "jless";
     homepage = "https://jless.io";
     changelog = "https://github.com/PaulJuliusMartinez/jless/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

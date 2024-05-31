@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitLab
-, fetchFromGitHub
 , buildGoModule
 , pkg-config
 }:
 
 let
-  version = "16.8.1";
+  version = "16.10.6";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -18,10 +17,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-yR8O9F6THymKKHbnfh67NhEcNNBz7XHja/fpeTmVoe0=";
+      hash = "sha256-C57p3H1L6ZQfjipGoQJup8u6ofir3rrxORtzUA1afL0=";
     };
 
-    vendorHash = "sha256-AkL/BbCrqgXyvfiMxzMIXeZwh5aFL2a2+myk/4YXMNc=";
+    vendorHash = "sha256-6gZr0/0ZGcFwwAY4IuW2puL/7akMZvaU0ONJGYyyJas=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 

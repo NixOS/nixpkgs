@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, protobuf
-, pythonRelaxDepsHook
-, pytestCheckHook
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  protobuf,
+  pythonRelaxDepsHook,
+  pytestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "axisregistry";
-  version = "0.4.5";
+  version = "0.4.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-elQUcl6Zh/3xXLduFKbiXZ6uQsDE8C6M3QnTEwaJlaA=";
+    hash = "sha256-obpjiX86fzokao7UWQUXgarKYRNdxplr6/r2D2d7DCI=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
   # ecosystem have begun upgrading from protobuf 3 to protobuf 4,

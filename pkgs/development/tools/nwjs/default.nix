@@ -17,6 +17,7 @@
 , lib
 , libcap
 , libdrm
+, libGL
 , libnotify
 , libuuid
 , libxcb
@@ -31,7 +32,7 @@
 , stdenv
 , systemd
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorg
 }:
 
@@ -55,6 +56,7 @@ let
       gtk3
       libcap
       libdrm
+      libGL
       libnotify
       libxkbcommon
       mesa
@@ -85,7 +87,7 @@ let
     extraOutputsToInstall = [ "lib" "out" ];
   };
 
-  version = "0.84.0";
+  version = "0.87.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -96,16 +98,16 @@ stdenv.mkDerivation {
     in fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
       hash = {
-        "sdk-ia32" = "sha256-uy6WZuA5b79yACSe3wiKiEeMb6K/z84cSeQDrKFUUdE=";
-        "sdk-x64" = "sha256-xI/YMHg5RWYh9XCLskSkuDwemH77U43Fzb8C9+fS9wE=";
-        "ia32" = "sha256-Sc9geGuwl9TIdLrKr97Wz2h4S+AEgP3DAd12Toyk7b8=";
-        "x64" = "sha256-VIygMzCPTKzLr47bG1DYy/zj0OxsjGcms0G1BkI/TEI=";
+        "sdk-ia32" = "sha256-We4tSI8rQbEIoxNgTP/IkL/sD7GegVQDAtXUSY4AoB0=";
+        "sdk-x64" = "sha256-pWsNVHNm1gVAy9ofZ6g1Im5TpzxM2bmJ6RENa21N4qM=";
+        "ia32" = "sha256-ExxzzErT3GBI1yLYycojDkzKZ2VuvsOjaingQiK1Kww=";
+        "x64" = "sha256-tKm3aTlfPuevdjqFFEVU6nvIixoBDUcnJPFyO1PNRqE=";
       }."${flavor + bits}";
     };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook.override { inherit makeWrapper; })
+    (wrapGAppsHook3.override { inherit makeWrapper; })
   ];
 
   buildInputs = [ nwEnv ];

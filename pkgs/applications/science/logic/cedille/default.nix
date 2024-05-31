@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory";
     homepage = "https://cedille.github.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam mpickering ];
+    maintainers = with maintainers; [ mpickering ];
     platforms = platforms.unix;
 
     # Broken due to Agda update.  See

@@ -6,22 +6,22 @@
 , ninja
 , wayland
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , installShellFiles
 }:
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.4";
+  version = "1.4.1";
 
   src = fetchFromSourcehut {
     repo = pname;
     owner = "~scoopta";
     rev = "v${version}";
-    sha256 = "sha256-zzBD1OPPlOjAUaJOlMf6k1tSai1w1ZvOwy2sSOWI7AM=";
+    sha256 = "sha256-aedoUhVfk8ljmQ23YxVmGZ00dPpRftW2dnRAgXmtV/w=";
     vc = "hg";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook3 installShellFiles ];
   buildInputs = [ wayland gtk3 ];
 
   patches = [

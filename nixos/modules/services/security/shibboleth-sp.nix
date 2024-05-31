@@ -8,31 +8,31 @@ in {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the shibboleth service";
+        description = "Whether to enable the shibboleth service";
       };
 
       configFile = lib.mkOption {
         type = lib.types.path;
         example = lib.literalExpression ''"''${pkgs.shibboleth-sp}/etc/shibboleth/shibboleth2.xml"'';
-        description = lib.mdDoc "Path to shibboleth config file";
+        description = "Path to shibboleth config file";
       };
 
       fastcgi.enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to include the shibauthorizer and shibresponder FastCGI processes";
+        description = "Whether to include the shibauthorizer and shibresponder FastCGI processes";
       };
 
       fastcgi.shibAuthorizerPort = lib.mkOption {
         type = lib.types.int;
         default = 9100;
-        description = lib.mdDoc "Port for shibauthorizer FastCGI process to bind to";
+        description = "Port for shibauthorizer FastCGI process to bind to";
       };
 
       fastcgi.shibResponderPort = lib.mkOption {
         type = lib.types.int;
         default = 9101;
-        description = lib.mdDoc "Port for shibauthorizer FastCGI process to bind to";
+        description = "Port for shibauthorizer FastCGI process to bind to";
       };
     };
   };

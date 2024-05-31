@@ -5,7 +5,7 @@
 , meson
 , ninja
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , libgee
 , pantheon
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

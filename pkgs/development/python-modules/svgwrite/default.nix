@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,5 +33,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozman/svgwrite";
     license = licenses.mit;
   };
-
 }

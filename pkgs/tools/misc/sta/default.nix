@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     '';
     license = licenses.mit;
     homepage = "https://github.com/simonccarter/sta";
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
     mainProgram = "sta";

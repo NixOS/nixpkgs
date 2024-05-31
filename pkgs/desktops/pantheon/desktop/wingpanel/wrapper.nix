@@ -1,5 +1,5 @@
 { lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , stdenv
 , xorg
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.forEach selectedIndicators (x: x.buildInputs)

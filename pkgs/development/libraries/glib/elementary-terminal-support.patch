@@ -1,8 +1,8 @@
 diff --git a/gio/gdesktopappinfo.c b/gio/gdesktopappinfo.c
-index 30fcb2937..a6a7163a7 100644
+index 87db7a97a..bf01fb6b6 100644
 --- a/gio/gdesktopappinfo.c
 +++ b/gio/gdesktopappinfo.c
-@@ -2704,6 +2704,7 @@ prepend_terminal_to_vector (int          *argc,
+@@ -2697,6 +2697,7 @@ prepend_terminal_to_vector (int          *argc,
      { "gnome-terminal", "--" },
      { "mate-terminal", "-x" },
      { "xfce4-terminal", "-x" },

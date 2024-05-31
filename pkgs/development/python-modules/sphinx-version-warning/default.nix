@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonImportsCheckHook
-, pythonOlder
-, setuptools
-, sphinx
-, sphinx-autoapi
-, sphinx-prompt
-, sphinx-rtd-theme
-, sphinx-tabs
-, sphinxemoji
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonImportsCheckHook,
+  pythonOlder,
+  setuptools,
+  sphinx,
+  sphinx-autoapi,
+  sphinx-prompt,
+  sphinx-rtd-theme,
+  sphinx-tabs,
+  sphinxemoji,
+  sphinxHook,
 }:
 
 # Latest tagged release release "1.1.2" (Nov 2018) does not contain
@@ -56,13 +57,9 @@ buildPythonPackage {
     setuptools
   ];
 
-  buildInputs = [
-    sphinx
-  ];
+  buildInputs = [ sphinx ];
 
-  pythonImportsCheck = [
-    "versionwarning"
-  ];
+  pythonImportsCheck = [ "versionwarning" ];
 
   meta = with lib; {
     description = "A sphinx extension to show a warning banner at the top of your documentation";

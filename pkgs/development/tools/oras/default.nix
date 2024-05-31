@@ -51,6 +51,7 @@ buildGoModule rec {
     homepage = "https://oras.land/";
     changelog = "https://github.com/oras-project/oras/releases/tag/v${version}";
     description = "The ORAS project provides a way to push and pull OCI Artifacts to and from OCI Registries";
+    mainProgram = "oras";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk developer-guy ];
   };

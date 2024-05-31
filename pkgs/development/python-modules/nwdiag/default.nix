@@ -1,55 +1,54 @@
-{ lib
-, blockdiag
-, fetchFromGitHub
-, buildPythonPackage
-, nose
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  blockdiag,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pynose,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nwdiag";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
-    repo = pname;
-    rev = version;
+    repo = "nwdiag";
+    rev = "refs/tags/${version}";
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
-  propagatedBuildInputs = [
-    blockdiag
-    setuptools
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ blockdiag ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "src/nwdiag/tests/"
-  ];
+  pytestFlagsArray = [ "src/nwdiag/tests/" ];
 
   disabledTests = [
-    # UnicodeEncodeError: 'latin-1' codec can't encode...
-    "test_setup_inline_svg_is_true_with_multibytes"
+    # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
+    "svg"
+    "noviewbox"
   ];
 
-  pythonImportsCheck = [
-    "nwdiag"
-  ];
+  pythonImportsCheck = [ "nwdiag" ];
 
   meta = with lib; {
     description = "Generate network-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
+    changelog = "https://github.com/blockdiag/nwdiag/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "rackdiag";
+    platforms = platforms.unix;
   };
 }

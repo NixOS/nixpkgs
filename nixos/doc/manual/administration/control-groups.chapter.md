@@ -39,7 +39,9 @@ they were in the same cgroup, then the PostgreSQL process would get
 `configuration.nix`:
 
 ```nix
-systemd.services.httpd.serviceConfig.CPUShares = 512;
+{
+  systemd.services.httpd.serviceConfig.CPUShares = 512;
+}
 ```
 
 By default, every cgroup has 1024 CPU shares, so this will halve the CPU
@@ -52,7 +54,9 @@ limits can be specified in `configuration.nix`; for instance, to limit
 `httpd.service` to 512 MiB of RAM (excluding swap):
 
 ```nix
-systemd.services.httpd.serviceConfig.MemoryLimit = "512M";
+{
+  systemd.services.httpd.serviceConfig.MemoryLimit = "512M";
+}
 ```
 
 The command `systemd-cgtop` shows a continuously updated list of all

@@ -17,7 +17,7 @@ in
       cleanOnBoot = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to delete all files in {file}`/tmp` during boot.
         '';
       };
@@ -25,7 +25,7 @@ in
       tmpfsSize = mkOption {
         type = types.oneOf [ types.str types.types.ints.positive ];
         default = "50%";
-        description = lib.mdDoc ''
+        description = ''
           Size of tmpfs in percentage.
           Percentage is defined by systemd.
         '';
@@ -34,7 +34,7 @@ in
       useTmpfs = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
            Whether to mount a tmpfs on {file}`/tmp` during boot.
 
            ::: {.note}

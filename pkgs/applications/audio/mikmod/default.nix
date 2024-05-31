@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;
+    mainProgram = "mikmod";
   };
 }

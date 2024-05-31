@@ -1,21 +1,27 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  substituteAll,
+  addOpenGLRunpath,
 }:
 
 buildPythonPackage rec {
   pname = "nvidia-ml-py";
-  version = "12.535.133";
+  version = "12.550.52";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-sVWa8NV90glVv1jQWv/3sWbd1ElH6zBRyZBWOHmesdw=";
+    hash = "sha256-3+3XFDNccuZaMshun12xzUlSbUTW2McoCdmWlY9zTAc=";
   };
 
   patches = [
-    ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch
+    (substituteAll {
+      src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
   ];
 
   # no tests

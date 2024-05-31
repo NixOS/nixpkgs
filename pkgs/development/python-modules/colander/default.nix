@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, babel
-, translationstring
-, iso8601
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  babel,
+  translationstring,
+  iso8601,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     iso8601
   ];
 
-  pythonImportsCheck = [
-    "colander"
-  ];
+  pythonImportsCheck = [ "colander" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A simple schema-based serialization and deserialization library";

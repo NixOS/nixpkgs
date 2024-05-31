@@ -1,8 +1,13 @@
 { lib, stdenv, fetchurl, unzip, graylog-5_1 }:
 
-with lib;
-
 let
+  inherit (lib)
+    licenses
+    maintainers
+    platforms
+    sourceTypes
+    ;
+
   glPlugin = a@{
     pluginName,
     version,
@@ -78,7 +83,7 @@ in {
     meta = {
       homepage = "https://docs.graylog.org/en/3.3/pages/integrations.html#enterprise";
       description = "Integrations are tools that help Graylog work with external systems (unfree enterprise integrations)";
-      license = lib.licenses.unfree;
+      license = licenses.unfree;
     };
   };
   filter-messagesize = glPlugin rec {
@@ -227,7 +232,7 @@ in {
     meta = {
       homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
       description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog";
-      license = lib.licenses.gpl3Only;
+      license = licenses.gpl3Only;
     };
   };
   snmp = glPlugin rec {
@@ -267,7 +272,7 @@ in {
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
       description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP";
-      license = lib.licenses.gpl3Only;
+      license = licenses.gpl3Only;
     };
   };
   twiliosms = glPlugin rec {

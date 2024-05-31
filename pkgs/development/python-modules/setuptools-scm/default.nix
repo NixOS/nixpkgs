@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, packaging
-, typing-extensions
-, tomli
+  # dependencies
+  packaging,
+  typing-extensions,
+  tomli,
 
-# optional-dependencies
-, rich
+  # optional-dependencies
+  rich,
 }:
 
 buildPythonPackage rec {
@@ -26,29 +27,19 @@ buildPythonPackage rec {
     hash = "sha256-tfQ/9oAGaVlRk/0JiRVk7p0dfcsZbKtLJQbVOi4clcc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  nativeBuildInputs = [ setuptools ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   propagatedBuildInputs = [
     packaging
     setuptools
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   passthru.optional-dependencies = {
-    rich = [
-      rich
-    ];
+    rich = [ rich ];
   };
 
-  pythonImportsCheck = [
-    "setuptools_scm"
-  ];
+  pythonImportsCheck = [ "setuptools_scm" ];
 
   # check in passthru.tests.pytest to escape infinite recursion on pytest
   doCheck = false;

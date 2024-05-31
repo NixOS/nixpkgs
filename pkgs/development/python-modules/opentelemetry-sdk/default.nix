@@ -1,34 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, flaky
-, hatchling
-, opentelemetry-api
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, setuptools
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  flaky,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  setuptools,
+  typing-extensions,
+  pytestCheckHook,
 }:
 
 let
   self = buildPythonPackage {
     inherit (opentelemetry-api) version src;
     pname = "opentelemetry-sdk";
-    disabled = pythonOlder "3.7";
+    pyproject = true;
+
+    disabled = pythonOlder "3.8";
 
     sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-sdk";
 
-    format = "pyproject";
+    build-system = [ hatchling ];
 
-    nativeBuildInputs = [
-      hatchling
-    ];
-
-    propagatedBuildInputs = [
+    dependencies = [
       opentelemetry-api
       opentelemetry-semantic-conventions
-      setuptools
       typing-extensions
     ];
 
@@ -38,9 +36,7 @@ let
       pytestCheckHook
     ];
 
-    disabledTestPaths = [
-      "tests/performance/benchmarks/"
-    ];
+    disabledTestPaths = [ "tests/performance/benchmarks/" ];
 
     pythonImportsCheck = [ "opentelemetry.sdk" ];
 
@@ -54,4 +50,5 @@ let
       description = "OpenTelemetry Python SDK";
     };
   };
-in self
+in
+self

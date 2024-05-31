@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , libgee
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "cipher";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

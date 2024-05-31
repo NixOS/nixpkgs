@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "43.2";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "NIUI+PbnRRwHNE/6egmpkM8dKIO8z1M0CdvgKSaNSfI=";
+    hash = "sha256-oryQ4KdUMSxXibkZi0knMDd1tiWDqOlnbSxqlztG/ec=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +57,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Chess";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-chess";
     description = "Play the classic two-player boardgame of chess";
+    mainProgram = "gnome-chess";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

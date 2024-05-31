@@ -14,7 +14,7 @@ in
   options.networking.wireless.athUserRegulatoryDomain = mkOption {
     default = false;
     type = types.bool;
-    description = lib.mdDoc ''
+    description = ''
       If enabled, sets the ATH_USER_REGD kernel config switch to true to
       disable the enforcement of EEPROM regulatory restrictions for ath
       drivers. Requires at least Linux ${linuxKernelMinVersion}.

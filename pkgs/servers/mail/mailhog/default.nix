@@ -17,6 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Web and API based SMTP testing";
+    mainProgram = "MailHog";
     homepage = "https://github.com/mailhog/MailHog";
     changelog = "https://github.com/mailhog/MailHog/releases/tag/v${version}";
     maintainers = with maintainers; [ disassembler jojosch ];

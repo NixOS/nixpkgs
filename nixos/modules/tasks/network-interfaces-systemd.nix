@@ -32,13 +32,13 @@ let
     optionalAttrs (gateway != null && gateway.interface != null) {
       networks."40-${gateway.interface}" = {
         matchConfig.Name = gateway.interface;
-        routes = [{
-          routeConfig = {
+        routes = [
+          ({
             Gateway = gateway.address;
           } // optionalAttrs (gateway.metric != null) {
             Metric = gateway.metric;
-          };
-        }];
+          })
+        ];
       };
     }
   ));
@@ -98,61 +98,24 @@ let
         (route: {
           # Most of these route options have not been tested.
           # Please fix or report any mistakes you may find.
-          routeConfig =
-            optionalAttrs (route.address != null && route.prefixLength != null) {
-              Destination = "${route.address}/${toString route.prefixLength}";
-            } //
-            optionalAttrs (route.options ? fastopen_no_cookie) {
-              FastOpenNoCookie = route.options.fastopen_no_cookie;
-            } //
-            optionalAttrs (route.via != null) {
-              Gateway = route.via;
-            } //
-            optionalAttrs (route.type != null) {
-              Type = route.type;
-            } //
-            optionalAttrs (route.options ? onlink) {
-              GatewayOnLink = true;
-            } //
-            optionalAttrs (route.options ? initrwnd) {
-              InitialAdvertisedReceiveWindow = route.options.initrwnd;
-            } //
-            optionalAttrs (route.options ? initcwnd) {
-              InitialCongestionWindow = route.options.initcwnd;
-            } //
-            optionalAttrs (route.options ? pref) {
-              IPv6Preference = route.options.pref;
-            } //
-            optionalAttrs (route.options ? mtu) {
-              MTUBytes = route.options.mtu;
-            } //
-            optionalAttrs (route.options ? metric) {
-              Metric = route.options.metric;
-            } //
-            optionalAttrs (route.options ? src) {
-              PreferredSource = route.options.src;
-            } //
-            optionalAttrs (route.options ? protocol) {
-              Protocol = route.options.protocol;
-            } //
-            optionalAttrs (route.options ? quickack) {
-              QuickAck = route.options.quickack;
-            } //
-            optionalAttrs (route.options ? scope) {
-              Scope = route.options.scope;
-            } //
-            optionalAttrs (route.options ? from) {
-              Source = route.options.from;
-            } //
-            optionalAttrs (route.options ? table) {
-              Table = route.options.table;
-            } //
-            optionalAttrs (route.options ? advmss) {
-              TCPAdvertisedMaximumSegmentSize = route.options.advmss;
-            } //
-            optionalAttrs (route.options ? ttl-propagate) {
-              TTLPropagate = route.options.ttl-propagate == "enabled";
-            };
+          Destination = mkIf (route.address != null && route.prefixLength != null) "${route.address}/${toString route.prefixLength}";
+          FastOpenNoCookie = mkIf (route.options ? fastopen_no_cookie) route.options.fastopen_no_cookie;
+          Gateway = mkIf (route.via != null) route.via;
+          Type = mkIf (route.type != null) route.type;
+          GatewayOnLink = mkIf (route.options ? onlink) true;
+          InitialAdvertisedReceiveWindow = mkIf (route.options ? initrwnd) route.options.initrwnd;
+          InitialCongestionWindow = mkIf (route.options ? initcwnd) route.options.initcwnd;
+          IPv6Preference = mkIf (route.options ? pref) route.options.pref;
+          MTUBytes = mkIf (route.options ? mtu) route.options.mtu;
+          Metric = mkIf (route.options ? metric) route.options.metric;
+          PreferredSource = mkIf (route.options ? src) route.options.src;
+          Protocol = mkIf (route.options ? protocol) route.options.protocol;
+          QuickAck = mkIf (route.options ? quickack) route.options.quickack;
+          Scope = mkIf (route.options ? scope) route.options.scope;
+          Source = mkIf (route.options ? from) route.options.from;
+          Table = mkIf (route.options ? table) route.options.table;
+          TCPAdvertisedMaximumSegmentSize = mkIf (route.options ? advmss) route.options.advmss;
+          TTLPropagate = mkIf (route.options ? ttl-propagate) route.options.ttl-propagate == "enabled";
         });
       networkConfig.IPv6PrivacyExtensions = "kernel";
       linkConfig = optionalAttrs (i.macAddress != null) {

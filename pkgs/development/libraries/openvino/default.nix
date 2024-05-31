@@ -1,7 +1,6 @@
 { lib
 , gcc12Stdenv
 , fetchFromGitHub
-, fetchpatch2
 , fetchurl
 , cudaSupport ? opencv.cudaSupport or false
 
@@ -12,13 +11,14 @@
 , cmake
 , git
 , libarchive
+, patchelf
 , pkg-config
-, python
+, python3Packages
 , shellcheck
-, sphinx
 
 # runtime
 , flatbuffers
+, level-zero
 , libusb1
 , libxml2
 , ocl-icd
@@ -37,39 +37,33 @@ let
 
   stdenv = gcc12Stdenv;
 
-  # See GNA_VERSION in cmake/dependencies.cmake
-  gna_version = "03.05.00.2116";
-  gna = fetchurl {
-    url = "https://storage.openvinotoolkit.org/dependencies/gna/gna_${gna_version}.zip";
-    hash = "sha256-lgNQVncCvaFydqxMBg11JPt8587XhQBL2GHIH/K/4sU=";
-  };
-
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
     url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v4.tgz";
     hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
   };
+
+  python = python3Packages.python.withPackages (ps: with ps; [
+    cython
+    pybind11
+    setuptools
+    sphinx
+    wheel
+  ]);
+
 in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2023.3.0";
+  version = "2024.1.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-dXlQhar5gz+1iLmDYXUY0jZKh4rJ+khRpoZQphJXfcU=";
+    hash = "sha256-OOSxXpLjmhOgKvrSO6SmY7xLhJSzGXT8w/Y4FnfwTqU=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "enable-js-toggle.patch";
-      url = "https://github.com/openvinotoolkit/openvino/commit/0a8f1383826d949c497fe3d05fef9ad2b662fa7e.patch";
-      hash = "sha256-mQYunouPo3tRlD5Yp4EUth324ccNnVX8zmjPHvJBYKw=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -82,27 +76,16 @@ stdenv.mkDerivation rec {
     cmake
     git
     libarchive
+    patchelf
     pkg-config
-    (python.withPackages (ps: with ps; [
-      cython
-      pybind11
-      setuptools
-    ]))
+    python
     scons
     shellcheck
-    sphinx
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
 
   postPatch = ''
-    mkdir -p temp/gna_${gna_version}
-    pushd temp/
-    bsdtar -xf ${gna}
-    autoPatchelf gna_${gna_version}
-    echo "${gna.url}" > gna_${gna_version}/ie_dependency.info
-    popd
-
     mkdir -p temp/tbbbind_${tbbbind_version}
     pushd temp/tbbbind_${tbbbind_version}
     bsdtar -xf ${tbbbind}
@@ -120,6 +103,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_PREFIX_PATH:PATH=${placeholder "out"}"
     "-DOpenCV_DIR=${opencv}/lib/cmake/opencv4/"
     "-DProtobuf_LIBRARIES=${protobuf}/lib/libprotobuf${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DPython_EXECUTABLE=${python.interpreter}"
 
     (cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (cmakeBool "NCC_SYLE" false)
@@ -130,7 +114,6 @@ stdenv.mkDerivation rec {
 
     # features
     (cmakeBool "ENABLE_INTEL_CPU" stdenv.isx86_64)
-    (cmakeBool "ENABLE_INTEL_GNA" stdenv.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -152,6 +135,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatbuffers
+    level-zero
     libusb1
     libxml2
     ocl-icd

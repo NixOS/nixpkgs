@@ -1,50 +1,66 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, eigen
-, numpy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+  boost,
+  eigen,
+  jrl-cmakemodules,
+  numpy,
+  scipy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eigenpy";
-  version = "3.3.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
-    repo = finalAttrs.pname;
+    repo = "eigenpy";
     rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-INOg1oL5APMI2YZDe4yOJadhMsG7b+NfEcSr9FsdqeU=";
+    hash = "sha256-nTS9FNXGrak5g83BHHNSsk5V5khpOpRz5zWE8D1gDUo=";
   };
+
+  outputs = [
+    "dev"
+    "doc"
+    "out"
+  ];
+
+  cmakeFlags = [
+    "-DINSTALL_DOCUMENTATION=ON"
+    "-DBUILD_TESTING_SCIPY=ON"
+  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    doxygen
+    scipy
   ];
 
-  buildInputs = [
-    boost
-  ];
+  buildInputs = [ boost ];
 
   propagatedBuildInputs = [
     eigen
+    jrl-cmakemodules
     numpy
   ];
 
   doCheck = true;
-  pythonImportsCheck = [
-    "eigenpy"
-  ];
+  pythonImportsCheck = [ "eigenpy" ];
 
   meta = with lib; {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
-    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${version}";
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ nim65s wegank ];
+    maintainers = with maintainers; [
+      nim65s
+      wegank
+    ];
     platforms = platforms.unix;
   };
 })

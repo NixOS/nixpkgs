@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, blessings
-, colorama
-, glob2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  blessings,
+  colorama,
+  glob2,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     glob2
   ];
 
-  pythonImportsCheck = [
-    "ronin"
-  ];
+  pythonImportsCheck = [ "ronin" ];
 
   meta = with lib; {
     homepage = "https://github.com/tliron/ronin/";

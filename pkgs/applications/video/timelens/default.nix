@@ -4,7 +4,7 @@
 , pkg-config
 , glib
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

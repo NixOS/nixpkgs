@@ -21,5 +21,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/charm/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ penguwin ];
+    mainProgram = "charm";
   };
 }

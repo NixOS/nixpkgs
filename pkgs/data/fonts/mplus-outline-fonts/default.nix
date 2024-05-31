@@ -25,7 +25,7 @@ in
       homepage = "https://mplus-fonts.osdn.jp";
       maintainers = with maintainers; [ uakci ];
       platforms = platforms.all;
-      license = licenses.mit;
+      license = licenses.mplus;
     };
   };
 

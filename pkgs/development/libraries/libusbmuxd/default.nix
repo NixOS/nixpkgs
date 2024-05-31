@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libimobiledevice/libusbmuxd";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
   };
 }

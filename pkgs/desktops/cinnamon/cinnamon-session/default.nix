@@ -16,7 +16,7 @@
 , lib
 , stdenv
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , xorg
 , libexecinfo
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     libexecinfo
     python3
     pkg-config

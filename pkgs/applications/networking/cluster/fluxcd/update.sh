@@ -12,7 +12,9 @@ LATEST_VERSION=$(echo ${LATEST_TAG} | sed 's/^v//')
 
 if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/fluxcd/flux2/archive/refs/tags/${LATEST_TAG}.tar.gz)
+    SHA256=$(nix hash to-sri --type sha256 $SHA256)
     SPEC_SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/fluxcd/flux2/releases/download/${LATEST_TAG}/manifests.tar.gz)
+    SPEC_SHA256=$(nix hash to-sri --type sha256 $SPEC_SHA256)
 
     setKV () {
         sed -i "s|$1 = \".*\"|$1 = \"${2:-}\"|" "${FLUXCD_PATH}/default.nix"

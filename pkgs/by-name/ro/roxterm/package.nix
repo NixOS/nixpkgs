@@ -25,7 +25,7 @@
 , stdenv
 , util-linuxMinimal
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 , xmlto
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

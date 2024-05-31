@@ -24,6 +24,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "The fastest STL file viewer";
+    mainProgram = "fstl";
     homepage = "https://github.com/fstl-app/fstl";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;

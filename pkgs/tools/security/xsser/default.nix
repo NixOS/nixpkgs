@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook, gobject-introspection, gtk3, pango
+{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook3, gobject-introspection, gtk3, pango
 , pillow, pycurl, beautifulsoup4, pygeoip, pygobject3, cairocffi, selenium }:
 
 buildPythonApplication rec {
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace /usr/share share
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = [
     gtk3
@@ -53,6 +53,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Automatic framework to detect, exploit and report XSS vulnerabilities in web-based applications";
+    mainProgram = "xsser";
     homepage = "https://xsser.03c8.net/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ emilytrau ];

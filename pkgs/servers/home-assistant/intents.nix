@@ -3,15 +3,16 @@
 , fetchFromGitHub
 , pythonOlder
 
-# build
-, hassil
-, jinja2
-, pyyaml
-, regex
-, voluptuous
-, python
+# build-system
 , setuptools
-, wheel
+
+# codegen
+, hassil
+, python
+, pyyaml
+, voluptuous
+, regex
+, jinja2
 
 # tests
 , pytest-xdist
@@ -20,52 +21,51 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.1.2";
-  format = "pyproject";
+  version = "2024.4.24";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "home-assistant";
     repo = "intents-package";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uOrSvkzymG31nRmAgrn6z1IDJWahxqXHcPDflLPRVT4=";
+    # https://github.com/home-assistant/intents-package/issues/3
+    rev = "a68176a189c3def87cb11ad39baacea2440ce668";
+    hash = "sha256-SUIJWoA0ltg+bjYn4J5kvAk4Eh23uxEcdxonkTSV0m0=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace 'requires = ["setuptools~=62.3", "wheel~=0.37.1"]' 'requires = ["setuptools", "wheel"]'
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=62.3" "setuptools" \
+      --replace-fail "wheel~=0.37.1" "wheel"
   '';
 
-  nativeBuildInputs = [
-    hassil
-    jinja2
-    pyyaml
-    regex
+  build-system = [
     setuptools
-    wheel
+
+    # build-time codegen; https://github.com/home-assistant/intents/blob/main/requirements.txt#L1-L5
+    hassil
+    pyyaml
     voluptuous
+    regex
+    jinja2
   ];
 
   postInstall = ''
-    pushd intents
-    # https://github.com/home-assistant/intents/blob/main/script/package#L18
-    ${python.pythonOnBuildForHost.interpreter} -m script.intentfest merged_output $out/${python.sitePackages}/home_assistant_intents/data
-    popd
+    # https://github.com/home-assistant/intents-package/blob/main/script/package#L23-L24
+    PACKAGE_DIR=$out/${python.sitePackages}/home_assistant_intents
+    ${python.pythonOnBuildForHost.interpreter} script/merged_output.py $PACKAGE_DIR/data
+    ${python.pythonOnBuildForHost.interpreter} script/write_languages.py $PACKAGE_DIR/data > $PACKAGE_DIR/languages.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
     "intents/tests"
-  ];
-
-  disabledTests = [
-    # AssertionError: Recognition failed for 'put apples on the list'
-    "test_shopping_list_HassShoppingListAddItem"
   ];
 
   meta = with lib; {

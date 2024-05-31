@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nostalgia bucklespring keyboard sound";
+    mainProgram = "buckle";
     longDescription = ''
       When built with libinput (wayland or bare console),
       users need to be in the input group to use this:

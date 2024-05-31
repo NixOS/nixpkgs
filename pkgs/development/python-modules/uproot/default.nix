@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, awkward
-, hatch-vcs
-, hatchling
-, numpy
-, fsspec
-, packaging
-, pandas
-, pytestCheckHook
-, lz4
-, pytest-timeout
-, rangehttpserver
-, scikit-hep-testdata
-, xxhash
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  awkward,
+  cramjam,
+  hatch-vcs,
+  hatchling,
+  numpy,
+  fsspec,
+  packaging,
+  pandas,
+  pytestCheckHook,
+  pytest-timeout,
+  rangehttpserver,
+  scikit-hep-testdata,
+  xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.2.2";
+  version = "5.3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,16 +29,17 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7X8oIMvOSC1JXQrZTPXLiqsUnfSc2Rx3KCvxKbhvPzM=";
+    hash = "sha256-ptfT31eUNSpVaZfXAyRcIc2T2p82rXmzUyySSVbI9lI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
+    cramjam
     numpy
     fsspec
     packaging
@@ -47,12 +48,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    lz4
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
     xxhash
-    zstandard
   ];
 
   preCheck = ''
@@ -61,13 +60,16 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests that try to download files
+    "test_descend_into_path_classname_of"
     "test_fallback"
     "test_file"
     "test_fsspec_cache_http"
     "test_fsspec_cache_http_directory"
     "test_fsspec_chunks"
     "test_fsspec_globbing_http"
+    "test_fsspec_writing_http"
     "test_fsspec_writing_memory"
+    "test_fsspec_writing_ssh"
     "test_http"
     "test_http_fallback"
     "test_http_multipart"
@@ -75,10 +77,16 @@ buildPythonPackage rec {
     "test_http_size"
     "test_http_size_port"
     "test_issue_1054_filename_colons"
+    "test_multiple_page_lists"
     "test_no_multipart"
-    "test_open_fsspec_http"
     "test_open_fsspec_github"
+    "test_open_fsspec_http"
+    "test_open_fsspec_ss"
     "test_pickle_roundtrip_http"
+    "test_split_ranges_if_large_file_in_http"
+    # Cyclic dependency with dask-awkward
+    "test_dask_duplicated_keys"
+    "test_decompression_executor_for_dask"
   ];
 
   disabledTestPaths = [
@@ -91,9 +99,7 @@ buildPythonPackage rec {
     "tests/test_1043_const_std_string.py"
   ];
 
-  pythonImportsCheck = [
-    "uproot"
-  ];
+  pythonImportsCheck = [ "uproot" ];
 
   meta = with lib; {
     description = "ROOT I/O in pure Python and Numpy";

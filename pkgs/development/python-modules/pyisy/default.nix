@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, colorlog
-, fetchFromGitHub
-, python-dateutil
-, pythonOlder
-, requests
-, setuptools-scm
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  colorlog,
+  fetchFromGitHub,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
       --replace 'version_format="{tag}"' 'version="${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aiohttp

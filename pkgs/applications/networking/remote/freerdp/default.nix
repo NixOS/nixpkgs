@@ -76,13 +76,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.11.5";
+  version = "2.11.7";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    hash = "sha256-WyYBIiIQNDHydJqU3jWNItJU2/sYnRpGHCXE9Xhom5M=";
+    hash = "sha256-w+xyMNFmKylSheK0yAGl8J6MXly/HUjjAfR9Qq3s/kA=";
   };
 
   postPatch = ''
@@ -205,6 +205,7 @@ stdenv.mkDerivation rec {
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg lheckemann ];
     platforms = platforms.unix;

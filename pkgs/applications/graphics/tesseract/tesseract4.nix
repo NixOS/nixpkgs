@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
-, leptonica, libpng, libtiff, icu, pango, opencl-headers, fetchpatch }:
+, leptonica, libpng, libtiff, icu, pango, opencl-headers }:
 
 stdenv.mkDerivation rec {
   pname = "tesseract";
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ viric erikarvstedt ];
     platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "tesseract";
   };
 }

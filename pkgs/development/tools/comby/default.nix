@@ -47,6 +47,7 @@ let
 
       meta = {
         description = "Tool for searching and changing code structure";
+        mainProgram = "comby";
         license = lib.licenses.asl20;
         homepage = "https://comby.dev";
       };

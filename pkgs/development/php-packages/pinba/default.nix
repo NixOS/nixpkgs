@@ -1,4 +1,8 @@
-{ buildPecl, lib, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+}:
 
 buildPecl rec {
   pname = "pinba";
@@ -7,7 +11,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "tony2001";
     repo = "pinba_extension";
-    rev = "RELEASE_${lib.replaceStrings ["."] ["_"] version}";
+    rev = "RELEASE_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0wqcqq6sb51wiawa37hbd1h9dbvmyyndzdvz87xqji7lpr9vn8jy";
   };
 

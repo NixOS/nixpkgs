@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lxml
-, mock
-, ncclient
-, netaddr
-, nose2
-, ntc-templates
-, paramiko
-, pyparsing
-, pyserial
-, pythonOlder
-, pyyaml
-, scp
-, setuptools
-, pytestCheckHook
-, six
-, transitions
-, yamlordereddictloader
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  mock,
+  ncclient,
+  netaddr,
+  nose2,
+  ntc-templates,
+  paramiko,
+  pyparsing,
+  pyserial,
+  pythonOlder,
+  pyyaml,
+  scp,
+  setuptools,
+  pytestCheckHook,
+  six,
+  transitions,
+  yamlordereddictloader,
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,14 +33,12 @@ buildPythonPackage rec {
     owner = "Juniper";
     repo = "py-junos-eznc";
     rev = "refs/tags/${version}";
-    hash = "sha256-06OV6UrF2i4SxL5dCvVxsEX2e8ef8UBFx/oMbvCZDaM=";
+    hash = "sha256-aoi+in5A8qSdQNY3V4S4wBBfPchR1an7G6GQHDhgxpQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     lxml
     ncclient
@@ -61,9 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-   "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # jnpr.junos.exception.FactLoopError: A loop was detected while gathering the...
@@ -76,9 +73,7 @@ buildPythonPackage rec {
     "test_domain_fact_from_config"
   ];
 
-  pythonImportsCheck = [
-    "jnpr.junos"
-  ];
+  pythonImportsCheck = [ "jnpr.junos" ];
 
   meta = with lib; {
     description = "Junos 'EZ' automation for non-programmers";

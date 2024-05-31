@@ -19,6 +19,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Monitoring and Testing Tool for Linux kernel thermal subsystem";
+    mainProgram = "tmon";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;

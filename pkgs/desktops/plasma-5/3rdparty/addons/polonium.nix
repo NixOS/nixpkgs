@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "polonium";
-  version = "0.6.0";
+  version = "1.0rc";
 
   src = fetchFromGitHub {
     owner = "zeroxoneafour";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-fZgNOcOq+owmqtplwnxeOIQpWmrga/WitCNCj89O5XA=";
+    hash = "sha256-AdMeIUI7ZdctpG/kblGdk1DBy31nDyolPVcTvLEHnNs=";
   };
 
-  npmDepsHash = "sha256-25AtM1FweWIbFot+HUMSPYTu47/0eKNpRWSlBEL0yKk=";
+  npmDepsHash = "sha256-kaT3Uyq+/JkmebakG9xQuR4Kjo7vk6BzI1/LffOj/eo=";
 
   dontConfigure = true;
 
@@ -43,9 +43,9 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "Auto-tiler that uses KWin 5.27+ tiling functionality";
+    description = "Auto-tiler that uses KWin 6.0+ tiling functionality";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg kotatsuyaki ];
     inherit (plasma-framework.meta) platforms;
   };
 }

@@ -6,10 +6,13 @@
 , stdenv
 , darwin
 , nixosTests
-, rocksdb
+, rocksdb_8_3
 , rust-jemalloc-sys
 }:
 
+let
+  rocksdb = rocksdb_8_3;
+in
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
   version = "0.6.0";
@@ -66,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pstn piegames pimeys ];
+    maintainers = with maintainers; [ pstn pimeys ];
     mainProgram = "conduit";
   };
 }

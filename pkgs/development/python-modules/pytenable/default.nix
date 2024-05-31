@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, marshmallow
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, python-dateutil
-, pythonOlder
-, requests
-, requests-pkcs12
-, responses
-, restfly
-, semver
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  marshmallow,
+  pytest-datafiles,
+  pytest-vcr,
+  pytestCheckHook,
+  python-box,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-pkcs12,
+  responses,
+  restfly,
+  semver,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.18";
+  version = "1.4.22";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,14 +30,12 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = "refs/tags/${version}";
-    hash = "sha256-JAS+C1MeO/B8ZQ2BYsRwpVW08E9hGoJcvv9zOJZD3Gg=";
+    hash = "sha256-acMafLlO0yGEnW+0XeBWUpDWvOPFAB4RK/XyAb2JbPw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
     marshmallow
     python-box
@@ -71,9 +70,7 @@ buildPythonPackage rec {
     "test_events_list_vcr"
   ];
 
-  pythonImportsCheck = [
-    "tenable"
-  ];
+  pythonImportsCheck = [ "tenable" ];
 
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";

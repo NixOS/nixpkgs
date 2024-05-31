@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, flask, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "flask-script";

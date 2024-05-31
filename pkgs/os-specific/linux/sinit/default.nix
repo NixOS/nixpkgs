@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A very minimal Linux init implementation from suckless.org";
+    mainProgram = "sinit";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

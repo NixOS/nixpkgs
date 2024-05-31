@@ -18,8 +18,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
@@ -30,5 +28,6 @@ appimageTools.wrapType2 {
     homepage = "https://requestly.io";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "requestly";
   };
 }

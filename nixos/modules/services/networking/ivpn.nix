@@ -8,7 +8,7 @@ with lib;
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         This option enables iVPN daemon.
         This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
       '';

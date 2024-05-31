@@ -1,4 +1,5 @@
 { lib, python3, fetchFromGitHub, glibcLocales, git }:
+
 let
   changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
     inherit version;
@@ -13,8 +14,10 @@ let
       cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
     };
   };
+
 in
-with localPython.pkgs; buildPythonApplication rec {
+
+localPython.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
   version = "3.20.10";
   format = "setuptools";
@@ -31,7 +34,7 @@ with localPython.pkgs; buildPythonApplication rec {
     substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with localPython.pkgs; [
     pythonRelaxDepsHook
   ];
 
@@ -39,7 +42,7 @@ with localPython.pkgs; buildPythonApplication rec {
     glibcLocales
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with localPython.pkgs; [
     blessed
     botocore
     cement
@@ -64,7 +67,7 @@ with localPython.pkgs; buildPythonApplication rec {
     "termcolor"
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with localPython.pkgs; [
     pytestCheckHook
     pytest-socket
     mock

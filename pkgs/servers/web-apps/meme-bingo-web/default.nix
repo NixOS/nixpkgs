@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Play meme bingo using this neat web app";
+    mainProgram = "meme-bingo-web";
     homepage = "https://codeberg.org/annaaurora/meme-bingo-web";
     license = licenses.unlicense;
     maintainers = with maintainers; [ annaaurora ];

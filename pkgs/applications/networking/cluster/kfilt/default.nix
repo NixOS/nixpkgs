@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = {
     description = "Command-line tool that filters Kubernetes resources";
+    mainProgram = "kfilt";
     homepage = "https://github.com/ryane/kfilt";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ryane ];

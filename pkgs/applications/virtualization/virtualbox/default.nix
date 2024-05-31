@@ -1,10 +1,11 @@
-{ config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+{ config, stdenv, fetchurl, fetchpatch, callPackage, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, libtpms, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
 , linuxPackages
+, nixosTests
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -17,8 +18,15 @@
 , headless ? false
 , enable32bitGuests ? true
 , enableWebService ? false
+, enableKvm ? false
 , extraConfigureFlags ? ""
 }:
+
+# See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
+assert enableKvm -> !enableHardening;
+
+# The web services use Java infrastructure.
+assert enableWebService -> javaBindings;
 
 with lib;
 
@@ -26,17 +34,23 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "7.0.12";
+  version = "7.0.14";
+
+  # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
+  # modsrc at all.
+  withModsrc = !enableKvm;
+
+  virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "d76634c6ccf62503726a5aeae6c78a3462474c51a0ebe4942591ccc2d939890a";
+    sha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
   };
 
-  outputs = [ "out" "modsrc" ];
+  outputs = [ "out" ] ++ optional withModsrc "modsrc";
 
   nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 yasm glslang ]
     ++ optional (!headless) wrapQtAppsHook;
@@ -85,7 +99,13 @@ in stdenv.mkDerivation {
   patches =
      optional enableHardening ./hardened.patch
      # Since VirtualBox 7.0.8, VBoxSDL requires SDL2, but the build framework uses SDL1
-  ++ optional (!headless) ./fix-sdl.patch
+  ++ optionals (!headless) [ ./fix-sdl.patch
+     # No update patch disables check for update function
+     # https://bugs.launchpad.net/ubuntu/+source/virtualbox-ose/+bug/272212
+     (fetchpatch {
+       url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/debian/${version}-dfsg-1/debian/patches/16-no-update.patch";
+       hash = "sha256-UJHpuB6QB/BbxJorlqZXUF12lgq8gbLMRHRMsbyqRpY=";
+     })]
   ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
@@ -97,7 +117,17 @@ in stdenv.mkDerivation {
   ++ optional (!headless && enableHardening) (substituteAll {
       src = ./qt-env-vars.patch;
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
-    })
+  })
+     # While the KVM patch should not break any other behavior if --with-kvm is not specified,
+     # we don't take any chances and only apply it if people actually want to use KVM support.
+  ++ optional enableKvm (fetchpatch
+    (let
+      patchVersion = "20240502";
+    in {
+      name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
+      hash = "sha256-KokIrrAoJutHzPg6e5YAJgDGs+nQoVjapmyn9kG5tV0=";
+    }))
   ++ [
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
@@ -159,6 +189,7 @@ in stdenv.mkDerivation {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
+      ${optionalString (enableKvm) "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
@@ -214,13 +245,17 @@ in stdenv.mkDerivation {
         mkdir -p $out/share/icons/hicolor/$size/apps
         ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
       done
+      # Translation
+      ln -sv $libexec/nls "$out/share/virtualbox"
     ''}
 
-    cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+    ${optionalString withModsrc ''
+      cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+    ''}
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
-    ln -s "${linuxPackages.virtualboxGuestAdditions.src}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+    ln -s "${virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''
@@ -233,8 +268,8 @@ in stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
+    tests = nixosTests.virtualbox;
     updateScript = ./update.sh;
   };
 
@@ -252,7 +287,7 @@ in stdenv.mkDerivation {
     ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander ];
+    maintainers = with maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };

@@ -1,44 +1,48 @@
-{ lib
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, pbr
-, cliff
-, jsonschema
-, testtools
-, paramiko
-, netaddr
-, oslo-concurrency
-, oslo-config
-, oslo-log
-, stestr
-, oslo-serialization
-, oslo-utils
-, fixtures
-, pythonOlder
-, pyyaml
-, subunit
-, stevedore
-, prettytable
-, urllib3
-, debtcollector
-, hacking
-, oslotest
-, bash
-, python
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchPypi,
+  pbr,
+  cliff,
+  jsonschema,
+  testtools,
+  paramiko,
+  netaddr,
+  oslo-concurrency,
+  oslo-config,
+  oslo-log,
+  stestr,
+  oslo-serialization,
+  oslo-utils,
+  fixtures,
+  pythonOlder,
+  pyyaml,
+  subunit,
+  stevedore,
+  prettytable,
+  urllib3,
+  debtcollector,
+  hacking,
+  oslotest,
+  bash,
+  python,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "36.0.0";
-  format = "setuptools";
+  version = "38.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-97Z5C7IluOXSkkUamFuljzzvD3QxdHZ/p8mXE9jW/2I=";
+    hash = "sha256-2WmSN4NrH5/y5iAuYaaVuZkuh1ym14jFj7OXw8Jfxtc=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pbr

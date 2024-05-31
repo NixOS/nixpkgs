@@ -1,23 +1,24 @@
-{ lib
-, albumentations
-, buildPythonPackage
-, cython
-, easydict
-, fetchPypi
-, insightface
-, matplotlib
-, mxnet
-, numpy
-, onnx
-, onnxruntime
-, opencv4
-, prettytable
-, pythonOlder
-, scikit-image
-, scikit-learn
-, tensorboard
-, testers
-, tqdm
+{
+  lib,
+  albumentations,
+  buildPythonPackage,
+  cython,
+  easydict,
+  fetchPypi,
+  insightface,
+  matplotlib,
+  mxnet,
+  numpy,
+  onnx,
+  onnxruntime,
+  opencv4,
+  prettytable,
+  pythonOlder,
+  scikit-image,
+  scikit-learn,
+  tensorboard,
+  testers,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-8ZH3GWEuuzcBj0GTaBRQBUTND4bm/NZ2wCPzVMZo3fc=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
   propagatedBuildInputs = [
     easydict
@@ -70,6 +69,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "State-of-the-art 2D and 3D Face Analysis Project";
+    mainProgram = "insightface-cli";
     homepage = "https://github.com/deepinsight/insightface";
     license = licenses.mit;
     maintainers = with maintainers; [ oddlama ];

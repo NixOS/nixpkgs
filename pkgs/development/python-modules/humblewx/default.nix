@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, wxpython
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  wxpython,
+  python,
 }:
 
 buildPythonPackage rec {

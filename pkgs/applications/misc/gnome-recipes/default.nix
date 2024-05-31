@@ -8,7 +8,7 @@
 , gettext
 , itstool
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , glib
 , libsoup
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Recipe management application for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/Recipes";
+    mainProgram = "gnome-recipes";
+    homepage = "https://gitlab.gnome.org/GNOME/recipes";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

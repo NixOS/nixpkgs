@@ -1,47 +1,44 @@
-{ lib
-, cython_3
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  cython,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pytest-asyncio,
+  pytest-timeout,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.131.0";
-  format = "pyproject";
+  version = "0.132.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-l+uz+wj+tgptxEjEN8ZlmxH8I4Nhrg8qAY3yCcOgBfE=";
+    hash = "sha256-Jmz9zs//EVdBbEElq6OEfGZiOiMvjV5CJxZOM/lHvok=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "Cython>=3.0.5" "Cython"
+      --replace-fail "Cython>=3.0.8" "Cython"
   '';
 
-  nativeBuildInputs = [
-    cython_3
+  build-system = [
+    cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -70,9 +67,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

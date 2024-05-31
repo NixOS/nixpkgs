@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool to run processes untied from some of the namespaces";
+    mainProgram = "untie";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

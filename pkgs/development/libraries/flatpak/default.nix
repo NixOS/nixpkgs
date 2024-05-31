@@ -54,14 +54,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.14.5";
+  version = "1.14.6";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-W3DGTOesE04eoIARJW5COuXFTydyl0QVg/d9AT8n/6w="; # Taken from https://github.com/flatpak/flatpak/releases/
+    sha256 = "sha256-U482ssb4xw7v0S0TrVsa2DCCAQaovTqfa45NnegeSUY="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -97,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
+
+    # Try mounting fonts and icons from NixOS locations if FHS locations don't exist.
+    # https://github.com/NixOS/nixpkgs/issues/119433
+    ./fix-fonts-icons.patch
   ];
 
   nativeBuildInputs = [

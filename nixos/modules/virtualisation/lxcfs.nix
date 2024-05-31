@@ -15,7 +15,7 @@ in {
       lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           This enables LXCFS, a FUSE filesystem for LXC.
           To use lxcfs in include the following configuration in your
           container configuration:

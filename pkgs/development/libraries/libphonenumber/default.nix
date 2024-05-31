@@ -1,14 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest, boost, pkg-config, protobuf, icu, Foundation, buildPackages }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, jre
+, pkg-config
+, boost
+, icu
+, protobuf
+, Foundation
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "8.12.37";
+  version = "8.13.37";
 
   src = fetchFromGitHub {
-    owner = "googlei18n";
+    owner = "google";
     repo = "libphonenumber";
-    rev = "v${version}";
-    sha256 = "sha256-xLxadSxVY3DjFDQrqj3BuOvdMaKdFSLjocfzovJCBB0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TQ9Hz9fnKZhZkg+hkXgFqH4TDCWMe+fcEWE6ShwSBBU=";
   };
 
   patches = [
@@ -19,29 +30,30 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    gtest
+    jre
     pkg-config
   ];
 
   buildInputs = [
     boost
-    protobuf
     icu
-    gtest
-  ] ++ lib.optional stdenv.isDarwin Foundation;
+    protobuf
+  ] ++ lib.optionals stdenv.isDarwin [
+    Foundation
+  ];
 
   cmakeDir = "../cpp";
-  cmakeFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DBUILD_GEOCODER=OFF"
-      "-DPROTOC_BIN=${buildPackages.protobuf}/bin/protoc"
-    ];
 
-  checkPhase = "./libphonenumber_test";
+  doCheck = true;
+
+  checkTarget = "tests";
 
   meta = with lib; {
+    changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
     license = licenses.asl20;
     maintainers = with maintainers; [ illegalprime ];
   };
-}
+})

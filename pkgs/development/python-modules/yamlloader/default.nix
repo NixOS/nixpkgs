@@ -1,27 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pyyaml
-, hypothesis
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pyyaml,
+  hypothesis,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "yamlloader";
-  version = "1.3.2";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fb2YQh2AkMUhZV8bBsoDAGfynfUlOoh4EmvOOpD1aBc=";
+    hash = "sha256-tv5A7PWvWW2EDpIGcO00dfmBNJK/blWyTyrUUMISurU=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
   nativeCheckInputs = [
     hypothesis

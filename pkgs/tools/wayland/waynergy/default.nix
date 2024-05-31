@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "waynergy";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "r-c-f";
     repo = "waynergy";
     rev = "v${version}";
-    hash = "sha256-DHP84AYDd3M8on4LgS2TzFU/QulrWXdl1qbLV+qKoxw=";
+    hash = "sha256-cwpW6O+KJNDvSrHeSM1Ci7S0kNw6a8KCdGAIhowPEIw=";
   };
 
   strictDeps = true;

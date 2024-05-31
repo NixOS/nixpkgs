@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Core algorithm library for Korean input routines";
+    mainProgram = "hangul";
     homepage = "https://github.com/choehwanjin/libhangul";
     license = licenses.lgpl21;
     maintainers = [ maintainers.ianwookim ];

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flask, mutagen }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  mutagen,
+}:
 
 buildPythonPackage rec {
   pname = "podcats";
@@ -17,10 +23,14 @@ buildPythonPackage rec {
       --replace 'debug=True' 'debug=True, use_reloader=False'
   '';
 
-  propagatedBuildInputs = [ flask mutagen ];
+  propagatedBuildInputs = [
+    flask
+    mutagen
+  ];
 
   meta = {
     description = "Application that generates RSS feeds for podcast episodes from local audio files";
+    mainProgram = "podcats";
     homepage = "https://github.com/jakubroztocil/podcats";
     license = lib.licenses.bsd2;
   };

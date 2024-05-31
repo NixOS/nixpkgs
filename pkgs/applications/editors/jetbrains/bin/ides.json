@@ -168,5 +168,16 @@
       "longDescription": "WebStorm provides an editor for HTML, JavaScript (incl. Node.js), and CSS with on-the-fly code analysis, error prevention and automated refactorings for JavaScript code.",
       "homepage": "https://www.jetbrains.com/webstorm/"
     }
+  },
+  "writerside": {
+    "product": "Writerside",
+    "wmClass": "jetbrains-writerside",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Documentation IDE from JetBrains",
+      "maintainers": [ "zlepper"],
+      "longDescription": "The most powerful development environment – now adapted for writing documentation.",
+      "homepage": "https://www.jetbrains.com/writerside/"
+    }
   }
 }

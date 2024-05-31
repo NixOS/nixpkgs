@@ -12,18 +12,17 @@
 , python3
 , polkit
 , networkmanager
-, gtk-doc
-, docbook-xsl-nons
+, gi-docgen
 , at-spi2-core
 , libstartup_notification
 , unzip
 , shared-mime-info
 , libgweather
+, libjxl
 , librsvg
 , webp-pixbuf-loader
 , geoclue2
 , perl
-, docbook_xml_dtd_45
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -67,13 +66,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "45.3";
+  version = "46.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    sha256 = "OhlyRyDYJ03GvO1o4N1fx2aKBM15l4y7uCI0dMzdqas=";
+    hash = "sha256-a1hxAcBL+zZKsJzTi12T6+60JUdUyAfPcS+8juP94jg=";
   };
 
   patches = [
@@ -100,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Work around failing fingerprint auth
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
-      sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
+      url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/dcd112d9708954187e7490564c2229d82ba5326f/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
+      hash = "sha256-mgXty5HhiwUO1UV3/eDgWtauQKM0cRFQ0U7uocST25s=";
     })
   ];
 
@@ -110,9 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     gettext
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    gtk-doc
+    gi-docgen
     perl
     wrapGAppsHook4
     sassc
@@ -188,10 +185,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    # Pull in WebP support for gnome-backgrounds.
+    # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
     export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
       extraLoaders = [
+        libjxl
         librsvg
         webp-pixbuf-loader
       ];
@@ -211,6 +209,9 @@ stdenv.mkDerivation (finalAttrs: {
     for svc in org.gnome.ScreenSaver org.gnome.Shell.Extensions org.gnome.Shell.Notifications org.gnome.Shell.Screencast; do
       wrapGApp $out/share/gnome-shell/$svc
     done
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   separateDebugInfo = true;
@@ -225,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

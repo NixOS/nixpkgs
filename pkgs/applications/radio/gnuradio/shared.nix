@@ -125,6 +125,7 @@ in {
 
   meta = with lib; {
     description = "Software Defined Radio (SDR) software";
+    mainProgram = "gnuradio-config-info";
     longDescription = ''
       GNU Radio is a free & open-source software development toolkit that
       provides signal processing blocks to implement software radios. It can be

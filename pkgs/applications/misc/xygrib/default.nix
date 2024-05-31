@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
+    mainProgram = "xygrib";
     longDescription = ''
       XyGrib is a leading opensource weather visualization package.
       It interacts with OpenGribs's Grib server providing a choice

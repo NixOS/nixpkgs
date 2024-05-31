@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An HTTP server for testing Wasm";
+    mainProgram = "wasmserve";
     homepage = "https://github.com/hajimehoshi/wasmserve";
     license = licenses.asl20;
     maintainers = with maintainers; [ kirillrdy ];

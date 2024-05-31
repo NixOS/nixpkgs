@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, beartype
-, invoke
-, numpy
-, pandas
-, feedparser
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  beartype,
+  invoke,
+  numpy,
+  pandas,
+  feedparser,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-hz4YrcvARCAA7TXapmneIwle/F4pzcIYLPSmiFHC0VQ=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     beartype
@@ -51,11 +50,11 @@ buildPythonPackage rec {
     "tests/test_typeguard.py"
     # tries to build wheel of package, broken/unnecessary under Nix:
     "tests/test_wheel.py"
+    # beartype fails a type check
+    "tests/test_beartype.py"
   ];
 
-  pythonImportsCheck = [
-    "nptyping"
-  ];
+  pythonImportsCheck = [ "nptyping" ];
 
   meta = with lib; {
     description = "Type hints for numpy";

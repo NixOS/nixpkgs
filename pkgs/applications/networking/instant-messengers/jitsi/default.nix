@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://desktop.jitsi.org/";
     description = "Open Source Video Calls and Chat";
+    mainProgram = "jitsi";
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode

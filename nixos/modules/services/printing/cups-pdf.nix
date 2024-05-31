@@ -41,7 +41,7 @@ let
       default = "/var/spool/cups-pdf-${name}/users/\${USER}";
       defaultText = "/var/spool/cups-pdf-{instance-name}/users/\${USER}";
       example = "\${HOME}/cups-pdf";
-      description = lib.mdDoc ''
+      description = ''
         output directory;
         `''${HOME}` will be expanded to the user's home directory,
         `''${USER}` will be expanded to the user name.
@@ -52,19 +52,19 @@ let
       default = "/var/spool/cups-pdf-${name}/anonymous";
       defaultText = "/var/spool/cups-pdf-{instance-name}/anonymous";
       example = "/var/lib/cups-pdf";
-      description = lib.mdDoc "path for anonymously created PDF files";
+      description = "path for anonymously created PDF files";
     };
     options.Spool = lib.mkOption {
       type = with lib.types; nullOr singleLineStr;
       default = "/var/spool/cups-pdf-${name}/spool";
       defaultText = "/var/spool/cups-pdf-{instance-name}/spool";
       example = "/var/lib/cups-pdf";
-      description = lib.mdDoc "spool directory";
+      description = "spool directory";
     };
     options.Anonuser = lib.mkOption {
       type = lib.types.singleLineStr;
       default = "root";
-      description = lib.mdDoc ''
+      description = ''
         User for anonymous PDF creation.
         An empty string disables this feature.
       '';
@@ -74,21 +74,21 @@ let
       default = lib.getExe pkgs.ghostscript;
       defaultText = lib.literalExpression "lib.getExe pkgs.ghostscript";
       example = lib.literalExpression ''''${pkgs.ghostscript}/bin/ps2pdf'';
-      description = lib.mdDoc "location of GhostScript binary";
+      description = "location of GhostScript binary";
     };
   };
 
   instanceConfig = { name, config, ... }: {
     options = {
-      enable = (lib.mkEnableOption (lib.mdDoc "this cups-pdf instance")) // { default = true; };
-      installPrinter = (lib.mkEnableOption (lib.mdDoc ''
+      enable = (lib.mkEnableOption "this cups-pdf instance") // { default = true; };
+      installPrinter = (lib.mkEnableOption ''
         a CUPS printer queue for this instance.
         The queue will be named after the instance and will use the {file}`CUPS-PDF_opt.ppd` ppd file.
         If this is disabled, you need to add the queue yourself to use the instance
-      '')) // { default = true; };
+      '') // { default = true; };
       confFileText = lib.mkOption {
         type = lib.types.lines;
-        description = lib.mdDoc ''
+        description = ''
           This will contain the contents of {file}`cups-pdf.conf` for this instance, derived from {option}`settings`.
           You can use this option to append text to the file.
         '';
@@ -100,7 +100,7 @@ let
           Out = "\${HOME}/cups-pdf";
           UserUMask = "0033";
         };
-        description = lib.mdDoc ''
+        description = ''
           Settings for a cups-pdf instance, see the descriptions in the template config file in the cups-pdf package.
           The key value pairs declared here will be translated into proper key value pairs for {file}`cups-pdf.conf`.
           Setting a value to `null` disables the option and removes it from the file.
@@ -142,11 +142,11 @@ in
 {
 
   options.services.printing.cups-pdf = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       the cups-pdf virtual pdf printer backend.
       By default, this will install a single printer `pdf`.
       but this can be changed/extended with {option}`services.printing.cups-pdf.instances`
-    '');
+    '';
     instances = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule instanceConfig);
       default.pdf = {};
@@ -154,7 +154,7 @@ in
         Out = "\${HOME}/cups-pdf";
         UserUMask = "0033";
       };
-      description = lib.mdDoc ''
+      description = ''
         Permits to raise one or more cups-pdf instances.
         Each instance is named by an attribute name, and the attribute's values control the instance' configuration.
       '';

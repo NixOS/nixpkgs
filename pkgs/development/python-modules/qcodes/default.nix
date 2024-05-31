@@ -1,49 +1,50 @@
-{ lib
-, broadbean
-, buildPythonPackage
-, cf-xarray
-, dask
-, deepdiff
-, fetchFromGitHub
-, h5netcdf
-, h5py
-, hypothesis
-, importlib-metadata
-, ipykernel
-, ipython
-, ipywidgets
-, jsonschema
-, lxml
-, matplotlib
-, numpy
-, opencensus
-, opencensus-ext-azure
-, opentelemetry-api
-, packaging
-, pandas
-, pillow
-, pip
-, pytest-asyncio
-, pytest-mock
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyvisa
-, pyvisa-sim
-, rsa
-, ruamel-yaml
-, setuptools
-, sphinx
-, tabulate
-, tqdm
-, typing-extensions
-, uncertainties
-, versioningit
-, websockets
-, wheel
-, wrapt
-, xarray
+{
+  lib,
+  broadbean,
+  buildPythonPackage,
+  cf-xarray,
+  dask,
+  deepdiff,
+  fetchFromGitHub,
+  h5netcdf,
+  h5py,
+  hypothesis,
+  importlib-metadata,
+  ipykernel,
+  ipython,
+  ipywidgets,
+  jsonschema,
+  lxml,
+  matplotlib,
+  numpy,
+  opencensus,
+  opencensus-ext-azure,
+  opentelemetry-api,
+  packaging,
+  pandas,
+  pillow,
+  pip,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyvisa,
+  pyvisa-sim,
+  rsa,
+  ruamel-yaml,
+  setuptools,
+  sphinx,
+  tabulate,
+  tqdm,
+  typing-extensions,
+  uncertainties,
+  versioningit,
+  websockets,
+  wheel,
+  wrapt,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "QCoDeS";
+    owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
     hash = "sha256-AggAVq/yfJUZRwoQb29QoIbVIAdV3solKCjivqucLZk=";
@@ -94,9 +95,7 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     deepdiff
@@ -119,6 +118,8 @@ buildPythonPackage rec {
     "-n"
     "$NIX_BUILD_CORES"
     # Follow upstream with settings
+    "-m 'not serial'"
+    "--hypothesis-profile ci"
     "--durations=20"
   ];
 
@@ -141,11 +142,19 @@ buildPythonPackage rec {
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
     "test_ramp_safely"
+
+    # more flaky tests
+    # https://github.com/microsoft/Qcodes/issues/5551
+    "test_query_close_once_at_init"
+    "test_step_ramp"
   ];
 
-  pythonImportsCheck = [
-    "qcodes"
-  ];
+  pythonImportsCheck = [ "qcodes" ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+  '';
 
   postInstall = ''
     export HOME="$TMPDIR"

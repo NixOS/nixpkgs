@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-datalake-nspkg
-, azure-mgmt-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrestazure,
+  azure-common,
+  azure-mgmt-datalake-nspkg,
+  azure-mgmt-core,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Data Lake Store Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer maxwilson ];
+    maintainers = with maintainers; [
+      jonringer
+      maxwilson
+    ];
   };
 }

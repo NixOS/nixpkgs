@@ -53,6 +53,7 @@ let
     pkgsStatic = true;
     pkgsCross = true;
     pkgsi686Linux = true;
+    pkgsLinux = true;
     pkgsExtraHardening = true;
   };
 
@@ -75,6 +76,7 @@ let
 
     buildHaskellPackages = true;
     buildPackages = true;
+    buildFreebsd = true;
     generateOptparseApplicativeCompletions = true;
 
     callPackage = true;

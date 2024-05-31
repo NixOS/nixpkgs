@@ -32,7 +32,9 @@ makeSetupHook {
     zig_default_flags =
       let
         releaseType =
-          if lib.versionAtLeast zig.version "0.11" then
+          if lib.versionAtLeast zig.version "0.12" then
+            "--release=safe"
+          else if lib.versionAtLeast zig.version "0.11" then
             "-Doptimize=ReleaseSafe"
           else
             "-Drelease-safe=true";

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , substituteAll
 , pkg-config
 , meson
@@ -44,30 +43,19 @@ let
   withFwupd = stdenv.hostPlatform.isx86;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "45.3";
+  version = "46.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1rkkWyIjfae9FzndKMI8yPODX5n6EMEDfZ3XY1M1JRw=";
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5wDLood2T14iVVFOMS4WBVD9v3pdP+FjWLtve2cyuXQ=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       inherit isocodes;
-    })
-
-    # Add support for AppStream 1.0.
-    # https://gitlab.gnome.org/GNOME/gnome-software/-/issues/2393
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-software/-/commit/0655f358ed0e8455e12d9634f60bc4dbaee434e3.patch";
-      hash = "sha256-8IXXUfNeha5yRlRLuxQV8whwQmyNw7Aoi/r5NNFS/zA=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-software/-/commit/e431ab003f3fabf616b6eb7dc93f8967bc9473e5.patch";
-      hash = "sha256-Y5GcC1XMbb9Bl2/VKFnrV1B/ipLKxY4guse25LhxhKM=";
     })
   ];
 
@@ -122,16 +110,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-software";
       attrPath = "gnome.gnome-software";
     };
   };
 
   meta = with lib; {
     description = "Software store that lets you install and update applications and system extensions";
-    homepage = "https://wiki.gnome.org/Apps/Software";
+    mainProgram = "gnome-software";
+    homepage = "https://apps.gnome.org/Software/";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

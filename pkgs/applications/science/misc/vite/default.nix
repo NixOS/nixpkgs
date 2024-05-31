@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Visual Trace Explorer (ViTE), a tool to visualize execution traces";
+    mainProgram = "vite";
 
     longDescription = ''
       ViTE is a trace explorer. It is a tool to visualize execution

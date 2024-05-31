@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "curl statistics made simple";
+    mainProgram = "httpstat";
     homepage = "https://github.com/reorx/httpstat";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nequissimus ];

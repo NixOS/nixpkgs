@@ -1,32 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, numpy
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  libiconv,
+  numpy,
+  scipy,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "clarabel";
-  version = "0.6.0.post1";
+  version = "0.8.1";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "oxfordcontrol";
-    repo  = "Clarabel.rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5Mw+3WRMuz3BxLWRdsnXHjetsNrM3EZRZld8lVTNKgo=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-03GEFzlvzLeedKVeDokdHGArwjunh3Zm8cJQL90mI+o=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-9zBr9SUd8jJDSqRX9Xs0mDV5gck/qfqJ3VfEAOz7EsA=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} ./Cargo.lock
-  '';
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -40,9 +38,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "clarabel"
-  ];
+  pythonImportsCheck = [ "clarabel" ];
 
   # no tests but run the same examples as .github/workflows/pypi.yaml
   checkPhase = ''
@@ -52,11 +48,13 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/oxfordcontrol/Clarabel.rs/releases/tag/v${version}/CHANGELOG.md";
     description = "Conic Interior Point Solver";
     homepage = "https://github.com/oxfordcontrol/Clarabel.rs";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ a-n-n-a-l-e-e ];
+    maintainers = [ ];
   };
 }

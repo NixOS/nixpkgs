@@ -1,4 +1,4 @@
-{ lib, pkgs, config, libsForQt5 }:
+{ lib, pkgs, config, libsForQt5, qt6Packages }:
 let
   packages = self:
   let
@@ -23,12 +23,17 @@ let
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
     util-dfm = callPackage ./library/util-dfm { };
+    dtk6core = callPackage ./library/dtk6core { };
+    dtk6gui = callPackage ./library/dtk6gui { };
+    dtk6widget = callPackage ./library/dtk6widget { };
+    dtk6declarative = callPackage ./library/dtk6declarative { };
+    dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
     dde-appearance = callPackage ./core/dde-appearance { };
     dde-app-services = callPackage ./core/dde-app-services { };
-    dde-application-manager = callPackage ./core/dde-application-manager { };
+    dde-application-manager = qt6Packages.callPackage ./core/dde-application-manager { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
     dde-clipboard = callPackage ./core/dde-clipboard { };

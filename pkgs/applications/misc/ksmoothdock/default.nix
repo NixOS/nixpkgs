@@ -32,6 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A cool desktop panel for KDE Plasma 5";
+    mainProgram = "ksmoothdock";
     license = licenses.mit;
     homepage = "https://dangvd.github.io/ksmoothdock/";
     maintainers = with maintainers; [ shamilton ];

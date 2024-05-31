@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fonttools
-, git
-, gitpython
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  git,
+  gitpython,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python utility for manipulating font version headers";
+    mainProgram = "font-v";
     homepage = "https://github.com/source-foundry/font-v";
     license = licenses.mit;
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

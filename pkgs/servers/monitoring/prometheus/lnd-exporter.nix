@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/lightninglabs/lndmon";
     description = "Prometheus exporter for lnd (Lightning Network Daemon)";
+    mainProgram = "lndmon";
     license = licenses.mit;
     maintainers = with maintainers; [ mmilata ];
   };

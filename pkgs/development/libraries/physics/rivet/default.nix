@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, hepmc, imagemagick, less, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.9";
+  version = "3.1.10";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    hash = "sha256-9lMgRdph7rKtwgqavEFmtLLUGrLByltQDNYWuxuS57E=";
+    hash = "sha256-RYuODfHec46ZctJLJg6qCH3xLJnU/p3uU3fUfqakmRk=";
   };
 
   latex = texliveBasic.withPackages (ps: with ps; [

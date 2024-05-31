@@ -7,7 +7,7 @@
 , ninja
 , python3
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
@@ -15,6 +15,7 @@
 , qtsvg
 , qtimageformats
 , gtk3
+, glib-networking
 , boost
 , fmt
 , libdbusmenu
@@ -30,7 +31,6 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm_2_68
 , webkitgtk_6_0
 , jemalloc
 , rnnoise
@@ -64,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.14.13";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-JcW/gXSgtzxv/37V13brHsa4XcVyB5ZCiPj4slMFdro=";
+    hash = "sha256-RaIUk+49uNc+TycC/oV+02o5EpkbP4tSSv7DsLn+WHM=";
   };
 
   patches = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ] ++ lib.optionals stdenv.isLinux [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     extra-cmake-modules
   ] ++ lib.optionals stdenv.isDarwin [
     lld
@@ -138,13 +138,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
+    glib-networking
     fmt
     libdbusmenu
     alsa-lib
     libpulseaudio
     pipewire
     hunspell
-    glibmm_2_68
     webkitgtk_6_0
     jemalloc
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [

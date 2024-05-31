@@ -19,8 +19,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     install -Dm 444 ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
 
@@ -35,5 +33,6 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "motrix";
   };
 }

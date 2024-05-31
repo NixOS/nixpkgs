@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "Interpreter for Infocom and other Z-Machine games (SDL interface)";
+    mainProgram = "sfrotz";
     longDescription = ''
       Frotz is a Z-Machine interpreter. The Z-machine is a virtual machine
       designed by Infocom to run all of their text adventures. It went through

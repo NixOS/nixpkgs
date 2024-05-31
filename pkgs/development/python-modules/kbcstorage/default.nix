@@ -1,35 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-
-# build
-, setuptools
-, setuptools-git-versioning
-, setuptools-scm
-
-# propagates
-, azure-storage-blob
-, boto3
-, requests
-
-# tests
-, responses
-, unittestCheckHook
+{
+  lib,
+  azure-storage-blob,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python-dotenv,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools,
+  setuptools-git-versioning,
+  setuptools-scm,
+  unittestCheckHook,
+  urllib3,
 }:
+
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.7.1";
-  format = "pyproject";
+  version = "0.8.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "keboola";
-    repo = pname;
+    repo = "sapi-python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-74sChw6eMkBtfHV6hiaaLNOr/J0Sa73LB93Z8muLaiI=";
+    hash = "sha256-Xc4VD91Nhnj0UyWHpdwEaETJVH8Ue6/kuiKEMaiSR0g=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "urllib3<2.0.0" "urllib3"
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -40,17 +43,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     azure-storage-blob
     boto3
+    python-dotenv
     requests
+    responses
+    urllib3
   ];
 
   # Requires API token and an active Keboola bucket
   # ValueError: Root URL is required.
   doCheck = false;
-
-  nativeCheckInputs = [
-    unittestCheckHook
-    responses
-  ];
 
   pythonImportsCheck = [
     "kbcstorage"

@@ -20,18 +20,18 @@
 , python3
 , systemd
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-messages";
-  version = "23.10.0";
+  version = "24.5.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-messages";
     rev = finalAttrs.version;
-    hash = "sha256-FBJeP5hOXJcOk04cRJpw+oN7L3w3meDX3ivLmFWkhVI=";
+    hash = "sha256-D1181eD2mAVXEa7RLXXC4b2tVGrxbh0WWgtbC1anHH0=";
   };
 
   outputs = [
@@ -50,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace libmessaging-menu/messaging-menu.pc.in \
       --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
       --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+
+    # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
   '' + lib.optionalString (!withDocumentation) ''
     sed -i CMakeLists.txt \
       '/add_subdirectory(doc)/d'
@@ -63,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
@@ -117,6 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = lib.optionalString withDocumentation ''
     # installing regenerates docs, generated files are created without write permissions, errors out while trying to overwrite them
     chmod +w doc/reference/html/*
+  '';
+
+  # Indicators that talk to it may issue requests to parse desktop files, which needs binaries in Exec on PATH
+  # messaging_menu_app_set_desktop_id -> g_desktop_app_info_new -...-> g_desktop_app_info_load_from_keyfile -> g_find_program_for_path
+  # When launched via systemd, PATH is very narrow
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --suffix PATH : '/run/current-system/sw/bin'
+    )
   '';
 
   passthru = {

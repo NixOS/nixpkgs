@@ -9,12 +9,12 @@ in
   ###### interface
   options = {
     services.target = with types; {
-      enable = mkEnableOption (lib.mdDoc "the kernel's LIO iscsi target");
+      enable = mkEnableOption "the kernel's LIO iscsi target";
 
       config = mkOption {
         type = attrs;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Content of /etc/target/saveconfig.json
           This file is normally read and written by targetcli
         '';

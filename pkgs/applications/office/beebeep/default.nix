@@ -36,6 +36,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.beebeep.net/";
     description = "BeeBEEP is the free office messenger that is indispensable in all those places where privacy and security are an essential requirement.";
+    mainProgram = "beebeep";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ mglolenstine ];

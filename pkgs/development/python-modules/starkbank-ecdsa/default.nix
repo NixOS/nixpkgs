@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-HarlCDE2qOLbyhMLOE++bTC+7srJqwmohM6vrJkJ/gc=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     cd tests
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     "*.py"
   ];
 
-  pythonImportsCheck = [
-    "ellipticcurve"
-  ];
+  pythonImportsCheck = [ "ellipticcurve" ];
 
   meta = with lib; {
     description = "Python ECDSA library";
