@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pwvucontrol";
-  version = "0.4";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     rev = version;
-    hash = "sha256-VwoxV7+TuZnkkdmpGHH/uyKoV2E7q71GKgkoVWUefxM=";
+    hash = "sha256-soxB8pbbyYe1EXtopq1OjoklEDJrwK6od4nFLDwb8LY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
