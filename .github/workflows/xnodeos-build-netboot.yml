@@ -1,0 +1,36 @@
+---
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build XnodeOS ISO Image
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v22
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Build XnodeOS Netboot Image
+        run: make netboot
+      - name: Archive iPXE Chainload Script as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipxe
+          path: result/ipxe
+      - name: Archive XnodeOS Linux Kernel Image as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel
+          path: result/kernel
+      - name: Archive XnodeOS Initial Ramdisk Image as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: initrd
+          path: result/initrd
