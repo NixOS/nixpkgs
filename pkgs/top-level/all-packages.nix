@@ -5511,9 +5511,7 @@ with pkgs;
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
-  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
-    wlroots = wlroots_0_16;
-  };
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
@@ -27153,8 +27151,6 @@ with pkgs;
   irqbalance = callPackage ../os-specific/linux/irqbalance { };
 
   itpp = callPackage ../development/libraries/science/math/itpp { };
-
-  iw = callPackage ../os-specific/linux/iw { };
 
   iwd = callPackage ../os-specific/linux/iwd { };
 

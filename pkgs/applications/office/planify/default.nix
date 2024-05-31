@@ -7,7 +7,7 @@
 , pkg-config
 , vala
 , wrapGAppsHook4
-, evolution-data-server
+, evolution-data-server-gtk4
 , glib
 , glib-networking
 , gst_all_1
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
     glib-networking
     # Needed for GtkMediaStream creation with success.ogg, see #311295.
