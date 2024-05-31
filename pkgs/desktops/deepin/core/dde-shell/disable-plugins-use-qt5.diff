@@ -7,7 +7,7 @@ index 1a20179..83c5ff2 100644
  add_subdirectory(showdesktop)
  add_subdirectory(taskmanager)
 -add_subdirectory(tray)
-+#add_subdirectory(tray)
++ add_subdirectory(tray)
  add_subdirectory(multitaskview)
  
  # dock plugin load program

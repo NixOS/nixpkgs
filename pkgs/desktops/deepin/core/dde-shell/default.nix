@@ -8,29 +8,43 @@
 , wayland-scanner
 , dtk6declarative
 , dtk6widget
+, dde-qt-dbus-factory
 , qt6Packages
-, libsForQt5
+, qt6integration
+, qt6platform-plugins
+, kdePackages
 , wayland
 , wayland-protocols
 , yaml-cpp
+, xorg
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "0.0.17";
+  version = "0.0.23-unstable-2024-06-11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
-    rev = "e666b487d978d34c8f7f7488d42482397755615c";
-    hash = "sha256-DvcxCLKTddUtPELMN7oBcQPSbHoNWEmXYLeCo3O8rOg=";
+    rev = "d68cc64ad2cd6978af2f34deb3ef48f991d54fc3";
+    hash = "sha256-hVrdfbtcL3EJitiDghNSuGr5MX/VVT1J3tuY6wjwYcw=";
   };
 
   patches = [
     ./disable-plugins-use-qt5.diff
-    ./fix-translations-cant-install.diff
     ./fix-path-for-nixos.diff
+    ./only-use-qt6.diff # remove in next release
   ];
+
+  postPatch = ''
+    for file in $(grep -rl "/usr/lib/dde-dock/tmp"); do
+      substituteInPlace $file --replace-fail "/usr/lib/dde-dock/tmp" "/run/current-system/sw/lib/dde-dock/tmp"
+    done
+
+    for file in $(grep -rl "/usr/lib/deepin-daemon"); do
+      substituteInPlace $file --replace-fail "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
+    done
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -42,17 +56,32 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    qt6Packages.qtbase
-    qt6Packages.qtwayland
     dtk6declarative
     dtk6widget
+    dde-qt-dbus-factory
+    qt6Packages.qtbase
+    qt6Packages.qtwayland
+    qt6Packages.qtsvg
+    qt6platform-plugins
+    kdePackages.networkmanager-qt
     wayland
     wayland-protocols
     yaml-cpp
+    xorg.libXcursor
+    xorg.libXres
   ];
 
+  env.PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+
   cmakeFlags = [
-    (lib.cmakeFeature "SYSTEMD_USER_UNIT_DIR" "${placeholder "out"}/lib/systemd/user")
+    "-DQML_INSTALL_DIR=${placeholder "out"}/${qt6Packages.qtbase.qtQmlPrefix}"
+  ];
+
+  qtWrapperArgs = [
+     # qt6integration must be placed before qtsvg in QT_PLUGIN_PATH
+     "--prefix QT_PLUGIN_PATH : ${qt6integration}/${qt6Packages.qtbase.qtPluginPrefix}"
+     "--suffix DDE_SHELL_PLUGIN_PATH : /run/current-system/sw/lib/dde-shell"
+     "--suffix DDE_SHELL_PACKAGE_PATH : /run/current-system/sw/share/dde-shell"
   ];
 
   meta = {
