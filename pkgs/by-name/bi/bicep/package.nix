@@ -34,7 +34,6 @@ buildDotnetModule rec {
   passthru.updateScript = ./updater.sh;
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Domain Specific Language (DSL) for deploying Azure resources declaratively";
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
