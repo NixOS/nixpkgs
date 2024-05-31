@@ -22567,6 +22567,11 @@
     githubId = 40352765;
     name = "Yoctocell";
   };
+  yomaq = {
+    name = "yomaq";
+    github = "yomaq";
+    githubId = 112864332;
+  };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
     matrix = "@yorickvp:matrix.org";
