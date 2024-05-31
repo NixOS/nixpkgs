@@ -21466,7 +21466,9 @@ with pkgs;
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
-  imgui = callPackage ../development/libraries/imgui { };
+  imgui = callPackage ../development/libraries/imgui {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   imtui = callPackage ../development/libraries/imtui { };
 
