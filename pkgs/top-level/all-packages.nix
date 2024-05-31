@@ -16518,7 +16518,7 @@ with pkgs;
 
   ponyc = callPackage ../development/compilers/ponyc {
     # Upstream pony no longer supports GCC
-    stdenv = llvmPackages.stdenv;
+    stdenv = llvmPackages_16.stdenv;
   };
 
   blaze = callPackage ../development/libraries/blaze { };
