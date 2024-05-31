@@ -28,6 +28,8 @@
     sha256 = "sha256-BpE7ZrtiiaDqwy1G4IHOQBJMr6sAadFbRxsdObs1SIY=";
   };
 
+  strictDeps = true;
+
   postPatch = ''
     rm -rf dlib/external
   '';
@@ -61,13 +63,12 @@
   ]
   ++ lib.optionals guiSupport [ libX11 ]
   ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cccl
     cuda_cudart
-    cuda_nvcc
+    cudnn
     libcublas
     libcurand
     libcusolver
-    cudnn
-    cuda_cccl
   ]);
 
   passthru = {
