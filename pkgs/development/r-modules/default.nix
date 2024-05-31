@@ -953,6 +953,7 @@ let
     "beer"
     "ceramic"
     "connections"
+    "covidmx"
     "csodata"
     "DiceView"
     "facmodTS"
