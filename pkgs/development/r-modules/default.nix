@@ -1739,6 +1739,20 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    SharedObject = old.SharedObject.overrideAttrs (attrs: {
+      # backport PR resolving build issues: https://github.com/Jiefei-Wang/SharedObject/pull/17
+      patches = let inherit (pkgs) fetchpatch; in [
+        (fetchpatch {
+          url = "https://github.com/Jiefei-Wang/SharedObject/pull/17/commits/50c4b2964649d7f5a14d843bd7089ab62650fcd3.patch";
+          sha256 = "sha256-zn535IeOYRvyQ2yxgoGEq2wccrl9xdu9nREmy7sV+PQ=";
+        })
+        (fetchpatch {
+          url = "https://github.com/Jiefei-Wang/SharedObject/pull/17/commits/bf096a39858e9210cbe246d4b136905d4cfbfaf4.patch";
+          sha256 = "sha256-Z+BZOkFnLgIBiVuPsAHp7bMXzADcvuHV4hILdmLvd+k=";
+        })
+      ];
+    });
+
     httr2 = old.httr2.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });
