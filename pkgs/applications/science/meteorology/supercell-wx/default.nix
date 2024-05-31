@@ -5,7 +5,6 @@
   aws-sdk-cpp,
   bzip2,
   cmake,
-  conan,
   ninja,
   zlib,
   openssl,
@@ -32,7 +31,6 @@
   tbb_2021_11,
   tzdata,
   substituteAll,
-  pkg-config,
   python3,
   wrapQtAppsHook,
 }:
@@ -112,8 +110,6 @@ stdenv.mkDerivation {
     cmake
     ninja
     wrapQtAppsHook
-    pkg-config
-    git
   ];
 
   buildInputs = [
