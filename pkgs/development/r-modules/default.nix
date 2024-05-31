@@ -1524,6 +1524,16 @@ let
         '';
     });
 
+    FlexReg = old.FlexReg.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        # needed to avoid "log limit exceeded" on Hydra
+        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -Wno-ignored-attributes";
+      };
+
+      # consumes a lot of resources in parallel
+      enableParallelBuilding = false;
+    });
+
     geojsonio = old.geojsonio.overrideAttrs (attrs: {
       buildInputs = [ cacert ] ++ attrs.buildInputs;
     });
