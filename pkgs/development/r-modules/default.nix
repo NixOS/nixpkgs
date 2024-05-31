@@ -1334,15 +1334,8 @@ let
       '';
     });
 
-    # backported patch from 1.9
-    Rhisat2= old.Rhisat2.overrideAttrs (attrs: {
-      patches = [ (pkgs.fetchpatch {
-        url = "https://github.com/fmicompbio/Rhisat2/commit/a0f27b018831b39f080f99e6db8a4b876fd56fc3.patch";
-        sha256 = "sha256-FbYkP/WFmbfQmxArkHgushgVgY0XSypbK8Z5ivQK8k4=";
-      }) ];
-      env = (attrs.env or { }) // {
-        NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -w";
-      };
+    Rhisat2 = old.Rhisat2.overrideAttrs (attrs: {
+      enableParallelBuilding = false;
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
