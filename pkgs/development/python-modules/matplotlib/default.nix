@@ -12,10 +12,20 @@
   pybind11,
   meson-python,
   setuptools-scm,
+  pytestCheckHook,
+  python,
+  matplotlib,
+  fetchurl,
 
   # native libraries
   ffmpeg-headless,
   freetype,
+  # By default, almost all tests fail due to the fact we use our version of
+  # freetype. We still define use this argument to define the overriden
+  # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
+  # builds matplotlib with the freetype version they default to, with which all
+  # tests should pass.
+  doCheck ? false,
   qhull,
 
   # propagates
@@ -177,13 +187,33 @@ buildPythonPackage rec {
 
   passthru.tests = {
     inherit sage;
+    withOutdatedFreetype = matplotlib.override {
+      doCheck = true;
+      freetype = freetype.overrideAttrs (_: {
+        src = fetchurl {
+          url = "https://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-2.6.1.tar.gz";
+          sha256 = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
+        };
+        patches = [ ];
+      });
+    };
   };
 
-  # Encountering a ModuleNotFoundError, as describved and investigated at:
-  # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
-  # which may fail due to a freetype version that doesn't match the freetype
-  # version used by upstream.
-  doCheck = false;
+  pythonImportsCheck = [ "matplotlib" ];
+  inherit doCheck;
+  nativeCheckInputs = [ pytestCheckHook ];
+  preCheck = ''
+    # https://matplotlib.org/devdocs/devel/testing.html#obtain-the-reference-images
+    find lib -name baseline_images -printf '%P\n' | while read p; do
+      cp -r lib/"$p" $out/${python.sitePackages}/"$p"
+    done
+    # Tests will fail without these files as well
+    cp \
+      lib/matplotlib/tests/{mpltest.ttf,cmr10.pfb,Courier10PitchBT-Bold.pfb} \
+      $out/${python.sitePackages}/matplotlib/tests/
+    # https://github.com/NixOS/nixpkgs/issues/255262
+    cd $out
+  '';
 
   meta = with lib; {
     description = "Python plotting library, making publication quality plots";
