@@ -56,8 +56,9 @@ let
     "UpdateManagerTest.CheckForUpdates"
     "WarningsProvider*\"https"
 
-    # These tests are failing (can't overwrite a file created by earlier test).
-    "SettingsManager/*"
+    # These tests are failing (seemingly can't overwrite a file created by earlier test).
+    "SettingsManager/DefaultSettingsTest*"
+    "SettingsManager/BadSettingsTest*"
   ];
 in
 stdenv.mkDerivation {
