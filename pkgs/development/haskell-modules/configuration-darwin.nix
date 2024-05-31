@@ -327,6 +327,11 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  ghcjs-dom-hello = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ jsaddle jsaddle-warp ];
+    executableHaskellDepends = with self; [ ghcjs-dom jsaddle-wkwebview ];
+  }) super.ghcjs-dom-hello;
+
   jsaddle-hello = overrideCabal (drv: {
     libraryHaskellDepends = with self; [ jsaddle lens ];
     executableHaskellDepends = with self; [ jsaddle-warp jsaddle-wkwebview ];
