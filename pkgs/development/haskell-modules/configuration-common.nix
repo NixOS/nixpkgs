@@ -1566,6 +1566,21 @@ self: super: {
       doJailbreak
     ];
 
+  ghcjs-dom-hello = appendPatches [
+    (fetchpatch {
+      url = "https://github.com/ghcjs/ghcjs-dom-hello/commit/53991df6a4eba9f1e9633eb22f6a0486a79491c3.patch";
+      sha256 = "sha256-HQeUgjvzYyY14+CDYiMahAMn7fBcy2d7p8/kqGq+rnI=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ghcjs/ghcjs-dom-hello/commit/d766d937121f7ea5c4c154bd533a1eae47f531c9.patch";
+      sha256 = "sha256-QTkH+L+JMwGyuoqzHBnrokT7KzpHC4YiAWoeiaFBLUw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ghcjs/ghcjs-dom-hello/commit/831464d995f4033c9aa84f9ed9fb37a268f34d4e.patch";
+      sha256 = "sha256-hQMy+78geTuxd3kbdiyYqoAFrauu90HbpPi0EEKjMzM=";
+    })
+   ] super.ghcjs-dom-hello;
+
   # Needs https://github.com/ghcjs/jsaddle-hello/pull/5 and hackage release
   jsaddle-hello = appendPatches [
     (fetchpatch {
@@ -1581,8 +1596,6 @@ self: super: {
       sha256 = "sha256-WL0CcnlMt6KI7MOZMg74fNN/I4gYSO3n+GiaXB2BOP0=";
     })
   ] super.jsaddle-hello;
-
-  ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
 
   # Too strict upper bounds on text
   lsql-csv = doJailbreak super.lsql-csv;
