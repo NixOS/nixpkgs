@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, mono
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  mono,
 }:
 
 buildDotnetModule rec {
@@ -39,5 +40,6 @@ buildDotnetModule rec {
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
+    mainProgram = "bicep";
   };
 }
