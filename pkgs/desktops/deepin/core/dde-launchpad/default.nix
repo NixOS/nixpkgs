@@ -4,21 +4,21 @@
 , cmake
 , pkg-config
 , qt6Packages
+, qt6integration
+, qt6platform-plugins
 , dtk6declarative
-, appstream-qt
-, kitemmodels
 , dde-shell
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-launchpad";
-  version = "0.6.10";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-MVSWcUqbZDloKKfly+E7HLObpJlj0Oq8G8pP5Lkpriw=";
+    hash = "sha256-nT89cUx7Bxf+d+fgqvXZ9U0i/qf1oP2alUB90UXpNcM=";
   };
 
   nativeBuildInputs = [
@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    qt6integration
+    qt6platform-plugins
     dtk6declarative
     dde-shell
-    #kitemmodels
-  ] ++ (with qt6Packages ; [
+  ] ++ (with qt6Packages; [
     qtbase
     qtsvg
     qtwayland
