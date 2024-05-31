@@ -427,7 +427,7 @@ See [](#ex-dockerTools-streamLayeredImage-hello) to see how to do that.
 
 For this function, you specify a [store path](https://nixos.org/manual/nix/stable/store/store-path) or a list of store paths to be added to the image, and the functions will automatically include any dependencies of those paths in the image.
 The function will attempt to create one layer per object in the Nix store that needs to be added to the image.
-In case there are more objects to include than available layers, the function will put the most ["popular"](https://github.com/NixOS/nixpkgs/tree/release-23.11/pkgs/build-support/references-by-popularity) objects in their own layers, and group all remaining objects into a single layer.
+In case there are more objects to include than available layers, the function will put the most ["popular"](https://github.com/NixOS/nixpkgs/tree/release-24.05/pkgs/build-support/references-by-popularity) objects in their own layers, and group all remaining objects into a single layer.
 
 An additional layer will be created with symlinks to the store paths you specified to be included in the image.
 These symlinks are built with [`symlinkJoin`](#trivial-builder-symlinkJoin), so they will be included in the root of the image.
