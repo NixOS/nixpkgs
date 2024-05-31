@@ -64,14 +64,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240430.0";
+  version = "20240529.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-v7558m2h3RqvLLhf3BdYO9LKCFKuMTtPIXgH6OXiiY4=";
+    hash = "sha256-v2GFvgHHJ2EMoayZ+//OZ0U+P1fh5Mgp5fAoqtZts7U=";
     fetchSubmodules = true;
   };
 
