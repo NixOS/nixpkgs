@@ -5,23 +5,27 @@
 , binutils
 , asciidoctor
 , cmake
+, doctest
+, fmt
+, hiredis
 , perl
 , zstd
 , bashInteractive
 , xcodebuild
+, xxHash
 , makeWrapper
 , nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.9.1";
+  version = "4.10";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-n0MTq8x6KNkgwhJQG7F+e3iCOS644nLkMsiRztJe8QU=";
+    sha256 = "sha256-0T9iJXnDX8LffhB/5hsfBNyZQ211f0lL/7dvTrjmiE0=";
   };
 
   outputs = [ "out" "man" ];
@@ -39,14 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ asciidoctor cmake perl ];
-  buildInputs = [ zstd ];
+  buildInputs = [ fmt hiredis xxHash zstd ];
 
-  cmakeFlags = [
-    # Build system does not autodetect redis library presence.
-    # Requires explicit flag.
-    "-DREDIS_STORAGE_BACKEND=OFF"
-  ];
+  cmakeFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-DENABLE_TESTING=OFF";
 
   doCheck = true;
   nativeCheckInputs = [
@@ -54,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     # bashInteractive, but not bash.
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
+
+  checkInputs = [
+    doctest
+  ];
 
   checkPhase =
     let
