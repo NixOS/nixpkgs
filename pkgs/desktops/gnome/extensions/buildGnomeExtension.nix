@@ -56,7 +56,7 @@ let
       homepage = link;
       license = lib.licenses.gpl2Plus; # https://gjs.guide/extensions/review-guidelines/review-guidelines.html#licensing
       platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ lib.maintainers.honnip ];
     };
     passthru = {
       extensionPortalSlug = pname;
