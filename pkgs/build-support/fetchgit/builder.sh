@@ -13,6 +13,7 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
+  ${keepSourceDate:+--keep-source-date} \
   ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
   ${nonConeMode:+--non-cone-mode} \
   ${branchName:+--branch-name "$branchName"}

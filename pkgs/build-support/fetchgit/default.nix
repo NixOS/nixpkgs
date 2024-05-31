@@ -22,6 +22,7 @@ lib.makeOverridable (
   postFetch ? ""
 , preferLocalBuild ? true
 , fetchLFS ? false
+, keepSourceDate ? false
 , # Shell code to build a netrc file for BASIC auth
   netrcPhase ? null
 , # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
@@ -84,7 +85,7 @@ stdenvNoCC.mkDerivation {
   # > from standard in as a newline-delimited list instead of from the arguments.
   sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone keepSourceDate branchName nonConeMode postFetch;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -99,7 +100,6 @@ stdenvNoCC.mkDerivation {
   impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
-
 
   inherit preferLocalBuild meta allowedRequisites;
 
