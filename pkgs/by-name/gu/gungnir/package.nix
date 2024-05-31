@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gungnir";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "g0ldencybersec";
     repo = "gungnir";
     rev = "v${version}";
-    hash = "sha256-k6fxAvUBAAcTHzdeGhekYhPpnS05jHq/7EqxafQfMio=";
+    hash = "sha256-A4MPRsUSeYwKlhCHByty6T33wEp/BopZMDWOnOqlQqQ=";
   };
 
   vendorHash = "sha256-r2aU59L0fnSdc/lpR04K/GQ1eZ7ihV+tKlyuS6sPX2o=";
