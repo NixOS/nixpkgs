@@ -1030,6 +1030,21 @@ let
         };
       };
 
+      danielgavin.ols = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "DanielGavin";
+          name = "ols";
+          version = "0.1.28";
+          hash = "sha256-yVXltjvtLc+zqela/Jyg+g66PU61+YTMX1hWPW8fIkk=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for Odin language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DanielGavin.ols";
+          homepage = "https://github.com/DanielGavin/ols";
+          license = lib.licenses.mit;
+        };
+      };
+
       daohong-emilio.yash = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "daohong-emilio";
