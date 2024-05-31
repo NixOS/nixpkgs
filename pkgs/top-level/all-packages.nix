@@ -22877,6 +22877,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
     pythonPackages = python3Packages;
+    # NOTE: CUDA 12.3 is the latest supported by OpenCV 4.9.
+    # For Jetson we use CUDA 12.2, as the 12.3 release does not provide cuda_cccl for Jetson.
+    cudaPackages =
+      if cudaPackages.flags.isJetsonBuild then
+        cudaPackages_12_2
+      else
+        cudaPackages_12_3;
   };
 
   opencv4WithoutCuda = opencv4.override {

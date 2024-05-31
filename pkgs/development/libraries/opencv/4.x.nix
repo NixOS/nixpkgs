@@ -246,7 +246,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
 
 in
 
@@ -370,21 +370,21 @@ effectiveStdenv.mkDerivation {
   ] ++ lib.optionals enableDocs [
     doxygen
     graphviz-nox
-  ] ++ lib.optionals enableCuda [
-    cudaPackages.cuda_cudart
+  ] ++ lib.optionals enableCuda ([
     cudaPackages.cuda_cccl # <thrust/*>
-    cudaPackages.libnpp # npp.h
+    cudaPackages.cuda_cudart # <cuda_runtime_api.h> -lcudart
+    cudaPackages.libnpp # npp.h -lnpp
     nvidia-optical-flow-sdk
   ] ++ lib.optionals enableCublas [
-    # May start using the default $out instead once
-    # https://github.com/NixOS/nixpkgs/issues/271792
-    # has been addressed
-    cudaPackages.libcublas # cublas_v2.h
+    cudaPackages.libcublas # <cublas_v2.h> -lcublas
   ] ++ lib.optionals enableCudnn [
-    cudaPackages.cudnn # cudnn.h
+    # NOTE: As of version 4.9, OpenCV does not support CUDNN 9.x.
+    # See: https://github.com/opencv/opencv/pull/25412
+    # Revisit when updating to OpenCV 4.10.
+    cudaPackages.cudnn_8 # <cudnn.h> -lcudnn
   ] ++ lib.optionals enableCufft [
-    cudaPackages.libcufft # cufft.h
-  ];
+    cudaPackages.libcufft # <cufft.h> -lcufft
+  ]);
 
   propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
 
@@ -455,7 +455,7 @@ effectiveStdenv.mkDerivation {
     "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
 
-    "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${nvidia-optical-flow-sdk}"
+    "-DNVIDIA_OPTICAL_FLOW_2_0_HEADERS_PATH=${lib.getOutput "include" nvidia-optical-flow-sdk}"
   ] ++ lib.optionals effectiveStdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
