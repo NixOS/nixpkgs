@@ -80,6 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/6e30f4f10ef90e817ca01d32959b6c782de48955.patch";
       hash = "sha256-TAbYn265RpHpulaRVaHy9XqNF+qoDE7YQIfFMPfqEhw=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/40 merged & in release
+    (fetchpatch {
+      name = "0006-content-hub-Fix-AppArmor-less-transfer.patch";
+      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/b58e5c8babf00ad7c402555c96254ce0165adb9e.patch";
+      hash = "sha256-a7x/0NiUBmmFlq96jkHyLCL0f5NIFh5JR/H+FQ/2GqI=";
+    })
   ];
 
   postPatch = ''
