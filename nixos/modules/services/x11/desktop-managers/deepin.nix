@@ -141,7 +141,6 @@ in
             dtkdeclarative
             qt5platform-plugins
             deepin-pw-check
-            deepin-turbo
 
             dde-account-faces
             deepin-icon-theme
