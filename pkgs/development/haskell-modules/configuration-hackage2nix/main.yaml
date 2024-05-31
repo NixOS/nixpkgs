@@ -128,6 +128,57 @@ extra-packages:
 package-maintainers:
   abbradar:
     - Agda
+  alexfmpe:
+    - aeson-gadt-th
+    - basic-sop
+    - cli-extras
+    - cli-git
+    - cli-nix
+    - commutative-semigroups
+    - constraints-extras
+    - dependent-map
+    - dependent-monoidal-map
+    - dependent-sum
+    - dependent-sum-aeson-orphans
+    - dependent-sum-template
+    - gargoyle
+    - gargoyle-postgresql
+    - gargoyle-postgresql-connect
+    - gargoyle-postgresql-nix
+    - generics-sop
+    - ghcjs-base
+    - ghcjs-dom
+    - ghcjs-dom-hello
+    - ghcjs-dom-javascript
+    - haveibeenpwned
+    - jsaddle
+    - jsaddle-clib
+    - jsaddle-dom
+    - jsaddle-hello
+    - jsaddle-warp
+    - jsaddle-webkit2gtk
+    - jsaddle-wkwebview
+    - json-sop
+    - large-generics
+    - large-records
+    - lens-sop
+    - linux-namespaces
+    - monoidal-containers
+    - nix-thunk
+    - patch
+    - proto-lens-arbitrary
+    - proto3-suite
+    - proto3-wire
+    - records-sop
+    - reflex
+    - reflex-dom
+    - reflex-dom-core
+    - reflex-gadt-api
+    - universe
+    - universe-some
+    - vessel
+    - warp
+    - which
   Anton-Latukha:
     - hnix
     - hnix-store-core
