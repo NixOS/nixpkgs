@@ -6,6 +6,7 @@
 , jre8
 , blas
 , lapack
+, boost
 , curl
 , readline
 , expat
@@ -42,6 +43,11 @@ mkOpenModelicaDerivation ({
                /^\s*ar / s/ar /${stdenv.cc.targetPrefix}ar /
                /^\s*ranlib/ s/ranlib /${stdenv.cc.targetPrefix}ranlib /' \
         $(find ./OMCompiler -name 'Makefile*')
+    # Fixes https://github.com/OpenModelica/OpenModelica/issues/7064
+    sed -i 's|LIBRARY DESTINATION \''${CMAKE_INSTALL_LIBDIR}|LIBRARY DESTINATION lib2|g' \
+        ./OMCompiler/3rdParty/libzmq/CMakeLists.txt
+    # Fixes https://github.com/OpenModelica/OpenModelica/issues/10982
+    sed -i 's|@BOOSTHOME@|${boost.dev}/include|g' $(find ./OMCompiler -name 'Makefile*')
   '';
 
   preFixup = ''

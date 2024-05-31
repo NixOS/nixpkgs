@@ -1,0 +1,5 @@
+build-dirs:
+	mkdir -p "@OMBUILDDIR@"/lib/@host_short@/omc
+	mkdir -p "@OMBUILDDIR@"/include/omc
+	mkdir -p "@OMBUILDDIR@"/bin
+	mkdir -p "@OMBUILDDIR@"/share

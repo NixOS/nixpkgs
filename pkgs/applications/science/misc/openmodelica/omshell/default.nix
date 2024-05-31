@@ -1,4 +1,4 @@
-{ lib, qttools, qmake, qtwebkit, wrapQtAppsHook, readline, openmodelica, mkOpenModelicaDerivation }:
+{ lib, qttools, qmake, wrapQtAppsHook, readline, openmodelica, mkOpenModelicaDerivation }:
 
 mkOpenModelicaDerivation rec {
   pname = "omshell";
@@ -8,7 +8,7 @@ mkOpenModelicaDerivation rec {
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
-  buildInputs = [ readline qtwebkit ];
+  buildInputs = [ readline ];
 
   postPatch = with openmodelica; ''
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
@@ -20,6 +20,10 @@ mkOpenModelicaDerivation rec {
     sed -i OMShell/OMShell/OMShellGUI/OMShell.config.in -e '
       s|@OMBUILDDIR@|${omcompiler}|
       s|@OPENMODELICAHOME@|${omcompiler}|
+    '
+    #remove remnants of qtwebkit
+    sed -i OMShell/OMShell/OMShellGUI/OMShellGUI.pro -e '
+      s|webkitwidgets||g
     '
     sed -i OMShell/mosh/src/Makefile.in -e '
       /^CFLAGS =/ s|-I../../../build|-I${omcompiler}|
