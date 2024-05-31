@@ -2424,7 +2424,6 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
- - json-sop
  - json-spec-elm
  - json-spec-elm-servant
  - json-spec-openapi

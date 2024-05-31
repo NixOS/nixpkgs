@@ -3437,7 +3437,6 @@ broken-packages:
   - lens-process # failure in job https://hydra.nixos.org/build/233242948 at 2023-09-02
   - lensref # failure in job https://hydra.nixos.org/build/233205479 at 2023-09-02
   - lens-simple # failure in job https://hydra.nixos.org/build/233245452 at 2023-09-02
-  - lens-sop # failure in job https://hydra.nixos.org/build/259961739 at 2024-05-19
   - lens-tell # failure in job https://hydra.nixos.org/build/233234619 at 2023-09-02
   - lens-text-encoding # failure in job https://hydra.nixos.org/build/233222713 at 2023-09-02
   - lens-th-rewrite # failure in job https://hydra.nixos.org/build/233201025 at 2023-09-02

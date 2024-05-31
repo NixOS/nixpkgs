@@ -2633,18 +2633,6 @@ self: super: {
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;
 
-  # Raise version bounds: https://github.com/well-typed/lens-sop/pull/4
-  lens-sop = appendPatches [
-    (fetchpatch {
-      url = "https://github.com/well-typed/lens-sop/commit/d8657f27c12191a7c0a91701c0fcd9a590e0090e.patch";
-      sha256 = "sha256-9ODfbOb6Bs3EVTY9b7cUvkNmqzzZPWUmgmlAneaN3Tw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/well-typed/lens-sop/commit/b7ecffdeb836d19373871659e2f8cd24da6f7312.patch";
-      sha256 = "sha256-hDUQ2fW9Qyom65YvtW9bsbz7XtueRmdsAbAB42D+gu4=";
-    })
-  ] super.lens-sop;
-
   # Raise version bounds: https://github.com/kosmikus/records-sop/pull/15
   records-sop = appendPatch (fetchpatch {
     url = "https://github.com/kosmikus/records-sop/commit/fb149f453a816ff14d0cb20b3ea56b80ff49d9f1.patch";
