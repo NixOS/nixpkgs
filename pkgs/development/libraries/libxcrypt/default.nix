@@ -15,6 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5eH0yu4KAd4q7ibjE4gH1tPKK45nKHlm0f79ZeH9iUM=";
   };
 
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./build-aux/m4-autogen/config.guess --replace-fail /usr/bin/uname uname
+  '';
+
   outputs = [
     "out"
     "man"

@@ -76,10 +76,6 @@ let
 
     cargoDeps = rustPlatform.importCargoLock cargoLock;
 
-    RUSTFLAGS = builtins.concatStringsSep " " [
-      "-C linker=lld"
-    ];
-
     nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ] ++
       lib.optional (lib.versionAtLeast version "15") [
         binaryen

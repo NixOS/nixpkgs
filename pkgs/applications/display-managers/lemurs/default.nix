@@ -19,9 +19,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-uuHPJe+1VsnLRGbHtgTMrib6Tk359cwTDVfvtHnDToo=";
 
-  # Fixes a lock issue
-  preConfigure = "cargo update --offline";
-
   buildInputs = [
     linux-pam
   ];

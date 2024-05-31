@@ -77,7 +77,6 @@ in
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
 ++ optional atLeast7 ./ppc-musl.patch
 ++ optional is12 ./12/lambda-ICE-PR109241.patch # backport ICE fix on ccache code
-++ optional is13 ./13/ICE-PR110280.patch # backport ICE fix on const_unop
 ++ optional (atLeast9 && langD) ./libphobos.patch
 
 
@@ -153,8 +152,8 @@ in
   }) ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
-    sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
+    sha256 = "sha256-RBTCBXIveGwuQGJLzMW/UexpUZdDgdXprp/G2NHkmQo=";
   }) ];
   "12" = [ (fetchurl {
     name = "gcc-12-darwin-aarch64-support.patch";

@@ -22,10 +22,6 @@ wafConfigurePhase() {
         ${wafConfigureTargets:-configure}
     )
 
-    if [ -z "${dontAddWafCrossFlags:-}" ]; then
-        flagsArray+=(@wafCrossFlags@)
-    fi
-
     echoCmd 'waf configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 

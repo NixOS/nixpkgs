@@ -39,7 +39,7 @@ cargoBuildHook() {
     set -x
     @setEnv@ cargo build -j $NIX_BUILD_CORES \
         --target @rustHostPlatformSpec@ \
-        --frozen \
+        --offline \
         ${cargoBuildProfileFlag} \
         ${cargoBuildNoDefaultFeaturesFlag} \
         ${cargoBuildFeaturesFlag} \

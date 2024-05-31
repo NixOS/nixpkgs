@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook
 , # Note: -static hasn’t work on darwin
   static ? with stdenv.hostPlatform; isStatic && !isDarwin
 }:
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
+
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
   configureFlags = lib.optional (static) "LDFLAGS=-static";
 

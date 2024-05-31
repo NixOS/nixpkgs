@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
 , coreutils
 }:
 
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-install-statedir.patch ];
 
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.

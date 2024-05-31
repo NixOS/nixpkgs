@@ -33,10 +33,6 @@ buildPythonPackage rec {
 
   buildAndTestSubdir = "quil-py";
 
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
   build-system = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook

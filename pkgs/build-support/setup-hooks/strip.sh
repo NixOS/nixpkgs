@@ -74,13 +74,17 @@ stripDirs() {
         echo "stripping (with command $cmd and flags $stripFlags) in $paths"
         local striperr
         striperr="$(mktemp --tmpdir="$TMPDIR" 'striperr.XXXXXX')"
-        # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
-        find $paths -type f "${excludeFlags[@]}" -a '!' -path "$prefix/lib/debug/*" -print0 |
-            # Make sure we process files under symlinks only once. Otherwise
-            # 'strip` can corrupt files when writes to them in parallel:
-            #   https://github.com/NixOS/nixpkgs/issues/246147#issuecomment-1657072039
-            xargs -r -0 -n1 -- realpath -z | sort -u -z |
+        # Make sure we process files only once. `strip`ping the same file through different
+        # links in parallel can corrupt it:
+        #   https://github.com/NixOS/nixpkgs/issues/246147#issuecomment-1657072039
 
+        # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
+        # Print out each file's device and inode (which will be the same if two files are hardlinked
+        # or are the same file found through different symlinks), followed by its path...
+        find $paths -type f "${excludeFlags[@]}" -a '!' -path "$prefix/lib/debug/*" -printf '%D-%i,%p\0' |
+            # ... sort/uniq by device/inode, then cut them out and keep the path, ...
+            sort -t, -k1,1 -u -z | cut -d, -f2- -z |
+            # and finally strip each unique path in parallel.
             xargs -r -0 -n1 -P "$NIX_BUILD_CORES" -- $cmd $stripFlags 2>"$striperr" || exit_code=$?
         # xargs exits with status code 123 if some but not all of the
         # processes fail. We don't care if some of the files couldn't

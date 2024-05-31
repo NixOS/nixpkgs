@@ -22,11 +22,6 @@ let
 
     cargoHash = "sha256-4o3ctun/8VcBRuj+j0Yaawdkyn6Z6LPp+FTyhPxQWU8=";
 
-    # Cargo.lock is outdated
-    preConfigure = ''
-      cargo update --offline
-    '';
-
     meta = with lib; {
       description = "A tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
