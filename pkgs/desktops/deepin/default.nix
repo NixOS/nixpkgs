@@ -72,7 +72,6 @@ let
     deepin-screensaver = callPackage ./apps/deepin-screensaver { };
 
     #### Go Packages
-    go-gir-generator = callPackage ./go-package/go-gir-generator { };
     go-dbus-factory = callPackage ./go-package/go-dbus-factory { };
     dde-api = callPackage ./go-package/dde-api { };
     dde-daemon = callPackage ./go-package/dde-daemon { };
@@ -99,6 +98,7 @@ let
     dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
     dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
     go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
+    go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31
   };
 in
 lib.makeScope libsForQt5.newScope packages
