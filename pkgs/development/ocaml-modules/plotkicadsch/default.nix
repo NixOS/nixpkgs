@@ -1,6 +1,5 @@
 { lib
 , buildDunePackage
-, fetchFromGitHub
 , substituteAll
 , base64
 , cmdliner

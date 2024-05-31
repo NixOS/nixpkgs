@@ -73,16 +73,19 @@ let
 
 
         with subtest("nix-db"):
-            info = get_path_info("${foo}")
+            out = "${foo}"
+            info = get_path_info(out)
             print(info)
 
+            pathinfo = info[0] if isinstance(info, list) else info[out]
+
             if (
-                info[0]["narHash"]
+                pathinfo["narHash"]
                 != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
             ):
                 raise Exception("narHash not set")
 
-            if info[0]["narSize"] != 128:
+            if pathinfo["narSize"] != 128:
                 raise Exception("narSize not set")
 
         with subtest("nixos-version"):

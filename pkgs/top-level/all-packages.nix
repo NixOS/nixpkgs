@@ -3668,8 +3668,6 @@ with pkgs;
 
   djmount = callPackage ../tools/filesystems/djmount { };
 
-  dgsh = callPackage ../shells/dgsh { };
-
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
   dl-librescore = callPackage ../tools/audio/dl-librescore { };
@@ -5513,9 +5511,7 @@ with pkgs;
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
 
-  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker {
-    wlroots = wlroots_0_16;
-  };
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
@@ -8119,7 +8115,6 @@ with pkgs;
 
   frigate = callPackage ../applications/video/frigate { };
 
-  frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
   ftgl = callPackage ../development/libraries/ftgl { };
@@ -11950,7 +11945,11 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray { };
+  povray = callPackage ../tools/graphics/povray {
+    # https://github.com/POV-Ray/povray/issues/460
+    # https://github.com/NixOS/nixpkgs/issues/311017
+    stdenv = gcc12Stdenv;
+  };
 
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
@@ -14786,11 +14785,6 @@ with pkgs;
   yeshup = callPackage ../tools/system/yeshup { };
 
   ytfzf = callPackage ../tools/misc/ytfzf { };
-
-  # To expose more packages for Yi, override the extraPackages arg.
-  yi = callPackage ../applications/editors/yi/wrapper.nix {
-    haskellPackages = haskell.packages.ghc810;
-  };
 
   yaydl = callPackage ../tools/video/yaydl {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -21470,7 +21464,9 @@ with pkgs;
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
-  imgui = callPackage ../development/libraries/imgui { };
+  imgui = callPackage ../development/libraries/imgui {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   imtui = callPackage ../development/libraries/imtui { };
 
@@ -22674,8 +22670,6 @@ with pkgs;
   libopus = callPackage ../development/libraries/libopus { };
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
-
-  liboqs = callPackage ../development/libraries/liboqs { };
 
   libosinfo = callPackage ../development/libraries/libosinfo { };
 
@@ -27160,8 +27154,6 @@ with pkgs;
 
   itpp = callPackage ../development/libraries/science/math/itpp { };
 
-  iw = callPackage ../os-specific/linux/iw { };
-
   iwd = callPackage ../os-specific/linux/iwd { };
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
@@ -28309,8 +28301,6 @@ with pkgs;
   carlito = callPackage ../data/fonts/carlito { };
 
   cascadia-code = callPackage ../data/fonts/cascadia-code { };
-
-  catppuccin-cursors = callPackage ../data/icons/catppuccin-cursors { };
 
   ccsymbols = callPackage ../data/fonts/ccsymbols { };
 
@@ -34120,7 +34110,15 @@ with pkgs;
 
   rke = callPackage ../applications/networking/cluster/rke { };
 
-  rke2 = callPackage ../applications/networking/cluster/rke2 { };
+  inherit (callPackage ../applications/networking/cluster/rke2 {
+    buildGoModule = buildGo121Module;
+    go = go_1_21;
+  }) rke2_stable;
+  inherit (callPackage ../applications/networking/cluster/rke2 {
+    buildGoModule = buildGo122Module;
+    go = go_1_22;
+  }) rke2_latest rke2_testing;
+  rke2 = rke2_stable;
 
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
@@ -34426,8 +34424,6 @@ with pkgs;
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
 
   peru = callPackage ../applications/version-management/peru { };
-
-  petrinizer = haskellPackages.callPackage ../applications/science/logic/petrinizer { };
 
   pmidi = callPackage ../applications/audio/pmidi { };
 
@@ -34741,8 +34737,6 @@ with pkgs;
   termimage = callPackage ../tools/graphics/termimage { };
 
   terminal-notifier = callPackage ../applications/misc/terminal-notifier { };
-
-  textpieces = callPackage ../tools/text/textpieces { };
 
   textplots = callPackage ../tools/graphics/textplots { };
 
@@ -36429,8 +36423,6 @@ with pkgs;
 
   abuse = callPackage ../games/abuse { };
 
-  adom = callPackage ../games/adom { };
-
   airshipper = callPackage ../games/airshipper { };
 
   airstrike = callPackage ../games/airstrike { };
@@ -37452,8 +37444,6 @@ with pkgs;
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
   vitetris = callPackage ../games/vitetris { };
-
-  vms-empire = callPackage ../games/vms-empire { };
 
   voxelands = callPackage ../games/voxelands { };
 
@@ -40751,8 +40741,6 @@ with pkgs;
   openbsdCross = callPackage ../os-specific/bsd/openbsd {
     stdenv = crossLibcStdenv;
   };
-
-  yrd = callPackage ../tools/networking/yrd { };
 
   powershell = callPackage ../shells/powershell { };
 

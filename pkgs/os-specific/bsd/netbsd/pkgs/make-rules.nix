@@ -1,7 +1,6 @@
 {
   lib,
   mkDerivation,
-  fetchNetBSD,
   stdenv,
   bsdSetupHook,
   netbsdSetupHook,

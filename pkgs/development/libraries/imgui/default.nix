@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.GameController
   ];
 
   propagatedBuildInputs =

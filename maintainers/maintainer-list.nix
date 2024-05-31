@@ -577,6 +577,15 @@
       fingerprint = "51E4 F5AB 1B82 BE45 B422  9CC2 43A5 E25A A5A2 7849";
     }];
   };
+  aduh95 = {
+    email = "duhamelantoine1995@gmail.com";
+    github = "aduh95";
+    githubId = 14309773;
+    name = "Antoine du Hamel";
+    keys = [{
+      fingerprint = "C0D6 2484 39F1 D560 4AAF  FB40 21D9 00FF DB23 3756";
+    }];
+  };
   aerialx = {
     email = "aaron+nixos@aaronlindsay.com";
     github = "AerialX";
@@ -1085,6 +1094,12 @@
     keys = [{
       fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE";
     }];
+  };
+  aman9das = {
+    email = "amandas62640@gmail.com";
+    github = "Aman9das";
+    githubId = 39594914;
+    name = "Aman Das";
   };
   amanjeev = {
     email = "aj@amanjeev.com";

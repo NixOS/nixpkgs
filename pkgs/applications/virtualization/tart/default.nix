@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "macOS VMs on Apple Silicon to use in CI and other automations";
     homepage = "https://tart.run";
     license = licenses.fairsource09;
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [ emilytrau Enzime aduh95 ];
     mainProgram = finalAttrs.pname;
     platforms = [ "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

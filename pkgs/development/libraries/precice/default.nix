@@ -1,22 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "precice";
-    repo = pname;
+    repo = "precice";
     rev = "v${version}";
-    hash = "sha256-RuZ18BFdusMHC+Yuapc2N8cEetLu32e28J34HH+gHOg=";
+    hash = "sha256-AkIyrjL4OSqX6B1tt1QFopuwnkQaTtb4LmIssY3d3fQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/precice/precice/commit/9dffe04144ab0f6a92fbff9be91cda71718b9c8e.patch";
-      hash = "sha256-kSvIfBQH1mBA5CFJo9Usiypol0u9VgHMlUEHK/uHVNQ=";
-    })
-  ];
 
   cmakeFlags = [
     "-DPRECICE_PETScMapping=OFF"
@@ -43,5 +36,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 }
-
-

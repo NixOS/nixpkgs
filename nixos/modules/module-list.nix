@@ -281,6 +281,7 @@
   ./programs/systemtap.nix
   ./programs/thefuck.nix
   ./programs/thunar.nix
+  ./programs/thunderbird.nix
   ./programs/tmux.nix
   ./programs/traceroute.nix
   ./programs/trippy.nix

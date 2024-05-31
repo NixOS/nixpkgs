@@ -3,7 +3,6 @@
 , callPackage
 , resholve
 , shunit2
-, fetchFromGitHub
 , coreutils
 , gnused
 , gnugrep
