@@ -50,5 +50,6 @@ buildPythonPackage {
     homepage = "https://github.com/nix-community/nixops-gce";
     license = licenses.mit;
     maintainers = nixops.meta.maintainers;
+    broken = true; # never built on Hydra
   };
 }
