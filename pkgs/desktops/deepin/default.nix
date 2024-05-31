@@ -29,6 +29,7 @@ let
     dtk6declarative = callPackage ./library/dtk6declarative { };
     dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
     qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
+    qt6integration = callPackage ./library/qt6integration { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
