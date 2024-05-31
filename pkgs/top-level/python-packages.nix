@@ -2710,14 +2710,7 @@ self: super: with self; {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  cupy = callPackage ../development/python-modules/cupy {
-    # cupy 12.2.0 possibly incompatible with cutensor 2.0 that comes with cudaPackages_12
-    cudaPackages = pkgs.cudaPackages_11.overrideScope (cu-fi: _: {
-      # CuDNN 9 is not supported:
-      # https://github.com/cupy/cupy/issues/8215
-      cudnn = cu-fi.cudnn_8_9;
-    });
-  };
+  cupy = callPackage ../development/python-modules/cupy { cudaPackages = pkgs.cudaPackages_12_4; };
 
   curio = callPackage ../development/python-modules/curio { };
 
