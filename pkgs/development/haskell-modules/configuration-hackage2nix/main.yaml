@@ -700,7 +700,6 @@ unsupported-platforms:
   intricacy:                                    [ platforms.darwin ] # depends on mesa
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
-  jsaddle-hello:                                [ platforms.darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]

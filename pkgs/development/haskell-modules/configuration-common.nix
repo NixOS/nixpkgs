@@ -1560,7 +1560,22 @@ self: super: {
       doJailbreak
     ];
 
-  jsaddle-hello = doJailbreak super.jsaddle-hello;
+  # Needs https://github.com/ghcjs/jsaddle-hello/pull/5 and hackage release
+  jsaddle-hello = appendPatches [
+    (fetchpatch {
+      url = "https://github.com/ghcjs/jsaddle-hello/commit/c4de837675117b821c50a5079d20d84ec16ff26a.patch";
+      sha256 = "sha256-NsM7QqNLt5V8i5bveYgMrawGnZVsIuAoJfBF75jBwV0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ghcjs/jsaddle-hello/commit/5c437363833684ea951ec74a0d0fdf5b6fbaca85.patch";
+      sha256 = "sha256-CUyZsts0FAQ3c8Z+zfvwbmlAJCMcidV80n8dA/SoRls=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ghcjs/jsaddle-hello/commit/e2da9e266fbfa8f7fcf3009ab6cfbf825a8bcf7a.patch";
+      sha256 = "sha256-WL0CcnlMt6KI7MOZMg74fNN/I4gYSO3n+GiaXB2BOP0=";
+    })
+  ] super.jsaddle-hello;
+
   ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
 
   # Too strict upper bounds on text
