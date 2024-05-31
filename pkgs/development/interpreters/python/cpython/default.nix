@@ -461,6 +461,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString stdenv.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
+    # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
+    sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
   '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
