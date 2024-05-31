@@ -47,11 +47,19 @@ in
   */
 , commit ? (args.src.rev or "unknown")
   /*
-    recipe: Optional MELPA recipe.
-    Default: a minimal but not accurate recipe
-    You need to provide your own recipe if you want to set :files.
+    files: Optional recipe property specifying the files used to build the package.
+    If null, do not set it in recipe, keeping the default upstream behaviour.
+    Default: null
   */
-, recipe ? (writeText "${pname}-recipe" ''(${ename} :fetcher git :url "")'')
+, files ? null
+  /*
+    recipe: Optional MELPA recipe.
+    Default: a minimally functional recipe
+  */
+, recipe ? (writeText "${pname}-recipe" ''
+    (${ename} :fetcher git :url ""
+              ${lib.optionalString (files != null) ":files ${files}"})
+  '')
 , meta ? {}
 , ...
 }@args:
