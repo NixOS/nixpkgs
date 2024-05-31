@@ -1,37 +1,41 @@
 { lib
-, stdenv
+, buildDotnetModule
 , fetchFromGitHub
-, meson
-, ninja
+, blueprint-compiler
 , pkg-config
-, jsoncpp
-, taglib
-, curl
-, curlpp
 , glib
 , gtk4
 , libadwaita
 , wrapGAppsHook4
 , desktop-file-utils
 , chromaprint # fpcalc
+, dotnetCorePackages
 }:
 
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "tagger";
-  version = "2022.11.2";
+  version = "2023.11.3";
 
   src = fetchFromGitHub {
-    owner = "nlogozzo";
-    repo = "NickvisionTagger";
+    owner = "NickvisionApps";
+    repo = "Tagger";
     rev = version;
-    hash = "sha256-gFpnTuUROYwPANrkD+g7a3FHSCVY2oB97flCK+LLowY=";
+    hash = "sha256-rWdCzqNgAozEDGzzE4CNVXGfK225MKZ1s9bLidiZ/y0=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
+  projectFile = "NickvisionTagger.GNOME/NickvisionTagger.GNOME.csproj";
+  nugetDeps = ./deps.nix;
+  executables = "NickvisionTagger.GNOME";
+
+  passthru.updateScript = ./update.sh;
+
   nativeBuildInputs = [
-    meson
-    ninja
     pkg-config
     wrapGAppsHook4
+    blueprint-compiler
     desktop-file-utils
   ];
 
@@ -39,26 +43,26 @@ stdenv.mkDerivation rec {
     glib
     gtk4
     libadwaita
-    jsoncpp
-    taglib
-    curl
-    curlpp
+    chromaprint
   ];
 
-  # Don't install compiled binary
-  postPatch = ''
-    sed -i '/fpcalc/d' meson.build
-  '';
+  runtimeDeps = [
+    glib
+    gtk4
+    libadwaita
+  ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ chromaprint ]}"
-    )
+  # Tried to have cake handle install but couldn't figure it out
+  postInstall = ''
+    substituteInPlace NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in --replace '@EXEC@' "NickvisionTagger.GNOME"
+    install -Dm444 NickvisionTagger.Shared/Resources/org.nickvision.tagger.svg -t $out/share/icons/hicolor/scalable/apps/
+    install -Dm444 NickvisionTagger.Shared/Resources/org.nickvision.tagger-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
+    install -Dm444 NickvisionTagger.Shared/Linux/org.nickvision.tagger.desktop.in -T $out/share/applications/org.nickvision.tagger.desktop
   '';
 
   meta = with lib; {
     description = "An easy-to-use music tag (metadata) editor";
-    homepage = "https://github.com/nlogozzo/NickvisionTagger";
+    homepage = "https://github.com/NickvisionApps/Tagger";
     mainProgram = "org.nickvision.tagger";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
