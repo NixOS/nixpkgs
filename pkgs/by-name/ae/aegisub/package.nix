@@ -7,6 +7,7 @@
   darwin,
   expat,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg,
   ffms,
   fftw,
@@ -120,7 +121,13 @@ stdenv.mkDerivation (finalAttrs: {
     "relro"
   ];
 
-  patches = lib.optionals (!useBundledLuaJIT) [
+  patches = [
+    (fetchpatch {
+      name = "move-iconv-include-to-charset_conv.h.patch";
+      url = "https://github.com/arch1t3cht/Aegisub/commit/b8f4c98c4cbc698e4adbba302c2dc328fe193435.patch";
+      hash = "sha256-dCm/VG+8yK7qWKWF4Ew/M2hbbAC/d3hiuRglR9BvWtw=";
+    })
+  ] ++ lib.optionals (!useBundledLuaJIT) [
     ./000-remove-bundled-luajit.patch
   ];
 
