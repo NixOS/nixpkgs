@@ -151,7 +151,7 @@ in
             deepin-desktop-base
 
             startdde
-            dde-dock
+            dde-shell
             dde-launchpad
             dde-session-ui
             dde-session-shell
