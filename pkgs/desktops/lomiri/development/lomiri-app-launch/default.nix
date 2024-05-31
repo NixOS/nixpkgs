@@ -54,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/0419b2592284f43ee5e76060948ea3d5f1c991fd.patch";
       hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
     })
+
+    # Use /run/current-system/sw/bin fallback for desktop file Exec= lookups, propagate to launched applications
+    ./2001-Inject-current-system-PATH.patch
   ];
 
   postPatch = ''
