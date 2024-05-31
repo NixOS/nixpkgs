@@ -18,10 +18,10 @@ in {
       imports = [ commonConfig ];
       networking.hostId = "daa82e91";
 
-      programs.ssh.extraConfig = ''
-        UserKnownHostsFile=/dev/null
-        StrictHostKeyChecking=no
-      '';
+      programs.ssh.hostSettings."*" = {
+        UserKnownHostsFile = "/dev/null";
+        StrictHostKeyChecking = false;
+      };
 
       services.sanoid = {
         enable = true;

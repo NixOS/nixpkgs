@@ -101,11 +101,10 @@ let
             init.defaultBranch = "main";
           };
         };
-        programs.ssh.extraConfig = ''
-          Host *
-            StrictHostKeyChecking no
-            IdentityFile ~/.ssh/privk
-        '';
+        programs.ssh.hostSettings."*" = {
+          StrictHostKeyChecking = false;
+          IdentityFile = "~/.ssh/privk";
+        };
       };
     };
 
