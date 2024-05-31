@@ -25,6 +25,10 @@ let
     "fabric"
   ];
 
+  managedServices = [
+    "static"
+  ];
+
   allServices = services ++ [ "zebra" "mgmt" ];
 
   isEnabled = service: cfg.${service}.enable;
@@ -226,6 +230,11 @@ in
             });
        in
          listToAttrs (map frrService (filter isEnabled allServices));
+
+    warnings =
+      if ((any (x: cfg.${x}.config != "") managedServices) || (any (x: cfg.${x}.configFile != null) managedServices))
+      then [ ("frr: config of " + (toString managedServices) + " have to be moved into mgmt.config") ]
+      else [];
 
   };
 
