@@ -1,25 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, getopt
-, ksh
-, bc
-, tzdata
-, pkgsMusl # for passthru.tests
+{
+  lib,
+  bc,
+  fetchurl,
+  getopt,
+  ksh,
+  pkgsMusl,
+  stdenv,
+  tzdata,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20240301";
+  version = "20240520";
 
   src = fetchurl {
-    url = "http://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-JM4L46z8i5PHWgeWxi7swWN246fAVXCzAtIEgOOOn1k=";
+    url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
+    hash = "sha256-IhDM1FWwCN95Ufbb00e/zBg3xGRzAU5LjdX/MJGuKJQ=";
   };
 
   patches = [
-    # make bootstrap script aware of the prefix in /nix/store
-    ./001-bootstrap-fix.diff
     # decouple tests from build phase
     ./002-dont-test-while-installing.diff
     # preserve PATH from build env in unit tests
@@ -27,6 +26,43 @@ stdenv.mkDerivation (finalAttrs: {
     # Always enable ksh test since it checks in a impure location /bin/ksh
     ./004-unconditional-ksh-test.diff
   ];
+
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ getopt ];
+
+  nativeCheckInputs = [
+    bc
+    tzdata
+  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
+    ksh
+  ];
+
+  # The generated makefile is a small wrapper for calling ./boot-strap with a
+  # given op. On a case-insensitive filesystem this generated makefile clobbers
+  # a distinct, shipped Makefile and causes infinite recursion during tests
+  # which eventually fail with "fork: Resource temporarily unavailable"
+  configureFlags = [
+    "--without-makefile"
+  ];
+
+  # Disabled tests:
+  # * directive-export{,-gmake}: another failure related to TZ variables
+  # * opt-chdir: ofborg complains about it somehow
+  # * opt-keep-going-indirect: not yet known
+  # * varmod-localtime: musl doesn't support TZDIR and this test relies on
+  #   impure, implicit paths
+  env.BROKEN_TESTS = builtins.concatStringsSep " " [
+    "directive-export"
+    "directive-export-gmake"
+    "opt-chdir" # works on my machine -- AndersonTorres
+    "opt-keep-going-indirect"
+    "varmod-localtime"
+  ];
+
+  strictDeps = true;
+
+  doCheck = true;
 
   # Make tests work with musl
   # * Disable deptgt-delete_on_error test (alpine does this too)
@@ -38,16 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e '/shell-ksh/d'
     substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
   '';
-
-  nativeBuildInputs = [ getopt ];
-
-  # The generated makefile is a small wrapper for calling ./boot-strap with a
-  # given op. On a case-insensitive filesystem this generated makefile clobbers
-  # a distinct, shipped, Makefile and causes infinite recursion during tests
-  # which eventually fail with "fork: Resource temporarily unavailable"
-  configureFlags = [
-    "--without-makefile"
-  ];
 
   buildPhase = ''
     runHook preBuild
@@ -65,29 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  doCheck = true;
-
-  nativeCheckInputs = [
-    bc
-    tzdata
-  ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
-    ksh
-  ];
-
-  # Disabled tests:
-  # directive-export{,-gmake}: another failure related to TZ variables
-  # opt-chdir: ofborg complains about it somehow
-  # opt-keep-going-indirect: not yet known
-  # varmod-localtime: musl doesn't support TZDIR and this test relies on impure,
-  # implicit paths
-  env.BROKEN_TESTS = builtins.concatStringsSep " " [
-    "directive-export"
-    "directive-export-gmake"
-    "opt-chdir" # works on my machine -- AndersonTorres
-    "opt-keep-going-indirect"
-    "varmod-localtime"
-  ];
-
   checkPhase = ''
     runHook preCheck
 
@@ -96,22 +99,24 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  strictDeps = true;
-
   setupHook = ./setup-hook.sh;
 
-  passthru.tests.bmakeMusl = pkgsMusl.bmake;
+  passthru = {
+    tests = {
+      bmakeMusl = pkgsMusl.bmake;
+    };
+  };
 
   meta = {
-    homepage = "http://www.crufty.net/help/sjg/bmake.html";
+    homepage = "https://www.crufty.net/help/sjg/bmake.html";
     description = "Portable version of NetBSD 'make'";
     license = lib.licenses.bsd3;
     mainProgram = "bmake";
     maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
     platforms = lib.platforms.unix;
-    # ofborg: x86_64-linux builds the musl package, aarch64-linux doesn't
-    broken = stdenv.hostPlatform.isMusl && stdenv.buildPlatform.isAarch64;
+    # requires strip
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
   };
 })
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
-# TODO: investigate Musl support
+# TODO: investigate static support
