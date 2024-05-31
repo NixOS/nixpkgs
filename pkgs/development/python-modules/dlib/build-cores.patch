@@ -1,15 +1,17 @@
 diff --git a/setup.py b/setup.py
-index 0c8d8f16..565ef8ef 100644
+index 219583b..3ca5f88 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -172,21 +172,7 @@ class CMakeBuild(build_ext):
+@@ -170,23 +170,7 @@ class CMakeBuild(build_ext):
          subprocess.check_call(cmake_build, cwd=build_folder)
  
  def num_available_cpu_cores(ram_per_build_process_in_gb):
 -    if 'TRAVIS' in os.environ and os.environ['TRAVIS']=='true':
 -        # When building on travis-ci, just use 2 cores since travis-ci limits
 -        # you to that regardless of what the hardware might suggest.
--        return 2 
+-        return 2
+-    elif 'CMAKE_BUILD_PARALLEL_LEVEL' in os.environ and os.environ['CMAKE_BUILD_PARALLEL_LEVEL'].isnumeric():
+-        return int(os.environ['CMAKE_BUILD_PARALLEL_LEVEL'])
 -    try:
 -        mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')  
 -        mem_gib = mem_bytes/(1024.**3)
