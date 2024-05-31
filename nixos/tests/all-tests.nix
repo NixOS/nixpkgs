@@ -783,7 +783,7 @@ in {
   qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
   qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
-  qtile = handleTest ./qtile.nix {};
+  qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile.nix {};
   quake3 = handleTest ./quake3.nix {};
   quicktun = handleTest ./quicktun.nix {};
   quorum = handleTest ./quorum.nix {};
