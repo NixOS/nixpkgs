@@ -21,8 +21,8 @@
       text = ''
         #!ipxe
         # TODO: MAKE CONFIGURABLE WITH iPXE VARS for CHAINLOAD
-        kernel http://localhost:8000/kernel initrd=initrd init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-        initrd http://localhost:8000/initrd
+        kernel http://127.0.0.1:8000/kernel initrd=initrd init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+        initrd http://127.0.0.1:8000/initrd
         boot
       '';
     };
