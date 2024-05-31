@@ -48,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-app-launch/-/merge_requests/57 merged & in release
+    # Remove when version > 0.1.9
     (fetchpatch {
       name = "0001-lomiri-app-launch-Fix-typelib-gir-dependency.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/0419b2592284f43ee5e76060948ea3d5f1c991fd.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/8466e77914e73801499df224fcd4a53c4a0eab25.patch";
       hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
     })
 
@@ -64,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # used pkg_get_variable, cannot replace prefix
     substituteInPlace data/CMakeLists.txt \
-      --replace 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'set(SYSTEMD_USER_UNIT_DIR "''${CMAKE_INSTALL_PREFIX}/lib/systemd/user")'
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace tests/jobs-systemd.cpp \
-      --replace '^(/usr)?' '^(/nix/store/\\w+-bash-.+)?'
+      --replace-fail '^(/usr)?' '^(/nix/store/\\w+-bash-.+)?'
   '';
 
   strictDeps = true;
@@ -139,13 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "System and associated utilities to launch applications in a standard and confined way";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-app-launch";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-app-launch-0"
     ];
