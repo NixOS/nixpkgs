@@ -314,7 +314,7 @@ let
     };
     lispLibs = [
       self.nclasses
-      self.quri_20240328
+      self.quri
       super.alexandria
       super.iolib
       super.serapeum
@@ -368,153 +368,155 @@ let
     ];
   };
 
-  quri_20240328 = (super.quri.overrideAttrs (final: prev: {
-    version = "20240328-git";
-    src = pkgs.fetchFromGitHub {
-      owner = "fukamachi";
-      repo = "quri";
-      rev = "03ecaf3771561d713e58a9c5c22b4d95a7592527";
-      sha256 = "sha256-YqZFZvGVD2QRkD7wFyLEBHn+5mFVHfhxSkcv/nY1qbU=";
-    };
-  }));
 
-  nyxt-gtk = build-asdf-system {
-    pname = "nyxt";
-    version = "3.11.6";
+  nyxt-gtk = let
+    scope = self.overrideScope (self: super: {
+      quri = (super.quri.overrideAttrs (final: prev: {
+          version = "20240328-git";
+          src = pkgs.fetchFromGitHub {
+            owner = "fukamachi";
+            repo = "quri";
+            rev = "03ecaf3771561d713e58a9c5c22b4d95a7592527";
+            sha256 = "sha256-YqZFZvGVD2QRkD7wFyLEBHn+5mFVHfhxSkcv/nY1qbU=";
+          };
+        }));
+      nyxt-gtk = build-asdf-system {
+        pname = "nyxt";
+        version = "3.11.7";
 
-    lispLibs = (with super; [
-      alexandria
-      bordeaux-threads
-      calispel
-      cl-base64
-      cl-gopher
-      cl-html-diff
-      cl-json
-      cl-ppcre
-      cl-ppcre-unicode
-      cl-prevalence
-      cl-qrencode
-      cl-tld
-      closer-mop
-      dissect
-      moptilities
-      dexador
-      enchant
-      flexi-streams
-      idna
-      iolib
-      lass
-      local-time
-      lparallel
-      log4cl
-      montezuma
-      ndebug
-      osicat
-      parenscript
-      py-configparser
-      serapeum
-      str
-      phos
-      plump
-      clss
-      spinneret
-      trivia
-      trivial-features
-      trivial-garbage
-      trivial-package-local-nicknames
-      trivial-types
-      unix-opts
-      cluffer
-      cl-cffi-gtk
-      sqlite
-      # TODO: Remove these overrides after quicklisp updates past the June 2023 release
-      (trivial-clipboard.overrideAttrs (final: prev: {
+        lispLibs = (with self; [
+          alexandria
+          bordeaux-threads
+          calispel
+          cl-base64
+          cl-gopher
+          cl-html-diff
+          cl-json
+          cl-ppcre
+          cl-ppcre-unicode
+          cl-prevalence
+          cl-qrencode
+          cl-tld
+          closer-mop
+          dissect
+          moptilities
+          dexador
+          enchant
+          flexi-streams
+          idna
+          iolib
+          lass
+          local-time
+          lparallel
+          log4cl
+          montezuma
+          ndebug
+          osicat
+          parenscript
+          py-configparser
+          serapeum
+          str
+          phos
+          plump
+          clss
+          spinneret
+          trivia
+          trivial-features
+          trivial-garbage
+          trivial-package-local-nicknames
+          trivial-types
+          unix-opts
+          cluffer
+          cl-cffi-gtk
+          sqlite
+          # TODO: Remove these overrides after quicklisp updates past the June 2023 release
+          (trivial-clipboard.overrideAttrs (final: prev: {
+            src = pkgs.fetchFromGitHub {
+              owner = "snmsts";
+              repo = "trivial-clipboard";
+              rev = "50b3d3a25717ac78fb1f0517635c3cb1c31c7667";
+              sha256 = "sha256-QVLSkgVZ4r+XYIhor9UX4hVY8CvBE3M3mQdjwrcl8qk=";
+            };}))
+          (cl-gobject-introspection.overrideAttrs (final: prev: {
+            src = pkgs.fetchFromGitHub {
+              owner = "andy128k";
+              repo = "cl-gobject-introspection";
+              rev = "83beec4492948b52aae4d4152200de5d5c7ac3e9";
+              sha256 = "sha256-g/FwWE+Rzmzm5Y+irvd1AJodbp6kPHJIFOFDPhaRlXc=";
+            };}))
+          (cl-webkit2.overrideAttrs (final: prev: {
+            src = pkgs.fetchFromGitHub {
+              owner = "joachifm";
+              repo = "cl-webkit";
+              rev = "66fd0700111586425c9942da1694b856fb15cf41";
+              sha256 = "sha256-t/B9CvQTekEEsM/ZEp47Mn6NeZaTYFsTdRqclfX9BNg=";
+            };
+          }))
+          (slynk.overrideAttrs (final: prev: {
+            src = pkgs.fetchFromGitHub {
+              owner = "joaotavora";
+              repo = "sly";
+              rev = "9c43bf65b967e12cef1996f1af5f0671d8aecbf4";
+              hash = "sha256-YlHZ/7VwvHe2PBPRshN+Gr3WuGK9MpkOJprP6QXI3pY=";
+            };
+            systems = [ "slynk" "slynk/arglists" "slynk/fancy-inspector"
+                        "slynk/package-fu" "slynk/mrepl" "slynk/trace-dialog"
+                        "slynk/profiler" "slynk/stickers" "slynk/indentation"
+                        "slynk/retro" ];
+          }))
+          iterate
+          symbol-munger
+          misc-extensions
+          quri
+          history-tree
+          nhooks
+          nkeymaps
+          prompter
+          cl-colors2_0_5_4
+          njson
+          nsymbols
+          nclasses
+          nfiles
+          cl-containers
+          # remove this override after quicklisp one is updated.
+          (swank.overrideAttrs (final: prev: {
+            src = pkgs.fetchFromGitHub {
+              owner = "slime";
+              repo = "slime";
+              rev = "v2.29.1";
+              hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
+            };
+            systems = [ "swank" "swank/exts" ];
+          }))
+        ]);
+
         src = pkgs.fetchFromGitHub {
-          owner = "snmsts";
-          repo = "trivial-clipboard";
-          rev = "f7b2c96fea00ca06a83f20b00b7b1971e76e03e7";
-          sha256 = "sha256-U6Y9BiM2P1t9P8fdX8WIRQPRWl2v2ZQuKdP1IUqvOAk=";
-        };}))
-      (cl-gobject-introspection.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "andy128k";
-          repo = "cl-gobject-introspection";
-          rev = "83beec4492948b52aae4d4152200de5d5c7ac3e9";
-          sha256 = "sha256-g/FwWE+Rzmzm5Y+irvd1AJodbp6kPHJIFOFDPhaRlXc=";
-        };}))
-      (cl-webkit2.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "joachifm";
-          repo = "cl-webkit";
-          rev = "66fd0700111586425c9942da1694b856fb15cf41";
-          sha256 = "sha256-t/B9CvQTekEEsM/ZEp47Mn6NeZaTYFsTdRqclfX9BNg=";
+          owner = "atlas-engineer";
+          repo = "nyxt";
+          rev = "3.11.7";
+          hash = "sha256-QhJ5uzhPJBVtfm7PbrtHcIrhx2YFKuRoWAIosoSeNGM=";
         };
-      }))
-      (slynk.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "joaotavora";
-          repo = "sly";
-          rev = "9c43bf65b967e12cef1996f1af5f0671d8aecbf4";
-          hash = "sha256-YlHZ/7VwvHe2PBPRshN+Gr3WuGK9MpkOJprP6QXI3pY=";
-        };
-        systems = [ "slynk" "slynk/arglists" "slynk/fancy-inspector"
-                    "slynk/package-fu" "slynk/mrepl" "slynk/trace-dialog"
-                    "slynk/profiler" "slynk/stickers" "slynk/indentation"
-                    "slynk/retro" ];
-      }))
-      iterate
-      symbol-munger
-    ]) ++ (with self; [
-      quri_20240328
-      history-tree
-      nhooks
-      nkeymaps
-      prompter
-      cl-colors2_0_5_4
-      njson
-      nsymbols
-      nclasses
-      nfiles
-      cl-containers
-      # remove this override after quicklisp one is updated.
-      (swank.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "slime";
-          repo = "slime";
-          rev = "v2.29.1";
-          hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
-        };
-        systems = [ "swank" "swank/exts" ];
-      }))
-    ]);
 
-    src = pkgs.fetchFromGitHub {
-      owner = "atlas-engineer";
-      repo = "nyxt";
-      rev = "3.11.6";
-      hash = "sha256-o+4LnSNyhdz5YAjNQJuE2ERtt48PckjKfts9QVRw82A=";
-    };
+        nativeBuildInputs = [ pkgs.makeWrapper ];
 
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+        buildInputs = [
+          # needed for GSETTINGS_SCHEMAS_PATH
+          pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
 
-    buildInputs = [
-      # needed for GSETTINGS_SCHEMAS_PATH
-      pkgs.gsettings-desktop-schemas pkgs.glib pkgs.gtk3
+          # needed for XDG_ICON_DIRS
+          pkgs.gnome.adwaita-icon-theme
+        ];
 
-      # needed for XDG_ICON_DIRS
-      pkgs.gnome.adwaita-icon-theme
-    ];
+        # This patch removes the :build-operation component from the nyxt/gi-gtk-application system.
+        # This is done because if asdf:operate is used and the operation matches the system's :build-operation
+        # then output translations are ignored, causing the result of the operation to be placed where
+        # the .asd is located, which in this case is the nix store.
+        # see: https://gitlab.common-lisp.net/asdf/asdf/-/blob/master/doc/asdf.texinfo#L2582
+        patches = [ ./patches/nyxt-remove-build-operation.patch ];
 
-    # This patch removes the :build-operation component from the nyxt/gi-gtk-application system.
-    # This is done because if asdf:operate is used and the operation matches the system's :build-operation
-    # then output translations are ignored, causing the result of the operation to be placed where
-    # the .asd is located, which in this case is the nix store.
-    # see: https://gitlab.common-lisp.net/asdf/asdf/-/blob/master/doc/asdf.texinfo#L2582
-    patches = [ ./patches/nyxt-remove-build-operation.patch ];
+        NASDF_USE_LOGICAL_PATHS = true;
 
-    NASDF_USE_LOGICAL_PATHS = true;
-
-    buildScript = pkgs.writeText "build-nyxt.lisp" ''
+        buildScript = pkgs.writeText "build-nyxt.lisp" ''
       (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
       (require :uiop)
       (let ((pwd (uiop:ensure-directory-pathname (uiop/os:getcwd))))
@@ -524,8 +526,8 @@ let
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
 
-    # TODO(kasper): use wrapGAppsHook3
-    installPhase = ''
+        # TODO(kasper): use wrapGAppsHook3
+        installPhase = ''
       mkdir -pv $out
       cp -r * $out
       rm -fv $out/nyxt
@@ -539,7 +541,8 @@ let
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.dconf.lib}/lib/gio/modules/ \
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.glib-networking}/lib/gio/modules/
     '';
-  };
+      };});
+    in scope.nyxt-gtk;
 
   nyxt = self.nyxt-gtk;
 
