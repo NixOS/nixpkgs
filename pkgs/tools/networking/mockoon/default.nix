@@ -38,5 +38,6 @@ appimageTools.wrapType2 {
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "mockoon";
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };
 }
