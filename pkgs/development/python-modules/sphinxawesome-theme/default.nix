@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxawesome-theme";
-  version = "5.1.4";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "sphinxawesome_theme";
-    hash = "sha256-OwikuKJrPo4vNaud/9JToYYJePV6Kew8izYbr/qKTtQ=";
+    hash = "sha256-wk8eXAueR1OA0W/F8fO/2ElVgX2gkF2V9+IICdfNPF0=";
   };
 
   build-system = [ poetry-core pythonRelaxDepsHook ];

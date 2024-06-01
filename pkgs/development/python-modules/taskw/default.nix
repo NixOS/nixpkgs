@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -22,6 +23,9 @@ buildPythonPackage rec {
   pname = "taskw";
   version = "2.0.0";
   pyproject = true;
+
+  # ModuleNotFoundError: No module named 'distutils'
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

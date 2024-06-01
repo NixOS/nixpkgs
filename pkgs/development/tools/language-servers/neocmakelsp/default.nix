@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "neocmakelsp";
-  version = "0.6.26";
+  version = "0.6.27";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "neocmakelsp";
     rev = "v${version}";
-    hash = "sha256-9pCi7bevgE2tO0n1LvhLIcFV8sVpAagkVB8l5WWdIbM=";
+    hash = "sha256-In+Z/MCjgV/iPkAh4mTfrlThKZEMQqMYyfOP0m11+ps=";
   };
 
-  cargoHash = "sha256-xm+8IDLvPDOFJ6FyeQdpbWgQ9XE6bW5i29W0S9JSQzc=";
+  cargoHash = "sha256-fLtbaL0h3tmX5INwYn7fPj+TAxfBQarD44twq0ggXRU=";
 
   meta = with lib; {
     description = "A cmake lsp based on tower-lsp and treesitter";
