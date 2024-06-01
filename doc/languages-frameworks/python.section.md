@@ -1041,6 +1041,14 @@ buildPythonPackage rec {
     libxslt
   ];
 
+  # tests are meant to be ran "in-place" in the same directory as src
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "lxml"
+    "lxml.etree"
+  ];
+
   meta = {
     changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
@@ -1111,6 +1119,8 @@ buildPythonPackage rec {
 
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
+
+  pythonImportsCheck = [ "pyfftw" ];
 
   meta = {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
