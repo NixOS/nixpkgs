@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "iina";
-    maintainers = with maintainers; [ arkivm stepbrobd ];
+    maintainers = with maintainers; [ arkivm donteatoreo stepbrobd ];
   };
 }
