@@ -368,6 +368,16 @@ let
     ];
   };
 
+  quri_20240328 = (super.quri.overrideAttrs (final: prev: {
+    version = "20240328-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "quri";
+      rev = "03ecaf3771561d713e58a9c5c22b4d95a7592527";
+      sha256 = "sha256-YqZFZvGVD2QRkD7wFyLEBHn+5mFVHfhxSkcv/nY1qbU=";
+    };
+  }));
+
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
     version = "3.11.6";
@@ -416,7 +426,6 @@ let
       unix-opts
       cluffer
       cl-cffi-gtk
-      quri
       sqlite
       # TODO: Remove these overrides after quicklisp updates past the June 2023 release
       (trivial-clipboard.overrideAttrs (final: prev: {
@@ -456,6 +465,7 @@ let
       iterate
       symbol-munger
     ]) ++ (with self; [
+      quri_20240328
       history-tree
       nhooks
       nkeymaps
