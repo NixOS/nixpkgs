@@ -406,8 +406,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.11.4";
-          hash = "sha256-dAovrYfA5muPNhFIHycxuO0CIWPT4T9hsEzri1JDOUI=";
+          version = "1.14.1";
+          hash = "sha256-taO9jxNC4mvli08Gbl8oO70T+RkfZkztoVZYWeVY4Bs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -1026,6 +1026,21 @@ let
         meta = {
           description = "Database Client For Visual Studio Code";
           homepage = "https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-mysql-client2";
+          license = lib.licenses.mit;
+        };
+      };
+
+      danielgavin.ols = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "DanielGavin";
+          name = "ols";
+          version = "0.1.28";
+          hash = "sha256-yVXltjvtLc+zqela/Jyg+g66PU61+YTMX1hWPW8fIkk=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for Odin language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DanielGavin.ols";
+          homepage = "https://github.com/DanielGavin/ols";
           license = lib.licenses.mit;
         };
       };
