@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
 
     sed -i src/qtpluginprovider.cpp \
-      -e "/QStringList dirs = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
+      -e "/QStringList default_paths = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
   '';
 
   postFixup = ''
