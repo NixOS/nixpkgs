@@ -38,8 +38,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonNamespaces = [ "paste" ];
-
   disabledTestPaths = [ "appsetup/testfiles" ];
 
   pythonImportsCheck = [
