@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  gitUpdater,
+  nix-update-script,
   unzip,
 }:
 
@@ -28,10 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/lwouis/alt-tab-macos";
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Windows alt-tab on macOS";
