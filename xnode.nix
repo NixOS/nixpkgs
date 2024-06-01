@@ -49,7 +49,6 @@
         "xnode" = {
           isNormalUser = true;
           password = "xnode";
-          #openssh.authorizedKeys.keys = [ sshPubKey ]; # Inject a key from environment or through --args
         };
       };
     };
