@@ -1190,6 +1190,10 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    RcppGetconf = old.RcppGetconf.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     SpliceWiz = old.SpliceWiz.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
