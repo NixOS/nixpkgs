@@ -923,6 +923,7 @@ let
     "Simile"
     "SimpleTable"
     "SOLOMON"
+    "soptdmaeA"
     "soundecology"
     "spatsurv"
     "sqldf"
