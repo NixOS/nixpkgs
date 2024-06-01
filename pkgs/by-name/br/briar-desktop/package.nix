@@ -8,6 +8,7 @@
 , p7zip
 , bash
 , writeScript
+, libGL
 }:
 let
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${openjdk}/bin/java $out/bin/briar-desktop \
       --add-flags "-jar $out/lib/briar-desktop.jar" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-        libnotify
+        libnotify libGL
       ]}"
   '';
 
