@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, callPackage
 , lib
 , envoy
 , mkYarnPackage
@@ -14,15 +13,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.25.2";
+  version = "0.26.0";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-JateIiVao5IiPXmphA5+PlzB2XtP6zRR4rURqXSqJ6Q=";
+    hash = "sha256-AkpfLKPirl8fz4s0hQI15aSgI2PZFPakAzC+j66MVY0=";
   };
 
-  vendorHash = "sha256-GdeZkKkENacc11FmEAFUfX9efInfhpv2Lz0/3CtixFQ=";
+  vendorHash = "sha256-kabWL7yqNkI2JRPmVv0tp0nIfVDwT9QbbDIbdM8sL5s=";
 
   ui = mkYarnPackage {
     inherit version;
@@ -54,7 +53,9 @@ buildGoModule rec {
   ];
 
   # patch pomerium to allow use of external envoy
-  patches = [ ./external-envoy.diff ];
+  patches = [
+    ./0001-envoy-allow-specification-of-external-binary.patch
+  ];
 
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.

@@ -20,8 +20,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/P1cgAC+a2YCcvbsysYdD+fEwibo+GyE0XY4A0+gMh4=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     installShellFiles
+    argcomplete
   ];
 
   build-system = with python3Packages; [
@@ -77,8 +78,8 @@ python3Packages.buildPythonApplication rec {
   ''
   + ''
     installShellCompletion --cmd ${execName} \
-      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
-      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
+      --bash <(register-python-argcomplete ${execName}) \
+      --zsh <(register-python-argcomplete ${execName})
   '';
 
   passthru.tests.version = (testers.testVersion {
