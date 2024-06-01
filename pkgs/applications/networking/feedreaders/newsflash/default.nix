@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, substituteAll
-, cargo
-, meson
-, ninja
-, pkg-config
-, rustc
-, blueprint-compiler
-, wrapGAppsHook4
-, gdk-pixbuf
-, glib
-, clapper
-, gtk4
-, libadwaita
-, libxml2
-, openssl
-, sqlite
-, webkitgtk
-, glib-networking
-, librsvg
-, gst_all_1
-, gitUpdater
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  substituteAll,
+  cargo,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  glib,
+  clapper,
+  gtk4,
+  libadwaita,
+  libxml2,
+  openssl,
+  sqlite,
+  webkitgtk,
+  glib-networking,
+  librsvg,
+  gst_all_1,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -83,37 +84,40 @@ stdenv.mkDerivation (finalAttrs: {
     blueprint-compiler
   ];
 
-  buildInputs = [
-    clapper
-    gtk4
-    libadwaita
-    libxml2
-    openssl
-    sqlite
-    webkitgtk
+  buildInputs =
+    [
+      clapper
+      gtk4
+      libadwaita
+      libxml2
+      openssl
+      sqlite
+      webkitgtk
 
-    # TLS support for loading external content in webkitgtk WebView
-    glib-networking
+      # TLS support for loading external content in webkitgtk WebView
+      glib-networking
 
-    # SVG support for gdk-pixbuf
-    librsvg
-  ] ++ (with gst_all_1; [
-    # Audio & video support for webkitgtk WebView
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-  ]);
+      # SVG support for gdk-pixbuf
+      librsvg
+    ]
+    ++ (with gst_all_1; [
+      # Audio & video support for webkitgtk WebView
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+    ]);
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v.";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v."; };
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
+    maintainers = with maintainers; [
+      kira-bruneau
+      stunkymonkey
+    ];
     platforms = platforms.unix;
     mainProgram = "io.gitlab.news_flash.NewsFlash";
   };
