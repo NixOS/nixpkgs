@@ -3,6 +3,7 @@
 , boehmgc
 , boost
 , cairo
+, callPackage
 , cmake
 , desktopToDarwinBundle
 , fetchurl
@@ -171,6 +172,8 @@ stdenv.mkDerivation rec {
       ln -s $f $out/lib/$(basename $f)
     done
   '';
+
+  passthru.tests.ps2pdf-plugin = callPackage ./test-ps2pdf-plugin.nix { };
 
   meta = with lib; {
     description = "Vector graphics editor";
