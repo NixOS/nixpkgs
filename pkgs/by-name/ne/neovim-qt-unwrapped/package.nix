@@ -1,6 +1,6 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, doxygen, msgpack, neovim, python3Packages, qtbase, qtsvg }:
+{ lib, libsForQt5, fetchFromGitHub, cmake, doxygen, msgpack, neovim, python3Packages }:
 
-mkDerivation rec {
+libsForQt5.mkDerivation rec {
   pname = "neovim-qt-unwrapped";
   version = "0.2.18";
 
@@ -16,7 +16,7 @@ mkDerivation rec {
     "-DENABLE_TESTS=0"  # tests fail because xcb platform plugin is not found
   ];
 
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     neovim.unwrapped # only used to generate help tags at build time
     qtbase
     qtsvg
