@@ -264,14 +264,14 @@ let
 
   };
 
-  njson = build-asdf-system rec {
+  njson = build-asdf-system {
     pname = "njson";
-    version = "1.2.2";
+    version = "1.2.2-unstable-2024-03-25";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "njson";
-      rev = version;
-      sha256 = "sha256-kw5DD0GJp/TeCiYATBY8GL8UKqYS6Q4j0a0eQsdcZRc=";
+      rev = "3847bc749a6f6eb1103bc21f8ef3b4f6b301e822";
+      sha256 = "sha256-TgEo2xQCIlm5pHRnh2qAW5NZBfqAcxvvQ1w901pkbck=";
     };
     lispLibs = [ super.cl-json super.com_dot_inuoe_dot_jzon];
     systems = [ "njson" "njson/cl-json" "njson/jzon"];
