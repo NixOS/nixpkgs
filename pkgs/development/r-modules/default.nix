@@ -940,6 +940,7 @@ let
     "tcltk2"
     "TestScorer"
     "TIMP"
+    "tkImgR"
     "tkrplot"
     "tmap"
     "tspmeta"
