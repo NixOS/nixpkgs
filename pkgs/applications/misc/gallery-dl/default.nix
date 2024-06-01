@@ -36,12 +36,12 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "gallery_dl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";
     homepage = "https://github.com/mikf/gallery-dl";
     changelog = "https://github.com/mikf/gallery-dl/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "gallery-dl";
-    maintainers = with maintainers; [ dawidsowa ];
+    maintainers = with lib.maintainers; [ dawidsowa ];
   };
 }
