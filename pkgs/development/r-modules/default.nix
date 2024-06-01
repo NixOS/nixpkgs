@@ -347,6 +347,7 @@ let
     fangs = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
+    fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
