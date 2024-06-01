@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.displayManager.aporia;
-in {
+in
+{
   options = {
     services.displayManager.aporia = {
       enable = lib.mkEnableOption "aporia as the display manager";
@@ -53,29 +59,34 @@ in {
     };
 
     environment = lib.mkMerge [
-      (let
-       session-prefix = config.services.displayManager.sessionData.desktops;
-      in {
-        etc."aporia/config".text = (lib.optionalString (cfg.settings.ascii.text != null) ''
-        # Ascii is the name of the ascii file to use
-        ascii = ${cfg.settings.ascii.name}
-        '') + ''
-        # The size of the box in the top left.
-        # Warning: values lower than 35 will not display properly.
-        box_width = ${builtins.toString cfg.settings.box-width}
+      (
+        let
+          session-prefix = config.services.displayManager.sessionData.desktops;
+        in
+        {
+          etc."aporia/config".text =
+            (lib.optionalString (cfg.settings.ascii.text != null) ''
+              # Ascii is the name of the ascii file to use
+              ascii = ${cfg.settings.ascii.name}
+            '')
+            + ''
+              # The size of the box in the top left.
+              # Warning: values lower than 35 will not display properly.
+              box_width = ${builtins.toString cfg.settings.box-width}
 
-        # The shutdown and reboot commands to use
-        shutdown_command = ${cfg.settings.commands.shutdown}
-        reboot_command = ${cfg.settings.commands.reboot}
+              # The shutdown and reboot commands to use
+              shutdown_command = ${cfg.settings.commands.shutdown}
+              reboot_command = ${cfg.settings.commands.reboot}
 
-        # The paths to search for desktop files
-        xsessions_path = "${session-prefix}/share/xsessions
-        wayland_sessions_path = ${session-prefix}/share/wayland-sessions
-        '';
+              # The paths to search for desktop files
+              xsessions_path = "${session-prefix}/share/xsessions
+              wayland_sessions_path = ${session-prefix}/share/wayland-sessions
+            '';
 
-        pathsToLink = [ "/share/aporia" ];
-        systemPackages = [ cfg.package ];
-      })
+          pathsToLink = [ "/share/aporia" ];
+          systemPackages = [ cfg.package ];
+        }
+      )
       (lib.mkIf (cfg.settings.ascii.text != null) {
         etc."aporia/${cfg.settings.ascii.name}.ascii".text = cfg.settings.ascii.text;
       })
@@ -89,7 +100,7 @@ in {
         execCmd = "exec /run/current-system/sw/bin/aporia";
       };
 
-     xserver = lib.mkIf config.services.xserver.enable {
+      xserver = lib.mkIf config.services.xserver.enable {
         tty = null;
         display = null;
       };
