@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-YHSr2pnk17QEdrIHInXX2eBFN9OGjdleaB41VLaqlnA=";
+    hash = "sha256-YHSr2pnk17QEdrIHInXX2eBFN9OGjdleaB41VLaqlnA=";
   };
 
   outputs = [
