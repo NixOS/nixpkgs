@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   numpy,
   llvmPackages,
   wurlitzer,
@@ -16,9 +17,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pkomiske";
     repo = "Wasserstein";
-    rev = "89c2d6279a7e0aa3b56bcc8fb7b6009420f2563e"; # https://github.com/pkomiske/Wasserstein/issues/1
+    rev = "v${version}";
     hash = "sha256-s9en6XwvO/WPsF7/+SEmGePHZQgl7zLgu5sEn4nD9YE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/thaler-lab/Wasserstein/commit/8667d59dfdf89eabf01f3ae93b23a30a27c21c58.patch";
+      hash = "sha256-jp5updB3E1MYgLhBJwmBMTwBiFXtABMwTxt0G6xhoyA=";
+    })
+  ];
 
   buildInputs = [ llvmPackages.openmp ];
   propagatedBuildInputs = [
