@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "8.15.1";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-YyrGqcLRhCEWaJ6duUMpQMj1kx27t9EilhZ3tll8nbY=";
+    hash = "sha256-dTEYI3dGu3Q/80lijp0ooApveSL1VWVHwLw7covnYYc=";
   };
 
   patches = [
@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
+      --replace-fail "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
   buildInputs = [ qpdf ];
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools
   ];
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     python-xmp-toolkit
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     lxml
     packaging
