@@ -20,4 +20,8 @@
   };
 
   xdg.portal.wlr.enable = wlr-portal;
+
+  # Window manager only sessions (unlike DEs) don't handle XDG
+  # autostart files, so force them to run the service
+  services.xserver.desktopManager.runXdgAutostartIfNone = lib.mkDefault true;
 }
