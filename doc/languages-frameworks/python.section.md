@@ -140,7 +140,7 @@ The `buildPythonPackage` mainly does four things:
 * In the [`postFixup`](#var-stdenv-postFixup) phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} setup.py test` is run.
+* In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} -m pytest` is run.
 
 By default tests are run because [`doCheck = true`](#var-stdenv-doCheck). Test dependencies, like
 e.g. the test runner, should be added to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
@@ -964,7 +964,7 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 , numpy, multipledispatch, python-dateutil
 
 # tests
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -989,7 +989,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   meta = {
@@ -1002,8 +1002,8 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytest`.
-`pytest` is a test runner and is only used during the [`checkPhase`](#ssec-check-phase) and is
+`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
+`pytestCheckHook` is a test runner hook and is only used during the [`checkPhase`](#ssec-check-phase) and is
 therefore not added to `dependencies`.
 
 In the previous case we had only dependencies on other Python packages to consider.
@@ -1127,10 +1127,8 @@ Note also the line [`doCheck = false;`](#var-stdenv-doCheck), we explicitly disa
 
 It is highly encouraged to have testing as part of the package build. This
 helps to avoid situations where the package was able to build and install,
-but is not usable at runtime. Currently, all packages will use the `test`
-command provided by the setup.py (i.e. `python setup.py test`). However,
-this is currently deprecated https://github.com/pypa/setuptools/pull/1878
-and your package should provide its own [`checkPhase`](#ssec-check-phase).
+but is not usable at runtime.
+Your package should provide its own [`checkPhase`](#ssec-check-phase).
 
 ::: {.note}
 The [`checkPhase`](#ssec-check-phase) for python maps to the `installCheckPhase` on a
@@ -1201,9 +1199,11 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
-`pytestCheckHook` is a convenient hook which will substitute the setuptools
-`test` command for a [`checkPhase`](#ssec-check-phase) which runs `pytest`. This is also beneficial
+`pytestCheckHook` is a convenient hook which will set up (or configure)
+a [`checkPhase`](#ssec-check-phase) to run `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
+Most packages use `pytest` or `unittest`, which is compatible with `pytest`,
+so you will most likely use `pytestCheckHook`.
 
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
@@ -1361,7 +1361,7 @@ work with any of the [existing hooks](#setup-hooks).
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
-`unittestCheckHook` is a hook which will substitute the setuptools `test` command for a [`checkPhase`](#ssec-check-phase) which runs `python -m unittest discover`:
+`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
 
 ```nix
 {
@@ -1374,6 +1374,8 @@ work with any of the [existing hooks](#setup-hooks).
   ];
 }
 ```
+
+`pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
 
 #### Using sphinxHook {#using-sphinxhook}
 
@@ -1929,16 +1931,15 @@ Both are also exported in `nix-shell`.
 It is recommended to test packages as part of the build process.
 Source distributions (`sdist`) often include test files, but not always.
 
-By default the command `python setup.py test` is run as part of the
-[`checkPhase`](#ssec-check-phase), but often it is necessary to pass a custom [`checkPhase`](#ssec-check-phase). An
-example of such a situation is when `py.test` is used.
+The best practice today is to pass a test hook (e.g. pytestCheckHook, unittestCheckHook) into nativeCheckInputs.
+This will reconfigure the checkPhase to make use of that particular test framework.
+Occasionally packages don't make use of a common test framework, which may then require a custom checkPhase.
 
 #### Common issues {#common-issues}
 
-* Non-working tests can often be deselected. By default [`buildPythonPackage`](#buildpythonpackage-function)
-  runs `python setup.py test`. which is deprecated. Most Python modules however
-  do follow the standard test protocol where the pytest runner can be used
-  instead. `pytest` supports the `-k` and `--ignore` parameters to ignore test
+* Non-working tests can often be deselected. Most Python modules
+  do follow the standard test protocol where the pytest runner can be used.
+  `pytest` supports the `-k` and `--ignore` parameters to ignore test
   methods or classes as well as whole files. For `pytestCheckHook` these are
   conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
 
