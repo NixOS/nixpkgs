@@ -1781,6 +1781,10 @@ let
       RGL_USE_NULL = "true";
     });
 
+    gpuMagic = old.gpuMagic.overrideAttrs (_: {
+      hardeningDisable = ["format"];
+    });
+
     Rdisop = old.Rdisop.overrideAttrs (_: {
       hardeningDisable = ["format"];
     });
