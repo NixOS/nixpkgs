@@ -5,7 +5,7 @@
 
 trivialBuild {
   pname = "font-lock-plus";
-  version = "208+unstable=2018-01-01";
+  version = "208-unstable-2018-01-01";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
