@@ -19132,8 +19132,6 @@ with pkgs;
 
   nex = callPackage ../development/tools/parsing/nex { };
 
-  ninja = callPackage ../development/tools/build-managers/ninja { };
-
   nimbo = with python3Packages; callPackage ../applications/misc/nimbo { };
 
   gn = callPackage ../development/tools/build-managers/gn { };
