@@ -370,6 +370,7 @@ let
     rbedrock = [ pkgs.zlib.dev pkgs.which pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
+    imbibe = [ pkgs.zlib.dev ];
     iBMQ = [ pkgs.gsl ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
