@@ -1,13 +1,20 @@
 # XnodeOS
-XnodeOS is a modularised configurable operating-system for servers built on NixOS, you can find all of our nix flakes and modules here.
+XnodeOS is a modularised opinionated-yet-configurable operating system for Xnodes based on NixOS.
 
 ## building
 1. `make clean`
-2. `make iso`
+2. `make iso` or `make netboot`
 
 ## requirements
 You must have the nix package installed for this build to work.
 
+## testing netboot
+```
+make clean netboot
+cd result
+python3 -m http.server&
+qemu-system-x86_64 -enable-kvm -m 2G -cpu 2 -serial mon:stdio -net user,bootfile="http://127.0.0.1:8000/ipxe" -net nic -msg timestamp=on
+```
 
 ### FEATURE: SSH-Keys
 In the local environment where you are running make iso you need to pass the key in by one of the following methods:

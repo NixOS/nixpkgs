@@ -7,6 +7,7 @@
   };
   outputs = inputs:
     let
+      xnode =  import ./xnode.nix;
       flakeContext = {
         inherit xnode;
         inherit inputs;
@@ -16,6 +17,7 @@
       packages = {
         x86_64-linux = {
           iso = import ./packages/iso.nix flakeContext;
+          netboot = import ./packages/netboot.nix flakeContext;
         };
       };
     };

@@ -1,4 +1,4 @@
-{ inputs, ... }@flakeContext:
+{ inputs, sshPubKey ? "", xnode, ... }@flakeContext:
 let
   isoModule = xnode;
 in
