@@ -587,12 +587,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.2.0";
+    version = "1.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
+      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -610,9 +610,11 @@ in rec {
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      substituteInPlace $target/session-wizard.tmux \
-        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
-      wrapProgram $target/session-wizard.sh \
+      for f in .gitignore Dockerfile flake.* scripts tests; do
+        rm -rf $target/$f
+      done
+      substituteInPlace $target/session-wizard.tmux --replace  \$CURRENT_DIR $target
+      wrapProgram $target/bin/t \
         --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
     '';
   };
