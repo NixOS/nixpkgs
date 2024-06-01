@@ -40,7 +40,7 @@ in {
     pixelfed = {
       enable = mkEnableOption "a Pixelfed instance";
       package = mkPackageOption pkgs "pixelfed" { };
-      phpPackage = mkPackageOption pkgs "php81" { };
+      phpPackage = mkPackageOption pkgs "php82" { };
 
       user = mkOption {
         type = types.str;
