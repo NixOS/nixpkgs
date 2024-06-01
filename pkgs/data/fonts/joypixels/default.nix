@@ -108,6 +108,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ toonn jtojnar ];
     # Not quite accurate since it's a font, not a program, but clearly
     # indicates we're not actually building it from source.
-    sourceProvenance = sourceTypes.binaryNativeCode;
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
   };
 }
