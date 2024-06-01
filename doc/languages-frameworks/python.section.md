@@ -78,6 +78,7 @@ The following is an example:
 , fetchPypi
 
 # build-system
+, setuptools
 , setuptools-scm
 
 # dependencies
@@ -107,6 +108,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
+    setuptools
     setuptools-scm
   ];
 
@@ -294,7 +296,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     setuptools
-    wheel
   ];
 
   dependencies = with python3Packages; [
@@ -831,7 +832,6 @@ building Python libraries is [`buildPythonPackage`](#buildpythonpackage-function
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -846,7 +846,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   # has no tests
@@ -905,7 +904,6 @@ with import <nixpkgs> {};
 
       build-system = [
         python311.pkgs.setuptools
-        python311.pkgs.wheel
       ];
 
       # has no tests
@@ -958,7 +956,7 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 , fetchPypi
 
 # build dependencies
-, setuptools, wheel
+, setuptools
 
 # dependencies
 , numpy, multipledispatch, python-dateutil
@@ -979,7 +977,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -1016,7 +1013,6 @@ when building the bindings and are therefore added as [`buildInputs`](#var-stden
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 , libxml2
 , libxslt
 }:
@@ -1033,7 +1029,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   buildInputs = [
@@ -1076,7 +1071,6 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 # build dependencies
 , setuptools
-, wheel
 
 # dependencies
 , fftw
@@ -1098,7 +1092,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   buildInputs = [
@@ -1465,7 +1458,6 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -1480,7 +1472,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   meta = {
