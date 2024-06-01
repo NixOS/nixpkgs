@@ -1361,6 +1361,8 @@ instead of a dev dependency).
 Keep in mind that while the examples above are done with `requirements.txt`,
 `pythonRelaxDepsHook` works by modifying the resulting wheel file, so it should
 work with any of the [existing hooks](#setup-hooks).
+It indicates that `pythonRelaxDepsHook` has no effect on build time dependencies, such as in `build-system`.
+If a package requires incompatible build time dependencies, they should be removed in `postPatch` with `substituteInPlace` or something similar.
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
