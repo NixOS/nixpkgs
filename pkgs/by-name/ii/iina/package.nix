@@ -5,12 +5,12 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iina";
   version = "1.3.5";
 
   src = fetchurl {
-    url = "https://github.com/iina/iina/releases/download/v${version}/IINA.v${version}.dmg";
+    url = "https://github.com/iina/iina/releases/download/v${finalAttrs.version}/IINA.v${finalAttrs.version}.dmg";
     hash = "sha256-O4uRmfQaGMKqizDlgk0MnazMHVkXaDLqZQ9TP8vcajg=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "iina";
     maintainers = with maintainers; [ arkivm donteatoreo stepbrobd ];
   };
-}
+})
