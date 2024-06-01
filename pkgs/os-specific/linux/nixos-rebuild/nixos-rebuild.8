@@ -18,7 +18,6 @@
 .Op Fl -no-build-nix
 .Op Fl -fast
 .Op Fl -rollback
-.Op Fl -builders Ar builder-spec
 .br
 .Op Fl -flake Ar flake-uri
 .Op Fl -no-flake
@@ -31,14 +30,26 @@
 .Op Fl -target-host Va host
 .Op Fl -use-remote-sudo
 .br
-.Op Fl -show-trace
-.Op Fl I Va NIX_PATH
 .Op Fl -verbose | v
-.Op Fl -accept-flake-config
-.Op Fl -impure
+.Op Fl -quiet
+.Op Fl -log-format Ar format
+.Op Fl -no-build-output | Q
 .Op Fl -max-jobs | j Va number
-.Op Fl -keep-failed | K
+.Op Fl -cores Va number
 .Op Fl -keep-going | k
+.Op Fl -keep-failed | K
+.Op Fl -fallback
+.Op Fl I Va NIX_PATH
+.Op Fl -option Ar name value
+.Op Fl -repair
+.Op Fl -builders Va builder-spec
+.Op Fl -accept-flake-config
+.Op Fl -print-build-logs | L
+.Op Fl -show-trace
+.Op Fl -refresh
+.Op Fl -impure
+.Op Fl -offline
+.Op Fl -no-net
 .
 .
 .
@@ -390,18 +401,34 @@ even if the current NixOS systems uses flakes.
 .Pp
 In addition,
 .Nm
-accepts various Nix-related flags, including
+accepts following builder flags:
+.Fl -verbose Ns ,
+.Fl v Ns ,
+.Fl -quiet Ns ,
+.Fl -log-format Ns ,
+.Fl -no-build-output Ns ,
+.Fl Q Ns ,
 .Fl -max-jobs Ns ,
 .Fl j Ns ,
-.Fl I Ns ,
-.Fl -accept-flake-config Ns ,
-.Fl -show-trace Ns ,
-.Fl -keep-failed Ns ,
+.Fl -cores Ns ,
 .Fl -keep-going Ns ,
+.Fl k Ns ,
+.Fl -keep-failed Ns ,
+.Fl K Ns ,
+.Fl -fallback Ns ,
+.Fl I Ns ,
+.Fl -option Ns
+.Fl -repair Ns ,
+.Fl -builders Ns ,
+.Fl -accept-flake-config Ns ,
+.Fl -print-build-logs Ns ,
+.Fl L Ns ,
+.Fl -show-trace Ns ,
+.Fl -refresh Ns ,
 .Fl -impure Ns ,
-.Fl -verbose Ns , and
-.Fl v Ns
-\&. See the Nix manual for details.
+.Fl -offline Ns , and
+.Fl -no-net Ns
+\&. See the Nix manual or nix-build manpage for details.
 .
 .
 .
