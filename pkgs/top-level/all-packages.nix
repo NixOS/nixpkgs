@@ -14093,6 +14093,10 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
+  gpauth = callPackage ../tools/networking/globalprotect-openconnect/gpauth { };
+
+  gpclient = callPackage ../tools/networking/globalprotect-openconnect/gpclient { };
+
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
