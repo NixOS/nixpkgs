@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytransportnswv2";
-  version = "0.3.4";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Vj16Mmi3cH0V7d+GMQUTr1mmOyXcnZ3BarrE8fHWSns=";
+    hash = "sha256-LbFBzC7kGa2qz+XQZDmjhE2FhmScesx5jtLtkV0hlg8=";
   };
 
   build-system = [ setuptools ];
