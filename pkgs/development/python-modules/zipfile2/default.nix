@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -25,5 +26,6 @@ buildPythonPackage rec {
     description = "A backwards-compatible improved zipfile class";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.psfl;
+    broken = pythonAtLeast "3.12"; # tests are failing because the signature of ZipInfo._decodeExtra changed
   };
 }
