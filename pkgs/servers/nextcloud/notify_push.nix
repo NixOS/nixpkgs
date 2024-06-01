@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-RJnNwSDwIA0M+BufBKT9a/pyHwpcpJFR//j0fE4U3gE=";
+      cargoHash = "sha256-Z7AX/PXfiUHEV/M+i/2qne70tcZnnPj/iNT+DNMECS8=";
 
       meta = meta // {
         mainProgram = "test_client";
