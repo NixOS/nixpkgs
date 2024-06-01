@@ -11,7 +11,7 @@
   libsecret,
   gtk3,
   withGnome ? true,
-  gnome,
+  unstableGitUpdater,
   fetchpatch,
   libnma,
   glib,
@@ -76,9 +76,8 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "NetworkManager-iodine";
-      attrPath = "networkmanager-iodine";
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
     };
 
     networkManagerPlugin = "VPN/nm-iodine-service.name";
