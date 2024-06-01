@@ -549,6 +549,7 @@ let
     qqconf = [ pkgs.pkg-config ];
     qspray = [ pkgs.pkg-config ];
     ratioOfQsprays = [ pkgs.pkg-config ];
+    symbolicQspray = [ pkgs.pkg-config ];
     vapour = [ pkgs.pkg-config ];
   };
 
@@ -745,6 +746,7 @@ let
     spFW = [ pkgs.fftw.dev ];
     qspray = with pkgs; [ gmp.dev mpfr.dev ];
     ratioOfQsprays = with pkgs; [ gmp.dev mpfr.dev ];
+    symbolicQspray = with pkgs; [ gmp.dev mpfr.dev ];
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
