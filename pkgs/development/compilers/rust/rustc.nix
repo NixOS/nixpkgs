@@ -58,8 +58,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-       optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+       # This doesn't apply to cross-building for FreeBSD because the host
+       # uses libstdc++, but the target (used for building std) uses libc++
+       optional (stdenv.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+    ++ optional stdenv.isFreeBSD "-rpath ${llvmPackages.libunwind}/lib"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
@@ -214,6 +217,11 @@ in stdenv.mkDerivation (finalAttrs: {
     [source.vendored-sources]
     directory = "vendor"
     EOF
+  '' + lib.optionalString (stdenv.isFreeBSD) ''
+    # lzma-sys bundles an old version of xz that doesn't build
+    # on modern FreeBSD, use the system one instead
+    substituteInPlace src/bootstrap/src/core/build_steps/tool.rs \
+        --replace 'cargo.env("LZMA_API_STATIC", "1");' ' '
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
