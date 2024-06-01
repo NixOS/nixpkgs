@@ -1,5 +1,5 @@
-{ stdenv, boost, cmake, config, cudaPackages, eigen, fetchFromGitHub, gperftools
-, lib, libzip, makeWrapper, ocl-icd, opencl-headers, openssl
+{ autoAddDriverRunpath, stdenv, boost, cmake, config, cudaPackages, eigen, fetchFromGitHub, gperftools
+, lib, libzip, makeWrapper, mesa, ocl-icd, opencl-headers, openssl
 , writeShellScriptBin, enableAVX2 ? stdenv.hostPlatform.avx2Support
 , backend ? if config.cudaSupport then "cuda" else "opencl"
 , enableBigBoards ? false, enableContrib ? false, enableTcmalloc ? true
@@ -23,18 +23,32 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-hZc8LlOxnVqJqyqOSIWKv3550QOaGr79xgqsAQ8B8SM=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    autoAddDriverRunpath
+    cmake
+    makeWrapper
+  ] ++ lib.optionals (backend == "cuda" || backend == "tensorrt") [
+    cudaPackages.cuda_nvcc
+  ];
 
-  buildInputs = [ libzip boost ] ++ lib.optionals (backend == "eigen") [ eigen ]
-    ++ lib.optionals (backend == "cuda") [
-      cudaPackages.cudnn
-      cudaPackages.cudatoolkit
-    ] ++ lib.optionals (backend == "tensorrt") [
-      cudaPackages.cudatoolkit
-      cudaPackages.tensorrt
-    ] ++ lib.optionals (backend == "opencl") [ opencl-headers ocl-icd ]
-    ++ lib.optionals enableContrib [ openssl ]
-    ++ lib.optionals enableTcmalloc [ gperftools ];
+  buildInputs = [
+    libzip
+    boost
+  ] ++ lib.optionals (backend == "eigen") [ eigen ] 
+  ++ lib.optionals (backend == "cuda" || backend == "tensorrt") [
+    cudaPackages.cuda_cudart
+    mesa.drivers
+  ] ++ lib.optionals (backend == "cuda") [
+    cudaPackages.cuda_cccl # <nv/target>
+
+    # NOTE: Only CUDNN 8.x is supported as of release 1.14.1.
+    cudaPackages.cudnn_8
+
+    cudaPackages.libcublas
+  ] ++ lib.optionals (backend == "tensorrt") [ cudaPackages.tensorrt ] 
+  ++ lib.optionals (backend == "opencl") [ opencl-headers ocl-icd ]
+  ++ lib.optionals enableContrib [ openssl ]
+  ++ lib.optionals enableTcmalloc [ gperftools ];
 
   cmakeFlags = [
     (lib.cmakeFeature "USE_BACKEND" (lib.toUpper backend))
@@ -50,21 +64,12 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd cpp/
-  '' + lib.optionalString (backend == "cuda") ''
-    export CUDNN_INCLUDE_DIR="${cudaPackages.cudnn.dev}"
-    export CUDNN_LIBRARY="${cudaPackages.cudnn.lib}"
-  '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
-    export CUDA_PATH="${cudaPackages.cudatoolkit}"
-    export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin; cp katago $out/bin;
-  '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
-    wrapProgram $out/bin/katago \
-      --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
-  '' + ''
+    mkdir -p $out/bin
+    cp katago $out/bin
     runHook postInstall
   '';
 
