@@ -38,7 +38,7 @@ let
 
       postInstall = ''
         # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
-        installShellCompletion --bash --name terraform <(echo complete -C terraform terraform)
+        installShellCompletion --size-check 32 --bash --name terraform <(echo complete -C terraform terraform)
       '';
 
       preCheck = ''
