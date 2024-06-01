@@ -45,7 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      set -eo pipefail
       url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
       version=$(echo "$url" | jq -r '.version')
       update-source-version raycast "$version" --file=./pkgs/os-specific/darwin/raycast/default.nix
