@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }@xnodepkgs: {
+{ config, lib, pkgs, ... }: {
 
   config = {
     isoImage = {

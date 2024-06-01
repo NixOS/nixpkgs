@@ -3,11 +3,12 @@
   inputs = {
     nixpkgs.url = "flake:nixpkgs/nixpkgs-unstable";
     nixos-generators.url = "github:nix-community/nixos-generators";
-    xnodepkgs.url = "github:Openmesh-Network/XnodeOS";
+    xnodepkgs.url = "github:harrys522/my-nix-pkgs";
   };
   outputs = inputs:
     let
       flakeContext = {
+        inherit xnode;
         inherit inputs;
       };
     in
