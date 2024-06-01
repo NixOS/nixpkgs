@@ -869,7 +869,7 @@ buildPythonPackage rec {
 What happens here? The function [`buildPythonPackage`](#buildpythonpackage-function) is called and as argument
 it accepts a set. In this case the set is a recursive set, `rec`. One of the
 arguments is the name of the package, which consists of a basename (generally
-following the name on PyPi) and a version. Another argument, `src` specifies the
+following the name on PyPI) and a version. Another argument, `src` specifies the
 source, which in this case is fetched from PyPI using the helper function
 `fetchPypi`. The argument `doCheck` is used to set whether tests should be run
 when building the package. Since there are no tests, we rely on [`pythonImportsCheck`](#using-pythonimportscheck)
