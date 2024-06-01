@@ -378,6 +378,7 @@ let
     HiCseg = [ pkgs.gsl ];
     imager = [ pkgs.xorg.libX11.dev ];
     imbibe = [ pkgs.zlib.dev ];
+    image_CannyEdges = with pkgs; [ fftw.dev libpng.dev ];
     iBMQ = [ pkgs.gsl ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
