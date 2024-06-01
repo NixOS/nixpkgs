@@ -53,6 +53,7 @@ in
       services.deepin.dde-daemon.enable = mkForce true;
       services.deepin.dde-api.enable = mkForce true;
       services.deepin.app-services.enable = mkForce true;
+      services.deepin.deepin-anything.enable = mkDefault true;
 
       services.colord.enable = mkDefault true;
       services.accounts-daemon.enable = mkDefault true;
@@ -98,11 +99,12 @@ in
         "/share/dsg"
         "/share/deepin-themes"
         "/share/deepin"
+        "/share/dde-shell"
       ];
 
       environment.etc = {
         "deepin-installer.conf".text = ''
-          system_info_vendor_name="Copyright (c) 2003-2023 NixOS contributors"
+          system_info_vendor_name="Copyright (c) 2003-2024 NixOS contributors"
         '';
       };
 
@@ -140,6 +142,9 @@ in
             dtkwidget
             dtkdeclarative
             qt5platform-plugins
+            qt6platform-plugins
+            qt5integration
+            qt6integration
             deepin-pw-check
 
             dde-account-faces
@@ -151,6 +156,8 @@ in
             deepin-desktop-base
 
             startdde
+            # TODO: should remove dde-dock, but dde-shell still need it's dconfig
+            dde-dock
             dde-shell
             dde-launchpad
             dde-session-ui
@@ -170,6 +177,7 @@ in
             dde-appearance
             dde-application-manager
             deepin-service-manager
+            dde-grand-search
           ];
           optionalPackages = [
             onboard # dde-dock plugin
@@ -193,7 +201,7 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.deepin.excludePackages;
 
       services.dbus.packages = with pkgs.deepin; [
-        dde-dock
+        dde-shell
         dde-launchpad
         dde-session-ui
         dde-session-shell
@@ -208,9 +216,11 @@ in
         dde-appearance
         dde-application-manager
         deepin-service-manager
+        dde-grand-search
       ];
 
       systemd.packages = with pkgs.deepin; [
+        dde-shell
         dde-launchpad
         dde-file-manager
         dde-calendar
