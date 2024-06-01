@@ -3,12 +3,19 @@ ninjaBuildPhase() {
 
     local buildCores=1
 
+    local verboseFlag=""
+
+    if [ "${ninjaEnableVerboseOutput:-0}" ]; then
+        verboseFlag="--verbose"
+    fi
+
     # Parallel building is enabled by default.
-    if [ "${enableParallelBuilding-1}" ]; then
+    if [ "${enableParallelBuilding:-1}" ]; then
         buildCores="$NIX_BUILD_CORES"
     fi
 
     local flagsArray=(
+        $verboseFlag
         -j$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
@@ -22,6 +29,12 @@ ninjaBuildPhase() {
 ninjaCheckPhase() {
     runHook preCheck
 
+    local verboseFlag=""
+
+    if [ "${ninjaEnableVerboseOutput:-0}" ]; then
+        verboseFlag="--verbose"
+    fi
+
     if [ -z "${checkTarget:-}" ]; then
         if ninja -t query test >/dev/null 2>&1; then
             checkTarget=test
@@ -33,11 +46,12 @@ ninjaCheckPhase() {
     else
         local buildCores=1
 
-        if [ "${enableParallelChecking-1}" ]; then
+        if [ "${enableParallelChecking:-1}" ]; then
             buildCores="$NIX_BUILD_CORES"
         fi
 
         local flagsArray=(
+            $verboseFlag
             -j$buildCores
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
@@ -55,13 +69,20 @@ ninjaInstallPhase() {
 
     local buildCores=1
 
+    local verboseFlag=""
+
+    if [ "${ninjaEnableVerboseOutput:-1}" ]; then
+        verboseFlag="--verbose"
+    fi
+
     # Parallel building is enabled by default.
-    if [ "${enableParallelInstalling-1}" ]; then
+    if [ "${enableParallelInstalling:-1}" ]; then
         buildCores="$NIX_BUILD_CORES"
     fi
 
     # shellcheck disable=SC2086
     local flagsArray=(
+        $verboseFlag
         -j$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
         ${installTargets:-install}
