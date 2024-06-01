@@ -181,7 +181,7 @@ stdenv.mkDerivation rec {
     homepage = "https://signal.org/";
     changelog = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr ];
+    maintainers = with lib.maintainers; [ eclairevoyant mic92 equirosa urandom bkchr teutat3s ];
     mainProgram = pname;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
