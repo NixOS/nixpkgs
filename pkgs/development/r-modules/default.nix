@@ -348,6 +348,7 @@ let
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     Formula = [ pkgs.gmp ];
+    frailtyMMpen = [ pkgs.gsl ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
     GeneralizedWendland = [ pkgs.gsl ];
