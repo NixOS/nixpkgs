@@ -45,6 +45,8 @@ in
 
   git-undo = callPackage ./manual-packages/git-undo { };
 
+  grid = callPackage ./manual-packages/grid { };
+
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
   helm-words = callPackage ./manual-packages/helm-words { };
