@@ -848,6 +848,7 @@ let
     "multibiplotGUI"
     "OligoSpecificitySystem"
     "onemap"
+    "optbdmaeAT"
     "paleoMAS"
     "pbatR"
     "PBSadmb"
