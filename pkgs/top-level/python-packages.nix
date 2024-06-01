@@ -1525,6 +1525,8 @@ self: super: with self; {
 
   biliass = callPackage ../development/python-modules/biliass { };
 
+  bilibili-api-python = callPackage ../development/python-modules/bilibili-api-python { };
+
   billiard = callPackage ../development/python-modules/billiard { };
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
@@ -12906,6 +12908,8 @@ self: super: with self; {
   qpsolvers = callPackage ../development/python-modules/qpsolvers { };
 
   qrcode = callPackage ../development/python-modules/qrcode { };
+
+  qrcode-terminal = callPackage ../development/python-modules/qrcode-terminal { };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
