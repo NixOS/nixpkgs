@@ -14,19 +14,19 @@
 
 buildPythonPackage rec {
   pname = "flask-cors";
-  version = "4.0.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
     rev = "refs/tags/${version}";
-    hash = "sha256-ISot5KglCjfbJNsnveDLK44vVaapHRAFdS+1tOd08pw=";
+    hash = "sha256-DbTeq18CLuwj8lzQnpyPMEfxgR97XlF0s37wkTYd4O4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ flask ];
+  dependencies = [ flask ];
 
   nativeCheckInputs = [
     pytestCheckHook
