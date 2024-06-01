@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchPypi, requests, yt-dlp, pytestCheckHook }:
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  requests,
+  yt-dlp,
+  pytestCheckHook,
+}:
 
 buildPythonApplication rec {
   pname = "gallery-dl";
@@ -16,9 +23,7 @@ buildPythonApplication rec {
     yt-dlp
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     # requires network access
@@ -29,9 +34,7 @@ buildPythonApplication rec {
     "--ignore=test/test_ytdl.py"
   ];
 
-  pythonImportsCheck = [
-    "gallery_dl"
-  ];
+  pythonImportsCheck = [ "gallery_dl" ];
 
   meta = with lib; {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";
