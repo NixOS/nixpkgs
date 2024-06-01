@@ -9,9 +9,9 @@ let
   editorScript = pkgs.writeScriptBin "emacseditor" ''
     #!${pkgs.runtimeShell}
     if [ -z "$1" ]; then
-      exec ${cfg.package}/bin/emacsclient --create-frame --alternate-editor ${cfg.package}/bin/emacs
+      exec ${cfg.package}/bin/emacsclient --create-frame
     else
-      exec ${cfg.package}/bin/emacsclient --alternate-editor ${cfg.package}/bin/emacs "$@"
+      exec ${cfg.package}/bin/emacsclient "$@"
     fi
   '';
 
@@ -55,6 +55,20 @@ in
       '';
     };
 
+    alternateEditor = mkOption {
+      type = types.str;
+      default = "emacs";
+      example = "vi";
+      description = ''
+        If the Emacs server is not running, the shell command in this
+        environment variable runs instead. If set to the empty string, Emacs
+        starts in daemon mode, and the client tries to connect to it. Will be
+        overridden by the `--alternate-editor` option, if present.
+
+        Here it defaults to a non-daemon instance of Emacs.
+      '';
+    };
+
     startWithGraphical = mkOption {
       type = types.bool;
       default = config.services.xserver.enable;
@@ -85,7 +99,10 @@ in
 
     environment.systemPackages = [ cfg.package editorScript ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
+    environment.variables = {
+      EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
+      ALTERNATE_EDITOR = cfg.alternateEditor;
+    };
   };
 
   meta.doc = ./emacs.md;
