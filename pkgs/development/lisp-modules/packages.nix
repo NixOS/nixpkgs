@@ -291,14 +291,14 @@ let
 
   };
 
-  nclasses = build-asdf-system rec {
+  nclasses = build-asdf-system {
     pname = "nclasses";
-    version = "0.6.1";
+    version = "0.6.1-unstable-2024-03-25";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nclasses";
-      rev = version;
-      sha256 = "sha256-foXmaLxMYMFieB2Yd2iPsU4EX5kLXq7kyElqGZ47OgI=";
+      rev = "ad74d75c4eb0f0a626c618b0547709e6b04827ac";
+      sha256 = "sha256-Vh+Hm0C/YGz3MGvSbKLcOl+KQZ/7Dm/IG7twTNWhAPs=";
     };
     lispLibs = [ super.moptilities ];
   };
