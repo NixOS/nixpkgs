@@ -27,12 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    homepage = "https://iina.io/";
     description = "The modern media player for macOS";
-    platforms = platforms.darwin;
+    homepage = "https://iina.io/";
     license = licenses.gpl3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    mainProgram = "iina";
     maintainers = with maintainers; [ arkivm donteatoreo stepbrobd ];
+    mainProgram = "iina";
+    platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })
