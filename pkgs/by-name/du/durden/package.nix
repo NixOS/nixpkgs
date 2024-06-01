@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
-  version = "unstable-2023-10-23";
+  version = "unstable-2024-06-01";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "durden";
-    rev = "347dba6da011bbaa70c6edaf82a2d915f4057db3";
-    hash = "sha256-iNf7fOzz7mf1CXG5leCenkSTrdCc9/KL8VLw8gUIyKE=";
+    rev = "ea65224f268b590a9cc28bfb27e146e3c2b4e0d0";
+    hash = "sha256-1TS/57Ig9OCQEBQ0vj+YbWgOZh/YTR1yRfcWJkBnpLI=";
   };
 
   dontConfigure = true;

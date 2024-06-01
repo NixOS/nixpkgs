@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
-  version = "unstable-2023-11-06";
+  version = "unstable-2023-06-01";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "cat9";
-    rev = "a807776a85237ab0bdd0a712fb33c176fc295e30";
-    hash = "sha256-OlH8FgVBk76Qw+5mnsrryXOL9GbPJWlwUGtYlLuAPxQ=";
+    rev = "a34da77d186163b886049c7d85e812200b80d83d";
+    hash = "sha256-DEEbWyEi/Ba7bXWkjRQR4aG/uZSGz5lN5eaDy8TeWRA=";
   };
 
   dontConfigure = true;
