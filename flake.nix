@@ -6,9 +6,7 @@
   };
   outputs = inputs:
     let
-      xnode =  import ./xnode.nix;
       flakeContext = {
-        inherit xnode;
         inherit inputs;
       };
     in
