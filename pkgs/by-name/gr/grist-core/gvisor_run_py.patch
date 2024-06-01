@@ -1,5 +1,5 @@
 diff --git a/sandbox/gvisor/run.py b/sandbox/gvisor/run.py
-index 61a6b916..47eee21e 100755
+index 61a6b916..4786d70d 100755
 --- a/sandbox/gvisor/run.py
 +++ b/sandbox/gvisor/run.py
 @@ -48,8 +48,7 @@ sys.stderr.write('run.py: ' + ' '.join(sys.argv) + "\n")
@@ -26,7 +26,26 @@ index 61a6b916..47eee21e 100755
  settings = {
    "ociVersion": "1.0.0",
    "process": {
-@@ -158,41 +155,17 @@ exceptions += ["proc", "sys"]   # already virtualized
+@@ -142,12 +139,12 @@ def preserve(*locations, short_failure=False):
+         raise Exception('cannot find: ' + location)
+       raise Exception('cannot find: ' + location + ' ' +
+                       '(if tmp path, make sure TMPDIR when running grist and GRIST_TMP line up)')
+-    mounts.append({
+-      "destination": location,
+-      "source": location,
+-      "options": ["ro"],
+-      "type": "bind"
+-    })
++      #mounts.append({
++      #"destination": location,
++      #"source": location,
++      #"options": ["ro"],
++      #"type": "bind"
++    #})
+     preserved.add(location)
+ 
+ # Prepare the file system - blank out everything that need not be shared.
+@@ -158,91 +155,71 @@ exceptions += ["proc", "sys"]   # already virtualized
  start = args.start
  if include_bash or start:
    exceptions.append("bin")
@@ -73,7 +92,24 @@ index 61a6b916..47eee21e 100755
  
  # Set up any specific shares requested.
  if args.mount:
-@@ -211,28 +184,30 @@ for directory in os.listdir('/'):
+   preserve(*args.mount)
+ 
+-for directory in os.listdir('/'):
+-  if directory not in exceptions and ("/" + directory) not in preserved:
+-    mounts.insert(0, {
++# for directory in os.listdir('/'):
++#  if directory not in exceptions and ("/" + directory) not in preserved:
++      #mounts.insert(0, {
+       # This places an empty directory at this destination.
+       # Follow any symlinks since otherwise there is an error.
+-      "destination": os.path.realpath("/" + directory),
+-      "type": "tmpfs"
+-    })
++      #"destination": os.path.realpath("/" + directory),
++      #"type": "tmpfs"
++    #})
+ 
+ # Set up faketime inside the sandbox if requested.  Can't be set up outside the sandbox,
  # because gvisor is written in Go and doesn't use the standard library that faketime
  # tweaks.
  if args.faketime:
@@ -105,7 +141,33 @@ index 61a6b916..47eee21e 100755
    flag_string = os.environ.get('GVISOR_FLAGS') or '-rootless'
    flags = flag_string.split(' ')
 -  command = ["runsc",
+-             "-root", "/tmp/runsc",   # Place container information somewhere writable.
 +  command = ["@gvisor@/bin/runsc",
-              "-root", "/tmp/runsc",   # Place container information somewhere writable.
++             "-root", root_dir,   # Place container information somewhere writable.
              ] + flags + [
               "-network",
+              "none"] + action + [
+              root_dir.replace('/', '_')]  # Derive an arbitrary container name.
+   return command
+ 
++print(os.environ.get("TMPDIR"))
+ # Generate the OCI spec as config.json in a temporary directory, and either show
+ # it (if --dry-run) or pass it on to gvisor runsc.
+-with tempfile.TemporaryDirectory() as root:  # pylint: disable=no-member
++if True:
++  root = tempfile.TemporaryDirectory().name  # pylint: disable=no-member
+   config_filename = os.path.join(root, 'config.json')
+   with open(config_filename, 'w') as fout:
+     json.dump(settings, fout, indent=2)
+@@ -256,9 +233,9 @@ with tempfile.TemporaryDirectory() as root:  # pylint: disable=no-member
+         command = make_command(root, ["restore", "--image-path=" + args.restore])
+       else:
+         command = make_command(root, ["run"])
+-      result = subprocess.run(command, cwd=root)  # pylint: disable=no-member
++      result = subprocess.run(command, cwd=root, capture_output=True)  # pylint: disable=no-member
+       if result.returncode != 0:
+-        raise Exception('gvisor runsc problem: ' + json.dumps(command))
++          raise Exception('gvisor runsc problem: ' + json.dumps(command) + ' : ' + str(config_filename) + ' ' + str(result))
+     else:
+       # We've been asked to make a checkpoint.
+       # Start up the sandbox, and wait for it to emit a message on stderr ('Ready').
