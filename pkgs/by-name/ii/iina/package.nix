@@ -1,11 +1,11 @@
 { lib
 , fetchurl
-, stdenv
+, stdenvNoCC
 , undmg
 , nix-update-script
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iina";
   version = "1.3.5";
 
