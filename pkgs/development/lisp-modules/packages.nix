@@ -350,14 +350,14 @@ let
   };
 
 
-  history-tree = build-asdf-system rec {
+  history-tree = build-asdf-system {
     pname = "history-tree";
-    version = "0.1.2";
+    version = "0.1.2-unstable-2024-03-25";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "history-tree";
-      rev = version;
-      hash = "sha256-wpVONvShNnvrPOlbNoX/t9sYiwxnIKnnJaJyALEyeNg=";
+      rev = "e26181adcca86be4cba39d0e8015a4e50f1eb105";
+      hash = "sha256-GNstsd3QohuwbVhd/gJp4O9OZaqKjx1/XDm3OyQn888=";
     };
     lispLibs = with self; [
       alexandria
