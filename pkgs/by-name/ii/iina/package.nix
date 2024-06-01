@@ -1,8 +1,9 @@
-{ lib
-, fetchurl
-, stdenvNoCC
-, undmg
-, nix-update-script
+{
+  lib,
+  fetchurl,
+  stdenvNoCC,
+  undmg,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,7 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "The modern media player for macOS";
     homepage = "https://iina.io/";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ arkivm donteatoreo stepbrobd ];
+    maintainers = with lib.maintainers; [
+      arkivm
+      donteatoreo
+      stepbrobd
+    ];
     mainProgram = "iina";
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
