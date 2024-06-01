@@ -347,6 +347,7 @@ let
     fangs = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
+    fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     frailtyMMpen = [ pkgs.gsl ];
     gdalraster = [ pkgs.pkg-config ];
