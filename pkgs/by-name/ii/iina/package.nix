@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iina";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${version}/IINA.v${version}.dmg";
-    hash = "sha256-feUPWtSi/Vsnv1mjGyBgB0wFMxx6r6UzrUratlAo14w=";
+    hash = "sha256-O4uRmfQaGMKqizDlgk0MnazMHVkXaDLqZQ9TP8vcajg=";
   };
 
   nativeBuildInputs = [ undmg ];
