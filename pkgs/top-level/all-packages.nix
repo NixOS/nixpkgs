@@ -21707,8 +21707,6 @@ with pkgs;
 
   lib3mf = callPackage ../development/libraries/lib3mf { };
 
-  libAfterImage = callPackage ../development/libraries/libAfterImage { };
-
   libaacs = callPackage ../development/libraries/libaacs { };
 
   libaal = callPackage ../development/libraries/libaal { };
