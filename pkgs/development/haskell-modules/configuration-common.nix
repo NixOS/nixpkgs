@@ -1677,6 +1677,14 @@ self: super: {
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
 
+  Spock-core = appendPatches [
+    (fetchpatch {
+      url = "https://github.com/agrafix/Spock/commit/d0b51fa60a83bfa5c1b5fc8fced18001e7321701.patch";
+      sha256 = "sha256-l9voiczOOdYVBP/BNEUvqARb21t0Rp2kpsNbRFUWSLg=";
+      stripLen = 1;
+    })
+  ] (doJailbreak super.Spock-core);
+
   # https://github.com/strake/filtrable.hs/issues/6
   filtrable = doJailbreak super.filtrable;
 

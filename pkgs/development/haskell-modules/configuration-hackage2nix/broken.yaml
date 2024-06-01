@@ -5608,7 +5608,6 @@ broken-packages:
   - splot # failure in job https://hydra.nixos.org/build/252715661 at 2024-03-16
   - Spock-api-ghcjs # failure in job https://hydra.nixos.org/build/233246163 at 2023-09-02
   - Spock-auth # failure in job https://hydra.nixos.org/build/233212125 at 2023-09-02
-  - Spock-core # failure in job https://hydra.nixos.org/build/252720122 at 2024-03-16
   - spoonutil # failure in job https://hydra.nixos.org/build/233257645 at 2023-09-02
   - spotify # failure in job https://hydra.nixos.org/build/233254990 at 2023-09-02
   - spoty # failure in job https://hydra.nixos.org/build/233233863 at 2023-09-02
