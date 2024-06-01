@@ -35,6 +35,8 @@ in
 
   emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
 
+  enlight = callPackage ./manual-packages/enlight { };
+
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
