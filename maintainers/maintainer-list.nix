@@ -12804,6 +12804,12 @@
     githubId = 952712;
     name = "Matt Christ";
   };
+  matteopacini = {
+    email = "m@matteopacini.me";
+    github = "matteo-pacini";
+    githubId = 3139724;
+    name = "Matteo Pacini";
+  };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
     github = "matthewbauer";
