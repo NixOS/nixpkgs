@@ -604,7 +604,8 @@ that sets up an interpreter pointing to them. This matters much more for "big"
 modules like `pytorch` or `tensorflow`.
 
 Module names usually match their names on [pypi.org](https://pypi.org/), but
-you can use the [Nixpkgs search website](https://nixos.org/nixos/packages.html)
+normalized according to PEP 503/508. (e.g. Foo__Bar.baz -> foo-bar-baz)
+You can use the [Nixpkgs search website](https://nixos.org/nixos/packages.html)
 to find them as well (along with non-python packages).
 
 At this point we can create throwaway experimental Python environments with
@@ -1081,7 +1082,7 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 }:
 
 buildPythonPackage rec {
-  pname = "pyFFTW";
+  pname = "pyfftw";
   version = "0.9.2";
   pyproject = true;
 
