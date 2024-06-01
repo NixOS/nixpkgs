@@ -39,6 +39,13 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1
+    installShellCompletion --cmd hurl \
+      --bash completions/hurl.bash \
+      --zsh completions/_hurl \
+      --fish completions/hurl.fish
+
+    installShellCompletion --cmd hurlfmt \
+      --zsh completions/_hurlfmt
   '';
 
   meta = with lib; {
