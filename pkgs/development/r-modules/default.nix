@@ -351,6 +351,7 @@ let
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
     frailtyMMpen = [ pkgs.gsl ];
+    gamstransfer = [ pkgs.zlib ];
     gdalraster = [ pkgs.pkg-config ];
     gdtools = with pkgs; [ cairo.dev fontconfig.lib freetype.dev ];
     GeneralizedWendland = [ pkgs.gsl ];
