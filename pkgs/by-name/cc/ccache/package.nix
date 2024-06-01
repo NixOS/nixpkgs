@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-0T9iJXnDX8LffhB/5hsfBNyZQ211f0lL/7dvTrjmiE0=";
+    sha256 = "sha256-YHSr2pnk17QEdrIHInXX2eBFN9OGjdleaB41VLaqlnA=";
   };
 
   outputs = [
@@ -72,9 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     bashInteractive
   ] ++ lib.optional stdenv.isDarwin xcodebuild;
 
-  checkInputs = [
-    doctest
-  ];
+  checkInputs = [ doctest ];
 
   checkPhase =
     let
