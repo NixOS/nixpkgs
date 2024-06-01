@@ -397,6 +397,7 @@ let
     mzR = with pkgs; [ zlib netcdf ];
     nanonext = with pkgs; [ mbedtls nng ];
     ncdf4 = [ pkgs.netcdf ];
+    neojags = [ pkgs.jags ];
     nloptr = with pkgs; [ nlopt pkg-config ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
