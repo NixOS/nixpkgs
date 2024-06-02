@@ -1,17 +1,19 @@
-{ alsa-lib
-, autoPatchelfHook
+{ autoPatchelfHook
 , fetchurl
-, gtk3
-, gtk4
-, libnotify
-, copyDesktopItems
 , makeDesktopItem
+, makeShellWrapper
 , makeWrapper
-, mesa
-, nss
+, wrapGAppsHook3
+, alsa-lib
+, atk
+, cairo
+, cups
+, gtk3
 , lib
-, libdrm
-, qt5
+, mesa
+, nspr
+, nss
+, pango
 , stdenv
 , udev
 , xdg-utils
@@ -20,37 +22,34 @@
 
 stdenv.mkDerivation rec {
   pname = "wavebox";
-  version = "10.124.17-2";
+  version = "10.125.28-2";
 
   src = fetchurl {
     url = "https://download.wavebox.app/stable/linux/tar/Wavebox_${version}.tar.gz";
-    sha256 = "sha256-RS1/zs/rFWsj29BrT8Mb2IXgy9brBsQypxfvnd7pKl0=";
+    sha256 = "sha256-8X17WLa1q2c7FQD61e5wYZKOYnHA9sSvfGrtARACGZc=";
   };
 
-  # don't remove runtime deps
-  dontPatchELF = true;
-  # ignore optional Qt 6 shim
-  autoPatchelfIgnoreMissingDeps = [ "libQt6Widgets.so.6" "libQt6Gui.so.6" "libQt6Core.so.6" ];
+  dontBuild = true;
+  dontConfigure = true;
+  # Avoid double-wrapping
+  dontWrapGApps = true;
+  # Ignore the unused Qt shims
+  autoPatchelfIgnoreMissingDeps = [ "libQt5Widgets.so.5" "libQt5Gui.so.5" "libQt5Core.so.5" "libQt6Widgets.so.6" "libQt6Gui.so.6" "libQt6Core.so.6" ];
+  nativeBuildInputs = [ autoPatchelfHook (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; }) ];
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper qt5.wrapQtAppsHook copyDesktopItems ];
-
-  buildInputs = with xorg; [
-    libXdmcp
-    libXScrnSaver
-    libXtst
-    libxshmfence
-    libXdamage
-  ] ++ [
+  buildInputs = [
     alsa-lib
-    gtk3
-    nss
-    libdrm
+    atk
+    cairo
+    cups
+    pango
     mesa
-    gtk4
-    qt5.qtbase
+    nspr
+    nss
+    xorg.libXrandr
   ];
 
-  runtimeDependencies = [ (lib.getLib udev) libnotify gtk4 ];
+  runtimeDependencies = [ alsa-lib gtk3 mesa nspr nss (lib.getLib udev) ];
 
   desktopItems = [
     (makeDesktopItem rec {
@@ -76,9 +75,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--disable-features=AllowQt \''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
+  '';
+
   postFixup = ''
-    makeWrapper $out/opt/wavebox/wavebox-launcher $out/bin/wavebox \
-    --prefix PATH : ${xdg-utils}/bin
+    makeWrapper $out/opt/wavebox/wavebox $out/bin/wavebox \
+      --prefix PATH : ${xdg-utils}/bin \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   passthru.updateScript = ./update.sh;
@@ -87,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Wavebox messaging application";
     homepage = "https://wavebox.io";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rawkode ];
+    maintainers = with maintainers; [ flexiondotorg rawkode ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
   };
