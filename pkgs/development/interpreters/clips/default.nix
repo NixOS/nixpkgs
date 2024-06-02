@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -D -t $out/bin core/clips
+    install -D -t $out/lib core/libclips.a
+    install -D -t $out/include core/*.h
     runHook postInstall
   '';
 
