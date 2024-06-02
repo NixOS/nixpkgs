@@ -55,10 +55,12 @@ in maven'.buildMavenPackage {
   postPatch = ''
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
-  mvnParameters = "-DskipTests=true -pl !packaging";
+  mvnParameters = "-pl !packaging";
   mvnHash = "sha256-0qsKUMV9M0ZaddR5ust8VikSrsutdxVNNezKqR+F/6M=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/lib/server/target/lib
