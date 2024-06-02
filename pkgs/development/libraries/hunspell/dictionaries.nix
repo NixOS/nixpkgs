@@ -968,9 +968,7 @@ rec {
     };
   };
 
-    /*
-  Turkish
-  */
+  /* Turkish */
   tr_TR = tr-tr;
   tr-tr = mkDict rec {
     pname = "hunspell-dict-tr-tr";
