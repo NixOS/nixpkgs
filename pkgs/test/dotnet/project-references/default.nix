@@ -34,5 +34,5 @@ in
 
 runCommand "project-references-test" { } ''
   ${application}/bin/Application
-  touch $out
+  mkdir $out
 ''
