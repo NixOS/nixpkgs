@@ -1,15 +1,8 @@
-{lib, stdenvNoCC, git, git-lfs, cacert}:
-
-let
-  urlToName = url: rev: let
-    shortRev = lib.sources.shortRev rev;
-    appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
-  in "${lib.sources.urlToName url}${appendShort}";
-in
+{lib, repoRevToNameMaybe, stdenvNoCC, git, git-lfs, cacert}:
 
 lib.makeOverridable (
 { url, rev ? "HEAD"
-, name ? urlToName url rev
+, name ? repoRevToNameMaybe url rev "git"
 , sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null

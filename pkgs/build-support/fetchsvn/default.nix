@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, buildPackages
+{ lib, config, stdenvNoCC, buildPackages
 , subversion, glibcLocales, sshSupport ? true, openssh ? null
 }:
 
@@ -17,7 +17,10 @@ let
         else if elemAt path 1 == "tags" then "${elemAt path 2}-${head path}"
         # ../repo (no trunk) -> repo
         else head path;
-    in "${repoName}-r${toString rev}";
+      pretty = config.nameSourcesPrettily;
+      suffix = lib.optionalString (pretty == "full") "-svn";
+    in if pretty == false then "source"
+       else "${repoName}-r${toString rev}${suffix}-source";
 in
 
 { url, rev ? "HEAD"

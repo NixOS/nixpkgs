@@ -1,18 +1,19 @@
-{ lib, stdenvNoCC, mercurial }:
-{ name ? null
-, url
+{ lib, repoRevToNameMaybe, stdenvNoCC, mercurial }:
+{ url
 , rev ? null
+, name ? repoRevToNameMaybe url rev "hg"
 , sha256 ? null
 , hash ? null
 , fetchSubrepos ? false
-, preferLocalBuild ? true }:
+, preferLocalBuild ? true
+}:
 
 if hash != null && sha256 != null then
   throw "Only one of sha256 or hash can be set"
 else
 # TODO: statically check if mercurial as the https support if the url starts woth https.
 stdenvNoCC.mkDerivation {
-  name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
+  inherit name;
   builder = ./builder.sh;
   nativeBuildInputs = [mercurial];
 
