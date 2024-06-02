@@ -20568,7 +20568,9 @@ with pkgs;
 
   emanote = haskell.lib.compose.justStaticExecutables haskellPackages.emanote;
 
-  enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
+  enchant2 = callPackage ../development/libraries/enchant/2.x.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   enchant = enchant2;
 
   enet = callPackage ../development/libraries/enet { };
