@@ -12,6 +12,7 @@
   setuptools,
   wrapGAppsNoGuiHook,
   notify2,
+  glib
 }:
 
 let
@@ -33,6 +34,10 @@ buildPythonPackage (common // {
   '';
 
   nativeBuildInputs = [ setuptools wrapGAppsNoGuiHook ];
+
+  buildInputs = [
+    glib
+  ];
 
   propagatedBuildInputs = [
     daemonize
