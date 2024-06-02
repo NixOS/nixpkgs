@@ -1,6 +1,7 @@
 {
   stdenvNoCC,
   fetchurl,
+  callPackage,
   jq,
   moreutils,
   cacert,
@@ -29,7 +30,7 @@
             outputHashAlgo = "sha256";
           };
     in
-    stdenvNoCC.mkDerivation (
+    stdenvNoCC.mkDerivation (finalAttrs: (
       args'
       // {
         name = "${pname}-pnpm-deps";
@@ -69,12 +70,19 @@
           runHook postFixup
         '';
 
+        passthru = {
+          serve = callPackage ./serve.nix {
+            inherit pnpm;
+            pnpmDeps = finalAttrs.finalPackage;
+          };
+        };
+
         dontConfigure = true;
         dontBuild = true;
         outputHashMode = "recursive";
       }
       // hash'
-    );
+    ));
 
   configHook = makeSetupHook {
     name = "pnpm-config-hook";
