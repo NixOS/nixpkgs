@@ -129,7 +129,7 @@ let
 
   packages =
     [
-      pkgs.networkmanager
+      cfg.package
     ]
     ++ cfg.plugins
     ++ lib.optionals (!delegateWireless && !enableIwd) [
@@ -160,6 +160,8 @@ in
           to change network settings to this group.
         '';
       };
+
+      package = mkPackageOption pkgs "networkmanager" { };
 
       connectionConfig = mkOption {
         type =
@@ -643,7 +645,7 @@ in
           ${pkgs.envsubst}/bin/envsubst -i ${ini.generate (lib.escapeShellArg profile.n) profile.v} > ${path (lib.escapeShellArg profile.n)}
         '') (lib.mapAttrsToList (n: v: { inherit n v; }) cfg.ensureProfiles.profiles)
         + ''
-          ${pkgs.networkmanager}/bin/nmcli connection reload
+          ${cfg.package}/bin/nmcli connection reload
         '';
       serviceConfig = {
         EnvironmentFile = cfg.ensureProfiles.environmentFiles;
