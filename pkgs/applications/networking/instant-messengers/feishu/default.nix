@@ -57,44 +57,25 @@
 , wayland
 , wrapGAppsHook3
 , xdg-utils
+, writeScript
 
-# for custom command line arguments, e.g. "--use-gl=desktop"
+  # for custom command line arguments, e.g. "--use-gl=desktop"
 , commandLineArgs ? ""
 }:
 
-stdenv.mkDerivation rec {
-  version = "6.9.20";
-  pname = "feishu";
-  packageHash = "6085d1c4"; # A hash value used in the download url
-
-  src = fetchurl {
-    url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
-    hash = "sha256-kg5j/vWaCBUjnF983kk0ZMJ+inF5z5ctED9+ITuIn94=";
+let
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/7e382fc2/Feishu-linux_x64-7.15.13.deb";
+      sha256 = "sha256-CyQmQKfyYcWqpty5LxTNqm73AVnPdm7biBwICkbBEco=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/4c8c2fbf/Feishu-linux_arm64-7.15.13.deb";
+      sha256 = "sha256-nxtu5xOafZ1tlN/f0+5VF2I6ISfHmPJTztOI+AQwp9c=";
+    };
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    makeShellWrapper
-    dpkg
-  ];
-
-  buildInputs = [
-    gtk3
-
-    # for autopatchelf
-    alsa-lib
-    cups
-    curl
-    libXdamage
-    libXtst
-    libdrm
-    libgcrypt
-    libpulseaudio
-    libxshmfence
-    mesa
-    nspr
-    nss
-  ];
+  supportedPlatforms = [ "x86_64-linux" "aarch64-linux" ];
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -149,6 +130,36 @@ stdenv.mkDerivation rec {
     wayland
     xdg-utils
   ];
+in
+stdenv.mkDerivation {
+  version = "7.15.13";
+  pname = "feishu";
+
+  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeShellWrapper
+    dpkg
+  ];
+
+  buildInputs = [
+    gtk3
+
+    # for autopatchelf
+    alsa-lib
+    cups
+    curl
+    libXdamage
+    libXtst
+    libdrm
+    libgcrypt
+    libpulseaudio
+    libxshmfence
+    mesa
+    nspr
+    nss
+  ];
 
   dontUnpack = true;
   installPhase = ''
@@ -189,12 +200,38 @@ stdenv.mkDerivation rec {
     ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
   '';
 
+  passthru = {
+    inherit sources;
+    updateScript = writeScript "update-feishu.sh" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl jq common-updater-scripts
+
+      for platform in ${lib.escapeShellArgs supportedPlatforms}; do
+        if [ $platform = "x86_64-linux" ]; then
+          platform_id=10
+        elif [ $platform = "aarch64-linux" ]; then
+          platform_id=12
+        else
+          echo "Unsupported platform: $platform"
+          exit 1
+        fi
+        package_info=$(curl -sf "https://www.feishu.cn/api/package_info?platform=$platform_id")
+        update_link=$(echo $package_info | jq -r '.data.download_link' | sed 's/lf[0-9]*-ug-sign.feishucdn.com/sf3-cn.feishucdn.com\/obj/;s/?.*$//')
+        new_version=$(echo $package_info | jq -r '.data.version_number' | sed -n 's/.*@V//p')
+        sha256_hash=$(nix-prefetch-url $update_link)
+        sri_hash=$(nix hash to-sri --type sha256 $sha256_hash)
+        update-source-version feishu 0 ${lib.fakeSha256} --system=$platform --source-key="sources.$platform"
+        update-source-version feishu $new_version $sri_hash $update_link --system=$platform --source-key="sources.$platform"
+      done
+    '';
+  };
+
   meta = with lib; {
     description = "An all-in-one collaboration suite";
     homepage = "https://www.feishu.cn/en/";
     downloadPage = "https://www.feishu.cn/en/#en_home_download_block";
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = supportedPlatforms;
     maintainers = with maintainers; [ billhuang ];
   };
 }

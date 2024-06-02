@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.8.3";
+  version = "0.9.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JuNXVse/n/lFbNaLwMcir8NBHiRxcbYvtbxePwI6YoY=";
+    hash = "sha256-YOG9+ONf2OnkSZBL/Vb8Inebx4XDSGJb2fqypaWebhY=";
   };
 
   propagatedBuildInputs = [

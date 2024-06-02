@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cvxopt,
   cvxpy,
@@ -9,18 +8,20 @@
   ipython,
   matplotlib,
   numpy,
+  oldest-supported-numpy,
   packaging,
   pytest-rerunfailures,
   pytestCheckHook,
   python,
   pythonOlder,
   scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "4.7.5";
-  format = "setuptools";
+  version = "5.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,10 +29,14 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4nXZPZFu9L+Okha3qvPil1KvLGO1EbrzotQjqQ8r9l8=";
+    hash = "sha256-lMPzgmUaoEQB5TzmqEJFiFTuS3AGpyMMjPHlPUKTLvk=";
   };
 
-  nativeBuildInputs = [ cython_0 ];
+  nativeBuildInputs = [
+    cython_0
+    setuptools
+    oldest-supported-numpy
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -43,9 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-rerunfailures
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  # Disabling OpenMP support on Darwin.
-  setupPyGlobalFlags = lib.optionals (!stdenv.isDarwin) [ "--with-openmp" ];
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.

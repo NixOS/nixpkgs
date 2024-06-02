@@ -4,6 +4,7 @@
   fetchFromGitHub,
   regex,
   requests,
+  setuptools,
   tqdm,
   numpy,
   toposort,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "gpt-2-simple";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "minimaxir";
@@ -21,6 +22,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-WwD4sDcc28zXEOISJsq8e+rgaNrrgIy79Wa4J3E7Ovc=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     regex
@@ -31,7 +34,7 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  dontCheck = true; # no tests in upstream
+  doCheck = false; # no tests in upstream
 
   meta = with lib; {
     description = "Easily retrain OpenAI's GPT-2 text-generating model on new texts";

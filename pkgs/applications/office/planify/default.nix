@@ -7,7 +7,7 @@
 , pkg-config
 , vala
 , wrapGAppsHook4
-, evolution-data-server
+, evolution-data-server-gtk4
 , glib
 , glib-networking
 , gst_all_1
@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "4.7.4";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
     rev = version;
-    hash = "sha256-x76HasjETqXqE5yXE69/69NAYEWAksHSt0nYRq8/P0k=";
+    hash = "sha256-uzZYrn1nbDoLSYyO1Y2YJk35+1WfVckSgGproaHKTOQ=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
     glib-networking
     # Needed for GtkMediaStream creation with success.ogg, see #311295.

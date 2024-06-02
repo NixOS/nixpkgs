@@ -104,7 +104,6 @@ let
     };
     "osx-10.9.5" = {
       launchd            = "842.92.1";
-      libauto            = "185.5";
       Libc               = "997.90.3"; # We use this, but not from here
       Libsystem          = "1197.1.1";
       Security           = "55471.14.18";
@@ -259,7 +258,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "sha256-54P3+YhVhOanoZQoqswDnr/GbR/AdEERse135nyuIQo=" {};
     IOKit           = applePackage "IOKit"             "osx-10.11.6"     "" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs=" {};
-    libauto         = applePackage "libauto"           "osx-10.9.5"      "sha256-GnRcKq8jRbEsI/PSDphwUjWtpEIEcnLlQL9yxYLgSsU=" {};
     Libc            = applePackage "Libc"              "osx-10.12.6"     "sha256-LSsL7S3KFgGU9qjK4atu/4wBh8ftgfsk6JOvg+ZTZOY=" {
       Libc_10-9 = fetchFromGitHub {
         owner  = "apple-oss-distributions";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "syncedlyrics";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "rtcq";
     repo = "syncedlyrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B3+0DPR30MwPL53YIS/3jmMU73Z0NDDaR0pV8wE6P5Q=";
+    hash = "sha256-jqd68Npt7qq9aMWO3AVR4JRAs9avO4x9u+MC/brU1Cw=";
   };
 
   build-system = [

@@ -142,7 +142,7 @@ let
         license = licenses.bsd3;
         platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
         maintainers = teams.flutter.members ++ (with maintainers; [
-          babariviere ericdallo
+          ericdallo
         ]);
       };
     };

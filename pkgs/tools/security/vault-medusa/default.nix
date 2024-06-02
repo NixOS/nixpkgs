@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vault-medusa";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "jonasvinther";
     repo = "medusa";
     rev = "v${version}";
-    sha256 = "sha256-4fYtWRWonZC9HSNGMqZZPH3xHi6wPk3vSF+htu34g6A=";
+    sha256 = "sha256-c5ldU54SQQKnKp2xxUiHVOaCRV9ttC24sN8AUMMuWzQ=";
   };
 
   vendorHash = "sha256-GdQiPeU5SWZlqWkyk8gU9yVTUQxJlurhY3l1xZXKeJY=";

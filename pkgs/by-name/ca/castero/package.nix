@@ -15,8 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-6/7oCKBMEcQeJ8PaFP15Xef9sQRYCpigtzINv2M6GUY=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
+  build-system = with python3.pkgs; [
     wheel
   ];
 
@@ -29,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     lxml
     mpv
     python-vlc
-  ];
+  ] ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

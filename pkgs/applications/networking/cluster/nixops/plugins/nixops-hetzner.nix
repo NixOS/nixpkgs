@@ -52,5 +52,6 @@ buildPythonPackage {
     homepage = "https://github.com/NixOS/nixops-hetzner";
     license = licenses.mit;
     maintainers = nixops.meta.maintainers;
+    broken = true; # never built on Hydra
   };
 }

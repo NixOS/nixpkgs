@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.10.0";
+  version = "0.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Aln5WyDgNnxOUwyhOz9NGsnV1zXt/Rs57ULxR5ZJXNM=";
+    hash = "sha256-FV/S/N9wA+rUos/uQIzvPWmWCIFi8wi2Tt6jMzvYfYQ=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -69,6 +69,7 @@
       ktextaddons = self.callPackage ./misc/ktextaddons {};
       kunifiedpush = self.callPackage ./misc/kunifiedpush {};
       kweathercore = self.callPackage ./misc/kweathercore {};
+      marknote = self.callPackage ./misc/marknote {};
       mpvqt = self.callPackage ./misc/mpvqt {};
       oxygen-icons = self.callPackage ./misc/oxygen-icons {};
       phonon = self.callPackage ./misc/phonon {};

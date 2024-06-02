@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchPypi,
   mock,
   psutil,
   pytestCheckHook,

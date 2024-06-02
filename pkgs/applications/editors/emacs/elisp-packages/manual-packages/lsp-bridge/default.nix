@@ -88,6 +88,8 @@ melpaBuild {
     runHook postCheck
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p common-updater-scripts coreutils git gnused

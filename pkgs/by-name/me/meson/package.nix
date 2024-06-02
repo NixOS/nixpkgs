@@ -4,6 +4,8 @@
 , installShellFiles
 , coreutils
 , darwin
+, libblocksruntime
+, llvmPackages
 , libxcrypt
 , openldap
 , ninja
@@ -93,6 +95,11 @@ python3.pkgs.buildPythonApplication rec {
     OpenAL
     OpenGL
     openldap
+  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+    libblocksruntime
   ];
 
   checkPhase = lib.concatStringsSep "\n" ([

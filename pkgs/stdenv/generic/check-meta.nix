@@ -230,23 +230,23 @@ let
 
              $ export NIXPKGS_ALLOW_INSECURE=1
              ${flakeNote}
-        b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
+        b) for `nixos-rebuild` you can add ‘${lib.getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
 
              {
                nixpkgs.config.permittedInsecurePackages = [
-                 "${getName attrs}"
+                 "${lib.getName attrs}"
                ];
              }
 
         c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-           ‘${getName attrs}’ to `permittedInsecurePackages` in
+           ‘${lib.getName attrs}’ to `permittedInsecurePackages` in
            ~/.config/nixpkgs/config.nix, like so:
 
              {
                permittedInsecurePackages = [
-                 "${getName attrs}"
+                 "${lib.getName attrs}"
                ];
              }
 

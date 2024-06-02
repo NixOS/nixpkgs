@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.106";
+  version = "3.2.112";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-N62tdVnrgOLHi4k/OpKrAfJ7sBu5Xf8lUAmEqatEAGo=";
+    hash = "sha256-VE9dxDDIZVT1aajEWHXbui711HjFvgZMEbXCBiq1nKc=";
   };
 
   patches = [ ./flake8-compat-5.x.patch ];

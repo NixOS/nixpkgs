@@ -1,12 +1,11 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  pythonAtLeast,
   python,
   onnx,
-  isPy311,
 }:
 let
   pname = "paddle2onnx";
@@ -30,7 +29,7 @@ buildPythonPackage {
     format
     ;
 
-  disabled = pythonOlder "3.8" || isPy311;
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.11";
 
   propagatedBuildInputs = [ onnx ];
 

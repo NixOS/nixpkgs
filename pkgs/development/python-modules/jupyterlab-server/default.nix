@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.27.1";
+  version = "2.27.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,16 +30,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-CXtaxwm2dscoSsnF43PxGTClYfUs1ahuT8flqcioYx0=";
+    hash = "sha256-FcuzSdxF6VTgm6z4G5+byxCBX/Zg+yA07NdBfbOn6ic=";
   };
 
   postPatch = ''
     sed -i "/timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
     jinja2
     json5
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     requests
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     openapi = [
       openapi-core
       ruamel-yaml
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     strict-rfc3339
-  ] ++ passthru.optional-dependencies.openapi;
+  ] ++ optional-dependencies.openapi;
 
   preCheck = ''
     export HOME=$(mktemp -d)

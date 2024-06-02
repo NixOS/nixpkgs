@@ -2,7 +2,6 @@
 , yarn
 , fixup-yarn-lock
 , nodejs-slim
-, fetchFromGitHub
 , fetchYarnDeps
 , gotify-server
 }:

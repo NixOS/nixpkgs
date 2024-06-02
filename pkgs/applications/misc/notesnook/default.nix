@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, _7zz }:
 
 let
   pname = "notesnook";
-  version = "2.6.1";
+  version = "3.0.6";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -16,9 +16,9 @@ let
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash = {
-      x86_64-linux = "sha256-PLHP1Q4+xcHyr0323K4BD+oH57SspsrAcxRe/C6RFDU=";
-      x86_64-darwin = "sha256-gOUL3qLSM+/pr519Gc0baUtbmhA40lG6XzuCRyGILkc=";
-      aarch64-darwin = "sha256-d1nXdCv1mK4+4Gef1upIkHS3J2d9qzTLXbBWabsJwpw=";
+      x86_64-linux = "sha256-606+8euLnZdIPUwi+wilJgvnNQNwBCj6AGZFmp9HOWs=";
+      x86_64-darwin = "sha256-A0Rbm6boYI2B3Ne+FczAM3qmtM2KwNWD+C2N0sgWRtg=";
+      aarch64-darwin = "sha256-Jm7rZWEsMspjKrMODGPBGJP0I5fF3aj+WXdBNsmv4jw=";
     }.${system} or throwSystem;
   };
 
@@ -36,7 +36,7 @@ let
     '';
     homepage = "https://notesnook.com";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ j0lol ];
+    maintainers = with maintainers; [ cig0 j0lol ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "notesnook";
   };
@@ -59,9 +59,14 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ undmg ];
+    nativeBuildInputs = [ _7zz ];
 
     sourceRoot = "Notesnook.app";
+
+    # 7zz did not unpack in setup hook for some reason, done manually here
+    unpackPhase = ''
+      7zz x $src
+    '';
 
     installPhase = ''
       mkdir -p $out/Applications/Notesnook.app

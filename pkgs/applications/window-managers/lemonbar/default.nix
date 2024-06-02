@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lemonbar";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "LemonBoy";
     repo = "bar";
     rev = "v${version}";
-    sha256 = "sha256-lmppcnQ8r4jEuhegpTBxYqxfTTS/IrbtQVZ44HqnoWo=";
+    sha256 = "sha256-OLhgu0kmMZhjv/VST8AXvIH+ysMq72m4TEOypdnatlU=";
   };
 
   buildInputs = [ libxcb perl ];

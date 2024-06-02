@@ -218,6 +218,7 @@
   ./programs/kbdlight.nix
   ./programs/kclock.nix
   ./programs/kdeconnect.nix
+  ./programs/ladybird.nix
   ./programs/lazygit.nix
   ./programs/kubeswitch.nix
   ./programs/less.nix
@@ -281,6 +282,7 @@
   ./programs/systemtap.nix
   ./programs/thefuck.nix
   ./programs/thunar.nix
+  ./programs/thunderbird.nix
   ./programs/tmux.nix
   ./programs/traceroute.nix
   ./programs/trippy.nix

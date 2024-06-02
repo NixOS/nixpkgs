@@ -84,7 +84,6 @@ in
         # "limits" defined below are adopted from upstream: https://github.com/containerd/containerd/blob/master/containerd.service
         LimitNPROC = "infinity";
         LimitCORE = "infinity";
-        LimitNOFILE = "infinity";
         TasksMax = "infinity";
         OOMScoreAdjust = "-999";
 

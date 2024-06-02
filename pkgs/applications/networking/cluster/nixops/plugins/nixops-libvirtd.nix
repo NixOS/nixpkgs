@@ -48,5 +48,6 @@ buildPythonPackage {
     homepage = "https://github.com/nix-community/nixops-libvirtd";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ aminechikhaoui ];
+    broken = true; # never built on Hydra
   };
 }

@@ -4,7 +4,6 @@
   cryptography,
   defusedxml,
   fetchFromGitHub,
-  fetchPypi,
   paste,
   poetry-core,
   pyasn1,

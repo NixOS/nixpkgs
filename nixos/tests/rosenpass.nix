@@ -74,10 +74,8 @@ in
           wireguardConfig.ListenPort = server.wg.listen;
           wireguardPeers = [
             {
-              wireguardPeerConfig = {
-                AllowedIPs = [ "::/0" ];
-                PublicKey = client.wg.public;
-              };
+              AllowedIPs = [ "::/0" ];
+              PublicKey = client.wg.public;
             }
           ];
         };
@@ -97,11 +95,9 @@ in
 
         systemd.network.netdevs."10-${deviceName}".wireguardPeers = [
           {
-            wireguardPeerConfig = {
-              AllowedIPs = [ "::/0" ];
-              PublicKey = server.wg.public;
-              Endpoint = "server:${builtins.toString server.wg.listen}";
-            };
+            AllowedIPs = [ "::/0" ];
+            PublicKey = server.wg.public;
+            Endpoint = "server:${builtins.toString server.wg.listen}";
           }
         ];
 

@@ -573,6 +573,7 @@ mapAliases ({
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_lockfile = zc-lockfile; # added 2024-01-06
+  zipstream = throw "zipstream has been removed, because it has been unmaintained for 6 years and there are no dependent packages"; # added 2024-05-26
   zipstream-new = throw "zipstream-new has been removed, because it  was packaged as a dependency for octoprint, which has switched to zipstream-ng since."; # added 2024-01-05
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28

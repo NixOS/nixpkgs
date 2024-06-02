@@ -48,5 +48,6 @@ buildPythonPackage {
     homepage = "https://github.com/lukebfox/nixops-hetznercloud";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ lukebfox ];
+    broken = true; # never built on Hydra
   };
 }

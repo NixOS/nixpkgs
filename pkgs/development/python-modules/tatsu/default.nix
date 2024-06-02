@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.12.0";
+  version = "5.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "neogeny";
     repo = "TatSu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-55sTUqNwfWg5h9msByq2RuVx/z23ST7p7pA/ZsIeYr8=";
+    hash = "sha256-dY+hvNwYrkKko9A5yRT0EWYlvVu3OrhJMzk/8cjzuUo=";
   };
 
   nativeBuildInputs = [ setuptools ];

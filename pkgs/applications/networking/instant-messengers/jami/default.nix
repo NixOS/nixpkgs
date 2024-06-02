@@ -64,14 +64,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240430.0";
+  version = "20240529.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-v7558m2h3RqvLLhf3BdYO9LKCFKuMTtPIXgH6OXiiY4=";
+    hash = "sha256-v2GFvgHHJ2EMoayZ+//OZ0U+P1fh5Mgp5fAoqtZts7U=";
     fetchSubmodules = true;
   };
 
@@ -128,14 +128,14 @@ stdenv.mkDerivation rec {
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2022-04-26";
+    version = "unstable-2024-05-17";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "d7976982d24867c6faaf8103504ec8a10d932fa0";
-      hash = "sha256-vazFDMIu/3AWeOz0LZhZD9NFO8cd5AK41zBpqpQrqnc=";
+      rev = "77331098ff663a5ac54fae7d0bedafe076c575a1";
+      hash = "sha256-55LEnI1YgVujCtv1dGOFtJdvnzB2SKqwEptaHasZB7I=";
     };
 
     nativeBuildInputs = [

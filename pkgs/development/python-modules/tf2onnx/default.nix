@@ -79,5 +79,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/onnx/tensorflow-onnx";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
+    # Duplicated `protobuf` in the derivation:
+    # - version 4.24.4 (from onnx), the default version of protobuf in nixpkgs
+    # - version 4.21.12 (from tensorflow), pinned as such because tensorflow is outdated and does
+    #   not support more recent versions of protobuf
+    broken = true;
   };
 }

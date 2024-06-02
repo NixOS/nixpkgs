@@ -114,6 +114,15 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+  (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/system-monitor_at_gnome-shell-extensions.gcampax.github.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
+  }))
+
   (patchExtension "system-monitor-next@paradoxxx.zero.gmail.com" (old: {
     patches = [
       (substituteAll {

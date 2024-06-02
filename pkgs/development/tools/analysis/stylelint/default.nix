@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "stylelint";
-  version = "16.6.0";
+  version = "16.6.1";
 
   src = fetchFromGitHub {
     owner = "stylelint";
     repo = "stylelint";
     rev = version;
-    hash = "sha256-yNEXtuemNzpy7gIlVUWM5crP0LpLHmiVYznomC5eGYs=";
+    hash = "sha256-wt9EVE3AAnOVJsDHG+qIXSqZ1I2MSITHjGpEGLPWOBY=";
   };
 
-  npmDepsHash = "sha256-e9helwaAiW3KtPHOWN7S0VxG87nKj6X4lTHTEdXoRZc=";
+  npmDepsHash = "sha256-+74oklREFCDEa8E0QDBlIzfW943AStJxfXkQDqRGFyo=";
 
   dontNpmBuild = true;
 

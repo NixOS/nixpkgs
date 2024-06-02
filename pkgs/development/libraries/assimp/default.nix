@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "assimp";
-  version = "5.3.1";
+  version = "5.4.1";
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    hash = "sha256-/1A8n7oe9WsF3FpbLZxhifzrdj38t9l5Kc8Q5jfDoyY=";
+    hash = "sha256-F3aaEaHZyOLES6zOYqHRG0BtaKk9d/bAHCtal6FsIWc=";
   };
 
   nativeBuildInputs = [ cmake ];

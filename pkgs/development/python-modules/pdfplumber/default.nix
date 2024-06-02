@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  ghostscript,
   jupyterlab,
   nbexec,
   pandas,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    ghostscript
     jupyterlab
     nbexec
     pandas
@@ -66,8 +68,6 @@ buildPythonPackage rec {
     "tests/test_display.py"
     # Tests requires pypdfium2
     "tests/test_issues.py"
-    # Tests require Ghostscript
-    "tests/test_repair.py"
   ];
 
   meta = with lib; {

@@ -4,6 +4,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ViewPatterns #-}
@@ -17,6 +18,7 @@ import qualified Data.Aeson.Key             as A
 import qualified Data.Aeson.KeyMap          as HM
 import qualified Data.ByteString.Lazy.Char8 as BL8
 import qualified Data.List as L
+import Data.String.Interpolate
 import Data.Text as T
 import qualified Data.Vector as V
 import qualified Data.Yaml as Yaml
@@ -33,6 +35,7 @@ data Args = Args {
   countFilePath :: FilePath
   , topN :: Int
   , parallelism :: Int
+  , juliaAttr :: Text
   }
 
 argsParser :: Parser Args
@@ -40,6 +43,7 @@ argsParser = Args
   <$> strOption (long "count-file" <> short 'c' <> help "YAML file containing package names and counts")
   <*> option auto (long "top-n" <> short 'n' <> help "How many of the top packages to build" <> showDefault <> value 100 <> metavar "INT")
   <*> option auto (long "parallelism" <> short 'p' <> help "How many builds to run at once" <> showDefault <> value 10 <> metavar "INT")
+  <*> strOption (long "julia-attr" <> short 'a' <> help "Which Julia attr to build with" <> showDefault <> value "julia" <> metavar "STRING")
 
 data NameAndCount = NameAndCount {
   name :: Text
@@ -69,7 +73,7 @@ main = do
           introduce' (defaultNodeOptions { nodeOptionsVisibilityThreshold = 0 }) (T.unpack name) julia (newMVar Nothing) (const $ return ()) $ do
             it "Builds" $ do
               let cp = proc "nix" ["build", "--impure", "--no-link", "--json", "--expr"
-                                  , "with import ../../../../. {}; julia.withPackages [\"" <> T.unpack name <> "\"]"
+                                  , [i|with import ../../../../. {}; #{juliaAttr}.withPackages ["#{name}"]|]
                                   ]
               output <- readCreateProcessWithLogging cp ""
               juliaPath <- case A.eitherDecode (BL8.pack output) of

@@ -28,8 +28,6 @@ in
         Configuration of the Mealie service.
 
         See [the mealie documentation](https://nightly.mealie.io/documentation/getting-started/installation/backend-config/) for available options and default values.
-
-        In addition to the official documentation, you can set {env}`MEALIE_LOG_FILE`.
       '';
       example = {
         ALLOW_SIGNUP = "false";
@@ -61,6 +59,7 @@ in
         PRODUCTION = "true";
         ALEMBIC_CONFIG_FILE="${pkg}/config/alembic.ini";
         API_PORT = toString cfg.port;
+        BASE_URL = "http://localhost:${cfg.port}";
         DATA_DIR = "/var/lib/mealie";
         CRF_MODEL_PATH = "/var/lib/mealie/model.crfmodel";
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);

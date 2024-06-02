@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
-  buildInputs = [ zlib glib pixman
+  buildInputs = [ dtc zlib glib pixman
     vde2 texinfo lzo snappy libtasn1
     gnutls nettle curl libslirp
   ]

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "3.1.5";
+  version = "3.1.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dfm";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-83v7O/eo8LQux75IkLWU8moj3rYiyRjZdNeAwtjrJ60=";
+    hash = "sha256-JVZK3kvDwWENho0OxZ9OxATcm3XpGmX+e7alPclRsHY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, fetchFromSourcehut
 , wrapGAppsHook3
 , wails
 , scdoc

@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 
 , cmake
 , extra-cmake-modules

@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";
-  version = "2.8.4";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-x6utIvU4LxM/CJogy5JrFrDTLFmXbgItgqtT+lM7FGA=";
+    hash = "sha256-7T+q3T8z8SCpAn3ayodZeETOsTwL+hhVWzY2JyBEoi4=";
   };
 
   pythonPath = with python3Packages; [

@@ -4,6 +4,7 @@
 , jre
 , autoPatchelfHook
 , zlib
+, ncurses
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.isLinux [
     stdenv.cc.cc # libstdc++.so.6
     zlib
+  ];
+
+  propagatedBuildInputs = [
+    # for infocmp
+    ncurses
   ];
 
   installPhase = ''

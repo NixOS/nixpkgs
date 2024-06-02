@@ -3,27 +3,27 @@
 , fetchFromGitHub
 , breeze-icons
 , kdeclarative
-, kirigami2
+, kirigami
 , plasma-framework
 , plasma-workspace
 }:
 
 stdenv.mkDerivation rec {
   pname = "utterly-nord-plasma";
-  version = "2.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "HimDek";
     repo = pname;
-    rev = "6d9ffe008f0bee47c8346c9a7ec71f206d999fd0";
-    hash = "sha256-B5pIwV0BHxDluKWKTy+xuBPaE3N6UOHXip1SIAm2kM8=";
+    rev = "e513b4dfeddd587a34bfdd9ba6b1d1eac8ecadf5";
+    hash = "sha256-moLgBFR+BgoiEBzV3y/LA6JZfLHrG1weL1+h8LN9ztA=";
   };
 
   propagatedUserEnvPkgs = [
     breeze-icons
-    kdeclarative.bin
-    kirigami2
-    plasma-framework.bin
+    kdeclarative
+    kirigami
+    plasma-framework
     plasma-workspace
   ];
 

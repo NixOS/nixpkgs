@@ -205,7 +205,7 @@ runCommand "example" {
 
 :::
 
-## `testEqualContents` {#tester-equalContents}
+## `testEqualContents` {#tester-testEqualContents}
 
 Check that two paths have the same contents.
 

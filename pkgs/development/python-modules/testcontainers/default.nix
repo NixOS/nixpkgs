@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "testcontainers";
-  version = "4.5.0";
-  disabled = pythonOlder "3.9";
-
+  version = "4.5.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "testcontainers";
     repo = "testcontainers-python";
     rev = "refs/tags/testcontainers-v${version}";
-    hash = "sha256-+kMKxitRRjNGVqMJuDdJA0QnYpLicJ6qdD8tzplEbT8=";
+    hash = "sha256-7QlT3ibSUDeC+aWi2MCagLkomXG3/VU1xHQ7Xgoh/Pw=";
   };
 
   postPatch = ''

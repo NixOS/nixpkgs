@@ -620,6 +620,7 @@ in {
             "--enable-soap"
           ];
           doCheck = false;
+          internalDeps = [ php.extensions.session ];
         }
         {
           name = "sockets";
