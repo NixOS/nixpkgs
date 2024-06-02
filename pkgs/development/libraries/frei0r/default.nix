@@ -1,5 +1,4 @@
 { lib
-, config
 , stdenv
 , fetchFromGitHub
 , cairo
@@ -7,13 +6,13 @@
 , opencv
 , pcre
 , pkg-config
-, cudaSupport ? config.cudaSupport
-, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
   version = "2.3.2";
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "dyne";
@@ -25,11 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     cairo
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     pcre
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
-    cudaPackages.cuda_nvcc
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
