@@ -36,13 +36,13 @@ symlinkJoin {
       wrapProgram $out/bin/fcitx5-config-qt --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5"
     ''}
 
-    desktop=share/applications/org.fcitx.Fcitx5.desktop
-    autostart=etc/xdg/autostart/org.fcitx.Fcitx5.desktop
-    rm $out/$desktop
-    rm $out/$autostart
-    cp ${fcitx5}/$desktop $out/$desktop
-    sed -i $out/$desktop -e "s|^Exec=.*|Exec=$out/bin/fcitx5|g"
-    ln -s $out/$desktop $out/$autostart
+    pushd $out
+    grep -Rl --include=\*.{desktop,service} share/applications etc/xdg/autostart share/dbus-1/services -e ${fcitx5} | while read -r file; do
+      rm $file
+      cp ${fcitx5}/$file $file
+      substituteInPlace $file --replace-fail ${fcitx5} $out
+    done
+    popd
   '';
 
   inherit (fcitx5) meta;
