@@ -969,6 +969,7 @@ let
     "csodata"
     "DiceView"
     "facmodTS"
+    "gasanalyzer"
     "margaret"
     "MSnID"
     "OmnipathR"
