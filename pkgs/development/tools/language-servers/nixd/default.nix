@@ -1,103 +1,148 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, bison
-, boost182
-, flex
-, fmt
-, gtest
-, libbacktrace
-, lit
-, llvmPackages
-, meson
-, ninja
-, nix
-, nixpkgs-fmt
-, pkg-config
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost182,
+  gtest,
+  llvmPackages,
+  meson,
+  ninja,
+  nix,
+  nix-update-script,
+  nixd,
+  nixf,
+  nixt,
+  nlohmann_json,
+  pkg-config,
+  testers,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "nixd";
-  version = "2.1.2";
+let
+  common = rec {
+    version = "2.2.0";
 
-  src = fetchFromGitHub {
-    owner = "nix-community";
-    repo = "nixd";
-    rev = finalAttrs.version;
-    hash = "sha256-A6hoZ4fbWxd7Mx+r3e1HEw2IPaAn4WcMEIocy/ZCz28=";
-  };
-
-  mesonBuildType = "release";
-
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    bison
-    flex
-  ];
-
-  nativeCheckInputs = [
-    lit
-    nixpkgs-fmt
-  ];
-
-  buildInputs = [
-    libbacktrace
-    nix
-    fmt
-    gtest
-    boost182
-    llvmPackages.llvm
-  ];
-
-  env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
-
-  # https://github.com/nix-community/nixd/issues/215
-  doCheck = !stdenv.isDarwin;
-
-  checkPhase = ''
-    runHook preCheck
-    dirs=(store var var/nix var/log/nix etc home)
-
-    for dir in $dirs; do
-      mkdir -p "$TMPDIR/$dir"
-    done
-
-    export NIX_STORE_DIR=$TMPDIR/store
-    export NIX_LOCALSTATE_DIR=$TMPDIR/var
-    export NIX_STATE_DIR=$TMPDIR/var/nix
-    export NIX_LOG_DIR=$TMPDIR/var/log/nix
-    export NIX_CONF_DIR=$TMPDIR/etc
-    export HOME=$TMPDIR/home
-
-    # Disable nixd regression tests, because it uses some features provided by
-    # nix, and does not correctly work in the sandbox
-    meson test --print-errorlogs  unit/libnixf/Basic unit/libnixf/Parse unit/libnixt
-    runHook postCheck
-  '';
-
-  passthru.updateScript = nix-update-script { };
-
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
+    src = fetchFromGitHub {
+      owner = "nix-community";
+      repo = "nixd";
+      rev = version;
+      hash = "sha256-/8Ty1I130vWFidedt+WEaaFHS/zMFVu9vpq4Z3EBjGw=";
     };
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      moduleNames = [ "libnixf" "libnixt" ];
+
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+    ];
+
+    mesonBuildType = "release";
+
+    doCheck = true;
+
+    meta = {
+      homepage = "https://github.com/nix-community/nixd";
+      changelog = "https://github.com/nix-community/nixd/releases/tag/${version}";
+      license = lib.licenses.lgpl3Plus;
+      maintainers = with lib.maintainers; [
+        inclyc
+        Ruixi-rebirth
+        aleksana
+      ];
+      platforms = lib.platforms.unix;
     };
   };
+in
+{
+  nixf = stdenv.mkDerivation (
+    common
+    // {
+      pname = "nixf";
 
-  meta = {
-    description = "Nix language server";
-    homepage = "https://github.com/nix-community/nixd";
-    changelog = "https://github.com/nix-community/nixd/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
-    mainProgram = "nixd";
-    platforms = lib.platforms.unix;
-  };
-})
+      sourceRoot = "${common.src.name}/libnixf";
+
+      outputs = [
+        "out"
+        "dev"
+      ];
+
+      buildInputs = [
+        gtest
+        boost182
+        nlohmann_json
+      ];
+
+      passthru.tests.pkg-config = testers.hasPkgConfigModules {
+        package = nixf;
+        moduleNames = [ "nixf" ];
+      };
+
+      meta = common.meta // {
+        description = "A Nix language frontend, parser & semantic analysis";
+        mainProgram = "nixf-tidy";
+      };
+    }
+  );
+
+  nixt = stdenv.mkDerivation (
+    common
+    // {
+      pname = "nixt";
+
+      sourceRoot = "${common.src.name}/libnixt";
+
+      outputs = [
+        "out"
+        "dev"
+      ];
+
+      buildInputs = [
+        nix
+        gtest
+        boost182
+      ];
+
+      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+
+      passthru.tests.pkg-config = testers.hasPkgConfigModules {
+        package = nixt;
+        moduleNames = [ "nixt" ];
+      };
+
+      meta = common.meta // {
+        description = "A supporting library that wraps C++ nix";
+      };
+    }
+  );
+
+  nixd = stdenv.mkDerivation (
+    common
+    // {
+      pname = "nixd";
+
+      sourceRoot = "${common.src.name}/nixd";
+
+      buildInputs = [
+        nix
+        nixf
+        nixt
+        llvmPackages.llvm
+        gtest
+        boost182
+      ];
+
+      env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
+
+      # See https://github.com/nix-community/nixd/issues/519
+      doCheck = false;
+
+      passthru = {
+        updateScript = nix-update-script { };
+        tests.version = testers.testVersion { package = nixd; };
+      };
+
+      meta = common.meta // {
+        description = "A feature-rich Nix language server interoperating with C++ nix";
+        mainProgram = "nixd";
+      };
+    }
+  );
+}

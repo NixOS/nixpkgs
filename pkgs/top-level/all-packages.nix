@@ -17908,10 +17908,10 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
-  nixd = callPackage ../development/tools/language-servers/nixd {
+  inherit (callPackages ../development/tools/language-servers/nixd {
     llvmPackages = llvmPackages_16;
     nix = nixVersions.nix_2_19;
-  };
+  }) nixf nixt nixd;
 
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
 
