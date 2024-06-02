@@ -36,6 +36,10 @@
 , experimentalSpatialSvcSupport ? false # Spatial scalable video coding
 , experimentalFpMbStatsSupport ? false
 , experimentalEmulateHardwareSupport ? false
+
+# for passthru.tests
+, ffmpeg
+, gst_all_1
 }:
 
 let
@@ -183,6 +187,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''moveToOutput bin "$bin" '';
+
+  passthru.tests = {
+    inherit (gst_all_1) gst-plugins-good;
+    ffmpeg = ffmpeg.override { withVpx = true; };
+  };
 
   meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
