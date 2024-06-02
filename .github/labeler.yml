@@ -16,6 +16,17 @@
         - nixos/modules/services/x11/desktop-managers/cinnamon.nix
         - nixos/tests/cinnamon.nix
 
+"6.topic: dotnet":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/dotnet.section.md
+        - maintainers/scripts/update-dotnet-lockfiles.nix
+        - pkgs/build-support/dotnet/**/*
+        - pkgs/development/compilers/dotnet/**/*
+        - pkgs/test/dotnet/**/*
+        - pkgs/top-level/dotnet-packages.nix
+
 "6.topic: emacs":
   - any:
     - changed-files:
