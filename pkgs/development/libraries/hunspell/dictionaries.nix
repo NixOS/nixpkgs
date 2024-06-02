@@ -967,4 +967,29 @@ rec {
       platforms = platforms.all;
     };
   };
+
+  /* Turkish */
+  tr_TR = tr-tr;
+  tr-tr = mkDict rec {
+    pname = "hunspell-dict-tr-tr";
+    version = "1.1.1";
+
+    src = fetchFromGitHub {
+      owner = "tdd-ai";
+      repo = "hunspell-tr";
+      rev = "7302eca5f3652fe7ae3d3ec06c44697c97342b4e";
+      hash = "sha256-r/I5T/1e7gcp2XZ4UvnpFmWMTsNqLZSCbkqPcgC13PE=";
+    };
+
+    dictFileName = "tr_TR";
+    readmeFile = "README.md";
+
+    meta = with lib; {
+      description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
+      homepage = "https://github.com/tdd-ai/hunspell-tr/";
+      license = licenses.mpl20;
+      maintainers = with maintainers; [ samemrecebi ];
+      platforms = platforms.all;
+    };
+  };
 }

@@ -35,6 +35,8 @@ in
 
   emacs-conflict = callPackage ./manual-packages/emacs-conflict { };
 
+  enlight = callPackage ./manual-packages/enlight { };
+
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
   evil-markdown = callPackage ./manual-packages/evil-markdown { };
@@ -44,6 +46,8 @@ in
   ghc-mod = callPackage ./manual-packages/ghc-mod { };
 
   git-undo = callPackage ./manual-packages/git-undo { };
+
+  grid = callPackage ./manual-packages/grid { };
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
