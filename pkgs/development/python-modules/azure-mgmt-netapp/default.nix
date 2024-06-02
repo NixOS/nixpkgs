@@ -6,21 +6,24 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-netapp";
-  version = "12.0.0";
-  format = "setuptools";
+  version = "13.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bC7HZzIeUK4E6HcQgguB/sDr1G1kPkS/A43xZ6pBpyw=";
+    hash = "sha256-R322hzij1kcnrwxMClOzta40cMnd4w6bGnp5+p2pMQ8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
