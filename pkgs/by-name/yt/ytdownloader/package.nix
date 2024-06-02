@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.17.4";
+  version = "3.18.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GW+17DfPiFxw2QyJ5KTMZLDWmqXfnHfkg+QpM5XOP0M=";
+    hash = "sha256-/3VlBxT06/jnBwk07zoUs1yb9MUB9U+oJtXBGoKH6Dg=";
   };
 
-  npmDepsHash = "sha256-lhFyiWy9dgnxxaElavzqA4YpRm7cVC23pvL5Kwve58E=";
+  npmDepsHash = "sha256-dAd9O3iOELBRRzQV/+DSQXHS5PLjDZvsF2D1vwT9dw8=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ffmpeg yt-dlp ];
