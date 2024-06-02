@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
@@ -36,6 +35,7 @@
   torchsde,
   transformers,
   pythonAtLeast,
+  diffusers,
 }:
 
 buildPythonPackage rec {
@@ -87,8 +87,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diffusers" ];
 
-  # tests crash due to torch segmentation fault
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  # it takes a few hours
+  doCheck = false;
+
+  passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
 
   nativeCheckInputs = [
     parameterized
