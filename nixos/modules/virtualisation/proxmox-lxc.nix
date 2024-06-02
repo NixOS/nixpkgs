@@ -71,8 +71,10 @@ with lib;
       };
 
       systemd = {
-        mounts = mkIf (!cfg.privileged)
-          [{ where = "/sys/kernel/debug"; enable = false; }];
+        mounts = mkIf (!cfg.privileged) [{
+          enable = false;
+          where = "/sys/kernel/debug";
+        }];
         services."getty@".unitConfig.ConditionPathExists = [ "" "/dev/%I" ];
       };
 
