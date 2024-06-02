@@ -23,7 +23,6 @@ maven.buildMavenPackage rec {
   };
 
   mvnFetchExtraArgs.dontConfigure = true;
-  mvnParameters = "-DskipTests";
   mvnHash = "sha256-2uthmSjFQ43N5lgV11DsxuGce+ZptZsmRLTgjDo0M2w=";
 
   nativeBuildInputs = [ jdk makeWrapper ];
@@ -38,6 +37,8 @@ maven.buildMavenPackage rec {
       --no-man-pages \
       --compress 2
   '';
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
