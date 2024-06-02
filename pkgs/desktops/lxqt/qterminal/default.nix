@@ -6,6 +6,7 @@
 , qtbase
 , qtermwidget
 , qttools
+, qtwayland
 , wrapQtAppsHook
 , gitUpdater
 , nixosTests
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtermwidget
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };

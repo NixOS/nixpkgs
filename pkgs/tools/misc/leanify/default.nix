@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    ./leanify /dev/null
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
 

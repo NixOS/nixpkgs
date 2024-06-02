@@ -15,7 +15,6 @@
   jax,
   jaxlib,
   numba,
-  numba-scipy,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.20.0";
+  version = "2.22.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -33,7 +32,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-bvkOMer+zYSsiU4a147eUEZjjUeTVpb9f/hepMZZ3sE=";
+    hash = "sha256-FG95+3g+DcqQkyJX3PavfyUWTINFLrgAPTaHYN/jk90=";
   };
 
   postPatch = ''
@@ -88,13 +87,13 @@ buildPythonPackage rec {
     "tests/sparse/sandbox/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
     changelog = "https://github.com/pymc-devs/pytensor/releases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       bcdarwin
       ferrine
     ];
