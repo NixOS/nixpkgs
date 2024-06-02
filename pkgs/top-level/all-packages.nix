@@ -29012,7 +29012,7 @@ with pkgs;
 
   poly = callPackage ../data/fonts/poly { };
 
-  polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic { };
+  polychromatic = qt6Packages.callPackage ../applications/misc/polychromatic { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
