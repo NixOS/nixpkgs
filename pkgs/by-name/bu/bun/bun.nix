@@ -11,7 +11,7 @@
 , common-updater-scripts
 }:
 
-{ sources, version }:
+{ sources, version, baseline ? null }:
 
 stdenvNoCC.mkDerivation rec {
   inherit version;
@@ -51,6 +51,7 @@ stdenvNoCC.mkDerivation rec {
 
   passthru = {
     inherit sources;
+    inherit baseline;
     updateScript = writeShellScript "update-bun" ''
       set -o errexit
       export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
