@@ -12,10 +12,10 @@
   opencv,
   isBeta ? false,
   cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
 }:
 
 let
+  inherit (opencv.passthru) cudaPackages;
   fastdeploy = callPackage ./fastdeploy-ppocr.nix { };
   sources = lib.importJSON ./pin.json;
 in

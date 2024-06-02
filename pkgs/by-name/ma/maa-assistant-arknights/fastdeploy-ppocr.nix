@@ -8,10 +8,10 @@
   onnxruntime,
   opencv,
   cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
 }@inputs:
 
 let
+  inherit (opencv.passthru) cudaPackages;
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
   inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 in
