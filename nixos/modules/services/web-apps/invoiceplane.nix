@@ -225,7 +225,7 @@ in
 
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
-          default = {};  
+          default = {};
           description = "Specification of one or more InvoicePlane sites to serve";
         };
 
