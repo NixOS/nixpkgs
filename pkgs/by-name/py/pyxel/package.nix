@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2}/include/SDL2";
 
   # Tests can't use the display
-  dontCheck = true;
+  doCheck = false;
 
   pythonImportsCheck = [
     "pyxel"
