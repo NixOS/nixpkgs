@@ -1494,10 +1494,9 @@ with import <nixpkgs> {};
 
 ( let
     toolz = callPackage /path/to/toolz/release.nix {
-      buildPythonPackage = python310
-Packages.buildPythonPackage;
+      buildPythonPackage = python3Packages.buildPythonPackage;
     };
-  in python310.withPackages (ps: [
+  in python3.withPackages (ps: [
     ps.numpy
     toolz
   ])
