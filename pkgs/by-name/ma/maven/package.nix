@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildMaven = callPackage ./build-maven.nix {
       maven = finalAttrs.finalPackage;
     };
-    buildMavenPackage = callPackage ./build-package.nix {
+    buildMavenPackage = callPackage ./build-maven-package.nix {
       maven = finalAttrs.finalPackage;
     };
   };
