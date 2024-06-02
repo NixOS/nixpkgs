@@ -1,19 +1,18 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, jdk
-, makeWrapper
-, callPackage
+{
+  lib,
+  callPackage,
+  fetchurl,
+  jdk,
+  makeWrapper,
+  stdenvNoCC,
 }:
-
-assert jdk != null;
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apache-maven";
   version = "3.9.6";
 
   src = fetchurl {
-    url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/${finalAttrs.pname}-${finalAttrs.version}-bin.tar.gz";
+    url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
     hash = "sha256-bu3SyuNibWrTpcnuMkvSZYU9ZCl/B/AzQwdVvQ4MOks=";
   };
 
@@ -25,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/maven
-    cp -r ${finalAttrs.pname}-${finalAttrs.version}/* $out/maven
+    cp -r apache-maven-${finalAttrs.version}/* $out/maven
 
     makeWrapper $out/maven/bin/mvn $out/bin/mvn \
       --set-default JAVA_HOME "${jdk}"
@@ -44,12 +43,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    mainProgram = "mvn";
-    description = "Build automation tool (used primarily for Java projects)";
+  meta = {
     homepage = "https://maven.apache.org/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cko ];
+    description = "Build automation tool (used primarily for Java projects)";
+    longDescription = ''
+      Apache Maven is a software project management and comprehension
+      tool. Based on the concept of a project object model (POM), Maven can
+      manage a project's build, reporting and documentation from a central piece
+      of information.
+    '';
+    license = lib.licenses.asl20;
+    mainProgram = "mvn";
+    maintainers = with lib.maintainers; [ cko ];
+    inherit (jdk.meta) platforms;
   };
 })
