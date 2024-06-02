@@ -126,6 +126,14 @@ in let
         # It's not clear to me why this isn't an issue for LLVM developers running
         # on macOS (nothing about this _seems_ nix specific)..
         ./llvm/lit-shell-script-runner-set-dyld-library-path.patch
+
+        # resolves https://github.com/llvm/llvm-project/issues/75168
+        (fetchpatch {
+          name = "fix-fzero-call-used-regs.patch";
+          url = "https://github.com/llvm/llvm-project/commit/f800c1f3b207e7bcdc8b4c7192928d9a078242a0.patch";
+          stripLen = 1;
+          hash = "sha256-e8YKrMy2rGcSJGC6er2V66cOnAnI+u1/yImkvsRsmg8=";
+        })
       ];
       pollyPatches = [
         ./llvm/gnu-install-dirs-polly.patch
