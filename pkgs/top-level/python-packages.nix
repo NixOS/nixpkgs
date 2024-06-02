@@ -12997,6 +12997,8 @@ self: super: with self; {
 
   quart = callPackage ../development/python-modules/quart { };
 
+  quartodoc = callPackage ../development/python-modules/quartodoc { };
+
   quart-cors = callPackage ../development/python-modules/quart-cors { };
 
   quaternion = callPackage ../development/python-modules/quaternion { };
