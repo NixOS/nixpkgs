@@ -289,7 +289,6 @@ in {
         hardware.opengl = {
           extraPackages = [
             nvidia_x11.out
-            nvidia_x11.settings.libXNVCtrl
           ];
           extraPackages32 = [
             nvidia_x11.lib32
