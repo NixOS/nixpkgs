@@ -1917,6 +1917,8 @@ because we can only provide security support for non-vendored dependencies.
 We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
 as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
 
+See also [contributing section](#contributing).
+
 ### Are Python interpreters built deterministically? {#deterministic-builds}
 
 The Python interpreters are now built deterministically. Minor modifications had
@@ -1983,14 +1985,25 @@ The following rules are desired to be respected:
 * Python applications live outside of `python-packages.nix` and are packaged
   with [`buildPythonApplication`](#buildpythonapplication-function).
 * Make sure libraries build for all Python interpreters.
-* By default we enable tests. Make sure the tests are found and, in the case of
+  If it fails to build on some Python versions, consider disabling them by setting `disable = pythonAtLeast "3.x"` along with a comment.
+* The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
+* Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
+  since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
+  without running into duplicate module name conflicts.
+* The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
+* Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
   disabled individually. Try to avoid disabling the tests altogether. In any
   case, when you disable tests, leave a comment explaining why.
+* `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
+* `meta.platforms` takes the default value in many cases.
+  It does not need to be set explicitly unless the package requires a specific platform.
+* The file is formatted with `nixfmt-rfc-style`.
 * Commit names of Python libraries should reflect that they are Python
   libraries, so write for example `python311Packages.numpy: 1.11 -> 1.12`.
   It is highly recommended to specify the current default version to enable
   automatic build by ofborg.
+  Note that `pythonPackages` is an alias for `python27Packages`.
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
@@ -2003,6 +2016,8 @@ The following rules are desired to be respected:
   and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+
+This list is useful for reviewers as well as for self-checking when submitting packages.
 
 ## Package set maintenance {#python-package-set-maintenance}
 
