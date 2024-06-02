@@ -115,10 +115,7 @@ in
     ldap = {
       package = mkOption {
         type = types.package;
-        # needs openldap built with a libxcrypt that support crypt sha256 until users have had time to migrate to newer hashes
-        # Ref: <https://github.com/majewsky/portunus/issues/2>
-        # TODO: remove in NixOS 24.11 (cf. same note on pkgs/servers/portunus/default.nix)
-        default = pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; };
+        default = pkgs.openldap;
         defaultText = lib.literalExpression "pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; }";
         description = "The OpenLDAP package to use.";
       };
