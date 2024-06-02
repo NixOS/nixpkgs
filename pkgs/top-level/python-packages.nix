@@ -14306,6 +14306,8 @@ self: super: with self; {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
+  sphobjinv = callPackage ../development/python-modules/sphobjinv { };
+
   spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spinners = callPackage ../development/python-modules/spinners { };
