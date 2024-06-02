@@ -6,6 +6,7 @@
 { src
 , sourceRoot ? null
 , buildOffline ? false
+, doCheck ? true
 , patches ? [ ]
 , pname
 , version
@@ -22,6 +23,7 @@
 # created to allow using maven packages in the same style as rust
 
 let
+  mvnSkipTests = lib.optionalString (!doCheck) "-DskipTests";
   fetchedMavenDeps = stdenv.mkDerivation ({
     name = "${pname}-${version}-maven-deps";
     inherit src sourceRoot patches;
@@ -49,7 +51,7 @@ let
         mvn dependency:sources -DincludeGroupIds="$group" -DincludeArtifactIds="$artifact" -Dmaven.repo.local=$out/.m2
       done
     '' + lib.optionalString (!buildOffline) ''
-      mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
+      mvn package -Dmaven.repo.local=$out/.m2 ${mvnSkipTests} ${mvnParameters}
     '' + ''
       runHook postBuild
     '';
@@ -85,7 +87,7 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
     runHook preBuild
 
     mvnDeps=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)
-    mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnParameters}
+    mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2" ${mvnSkipTests} ${mvnParameters}
 
     runHook postBuild
   '';
