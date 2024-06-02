@@ -1,32 +1,33 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, makeWrapper
-, cdrtools
-, curl
-, gawk
-, gnugrep
-, gnused
-, jq
-, ncurses
-, pciutils
-, procps
-, python3
-, qemu
-, socat
-, spice-gtk
-, swtpm
-, usbutils
-, util-linux
-, unzip
-, xdg-user-dirs
-, xrandr
-, zsync
-, OVMF
-, OVMFFull
-, quickemu
-, testers
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  makeWrapper,
+  cdrtools,
+  curl,
+  gawk,
+  gnugrep,
+  gnused,
+  jq,
+  ncurses,
+  pciutils,
+  procps,
+  python3,
+  qemu,
+  socat,
+  spice-gtk,
+  swtpm,
+  usbutils,
+  util-linux,
+  unzip,
+  xdg-user-dirs,
+  xrandr,
+  zsync,
+  OVMF,
+  OVMFFull,
+  quickemu,
+  testers,
+  installShellFiles,
 }:
 let
   runtimePaths = [
@@ -52,7 +53,7 @@ let
   ];
 in
 
-stdenv.mkDerivation (finalAttrs : {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
   version = "4.9.4";
 
@@ -72,7 +73,10 @@ stdenv.mkDerivation (finalAttrs : {
       quickemu
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -98,6 +102,9 @@ stdenv.mkDerivation (finalAttrs : {
     homepage = "https://github.com/quickemu-project/quickemu";
     mainProgram = "quickemu";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fedx-sudo flexiondotorg ];
+    maintainers = with lib.maintainers; [
+      fedx-sudo
+      flexiondotorg
+    ];
   };
 })
