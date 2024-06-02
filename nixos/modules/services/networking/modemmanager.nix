@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.networking.modemmanager;
 in
@@ -19,6 +24,8 @@ in
           connectivity (e.g. GPS).
         '';
       };
+
+      package = mkPackageOption pkgs "modemmanager" { };
 
       fccUnlockScripts = mkOption {
         type = types.listOf (
@@ -82,9 +89,9 @@ in
       });
     '';
 
-    environment.systemPackages = [ pkgs.modemmanager ];
-    systemd.packages = [ pkgs.modemmanager ];
-    services.dbus.packages = [ pkgs.modemmanager ];
-    services.udev.packages = [ pkgs.modemmanager ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
+    services.dbus.packages = [ cfg.package ];
+    services.udev.packages = [ cfg.package ];
   };
 }
