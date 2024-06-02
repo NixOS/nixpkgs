@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.21.5";
+  version = "0.21.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Sb8Lu/nYUXgGt9gVv+j32cwW7TjXfH8z+fwzKaOeM8=";
+    hash = "sha256-vVgqx6qccGNdgt/VkHEfMeiICkLDm8o7iqjNx0UlD38=";
   };
 
   build-system = [
