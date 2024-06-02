@@ -37,7 +37,6 @@ maven.buildMavenPackage rec {
     x86_64-linux = "sha256-vXZAlZOh9pXNF1RL78oQRal5pkXFRKDz/7SP9LibgiA=";
     aarch64-linux = "sha256-xC+feb41EPi30gBrVR8usanVULI2Pt0knztzNagPQiw=";
   };
-  mvnParameters = "-DskipTests";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -45,6 +44,8 @@ maven.buildMavenPackage rec {
     wrapGAppsHook3
     gvfs
   ];
+
+  doCheck = false;
 
   # Don't wrap binaries twice.
   dontWrapGApps = true;
