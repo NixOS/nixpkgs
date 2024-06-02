@@ -49,6 +49,9 @@ buildNpmPackage rec {
       --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg}' \
       --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
       --replace-fail '!!localStorage.getItem("fullYtdlpBinPresent")' 'true'
+    # Disable auto-updates
+    substituteInPlace src/preferences.js \
+      --replace-warn 'const autoUpdateDisabled = getId("autoUpdateDisabled");' 'const autoUpdateDisabled = "true";'
   '';
 
   postInstall = ''
