@@ -9798,6 +9798,12 @@
     githubId = 54179289;
     name = "Jason Miller";
   };
+  jn-sena = {
+    email = "jn-sena@proton.me";
+    github = "jn-sena";
+    githubId = 45771313;
+    name = "Sena";
+  };
   jnsgruk = {
     email = "jon@sgrs.uk";
     github = "jnsgruk";
