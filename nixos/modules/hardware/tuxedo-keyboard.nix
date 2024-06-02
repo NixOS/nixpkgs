@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.hardware.tuxedo-keyboard;
-  tuxedo-keyboard = config.boot.kernelPackages.tuxedo-keyboard;
+  tuxedo-drivers = config.boot.kernelPackages.tuxedo-drivers;
 in
   {
     options.hardware.tuxedo-keyboard = {
@@ -30,6 +30,6 @@ in
     config = mkIf cfg.enable
     {
       boot.kernelModules = ["tuxedo_keyboard"];
-      boot.extraModulePackages = [ tuxedo-keyboard ];
+      boot.extraModulePackages = [ tuxedo-drivers ];
     };
   }
