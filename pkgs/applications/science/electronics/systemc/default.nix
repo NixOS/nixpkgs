@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "systemc";
-  version = "2.3.4";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "accellera-official";
     repo = pname;
     rev = version;
-    sha256 = "0sj8wlkp68cjhmkd9c9lvm3lk3sckczpz7w9vby64inc1f9fnf0b";
+    sha256 = "sha256-qeQUrPhD+Gb1lResM7NZzO/vEgJd3NE6lbnM380VVa0=";
   };
 
   nativeBuildInputs = [ cmake ];

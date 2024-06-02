@@ -53,7 +53,7 @@ let
 in
 buildPythonPackage rec {
   pname = "mmcv";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     owner = "open-mmlab";
     repo = "mmcv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-an78tRvx18zQ5Q0ca74r4Oe2gJ9F9OfWXLbuP2+rL68=";
+    hash = "sha256-NNF9sLJWV1q6uBE73LUW4UWwYm4TBMTBJjJkFArBmsc=";
   };
 
   preConfigure =
