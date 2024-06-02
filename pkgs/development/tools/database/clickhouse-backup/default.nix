@@ -10,7 +10,7 @@ buildGoModule rec {
   version = "2.5.10";
 
   src = fetchFromGitHub {
-    owner = "AlexAkulov";
+    owner = "Altinity";
     repo = "clickhouse-backup";
     rev = "v${version}";
     hash = "sha256-09xRELdWcwyTgvJKE5+srM9Uxb6BIZEQN3pR5ggRhYk=";
@@ -31,9 +31,9 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Tool for easy ClickHouse backup and restore with cloud storages support";
+    description = "Tool for easy ClickHouse backup and restore using object storage for backup files";
     mainProgram = "clickhouse-backup";
-    homepage = "https://github.com/AlexAkulov/clickhouse-backup";
+    homepage = "https://github.com/Altinity/clickhouse-backup";
     license = licenses.mit;
     maintainers = with maintainers; [ devusb ];
   };
