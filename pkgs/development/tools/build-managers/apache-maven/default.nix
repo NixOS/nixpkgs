@@ -35,8 +35,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.buildMavenPackage = callPackage ./build-package.nix {
-    maven = finalAttrs.finalPackage;
+  passthru = {
+    buildMaven = callPackage ./build-maven.nix {
+      maven = finalAttrs.finalPackage;
+    };
+    buildMavenPackage = callPackage ./build-package.nix {
+      maven = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
