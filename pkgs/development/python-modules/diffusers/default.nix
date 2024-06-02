@@ -4,10 +4,8 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   writeText,
   setuptools,
-  wheel,
   filelock,
   huggingface-hub,
   importlib-metadata,
@@ -42,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.27.2";
+  version = "0.28.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,29 +49,10 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aRnbU3jN40xaCsoMFyRt1XB+hyIYMJP2b/T1yZho90c=";
+    hash = "sha256-DYUVg96oHYoRqw/RGoH48YXfK/kfkYoqGQfkiOUr8DU=";
   };
 
-  patches = [
-    # fix python3.12 build
-    (fetchpatch {
-      # https://github.com/huggingface/diffusers/pull/7455
-      name = "001-remove-distutils.patch";
-      url = "https://github.com/huggingface/diffusers/compare/363699044e365ef977a7646b500402fa585e1b6b...3c67864c5acb30413911730b1ed4a9ad47c0a15c.patch";
-      hash = "sha256-Qyvyp1GyTVXN+A+lA1r2hf887ubTtaUknbKd4r46NZQ=";
-    })
-    (fetchpatch {
-      # https://github.com/huggingface/diffusers/pull/7461
-      name = "002-fix-removed-distutils.patch";
-      url = "https://github.com/huggingface/diffusers/commit/efbbbc38e436a1abb1df41a6eccfd6f9f0333f97.patch";
-      hash = "sha256-scdtpX1RYFFEDHcaMb+gDZSsPafkvnIO/wQlpzrQhLA=";
-    })
-  ];
-
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     filelock
