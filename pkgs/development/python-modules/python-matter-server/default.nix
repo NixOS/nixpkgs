@@ -34,13 +34,13 @@
 let
   paaCerts = stdenvNoCC.mkDerivation rec {
     pname = "matter-server-paa-certificates";
-    version = "1.2.0.1";
+    version = "1.3.0.0";
 
     src = fetchFromGitHub {
       owner = "project-chip";
       repo = "connectedhomeip";
       rev = "refs/tags/v${version}";
-      hash = "sha256-p3P0n5oKRasYz386K2bhN3QVfN6oFndFIUWLEUWB0ss=";
+      hash = "sha256-5MI6r0KhSTzolesTQ8YWeoko64jFu4jHfO5KOOKpV0A=";
     };
 
     installPhase = ''
@@ -56,7 +56,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.10.0";
+  version = "6.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-rfpGclSgCBTxlTgVqgNz3ixoldB9M+6mLmogkNDDdWs=";
+    hash = "sha256-Ou2bNEDsN8yIslkf4Rf4UrMrcMxTBND/hBtEU1nM8a0=";
   };
 
   patches = [
