@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atuin \
       --bash <($out/bin/atuin gen-completions -s bash) \
       --fish <($out/bin/atuin gen-completions -s fish) \
