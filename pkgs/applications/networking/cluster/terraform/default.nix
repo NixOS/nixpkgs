@@ -56,7 +56,6 @@ let
         license = licenses.bsl11;
         maintainers = with maintainers; [
           Chili-Man
-          babariviere
           kalbasit
           timstott
           zimbatm

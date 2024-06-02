@@ -428,7 +428,6 @@ with lib.maintainers; {
       bandresen
       hlolli
       glittershark
-      babariviere
       ericdallo
       thiagokokada
     ];
