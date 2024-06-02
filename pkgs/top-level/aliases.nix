@@ -27,13 +27,6 @@ let
     then removeAttrs alias [ "recurseForDerivations" ]
     else alias;
 
-  # Disabling distribution prevents top-level aliases for non-recursed package
-  # sets from building on Hydra.
-  removeDistribute = alias: with lib;
-    if isDerivation alias then
-      dontDistribute alias
-    else alias;
-
   # Make sure that we are not shadowing something from all-packages.nix.
   checkInPkgs = n: alias:
     if builtins.hasAttr n super
@@ -43,9 +36,8 @@ let
   mapAliases = aliases:
     lib.mapAttrs
       (n: alias:
-        removeDistribute
-          (removeRecurseForDerivations
-            (checkInPkgs n alias)))
+        removeRecurseForDerivations
+          (checkInPkgs n alias))
       aliases;
 in
 
