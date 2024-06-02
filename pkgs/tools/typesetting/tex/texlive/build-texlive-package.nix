@@ -233,7 +233,7 @@ let
     # if the container is missing (that is, outputs == [ ]), create a file, to prevent passing the package to .withPackages
     ''
       for outputName in ''${!outputs[@]} ; do
-        if [[ -z ''${outputDrvs[$outputName]} ]] ; then
+        if [[ -n ''${outputDrvs[$outputName]} ]] ; then
           ln -s "''${outputDrvs[$outputName]}" "''${outputs[$outputName]}"
         else
           touch "''${outputs[$outputName]}"
