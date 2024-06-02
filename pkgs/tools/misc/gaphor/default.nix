@@ -4,16 +4,23 @@
 , copyDesktopItems
 , gobject-introspection
 , poetry-core
-, wrapGAppsHook3
-, gtksourceview4
+, wrapGAppsHook4
+, gtksourceview5
+, libadwaita
 , pango
 , gaphas
 , generic
 , jedi
 , pycairo
+, pillow
+, dulwich
+, pydot
+, defusedxml
+, better-exceptions
+, babel
 , pygobject3
 , tinycss2
-, gtk3
+, gtk4
 , librsvg
 , makeDesktopItem
 , python
@@ -21,34 +28,40 @@
 
 buildPythonApplication rec {
   pname = "gaphor";
-  version = "2.8.2";
-
+  version = "2.25.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+qqsSLjdY2I19fxdfkOEQ9DhTTHccUDll4O5yqtLiz0=";
+    hash = "sha256-9PNgU1/9RL6QXba0gn4zHCAtSV3iY0HOY1Rf6bkyzxY=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     gobject-introspection
     poetry-core
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtksourceview4
+    gtksourceview5
     pango
+    libadwaita
   ];
 
   propagatedBuildInputs = [
-    gaphas
-    generic
-    jedi
     pycairo
     pygobject3
+    gaphas
+    generic
     tinycss2
+    babel
+    jedi
+    better-exceptions
+    pydot
+    pillow
+    defusedxml
+    dulwich
   ];
 
   desktopItems = makeDesktopItem {
@@ -59,7 +72,7 @@ buildPythonApplication rec {
     desktopName = "Gaphor";
   };
 
-  # Disable automatic wrapGAppsHook3 to prevent double wrapping
+  # Disable automatic wrapGAppsHook4 to prevent double wrapping
   dontWrapGApps = true;
 
   postInstall = ''
@@ -69,7 +82,7 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --prefix XDG_DATA_DIRS : "${gtk4}/share/gsettings-schemas/${gtk4.name}/" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     )
   '';
@@ -79,6 +92,6 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ wolfangaukang ];
     homepage = "https://github.com/gaphor/gaphor";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
