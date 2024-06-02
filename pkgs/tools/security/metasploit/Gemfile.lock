@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 19234871c7edcc534f2bd34505ec08a1f33319b0
-  ref: refs/tags/6.4.10
+  revision: 5dfb48d9f70d811d52e0633998108f22b4959b1a
+  ref: refs/tags/6.4.11
   specs:
-    metasploit-framework (6.4.10)
+    metasploit-framework (6.4.11)
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -47,7 +47,7 @@ GIT
       net-ssh
       network_interface
       nexpose
-      nokogiri (~> 1.14.0)
+      nokogiri
       octokit (~> 4.0)
       openssl-ccm
       openvas-omp
@@ -87,7 +87,7 @@ GIT
       rubyntlm
       rubyzip
       sinatra
-      sqlite3 (= 1.6.6)
+      sqlite3 (= 1.7.3)
       sshkey
       swagger-blocks
       thin
@@ -415,7 +415,7 @@ GEM
       rack (~> 2.2, >= 2.2.4)
       rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    sqlite3 (1.6.6)
+    sqlite3 (1.7.3)
       mini_portile2 (~> 2.8.0)
     sshkey (3.0.0)
     strptime (0.2.5)
@@ -466,4 +466,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.13
+   2.5.9
