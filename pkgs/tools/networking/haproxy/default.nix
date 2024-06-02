@@ -29,11 +29,11 @@ let
   sslPkg = sslPkgs.${sslLibrary};
 in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.9.7";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0aClbwCKjS8Ae8DDffaylSUg0fTd4zuNOAJxDlFYwTE=";
+    hash = "sha256-Wq2XQWIW0s2d0hLrZ0g5xAzTh/YPvEsT1+o/HlZkqBQ=";
   };
 
   buildInputs = [ sslPkg zlib libxcrypt ]
