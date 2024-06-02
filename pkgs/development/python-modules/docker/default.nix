@@ -2,12 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   packaging,
@@ -24,19 +24,21 @@
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "7.0.0";
+  version = "7.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Mjc2+5LNlBj8XnEzvJU+EanaBPRIP4KLUn21U/Hn5aM=";
+  src = fetchFromGitHub {
+    owner = "docker";
+    repo = "docker-py";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-sk6TZLek+fRkKq7kG9g6cR9lvfPC8v8qUXKb7Tq4pLU=";
   };
 
   nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   propagatedBuildInputs = [
