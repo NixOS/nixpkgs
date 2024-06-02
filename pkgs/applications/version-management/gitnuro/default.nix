@@ -12,10 +12,19 @@ stdenv.mkDerivation rec {
   pname = "gitnuro";
   version = "1.3.1";
 
-  src = fetchurl {
-    url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-x86_64-${version}.jar";
-    hash = "sha256-7yne9dD/7VT+H4tIBJvpOf8ksECCpoNAa8TSmFmjYMw=";
-  };
+  src = fetchurl (
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+    {
+      url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-x86_64-${version}.jar";
+      hash = "sha256-7yne9dD/7VT+H4tIBJvpOf8ksECCpoNAa8TSmFmjYMw=";
+    }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+    {
+      url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-arm_aarch64-${version}.jar";
+      hash = "sha256-6TRQfIhaKBjNPn3tEVWoUF92JAmwlHUtQZE8gKEZ/ZI=";
+    }
+    else throw "Unsupported architecture: ${stdenv.hostPlatform.system}"
+  );
 
   icon = fetchurl {
     url = "https://raw.githubusercontent.com/JetpackDuba/Gitnuro/4cfc45069c176f807d9bfb1a7cba410257078d3c/icons/logo.svg";
@@ -56,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "A FOSS Git multiplatform client based on Compose and JGit";
     homepage = "https://gitnuro.com/";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ zendo ];
     mainProgram = "gitnuro";
