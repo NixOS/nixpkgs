@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, buildPackages
 , cmake
 , gtest
 , jre
@@ -48,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   checkTarget = "tests";
+
+  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+    (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
