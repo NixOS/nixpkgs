@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     opencv
+    (lib.getOutput "cxxdev" opencv)
     libtiff
     libpng
     # TODO: Figure out how on earth to get it to pick up libjpeg8 for
