@@ -239,6 +239,14 @@ in
         '';
       };
 
+      enableDefaultPlugins = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enable a set of recommended plugins.
+        '';
+      };
+
       dhcp = mkOption {
         type = types.enum [
           "dhcpcd"
@@ -660,7 +668,7 @@ in
         useDHCP = false;
       })
 
-      {
+      (mkIf cfg.enableDefaultPlugins {
         networkmanager.plugins = with pkgs; [
           networkmanager-fortisslvpn
           networkmanager-iodine
@@ -670,7 +678,7 @@ in
           networkmanager-vpnc
           networkmanager-sstp
         ];
-      }
+      })
 
       (mkIf cfg.enableStrongSwan {
         networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
