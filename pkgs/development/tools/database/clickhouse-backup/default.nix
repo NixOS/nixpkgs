@@ -35,7 +35,6 @@ buildGoModule rec {
     mainProgram = "clickhouse-backup";
     homepage = "https://github.com/AlexAkulov/clickhouse-backup";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ devusb ];
   };
 }
