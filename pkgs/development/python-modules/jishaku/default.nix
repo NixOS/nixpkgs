@@ -3,7 +3,6 @@
   bash,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   discordpy,
   click,
@@ -13,26 +12,20 @@
   pytestCheckHook,
   pytest-asyncio,
   youtube-dl,
+  unstableGitUpdater,
 }:
+
 buildPythonPackage rec {
   pname = "jishaku";
-  version = "2.5.2";
+  version = "2.5.1-unstable-2024-05-29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gorialis";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-BWnuk6h80cKwRECyTuRvnYnTC78219oraeTNoqWDd1c=";
+    repo = "jishaku";
+    rev = "f68f4395cc58fca247b86967b52b35d95f2b7cd3";
+    hash = "sha256-1FBQNUC+qXBHWcY/7h2Rvw1anTD5BTYY/yAm+QnBlaQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # add entrypoint for install script
-      url = "https://github.com/Gorialis/jishaku/commit/b96cd55a1c2fd154c548f08019ccd6f7be9c7f90.patch";
-      hash = "sha256-laPoupwCC1Zthib8G+c1BXqTwZK0Z6up1DKVkhFicJ0=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace jishaku/shell.py \
@@ -60,6 +53,8 @@ buildPythonPackage rec {
     "jishaku.repl"
     "jishaku.features"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "A debugging and testing cog for discord.py bots";
