@@ -14608,6 +14608,8 @@ self: super: with self; {
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
+  stdio-mgr = callPackage ../development/python-modules/stdio-mgr { };
+
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
   stdlibs = callPackage ../development/python-modules/stdlibs { };
