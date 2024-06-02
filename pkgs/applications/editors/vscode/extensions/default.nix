@@ -4912,18 +4912,18 @@ let
     };
 
   aliases = super: {
-    _13xforever = super."13xforever";
-    _1Password = super."1Password";
-    _2gua = super."2gua";
-    _4ops = super."4ops";
-    Arjun.swagger-viewer = super.arjun.swagger-viewer;
-    jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
-    jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
-    matklad.rust-analyzer = super.rust-lang.rust-analyzer; # Previous publisher
-    ms-vscode.go = super.golang.go;
-    ms-vscode.PowerShell = super.ms-vscode.powershell;
-    rioj7.commandOnAllFiles = super.rioj7.commandonallfiles;
-    WakaTime.vscode-wakatime = super.wakatime.vscode-wakatime;
+    _13xforever = throw "_13xforever is deprecated in favor of 13xforever"; # Added 2024-05-29
+    _1Password = throw "_1Password is deprecated in favor of 1Password"; # Added 2024-05-29
+    _2gua = throw "_2gua is deprecated in favor of 2gua"; # Added 2024-05-29
+    _4ops = throw "_4ops is deprecated in favor of 4ops"; # Added 2024-05-29
+    Arjun.swagger-viewer = throw "Arjun.swagger-viewer is deprecated in favor of arjun.swagger-viewer"; # Added 2024-05-29
+    jakebecker.elixir-ls = throw "jakebecker.elixir-ls is deprecated in favor of elixir-lsp.vscode-elixir-ls"; # Added 2024-05-29
+    jpoissonnier.vscode-styled-components = throw "jpoissonnier.vscode-styled-components is deprecated in favor of styled-components.vscode-styled-components"; # Added 2024-05-29
+    matklad.rust-analyzer = throw "matklad.rust-analyzer is deprecated in favor of rust-lang.rust-analyzer"; # Added 2024-05-29
+    ms-vscode.go = throw "ms-vscode.go is deprecated in favor of golang.go"; # Added 2024-05-29
+    ms-vscode.PowerShell = throw "ms-vscode.PowerShell is deprecated in favor of super.ms-vscode.powershell"; # Added 2024-05-29
+    rioj7.commandOnAllFiles = throw "rioj7.commandOnAllFiles is deprecated in favor of rioj7.commandonallfiles"; # Added 2024-05-29
+    WakaTime.vscode-wakatime = throw "WakaTime.vscode-wakatime is deprecated in favor of wakatime.vscode-wakatime"; # Added 2024-05-29
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

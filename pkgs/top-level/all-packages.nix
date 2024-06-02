@@ -9009,8 +9009,6 @@ with pkgs;
 
   hue-plus = libsForQt5.callPackage ../applications/misc/hue-plus { };
 
-  hurl = callPackage ../tools/networking/hurl { };
-
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
@@ -10938,6 +10936,7 @@ with pkgs;
     nomad_1_5
     nomad_1_6
     nomad_1_7
+    nomad_1_8
     ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -13713,7 +13712,7 @@ with pkgs;
   trunk-io = callPackage ../development/tools/trunk-io { };
 
   trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   tthsum = callPackage ../applications/misc/tthsum { };
@@ -21707,8 +21706,6 @@ with pkgs;
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
   lib3mf = callPackage ../development/libraries/lib3mf { };
-
-  libAfterImage = callPackage ../development/libraries/libAfterImage { };
 
   libaacs = callPackage ../development/libraries/libaacs { };
 
@@ -40171,8 +40168,6 @@ with pkgs;
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
   ssh-tools = callPackage ../applications/misc/ssh-tools { };
-
-  auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
   thermald = callPackage ../tools/system/thermald { };
 

@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "nexttrace";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "nxtrace";
     repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-15ONnY0ST3e9FPyNkyUfQLgKUXjrMX2+4Op4WDumyyk=";
+    sha256 = "sha256-mJkAV4eUecJv2H3smfTNPcj+liCH8wNl/wiO+Q92eDE=";
   };
-  vendorHash = "sha256-dlubG+2UvlZI0r9CU2ljCbLs1+t+xgwP2yrbiAt8MgQ=";
+  vendorHash = "sha256-immUT11gO3dFkrwrjwwYtPLxhYvSKcxmwaEkjFGrMsE=";
 
   doCheck = false; # Tests require a network connection.
 
