@@ -1237,6 +1237,10 @@ let
       hardeningDisable = [ "format" ];
     });
 
+    HilbertVisGUI = old.HilbertVisGUI.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+    });
+
     MANOR = old.MANOR.overrideAttrs (attrs: {
       hardeningDisable = [ "format" ];
     });
