@@ -41,5 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;
+    # Getting DARWIN_NULL related errors
+    broken = stdenv.isDarwin;
   };
 })
