@@ -56,7 +56,6 @@ maven.buildMavenPackage {
     "-Dskip.npm"
     "-Dspotless.check.skip"
     "-Dmaven.gitcommitid.skip"
-    "-DskipTests"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -70,6 +69,8 @@ maven.buildMavenPackage {
 
     runHook postConfigure
   '';
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
