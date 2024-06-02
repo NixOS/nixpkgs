@@ -4,25 +4,35 @@
   colorama,
   fetchFromGitHub,
   online-judge-api-client,
+  packaging,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "online-judge-tools";
-  version = "11.5.1";
-  format = "setuptools";
+  version = "12.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "online-judge-tools";
     repo = "oj";
-    rev = "v${version}";
-    sha256 = "0zkzmmjgjb6lyrzq1ip54cpnp7al9a7mcyjyi5vx58bvnx3q0c6m";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m6V4Sq3yU/KPnbpA0oCLI/qaSrAPA6TutcBL5Crb/Cc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     online-judge-api-client
+    packaging
     requests
+  ];
+
+  pythonImportsCheck = [
+    "onlinejudge"
+    "onlinejudge_command"
   ];
 
   # Requires internet access
