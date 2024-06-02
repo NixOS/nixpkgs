@@ -20152,8 +20152,6 @@ with pkgs;
 
   boost = boost181;
 
-  boost_process = callPackage ../development/libraries/boost-process { };
-
   bosh-cli = callPackage ../applications/networking/cluster/bosh-cli { };
 
   botan2 = callPackage ../development/libraries/botan/2.0.nix {
