@@ -15,7 +15,13 @@
     "x86_64-linux"
   ]
 , # Attributes passed to nixpkgs.
-  nixpkgsArgs ? { config = { allowUnfree = true; inHydra = true; }; }
+  nixpkgsArgs ? {
+    config = {
+      allowAliases = false;
+      allowUnfree = true;
+      inHydra = true;
+    };
+  }
 }:
 
 let

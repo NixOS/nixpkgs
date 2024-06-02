@@ -26,6 +26,7 @@
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
 , nixpkgsArgs ? { config = {
+    allowAliases = false;
     allowUnfree = false;
     inHydra = true;
     permittedInsecurePackages = [
