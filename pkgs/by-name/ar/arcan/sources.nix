@@ -3,17 +3,20 @@
 }:
 
 {
-  letoram-arcan = {
-    pname = "arcan";
-    version = "0.6.2.1-unstable-2023-11-18";
+  letoram-arcan = let
+    self = {
+      pname = "arcan";
+      version = "0.6.3";
 
-    src = fetchFromGitHub {
-      owner = "letoram";
-      repo = "arcan";
-      rev = "0950ee236f96a555729498d0fdf91c16901037f5";
-      hash = "sha256-TxadRlidy4KRaQ4HunPO6ISJqm6JwnMRM8y6dX6vqJ4=";
+      src = fetchFromGitHub {
+        owner = "letoram";
+        repo = "arcan";
+        rev = self.version;
+        hash = "sha256-ZSKOkNrFa2QgmXmmXnLkB1pehmVJbEFVeNs43Z2DSKo=";
+      };
     };
-  };
+  in
+    self;
 
   letoram-openal = {
     pname = "letoram-openal";
@@ -29,37 +32,37 @@
 
   libuvc = {
     pname = "libuvc";
-    version = "0.0.7";
+    version = "0.0.7-unstable-2024-03-05";
 
     src = fetchFromGitHub {
       owner = "libuvc";
       repo = "libuvc";
-      rev = "68d07a00e11d1944e27b7295ee69673239c00b4b";
-      hash = "sha256-IdV18mnPTDBODpS1BXl4ulkFyf1PU2ZmuVGNOIdQwzE=";
+      rev = "047920bcdfb1dac42424c90de5cc77dfc9fba04d";
+      hash = "sha256-Ds4N9ezdO44eBszushQVvK0SUVDwxGkUty386VGqbT0=";
     };
   };
 
   luajit = {
     pname = "luajit";
-    version = "2.1-unstable-2023-10-08";
+    version = "2.1-unstable-2024-04-19";
 
     src = fetchFromGitHub {
       owner = "LuaJIT";
       repo = "LuaJIT";
-      rev = "656ecbcf8f669feb94e0d0ec4b4f59190bcd2e48";
-      hash = "sha256-/gGQzHgYuWGqGjgpEl18Rbh3Sx2VP+zLlx4N9/hbYLc=";
+      rev = "9b5e837ac2dfdc0638830c048a47ca9378c504d3";
+      hash = "sha256-GflF/sELSNanc9G4WMzoOadUBOFSs6OwqhAXa4sudWA=";
     };
   };
 
   tracy = {
     pname = "tracy";
-    version = "0.9.1-unstable-2023-10-09";
+    version = "0.10-unstable-2024-05-08";
 
     src = fetchFromGitHub {
       owner = "wolfpld";
       repo = "tracy";
-      rev = "93537dff336e0796b01262e8271e4d63bf39f195";
-      hash = "sha256-FNB2zTbwk8hMNmhofz9GMts7dvH9phBRVIdgVjRcyQM=";
+      rev = "11eee619fbb2ca97d8b7f7f6e0d6b20e37afbe61";
+      hash = "sha256-VRRNL7trX9Q6x/ujByidlJQvHxtDe7NZ7JomLFzXDE0=";
     };
   };
 }
