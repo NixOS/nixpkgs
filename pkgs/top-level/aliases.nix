@@ -1354,6 +1354,7 @@ mapAliases ({
   volatility = throw "'volatility' has been removed, as it was broken and unmaintained"; # Added 2023-12-10
 
   ### W ###
+  wakatime = wakatime-cli; # 2024-05-30
   waybar-hyprland = throw "waybar-hyprland has been removed: hyprland support is now built into waybar by default."; # Added 2023-08-21
   wayfireApplications-unwrapped = throw ''
     'wayfireApplications-unwrapped.wayfire' has been renamed to/replaced by 'wayfire'
