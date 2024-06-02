@@ -1,0 +1,45 @@
+{ lib
+, pkgs
+, stdenv
+, fetchFromGitHub
+, libusb1
+, pkg-config
+}:
+
+stdenv.mkDerivation rec {
+  pname = "dediprog-sf100-linux";
+  version = "1.14.20.x";
+
+  src = fetchFromGitHub {
+    owner = "DediProgSW";
+    repo = "SF100Linux";
+    rev = "V${version}";
+    hash = "sha256-hQvBZIwaWEC41vj2flaekIUP9Fwtj/JPi3XwRxfUbD0=";
+  };
+
+  buildInputs = [ libusb1 ];
+  nativeBuildInputs = [ pkg-config ];
+
+  udevRules = pkgs.writeText "dediprog.rules"
+    ''
+      ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="dada", MODE="660", GROUP="plugdev"
+    '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm0755 ./dpcmd -t $out/bin
+    install -Dm0644 ./ChipInfoDb.dedicfg -t $out/share/DediProg
+    install -Dm0644 ${udevRules} -D $out/lib/udev/rules.d/60-dediprog.rules
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/DediProgSW/SF100Linux";
+    description = "Linux software for DediProg SF100/SF600 programmers";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ thillux ];
+  };
+}
