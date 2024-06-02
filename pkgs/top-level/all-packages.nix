@@ -19057,7 +19057,6 @@ with pkgs;
   math-preview = callPackage ../tools/text/math-review { };
 
   maven3 = maven;
-  maven = callPackage ../development/tools/build-managers/apache-maven { };
   inherit (maven) buildMaven;
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
