@@ -538,9 +538,6 @@ rec {
       preferBuiltin = true;
       baseConfig = "defconfig";
       DTB = true;
-      extraConfig = ''
-        SERIAL_OF_PLATFORM y
-      '';
     };
   };
 
