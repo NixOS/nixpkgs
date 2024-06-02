@@ -531,6 +531,8 @@ effectiveStdenv.mkDerivation {
 
   passthru = {
     cudaSupport = enableCuda;
+    # OpenCV's OpenCVConfig.cmake requires consumers to use the same version of CUDA.
+    inherit cudaPackages;
 
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
