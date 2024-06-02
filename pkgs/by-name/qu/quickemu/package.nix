@@ -28,6 +28,7 @@
   quickemu,
   testers,
   installShellFiles,
+  fetchpatch2,
 }:
 let
   runtimePaths = [
@@ -72,6 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       quickemu
   '';
+
+  patches = [
+    # reduces windows vm ram requirements to 4G, to match microsoft recommendations
+    # TODO: remove on next release
+    (fetchpatch2 {
+      name = "decrease-windows-ram-requirements.patch";
+      url = "https://github.com/quickemu-project/quickemu/commit/f51697593a4650c5486661292e2febe1d16f8c71.patch";
+      hash = "sha256-J5hIvQGtkufOcjk2FZN65iox/W2zkLlg+Veg9TF11Fs=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
