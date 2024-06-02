@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.6.3";
+  version = "2.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,17 +37,8 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-neTdG/IcXopCmevzFY5/XDlhPHmOb6dhyAnzaobmeG8=";
+    hash = "sha256-IyVFpe7GaK4T8XDf2iDhtHYJ+8xhp5GSoJRcAnS7iTY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/pydantic/pydantic/pull/8678
-      name = "fix-pytest8-compatibility.patch";
-      url = "https://github.com/pydantic/pydantic/commit/825a6920e177a3b65836c13c7f37d82b810ce482.patch";
-      hash = "sha256-Dap5DtDzHw0jS/QUo5CRI9sLDJ719GRyC4ZNDWEdzus=";
-    })
-  ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
