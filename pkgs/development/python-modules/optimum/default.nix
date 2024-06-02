@@ -5,6 +5,7 @@
   pythonOlder,
   coloredlogs,
   datasets,
+  diffusers,
   evaluate,
   h5py,
   huggingface-hub,
@@ -13,6 +14,7 @@
   onnxruntime,
   packaging,
   protobuf,
+  setuptools,
   sympy,
   tensorflow,
   tf2onnx,
@@ -23,8 +25,8 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.19.2";
-  format = "setuptools";
+  version = "1.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -32,10 +34,12 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GYgLh6vlOoVvTvhNPfBT4YEqRhB7gZMqlOuab6maVGU=";
+    hash = "sha256-aQNDVNWTgY2LEtug229SEZRMvKHpsQfiTPWW4Lh3hs4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     coloredlogs
     datasets
     huggingface-hub
@@ -46,7 +50,7 @@ buildPythonPackage rec {
     transformers
   ] ++ transformers.optional-dependencies.sentencepiece;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     onnxruntime = [
       onnx
       onnxruntime
@@ -68,9 +72,7 @@ buildPythonPackage rec {
       h5py
       numpy
     ];
-    diffusers = [
-      # diffusers
-    ];
+    diffusers = [ diffusers ];
     intel = [
       # optimum-intel
     ];
