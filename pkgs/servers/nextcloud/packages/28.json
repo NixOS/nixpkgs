@@ -19,6 +19,16 @@
       "agpl"
     ]
   },
+  "camerarawpreviews": {
+    "sha256": "1ygcl1nsci0l5pv8gm0vw7sp3bw0fr4c4i9hsh3zjrhw5ljj5b7a",
+    "url": "https://github.com/ariselseng/camerarawpreviews/releases/download/v0.8.4/camerarawpreviews_nextcloud.tar.gz",
+    "version": "0.8.4",
+    "description": "This app will make previews of &quot;RAW&quot; files from cameras in Nextcloud.",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "contacts": {
     "sha256": "0xyrkr5p7xa8cn33kgx1hyblpbsdzaakpfm5bk6w9sm71a42688w",
     "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.5.3/contacts-v5.5.3.tar.gz",
@@ -130,8 +140,8 @@
     ]
   },
   "maps": {
-    "sha256": "1gqms3rrdpjmpb1h5d72b4lwbvsl8p10zwnkhgnsmvfcf93h3r1c",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
+    "sha256": "18gln06hgljgnr90ki95nl7b8986ivf3cymr6hajilszlr77hk22",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",

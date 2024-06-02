@@ -19,6 +19,16 @@
       "agpl"
     ]
   },
+  "camerarawpreviews": {
+    "sha256": "1ygcl1nsci0l5pv8gm0vw7sp3bw0fr4c4i9hsh3zjrhw5ljj5b7a",
+    "url": "https://github.com/ariselseng/camerarawpreviews/releases/download/v0.8.4/camerarawpreviews_nextcloud.tar.gz",
+    "version": "0.8.4",
+    "description": "This app will make previews of &quot;RAW&quot; files from cameras in Nextcloud.",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "contacts": {
     "sha256": "0yxp3477fx4mrds8wchhzavrxwm88dvz7s58zp59q1v7qr9i7whr",
     "url": "https://github.com/nextcloud-releases/contacts/releases/download/v6.0.0/contacts-v6.0.0.tar.gz",
