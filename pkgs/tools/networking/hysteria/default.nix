@@ -1,6 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  makeBinaryWrapper,
 }:
 buildGoModule rec {
   pname = "hysteria";
@@ -17,16 +19,23 @@ buildGoModule rec {
   proxyVendor = true;
 
   ldflags =
-    let cmd = "github.com/apernet/hysteria/app/cmd";
-    in [
+    let
+      cmd = "github.com/apernet/hysteria/app/cmd";
+    in
+    [
       "-s"
       "-w"
       "-X ${cmd}.appVersion=${version}"
       "-X ${cmd}.appType=release"
     ];
 
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
   postInstall = ''
     mv $out/bin/app $out/bin/hysteria
+
+    wrapProgram $out/bin/hysteria \
+      --add-flags "--disable-update-check"
   '';
 
   # Network required
