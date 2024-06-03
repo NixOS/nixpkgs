@@ -1086,9 +1086,9 @@ in
         '';
         description = "Declarative vhost config";
       };
-      validateConfigFile = lib.mkEnableOption ''
-        Validate configuration with pkgs.writeNginxConfig.
-      '' // { default = true; };
+      validateConfigFile = lib.mkEnableOption "validating configuration with pkgs.writeNginxConfig" // {
+        default = true;
+      };
     };
   };
 

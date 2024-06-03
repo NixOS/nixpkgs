@@ -900,7 +900,7 @@ in
     };
 
     virtualisation.tpm = {
-      enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm.";
+      enable = mkEnableOption "a TPM device in the virtual machine with a driver, using swtpm";
 
       package = mkPackageOption cfg.host.pkgs "swtpm" { };
 

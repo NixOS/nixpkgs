@@ -52,7 +52,7 @@ let
 in
 {
   options.services.mautrix-signal = {
-    enable = lib.mkEnableOption "mautrix-signal, a Matrix-Signal puppeting bridge.";
+    enable = lib.mkEnableOption "mautrix-signal, a Matrix-Signal puppeting bridge";
 
     settings = lib.mkOption {
       apply = lib.recursiveUpdate defaultConfig;

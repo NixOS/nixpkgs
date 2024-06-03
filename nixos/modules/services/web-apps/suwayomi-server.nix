@@ -9,7 +9,7 @@ in
 {
   options = {
     services.suwayomi-server = {
-      enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi.";
+      enable = mkEnableOption "Suwayomi, a free and open source manga reader server that runs extensions built for Tachiyomi";
 
       package = lib.mkPackageOptionMD pkgs "suwayomi-server" { };
 
@@ -72,7 +72,7 @@ in
               };
 
               basicAuthEnabled = mkEnableOption ''
-                Add basic access authentication to Suwayomi-Server.
+                basic access authentication for Suwayomi-Server.
                 Enabling this option is useful when hosting on a public network/the Internet
               '';
 

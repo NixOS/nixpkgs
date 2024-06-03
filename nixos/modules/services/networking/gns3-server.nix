@@ -87,17 +87,17 @@ in {
       };
 
       dynamips = {
-        enable = lib.mkEnableOption ''Whether to enable Dynamips support.'';
+        enable = lib.mkEnableOption ''Dynamips support'';
         package = lib.mkPackageOptionMD pkgs "dynamips" { };
       };
 
       ubridge = {
-        enable = lib.mkEnableOption ''Whether to enable uBridge support.'';
+        enable = lib.mkEnableOption ''uBridge support'';
         package = lib.mkPackageOptionMD pkgs "ubridge" { };
       };
 
       vpcs = {
-        enable = lib.mkEnableOption ''Whether to enable VPCS support.'';
+        enable = lib.mkEnableOption ''VPCS support'';
         package = lib.mkPackageOptionMD pkgs "vpcs" { };
       };
     };

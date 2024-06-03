@@ -8,7 +8,7 @@ in
 {
   options = {
     services.audiobookshelf = {
-      enable = mkEnableOption "Audiobookshelf, self-hosted audiobook and podcast server.";
+      enable = mkEnableOption "Audiobookshelf, self-hosted audiobook and podcast server";
 
       package = mkPackageOption pkgs "audiobookshelf" { };
 

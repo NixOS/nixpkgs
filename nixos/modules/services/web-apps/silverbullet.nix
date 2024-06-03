@@ -12,7 +12,7 @@ in
 {
   options = {
     services.silverbullet = {
-      enable = lib.mkEnableOption "Silverbullet, an open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application.";
+      enable = lib.mkEnableOption "Silverbullet, an open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
 
       package = lib.mkPackageOptionMD pkgs "silverbullet" { };
 
