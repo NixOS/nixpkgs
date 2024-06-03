@@ -68,12 +68,12 @@ stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
-    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
+    substituteInPlace Makefile --replace-fail /bin/pwd $(type -P pwd)
+    substituteInPlace utils/ppmtolss16 --replace-fail /usr/bin/perl $(type -P perl)
 
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
-      --replace /usr/include/ ""
+      --replace-fail /usr/include/ ""
 
     # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
     mkdir gnu-efi/inc/ia32/gnu
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "http://www.syslinux.org/";
+    homepage = "https://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.samueldr ];
