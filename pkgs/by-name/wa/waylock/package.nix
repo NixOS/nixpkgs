@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, libxkbcommon
-, pam
-, pkg-config
-, scdoc
-, wayland
-, wayland-protocols
-, zig_0_11
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitea,
+  libxkbcommon,
+  pam,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  zig_0_12,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -20,14 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Z5YNaR+jocJ4hS7NT8oAlrMnqNfD8KRzOyyqdVGDSl0=";
+    hash = "sha256-U8xJucLpmeLdmSUc+AVSH/mlv6UOXsxotJPTMK7lnkA=";
   };
+
+  deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     pkg-config
     scdoc
     wayland
-    zig_0_11.hook
+    zig_0_12.hook
   ];
 
   buildInputs = [
@@ -36,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     pam
   ];
 
-  zigBuildFlags = [ "-Dman-pages" ];
+  zigBuildFlags = [
+    "-Dman-pages"
+    "--system"
+    "${finalAttrs.deps}"
+  ];
 
   passthru.updateScript = ./update.nu;
 
@@ -45,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://codeberg.org/ifreund/waylock/releases/tag/v${finalAttrs.version}";
     description = "A small screenlocker for Wayland compositors";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ adamcstephens jordanisaacs ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      jordanisaacs
+    ];
     mainProgram = "waylock";
     platforms = lib.platforms.linux;
   };

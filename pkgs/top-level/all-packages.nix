@@ -429,8 +429,6 @@ with pkgs;
 
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
-  catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
-
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
@@ -31764,8 +31762,6 @@ with pkgs;
   rootbar = callPackage ../applications/misc/rootbar { };
 
   waycorner = callPackage ../applications/misc/waycorner { };
-
-  waylock = callPackage ../applications/misc/waylock { };
 
   wayshot = callPackage ../tools/misc/wayshot { };
 
