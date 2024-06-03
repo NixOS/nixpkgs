@@ -47,6 +47,7 @@ do
 
     url="https://services.gradle.org/distributions/gradle-${v}-bin.zip"
     read -d "\n" gradle_hash gradle_path < <(nix-prefetch-url --print-path $url)
+    gradle_hash=$(nix-hash --to-sri --type sha256 "$gradle_hash")
 
     # Prefix and suffix for "native-platform" dependency.
     gradle_native_prefix="gradle-$v/lib/native-platform-"
