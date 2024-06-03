@@ -1,4 +1,16 @@
-= Adding apps =
+## Updating apps
+
+To regenerate the nixpkgs nextcloudPackages set, run:
+
+```
+./generate.sh
+```
+
+After that you can commit and submit the changes in a pull request.
+
+## Adding apps
+
+**Before adding an app and making a pull request to nixpkgs, please first update as described above in a separate commit.**
 
 To extend the nextcloudPackages set, add a new line to the corresponding json
 file with the id of the app:
@@ -11,15 +23,17 @@ https://apps.nextcloud.com. The id corresponds to the last part in the app url,
 for example `breezedark` for the app with the url
 `https://apps.nextcloud.com/apps/breezedark`.
 
-To regenerate the nixpkgs nextcloudPackages set, run:
+Then regenerate the nixpkgs nextcloudPackages set by running:
 
 ```
 ./generate.sh
 ```
 
-After that you can commit and submit the changes.
+**Make sure that in this update, only the app added to `nextcloud-apps.json` gets updated.**
 
-= Usage with the Nextcloud module =
+After that you can commit and submit the changes in a pull request.
+
+## Usage with the Nextcloud module
 
 The apps will be available in the namespace `nextcloud25Packages.apps`.
 Using it together with the Nextcloud module could look like this:
