@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  ninja,
   which,
   # runtime dependencies
   numpy,
@@ -48,14 +49,24 @@ buildPythonPackage {
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
 
-  preBuild = ''
-    cat << EOF > ./xformers/version.py
-    # noqa: C801
-    __version__ = "${version}"
-    EOF
-
-    export MAX_JOBS=$NIX_BUILD_CORES
-  '';
+  preBuild =
+    ''
+      cat << EOF > ./xformers/version.py
+      # noqa: C801
+      __version__ = "${version}"
+      EOF
+    ''
+    + lib.optionalString cudaSupport ''
+      export CUDA_HOME=${lib.getBin cudaPackages.cuda_nvcc}
+      export TORCH_CUDA_ARCH_LIST="${lib.concatStringsSep ";" cudaCapabilities}"
+    ''
+    # NOTE: While normally the CUDA setup hooks take care of all the NVCC flags which make sure we use an appropriate
+    # version of GCC, we need to manually set them here because it's not CMake building the project -- it's a Python
+    # process which doesn't have access to our environment variables. As such, we need to manually add the contents
+    # of NVCC_PREPEND_FLAGS, which is normally prepended to the NVCC_FLAGS by NVCC itself, to NVCC_FLAGS.
+    + lib.optionalString cudaSupport ''
+      export NVCC_FLAGS="$NVCC_PREPEND_FLAGS $NVCC_FLAGS"
+    '';
 
   env = lib.attrsets.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
@@ -79,7 +90,7 @@ buildPythonPackage {
   nativeBuildInputs = [
     ninja
     which
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   propagatedBuildInputs = [
     numpy
