@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
+, nixosTests
 , nix-update-script
 , protobuf
 , rust-jemalloc-sys
@@ -53,7 +54,13 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) quickwit;
+      inherit (nixosTests.vector) syslog-quickwit;
+    };
+    updateScript = nix-update-script { };
+  };
 
   checkFlags = [
     # tries to make a network access
