@@ -1,4 +1,4 @@
-{ appleDerivation', stdenvNoCC }:
+{ lib, appleDerivation', stdenvNoCC }:
 
 appleDerivation' stdenvNoCC {
   installPhase = ''
@@ -17,4 +17,8 @@ appleDerivation' stdenvNoCC {
     setjmp.h
     ucontext.h
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
