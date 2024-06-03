@@ -37,6 +37,12 @@ in
       exdoc = self.packages.erlang_26.ex_doc;
       inherit wxSupport systemdSupport;
     };
+    erlang_27_odbc = self.interpreters.erlang_27.override { odbcSupport = true; };
+    erlang_27_javac = self.interpreters.erlang_27.override { javacSupport = true; };
+    erlang_27_odbc_javac = self.interpreters.erlang_27.override {
+      javacSupport = true;
+      odbcSupport = true;
+    };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
       wxGTK = wxGTK32;
