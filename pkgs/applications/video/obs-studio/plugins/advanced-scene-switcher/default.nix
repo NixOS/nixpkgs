@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libremidi
     nlohmann_json
     obs-studio
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     procps
     qtbase
     tesseract
