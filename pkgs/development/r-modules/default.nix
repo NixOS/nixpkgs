@@ -310,6 +310,7 @@ let
     rmsb = [ self.rstantools ];
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
+    disbayes = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
