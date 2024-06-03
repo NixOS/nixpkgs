@@ -1,5 +1,5 @@
 /**
-  Nixpkgs/NixOS option handling.
+  Module System option handling.
 */
 { lib }:
 
@@ -69,7 +69,7 @@ rec {
     # Type
 
     ```
-    isOption :: a -> bool
+    isOption :: a -> Bool
     ```
 
   */
@@ -82,8 +82,8 @@ rec {
 
     # Inputs
 
-    Structured function argument
-    : Attribute set containing the following attributes.
+    Structured attribute set
+    : Attribute set containing none or some of the following attributes.
 
       `default`
       : Optional default value used when no definition is given in the configuration.
@@ -347,7 +347,7 @@ rec {
   mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
 
   /**
-    This option accepts anything, but it does not produce any result.
+    This option accepts arbitrary definitions, but it does not produce an option value.
 
     This is useful for sharing a module across different module sets
     without having to implement similar features as long as the
@@ -358,7 +358,7 @@ rec {
 
     `attrs`
 
-    : 1\. Function argument
+    : Attribute set whose attributes override the argument to `mkOption`.
   */
   mkSinkUndeclaredOptions = attrs: mkOption ({
     internal = true;
@@ -374,8 +374,9 @@ rec {
   } // attrs);
 
   /**
-    Merges multiple definitions of an option into a single value
+    A merge function that merges multiple definitions of an option into a single value
     by checking that they are all equal.
+    Merge functions are typically used for constructing option types.
 
     # Inputs
 
