@@ -372,6 +372,7 @@ let
     gert = [ pkgs.libgit2 ];
     haven = with pkgs; [ zlib.dev ];
     hellorust = [ pkgs.cargo ];
+    hgwrr = [ pkgs.gsl ];
     h5vc = with pkgs; [ zlib.dev bzip2.dev xz.dev ];
     yyjsonr = with pkgs; [ zlib.dev ];
     RNifti = with pkgs; [ zlib.dev ];
