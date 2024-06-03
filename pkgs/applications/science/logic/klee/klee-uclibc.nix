@@ -6,6 +6,7 @@
 , python3
 , curl
 , which
+, nix-update-script
 , debugRuntime ? true
 , runtimeAsserts ? false
 , extraKleeuClibcConfig ? {}
@@ -88,6 +89,10 @@ llvmPackages.stdenv.mkDerivation rec {
   makeFlags = ["HAVE_DOT_CONFIG=y"];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(\d\.\d)" ];
+  };
 
   meta = with lib; {
     description = "A modified version of uClibc for KLEE.";
