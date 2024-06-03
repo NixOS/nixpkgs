@@ -362,5 +362,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                         "launchd" "842.92.1" "macos-10.9.2"
                         "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs="
                         {};
+                      Libm = applePackageMapping
+                        "Libm" "2026" "macos-10.7"
+                        "sha256-KjMETfT4qJm0m0Ux/F6Rq8bI4Q4UVnFx6IKbKxXd+Es="
+                        {};
                     };
 }
