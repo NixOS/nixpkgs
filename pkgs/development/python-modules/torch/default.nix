@@ -448,13 +448,10 @@ buildPythonPackage rec {
       pybind11
       removeReferencesTo
     ]
-    ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        autoAddDriverRunpath
-        cuda_nvcc
-      ]
-    )
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+    ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =
