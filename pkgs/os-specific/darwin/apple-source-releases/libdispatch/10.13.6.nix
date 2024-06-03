@@ -1,4 +1,4 @@
-{ appleDerivation', stdenvNoCC }:
+{ lib, appleDerivation', stdenvNoCC }:
 
 appleDerivation' stdenvNoCC {
   dontConfigure = true;
@@ -36,4 +36,8 @@ appleDerivation' stdenvNoCC {
     os/object.h
     os/object_private.h
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
