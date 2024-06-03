@@ -42,8 +42,8 @@ appimageTools.wrapType2 rec {
   meta = with lib; {
     description = "Graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       aw
       eclairevoyant
       nshalman
