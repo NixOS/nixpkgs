@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ekalinin";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-aW/aNZbFXfP4bF/Nlvv419IDfaJRA1pJYM7awj+6Hz0=";
+    hash = "sha256-85Zr4RbmNeW3JAdtvDblWaPTivWWUJKh+mJbtsGJVO4=";
   };
 
   propagatedBuildInputs = [ setuptools ];
