@@ -313,6 +313,7 @@ let
     disbayes = [ self.rstantools ];
     tipsae = [ self.rstantools ];
     TriDimRegression = [ self.rstantools ];
+    bbmix = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
