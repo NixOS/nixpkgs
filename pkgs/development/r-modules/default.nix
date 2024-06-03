@@ -312,6 +312,7 @@ let
     interactiveDisplay = [ self.BiocManager ];
     disbayes = [ self.rstantools ];
     tipsae = [ self.rstantools ];
+    TriDimRegression = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
