@@ -96,6 +96,8 @@
            containerPath = "/usr/bin/nvidia-powerd"; }
          { hostPath = lib.getExe' nvidia-driver "nvidia-smi";
            containerPath = "/usr/bin/nvidia-smi"; }])
+         { hostPath = lib.getExe' nvidia-driver "nvidia-ctk";
+           containerPath = "/usr/bin/nvidia-ctk"; }])
       # nvidia-docker 1.0 uses /usr/local/nvidia/lib{,64}
       #   e.g.
       #     - https://gitlab.com/nvidia/container-images/cuda/-/blob/e3ff10eab3a1424fe394899df0e0f8ca5a410f0f/dist/12.3.1/ubi9/base/Dockerfile#L44
