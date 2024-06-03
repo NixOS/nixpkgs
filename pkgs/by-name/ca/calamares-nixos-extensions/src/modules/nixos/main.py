@@ -224,9 +224,9 @@ cfgdeepin = """  # Enable the X11 windowing system.
 """
 
 cfgkeymap = """  # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "@@kblayout@@";
-    xkbVariant = "@@kbvariant@@";
+    variant = "@@kbvariant@@";
   };
 
 """
