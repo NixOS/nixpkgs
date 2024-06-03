@@ -13,24 +13,24 @@
 
 let
   pname = "lx-music-desktop";
-  version = "2.7.0";
+  version = "2.8.0";
 
   buildUrl = version: arch: "https://github.com/lyswhut/lx-music-desktop/releases/download/v${version}/lx-music-desktop_${version}_${arch}.deb";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = buildUrl version "amd64";
-      hash = "sha256-+mCAFfiJwa+RQ/9vnSPDrC1LoLIoZyFUEJAF6sXdqRM=";
+      hash = "sha256-Kt/foI7NrXV+Ex2DxLRyP3bVFw0Bx4TLuMyBMZD0bDw=";
     };
 
     aarch64-linux = fetchurl {
       url = buildUrl version "arm64";
-      hash = "sha256-fDlgHJqoZLGnUuZeZGdocYLbsE02QBrWPKS31fbGThk=";
+      hash = "sha256-4X4fXb2V/FigArcIgpgkNBa2+mOemPOx/HkxPlx//gw=";
     };
 
     armv7l-linux = fetchurl {
       url = buildUrl version "armv7l";
-      hash = "sha256-X6EXsBvTbPGXCJ+ektMCMGDG2zqGKBvWT/TwjGFL3ug=";
+      hash = "sha256-uWEQYOT4wxg6HWoL18mEpWF8pONl5Bwf/bnoN4X+A7c=";
     };
   };
 
