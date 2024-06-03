@@ -32,7 +32,7 @@ appimageTools.wrapType2 rec {
         -t $out/share/applications
     substituteInPlace \
         $out/share/applications/Chrysalis.desktop \
-        --replace 'Exec=Chrysalis' 'Exec=${pname}'
+        --replace-fail 'Exec=Chrysalis' 'Exec=${pname}'
 
     install -Dm444 ${appimageContents}/usr/share/icons/hicolor/256x256/chrysalis.png -t $out/share/pixmaps
   '';
