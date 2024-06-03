@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   passthru.tests = {
-    inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;
+    inherit (nixosTests.lvm2) lvm-thinpool-linux-latest lvm-thinpool-sd-stage-1-linux-latest;
   };
 
   meta = with lib; {
