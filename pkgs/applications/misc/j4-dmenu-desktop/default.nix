@@ -1,22 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, cmake, dmenu }:
-
+{
+  lib,
+  catch2_3,
+  cmake,
+  dmenu,
+  fetchFromGitHub,
+  fmt,
+  meson,
+  ninja,
+  pkg-config,
+  spdlog,
+  stdenv,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "j4-dmenu-desktop";
-  version = "unstable-2023-09-12";
+  version = "r3.0";
 
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "j4-dmenu-desktop";
-    rev = "7e3fd045482a8ea70619e422975b52feabc75175";
-    hash = "sha256-8PmfzQkHlEdMbrcQO0bPruP3jaKEcr/17x0/Z7Jedh0=";
+    rev = finalAttrs.version;
+    hash = "sha256-/HlH7BIQvsczzXm8SFwSRKlt5kj38l3DYFJ655J1qas=";
   };
 
   postPatch = ''
     substituteInPlace src/main.cc \
-        --replace "dmenu -i" "${lib.getExe dmenu} -i"
+        --replace-fail "dmenu -i" "${lib.getExe dmenu} -i"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    catch2_3
+    cmake
+    fmt
+    meson
+    ninja
+    pkg-config
+    spdlog
+  ];
 
   # tests are fetching an external git repository
   cmakeFlags = [
