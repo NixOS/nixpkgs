@@ -63,7 +63,6 @@ in
         ExecStart = lib.concatStringsSep " " [
           (lib.getExe cfg.package)
           cfg.mode
-          "--disable-update-check"
           "--config $\{CREDENTIALS_DIRECTORY}/config.yaml" # TODO: support other formats
         ];
 
