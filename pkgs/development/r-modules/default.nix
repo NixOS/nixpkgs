@@ -311,6 +311,7 @@ let
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
     disbayes = [ self.rstantools ];
+    tipsae = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
