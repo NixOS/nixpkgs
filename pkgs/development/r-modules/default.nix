@@ -351,6 +351,7 @@ let
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
+    fcl = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
     fingerPro = [ pkgs.gsl ];
