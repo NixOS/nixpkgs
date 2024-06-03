@@ -17,6 +17,11 @@
     url = "https://registry.npmjs.org/pnpm/-/pnpm-${finalAttrs.version}.tgz";
     inherit hash;
   };
+  # Remove binary files from src, we don't need them, and this way we make sure
+  # our distribution is free of binaryNativeCode
+  preConfigure = ''
+    rm -r dist/reflink.*node dist/vendor
+  '';
 
   buildInputs = lib.optionals withNode [ nodejs ];
 
