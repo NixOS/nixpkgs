@@ -348,6 +348,8 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 
 #### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
+NOTE: Nixpkgs pnpm tooling doesn't support building projects with a `pnpm-workspace.yaml`, or building monorepos. It maybe possible to use `pnpm.fetchDeps` for these projects, but it may be hard or impossible to produce a binary from such projects ([an example attempt](https://github.com/NixOS/nixpkgs/pull/290715#issuecomment-2144543728)).
+
 If the pnpm project is in a subdirectory, you can just define `sourceRoot` or `setSourceRoot` for `fetchDeps`. Note, that projects using `pnpm-workspace.yaml` are currently not supported, and will probably not work using this approach.
 If `sourceRoot` is different between the parent derivation and `fetchDeps`, you will have to set `pnpmRoot` to effectively be the same location as it is in `fetchDeps`.
 
