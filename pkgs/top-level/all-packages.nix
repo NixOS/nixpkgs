@@ -38089,8 +38089,6 @@ with pkgs;
 
   labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
 
-  lapack = callPackage ../build-support/alternatives/lapack { };
-
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
   lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
