@@ -14363,6 +14363,12 @@
     githubId = 1009523;
     name = "Ashijit Pramanik";
   };
+  Name = {
+    name = "Name";
+    email = "lasagna@garfunkles.space";
+    github = "namescode";
+    githubId = 86119896;
+  };
   name-snrl = {
     github = "name-snrl";
     githubId = 72071763;
