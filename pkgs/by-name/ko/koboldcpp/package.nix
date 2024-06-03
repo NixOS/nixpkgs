@@ -22,7 +22,7 @@
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
-  cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
+  cudaArches ? cudaPackages.flags.realArches or [ ],
 
   clblastSupport ? stdenv.isLinux,
   clblast,
@@ -67,7 +67,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
-  ];
+  ] ++ lib.optionals cublasSupport [ cudaPackages.cuda_nvcc ];
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
@@ -88,7 +88,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
       cudaPackages.cuda_cudart
       cudaPackages.cuda_cccl
     ]
@@ -129,7 +128,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
     (makeBool "LLAMA_METAL" metalSupport)
-    (lib.optionals cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
+    (lib.optionalString cublasSupport "CUDA_DOCKER_ARCH=${builtins.head cudaArches}")
   ];
 
   installPhase = ''
