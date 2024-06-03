@@ -6590,6 +6590,12 @@ self: super: with self; {
     inherit python;
   });
 
+  lgpio = toPythonModule (pkgs.lgpio.override {
+    inherit buildPythonPackage;
+    pyProject = "PY_LGPIO";
+    lgpioWithoutPython = pkgs.lgpio;
+  });
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
