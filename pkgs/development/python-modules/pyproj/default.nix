@@ -2,17 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
-  proj,
+  fetchpatch,
+  pytestCheckHook,
   pythonOlder,
   substituteAll,
-  cython,
-  pytestCheckHook,
-  mock,
+
   certifi,
+  cython,
+  mock,
   numpy,
-  shapely,
   pandas,
+  proj,
+  shapely,
   xarray,
 }:
 
@@ -36,6 +37,12 @@ buildPythonPackage rec {
       proj = proj;
       projdev = proj.dev;
     })
+
+    # fix test failure caused by update of EPSG DB
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/3f7c7e5bcec33d9b2f37ceb03c484ea318dff3ce.patch";
+      hash = "sha256-0J8AlInuhFDAYIBJAJ00XbqIanJY/D8xPVwlOapmLDE=";
+    })
   ];
 
   nativeBuildInputs = [ cython ];
@@ -44,11 +51,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ certifi ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
     numpy
-    shapely
     pandas
+    pytestCheckHook
+    shapely
     xarray
   ];
 
