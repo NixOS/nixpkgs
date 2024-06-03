@@ -4,6 +4,7 @@
   pythonOlder,
   hatchling,
   opentelemetry-api,
+  opentelemetry-instrumentation,
   opentelemetry-sdk,
   opentelemetry-test-utils,
   prometheus-client,
@@ -13,7 +14,9 @@
 buildPythonPackage {
   inherit (opentelemetry-api) src;
   pname = "opentelemetry-exporter-prometheus";
-  version = "0.44b0";
+  # This package is in the same repository as `opentelemetry-api`,
+  # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
+  version = opentelemetry-instrumentation.version;
   pyproject = true;
 
   disabled = pythonOlder "3.8";
