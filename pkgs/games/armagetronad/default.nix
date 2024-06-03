@@ -22,6 +22,7 @@
 , libxml2
 , protobuf
 , xvfb-run
+, gnugrep
 , dedicatedServer ? false
 }:
 
@@ -54,15 +55,14 @@ let
     # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
     ${unstableVersionMajor} =
       let
-        rev = "e7f41fd26363e7c6a72f0c673470ed06ab54ae08";
-        hash = "sha256-Uxxk6L7WPxKYQ4CNxWwEtvbZjK8BqYNTuwwdleZ44Ro=";
+        rev = "391a74625c1222dd180f069f1b61c3e069a3ba8c";
+        hash = "sha256-fUY0dBj85k0QhnAoDzyBmmKmRh9oCYC6r6X4ukt7/L0=";
       in dedicatedServer: {
         version = "${unstableVersionMajor}-${builtins.substring 0 8 rev}";
         src = fetchArmagetron rev hash;
         extraBuildInputs = [ protobuf boost ]
           ++ lib.optionals (!dedicatedServer) [ glew ftgl freetype SDL2 SDL2_image SDL2_mixer ];
         extraNativeBuildInputs = [ bison ];
-        extraNativeInstallCheckInputs = lib.optionals (!dedicatedServer) [ xvfb-run ];
       };
 
     # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
@@ -136,7 +136,9 @@ let
       nativeBuildInputs = [ autoconf automake gnum4 pkg-config which python3 ]
         ++ (resolvedParams.extraNativeBuildInputs or []);
 
-      nativeInstallCheckInputs = resolvedParams.extraNativeInstallCheckInputs or [];
+      nativeInstallCheckInputs = [ gnugrep ]
+        ++ lib.optional (!dedicatedServer) xvfb-run
+        ++ (resolvedParams.extraNativeInstallCheckInputs or []);
 
       postInstall = lib.optionalString (!dedicatedServer) ''
         mkdir -p $out/share/{applications,icons/hicolor}
@@ -154,18 +156,21 @@ let
         else
           run="$bin"
         fi
+        echo "Checking game info:" >&2
         version="$($run --version || true)"
+        echo "  - Version: $version" >&2
         prefix="$($run --prefix || true)"
-        rubber="$($run --doc | grep -m1 CYCLE_RUBBER)"
-
-        echo "Version: $version" >&2
-        echo "Prefix: $prefix" >&2
-        echo "Docstring: $rubber" >&2
+        echo "  - Prefix: $prefix" >&2
+        rubber="$(($run --doc || true) | grep -m1 CYCLE_RUBBER)"
+        echo "  - Docstring: $rubber" >&2
 
         if [[ "$version" != *"${resolvedParams.version}"* ]] || \
            [ "$prefix" != "$out" ] || \
            [[ ! "$rubber" =~ ^CYCLE_RUBBER[[:space:]]+Niceness[[:space:]]factor ]]; then
+          echo "Something didn't match. :-(" >&2
           exit 1
+        else
+          echo "Everything is ok." >&2
         fi
       '';
 
