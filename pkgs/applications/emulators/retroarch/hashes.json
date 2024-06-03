@@ -165,10 +165,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bsnes-libretro",
-            "rev": "37606e377ebae5d3175cd6267e4ddfa3f3c5091f",
-            "hash": "sha256-B1ragos8ZeCjg8Xlt6SC8V69iTZ6OXTpPptlWw4EMOU="
+            "rev": "44f6ce5dedb138ded8e59d71df18cae5b0655eba",
+            "hash": "sha256-7iB2VQ3f8YVOV3C+Rkviaj7USoZdO/riDnT9kCdzc8k="
         },
-        "version": "unstable-2024-05-17"
+        "version": "unstable-2024-05-31"
     },
     "bsnes-hd": {
         "fetcher": "fetchFromGitHub",
