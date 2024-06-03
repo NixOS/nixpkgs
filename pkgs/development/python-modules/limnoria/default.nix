@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, chardet
-, cryptography
-, feedparser
-, fetchPypi
-, mock
-, pysocks
-, pytestCheckHook
-, python-dateutil
-, python-gnupg
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  cryptography,
+  feedparser,
+  fetchPypi,
+  mock,
+  pysocks,
+  pytestCheckHook,
+  python-dateutil,
+  python-gnupg,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2023.11.18";
+  version = "2024.4.26";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ftm5OGTt1emQsYso3hAUA9yMNBkIK5jybdFaRKJJk0o=";
+    hash = "sha256-H8GAJvmkYJy8PJsXn4Yl9qY3zb9aFBa7sr4DN0bKYfQ=";
   };
 
   propagatedBuildInputs = [
@@ -33,13 +34,9 @@ buildPythonPackage rec {
     pysocks
     python-dateutil
     python-gnupg
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    pytz
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ pytz ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \

@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, cython_0
-, setuptools
-, wheel
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  cython_0,
+  setuptools,
+  wheel,
+  numpy,
 }:
 buildPythonPackage rec {
   pname = "daqp";
@@ -28,7 +29,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" "-p" "'*.py'" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-p"
+    "'*.py'"
+    "-v"
+  ];
 
   nativeBuildInputs = [
     cython_0
@@ -36,9 +43,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "daqp" ];
 

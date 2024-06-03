@@ -1,15 +1,16 @@
-{ lib
-, beautifultable
-, buildPythonPackage
-, click
-, click-default-group
-, fetchFromGitHub
-, humanize
-, keyring
-, unittestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
+{
+  lib,
+  beautifultable,
+  buildPythonPackage,
+  click,
+  click-default-group,
+  fetchFromGitHub,
+  humanize,
+  keyring,
+  unittestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "mwdblib"
-  ];
+  pythonImportsCheck = [ "mwdblib" ];
 
   meta = with lib; {
     description = "Python client library for the mwdb service";

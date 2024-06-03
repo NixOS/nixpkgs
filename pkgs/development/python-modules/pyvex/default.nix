@@ -1,29 +1,28 @@
-{ lib
-, stdenv
-, bitstring
-, buildPythonPackage
-, cffi
-, fetchPypi
-, pycparser
-, pythonOlder
-, setuptools
+{
+  lib,
+  stdenv,
+  bitstring,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pycparser,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.101";
+  version = "9.2.104";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zI86NYe0b9ppm9Zv6+zfB3UclhIm1TTqcC9vrBn3NR8=";
+    hash = "sha256-lFzvo+DZgVathfAx++A7lA9dRrUqDyAg204h7M17zW8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bitstring
@@ -51,14 +50,16 @@ buildPythonPackage rec {
   # Switch to GitHub release after all angr parts are present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyvex"
-  ];
+  pythonImportsCheck = [ "pyvex" ];
 
   meta = with lib; {
     description = "Python interface to libVEX and VEX IR";
     homepage = "https://github.com/angr/pyvex";
-    license = with licenses; [ bsd2 gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      bsd2
+      gpl3Plus
+      lgpl3Plus
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 
-# pythonPackages
-, pytest
+  # pythonPackages
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     sha256 = "0jfn11bl05k3qkqw0f4vi2i2lhllxdrbb1732qiisdy9fbvv8611";
   };
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     pytest
@@ -31,8 +30,6 @@ buildPythonPackage rec {
     mainProgram = "names";
     homepage = "https://github.com/treyhunner/names";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

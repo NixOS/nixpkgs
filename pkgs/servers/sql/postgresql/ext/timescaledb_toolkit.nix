@@ -4,7 +4,6 @@
 , postgresql
 , nixosTests
 , cargo-pgrx_0_10_2
-, fetchCrate
 , nix-update-script
 , stdenv
 }:

@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, fetchPypi
-, nose
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,10 @@ buildPythonPackage rec {
   meta = {
     description = "Library to create spreadsheet files compatible with MS";
     homepage = "https://github.com/python-excel/xlwt";
-    license = with lib.licenses; [ bsdOriginal bsd3 lgpl21 ];
+    license = with lib.licenses; [
+      bsdOriginal
+      bsd3
+      lgpl21
+    ];
   };
 }

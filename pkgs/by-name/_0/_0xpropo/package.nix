@@ -5,14 +5,14 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "0xpropo";
-  version = "1.000";
+  version = "1.100";
 
   src = let
     underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
   in
     fetchzip {
       url = "https://github.com/0xType/0xPropo/releases/download/${version}/0xPropo_${underscoreVersion}.zip";
-      hash = "sha256-yIhabwHjBipkcmsSRaokBXCbawQkUNOU8v+fbn2iiY4=";
+      hash = "sha256-ZlZNvn9xiOxS+dfGI1rGbh6XlXo3/puAm2vhKh63sK4=";
     };
 
   installPhase = ''

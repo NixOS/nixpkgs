@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
-, enlighten
-, zstandard
-, withGUI ? true
-, kivy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pythonOlder,
+  enlighten,
+  zstandard,
+  withGUI ? true,
+  kivy,
 }:
 
 buildPythonPackage rec {

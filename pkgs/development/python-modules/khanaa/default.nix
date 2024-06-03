@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, pythonOlder
+  pythonOlder,
 
-, unittestCheckHook
+  unittestCheckHook,
 
-, setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,24 +24,22 @@ buildPythonPackage rec {
     hash = "sha256-BzxNHYMkp5pdJYQ80EI5jlP654yX9woW7wz1jArCln4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   pythonImportsCheck = [ "khanaa" ];
 
-  meta = with lib;
-    {
-      description = "A tool to make spelling Thai more convenient";
-      homepage = "https://github.com/cakimpei/khanaa";
-      changelog = "https://github.com/cakimpei/khanaa/blob/main/CHANGELOG.md";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vizid ];
-    };
+  meta = with lib; {
+    description = "A tool to make spelling Thai more convenient";
+    homepage = "https://github.com/cakimpei/khanaa";
+    changelog = "https://github.com/cakimpei/khanaa/blob/main/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+  };
 }

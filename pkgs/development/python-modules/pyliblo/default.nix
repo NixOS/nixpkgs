@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, isPyPy
-, pythonAtLeast
-, liblo
-, cython_0
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPyPy,
+  pythonAtLeast,
+  liblo,
+  cython_0,
 }:
 
 buildPythonPackage rec {
@@ -34,5 +35,4 @@ buildPythonPackage rec {
     description = "Python wrapper for the liblo OSC library";
     license = licenses.lgpl21Only;
   };
-
 }

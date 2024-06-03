@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, pytestCheckHook
-, pdm-backend
-, numpy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  pytestCheckHook,
+  pdm-backend,
+  numpy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -35,13 +36,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsonconversion"
-  ];
+  pythonImportsCheck = [ "jsonconversion" ];
 
   meta = with lib; {
     description = "This python module helps converting arbitrary Python objects into JSON strings and back";

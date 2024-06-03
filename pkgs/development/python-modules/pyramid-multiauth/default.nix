@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyramid
-, unittestCheckHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyramid,
+  unittestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,23 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-+Aa+Vc4qCqDe/W5m/RBpYAyOMJkBv+ZGSqElJlkHqs4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyramid
-  ];
+  propagatedBuildInputs = [ pyramid ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/mozilla-services/pyramid_multiauth/releases/tag/${version}";
     description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
     homepage = "https://github.com/mozilla-services/pyramid_multiauth";
     license = licenses.mpl20;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

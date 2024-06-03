@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pathlib-abc";
-  version = "0.2.0";
+  version = "0.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,20 +17,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pathlib_abc";
     inherit version;
-    hash = "sha256-ua9rOf1RMhSFZ47DgD0KEeAqIuhp6AUsrLbo9l3nuGI=";
+    hash = "sha256-CE573ZGbD3d0kUqeZM2GobOYYPgfeB3XJCWGMfKRWr4=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  pythonImportsCheck = [
-    "pathlib_abc"
-  ];
+  pythonImportsCheck = [ "pathlib_abc" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python base classes for rich path objects";

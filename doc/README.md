@@ -345,4 +345,4 @@ Typographic replacements are enabled. Check the [list of possible replacement pa
 
 ## Getting help
 
-If you need documentation-specific help or reviews, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on your pull request.
+If you need documentation-specific help or reviews, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on your pull request.

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, asgineer
-, bcrypt
-, buildPythonPackage
-, fetchFromGitHub
-, iptools
-, itemdb
-, jinja2
-, markdown
-, nodejs
-, pscript
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, uvicorn
+{
+  lib,
+  stdenv,
+  asgineer,
+  bcrypt,
+  buildPythonPackage,
+  fetchFromGitHub,
+  iptools,
+  itemdb,
+  jinja2,
+  markdown,
+  nodejs,
+  pscript,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  uvicorn,
 }:
 
 buildPythonPackage rec {

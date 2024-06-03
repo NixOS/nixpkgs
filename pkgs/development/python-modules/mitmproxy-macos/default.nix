@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/mitmproxy-macos";
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  pythonImportsCheck = [
-    "mitmproxy_macos"
-  ];
+  pythonImportsCheck = [ "mitmproxy_macos" ];
 
   meta = with lib; {
     description = "The MacOS Rust bits in mitmproxy";
@@ -36,5 +33,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ boltzmannrain ];
     platforms = platforms.darwin;
+    broken = true; # last successful build 2023-12-04
   };
 }

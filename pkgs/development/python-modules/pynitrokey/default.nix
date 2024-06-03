@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, installShellFiles
-, libnitrokey
-, flit-core
-, certifi
-, cffi
-, click
-, cryptography
-, ecdsa
-, fido2
-, intelhex
-, nkdfu
-, python-dateutil
-, pyusb
-, requests
-, spsdk
-, tqdm
-, tlv8
-, typing-extensions
-, pyserial
-, protobuf
-, click-aliases
-, semver
-, nethsm
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  installShellFiles,
+  libnitrokey,
+  flit-core,
+  certifi,
+  cffi,
+  click,
+  cryptography,
+  ecdsa,
+  fido2,
+  intelhex,
+  nkdfu,
+  python-dateutil,
+  pyusb,
+  requests,
+  spsdk,
+  tqdm,
+  tlv8,
+  typing-extensions,
+  pyserial,
+  protobuf,
+  click-aliases,
+  semver,
+  nethsm,
+  importlib-metadata,
 }:
 
 let
@@ -80,9 +81,7 @@ buildPythonPackage {
 
   # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
-  makeWrapperArgs = [
-    "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
-  ];
+  makeWrapperArgs = [ "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}" ];
 
   # no tests
   doCheck = false;
@@ -100,8 +99,14 @@ buildPythonPackage {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
     changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ frogamic raitobezarius ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      frogamic
+      raitobezarius
+    ];
     inherit mainProgram;
   };
 }

@@ -1,27 +1,26 @@
-{ lib
-, azure-core
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
-  version = "5.11.7";
+  version = "5.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C0Ywon7jrAxEjD8jdSHV3K71qKGnJBQjUGwEY3oKRLA=";
+    hash = "sha256-EqF/V51puTDZBuqVeuzEVoJ0/xrQn8qhiLt7/pvpsXY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-core

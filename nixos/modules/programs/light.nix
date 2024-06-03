@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.light;
 
@@ -10,9 +8,9 @@ in
   options = {
     programs.light = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to install Light backlight control command
           and udev rules granting access to members of the "video" group.
@@ -20,8 +18,8 @@ in
       };
 
       brightnessKeys = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable brightness control with keyboard keys.
@@ -38,8 +36,8 @@ in
           '';
         };
 
-        step = mkOption {
-          type = types.int;
+        step = lib.mkOption {
+          type = lib.types.int;
           default = 10;
           description = ''
             The percentage value by which to increase/decrease brightness.
@@ -51,14 +49,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.light ];
     services.udev.packages = [ pkgs.light ];
-    services.actkbd = mkIf cfg.brightnessKeys.enable {
+    services.actkbd = lib.mkIf cfg.brightnessKeys.enable {
       enable = true;
       bindings = let
         light = "${pkgs.light}/bin/light";
-        step = toString cfg.brightnessKeys.step;
+        step = builtins.toString cfg.brightnessKeys.step;
       in [
         {
           keys = [ 224 ];

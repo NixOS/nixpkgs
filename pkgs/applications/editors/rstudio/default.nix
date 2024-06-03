@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems
@@ -29,8 +28,6 @@
 , soci
 , postgresql
 , nodejs
-, mkYarnModules
-, fetchYarnDeps
 , qmake
 , server ? false # build server version
 , sqlite

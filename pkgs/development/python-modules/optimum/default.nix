@@ -1,29 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, coloredlogs
-, datasets
-, evaluate
-, h5py
-, huggingface-hub
-, numpy
-, onnx
-, onnxruntime
-, packaging
-, protobuf
-, sympy
-, tensorflow
-, tf2onnx
-, timm
-, torch
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  coloredlogs,
+  datasets,
+  diffusers,
+  evaluate,
+  h5py,
+  huggingface-hub,
+  numpy,
+  onnx,
+  onnxruntime,
+  packaging,
+  protobuf,
+  setuptools,
+  sympy,
+  tensorflow,
+  tf2onnx,
+  timm,
+  torch,
+  transformers,
 }:
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.19.1";
-  format = "setuptools";
+  version = "1.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -31,10 +34,12 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "optimum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EHu3p3M7xBjMnf3tKsneYOZtd9YWsC0qok1fnk4TMAg=";
+    hash = "sha256-aQNDVNWTgY2LEtug229SEZRMvKHpsQfiTPWW4Lh3hs4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     coloredlogs
     datasets
     huggingface-hub
@@ -45,7 +50,7 @@ buildPythonPackage rec {
     transformers
   ] ++ transformers.optional-dependencies.sentencepiece;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     onnxruntime = [
       onnx
       onnxruntime
@@ -67,9 +72,7 @@ buildPythonPackage rec {
       h5py
       numpy
     ];
-    diffusers = [
-      # diffusers
-    ];
+    diffusers = [ diffusers ];
     intel = [
       # optimum-intel
     ];

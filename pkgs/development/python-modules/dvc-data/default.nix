@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, dictdiffer
-, diskcache
-, dvc-objects
-, fetchFromGitHub
-, funcy
-, pygtrie
-, pythonOlder
-, setuptools-scm
-, shortuuid
-, sqltrie
+{
+  lib,
+  buildPythonPackage,
+  dictdiffer,
+  diskcache,
+  dvc-objects,
+  fetchFromGitHub,
+  funcy,
+  pygtrie,
+  pythonOlder,
+  setuptools-scm,
+  shortuuid,
+  sqltrie,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-pr5RtVlGKKtpcmmCNGqcLiBFzJcajpqtPjBbzeCCHF8=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     dictdiffer
@@ -43,9 +42,7 @@ buildPythonPackage rec {
   # Tests depend on upath which is unmaintained and only available as wheel
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dvc_data"
-  ];
+  pythonImportsCheck = [ "dvc_data" ];
 
   meta = with lib; {
     description = "DVC's data management subsystem";

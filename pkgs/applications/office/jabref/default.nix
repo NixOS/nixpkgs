@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , fetchFromGitHub
 , wrapGAppsHook3
 , makeDesktopItem
@@ -21,20 +20,16 @@ let
       pin = "2.2.1-20230117.075740-16";
     };
   };
-  jackson-datatype-jsr310 = fetchurl {
-    url = "https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar";
-    hash = "sha256-vqHXgAnrxOXVSRij967F2p+9CfZiwZGiF//PN+hSfF4=";
-  };
 in
 stdenv.mkDerivation rec {
-  version = "5.12";
+  version = "5.13";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-+ltd9hItmMkEpKzX6TFfFy5fiOkLBK/tQNsh8OVDeoc=";
+    hash = "sha256-inE2FXAaEEiq7343KwtjEiTEHLtn01AzP0foTpsLoAw=";
     fetchSubmodules = true;
   };
 
@@ -47,7 +42,7 @@ stdenv.mkDerivation rec {
       categories = [ "Office" ];
       icon = "jabref";
       exec = "JabRef %U";
-      startupWMClass = "org.jabref.gui.JabRefMain";
+      startupWMClass = "org.jabref.gui.JabRefGUI";
       mimeTypes = [ "text/x-bibtex" ];
     })
   ];
@@ -69,13 +64,11 @@ stdenv.mkDerivation rec {
         | sh
       mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
         $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
-      # This is used but not cached by Gradle.
-      cp ${jackson-datatype-jsr310} $out/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar
     '';
     # Don't move info to share/
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
-    outputHash = "sha256-baP/zNgcc6oYwwbWvT7ontULcKKCw0rTQRkdZMgcWfY=";
+    outputHash = "sha256-lpFIhvPgkzIsHR6IVnn+oPhdSjo0yOIw7USo2+SJCVQ=";
   };
 
   postPatch = ''
@@ -92,9 +85,6 @@ stdenv.mkDerivation rec {
     # Find OpenOffice/LibreOffice binary
     substituteInPlace src/main/java/org/jabref/logic/openoffice/OpenOfficePreferences.java \
       --replace '/usr' '/run/current-system/sw'
-
-    # Don't fetch predatory sources. These source are fetched from online webpages.
-    sed -i -e '/new PJSource/,/);/c);' src/main/java/org/jabref/logic/journals/predatory/PredatoryJournalListCrawler.java
 
     # Add back downloadDependencies task for deps download which is removed upstream in https://github.com/JabRef/jabref/pull/10326
     cat <<EOF >> build.gradle
@@ -117,9 +107,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     # Use the local packages from -deps
-    sed -i -e '/repositories {/a maven { url uri("${deps}") }' \
-      build.gradle \
-      settings.gradle
+    sed -i -e '/repositories {/a maven { url uri("${deps}") }' build.gradle
+    sed -i -e '1i pluginManagement { repositories { maven { url uri("${deps}") } } }' settings.gradle
   '';
 
   nativeBuildInputs = [
@@ -169,9 +158,6 @@ stdenv.mkDerivation rec {
     cp -r build/resources $out/share/java/jabref
 
     tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
-
-    # workaround for https://github.com/NixOS/nixpkgs/issues/162064
-    unzip $out/lib/javafx-web-*-*.jar libjfxwebkit.so -d $out/lib/
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
 

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, tokenize-rt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  tokenize-rt,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-B+wjBy42RwabVz/6qEMGpB0JmwJ9hqSskwcNj4x/B/k=";
   };
 
-  propagatedBuildInputs = [
-    tokenize-rt
-  ];
+  propagatedBuildInputs = [ tokenize-rt ];
 
-  pythonImportsCheck = [
-    "add_trailing_comma"
-  ];
+  pythonImportsCheck = [ "add_trailing_comma" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A tool (and pre-commit hook) to automatically add trailing commas to calls and literals";

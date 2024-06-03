@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, antlr4
-, antlr4-python3-runtime
-, igraph
-, pygments
-, pytestCheckHook
-, pythonRelaxDepsHook
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  antlr4,
+  antlr4-python3-runtime,
+  igraph,
+  pygments,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -48,17 +49,11 @@ buildPythonPackage rec {
     igraph
   ];
 
-  passthru.optional-dependencies.pygments = [
-    pygments
-  ];
+  passthru.optional-dependencies.pygments = [ pygments ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pygments;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pygments;
 
-  pythonImportsCheck = [
-    "explorerscript"
-  ];
+  pythonImportsCheck = [ "explorerscript" ];
 
   meta = with lib; {
     homepage = "https://github.com/SkyTemple/explorerscript";

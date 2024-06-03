@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cu2qu
-, defcon
-, fontfeatures
-, fonttools
-, glyphslib
-, openstep-plist
-, orjson
-, poetry-core
-, pytestCheckHook
-, ufolib2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cu2qu,
+  defcon,
+  fontfeatures,
+  fonttools,
+  glyphslib,
+  openstep-plist,
+  orjson,
+  poetry-core,
+  pytestCheckHook,
+  ufolib2,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     orjson
     ufolib2
   ];
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   doCheck = true;
   nativeCheckInputs = [

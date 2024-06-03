@@ -98,7 +98,7 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ lib.maintainers.eelco ];
+      maintainers = [ ];
     };
     constituents = lib.flatten [
       [
@@ -124,7 +124,7 @@ in rec {
         "nixos.tests.firewall"
         "nixos.tests.ipv6"
         "nixos.tests.login"
-        "nixos.tests.misc"
+        "nixos.tests.misc.default"
         "nixos.tests.nat.firewall"
         "nixos.tests.nat.standalone"
         "nixos.tests.nfs4.simple"

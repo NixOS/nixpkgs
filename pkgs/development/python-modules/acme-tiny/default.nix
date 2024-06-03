@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, fusepy
-, fuse
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  fusepy,
+  fuse,
+  openssl,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [ fusepy fuse ];
+  nativeCheckInputs = [
+    fusepy
+    fuse
+  ];
 
   doCheck = false; # seems to hang, not sure
 

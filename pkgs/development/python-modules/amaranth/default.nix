@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pdm-backend
-, pyvcd
-, jinja2
-, importlib-resources
-, importlib-metadata
-, git
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pdm-backend,
+  pyvcd,
+  jinja2,
+  importlib-resources,
+  importlib-metadata,
+  git,
 
-# for tests
-, pytestCheckHook
-, symbiyosys
-, yices
-, yosys
+  # for tests
+  pytestCheckHook,
+  symbiyosys,
+  yices,
+  yosys,
 }:
 
 buildPythonPackage rec {
@@ -34,12 +35,13 @@ buildPythonPackage rec {
     pdm-backend
   ];
 
-  dependencies = [
-    jinja2
-    pyvcd
-  ] ++
-    lib.optional (pythonOlder "3.9") importlib-resources ++
-    lib.optional (pythonOlder "3.8") importlib-metadata;
+  dependencies =
+    [
+      jinja2
+      pyvcd
+    ]
+    ++ lib.optional (pythonOlder "3.9") importlib-resources
+    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -55,6 +57,10 @@ buildPythonPackage rec {
     mainProgram = "amaranth-rpc";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emily thoughtpolice pbsds ];
+    maintainers = with maintainers; [
+      emily
+      thoughtpolice
+      pbsds
+    ];
   };
 }

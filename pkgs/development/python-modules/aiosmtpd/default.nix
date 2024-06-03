@@ -1,13 +1,14 @@
-{ lib
-, atpublic
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  atpublic,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,16 +25,12 @@ buildPythonPackage rec {
     hash = "sha256-8nQ4BVSLYgZHRGkbujy/olV/+GABlkDhe5wef3hyQpQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     atpublic
     attrs
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -50,9 +47,7 @@ buildPythonPackage rec {
     "test_byclient"
   ];
 
-  pythonImportsCheck = [
-    "aiosmtpd"
-  ];
+  pythonImportsCheck = [ "aiosmtpd" ];
 
   meta = with lib; {
     description = "Asyncio based SMTP server";

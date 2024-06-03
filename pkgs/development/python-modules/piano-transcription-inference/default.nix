@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, fetchurl
-, librosa
-, matplotlib
-, mido
-, torch
-, torchlibrosa
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  fetchurl,
+  librosa,
+  matplotlib,
+  mido,
+  torch,
+  torchlibrosa,
 }:
 
 buildPythonPackage rec {

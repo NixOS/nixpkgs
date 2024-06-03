@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, python
-, isPy27
-, six
-, zope-testing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  python,
+  isPy27,
+  six,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
@@ -37,5 +38,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/manuel";
     license = licenses.zpl20;
   };
-
 }

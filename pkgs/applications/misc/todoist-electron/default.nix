@@ -22,9 +22,7 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  extraPkgs = { pkgs, ... }@args: [
-    pkgs.hidapi
-  ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
+  extraPkgs = pkgs: [ pkgs.hidapi ];
 
   extraInstallCommands = ''
     # Add desktop convencience stuff

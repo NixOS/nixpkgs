@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, nose, minimock }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  nose,
+  minimock,
+}:
 
 buildPythonPackage rec {
   pname = "mypgoclient";
@@ -11,7 +18,10 @@ buildPythonPackage rec {
     sha256 = "0aa28wc55x3rxa7clwfv5v5500ffyaq0vkxaa3v01y1r93dxkdvp";
   };
 
-  nativeCheckInputs = [ nose minimock ];
+  nativeCheckInputs = [
+    nose
+    minimock
+  ];
 
   checkPhase = ''
     nosetests
@@ -22,8 +32,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A gpodder.net client library";
     longDescription = ''
-        The mygpoclient library allows developers to utilize a Pythonic interface
-        to the gpodder.net web services.
+      The mygpoclient library allows developers to utilize a Pythonic interface
+      to the gpodder.net web services.
     '';
     homepage = "https://github.com/gpodder/mygpoclient";
     license = with licenses; [ gpl3 ];

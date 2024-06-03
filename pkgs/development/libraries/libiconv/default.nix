@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableShared "shared")
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
+  passthru = { inherit setupHooks; };
+
   meta = {
     description = "An iconv(3) implementation";
 

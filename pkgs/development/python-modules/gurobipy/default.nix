@@ -17,14 +17,14 @@ let
   };
   platform = platforms.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   hashes = rec {
-    cp311-aarch64-darwin = "sha256-pMwq4TXvr0mrKxZppeW2MQE/KrplWWFGmjKRLKwbHCI=";
-    cp311-aarch64-linux = "sha256-fxJSQUt+nk7JBGtkDi+qTl/js0hnWGZGyht4AqD9g60=";
+    cp311-aarch64-darwin = "sha256-jODaasqXupII5JDE1QLUK+Jd07WJfAtxB3NIHCeuDa4=";
+    cp311-aarch64-linux = "sha256-hx6BgCbI8ojXRA/NS4Qr7N8QBvQ0lfxPbj7G2bi6PXo=";
     cp311-x86_64-darwin = cp311-aarch64-darwin;
-    cp311-x86_64-linux = "sha256-q1nmuWmlDPeNWWw4bX3KECOChNQkwU+6hItYqWcyY4M=";
-    cp312-aarch64-darwin = "sha256-5+1QxYOhjbs01S3gqhkQ9Bx/0/NhbXEi710BGpiC5kM=";
-    cp312-aarch64-linux = "sha256-N7cFtibenj+SrZ7ZtevZtDUdW48DnLC4p5jB9vrWlb8=";
+    cp311-x86_64-linux = "sha256-hiZbepqPPlMcG77m5hwefQtoJk6XZ5W0z3rsaLnmbrg=";
+    cp312-aarch64-darwin = "sha256-H5J44n2CUqOo8jzn2G6gZPehWsbPnZtHXi4Iygx2RRM=";
+    cp312-aarch64-linux = "sha256-xFUR7yizqSsytyfStRigKlZ7q8uY+VgRR/j29DKPWp0=";
     cp312-x86_64-darwin = cp312-aarch64-darwin;
-    cp312-x86_64-linux = "sha256-Aw5xxvCwdgfdT7HMrWT/jKWx3RDjs8IuB4in0ZGdqcw=";
+    cp312-x86_64-linux = "sha256-giNHTNfLX1hIiWOPQlLOnqjrbPWkKQrA4KXug6ujYxI=";
   };
   hash =
     hashes."${pyShortVersion}-${stdenv.system}"
@@ -32,7 +32,7 @@ let
 in
 buildPythonPackage rec {
   pname = "gurobipy";
-  version = "11.0.1";
+  version = "11.0.2";
   inherit format;
 
   src = fetchPypi {

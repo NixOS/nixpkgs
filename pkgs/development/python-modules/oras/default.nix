@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "oras";
-  version = "0.1.29";
+  version = "0.1.30";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "oras-project";
     repo = "oras-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZV+J5zqRBRIddWdmLzzjpZi3M5E/HfkG8lWK9xzy5tw=";
+    hash = "sha256-qdWGqa5W+WI+lQ2TDZUuJF7PSmkc1Kv7UbWL6+Rfyio=";
   };
 
   build-system = [ setuptools ];

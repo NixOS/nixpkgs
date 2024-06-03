@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scotch";
-  version = "6.1.1";
+  version = "7.0.4";
 
   buildInputs = [
     bison
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "scotch";
     repo = "scotch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GUV6s+P56OAJq9AMe+LZOMPICQO/RuIi+hJAecmO5Wc=";
+    hash = "sha256-uaox4Q9pTF1r2BZjvnU2LE6XkZw3x9mGSKLdRVUobGU=";
   };
 
   preConfigure = ''

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "texpresso";
-  version = "0-unstable-2024-04-18";
+  version = "0-unstable-2024-05-23";
 
   nativeBuildInputs = [
     makeWrapper
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "texpresso";
-    rev = "62b2b5913420d92bb2863d9c92ac2072f7aaa5f9";
-    hash = "sha256-kVGRuFVkJvQfl1bEjBU0pyx+SB+k5yI9C6XFiKZRpLQ=";
+    rev = "01cafac1ec6d33d5e169a0202f23a6f565cc55b8";
+    hash = "sha256-uLGanGEUGzxIYFbU3U8LLV3bpn/IN9XltvWCmwSlD7E=";
   };
 
   buildFlags = [ "texpresso" ];

@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, sqlalchemy
-, sqlalchemy-utils
-, six
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  sqlalchemy,
+  sqlalchemy-utils,
+  six,
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, flask }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  flask,
+}:
 
 buildPythonPackage rec {
   pname = "flask-sslify";

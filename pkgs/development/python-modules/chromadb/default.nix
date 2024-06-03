@@ -132,6 +132,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-x" ];
 
   preCheck = ''
+    (($(ulimit -n) < 1024)) && ulimit -n 1024
     export HOME=$(mktemp -d)
   '';
 
@@ -149,10 +150,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "The AI-native open-source embedding database";
-    mainProgram = "chroma";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "chroma";
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

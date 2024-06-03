@@ -24,7 +24,7 @@
 , MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
 , ffmpeg_4 ? null
-, lib, stdenv, fetchpatch
+, lib, stdenv
 , version ? null
 , qtCompatVersion
 , pipewireSupport ? stdenv.isLinux

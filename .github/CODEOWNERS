@@ -137,9 +137,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ
-/pkgs/development/perl-modules      @stigtsp @zakame @dasJ
+/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @dasJ @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo
@@ -306,8 +306,8 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
 # Forgejo
-nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
-pkgs/applications/version-management/forgejo @bendlas @emilylange
+nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @IvarWithoutBones
@@ -345,8 +345,11 @@ pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
 
 # Pretix
 pkgs/by-name/pr/pretix/ @mweinelt
+pkgs/by-name/pr/pretalx/ @mweinelt
 nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/modules/services/web-apps/pretalx.nix @mweinelt
 nixos/tests/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretalx.nix @mweinelt
 
 # incus/lxc/lxd
 nixos/maintainers/scripts/lxd/          @adamcstephens

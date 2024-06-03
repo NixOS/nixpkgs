@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, flit-core
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  flit-core,
+  unittestCheckHook,
 
   # important downstream dependencies
-, flit
-, black
-, mypy
-, setuptools-scm
+  flit,
+  black,
+  mypy,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,12 @@ buildPythonPackage rec {
 
   passthru.tests = {
     # test downstream dependencies
-    inherit flit black mypy setuptools-scm;
+    inherit
+      flit
+      black
+      mypy
+      setuptools-scm
+      ;
   };
 
   meta = with lib; {

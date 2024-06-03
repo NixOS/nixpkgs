@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, google-api-core
-, imagesize
-, nbconvert
-, nbformat
-, numpy
-, opencv4
-, packaging
-, pillow
-, pydantic
-, pyproj
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, setuptools
-, shapely
-, strenum
-, tqdm
-, typeguard
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  google-api-core,
+  imagesize,
+  nbconvert,
+  nbformat,
+  numpy,
+  opencv4,
+  packaging,
+  pillow,
+  pydantic,
+  pyproj,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  setuptools,
+  shapely,
+  strenum,
+  tqdm,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -48,17 +49,11 @@ buildPythonPackage rec {
       --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "python-dateutil"
-  ];
+  pythonRelaxDeps = [ "python-dateutil" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     google-api-core
@@ -98,9 +93,7 @@ buildPythonPackage rec {
     "tests/data"
   ];
 
-  pythonImportsCheck = [
-    "labelbox"
-  ];
+  pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {
     description = "Platform API for LabelBox";

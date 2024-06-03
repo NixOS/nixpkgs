@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+}:
 
 buildPythonPackage {
   version = "0.5.3-2016-09-28";

@@ -428,6 +428,9 @@ in
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
 
+      # Use libconvReal to break an infinite recursion. It will be dropped in the next stage.
+      libiconv = super.libiconvReal;
+
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
@@ -539,7 +542,7 @@ in
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu
-        libedit libffi libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
+        libedit libffi libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4
         ncurses nghttp2 ninja openldap openssh openssl patchutils pbzx perl pkg-config
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
         zlib zstd;
@@ -614,8 +617,8 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
-      ed expat flex gettext gmp groff icu libedit libffi libiconv libidn2 libkrb5 libssh2
+      atf autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
+      ed expat flex gettext gmp groff icu kyua libedit libffi libiconv libidn2 libkrb5 libssh2
       libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zlib zstd
@@ -641,8 +644,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
-        cpio cyrus_sasl db ed expat flex gettext gmp groff icu libedit libffi libiconv
+        atf autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        cpio cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
         libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
@@ -703,8 +706,8 @@ in
   (prevStage:
     # previous stage-xclang stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal coreutils cpio
-      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libtool m4 ninja
+      atf autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal coreutils cpio
+      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libtool m4 ninja
       openbsm openldap openpam openssh patchutils pbzx perl pkg-config.pkg-config python3
       python3Minimal scons serf sqlite subversion sysctl.provider texinfo unzip which xz
     ]);
@@ -737,8 +740,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
+        atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+        cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
@@ -804,8 +807,8 @@ in
   (prevStage:
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
-      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
+      atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+      cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libidn2
       libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
@@ -841,8 +844,8 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
-        cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
+        atf autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
+        cyrus_sasl db ed expat flex gettext gmp gnugrep groff kyua libedit libidn2 libkrb5
         libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
         sqlite subversion sysctl texinfo unzip which xz zstd;
@@ -870,7 +873,7 @@ in
       llvmPackages = super.llvmPackages // (
         let
           tools = super.llvmPackages.tools.extend (_: _: {
-            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang libllvm llvm;
+            inherit (prevStage.llvmPackages) clang-unwrapped clangNoCompilerRtWithLibc libclang lld libllvm llvm;
             clang = prevStage.stdenv.cc;
           });
 
@@ -969,7 +972,7 @@ in
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
 
         # CF dependencies - don’t rebuild them.
-        icu libiconv libxml2 zlib;
+        icu libiconv libiconv-darwin libxml2 zlib;
 
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
@@ -1054,7 +1057,7 @@ in
         icu
 
         # LLVM dependencies - don’t rebuild them.
-        libffi libiconv libxml2 ncurses zlib;
+        libffi libiconv libiconv-darwin libxml2 ncurses zlib;
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
@@ -1325,9 +1328,9 @@ in
       overrides = self: super: {
         inherit (prevStage)
           bash binutils brotli bzip2 coreutils cpio diffutils ed file findutils gawk
-          gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
-          libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch pbzx
-          pcre python3Minimal xar xz zlib zstd;
+          gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libiconv-darwin
+          libidn2 libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam
+          openssl patch pbzx pcre python3Minimal xar xz zlib zstd;
 
         darwin = super.darwin.overrideScope (_: superDarwin: {
           inherit (prevStage.darwin)

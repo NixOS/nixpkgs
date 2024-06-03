@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, rapidfuzz
-, click
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonRelaxDepsHook,
+  rapidfuzz,
+  click,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
     click
   ];
 
-  pythonRelaxDeps = [
-    "rapidfuzz"
-  ];
+  pythonRelaxDeps = [ "rapidfuzz" ];
 
-  pythonImportsCheck = [
-    "jiwer"
-  ];
+  pythonImportsCheck = [ "jiwer" ];
 
   meta = with lib; {
     description = "A simple and fast python package to evaluate an automatic speech recognition system";

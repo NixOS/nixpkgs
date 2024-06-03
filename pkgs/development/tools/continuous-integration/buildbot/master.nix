@@ -72,14 +72,14 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "3.11.1";
+  version = "3.11.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ruYW1sVoGvFMi+NS+xiNsn0Iq2RmKlax4bxHgYrj6ZY=";
+    hash = "sha256-qcICSsjcgOrLG8zHBx0eSVSiXDAeHPH4roRZI9TZTkk=";
   };
 
   build-system = [

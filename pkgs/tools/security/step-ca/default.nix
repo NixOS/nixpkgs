@@ -24,6 +24,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
 
+  ldflags = [
+    "-w"
+    "-X main.Version=${version}"
+  ];
+
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
   buildInputs =

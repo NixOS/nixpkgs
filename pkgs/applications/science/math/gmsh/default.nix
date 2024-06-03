@@ -7,11 +7,11 @@ assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.12.2";
+  version = "4.13.1";
 
   src = fetchurl {
     url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
-    hash = "sha256-E+CdnKgQLlxAFx1u4VDGaHQrmMOmylf4N/e2Th4q9I8=";
+    hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
 
   buildInputs = [

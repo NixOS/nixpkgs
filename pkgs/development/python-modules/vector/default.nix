@@ -1,16 +1,17 @@
-{ lib
-, awkward
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, numba
-, numpy
-, notebook
-, packaging
-, papermill
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  awkward,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  numba,
+  numpy,
+  notebook,
+  packaging,
+  papermill,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "vector"
-  ];
+  pythonImportsCheck = [ "vector" ];
 
   __darwinAllowLocalNetworking = true;
 

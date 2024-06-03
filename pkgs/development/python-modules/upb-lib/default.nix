@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial-asyncio-fast
-, pytestCheckHook
-, pythonOlder
-, pytz
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial-asyncio-fast,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -22,18 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-e8LYywKA5lNZ4UYFZTwcfePDWB4cTNz38Tiy4xzOxOs=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     pyserial-asyncio-fast
     pytz
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "upb_lib" ];
 

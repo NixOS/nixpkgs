@@ -6,11 +6,13 @@
 , ninja
 , udev
 , glib
+, glibcLocales
+, umockdev
 , gnome
 , vala
 , gobject-introspection
-, glibcLocales
-, umockdev
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,9 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     meson
     ninja
-    vala
     glib # for glib-mkenums needed during the build
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    vala
   ];
 
   buildInputs = [
@@ -57,8 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     umockdev
   ];
 
-  doCheck = true;
-  mesonFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-Dtests=disabled";
+  doCheck = withIntrospection;
+  mesonFlags = [
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

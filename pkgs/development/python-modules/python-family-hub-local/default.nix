@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, aiohttp
-, async-timeout
-, pillow
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  aiohttp,
+  async-timeout,
+  pillow,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyfamilyhublocal"
-  ];
+  pythonImportsCheck = [ "pyfamilyhublocal" ];
 
   meta = with lib; {
     description = "Module to accesse information from Samsung FamilyHub fridges locally";

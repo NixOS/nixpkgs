@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, h2
-, pyjwt
-, pyopenssl
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  h2,
+  pyjwt,
+  pyopenssl,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-QPayQogW97saMmaPUP5x0CiXd6Qptg/OROigi5ASNQg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     h2
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aioapns"
-  ];
+  pythonImportsCheck = [ "aioapns" ];
 
   meta = with lib; {
     description = "An efficient APNs Client Library";

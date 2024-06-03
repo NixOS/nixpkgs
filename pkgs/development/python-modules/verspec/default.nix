@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pretend
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pretend,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,15 +29,16 @@ buildPythonPackage rec {
     "test/test_specifiers.py"
   ];
 
-  pythonImportsCheck = [
-    "verspec"
-  ];
+  pythonImportsCheck = [ "verspec" ];
 
   meta = with lib; {
     description = "Flexible version handling";
     homepage = "https://github.com/jimporter/verspec";
     changelog = "https://github.com/jimporter/averspec/releases/tag/v${version}";
-    license = with licenses; [ bsd2 /* and */ asl20 ];
+    license = with licenses; [
+      bsd2 # and
+      asl20
+    ];
     maintainers = with maintainers; [ ];
   };
 }

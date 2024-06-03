@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyopenssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyopenssl,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyopenssl ];
 
-  doCheck = false; #no tests were included
+  doCheck = false; # no tests were included
 
   meta = with lib; {
     homepage = "https://github.com/LLNL/certipy";
@@ -25,5 +26,4 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ isgy ];
   };
-
 }

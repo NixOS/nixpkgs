@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, freezegun
-, hatchling
-, mock
-, pytest-vcr
-, pytestCheckHook
-, python-dateutil
-, pythonAtLeast
-, pythonOlder
-, requests
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  freezegun,
+  hatchling,
+  mock,
+  pytest-vcr,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
+  requests,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-TLenmRr2ytuGj+RQzUVkc+ZfEfxni3189hBE/xxgdNg=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -58,9 +55,7 @@ buildPythonPackage rec {
     "TestDogshell"
   ];
 
-  pythonImportsCheck = [
-    "datadog"
-  ];
+  pythonImportsCheck = [ "datadog" ];
 
   meta = with lib; {
     description = "The Datadog Python library";

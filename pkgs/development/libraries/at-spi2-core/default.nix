@@ -19,6 +19,7 @@
 , libXext
 , gnome
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     libXi
     # libXext is a transitive dependency of libXi
     libXext
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
+  ] ++ lib.optionals systemdSupport [
     # libsystemd is a needed for dbus-broker support
     systemd
   ];
@@ -72,9 +73,11 @@ stdenv.mkDerivation rec {
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals systemdSupport [
     # Same as the above, but for dbus-broker
     "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
+  ] ++ lib.optionals (!systemdSupport) [
+    "-Duse_systemd=false"
   ];
 
   passthru = {

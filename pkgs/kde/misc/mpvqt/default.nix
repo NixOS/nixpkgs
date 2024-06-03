@@ -2,7 +2,7 @@
   lib,
   mkKdeDerivation,
   fetchFromGitLab,
-  mpv,
+  mpv-unwrapped,
   qtdeclarative,
 }:
 mkKdeDerivation rec {
@@ -18,7 +18,7 @@ mkKdeDerivation rec {
   };
 
   extraBuildInputs = [qtdeclarative];
-  extraPropagatedBuildInputs = [mpv];
+  extraPropagatedBuildInputs = [mpv-unwrapped];
 
   meta.license = with lib.licenses; [bsd2 bsd3 cc-by-sa-40 cc0 lgpl21Only lgpl3Only lgpl3Plus mit];
 }

@@ -1,14 +1,15 @@
-{ lib
-, adal
-, buildPythonPackage
-, fetchFromGitHub
-, httpretty
-, mock
-, msrest
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  adal,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpretty,
+  mock,
+  msrest,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-ZZVZi0v1ucD2g5FpLaNhfNBf6Ab10fUEcEdkY4ELaEY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     adal
@@ -41,14 +40,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "msrest"
-  ];
+  pythonImportsCheck = [ "msrest" ];
 
   meta = with lib; {
     description = "The runtime library 'msrestazure' for AutoRest generated Python clients";
     homepage = "https://azure.microsoft.com/en-us/develop/python/";
     license = licenses.mit;
-    maintainers = with maintainers; [ bendlas jonringer ];
+    maintainers = with maintainers; [
+      bendlas
+      jonringer
+    ];
   };
 }

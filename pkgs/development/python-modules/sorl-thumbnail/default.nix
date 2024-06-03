@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, setuptools-scm
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  django,
 }:
 
 buildPythonPackage rec {
@@ -24,18 +25,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
   env.DJANGO_SETTINGS_MODULE = "sorl.thumbnail.conf.defaults";
 
   # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sorl.thumbnail"
-  ];
+  pythonImportsCheck = [ "sorl.thumbnail" ];
 
   meta = with lib; {
     homepage = "https://sorl-thumbnail.readthedocs.org/en/latest/";

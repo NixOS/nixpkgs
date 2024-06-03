@@ -1639,6 +1639,27 @@ runTests {
     ];
   };
 
+  testToGNUCommandLineSeparator = {
+    expr = cli.toGNUCommandLine { optionValueSeparator = "="; } {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    };
+
+    expected = [
+      "-X=PUT"
+      "--data={\"id\":0}"
+      "--retry=3"
+      "--url=https://example.com/foo"
+      "--url=https://example.com/bar"
+      "--verbose"
+    ];
+  };
+
   testToGNUCommandLineShell = {
     expr = cli.toGNUCommandLineShell {} {
       data = builtins.toJSON { id = 0; };

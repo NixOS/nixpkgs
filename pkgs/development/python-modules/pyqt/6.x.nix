@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchurl
-, pkg-config
-, dbus
-, lndir
-, setuptools
-, dbus-python
-, sip
-, pyqt6-sip
-, pyqt-builder
-, qt6Packages
-, pythonOlder
-, withMultimedia ? true
-, withWebSockets ? true
-, withLocation ? true
-# Not currently part of PyQt6
-#, withConnectivity ? true
-, withPrintSupport ? true
-, cups
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchurl,
+  pkg-config,
+  dbus,
+  lndir,
+  setuptools,
+  dbus-python,
+  sip,
+  pyqt6-sip,
+  pyqt-builder,
+  qt6Packages,
+  pythonOlder,
+  withMultimedia ? true,
+  withWebSockets ? true,
+  withLocation ? true,
+  # Not currently part of PyQt6
+  #, withConnectivity ? true
+  withPrintSupport ? true,
+  cups,
 }:
 
 buildPythonPackage rec {
@@ -68,51 +69,55 @@ buildPythonPackage rec {
     export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = with qt6Packages; [
-    pkg-config
-    lndir
-    sip
-    qtbase
-    qtsvg
-    qtdeclarative
-    qtwebchannel
-    qmake
-    qtquick3d
-    qtquicktimeline
-  ]
-  # ++ lib.optional withConnectivity qtconnectivity
-  ++ lib.optional withMultimedia qtmultimedia
-  ++ lib.optional withWebSockets qtwebsockets
-  ++ lib.optional withLocation qtlocation
-  ;
+  nativeBuildInputs =
+    with qt6Packages;
+    [
+      pkg-config
+      lndir
+      sip
+      qtbase
+      qtsvg
+      qtdeclarative
+      qtwebchannel
+      qmake
+      qtquick3d
+      qtquicktimeline
+    ]
+    # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation;
 
-  buildInputs = with qt6Packages; [
-    dbus
-    qtbase
-    qtsvg
-    qtdeclarative
-    pyqt-builder
-    qtquick3d
-    qtquicktimeline
-  ]
-  # ++ lib.optional withConnectivity qtconnectivity
-  ++ lib.optional withWebSockets qtwebsockets
-  ++ lib.optional withLocation qtlocation
-  ;
+  buildInputs =
+    with qt6Packages;
+    [
+      dbus
+      qtbase
+      qtsvg
+      qtdeclarative
+      pyqt-builder
+      qtquick3d
+      qtquicktimeline
+    ]
+    # ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation;
 
-  propagatedBuildInputs = [
-    dbus-python
-    pyqt6-sip
-    setuptools
-  ]
-  # ld: library not found for -lcups
-  ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [
-    cups
-  ];
+  propagatedBuildInputs =
+    [
+      dbus-python
+      pyqt6-sip
+      setuptools
+    ]
+    # ld: library not found for -lcups
+    ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
@@ -125,19 +130,19 @@ buildPythonPackage rec {
   # Checked using pythonImportsCheck, has no tests
   doCheck = true;
 
-  pythonImportsCheck = [
-    "PyQt6"
-    "PyQt6.QtCore"
-    "PyQt6.QtQml"
-    "PyQt6.QtWidgets"
-    "PyQt6.QtGui"
-    "PyQt6.QtQuick"
-  ]
-  ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
-  ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
-  # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
-  ++ lib.optional withLocation "PyQt6.QtPositioning"
-  ;
+  pythonImportsCheck =
+    [
+      "PyQt6"
+      "PyQt6.QtCore"
+      "PyQt6.QtQml"
+      "PyQt6.QtWidgets"
+      "PyQt6.QtGui"
+      "PyQt6.QtQuick"
+    ]
+    ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
+    ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
+    # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
+    ++ lib.optional withLocation "PyQt6.QtPositioning";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
 

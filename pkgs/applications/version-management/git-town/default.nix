@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "14.2.0";
+  version = "14.2.1";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-+OJ8aUA/VFOAzdCRcOCQKm6/RjRe13TITP1DAWqoAQI=";
+    hash = "sha256-7wsN95I8Xa5CXh1Mg3Wv4gyTSRzZMqJ06ALLsud3l2k=";
   };
 
   vendorHash = null;
@@ -19,7 +19,8 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}"; in
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+    in
     [
       "-s"
       "-w"
@@ -28,19 +29,22 @@ buildGoModule rec {
     ];
 
   nativeCheckInputs = [ git ];
-  preCheck =
+
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  checkFlags =
     let
+      # Disable tests requiring local operations
       skippedTests = [
         "TestGodog"
-        "TestMockingShell_MockCommand"
-        "TestShellRunner_RunStringWith_Input"
+        "TestMockingRunner/MockCommand"
+        "TestMockingRunner/QueryWith"
+        "TestTestCommands/CreateChildFeatureBranch"
       ];
     in
-    ''
-      HOME=$(mktemp -d)
-      # Disable tests requiring local operations
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd git-town \

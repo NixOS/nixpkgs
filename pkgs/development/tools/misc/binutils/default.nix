@@ -170,8 +170,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+  #
+  # for FreeBSD it's more complicated. With -static-libgcc, configure
+  # thinks that limits.h does not exist and the build fails for not finding
+  # LONG_MIN. The configure test itself succeeds but the compiler issues a
+  # warning about -static-libgcc being unused.
   env.NIX_CFLAGS_COMPILE =
-    if hostPlatform.isDarwin
+    if (hostPlatform.isDarwin || hostPlatform.isFreeBSD)
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
@@ -217,6 +222,14 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ (if enableShared
       then [ "--enable-shared" "--disable-static" ]
       else [ "--disable-shared" "--enable-static" ])
+  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; libctf.ver version script references symbols that aren't present.
+      #
+      # This is fixed upstream and can be removed with the future release of 2.43.
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+  ])
   ;
 
   # Fails

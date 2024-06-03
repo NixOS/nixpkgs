@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, ipykernel
-, exceptiongroup
-, ipython
-, jupyter-client
-, jupyter-core
-, prompt-toolkit
-, pygments
-, pyzmq
-, traitlets
-, flaky
-, pexpect
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatchling,
+  ipykernel,
+  exceptiongroup,
+  ipython,
+  jupyter-client,
+  jupyter-core,
+  prompt-toolkit,
+  pygments,
+  pyzmq,
+  traitlets,
+  flaky,
+  pexpect,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-VmpL8xyHrb+t8izfhG4wabWace1dpx1rpNiqrRSlNTk=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   postPatch = ''
     # use wrapped executable in tests
@@ -51,13 +50,9 @@ buildPythonPackage rec {
     pygments
     pyzmq
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
-  pythonImportsCheck = [
-    "jupyter_console"
-  ];
+  pythonImportsCheck = [ "jupyter_console" ];
 
   nativeCheckInputs = [
     flaky

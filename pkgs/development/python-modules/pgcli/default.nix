@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, cli-helpers
-, click
-, configobj
-, prompt-toolkit
-, psycopg
-, pygments
-, sqlparse
-, pgspecial
-, setproctitle
-, keyring
-, pendulum
-, pytestCheckHook
-, sshtunnel
-, mock
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  cli-helpers,
+  click,
+  configobj,
+  prompt-toolkit,
+  psycopg,
+  pygments,
+  sqlparse,
+  pgspecial,
+  setproctitle,
+  keyring,
+  pendulum,
+  pytestCheckHook,
+  sshtunnel,
+  mock,
 }:
 
 # this is a pythonPackage because of the ipython line magics in pgcli.magic
@@ -45,7 +46,10 @@ buildPythonPackage rec {
     sshtunnel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ];
 
   disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
@@ -59,6 +63,9 @@ buildPythonPackage rec {
     homepage = "https://pgcli.com";
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dywedir SuperSandro2000 ];
+    maintainers = with maintainers; [
+      dywedir
+      SuperSandro2000
+    ];
   };
 }

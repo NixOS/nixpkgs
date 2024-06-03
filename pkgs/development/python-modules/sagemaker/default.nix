@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, pythonRelaxDepsHook
-, setuptools
-, attrs
-, boto3
-, cloudpickle
-, google-pasta
-, numpy
-, protobuf
-, smdebug-rulesconfig
-, importlib-metadata
-, packaging
-, pandas
-, pathos
-, schema
-, pyyaml
-, jsonschema
-, platformdirs
-, tblib
-, urllib3
-, requests
-, docker
-, tqdm
-, psutil
-, scipy
-, accelerate
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonRelaxDepsHook,
+  setuptools,
+  attrs,
+  boto3,
+  cloudpickle,
+  google-pasta,
+  numpy,
+  protobuf,
+  smdebug-rulesconfig,
+  importlib-metadata,
+  packaging,
+  pandas,
+  pathos,
+  schema,
+  pyyaml,
+  jsonschema,
+  platformdirs,
+  tblib,
+  urllib3,
+  requests,
+  docker,
+  tqdm,
+  psutil,
+  scipy,
+  accelerate,
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.218.1";
+  version = "2.219.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +42,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VDwD52mbOSNrZgUHM1fieYWW41V6Gf+paoP5nYg2cDI=";
+    hash = "sha256-TZpRRkoAlXU+Ccgxq49t+Cz0JOIUvYp7ok3x3sphncE=";
   };
 
   patches = [
@@ -99,7 +100,11 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    local = [ urllib3 docker pyyaml ];
+    local = [
+      urllib3
+      docker
+      pyyaml
+    ];
     scipy = [ scipy ];
     huggingface = [ accelerate ];
     # feature-processor = [ pyspark sagemaker-feature-store-pyspark ]; # not available in nixpkgs

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wlr-layout-ui";
-  version = "1.4.7";
+  version = "1.6.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
-    rev = "${version}";
-    hash = "sha256-3NV02/Lk43h3r17jwmSAqx7wofaHFJKDh+vaWwU17Gw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-aM8KV3jzim14lBVvn/AqUsfoRWrnKtRJeFSX1Thrq3M=";
   };
 
   postPatch = ''

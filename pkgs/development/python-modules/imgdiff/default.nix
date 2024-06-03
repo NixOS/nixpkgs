@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pillow
-, mock
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pillow,
+  mock,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-Y5nUnjihRpVVehhP1LUgfuJN5nCxEJu6P1w99Igpxjs=";
   };
 
-  propagatedBuildInputs = [
-    pillow
-  ];
+  propagatedBuildInputs = [ pillow ];
 
   pythonImportsCheck = [ "imgdiff" ];
 

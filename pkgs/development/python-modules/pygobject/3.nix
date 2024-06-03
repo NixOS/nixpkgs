@@ -1,25 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, glib
-, gobject-introspection
-, pycairo
-, cairo
-, ncurses
-, meson
-, ninja
-, pythonOlder
-, gnome
-, python
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  pycairo,
+  cairo,
+  ncurses,
+  meson,
+  ninja,
+  pythonOlder,
+  gnome,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
   version = "3.48.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   disabled = pythonOlder "3.8";
 
@@ -30,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-B5SutKm+MaCSrCBiG19U7CgPkYWUPTKLEFza5imK0ac=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config
@@ -44,9 +46,7 @@ buildPythonPackage rec {
   buildInputs = [
     cairo
     glib
-  ] ++ lib.optionals stdenv.isDarwin [
-    ncurses
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ ncurses ];
 
   propagatedBuildInputs = [
     pycairo

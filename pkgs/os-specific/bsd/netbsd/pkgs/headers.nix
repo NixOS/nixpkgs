@@ -1,4 +1,10 @@
-{ lib, symlinkJoin, include, sys-headers, libpthread-headers }:
+{
+  lib,
+  symlinkJoin,
+  include,
+  sys-headers,
+  libpthread-headers,
+}:
 
 symlinkJoin {
   name = "netbsd-headers-9.2";

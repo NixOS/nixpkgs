@@ -1,19 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, chardet
-, openpyxl
-, charset-normalizer
-, fetchPypi
-, fetchpatch
-, pythonOlder
-, pandas
-, tabulate
-, click
-, pdfminer-six
-, pypdf
-, opencv4
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  openpyxl,
+  charset-normalizer,
+  fetchPypi,
+  pythonOlder,
+  pandas,
+  tabulate,
+  click,
+  pdfminer-six,
+  pypdf,
+  opencv4,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +43,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "camelot"
-  ];
+  pythonImportsCheck = [ "camelot" ];
 
   meta = with lib; {
     description = "A Python library to extract tabular data from PDFs";

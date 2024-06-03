@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyspx"
-  ];
+  pythonImportsCheck = [ "pyspx" ];
 
   meta = with lib; {
     description = "Python bindings for SPHINCS";

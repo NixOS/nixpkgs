@@ -196,6 +196,15 @@ in {
       ];
     };
 
+    linux_6_9 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.9";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.rust_1_77-6_9
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -204,7 +213,6 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.rust_1_77-6_9
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -260,6 +268,8 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
+    linux_6_8_hardened = hardenedKernelFor kernels.linux_6_8 { };
+    linux_6_9_hardened = hardenedKernelFor kernels.linux_6_9 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -406,6 +416,7 @@ in {
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
+    nvidia_x11_legacy535   = nvidiaPackages.legacy_535;
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_dc              = nvidiaPackages.dc;
@@ -538,7 +549,7 @@ in {
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
-    vm-tools = callPackage ../os-specific/linux/vm-tools { };
+    mm-tools = callPackage ../os-specific/linux/mm-tools { };
 
     vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
 
@@ -587,6 +598,7 @@ in {
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
     rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
+    vm-tools = self.mm-tools;
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 
@@ -601,6 +613,7 @@ in {
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_8 = recurseIntoAttrs (packagesFor kernels.linux_6_8);
+    linux_6_9 = recurseIntoAttrs (packagesFor kernels.linux_6_9);
     __attrsFailEvaluation = true;
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
@@ -646,6 +659,8 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
+    linux_6_8_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_8_hardened);
+    linux_6_9_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_9_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -668,9 +683,9 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_8;
+    linux_latest = packages.linux_6_9;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
-    linux_rt_default = packages.linux_rt_5_4;
+    linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   } // { __attrsFailEvaluation = true; };
 

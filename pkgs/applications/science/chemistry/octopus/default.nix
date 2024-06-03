@@ -30,13 +30,13 @@ assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
-  version = "14.0";
+  version = "14.1";
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
-    sha256 = "sha256-wQ2I+10ZHLKamW3j6AUtq2KZVm6d29+JxYgwvBKz9DU=";
+    sha256 = "sha256-8wZR+bYdxJFsUPMWbIGYxRdNzjLgHm+KFLjY7fSN7io=";
   };
 
   nativeBuildInputs = [

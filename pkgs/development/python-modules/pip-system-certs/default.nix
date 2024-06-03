@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, wheel
-, git-versioner
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  wheel,
+  git-versioner,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     git-versioner
   ];
 
-  propagatedBuildInputs = [
-    wrapt
-  ];
+  propagatedBuildInputs = [ wrapt ];
 
   pythonImportsCheck = [
     "pip_system_certs.wrapt_requests"
@@ -39,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ slotThe ];
   };
-
 }

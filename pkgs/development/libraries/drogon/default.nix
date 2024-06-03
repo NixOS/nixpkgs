@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib, fetchpatch
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib
 # optional but of negligible size
 , openssl, brotli, c-ares
 # optional databases

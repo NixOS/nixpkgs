@@ -1,15 +1,16 @@
-{ lib
-, boto3
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, hatchling
-, mock
-, python
-, pythonOlder
-, requests
-, responses
-, urllib3
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  hatchling,
+  mock,
+  python,
+  pythonOlder,
+  requests,
+  responses,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-5uSpPeXpMkpuzMXzsGE6uQJWP/Dt/oqakB8Xb5G1eZY=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     django
@@ -42,9 +41,7 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.amazon-ses;
 
   passthru.optional-dependencies = {
-    amazon-ses = [
-      boto3
-    ];
+    amazon-ses = [ boto3 ];
   };
 
   checkPhase = ''
@@ -53,9 +50,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "anymail"
-  ];
+  pythonImportsCheck = [ "anymail" ];
 
   meta = with lib; {
     description = "Django email backends and webhooks for Mailgun";

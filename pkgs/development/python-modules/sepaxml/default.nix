@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, lxml
-, pytestCheckHook
-, text-unidecode
-, xmlschema
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  lxml,
+  pytestCheckHook,
+  text-unidecode,
+  xmlschema,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "sepaxml"
-  ];
+  pythonImportsCheck = [ "sepaxml" ];
 
   meta = with lib; {
     description = "SEPA Direct Debit XML generation in python";

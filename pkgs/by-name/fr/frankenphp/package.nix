@@ -7,6 +7,7 @@
 , testers
 , frankenphp
 , darwin
+, libiconv
 , pkg-config
 , makeBinaryWrapper
 , runCommand
@@ -26,13 +27,13 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-I1O5ZujFRIgbe+6k1FmCedywYwN1zA+owU+tLBtN7nU=";
+    hash = "sha256-W+9p/9qT7v1jq6m/gRgfw4AmnPRZVY3UixXaypUVn4E=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -40,7 +41,7 @@ in buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-u+7pUt6SmNI/smE3l3CQl+e/ZsVRSeVJgprR0aslrMI=";
+  vendorHash = "sha256-eNW03oBaON2X5X2ZbM3Ly5T+bJzSDhEYajY5LaZhwdQ=";
 
   buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
   nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
@@ -64,7 +65,7 @@ in buildGoModule rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # replace hard-code homebrew path
     substituteInPlace ../frankenphp.go \
-      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${darwin.libiconv}/lib"
+      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
   '';
 
   preFixup = ''

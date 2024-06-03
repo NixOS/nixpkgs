@@ -1,28 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, apispec
-, colorama
-, click
-, email-validator
-, flask
-, flask-babel
-, flask-limiter
-, flask-login
-, flask-openid
-, flask-sqlalchemy
-, flask-wtf
-, flask-jwt-extended
-, jsonschema
-, marshmallow
-, marshmallow-enum
-, marshmallow-sqlalchemy
-, python-dateutil
-, pythonOlder
-, prison
-, pyjwt
-, pyyaml
-, sqlalchemy-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  apispec,
+  colorama,
+  click,
+  email-validator,
+  flask,
+  flask-babel,
+  flask-limiter,
+  flask-login,
+  flask-openid,
+  flask-sqlalchemy,
+  flask-wtf,
+  flask-jwt-extended,
+  jsonschema,
+  marshmallow,
+  marshmallow-sqlalchemy,
+  python-dateutil,
+  pythonOlder,
+  prison,
+  pyjwt,
+  pyyaml,
+  sqlalchemy-utils,
 }:
 
 buildPythonPackage rec {
@@ -53,7 +53,6 @@ buildPythonPackage rec {
     flask-jwt-extended
     jsonschema
     marshmallow
-    marshmallow-enum
     marshmallow-sqlalchemy
     python-dateutil
     prison
@@ -74,9 +73,7 @@ buildPythonPackage rec {
   # Majority of tests require network access or mongo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flask_appbuilder"
-  ];
+  pythonImportsCheck = [ "flask_appbuilder" ];
 
   meta = with lib; {
     description = "Application development framework, built on top of Flask";

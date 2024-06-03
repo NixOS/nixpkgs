@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, setuptools
-, pytest
-, portpicker
-, cryptography
-, aiosmtpd
-, pytestCheckHook
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  setuptools,
+  pytest,
+  portpicker,
+  cryptography,
+  aiosmtpd,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-5NGs6Q83EqGRJ+2IdOaXqGFIwfSNKy2wwHIJaOjj7JU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiosmtpd

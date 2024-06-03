@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, cargo
-, hypothesis
-, libiconv
-, pytestCheckHook
-, python
-, pythonOlder
-, pyyaml
-, rustPlatform
-, rustc
-, setuptools-rust
-, setuptools-scm
-, typing-extensions
-, typing-inspect
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  cargo,
+  hypothesis,
+  libiconv,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  pyyaml,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  setuptools-scm,
+  typing-extensions,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
@@ -93,15 +94,17 @@ buildPythonPackage rec {
     "test_codemod_formatter_error_input"
   ];
 
-  pythonImportsCheck = [
-    "libcst"
-  ];
+  pythonImportsCheck = [ "libcst" ];
 
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit asl20 psfl ];
+    license = with licenses; [
+      mit
+      asl20
+      psfl
+    ];
     maintainers = with maintainers; [ ];
   };
 }

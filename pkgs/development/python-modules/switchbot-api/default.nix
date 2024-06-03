@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,20 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-dJLjWwBzrT3GnsRpTIXu3SkVDUlnAbRwBlfSQaHWPzc=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
   # Module has no tests
-  doCheck= false;
+  doCheck = false;
 
-  pythonImportsCheck = [
-    "switchbot_api"
-  ];
+  pythonImportsCheck = [ "switchbot_api" ];
 
   meta = with lib; {
     description = "An asynchronous library to use Switchbot API";

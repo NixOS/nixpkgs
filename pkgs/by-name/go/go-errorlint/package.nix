@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "go-errorlint";
-  version = "1.4.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "polyfloyd";
     repo = "go-errorlint";
     rev = "v${version}";
-    hash = "sha256-BU+3sLUGBCFA1JYFxTEyIan+iWB7Y7SaMFVomfNObMg=";
+    hash = "sha256-xO9AC1z3JNTRVEpM/FF8x+AMfmspU64kUywvpMb2yxM=";
   };
 
-  vendorHash = "sha256-xn7Ou4l8vbPD44rsN0mdFjTzOvkfv6QN6i5XR1XPxTE=";
+  vendorHash = "sha256-pSajd2wyefHgxMvhDKs+qwre4BMRBv97v/tZOjiT3LE=";
 
   ldflags = [ "-s" "-w" ];
 

@@ -1,13 +1,14 @@
-{ lib
-, authres
-, buildPythonPackage
-, dkimpy
-, dnspython
-, fetchFromGitHub
-, publicsuffix2
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  authres,
+  buildPythonPackage,
+  dkimpy,
+  dnspython,
+  fetchFromGitHub,
+  publicsuffix2,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-/vxUUSWwysYQzcy2AmkF4f8R59FHRnBfFlPRpfM9e5o=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     authres
@@ -36,13 +35,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "authheaders"
-  ];
+  pythonImportsCheck = [ "authheaders" ];
 
   disabledTests = [
     # Test fails with timeout even if the resolv.conf hack is present

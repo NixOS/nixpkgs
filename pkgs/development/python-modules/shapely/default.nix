@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 
-, cython_0
-, geos
-, numpy
-, oldest-supported-numpy
-, setuptools
-, wheel
+  cython_0,
+  geos,
+  numpy,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -33,17 +34,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    geos
-  ];
+  buildInputs = [ geos ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Fix a ModuleNotFoundError. Investigated at:
   # https://github.com/NixOS/nixpkgs/issues/255262

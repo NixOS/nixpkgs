@@ -1,22 +1,23 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
 
-# propagates
-, async-timeout
-, deprecated
-, importlib-metadata
-, packaging
-, typing-extensions
+  # propagates
+  async-timeout,
+  deprecated,
+  importlib-metadata,
+  packaging,
+  typing-extensions,
 
-# extras: hiredis
-, hiredis
+  # extras: hiredis
+  hiredis,
 
-# extras: ocsp
-, cryptography
-, pyopenssl
-, requests
+  # extras: ocsp
+  cryptography,
+  pyopenssl,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -36,14 +37,10 @@ buildPythonPackage rec {
     deprecated
     packaging
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
-    hiredis = [
-      hiredis
-    ];
+    hiredis = [ hiredis ];
     ocsp = [
       cryptography
       pyopenssl

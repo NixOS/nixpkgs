@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "crowdin-cli";
-  version = "3.19.2";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "https://github.com/crowdin/${pname}/releases/download/${version}/${pname}.zip";
-    hash = "sha256-tVfdpyQ/m6ZpVA7YFmkGSnpo8/FirIBEiIqHlUr1TKk=";
+    hash = "sha256-7KyQUnl2O/raQLcP5VsMCX3084Mn6HFfxjJmksAkWBc=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper unzip ];

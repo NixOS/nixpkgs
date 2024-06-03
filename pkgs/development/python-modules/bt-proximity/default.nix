@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pybluez
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pybluez,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     sha256 = "0xlif91vblbz065531yjf8nmlcahrl4q5pz52bc1jmzz7iv9hpgq";
   };
 
-  propagatedBuildInputs = [
-    pybluez
-  ];
+  propagatedBuildInputs = [ pybluez ];
 
   # there are no tests
   doCheck = false;

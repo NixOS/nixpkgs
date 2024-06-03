@@ -1,7 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cython
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cython,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -18,6 +22,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ cython ];
 
   pythonImportsCheck = [ "memory_allocator" ];
+
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "An extension class to allocate memory easily with cython";

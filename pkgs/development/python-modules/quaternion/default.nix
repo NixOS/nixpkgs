@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, oldest-supported-numpy
-, scipy
-, numba
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oldest-supported-numpy,
+  scipy,
+  numba,
 }:
 
 buildPythonPackage rec {

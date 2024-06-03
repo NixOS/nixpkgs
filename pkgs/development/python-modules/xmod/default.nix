@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,21 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-pfFxtDQ4kaBrx4XzYMQO1vE4dUr2zs8jgGUQUdXB798=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_partial_function"
-  ];
+  disabledTests = [ "test_partial_function" ];
 
-  pythonImportsCheck = [
-    "xmod"
-  ];
+  pythonImportsCheck = [ "xmod" ];
 
   meta = with lib; {
     description = "Turn any object into a module";

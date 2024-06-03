@@ -42,8 +42,10 @@ The first steps to all these are the same:
     will be safer to use the `nixos-*` channels instead:
 
     ```ShellSession
-    $ nix-channel --add https://nixos.org/channels/nixos-version nixpkgs
+    $ nix-channel --add https://nixos.org/channels/nixos-<version> nixpkgs
     ```
+
+    Where `<version>` corresponds to the latest version available on [channels.nixos.org](https://channels.nixos.org/).
 
     You may want to throw in a `nix-channel --update` for good measure.
 

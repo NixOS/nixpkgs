@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, cython
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cython,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # remove src module, so tests use the installed module instead
@@ -36,9 +35,7 @@ buildPythonPackage rec {
     rm -r ./cymem
   '';
 
-  pythonImportsCheck = [
-    "cymem"
-  ];
+  pythonImportsCheck = [ "cymem" ];
 
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";

@@ -1,8 +1,10 @@
 { egl-wayland
 , libepoxy
 , fetchurl
+, fetchpatch
 , fontutil
 , lib
+, libdecor
 , libei
 , libGL
 , libGLU
@@ -32,6 +34,7 @@
 , pkg-config
 , pixman
 , stdenv
+, systemd
 , wayland
 , wayland-protocols
 , wayland-scanner
@@ -46,12 +49,22 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "23.2.6";
+  version = "24.1.0";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    hash = "sha256-HJo2a058ytug+b0xPFnq4S0jvXJUOyKibq+LIINc/G0=";
+    hash = "sha256-vvIcTxiAek7VccTi32CrY7VGa71QLszrJIW4kqt23MI=";
   };
+
+  patches = [
+    # Backport fix for pkg-config generation to make CMake happy
+    # FIXME: remove when merged
+    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1543
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cb1c21a4240a5b6bf4aeeef51819639b4e0ad24.patch";
+      hash = "sha256-MZPP9QgYO4RFJ/vcjkpu7SVSo5Dh09ZdZjOwTopjdYQ=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -64,6 +77,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     egl-wayland
+    libdecor
     libepoxy
     libei
     fontutil
@@ -90,6 +104,7 @@ stdenv.mkDerivation rec {
     mesa
     openssl
     pixman
+    systemd
     wayland
     wayland-protocols
     xkbcomp
@@ -100,7 +115,6 @@ stdenv.mkDerivation rec {
     libunwind
   ];
   mesonFlags = [
-    (lib.mesonBool "xwayland_eglstream" true)
     (lib.mesonBool "xcsecurity" true)
     (lib.mesonOption "default_font_path" defaultFontPath)
     (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
@@ -120,7 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     mainProgram = "Xwayland";
-    maintainers = with maintainers; [ emantor ];
+    maintainers = with maintainers; [ emantor k900 ];
     platforms = platforms.linux;
   };
 }

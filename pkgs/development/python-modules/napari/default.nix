@@ -1,66 +1,68 @@
-{ lib
-, mkDerivationWith
-, appdirs
-, app-model
-, buildPythonPackage
-, cachey
-, certifi
-, dask
-, docstring-parser
-, fetchFromGitHub
-, imageio
-, jsonschema
-, magicgui
-, napari-console
-, napari-npe2
-, napari-svg
-, numpydoc
-, pint
-, psutil
-, pydantic
-, pyopengl
-, pillow
-, pythonOlder
-, pyyaml
-, scikit-image
-, scipy
-, setuptools-scm
-, sphinx
-, superqt
-, tifffile
-, toolz
-, tqdm
-, typing-extensions
-, vispy
-, wrapQtAppsHook
-, wrapt
+{
+  lib,
+  app-model,
+  appdirs,
+  buildPythonPackage,
+  cachey,
+  certifi,
+  dask,
+  docstring-parser,
+  fetchFromGitHub,
+  imageio,
+  jsonschema,
+  magicgui,
+  mkDerivationWith,
+  napari-console,
+  napari-npe2,
+  napari-svg,
+  numpydoc,
+  pandas,
+  pillow,
+  pint,
+  psutil,
+  pydantic,
+  pyopengl,
+  pythonOlder,
+  pyyaml,
+  scikit-image,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  superqt,
+  tifffile,
+  toolz,
+  tqdm,
+  typing-extensions,
+  vispy,
+  wrapQtAppsHook,
+  wrapt,
 }:
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
   version = "0.4.19.post1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "napari";
-    repo = pname;
+    repo = "napari";
     rev = "refs/tags/v${version}";
     hash = "sha256-qw5WdFPySNkmm+dNu+hqsmr+csBpHnSl9bMpb4nKEqI=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "scikit-image>=0.19.1" "scikit-image" \
-      --replace "sphinx<5" "sphinx" \
-      --replace "vispy>=0.11.0,<0.12" "vispy"
+      --replace-fail "scikit-image[data]>=0.19.1" "scikit-image"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
-    wrapQtAppsHook
   ];
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
     app-model
@@ -76,15 +78,15 @@ mkDerivationWith buildPythonPackage rec {
     napari-npe2
     napari-svg
     numpydoc
-    pint
+    pandas
     pillow
+    pint
     psutil
     pydantic
     pyopengl
     pyyaml
     scikit-image
     scipy
-    sphinx
     superqt
     tifffile
     toolz

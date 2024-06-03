@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lark
-, pynose
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lark,
+  pynose,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,16 +26,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
-    lark
-  ];
+  dependencies = [ lark ];
 
   # This fork of python-hcl2 doesn't ship tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hcl2"
-  ];
+  pythonImportsCheck = [ "hcl2" ];
 
   meta = with lib; {
     description = "Parser for HCL2 written in Python using Lark";

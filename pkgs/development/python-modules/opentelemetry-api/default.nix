@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, deprecated
-, hatchling
-, importlib-metadata
-, opentelemetry-test-utils
-, setuptools
-, pytestCheckHook
-, pythonRelaxDepsHook
-, writeScript
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  deprecated,
+  hatchling,
+  importlib-metadata,
+  opentelemetry-test-utils,
+  setuptools,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  writeScript,
 }:
 
 let
@@ -30,22 +31,16 @@ let
 
     sourceRoot = "${src.name}/opentelemetry-api";
 
-    nativeBuildInputs = [
-      pythonRelaxDepsHook
-    ];
+    nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-    build-system = [
-      hatchling
-    ];
+    build-system = [ hatchling ];
 
     dependencies = [
       deprecated
       importlib-metadata
     ];
 
-    pythonRelaxDeps = [
-      "importlib-metadata"
-    ];
+    pythonRelaxDeps = [ "importlib-metadata" ];
 
     nativeCheckInputs = [
       opentelemetry-test-utils
@@ -77,4 +72,5 @@ let
       maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
     };
   };
-in self
+in
+self

@@ -687,7 +687,7 @@ in {
                   authentication = {
                     mode = mkOption {
                       default = "wpa3-sae";
-                      type = types.enum ["none" "wpa2-sha256" "wpa3-sae-transition" "wpa3-sae"];
+                      type = types.enum ["none" "wpa2-sha1" "wpa2-sha256" "wpa3-sae-transition" "wpa3-sae"];
                       description = ''
                         Selects the authentication mode for this AP.
 
@@ -695,7 +695,9 @@ in {
                           and create an open AP. Use {option}`settings` together with this option if you
                           want to configure the authentication manually. Any password options will still be
                           effective, if set.
-                        - {var}`"wpa2-sha256"`: WPA2-Personal using SHA256 (IEEE 802.11i/RSN). Passwords are set
+                        - {var}`"wpa2-sha1"`: Not recommended. WPA2-Personal using HMAC-SHA1. Passwords are set
+                          using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
+                        - {var}`"wpa2-sha256"`: WPA2-Personal using HMAC-SHA256 (IEEE 802.11i/RSN). Passwords are set
                           using {option}`wpaPassword` or preferably by {option}`wpaPasswordFile` or {option}`wpaPskFile`.
                         - {var}`"wpa3-sae-transition"`: Use WPA3-Personal (SAE) if possible, otherwise fallback
                           to WPA2-SHA256. Only use if necessary and switch to the newer WPA3-SAE when possible.
@@ -812,7 +814,7 @@ in {
                         Warning: These entries will get put into a world-readable file in
                         the Nix store! Using {option}`saePasswordFile` instead is recommended.
 
-                        Not used when {option}`mode` is {var}`"wpa2-sha256"`.
+                        Not used when {option}`mode` is {var}`"wpa2-sha1"` or {var}`"wpa2-sha256"`.
                       '';
                       type = types.listOf (types.submodule {
                         options = {
@@ -884,7 +886,7 @@ in {
                         parameters doesn't matter:
                         `<password>[|mac=<peer mac>][|vlanid=<VLAN ID>][|pk=<m:ECPrivateKey-base64>][|id=<identifier>]`
 
-                        Not used when {option}`mode` is {var}`"wpa2-sha256"`.
+                        Not used when {option}`mode` is {var}`"wpa2-sha1"` or {var}`"wpa2-sha256"`.
                       '';
                     };
 
@@ -959,6 +961,9 @@ in {
                   } // optionalAttrs (bssCfg.authentication.mode == "wpa3-sae-transition") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK-SHA256 SAE";
+                  } // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha1") {
+                    wpa = 2;
+                    wpa_key_mgmt = "WPA-PSK";
                   } // optionalAttrs (bssCfg.authentication.mode == "wpa2-sha256") {
                     wpa = 2;
                     wpa_key_mgmt = "WPA-PSK-SHA256";
@@ -1186,8 +1191,8 @@ in {
                   message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
                 }
                 {
-                  assertion = auth.mode == "wpa2-sha256" -> countWpaPasswordDefinitions == 1;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-SHA256 which requires defining a wpa password option'';
+                  assertion = (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
+                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
                 }
               ])
               radioCfg.networks))

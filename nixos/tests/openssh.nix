@@ -5,7 +5,7 @@ let inherit (import ./ssh-keys.nix pkgs)
 in {
   name = "openssh";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ aszlig eelco ];
+    maintainers = [ aszlig ];
   };
 
   nodes = {
@@ -111,11 +111,11 @@ in {
     server-no-openssl =
       { ... }:
       {
-        programs.ssh.package = pkgs.opensshPackages.openssh.override {
-          linkOpenssl = false;
-        };
         services.openssh = {
           enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            linkOpenssl = false;
+          };
           hostKeys = [
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
           ];
@@ -136,11 +136,11 @@ in {
     server-no-pam =
       { pkgs, ... }:
       {
-        programs.ssh.package = pkgs.opensshPackages.openssh.override {
-          withPAM = false;
-        };
         services.openssh = {
           enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            withPAM = false;
+          };
           settings = {
             UsePAM = false;
           };

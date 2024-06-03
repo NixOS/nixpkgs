@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, paramiko
-, pytest-asyncio
-, pytest-mock
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, smbprotocol
-, tqdm
-, adlfs
-, dask
-, distributed
-, dropbox
-, fusepy
-, gcsfs
-, libarchive-c
-, ocifs
-, panel
-, pyarrow
-, pygit2
-, s3fs
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  paramiko,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  smbprotocol,
+  tqdm,
+  adlfs,
+  dask,
+  distributed,
+  dropbox,
+  fusepy,
+  gcsfs,
+  libarchive-c,
+  ocifs,
+  panel,
+  pyarrow,
+  pygit2,
+  s3fs,
 }:
 
 buildPythonPackage rec {
@@ -50,14 +51,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    entrypoints = [
-    ];
-    abfs = [
-      adlfs
-    ];
-    adl = [
-      adlfs
-    ];
+    entrypoints = [ ];
+    abfs = [ adlfs ];
+    adl = [ adlfs ];
     dask = [
       dask
       distributed
@@ -67,55 +63,25 @@ buildPythonPackage rec {
       requests
       dropbox
     ];
-    gcs = [
-      gcsfs
-    ];
-    git = [
-      pygit2
-    ];
-    github = [
-      requests
-    ];
-    gs = [
-      gcsfs
-    ];
-    hdfs = [
-      pyarrow
-    ];
-    arrow = [
-      pyarrow
-    ];
+    gcs = [ gcsfs ];
+    git = [ pygit2 ];
+    github = [ requests ];
+    gs = [ gcsfs ];
+    hdfs = [ pyarrow ];
+    arrow = [ pyarrow ];
     http = [
       aiohttp
       requests
     ];
-    sftp = [
-      paramiko
-    ];
-    s3 = [
-      s3fs
-    ];
-    oci = [
-      ocifs
-    ];
-    smb = [
-      smbprotocol
-    ];
-    ssh = [
-      paramiko
-    ];
-    fuse = [
-      fusepy
-    ];
-    libarchive = [
-      libarchive-c
-    ];
-    gui = [
-      panel
-    ];
-    tqdm = [
-      tqdm
-    ];
+    sftp = [ paramiko ];
+    s3 = [ s3fs ];
+    oci = [ ocifs ];
+    smb = [ smbprotocol ];
+    ssh = [ paramiko ];
+    fuse = [ fusepy ];
+    libarchive = [ libarchive-c ];
+    gui = [ panel ];
+    tqdm = [ tqdm ];
   };
 
   nativeCheckInputs = [
@@ -132,34 +98,34 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # Test assumes user name is part of $HOME
-    # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
-    "test_strip_protocol_expanduser"
-    # test accesses this remote ftp server:
-    # https://ftp.fau.de/debian-cd/current/amd64/log/success
-    "test_find"
-    # Tests want to access S3
-    "test_urlpath_inference_errors"
-    "test_mismatch"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # works locally on APFS, fails on hydra with AssertionError comparing timestamps
-    # darwin hydra builder uses HFS+ and has only one second timestamp resolution
-    # this two tests however, assume nanosecond resolution
-    "test_modified"
-    "test_touch"
-    # tries to access /home, ignores $HOME
-    "test_directories"
-  ];
+  disabledTests =
+    [
+      # Test assumes user name is part of $HOME
+      # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
+      "test_strip_protocol_expanduser"
+      # test accesses this remote ftp server:
+      # https://ftp.fau.de/debian-cd/current/amd64/log/success
+      "test_find"
+      # Tests want to access S3
+      "test_urlpath_inference_errors"
+      "test_mismatch"
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      # works locally on APFS, fails on hydra with AssertionError comparing timestamps
+      # darwin hydra builder uses HFS+ and has only one second timestamp resolution
+      # this two tests however, assume nanosecond resolution
+      "test_modified"
+      "test_touch"
+      # tries to access /home, ignores $HOME
+      "test_directories"
+    ];
 
   disabledTestPaths = [
     # JSON decoding issues
     "fsspec/implementations/tests/test_dbfs.py"
   ];
 
-  pythonImportsCheck = [
-    "fsspec"
-  ];
+  pythonImportsCheck = [ "fsspec" ];
 
   meta = with lib; {
     description = "A specification that Python filesystems should adhere to";

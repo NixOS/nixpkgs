@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonRelaxDepsHook
-, fetchPypi
-, emoji
-, pydbus
-, pygobject3
-, unidecode
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  pythonRelaxDepsHook,
+  fetchPypi,
+  emoji,
+  pydbus,
+  pygobject3,
+  unidecode,
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "mpris-server";
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     unidecode
   ];
 
-  pythonRelaxDeps = [
-    "emoji"
-  ];
+  pythonRelaxDeps = [ "emoji" ];
 
   pythonImportsCheck = [ "mpris_server" ];
 

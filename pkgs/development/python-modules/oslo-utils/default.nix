@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, debtcollector
-, eventlet
-, fixtures
-, iso8601
-, netaddr
-, netifaces
-, oslo-i18n
-, oslotest
-, packaging
-, pbr
-, pyparsing
-, pytz
-, setuptools
-, stestr
-, testscenarios
-, tzdata
-, pyyaml
-, iana-etc
-, libredirect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  debtcollector,
+  eventlet,
+  fixtures,
+  iso8601,
+  netaddr,
+  netifaces,
+  oslo-i18n,
+  oslotest,
+  packaging,
+  pbr,
+  pyparsing,
+  pytz,
+  setuptools,
+  stestr,
+  testscenarios,
+  tzdata,
+  pyyaml,
+  iana-etc,
+  libredirect,
 }:
 
 buildPythonPackage rec {
@@ -70,7 +71,7 @@ buildPythonPackage rec {
   # disabled tests:
   # https://bugs.launchpad.net/oslo.utils/+bug/2054134
   # netaddr default behaviour changed to be stricter
-  checkPhase =''
+  checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
     export LD_PRELOAD=${libredirect}/lib/libredirect.so

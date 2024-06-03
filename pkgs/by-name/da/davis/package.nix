@@ -6,13 +6,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "davis";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "tchapi";
     repo = "davis";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oPzMBCOcAJoHni9SO74RuJDEOcVYc4MtO5rGq1E9g3Q=";
+    hash = "sha256-0Km4bLQVfbkr5BL8XY5tM147Sje8hcFOjhCRnXq+4d4=";
   };
 
   vendorHash = "sha256-NOb6rc9jVsf+/RVOW7SLBAJk9SihcRxoepUEGBGLi2w=";

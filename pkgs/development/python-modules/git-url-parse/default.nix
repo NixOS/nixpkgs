@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbr
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pbr,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,20 +23,15 @@ buildPythonPackage rec {
       --replace " --cov giturlparse --cov-report term-missing" ""
   '';
 
-
   # Manually set version because prb wants to get it from the git
   # upstream repository (and we are installing from tarball instead)
   env.PBR_VERSION = version;
 
-  propagatedBuildInputs = [
-    pbr
-  ];
+  propagatedBuildInputs = [ pbr ];
 
   pythonImportsCheck = [ "giturlparse" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A simple GIT URL parser";
@@ -45,4 +41,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

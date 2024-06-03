@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython
-, setuptools
+  # build-system
+  cython,
+  setuptools,
 
-# dependencies
-, aiohappyeyeballs
-, async-interrupt
-, async-timeout
-, chacha20poly1305-reuseable
-, cryptography
-, noiseprotocol
-, protobuf
-, zeroconf
+  # dependencies
+  aiohappyeyeballs,
+  async-interrupt,
+  async-timeout,
+  chacha20poly1305-reuseable,
+  cryptography,
+  noiseprotocol,
+  protobuf,
+  zeroconf,
 
-# tests
-, mock
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "24.3.0";
+  version = "24.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wQR3dwN5O++TdtQh+Wcj7c7TNMaRj2lMlOuXOAPVU0Q=";
+    hash = "sha256-i/tmPTDb5DJRSj//Ju9OERx8A9S69WkWyoN+j2MO6mI=";
   };
 
   build-system = [
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     noiseprotocol
     protobuf
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     mock
@@ -65,15 +64,16 @@ buildPythonPackage rec {
     "test_reconnect_logic_stop_callback"
   ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
-  ];
+  pythonImportsCheck = [ "aioesphomeapi" ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
     changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

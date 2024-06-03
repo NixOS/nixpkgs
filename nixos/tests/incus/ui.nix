@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, lib, ... }: {
+import ../make-test-python.nix ({ pkgs, lib, incus ? pkgs.incus-lts, ... }: {
   name = "incus-ui";
 
   meta = {
@@ -7,7 +7,10 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
 
   nodes.machine = { lib, ... }: {
     virtualisation = {
-      incus.enable = true;
+      incus = {
+        enable = true;
+        package = incus;
+      };
       incus.ui.enable = true;
     };
     networking.nftables.enable = true;

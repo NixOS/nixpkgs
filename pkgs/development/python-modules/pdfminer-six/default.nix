@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, isPy3k
-, cryptography
-, charset-normalizer
-, pythonOlder
-, typing-extensions
-, pytestCheckHook
-, setuptools
-, substituteAll
-, ocrmypdf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  isPy3k,
+  cryptography,
+  charset-normalizer,
+  pythonOlder,
+  typing-extensions,
+  pytestCheckHook,
+  setuptools,
+  substituteAll,
+  ocrmypdf,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,17 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    charset-normalizer
-    cryptography
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      charset-normalizer
+      cryptography
+    ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+      typing-extensions
+    ];
 
   postInstall = ''
     for file in $out/bin/*.py; do
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     "pdfminer.high_level"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   passthru = {
     tests = {

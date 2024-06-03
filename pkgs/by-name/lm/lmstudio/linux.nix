@@ -8,7 +8,7 @@
 let
   src = fetchurl {
     url = "https://releases.lmstudio.ai/linux/${version}/beta/LM_Studio-${version}.AppImage";
-    hash = "sha256-hcV8wDhulFAxHDBDKicpEGovwcsn9RaIi/idUz+YzD8=";
+    hash = "sha256-1ahPRRgcYfW9eD04yeF4ft+yLn9+nIPOV5Vkv7rMiT8=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -16,7 +16,7 @@ in
 appimageTools.wrapType2 {
   inherit meta pname version src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.ocl-icd ];
+  extraPkgs = pkgs: [ pkgs.ocl-icd ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications

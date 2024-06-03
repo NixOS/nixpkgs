@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-CGFa7TIZ6hx3WEvVlh2CO6sib4rDgx0JrfZcb6h3+Ow=";
   };
 
-  propagatedBuildInputs = [
-    jinja2
-  ];
+  propagatedBuildInputs = [ jinja2 ];
 
   # no python tests
   doCheck = false;

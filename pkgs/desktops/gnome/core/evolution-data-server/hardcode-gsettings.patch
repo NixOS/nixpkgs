@@ -242,7 +242,7 @@ index 44ba49c..dfac2a2 100644
  		g_signal_connect_object (
  			watcher->priv->desktop_settings,
 diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
-index b9145af..350fcd3 100644
+index e0e9169..a44f52c 100644
 --- a/src/calendar/libedata-cal/e-cal-meta-backend.c
 +++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
 @@ -156,7 +156,18 @@ ecmb_is_power_saver_enabled (void)
@@ -265,7 +265,7 @@ index b9145af..350fcd3 100644
  
  	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
  		GPowerProfileMonitor *power_monitor;
-@@ -2632,7 +2643,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+@@ -2627,7 +2638,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
  			if (is_declined) {
  				GSettings *settings;
  
@@ -312,7 +312,7 @@ index d5a0823..2ae03f8 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index cecd740..9a15180 100644
+index cceba4a..d3c4da6 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
 @@ -747,7 +747,18 @@ gpg_ctx_get_executable_name (void)
@@ -361,10 +361,10 @@ index e61160c..b6553a4 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index bbf214b..bed39d2 100644
+index 56429a9..a9cc62c 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
-@@ -5661,7 +5661,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+@@ -5682,7 +5682,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
  	if (do_old_flags_update) {
  		GSettings *eds_settings;
  
@@ -457,10 +457,10 @@ index 1453410..a3f06b0 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-outlook.c b/src/libedataserver/e-oauth2-service-outlook.c
-index 7633e93..2328048 100644
+index 734f194..5b05077 100644
 --- a/src/libedataserver/e-oauth2-service-outlook.c
 +++ b/src/libedataserver/e-oauth2-service-outlook.c
-@@ -71,7 +71,18 @@ eos_outlook_read_settings (EOAuth2Service *service,
+@@ -75,7 +75,18 @@ eos_outlook_read_settings (EOAuth2Service *service,
  	if (!value) {
  		GSettings *settings;
  
@@ -481,7 +481,7 @@ index 7633e93..2328048 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-yahoo.c b/src/libedataserver/e-oauth2-service-yahoo.c
-index 3bb1071..199e822 100644
+index c8bbd3a..e71e36a 100644
 --- a/src/libedataserver/e-oauth2-service-yahoo.c
 +++ b/src/libedataserver/e-oauth2-service-yahoo.c
 @@ -67,7 +67,18 @@ eos_yahoo_read_settings (EOAuth2Service *service,

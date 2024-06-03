@@ -1,5 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, zope-testrunner, six, chardet}:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zope-testrunner,
+  six,
+  chardet,
+}:
 
 buildPythonPackage rec {
   pname = "ghdiff";
@@ -12,10 +18,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ zope-testrunner ];
-  propagatedBuildInputs = [ six chardet ];
+  propagatedBuildInputs = [
+    six
+    chardet
+  ];
 
   meta = with lib; {
-    homepage =  "https://github.com/kilink/ghdiff";
+    homepage = "https://github.com/kilink/ghdiff";
     license = licenses.mit;
     description = "Generate Github-style HTML for unified diffs.";
     mainProgram = "ghdiff";

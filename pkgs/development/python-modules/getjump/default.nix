@@ -1,11 +1,12 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, pillow
-, poetry-core
-, requests
-, rich
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
+  poetry-core,
+  requests,
+  rich,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-WSLfhVCqP+N+2Rs2PUXOknnlNx3UtWdFYrK1lTW1fqQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -29,9 +28,7 @@ buildPythonPackage rec {
     rich
   ];
 
-  pythonImportsCheck = [
-    "getjump"
-  ];
+  pythonImportsCheck = [ "getjump" ];
 
   # all the tests talk to the internet
   doCheck = false;

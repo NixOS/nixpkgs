@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonRelaxDepsHook
-# Python deps
-, frozenlist2
-, python-secp256k1-cardano
-, setuptools
-, poetry-core
-, frozendict
-, cbor2
-, rply
-, pycardano
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonRelaxDepsHook,
+  # Python deps
+  frozenlist2,
+  python-secp256k1-cardano,
+  setuptools,
+  poetry-core,
+  frozendict,
+  cbor2,
+  rply,
+  pycardano,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-djJMNXijMVzMVzw8NZSe3YFRGyAPqdvr0P374Za5XkU=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     setuptools
@@ -41,7 +40,10 @@ buildPythonPackage rec {
     python-secp256k1-cardano
   ];
 
-  pythonRelaxDeps = [ "pycardano" "rply" ];
+  pythonRelaxDeps = [
+    "pycardano"
+    "rply"
+  ];
 
   pythonImportsCheck = [ "uplc" ];
 

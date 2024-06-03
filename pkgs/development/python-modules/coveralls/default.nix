@@ -1,17 +1,18 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, isPy27
-, mock
-, pytest
-, pytest-runner
-, sh
-, coverage
-, docopt
-, requests
-, urllib3
-, git
-, isPy3k
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  isPy27,
+  mock,
+  pytest,
+  pytest-runner,
+  sh,
+  coverage,
+  docopt,
+  requests,
+  urllib3,
+  git,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     git
   ];
 
-  buildInputs = [
-    pytest-runner
-  ];
+  buildInputs = [ pytest-runner ];
 
   postPatch = ''
     sed -i "s/'coverage>=\([^,]\+\),.*',$/'coverage>=\1',/" setup.py
@@ -61,5 +60,3 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
   };
 }
-
-

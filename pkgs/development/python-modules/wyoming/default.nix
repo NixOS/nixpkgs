@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# optional-dependencies
-, zeroconf
+  # optional-dependencies
+  zeroconf,
 
-# tests
-, wyoming-faster-whisper
-, wyoming-openwakeword
-, wyoming-piper
+  # tests
+  wyoming-faster-whisper,
+  wyoming-openwakeword,
+  wyoming-piper,
 }:
 
 buildPythonPackage rec {
@@ -26,29 +27,19 @@ buildPythonPackage rec {
     hash = "sha256-SOPkvFMjoDQiWVP39+1Cx4fFmPH8wcBhZhaKapdZaeA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   passthru.optional-dependencies = {
-    zeroconf = [
-      zeroconf
-    ];
+    zeroconf = [ zeroconf ];
   };
 
-  pythonImportsCheck = [
-    "wyoming"
-  ];
+  pythonImportsCheck = [ "wyoming" ];
 
   # no tests
   doCheck = false;
 
   passthru.tests = {
-    inherit
-      wyoming-faster-whisper
-      wyoming-openwakeword
-      wyoming-piper
-    ;
+    inherit wyoming-faster-whisper wyoming-openwakeword wyoming-piper;
   };
 
   meta = with lib; {

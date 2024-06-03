@@ -1,14 +1,15 @@
-{ lib
-, blinker
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-env
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  blinker,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-env,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -25,20 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-Ag/ivZ2SDYX0kwXbExt3kE/pMJgfoGc6gWoy+Rr6GTw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    botocore
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
+  dependencies = [ botocore ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   optional-dependencies = {
-    signal = [
-      blinker
-    ];
+    signal = [ blinker ];
   };
 
   nativeCheckInputs = [
@@ -47,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ optional-dependencies.signal;
 
-  pythonImportsCheck = [
-    "pynamodb"
-  ];
+  pythonImportsCheck = [ "pynamodb" ];
 
   disabledTests = [
     # Tests requires credentials or network access

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , fetchurl
 , substituteAll
-, fetchpatch
 , coreutils
 , curl
 , glxinfo
@@ -34,6 +33,7 @@
 , gamescopeSupport ? true # build mangoapp and mangohudctl
 , lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
 , nix-update-script
+, libxkbcommon
 }:
 
 let
@@ -94,14 +94,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Gnq+1j+PFbeipAfXGnTq7wZdVQeG9R9vLAKZnZj7Bvs=";
+    hash = "sha256-cj/F/DWUDm2AHTJvHgkKa+KdIrfxPWLzI570Dp4VFhs=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -139,13 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       libdbus = dbus.lib;
       inherit hwdata;
-    })
-
-    # Add dep_vulkan to mangoapp and test_amdgpu to fix build failure
-    # TODO: Remove in next release
-    (fetchpatch {
-      url = "https://github.com/flightlessmango/MangoHud/commit/cba217ffaf93aea6acb4e59e3e46bf912f740ccf.patch";
-      hash = "sha256-1My4/EuSMpe3AFhhFOJr8rz/wnywp+BW+F4dSgxToe0=";
     })
   ];
 
@@ -202,6 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     glfw
     xorg.libXrandr
+    libxkbcommon
   ];
 
   doCheck = true;

@@ -1,16 +1,17 @@
-{ buildPythonPackage
-, oslo-config
-, docutils
-, oslo-log
-, oslotest
-, requests-mock
-, sphinx
-, stestr
-, testscenarios
+{
+  buildPythonPackage,
+  oslo-config,
+  docutils,
+  oslo-log,
+  oslotest,
+  requests-mock,
+  sphinx,
+  stestr,
+  testscenarios,
 }:
 
 buildPythonPackage {
-pname = "oslo-config-tests";
+  pname = "oslo-config-tests";
   inherit (oslo-config) version src;
   format = "other";
 

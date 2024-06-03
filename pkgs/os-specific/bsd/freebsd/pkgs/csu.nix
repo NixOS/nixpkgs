@@ -1,23 +1,32 @@
-{ lib, mkDerivation
-, bsdSetupHook, freebsdSetupHook
-, makeMinimal
-, install
-, flex, byacc, gencat
-, include
+{
+  lib,
+  mkDerivation,
+  bsdSetupHook,
+  freebsdSetupHook,
+  makeMinimal,
+  install,
+  flex,
+  byacc,
+  gencat,
+  include,
 }:
 
 mkDerivation {
+  isStatic = true;
   path = "lib/csu";
   extraPaths = [
     "lib/Makefile.inc"
     "lib/libc/include/libc_private.h"
   ];
   nativeBuildInputs = [
-    bsdSetupHook freebsdSetupHook
+    bsdSetupHook
+    freebsdSetupHook
     makeMinimal
     install
 
-    flex byacc gencat
+    flex
+    byacc
+    gencat
   ];
   buildInputs = [ include ];
   MK_TESTS = "no";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, ctranslate2
-, ctranslate2-cpp
-, sentencepiece
-, stanza
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  ctranslate2,
+  ctranslate2-cpp,
+  sentencepiece,
+  stanza,
 }:
 let
   ctranslate2OneDNN = ctranslate2.override {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
 
   doCheck = false; # needs network access
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # required for import check to work
   # PermissionError: [Errno 13] Permission denied: '/homeless-shelter'

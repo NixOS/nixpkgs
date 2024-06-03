@@ -1,11 +1,12 @@
-{ lib
-, cython
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  cython,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,18 +29,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=ulid_transform --cov-report=term-missing:skip-covered" ""
   '';
 
-  pythonImportsCheck = [
-    "ulid_transform"
-  ];
+  pythonImportsCheck = [ "ulid_transform" ];
 
   meta = with lib; {
     description = "Library to create and transform ULIDs";

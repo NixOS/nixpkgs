@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, jaraco-classes
-, jaraco-text
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  jaraco-classes,
+  jaraco-text,
 }:
 
 buildPythonPackage rec {

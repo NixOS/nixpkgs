@@ -10,13 +10,10 @@
   chardet,
   clarifai,
   cohere,
-  dataclasses-json,
   esprima,
   fetchFromGitHub,
   freezegun,
   huggingface-hub,
-  jsonpatch,
-  langchain-community,
   langchain-core,
   langchain-text-splitters,
   langsmith,
@@ -51,7 +48,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.1.16";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -59,8 +56,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Xv8juma/1qGC2Rb659dJBvRzRh5W+zU+O8W6peElFGc=";
+    rev = "refs/tags/langchain==${version}";
+    hash = "sha256-cLJhdeft9XNLk5njSBaEBSuP31c2VFCJ1ET+ypo6mNY=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -71,9 +68,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    dataclasses-json
-    jsonpatch
-    langchain-community
     langchain-core
     langchain-text-splitters
     langsmith
@@ -160,9 +154,15 @@ buildPythonPackage rec {
     "test_generic_fake_chat_model"
     # Test is outdated
     "test_serializable_mapping"
+    "test_person"
+    "test_aliases_hidden"
   ];
 
   pythonImportsCheck = [ "langchain" ];
+
+  passthru = {
+    updateScript = langchain-core.updateScript;
+  };
 
   meta = with lib; {
     description = "Building applications with LLMs through composability";

@@ -1,40 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, asn1crypto
-, astunparse
-, bincopy
-, bitstring
-, click
-, click-command-tree
-, click-option-group
-, colorama
-, crcmod
-, cryptography
-, deepmerge
-, fastjsonschema
-, hexdump
-, libusbsio
-, oscrypto
-, platformdirs
-, prettytable
-, pylink-square
-, pyocd
-, pyocd-pemicro
-, pypemicro
-, pyserial
-, requests
-, ruamel-yaml
-, setuptools
-, sly
-, spsdk
-, testers
-, typing-extensions
-, ipykernel
-, pytest-notebook
-, pytestCheckHook
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  asn1crypto,
+  astunparse,
+  bincopy,
+  bitstring,
+  click,
+  click-command-tree,
+  click-option-group,
+  colorama,
+  crcmod,
+  cryptography,
+  deepmerge,
+  fastjsonschema,
+  hexdump,
+  libusbsio,
+  oscrypto,
+  platformdirs,
+  prettytable,
+  pylink-square,
+  pyocd,
+  pyocd-pemicro,
+  pypemicro,
+  pyserial,
+  requests,
+  ruamel-yaml,
+  setuptools,
+  sly,
+  spsdk,
+  testers,
+  typing-extensions,
+  ipykernel,
+  pytest-notebook,
+  pytestCheckHook,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -107,12 +108,14 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = spsdk; };
 
   meta = with lib; {
-    broken = versionAtLeast cryptography.version "41.1";
     changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    maintainers = with maintainers; [
+      frogamic
+      sbruder
+    ];
     mainProgram = "spsdk";
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, msgpack
-, orjson
-, pendulum
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, tomli
-, tomli-w
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  msgpack,
+  orjson,
+  pendulum,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  tomli,
+  tomli-w,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -29,29 +30,15 @@ buildPythonPackage rec {
     hash = "sha256-ETK1rHKlByQkqibejiZmXF6c4eIiMazLa8XY2OH30q4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   passthru.optional-dependencies = {
-    orjson = [
-      orjson
-    ];
-    msgpack = [
-      msgpack
-    ];
-    yaml = [
-      pyyaml
-    ];
-    toml = [
-      tomli-w
-    ] ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ];
+    orjson = [ orjson ];
+    msgpack = [ msgpack ];
+    yaml = [ pyyaml ];
+    toml = [ tomli-w ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
   };
 
   nativeCheckInputs = [
@@ -61,9 +48,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "mashumaro"
-  ];
+  pythonImportsCheck = [ "mashumaro" ];
 
   meta = with lib; {
     description = "Serialization library on top of dataclasses";

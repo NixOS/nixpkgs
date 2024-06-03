@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, jdk11
-, psutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  jdk11,
+  psutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   # Disable tests because they require a dedicated Android emulator
   doCheck = false;
 
-  pythonImportsCheck = [
-    "adbe"
-  ];
+  pythonImportsCheck = [ "adbe" ];
 
   meta = with lib; {
     description = "Tool for Android testing and development";

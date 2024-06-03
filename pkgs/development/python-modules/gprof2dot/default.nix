@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, graphviz
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  graphviz,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,10 @@ buildPythonPackage rec {
     hash = "sha256-nIsBO6KTyG2VZZRXrkU/T/a9Ki1x6hda5Vv3rZv/mJM=";
   };
 
-  makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ graphviz ]}"
-  ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ graphviz ]}" ];
 
   # Needed so dot is on path of the test script
-  nativeCheckInputs = [
-    graphviz
-  ];
+  nativeCheckInputs = [ graphviz ];
 
   checkPhase = ''
     runHook preCheck

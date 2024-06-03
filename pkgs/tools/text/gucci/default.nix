@@ -19,15 +19,14 @@ buildGoModule rec {
     package = gucci;
   };
 
-  checkFlags = [ "-short" ];
-
-  # Integration tests rely on Ginkgo but fail.
-  # Related: https://github.com/onsi/ginkgo/issues/602
-  #
-  # Disable integration tests.
-  preCheck = ''
-    buildFlagsArray+=("-run" "[^(TestIntegration)]")
-  '';
+  checkFlags = [
+    "-short"
+    # Integration tests rely on Ginkgo but fail.
+    # Related: https://github.com/onsi/ginkgo/issues/602
+    #
+    # Disable integration tests.
+    "-skip=^TestIntegration"
+  ];
 
   meta = with lib; {
     description = "A simple CLI templating tool written in golang";

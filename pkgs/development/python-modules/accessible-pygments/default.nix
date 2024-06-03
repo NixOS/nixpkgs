@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pygments,
 }:
 
 buildPythonPackage rec {
   pname = "accessible-pygments";
   version = "0.0.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,9 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-57V6mxWVjpYBx+nrB6RAyBMoNUWiCXPyV0pfRT0OlT4=";
   };
 
-  propagatedBuildInputs = [
-    pygments
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pygments ];
 
   # Tests only execute pygments with these styles
   doCheck = false;

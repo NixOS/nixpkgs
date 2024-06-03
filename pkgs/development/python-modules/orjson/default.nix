@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, rustPlatform
-, cffi
+  # build-system
+  rustPlatform,
+  cffi,
 
-# native dependencies
-, libiconv
+  # native dependencies
+  libiconv,
 
-# tests
-, numpy
-, psutil
-, pytestCheckHook
-, python-dateutil
-, pytz
-, xxhash
-, python
+  # tests
+  numpy,
+  psutil,
+  pytestCheckHook,
+  python-dateutil,
+  pytz,
+  xxhash,
+  python,
 
-# for passthru.tests
-, falcon
-, fastapi
-, gradio
-, mashumaro
-, ufolib2
+  # for passthru.tests
+  falcon,
+  fastapi,
+  gradio,
+  mashumaro,
+  ufolib2,
 }:
 
 buildPythonPackage rec {
@@ -50,16 +51,14 @@ buildPythonPackage rec {
 
   maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
-  nativeBuildInputs = [
-    cffi
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [ cffi ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     numpy
@@ -70,9 +69,7 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  pythonImportsCheck = [
-    "orjson"
-  ];
+  pythonImportsCheck = [ "orjson" ];
 
   passthru.tests = {
     inherit
@@ -81,14 +78,17 @@ buildPythonPackage rec {
       gradio
       mashumaro
       ufolib2
-    ;
+      ;
   };
 
   meta = with lib; {
     description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy";
     homepage = "https://github.com/ijl/orjson";
     changelog = "https://github.com/ijl/orjson/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ misuzu ];
   };

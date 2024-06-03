@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pythonRelaxDepsHook
-, sphinx
-, beautifulsoup4
-, sphinx-basic-ng
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  sphinx,
+  beautifulsoup4,
+  sphinx-basic-ng,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-NUi+LO9Foy+M3AJy1BX8s+X6ag603f4h3z7PH+RaE88=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "sphinx"
-  ];
+  pythonRelaxDeps = [ "sphinx" ];
 
   propagatedBuildInputs = [
     sphinx
@@ -47,9 +44,7 @@ buildPythonPackage rec {
     cd -
   '';
 
-  pythonImportsCheck = [
-    "furo"
-  ];
+  pythonImportsCheck = [ "furo" ];
 
   meta = with lib; {
     description = "A clean customizable documentation theme for Sphinx";

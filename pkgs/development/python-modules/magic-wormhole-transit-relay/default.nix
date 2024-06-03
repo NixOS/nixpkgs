@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, autobahn
-, mock
-, twisted
-, pythonOlder
-, pythonAtLeast
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  autobahn,
+  mock,
+  twisted,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,11 +25,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ autobahn twisted ];
+  propagatedBuildInputs = [
+    autobahn
+    twisted
+  ];
 
   pythonImportsCheck = [ "wormhole_transit_relay" ];
 
-  nativeCheckInputs = [ pytestCheckHook mock twisted ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    twisted
+  ];
 
   meta = {
     description = "Transit Relay server for Magic-Wormhole";

@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, debtcollector, oslotest, stestr, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  debtcollector,
+  oslotest,
+  stestr,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "oslo.context";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-tk71FBvlWc+t5EjwRPpFwiYDUe3Lao72t+AMfc7wwyM=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "webob"
-  ];
+  pythonImportsCheck = [ "webob" ];
 
   disabledTestPaths = [
     # AttributeError: 'Thread' object has no attribute 'isAlive'

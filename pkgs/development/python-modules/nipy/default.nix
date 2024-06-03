@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, cython
-, meson-python
-, ninja
-, setuptools
+  # build-system
+  cython,
+  meson-python,
+  ninja,
+  setuptools,
 
-# dependencies
-, numpy
-, scipy
-, nibabel
-, sympy
-, transforms3d
+  # dependencies
+  numpy,
+  scipy,
+  nibabel,
+  sympy,
+  transforms3d,
 
-# optional-dependencies
-, matplotlib
+  # optional-dependencies
+  matplotlib,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,13 +53,9 @@ buildPythonPackage rec {
     transforms3d
   ];
 
-  optional-dependencies.optional = [
-    matplotlib
-  ];
+  optional-dependencies.optional = [ matplotlib ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ optional-dependencies.optional;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.optional;
 
   doCheck = false; # partial imports … circular dependencies. needs more time to figure out.
 
@@ -74,5 +71,4 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/nipy/nipy";
     license = licenses.bsd3;
   };
-
 }

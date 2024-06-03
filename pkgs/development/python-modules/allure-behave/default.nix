@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, behave
-, allure-python-commons
-, setuptools-scm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  behave,
+  allure-python-commons,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-M4yizHOV0e491y9dfZLYkg8a3g4H3evGN7OOYeBtyNw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pythonImportsCheck = [ "allure_behave" ];
 

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, setuptools-scm
-, libxcrypt
-, numpy
-, qt6
-, qtpy
-, pyqt6
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  libxcrypt,
+  numpy,
+  qt6,
+  qtpy,
+  pyqt6,
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -27,11 +28,13 @@ buildPythonPackage rec {
     sha256 = "sha256-0FmUA7kOFSRZXwbj8d7asujBPOjE2pFhu6TDNSGD4r0=";
   };
 
-  nativeBuildInputs = [ setuptools setuptools-scm qt6.wrapQtAppsHook ];
-
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    qt6.wrapQtAppsHook
   ];
+
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = [
     qt6.qtconnectivity

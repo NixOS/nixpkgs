@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "tds_fdw";
   # Move to stable version when it's released.
-  version = "unstable-2024-02-10";
+  version = "2.0.3-unstable-2024-02-10";
 
   buildInputs = [ postgresql freetds ];
 
@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
     install -D tds_fdw.control -t $out/share/postgresql/extension
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "A PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";

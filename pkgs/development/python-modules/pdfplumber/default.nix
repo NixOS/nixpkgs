@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterlab
-, nbexec
-, pandas
-, pandas-stubs
-, pdfminer-six
-, pillow
-, pytest-parallel
-, pytestCheckHook
-, pythonOlder
-, types-pillow
-, wand
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ghostscript,
+  jupyterlab,
+  nbexec,
+  pandas,
+  pandas-stubs,
+  pdfminer-six,
+  pillow,
+  pytest-parallel,
+  pytestCheckHook,
+  pythonOlder,
+  types-pillow,
+  wand,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +46,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    ghostscript
     jupyterlab
     nbexec
     pandas
@@ -53,9 +56,7 @@ buildPythonPackage rec {
     types-pillow
   ];
 
-  pythonImportsCheck = [
-    "pdfplumber"
-  ];
+  pythonImportsCheck = [ "pdfplumber" ];
 
   disabledTests = [
     # flaky
@@ -65,8 +66,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests requires pypdfium2
     "tests/test_display.py"
-    # Tests require Ghostscript
-    "tests/test_repair.py"
+    # Tests requires pypdfium2
+    "tests/test_issues.py"
   ];
 
   meta = with lib; {

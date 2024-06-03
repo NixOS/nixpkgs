@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "--flake8 --pylint --cov=marge" ""
+    substituteInPlace setup.cfg --replace-fail "--flake8 --pylint --cov=marge" ""
   '';
 
   nativeBuildInputs = [
@@ -30,11 +30,16 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pendulum ];
   disabledTests = [
     # test broken when run under Nix:
     #   "unittest.mock.InvalidSpecError: Cannot spec a Mock object."
     "test_get_mr_ci_status"
+  ];
+  disabledTestPaths = [
+    # test errors due to API mismatch in test setup:
+    #   "ImportError: cannot import name 'set_test_now' from 'pendulum.helpers'"
+    "tests/test_interval.py"
   ];
 
   pythonImportsCheck = [ "marge" ];

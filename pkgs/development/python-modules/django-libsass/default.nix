@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# dependencies
-, django-compressor
-, libsass
+  # dependencies
+  django-compressor,
+  libsass,
 
-# tests
-, django
-, python
+  # tests
+  django,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     libsass
   ];
 
-  nativeCheckInputs = [
-    django
-  ];
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     runHook preCheck

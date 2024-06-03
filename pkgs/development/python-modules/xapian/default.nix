@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchurl, python
-, sphinx
-, xapian
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+  sphinx,
+  xapian,
 }:
 
 let
@@ -25,7 +29,10 @@ buildPythonPackage rec {
     export XAPIAN_CONFIG=${xapian}/bin/xapian-config
   '';
 
-  buildInputs = [ sphinx xapian ];
+  buildInputs = [
+    sphinx
+    xapian
+  ];
 
   doCheck = true;
 

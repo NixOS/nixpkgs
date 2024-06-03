@@ -29,13 +29,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.4.0";
+  version = "2024.5.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+F5EOMMkO1ngGeFscDipwbldsY0AhOUKbjqgNpuph4g=";
+    hash = "sha256-dLzCugbRQSGuOwe99a3WLMffisyvYWNRdSdcdW9knjY=";
   };
 
   npmDeps = buildNpmPackage {
@@ -43,7 +43,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-0Q/BCRHlnyQJlCF3PgIP9q3Qyr/ff+GP0lPIwPsIMSU=";
+    npmDepsHash = "sha256-SEgAC3dmnxG1xM9QZQ/e+6NFOwXU3tXlbfZCzrAMFO0=";
 
     dontBuild = true;
 
@@ -81,15 +81,15 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail psycopg2-binary psycopg2 \
       --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
       --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "django-hierarkey==1.1.*" django-hierarkey \
+      --replace-fail "django-oauth-toolkit==2.3.*" django-oauth-toolkit \
       --replace-fail "djangorestframework==3.15.*" djangorestframework \
       --replace-fail "dnspython==2.6.*" dnspython \
       --replace-fail "importlib_metadata==7.*" importlib_metadata \
       --replace-fail "markdown==3.6" markdown \
-      --replace-fail "protobuf==5.26.*" protobuf \
+      --replace-fail "protobuf==5.27.*" protobuf \
       --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "pypdf==3.9.*" pypdf \
       --replace-fail "python-dateutil==2.9.*" python-dateutil \
+      --replace-fail "requests==2.32.*" "requests" \
       --replace-fail "stripe==7.9.*" stripe
   '';
 
@@ -179,7 +179,9 @@ python.pkgs.buildPythonApplication rec {
     vobject
     webauthn
     zeep
-  ] ++ plugins;
+  ]
+  ++ django.optional-dependencies.argon2
+  ++ plugins;
 
   optional-dependencies = with python.pkgs; {
     memcached = [

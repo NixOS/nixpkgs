@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, versioningit
-, platformdirs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  versioningit,
+  platformdirs,
 }:
 
 buildPythonPackage rec {
@@ -28,8 +29,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-  #  contextlib-chdir
-  #  importlib-metadata
+    #  contextlib-chdir
+    #  importlib-metadata
     platformdirs
   ];
 

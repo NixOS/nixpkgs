@@ -1,17 +1,18 @@
-{ lib
-, aniso8601
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, graphql-core
-, graphql-relay
-, pytest-asyncio
-, pytest-benchmark
-, pytest-mock
-, pytest7CheckHook
-, pythonOlder
-, pytz
-, snapshottest
+{
+  lib,
+  aniso8601,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  graphql-core,
+  graphql-relay,
+  pytest-asyncio,
+  pytest-benchmark,
+  pytest-mock,
+  pytest7CheckHook,
+  pythonOlder,
+  pytz,
+  snapshottest,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-DGxicCXZp9kW/OFkr0lAWaQ+GaECx+HD8+X4aW63vgQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aniso8601
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     snapshottest
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pythonImportsCheck = [
-    "graphene"
-  ];
+  pythonImportsCheck = [ "graphene" ];
 
   meta = with lib; {
     description = "GraphQL Framework for Python";

@@ -60,10 +60,8 @@ in {
     qt.enable = true;
     environment.systemPackages = with kdePackages; let
       requiredPackages = [
-        # Hack? To make everything run on Wayland
-        qtwayland
-        # Needed to render SVG icons
-        qtsvg
+        qtwayland # Hack? To make everything run on Wayland
+        qtsvg # Needed to render SVG icons
 
         # Frameworks with globally loadable bits
         frameworkintegration # provides Qt plugin
@@ -75,6 +73,9 @@ in {
         kiconthemes # provides Qt plugins
         kimageformats # provides Qt plugins
         kio # provides helper service + a bunch of other stuff
+        kio-admin # managing files as admin
+        kio-extras # stuff for MTP, AFC, etc
+        kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
         kwallet # provides helper service
@@ -87,30 +88,26 @@ in {
         # Core Plasma parts
         kwin
         pkgs.xwayland
-
         kscreen
         libkscreen
-
         kscreenlocker
-
         kactivitymanagerd
         kde-cli-tools
-        kglobalacceld
+        kglobalacceld # keyboard shortcut daemon
         kwrited # wall message proxy, not to be confused with kwrite
-
-        milou
-        polkit-kde-agent-1
-
+        baloo # system indexer
+        milou # search engine atop baloo
+        kdegraphics-thumbnailers # pdf etc thumbnailer
+        polkit-kde-agent-1 # polkit auth ui
         plasma-desktop
         plasma-workspace
-
-        # Crash handler
-        drkonqi
+        drkonqi # crash handler
+        kde-inotify-survey # warns the user on low inotifywatch limits
 
         # Application integration
         libplasma # provides Kirigami platform theme
         plasma-integration # provides Qt platform theme
-        kde-gtk-config
+        kde-gtk-config # syncs KDE settings to GTK
 
         # Artwork + themes
         breeze
@@ -124,37 +121,21 @@ in {
 
         # misc Plasma extras
         kdeplasma-addons
-
         pkgs.xdg-user-dirs # recommended upstream
 
         # Plasma utilities
         kmenuedit
-
         kinfocenter
         plasma-systemmonitor
         ksystemstats
         libksysguard
-
-        spectacle
         systemsettings
         kcmutils
-
-        # Gear
-        baloo
-        dolphin
-        dolphin-plugins
-        ffmpegthumbs
-        kdegraphics-thumbnailers
-        kde-inotify-survey
-        kio-admin
-        kio-extras
-        kio-fuse
       ];
       optionalPackages = [
         plasma-browser-integration
         konsole
         (lib.getBin qttools) # Expose qdbus in PATH
-
         ark
         elisa
         gwenview
@@ -162,6 +143,10 @@ in {
         kate
         khelpcenter
         print-manager
+        dolphin
+        dolphin-plugins
+        spectacle
+        ffmpegthumbs
       ];
     in
       requiredPackages

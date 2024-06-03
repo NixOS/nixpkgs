@@ -1,6 +1,10 @@
-{ mkDerivation
-, bsdSetupHook, netbsdSetupHook, rsync
-, make
+{
+  mkDerivation,
+  bsdSetupHook,
+  netbsdSetupHook,
+  rsync,
+  make,
+  make-rules,
 }:
 
 mkDerivation {
@@ -8,16 +12,20 @@ mkDerivation {
   sha256 = "0fh0nrnk18m613m5blrliq2aydciv51qhc0ihsj4k63incwbk90n";
   version = "9.2";
 
-  buildInputs = [];
+  buildInputs = [ ];
   nativeBuildInputs = [
-    bsdSetupHook netbsdSetupHook rsync
+    bsdSetupHook
+    netbsdSetupHook
+    rsync
   ];
 
   skipIncludesPhase = true;
 
   postPatch = ''
     patchShebangs $COMPONENT_PATH/configure
-    ${make.postPatch}
+
+    # make needs this to pick up our sys make files
+    appendToVar NIX_CFLAGS_COMPILE "-D_PATH_DEFSYSPATH=\"$out/share/mk\""
   '';
 
   buildPhase = ''
@@ -34,10 +42,10 @@ mkDerivation {
     install -D nbmake $out/bin/nbmake
     ln -s $out/bin/nbmake $out/bin/make
     mkdir -p $out/share
-    cp -r $BSDSRCDIR/share/mk $out/share/mk
+    cp -r ${make-rules} $out/share/mk
 
     runHook postInstall
   '';
 
-  extraPaths = [ make.src ] ++ make.extraPaths;
+  extraPaths = [ make.src ];
 }

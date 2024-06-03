@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "nixops-gce";
-  version = "unstable-2023-05-26";
+  version = "0-unstable-2023-05-26";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -50,5 +50,6 @@ buildPythonPackage {
     homepage = "https://github.com/nix-community/nixops-gce";
     license = licenses.mit;
     maintainers = nixops.meta.maintainers;
+    broken = true; # never built on Hydra
   };
 }

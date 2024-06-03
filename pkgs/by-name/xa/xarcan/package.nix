@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , arcan
 , audit
 , dbus
@@ -30,21 +29,23 @@
 , systemd
 , xcbutil
 , xcbutilwm
+, xcbutilimage
 , xkbcomp
 , xkeyboard_config
 , xorgproto
 , xtrans
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "unstable-2023-11-03";
+  version = "0-unstable-2024-05-11";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "xarcan";
-    rev = "380ea856307f593535dfc8b23799938db69e31b0";
-    hash = "sha256-RdizezCbJylQDkOmUdqL0lBTNLsjyvo+lKAjfZXTXf4=";
+    rev = "ecc4d0a6408dfeb19934e3bfd4c382b0862c03b4";
+    hash = "sha256-PmaoeemQpin5NN8I6JYOumP+PrzkyTYrqAyxxwBO9K0=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalPackages: {
     systemd
     xcbutil
     xcbutilwm
+    xcbutilimage
     xkbcomp
     xkeyboard_config
     xorgproto
@@ -103,6 +105,8 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-output=/tmp"
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
+
+  passthru.updateScript = unstableGitUpdater {};
 
   meta =  {
     homepage = "https://github.com/letoram/letoram";

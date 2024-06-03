@@ -1,11 +1,12 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, fetchPypi
-, holoviews
-, pandas
-, pythonOlder
+{
+  lib,
+  bokeh,
+  buildPythonPackage,
+  colorcet,
+  fetchPypi,
+  holoviews,
+  pandas,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Many tests require a network connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hvplot.pandas"
-  ];
+  pythonImportsCheck = [ "hvplot.pandas" ];
 
   meta = with lib; {
     description = "A high-level plotting API for the PyData ecosystem built on HoloViews";

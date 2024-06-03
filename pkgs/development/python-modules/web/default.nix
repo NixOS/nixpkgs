@@ -1,6 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
-, cheroot
-, dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  cheroot,
+  dbutils,
+  mysqlclient,
+  pymysql,
+  mysql-connector,
+  psycopg2,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +27,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "web" ];
 
-  nativeCheckInputs = [ pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    dbutils
+    mysqlclient
+    pymysql
+    mysql-connector
+    psycopg2
+  ];
 
   meta = with lib; {
     description = "Makes web apps";
@@ -31,5 +46,4 @@ buildPythonPackage rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [ layus ];
   };
-
 }

@@ -5,7 +5,7 @@
 , callPackage
 , isl_0_11, isl_0_14, isl_0_17, isl_0_20
 , libcCross
-, threadsCrossFor
+, threadsCross
 , noSysDirs
 , texinfo5
 , cloog_0_18_0, cloog
@@ -25,7 +25,7 @@ let
         reproducibleBuild = true;
         profiledCompiler = false;
         libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
-        threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor majorMinorVersion else { };
+        threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
         isl = if       stdenv.isDarwin then null
               else if    atLeast "9"   then isl_0_20
               else if    atLeast "7"   then isl_0_17

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, setuptools
-, six
-, attrs
-, twisted
-, autobahn
-, treq
-, mock
-, pythonOlder
-, pythonAtLeast
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  setuptools,
+  six,
+  attrs,
+  twisted,
+  autobahn,
+  treq,
+  mock,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -44,8 +45,7 @@ buildPythonPackage rec {
     six
     twisted
     autobahn
-  ] ++ autobahn.optional-dependencies.twisted
-  ++ twisted.optional-dependencies.tls;
+  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "wormhole_mailbox_server" ];
 

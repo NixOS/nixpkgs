@@ -468,7 +468,7 @@ in
           StateDirectory = [
             "pretix"
           ];
-          StateDirectoryMode = "0755";
+          StateDirectoryMode = "0750";
           CacheDirectory = "pretix";
           LogsDirectory = "pretix";
           WorkingDirectory = cfg.settings.pretix.datadir;
@@ -507,7 +507,7 @@ in
             "~@privileged"
             "@chown"
           ];
-          UMask = "0022";
+          UMask = "0027";
         };
       };
     in {
@@ -561,6 +561,8 @@ in
         wantedBy = [ "multi-user.target" ];
         serviceConfig.ExecStart = "${getExe' pythonEnv "celery"} -A pretix.celery_app worker ${cfg.celery.extraArgs}";
       };
+
+      nginx.serviceConfig.SupplementaryGroups = mkIf cfg.nginx.enable [ "pretix" ];
     };
 
     systemd.sockets.pretix-web.socketConfig = {
@@ -569,11 +571,9 @@ in
     };
 
     users = {
-      groups."${cfg.group}" = {};
-      users."${cfg.user}" = {
+      groups.${cfg.group} = {};
+      users.${cfg.user} = {
         isSystemUser = true;
-        createHome = true;
-        home = cfg.settings.pretix.datadir;
         inherit (cfg) group;
       };
     };

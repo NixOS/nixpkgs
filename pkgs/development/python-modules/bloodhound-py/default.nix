@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchPypi
-, impacket
-, ldap3
-, pycryptodome
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  impacket,
+  ldap3,
+  pycryptodome,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-USZU19dLppoq19+JMFtiojyJk6bj96nP2JQDq7JFkHM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dnspython
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bloodhound"
-  ];
+  pythonImportsCheck = [ "bloodhound" ];
 
   meta = with lib; {
     description = "Python based ingestor for BloodHound, based on Impacket";

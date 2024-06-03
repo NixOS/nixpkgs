@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, html-text
-, jstyleson
-, lxml
-, mf2py
-, mock
-, pyrdfa3
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, rdflib
-, setuptools
-, six
-, w3lib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html-text,
+  jstyleson,
+  lxml,
+  mf2py,
+  mock,
+  pyrdfa3,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  rdflib,
+  setuptools,
+  six,
+  w3lib,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-6lAb17EoR0FKyIOb9hk1jcpmPtZ7vClfuCrDZ83XBeg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     html-text
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "extruct"
-  ];
+  pythonImportsCheck = [ "extruct" ];
 
   disabledTests = [
     # AssertionError: Lists differ

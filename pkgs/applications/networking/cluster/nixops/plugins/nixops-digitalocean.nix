@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "nixops-digitalocean";
-  version = "unstable-2022-08-14";
+  version = "0.1.0-unstable-2022-08-14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, packaging
-, platformdirs
-, pydantic_1
-, pyyaml
-, requests-unixsocket
-, setuptools
-, setuptools-scm
-, urllib3
-, pytest-check
-, pytest-mock
-, pytestCheckHook
-, responses
-, freezegun
-, pytest-subprocess
-, pytest-logdog
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  packaging,
+  platformdirs,
+  pydantic_1,
+  pyyaml,
+  requests-unixsocket,
+  setuptools,
+  setuptools-scm,
+  urllib3,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
+  responses,
+  freezegun,
+  pytest-subprocess,
+  pytest-logdog,
 }:
 
 buildPythonPackage rec {
@@ -69,9 +70,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "craft_providers"
-  ];
+  pythonImportsCheck = [ "craft_providers" ];
 
   nativeCheckInputs = [
     freezegun

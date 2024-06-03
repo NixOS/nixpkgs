@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "got";
-  version = "0.98.2";
+  version = "0.99";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/11K2ZIu3xyAVbI5hlCXL9RjyAlZDb544uqxv3ihUMg=";
+    hash = "sha256-rqQINToCsuOtm00bdgeQAmmvl5htQJmMV/EKzfD6Hjg=";
   };
 
   nativeBuildInputs = [ pkg-config bison ]
@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libressl libbsd libevent libuuid libmd zlib ncurses ]
     ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
-
-  configureFlags = [ "--enable-gotd" ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     # The configure script assumes dependencies on Darwin are installed via
@@ -52,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://gameoftrees.org/releases/CHANGES";
-    description = "A version control system which prioritizes ease of use and simplicity over flexibility";
+    description = "Version control system which prioritizes ease of use and simplicity over flexibility";
     longDescription = ''
       Game of Trees (Got) is a version control system which prioritizes
       ease of use and simplicity over flexibility.

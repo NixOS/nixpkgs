@@ -1,16 +1,17 @@
-{ lib
-, bitbox02
-, buildPythonPackage
-, cbor
-, ecdsa
-, fetchFromGitHub
-, hidapi
-, libusb1
-, mnemonic
-, pyaes
-, pyserial
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  bitbox02,
+  buildPythonPackage,
+  cbor,
+  ecdsa,
+  fetchFromGitHub,
+  hidapi,
+  libusb1,
+  mnemonic,
+  pyaes,
+  pyserial,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
   # Tests require to clone quite a few firmwares
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hwilib"
-  ];
+  pythonImportsCheck = [ "hwilib" ];
 
   meta = with lib; {
     description = "Bitcoin Hardware Wallet Interface";

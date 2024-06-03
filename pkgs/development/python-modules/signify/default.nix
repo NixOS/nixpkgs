@@ -1,16 +1,17 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, certvalidator
-, fetchFromGitHub
-, mscerts
-, oscrypto
-, pyasn1
-, pyasn1-modules
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certvalidator,
+  fetchFromGitHub,
+  mscerts,
+  oscrypto,
+  pyasn1,
+  pyasn1-modules,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-29SyzqtZ1cI+1xrSPLFr63vwB5st/9i5b3FYtJn6eok=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -41,13 +40,9 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "signify"
-  ];
+  pythonImportsCheck = [ "signify" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     changelog = "https://github.com/ralphje/signify/blob/${src.rev}/docs/changelog.rst";

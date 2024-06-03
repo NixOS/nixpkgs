@@ -130,8 +130,8 @@ in
             relevant = config.systemd.network.enable;
             root = config.systemd.network.netdevs;
             peer = (x: x.wireguardPeers);
-            key = (x: if x.wireguardPeerConfig ? PublicKey then x.wireguardPeerConfig.PublicKey else null);
-            description = "${options.systemd.network.netdevs}.\"<name>\".wireguardPeers.*.wireguardPeerConfig.PublicKey";
+            key = x: x.PublicKey or null;
+            description = "${options.systemd.network.netdevs}.\"<name>\".wireguardPeers.*.PublicKey";
           }
           {
             relevant = config.networking.wireguard.enable;
@@ -225,8 +225,10 @@ in
         # See <https://www.freedesktop.org/software/systemd/man/systemd.unit.html#Specifiers>
         environment.CONFIG = "%t/${serviceConfig.RuntimeDirectory}/config.toml";
 
-        preStart = "${getExe pkgs.envsubst} -i ${config} -o \"$CONFIG\"";
-        script = "rosenpass exchange-config \"$CONFIG\"";
+        script = ''
+          ${getExe pkgs.envsubst} -i ${config} -o "$CONFIG"
+          rosenpass exchange-config "$CONFIG"
+        '';
       };
   };
 }

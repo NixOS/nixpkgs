@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pythonAtLeast
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pythonAtLeast,
+  stdenv,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# propagates (optional, but unspecified)
-# https://github.com/joblib/joblib#dependencies
-, lz4
-, psutil
+  # propagates (optional, but unspecified)
+  # https://github.com/joblib/joblib#dependencies
+  lz4,
+  psutil,
 
-# tests
-, pytestCheckHook
-, threadpoolctl
+  # tests
+  pytestCheckHook,
+  threadpoolctl,
 }:
-
 
 buildPythonPackage rec {
   pname = "joblib";
@@ -31,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-HrDcCRkZzThEkN6JDLXf1ThBCm1LO1Tu8J+4xQtAmxw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     lz4
@@ -45,21 +43,22 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  pytestFlagsArray = [
-    "joblib/test"
-  ];
+  pytestFlagsArray = [ "joblib/test" ];
 
-  disabledTests = [
-    "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
-    "test_parallel_call_cached_function_defined_in_jupyter" # jupyter not available during tests
-    "test_nested_parallel_warnings" # tests is flaky under load
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # deprecation warnings with python3.12 https://github.com/joblib/joblib/issues/1478
-    "test_main_thread_renamed_no_warning"
-    "test_background_thread_parallelism"
-  ];
+  disabledTests =
+    [
+      "test_disk_used" # test_disk_used is broken: https://github.com/joblib/joblib/issues/57
+      "test_parallel_call_cached_function_defined_in_jupyter" # jupyter not available during tests
+      "test_nested_parallel_warnings" # tests is flaky under load
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_dispatch_multiprocessing" # test_dispatch_multiprocessing is broken only on Darwin.
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # deprecation warnings with python3.12 https://github.com/joblib/joblib/issues/1478
+      "test_main_thread_renamed_no_warning"
+      "test_background_thread_parallelism"
+    ];
 
   meta = with lib; {
     changelog = "https://github.com/joblib/joblib/releases/tag/${version}";

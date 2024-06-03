@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, setuptools
-, proton-core
-, proton-vpn-network-manager
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  proton-core,
+  proton-vpn-network-manager,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton.vpn.backend.linux.networkmanager.protocol" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Adds support for the OpenVPN protocol using NetworkManager";

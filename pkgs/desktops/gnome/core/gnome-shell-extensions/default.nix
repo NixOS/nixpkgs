@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, glib
-, gnome
-, gnome-menus
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  libgtop,
+  glib,
+  gnome,
+  gnome-menus,
+  substituteAll,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "46.1";
+  version = "46.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xbpQcA2nephvAGC+7az8AX5+yCKD8qY4SEKggHvEVT8=";
+    hash = "sha256-1ELp0mklEl/yFaXBNCkElWVTgHQdqvuzejqZ1vDH2G8=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix_gmenu.patch;
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+    })
+    (substituteAll {
+      src = ./fix_gtop.patch;
+      gtop_path = "${libgtop}/lib/girepository-1.0";
     })
   ];
 
@@ -35,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  mesonFlags = [
-    "-Dextension_set=all"
-  ];
+  mesonFlags = [ "-Dextension_set=all" ];
 
   preFixup = ''
     # Since we do not install the schemas to central location,

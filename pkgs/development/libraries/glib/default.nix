@@ -22,7 +22,11 @@
 , makeHardcodeGsettingsPatch
 , testers
 , gobject-introspection
-, withIntrospection ? stdenv.buildPlatform.canExecute stdenv.hostPlatform && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+, mesonEmulatorHook
+, withIntrospection ?
+  stdenv.hostPlatform.emulatorAvailable buildPackages &&
+  lib.meta.availableOn stdenv.hostPlatform gobject-introspection &&
+  stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
@@ -56,11 +60,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.0";
+  version = "2.80.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-giipL5KkEhYLE5rmi2NFvSjyRDSnta8VDr4h/1h6Vh0=";
+    hash = "sha256-uc+296W9WzEjj9XVbfImst2l6jdhFHW/ifag+UAP6L0=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -150,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection'
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -233,7 +239,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc/glib-2.0" "$devdoc"
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];

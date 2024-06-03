@@ -1,38 +1,41 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, awkward
-, cachetools
-, cloudpickle
-, correctionlib
-, dask
-, dask-awkward
-, dask-histogram
-, fsspec-xrootd
-, hist
-, lz4
-, matplotlib
-, mplhep
-, numba
-, numpy
-, packaging
-, pandas
-, pyarrow
-, scipy
-, toml
-, tqdm
-, uproot
-, distributed
-, pyinstrument
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  aiohttp,
+  awkward,
+  cachetools,
+  cloudpickle,
+  correctionlib,
+  dask,
+  dask-awkward,
+  dask-histogram,
+  fsspec-xrootd,
+  hist,
+  lz4,
+  matplotlib,
+  mplhep,
+  numba,
+  numpy,
+  packaging,
+  pandas,
+  pyarrow,
+  requests,
+  scipy,
+  toml,
+  tqdm,
+  uproot,
+  distributed,
+  pyinstrument,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.4.1";
+  version = "2024.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,20 +44,16 @@ buildPythonPackage rec {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Iu1GHnLUqdhYO7hoHaf+O/S6KO0P+dvl0wgfRA5vtGI=";
+    hash = "sha256-FHE7/VL0mnf0eBPzCsrr8ISr7OmfFvI9xuV0CPa7JdU=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numba>=0.58.1" "numba"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     awkward
     cachetools
     cloudpickle
@@ -72,6 +71,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pyarrow
+    requests
     scipy
     toml
     tqdm
@@ -84,9 +84,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "coffea"
+  pythonImportsCheck = [ "coffea" ];
+
+  disabledTests = [
+    # Requires internet access
+    # https://github.com/CoffeaTeam/coffea/issues/1094
+    "test_lumimask"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";

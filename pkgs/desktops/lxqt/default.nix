@@ -30,10 +30,7 @@ let
     lxqt-sudo = callPackage ./lxqt-sudo {};
     lxqt-themes = callPackage ./lxqt-themes {};
     pavucontrol-qt = callPackage ./pavucontrol-qt {};
-    qtermwidget = callPackage ./qtermwidget {
-      lxqt-build-tools = lxqt-build-tools_0_13;
-      inherit (pkgs.libsForQt5) qtbase qttools;
-    };
+    qtermwidget = callPackage ./qtermwidget {};
 
     ### CORE 2
     lxqt-panel = callPackage ./lxqt-panel {};
@@ -41,10 +38,7 @@ let
     pcmanfm-qt = callPackage ./pcmanfm-qt {};
 
     ### OPTIONAL
-    qterminal = callPackage ./qterminal {
-      lxqt-build-tools = lxqt-build-tools_0_13;
-      inherit (pkgs.libsForQt5) qtbase qttools qtx11extras;
-    };
+    qterminal = callPackage ./qterminal {};
     compton-conf = callPackage ./compton-conf {
       lxqt-build-tools = lxqt-build-tools_0_13;
       inherit (pkgs.libsForQt5) qtbase qttools qtx11extras;

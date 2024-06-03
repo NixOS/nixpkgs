@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, proton-core
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  proton-core,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-/LfMjyTs/EusgnKEQugsdJzqDZBvaAhbsTUVLDCRw0I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    proton-core
-  ];
+  propagatedBuildInputs = [ proton-core ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -33,9 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton.vpn.logging" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'

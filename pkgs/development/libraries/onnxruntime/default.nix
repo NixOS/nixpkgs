@@ -15,7 +15,7 @@
 , re2
 , zlib
 , microsoft-gsl
-, iconv
+, libiconv
 , protobuf_21
 , pythonSupport ? true
 , cudaSupport ? config.cudaSupport
@@ -138,7 +138,7 @@ effectiveStdenv.mkDerivation rec {
     packaging
   ]) ++ lib.optionals effectiveStdenv.isDarwin [
     Foundation
-    iconv
+    libiconv
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cccl # cub/cub.cuh
     libcublas # cublas_v2.h

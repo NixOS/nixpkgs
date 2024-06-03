@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]

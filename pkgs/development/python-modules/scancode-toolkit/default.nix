@@ -1,61 +1,62 @@
-{ lib
-, attrs
-, beautifulsoup4
-, bitarray
-, boolean-py
-, buildPythonPackage
-, chardet
-, click
-, colorama
-, commoncode
-, container-inspector
-, debian-inspector
-, dparse2
-, extractcode
-, extractcode-7z
-, extractcode-libarchive
-, fasteners
-, fetchPypi
-, fingerprints
-, ftfy
-, gemfileparser2
-, html5lib
-, importlib-metadata
-, intbitset
-, jaraco-functools
-, javaproperties
-, jinja2
-, jsonstreams
-, license-expression
-, lxml
-, markupsafe
-, packageurl-python
-, packaging
-, parameter-expansion-patched
-, pefile
-, pip-requirements-parser
-, pkginfo2
-, pluggy
-, plugincode
-, publicsuffix2
-, pyahocorasick
-, pycryptodome
-, pygmars
-, pygments
-, pymaven-patch
-, pytestCheckHook
-, pythonOlder
-, requests
-, saneyaml
-, setuptools
-, spdx-tools
-, text-unidecode
-, toml
-, typecode
-, typecode-libmagic
-, urlpy
-, xmltodict
-, zipp
+{
+  lib,
+  attrs,
+  beautifulsoup4,
+  bitarray,
+  boolean-py,
+  buildPythonPackage,
+  chardet,
+  click,
+  colorama,
+  commoncode,
+  container-inspector,
+  debian-inspector,
+  dparse2,
+  extractcode,
+  extractcode-7z,
+  extractcode-libarchive,
+  fasteners,
+  fetchPypi,
+  fingerprints,
+  ftfy,
+  gemfileparser2,
+  html5lib,
+  importlib-metadata,
+  intbitset,
+  jaraco-functools,
+  javaproperties,
+  jinja2,
+  jsonstreams,
+  license-expression,
+  lxml,
+  markupsafe,
+  packageurl-python,
+  packaging,
+  parameter-expansion-patched,
+  pefile,
+  pip-requirements-parser,
+  pkginfo2,
+  pluggy,
+  plugincode,
+  publicsuffix2,
+  pyahocorasick,
+  pycryptodome,
+  pygmars,
+  pygments,
+  pymaven-patch,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  saneyaml,
+  setuptools,
+  spdx-tools,
+  text-unidecode,
+  toml,
+  typecode,
+  typecode-libmagic,
+  urlpy,
+  xmltodict,
+  zipp,
 }:
 
 buildPythonPackage rec {
@@ -72,9 +73,7 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     attrs
@@ -128,13 +127,9 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    zipp
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ zipp ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Importing scancode needs a writeable home, and preCheck happens in between
   # pythonImportsCheckPhase and pytestCheckPhase.
@@ -142,9 +137,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "scancode"
-  ];
+  pythonImportsCheck = [ "scancode" ];
 
   disabledTestPaths = [
     # Tests are outdated
@@ -159,7 +152,10 @@ buildPythonPackage rec {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [ asl20 cc-by-40 ];
+    license = with licenses; [
+      asl20
+      cc-by-40
+    ];
     maintainers = with maintainers; [ ];
   };
 }

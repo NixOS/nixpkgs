@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, fastrlock
-, numpy
-, wheel
-, pytestCheckHook
-, mock
-, setuptools
-, cudaPackages
-, addOpenGLRunpath
-, pythonOlder
-, symlinkJoin
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  fastrlock,
+  numpy,
+  wheel,
+  pytestCheckHook,
+  mock,
+  setuptools,
+  cudaPackages,
+  addOpenGLRunpath,
+  pythonOlder,
+  symlinkJoin,
 }:
 
 let

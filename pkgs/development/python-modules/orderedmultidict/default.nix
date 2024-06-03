@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, flake8, six, pythonOlder, importlib-metadata }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flake8,
+  six,
+  pythonOlder,
+  importlib-metadata,
+}:
 
 buildPythonPackage rec {
   pname = "orderedmultidict";
@@ -12,10 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ flake8 ];
 
-  propagatedBuildInputs = [ six ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      importlib-metadata
-    ];
+  propagatedBuildInputs = [ six ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   meta = with lib; {
     description = "Ordered Multivalue Dictionary.";

@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromSourcehut
-, kubo, packaging, tomli, flit-core }:
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromSourcehut,
+  kubo,
+  packaging,
+  tomli,
+  flit-core,
+}:
 
 buildPythonPackage rec {
   pname = "ipwhl";
@@ -16,7 +24,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
   buildInputs = [ kubo ];
-  propagatedBuildInputs = [ packaging tomli ];
+  propagatedBuildInputs = [
+    packaging
+    tomli
+  ];
   doCheck = false; # there's no test
   pythonImportsCheck = [ "ipwhl" ];
 

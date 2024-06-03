@@ -1,24 +1,25 @@
-{ lib
-, attrs
-, boto3
-, buildPythonPackage
-, click-completion
-, click-didyoumean
-, click-help-colors
-, colorama
-, fetchPypi
-, gradient-statsd
-, gradient-utils
-, gql
-, halo
-, marshmallow
-, progressbar2
-, pyopenssl
-, pyyaml
-, requests
-, requests-toolbelt
-, terminaltables
-, websocket-client
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  click-completion,
+  click-didyoumean,
+  click-help-colors,
+  colorama,
+  fetchPypi,
+  gradient-statsd,
+  gradient-utils,
+  gql,
+  halo,
+  marshmallow,
+  progressbar2,
+  pyopenssl,
+  pyyaml,
+  requests,
+  requests-toolbelt,
+  terminaltables,
+  websocket-client,
 }:
 
 buildPythonPackage rec {

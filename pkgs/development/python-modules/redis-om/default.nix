@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, unasync
-, poetry-core
-, python
-, click
-, hiredis
-, more-itertools
-, pydantic
-, python-ulid
-, redis
-, types-redis
-, typing-extensions
-, pkgs
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  unasync,
+  poetry-core,
+  python,
+  click,
+  hiredis,
+  more-itertools,
+  pydantic,
+  python-ulid,
+  redis,
+  types-redis,
+  typing-extensions,
+  pkgs,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.2.2";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "redis";
     repo = "redis-om-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-E11wpTrE+HIT+jgn1zMC8L7RGas83DAJd1R0WWHp7Jc=";
+    hash = "sha256-jwFtRnj/jhH+AKjExdOCgUfgEWweFCXVuz6F3qQRcs0=";
   };
 
   build-system = [

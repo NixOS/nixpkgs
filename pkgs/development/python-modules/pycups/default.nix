@@ -1,4 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, cups, libiconv }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cups,
+  libiconv,
+}:
 
 buildPythonPackage rec {
   pname = "pycups";

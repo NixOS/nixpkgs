@@ -4,7 +4,6 @@
 , zlib
 , pkg-config
 , autoreconfHook
-, xz
 , libintl
 , python
 , gettext
@@ -25,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
-  version = "2.12.6";
+  version = "2.12.7";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -34,8 +33,13 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    hash = "sha256-iJxZOogaPbX92WzJMYyH3zTrZI7fxFgnKtRv1gc1P7s=";
+    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
   };
+
+  # https://gitlab.gnome.org/GNOME/libxml2/-/issues/725
+  postPatch = if stdenv.hostPlatform.isFreeBSD then ''
+    substituteInPlace ./configure.ac --replace-fail pthread_join pthread_create
+  '' else null;
 
   strictDeps = true;
 
@@ -52,11 +56,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     ncurses
   ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
   ];
 
   propagatedBuildInputs = [

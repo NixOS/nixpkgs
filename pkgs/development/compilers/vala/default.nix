@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
+{ stdenv, lib, fetchurl, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
 , gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala, gobject-introspection
 }:
 

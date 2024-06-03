@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, llhttp
-, python
-# build_requires
-, cython
-, setuptools
-# install_requires
-, attrs
-, multidict
-, async-timeout
-, yarl
-, frozenlist
-, aiosignal
-, aiodns
-, brotli
-# tests_require
-, freezegun
-, gunicorn
-, pytest-mock
-, pytest7CheckHook
-, python-on-whales
-, re-assert
-, trustme
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  llhttp,
+  python,
+  # build_requires
+  cython,
+  setuptools,
+  # install_requires
+  attrs,
+  multidict,
+  async-timeout,
+  yarl,
+  frozenlist,
+  aiosignal,
+  aiodns,
+  brotli,
+  # tests_require
+  freezegun,
+  gunicorn,
+  pytest-mock,
+  pytest7CheckHook,
+  python-on-whales,
+  re-assert,
+  trustme,
 }:
 
 buildPythonPackage rec {
@@ -84,32 +85,35 @@ buildPythonPackage rec {
   '';
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
-  nativeCheckInputs = [
-    freezegun
-    gunicorn
-    pytest-mock
-    pytest7CheckHook
-    python-on-whales
-    re-assert
-  ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
-    # Optional test dependency. Depends indirectly on pyopenssl, which is
-    # broken on aarch64-darwin.
-    trustme
-  ];
+  nativeCheckInputs =
+    [
+      freezegun
+      gunicorn
+      pytest-mock
+      pytest7CheckHook
+      python-on-whales
+      re-assert
+    ]
+    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+      # Optional test dependency. Depends indirectly on pyopenssl, which is
+      # broken on aarch64-darwin.
+      trustme
+    ];
 
-  disabledTests = [
-    # Disable tests that require network access
-    "test_client_session_timeout_zero"
-    "test_mark_formdata_as_processed"
-    "test_requote_redirect_url_default"
-    # don't run benchmarks
-    "test_import_time"
-  ] ++ lib.optionals stdenv.is32bit [
-    "test_cookiejar"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
-    "test_close"
-  ];
+  disabledTests =
+    [
+      # Disable tests that require network access
+      "test_client_session_timeout_zero"
+      "test_mark_formdata_as_processed"
+      "test_requote_redirect_url_default"
+      # don't run benchmarks
+      "test_import_time"
+    ]
+    ++ lib.optionals stdenv.is32bit [ "test_cookiejar" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_addresses" # https://github.com/aio-libs/aiohttp/issues/3572, remove >= v4.0.0
+      "test_close"
+    ];
 
   disabledTestPaths = [
     "tests/test_proxy_functional.py" # FIXME package proxy.py
@@ -118,13 +122,15 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   # aiohttp in current folder shadows installed version
-  preCheck = ''
-    rm -r aiohttp
-    touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Work around "OSError: AF_UNIX path too long"
-    export TMPDIR="/tmp"
-  '';
+  preCheck =
+    ''
+      rm -r aiohttp
+      touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # Work around "OSError: AF_UNIX path too long"
+      export TMPDIR="/tmp"
+    '';
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";

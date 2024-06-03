@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "buckle";
@@ -11,6 +17,11 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   checkFlags = [
     # Both tests access the network.

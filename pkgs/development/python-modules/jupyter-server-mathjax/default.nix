@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jupyter-packaging
-, setuptools
-, jupyter-server
-, pytest-jupyter
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter-packaging,
+  setuptools,
+  jupyter-server,
+  pytest-jupyter,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    jupyter-server
-  ];
+  propagatedBuildInputs = [ jupyter-server ];
 
   nativeCheckInputs = [
     pytest-jupyter

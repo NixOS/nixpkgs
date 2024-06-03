@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, speg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  speg,
 }:
 
 buildPythonPackage rec {

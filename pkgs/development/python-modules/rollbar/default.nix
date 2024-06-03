@@ -1,16 +1,16 @@
-{ lib
-, aiocontextvars
-, blinker
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, httpx
-, mock
-, pytestCheckHook
-, requests
-, six
-, pythonOlder
-, webob
+{
+  lib,
+  aiocontextvars,
+  blinker,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  mock,
+  pytestCheckHook,
+  requests,
+  six,
+  pythonOlder,
+  webob,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +44,7 @@ buildPythonPackage rec {
   # https://github.com/rollbar/pyrollbar/pull/340
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rollbar"
-  ];
+  pythonImportsCheck = [ "rollbar" ];
 
   meta = with lib; {
     description = "Error tracking and logging from Python to Rollbar";

@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildPythonPackage rec {
@@ -22,5 +23,5 @@ buildPythonPackage rec {
     mainProgram = "pcpp";
     license = licenses.bsd0;
     maintainers = with maintainers; [ rakesh4g ];
- };
+  };
 }

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, linuxHeaders
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  linuxHeaders,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,19 +24,13 @@ buildPythonPackage rec {
       --replace-fail /usr/include ${linuxHeaders}/include
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [
-    linuxHeaders
-  ];
+  buildInputs = [ linuxHeaders ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "evdev"
-  ];
+  pythonImportsCheck = [ "evdev" ];
 
   meta = with lib; {
     description = "Provides bindings to the generic input event interface in Linux";

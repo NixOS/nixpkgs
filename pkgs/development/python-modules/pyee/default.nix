@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, twisted
-, typing-extensions
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  twisted,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   nativeCheckInputs = [
     mock
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [
-    "pyee"
-  ];
+  pythonImportsCheck = [ "pyee" ];
 
   meta = with lib; {
     description = "A port of Node.js's EventEmitter to Python";

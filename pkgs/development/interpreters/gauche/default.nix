@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
+    substituteInPlace ext/package-templates/configure \
+      --replace "#!/usr/bin/env gosh" "#!$out/bin/gosh"
     patchShebangs .
   '';
 

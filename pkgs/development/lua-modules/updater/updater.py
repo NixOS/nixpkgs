@@ -49,8 +49,8 @@ FOOTER = """
 class LuaPlugin:
     name: str
     """Name of the plugin, as seen on luarocks.org"""
-    src: str
-    """address to the git repository"""
+    rockspec: str
+    """Full path towards the rockspec"""
     ref: Optional[str]
     """git reference (branch name/tag)"""
     version: Optional[str]
@@ -103,7 +103,7 @@ class LuaEditor(pluginupdate.Editor):
             f.write(HEADER)
             header2 = textwrap.dedent(
                 """
-                { stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
+                { stdenv, lib, fetchurl, fetchgit, callPackage, ... }:
                 final: prev:
                 {
             """
@@ -171,16 +171,17 @@ def generate_pkg_nix(plug: LuaPlugin):
     if plug.maintainers:
         cmd.append(f"--maintainers={plug.maintainers}")
 
-    if plug.src != "":
-        if plug.src is None:
+    if plug.rockspec != "":
+        if plug.ref or plug.version:
             msg = (
-                "src must be set when 'version' is set to \"src\" for package %s"
+                "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s"
                 % plug.name
             )
-            log.error(msg)
-            raise RuntimeError(msg)
-        log.debug("Updating from source %s", plug.src)
-        cmd.append(plug.src)
+            log.warn(msg)
+
+        log.debug("Updating from rockspec %s", plug.rockspec)
+        cmd.append(plug.rockspec)
+
     # update the plugin from luarocks
     else:
         cmd.append(plug.name)

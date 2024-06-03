@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gcc
-, wirelesstools
-, isPy27
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gcc,
+  wirelesstools,
+  isPy27,
+  isPyPy,
 }:
 
 buildPythonPackage rec {

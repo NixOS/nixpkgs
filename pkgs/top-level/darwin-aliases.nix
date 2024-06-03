@@ -54,4 +54,13 @@ mapAliases ({
   ### I ###
 
   insert_dylib = throw "'darwin.insert_dylib' has been renamed to 'insert-dylib'"; # added 2024-04-04
+
+  ### L ###
+
+  libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
+  libiconv = pkgs.libiconv; # 2024-03-27
+
+  ### O ###
+
+  opencflite = pkgs.opencflite; # added 2024-05-02
 })

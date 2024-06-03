@@ -152,7 +152,8 @@ in
         # Check here for password length to prevent pgadmin from starting
         # and presenting a hard to find error message
         # see https://github.com/NixOS/nixpkgs/issues/270624
-        PW_LENGTH=$(wc -m < ${escapeShellArg cfg.initialPasswordFile})
+        PW_FILE="$CREDENTIALS_DIRECTORY/initial_password"
+        PW_LENGTH=$(wc -m < "$PW_FILE")
         if [ $PW_LENGTH -lt ${toString cfg.minimumPasswordLength} ]; then
             echo "Password must be at least ${toString cfg.minimumPasswordLength} characters long"
             exit 1
@@ -162,7 +163,7 @@ in
           echo ${escapeShellArg cfg.initialEmail}
 
           # file might not contain newline. echo hack fixes that.
-          PW=$(cat ${escapeShellArg cfg.initialPasswordFile})
+          PW=$(cat "$PW_FILE")
 
           # Password:
           echo "$PW"
@@ -181,6 +182,8 @@ in
         LogsDirectory = "pgadmin";
         StateDirectory = "pgadmin";
         ExecStart = "${cfg.package}/bin/pgadmin4";
+        LoadCredential = [ "initial_password:${cfg.initialPasswordFile}" ]
+          ++ optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
       };
     };
 
@@ -193,7 +196,8 @@ in
 
     environment.etc."pgadmin/config_system.py" = {
       text = lib.optionalString cfg.emailServer.enable ''
-        with open("${cfg.emailServer.passwordFile}") as f:
+        import os
+        with open(os.path.join(os.environ['CREDENTIALS_DIRECTORY'], 'email_password')) as f:
           pw = f.read()
         MAIL_PASSWORD = pw
       '' + formatPy cfg.settings;

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, poetry-core
-, python-lzo
-, tkinter
+  poetry-core,
+  python-lzo,
+  tkinter,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,22 +25,16 @@ buildPythonPackage rec {
     hash = "sha256-1/f+o2bVscT3EA8XQyS2hWjhimLRzfIBM6u2O7UqwcA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     python-lzo
     tkinter
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "readmdict"
-  ];
+  pythonImportsCheck = [ "readmdict" ];
 
   meta = with lib; {
     description = "Read mdx/mdd files (repacking of readmdict from mdict-analysis)";

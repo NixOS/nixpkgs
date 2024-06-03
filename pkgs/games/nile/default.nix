@@ -15,14 +15,14 @@
 
 buildPythonApplication rec {
   pname = "nile";
-  version = "unstable-2024-03-09";
+  version = "1.0.3-unstable-2024-05-25";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "imLinguin";
     repo = "nile";
-    rev = "ae09acfc20fe4e462762666871f78caae70f6c74";
-    hash = "sha256-hqhIacsbultY3CvvkYAZHmhCkQLi1mkPQwkztaUOd10=";
+    rev = "6e6968c37aef59772248de8602374b4831202854";
+    hash = "sha256-0UHXF9It/JjHMfBzQM5GRn4FU9rNrh3EM90M8Ki/fTE=";
   };
 
   disabled = pythonOlder "3.8";
@@ -56,5 +56,7 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ aidalgol ];
   };
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 }

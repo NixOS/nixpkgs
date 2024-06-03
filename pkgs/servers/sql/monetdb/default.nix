@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
-  version = "11.49.7";
+  version = "11.49.9";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Z9GHyNzwIJZd/1eXjUT4+Tb1kZveAWHe6wEMXem/0Kw=";
+    hash = "sha256-dN4Me9VTLHzJHIiHP2mMy84I6nCycP2nYgb/J36rJnU=";
   };
 
   nativeBuildInputs = [ bison cmake python3 ];

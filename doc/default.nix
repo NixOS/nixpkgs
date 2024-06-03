@@ -105,7 +105,15 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
-  buildPhase = ''
+  buildPhase = let
+    pythonInterpreterTable = pkgs.callPackage ./doc-support/python-interpreter-table.nix {};
+    pythonSection = with lib.strings; replaceStrings
+      [ "@python-interpreter-table@" ]
+      [ pythonInterpreterTable ]
+      (readFile ./languages-frameworks/python.section.md);
+  in ''
+    cp ${builtins.toFile "python.section.md" pythonSection} ./languages-frameworks/python.section.md
+
     cat \
       ./functions/library.md.in \
       ${lib-docs}/index.md \

@@ -3,7 +3,6 @@
 , stdenv
 , lib
 , addDriverRunpath
-, fetchpatch
 , fetchFromGitHub
 , protobuf
 , protoc-gen-go
@@ -100,8 +99,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "6ecf3189e00a1e8e737a78b6d10e1d7006e050a2";
-      hash = "sha256-JS287UdCzj6Es134cbhr8y/AoejMEux0w++/pZ5NejY=";
+      rev = "c12452c7aec8a02264afc00196a13caa591a13ac";
+      hash = "sha256-Kji8dlz7OfhPeNXnYgBHzpGGMhCsRLJ9d+EFf77Q6Co=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -254,8 +253,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "8fac6455ffeb0a0950a84e790ddb74f7290d33c4";
-      hash = "sha256-Dez/Q2vMvSmscS+BJwkgZ4QG+ebM/N8s1Okd5my0CWI=";
+      rev = "73d13ad19a8c9c4da4f405088a85169b1a171e66";
+      hash = "sha256-7g/J3a3behGgcJXy9ryAYXxgOYnsRMlGmux13re28AY=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
@@ -373,18 +372,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.14.0";
+  version = "2.15.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-wr7sTMjGofGiZZbRJ+RfgXx9TM9Adu2NBAXeB3P5Ep0=";
+    hash = "sha256-AjNgfZjVxlw0LtPbUTbJuLcUfqJdPzn6vOmUDz/v7Jc=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-nWNK2YekQnBSLx4ouNSe6esIe0yFuo69E0HStYLQANg=";
+    vendorHash = "sha256-+ZPZkOpaTsKrL2HDOEtAr8sT6uqTiQXo/XS+MBNZq5E=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -404,11 +403,13 @@ let
           -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
           -e 's, && git checkout.*,,g' \
           -e '/mod download/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-/ d' \
+      '';
 
-        ${cp} ${llama-cpp-grpc}/bin/*grpc-server backend/cpp/llama/grpc-server
-        echo "grpc-server:" > backend/cpp/llama/Makefile
-      ''
-    ;
+    postConfigure = ''
+      mkdir -p backend-assets/grpc
+      cp ${llama-cpp-grpc}/bin/*grpc-server backend-assets/grpc/llama-cpp
+    '';
 
     buildInputs = [ ]
       ++ lib.optionals with_cublas [ libcublas ]

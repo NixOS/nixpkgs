@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, click
-, pyyaml
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  click,
+  pyyaml,
+  sphinx,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, charset-normalizer
-, django
-, fetchFromGitHub
-, jinja2
-, mako
-, nose
-, pyramid
-, pyramid-mako
-, pytestCheckHook
-, six
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  charset-normalizer,
+  django,
+  fetchFromGitHub,
+  jinja2,
+  mako,
+  nose,
+  pyramid,
+  pyramid-mako,
+  pytestCheckHook,
+  six,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-6tIhKCa8wg01gNFygCS6GdUHfbWBu7wOZeMkCExRR34=";
   };
 
-  propagatedBuildInputs = [ six charset-normalizer ];
+  propagatedBuildInputs = [
+    six
+    charset-normalizer
+  ];
 
   nativeCheckInputs = [
     django
@@ -38,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestCheckFlags = [
-    "pypugjs/testsuite"
-  ];
+  pytestCheckFlags = [ "pypugjs/testsuite" ];
 
   meta = with lib; {
     description = "PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates";

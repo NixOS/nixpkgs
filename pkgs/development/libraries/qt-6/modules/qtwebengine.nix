@@ -316,5 +316,7 @@ qtModule {
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;
+    # Not compatible with macOS 11 without massive patching
+    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "12";
   };
 }

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, nix-update-script
-, hatch-vcs
-, hatchling
-, brotli
-, fonttools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  nix-update-script,
+  hatch-vcs,
+  hatchling,
+  brotli,
+  fonttools,
 }:
 
 buildPythonPackage rec {
   pname = "bdffont";
-  version = "0.0.20";
+  version = "0.0.25";
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T0gTtudsZmL0VZ3a3+C/v+dWAwbXUgf0PEdNtkxWROw=";
+    hash = "sha256-IQ18ospOCg/iyT0Ts+BwfbFqUBz71War7c3KMl/3z+Y=";
   };
 
   format = "pyproject";

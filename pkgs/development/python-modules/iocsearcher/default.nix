@@ -1,22 +1,23 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, base58
-, bech32
-, cashaddress
-, cbor
-, eth-hash
-, intervaltree
-, langdetect
-, lxml
-, pdfminer-six
-, phonenumbers
-, python-magic
-, readabilipy
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  base58,
+  bech32,
+  cashaddress,
+  cbor,
+  eth-hash,
+  intervaltree,
+  langdetect,
+  lxml,
+  pdfminer-six,
+  phonenumbers,
+  python-magic,
+  readabilipy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-SYh0+JEZa95iBznNzXut/9Vwof6VFeSlt0/g+XmMPC0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     base58
@@ -56,9 +55,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "iocsearcher"
-  ];
+  pythonImportsCheck = [ "iocsearcher" ];
 
   meta = with lib; {
     description = "Library and command line tool for extracting indicators of compromise (IOCs)";

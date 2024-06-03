@@ -1,36 +1,36 @@
 {
   # eval time deps
-  lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
 
-# buildtime
-, hatchling
+  # buildtime
+  hatchling,
 
-# runtime deps
-, click
-, ghp-import
-, importlib-metadata
-, jinja2
-, markdown
-, markupsafe
-, mergedeep
-, packaging
-, pathspec
-, platformdirs
-, pyyaml
-, pyyaml-env-tag
-, watchdog
+  # runtime deps
+  click,
+  ghp-import,
+  importlib-metadata,
+  jinja2,
+  markdown,
+  markupsafe,
+  mergedeep,
+  packaging,
+  pathspec,
+  platformdirs,
+  pyyaml,
+  pyyaml-env-tag,
+  watchdog,
 
-# optional-dependencies
-, babel
-, setuptools
+  # optional-dependencies
+  babel,
+  setuptools,
 
-# testing deps
-, mock
-, unittestCheckHook
+  # testing deps
+  mock,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +47,7 @@ buildPythonPackage rec {
     hash = "sha256-axH4AeL+osxoUIVJbW6YjiTfUr6TAXMB4raZ3oO0fyw=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     click
@@ -64,16 +62,10 @@ buildPythonPackage rec {
     pyyaml
     pyyaml-env-tag
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   passthru.optional-dependencies = {
-    i18n = [
-      babel
-    ] ++ lib.optionals (pythonAtLeast "3.12") [
-      setuptools
-    ];
+    i18n = [ babel ] ++ lib.optionals (pythonAtLeast "3.12") [ setuptools ];
   };
 
   nativeCheckInputs = [
@@ -81,7 +73,12 @@ buildPythonPackage rec {
     mock
   ] ++ passthru.optional-dependencies.i18n;
 
-  unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
+  unittestFlagsArray = [
+    "-v"
+    "-p"
+    "'*tests.py'"
+    "mkdocs"
+  ];
 
   pythonImportsCheck = [ "mkdocs" ];
 

@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "7.3.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
     rev = version;
-    sha256 = "sha256-KrpeDQH43n7seeSPVYKETxy1g0JuUowZerjgktLQg/4=";
+    sha256 = "sha256-O0Zu/ZxVANfWKcCkOF7jeJa3oG1ut56px7jeFK7LdKA=";
   };
 
   nativeBuildInputs = [

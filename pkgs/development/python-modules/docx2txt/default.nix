@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -13,9 +14,7 @@ buildPythonPackage rec {
     hash = "sha256-LAbZjXz+LTlH5XYKV9kk4/8HdFs3nIc3cjki5wCSNuU=";
   };
 
-  pythonImportsCheck = [
-    "docx2txt"
-  ];
+  pythonImportsCheck = [ "docx2txt" ];
 
   meta = with lib; {
     description = "A pure python-based utility to extract text and images from docx files";

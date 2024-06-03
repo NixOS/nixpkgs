@@ -42,7 +42,7 @@ rec {
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
-    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook;
 
   inherit lua;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
@@ -54,7 +54,7 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
+  luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });

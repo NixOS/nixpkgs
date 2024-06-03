@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, wheel
-, numpy
-, pandas
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
+  wheel,
+  numpy,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ancpbids"
-  ];
+  pythonImportsCheck = [ "ancpbids" ];
 
   pytestFlagsArray = [ "tests/auto" ];
 

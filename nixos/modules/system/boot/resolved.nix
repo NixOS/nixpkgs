@@ -7,6 +7,20 @@ let
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
 
+  resolvedConf = ''
+    [Resolve]
+    ${optionalString (config.networking.nameservers != [])
+      "DNS=${concatStringsSep " " config.networking.nameservers}"}
+    ${optionalString (cfg.fallbackDns != null)
+      "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
+    ${optionalString (cfg.domains != [])
+      "Domains=${concatStringsSep " " cfg.domains}"}
+    LLMNR=${cfg.llmnr}
+    DNSSEC=${cfg.dnssec}
+    DNSOverTLS=${cfg.dnsovertls}
+    ${config.services.resolved.extraConfig}
+  '';
+
 in
 {
 
@@ -126,60 +140,87 @@ in
       '';
     };
 
-  };
-
-  config = mkIf cfg.enable {
-
-    assertions = [
-      { assertion = !config.networking.useHostResolvConf;
-        message = "Using host resolv.conf is not supported with systemd-resolved";
-      }
-    ];
-
-    users.users.systemd-resolve.group = "systemd-resolve";
-
-    # add resolve to nss hosts database if enabled and nscd enabled
-    # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
-    # added with order 501 to allow modules to go before with mkBefore
-    system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);
-
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-resolved.service"
-    ];
-
-    systemd.services.systemd-resolved = {
-      wantedBy = [ "multi-user.target" ];
-      aliases = [ "dbus-org.freedesktop.resolve1.service" ];
-      restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
-    };
-
-    environment.etc = {
-      "systemd/resolved.conf".text = ''
-        [Resolve]
-        ${optionalString (config.networking.nameservers != [])
-          "DNS=${concatStringsSep " " config.networking.nameservers}"}
-        ${optionalString (cfg.fallbackDns != null)
-          "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
-        ${optionalString (cfg.domains != [])
-          "Domains=${concatStringsSep " " cfg.domains}"}
-        LLMNR=${cfg.llmnr}
-        DNSSEC=${cfg.dnssec}
-        DNSOverTLS=${cfg.dnsovertls}
-        ${config.services.resolved.extraConfig}
+    boot.initrd.services.resolved.enable = mkOption {
+      default = config.boot.initrd.systemd.network.enable;
+      defaultText = "config.boot.initrd.systemd.network.enable";
+      description = ''
+        Whether to enable resolved for stage 1 networking.
+        Uses the toplevel 'services.resolved' options for 'resolved.conf'
       '';
-
-      # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
-      # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
-      "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
-    } // optionalAttrs dnsmasqResolve {
-      "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
     };
 
-    # If networkmanager is enabled, ask it to interface with resolved.
-    networking.networkmanager.dns = "systemd-resolved";
-
-    networking.resolvconf.package = pkgs.systemd;
-
   };
+
+  config = mkMerge [
+    (mkIf cfg.enable {
+
+      assertions = [
+        { assertion = !config.networking.useHostResolvConf;
+          message = "Using host resolv.conf is not supported with systemd-resolved";
+        }
+      ];
+
+      users.users.systemd-resolve.group = "systemd-resolve";
+
+      # add resolve to nss hosts database if enabled and nscd enabled
+      # system.nssModules is configured in nixos/modules/system/boot/systemd.nix
+      # added with order 501 to allow modules to go before with mkBefore
+      system.nssDatabases.hosts = (mkOrder 501 ["resolve [!UNAVAIL=return]"]);
+
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-resolved.service"
+      ];
+
+      systemd.services.systemd-resolved = {
+        wantedBy = [ "sysinit.target" ];
+        aliases = [ "dbus-org.freedesktop.resolve1.service" ];
+        restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
+      };
+
+      environment.etc = {
+        "systemd/resolved.conf".text = resolvedConf;
+
+        # symlink the dynamic stub resolver of resolv.conf as recommended by upstream:
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html#/etc/resolv.conf
+        "resolv.conf".source = "/run/systemd/resolve/stub-resolv.conf";
+      } // optionalAttrs dnsmasqResolve {
+        "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      };
+
+      # If networkmanager is enabled, ask it to interface with resolved.
+      networking.networkmanager.dns = "systemd-resolved";
+
+      networking.resolvconf.package = pkgs.systemd;
+
+    })
+
+    (mkIf config.boot.initrd.services.resolved.enable {
+
+      assertions = [
+        {
+          assertion = config.boot.initrd.systemd.enable;
+          message = "'boot.initrd.services.resolved.enable' can only be enabled with systemd stage 1.";
+        }
+      ];
+
+      boot.initrd.systemd = {
+        contents = {
+          "/etc/tmpfiles.d/resolv.conf".text =
+            "L /etc/resolv.conf - - - - /run/systemd/resolve/stub-resolv.conf";
+          "/etc/systemd/resolved.conf".text = resolvedConf;
+        };
+
+        additionalUpstreamUnits = ["systemd-resolved.service"];
+        users.systemd-resolve = {};
+        groups.systemd-resolve = {};
+        storePaths = ["${config.boot.initrd.systemd.package}/lib/systemd/systemd-resolved"];
+        services.systemd-resolved = {
+          wantedBy = ["sysinit.target"];
+          aliases = [ "dbus-org.freedesktop.resolve1.service" ];
+        };
+      };
+
+    })
+  ];
 
 }

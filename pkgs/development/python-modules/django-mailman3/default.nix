@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, pdm-backend
+  # build-system
+  pdm-backend,
 
-# dependencies
-, django-gravatar2
-, django-allauth
-, mailmanclient
-, pytz
+  # dependencies
+  django-gravatar2,
+  django-allauth,
+  mailmanclient,
+  pytz,
 
-# tests
-, django
-, pytest-django
-, pytestCheckHook
-, nixosTests
+  # tests
+  django,
+  pytest-django,
+  pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-MnQlT5ElNnStLUKyOXnI7ZDDaBwfp+h9tbOC+cwB0es=";
   };
 
-  build-system = [
-    pdm-backend
-  ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     django-allauth
@@ -50,11 +49,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=django_mailman3.tests.settings_test
   '';
 
-  pythonImportsCheck = [
-    "django_mailman3"
-  ];
+  pythonImportsCheck = [ "django_mailman3" ];
 
-  passthru.tests = { inherit (nixosTests) mailman; };
+  passthru.tests = {
+    inherit (nixosTests) mailman;
+  };
 
   meta = with lib; {
     description = "Django library for Mailman UIs";

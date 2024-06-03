@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, linien-common
-, setuptools
-, fabric
-, typing-extensions
-, numpy
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  linien-common,
+  setuptools,
+  fabric,
+  typing-extensions,
+  numpy,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,9 @@ buildPythonPackage rec {
     description = "Client components of the Linien spectroscopy lock application";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-client";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fsagbuya doronbehar ];
+    maintainers = with maintainers; [
+      fsagbuya
+      doronbehar
+    ];
   };
 }

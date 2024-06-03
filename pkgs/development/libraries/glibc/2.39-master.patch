@@ -9074,3 +9074,1784 @@ index 0000000000..96a8765fd5
 +}
 +
 +#include <support/test-driver.c>
+
+commit e828914cf9f2fc2caa5bced0fc6a03cb78324979
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Tue Apr 23 21:16:32 2024 +0200
+
+    nptl: Fix tst-cancel30 on kernels without ppoll_time64 support
+    
+    Fall back to ppoll if ppoll_time64 fails with ENOSYS.
+    Fixes commit 370da8a121c3ba9eeb2f13da15fc0f21f4136b25 ("nptl: Fix
+    tst-cancel30 on sparc64").
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit f4724843ada64a51d66f65d3199fe431f9d4c254)
+
+diff --git a/sysdeps/pthread/tst-cancel30.c b/sysdeps/pthread/tst-cancel30.c
+index 3030660e5f..94ad6281bc 100644
+--- a/sysdeps/pthread/tst-cancel30.c
++++ b/sysdeps/pthread/tst-cancel30.c
+@@ -18,6 +18,7 @@
+    License along with the GNU C Library; if not, see
+    <https://www.gnu.org/licenses/>.  */
+ 
++#include <errno.h>
+ #include <support/check.h>
+ #include <support/xstdio.h>
+ #include <support/xthread.h>
+@@ -46,13 +47,19 @@ tf (void *arg)
+ 
+   /* Wait indefinitely for cancellation, which only works if asynchronous
+      cancellation is enabled.  */
+-#if defined SYS_ppoll || defined SYS_ppoll_time64
+-# ifndef SYS_ppoll_time64
+-#  define SYS_ppoll_time64 SYS_ppoll
++#ifdef SYS_ppoll_time64
++  long int ret = syscall (SYS_ppoll_time64, NULL, 0, NULL, NULL);
++  (void) ret;
++# ifdef SYS_ppoll
++  if (ret == -1 && errno == ENOSYS)
++    syscall (SYS_ppoll, NULL, 0, NULL, NULL);
+ # endif
+-  syscall (SYS_ppoll_time64, NULL, 0, NULL, NULL);
+ #else
++# ifdef SYS_ppoll
++  syscall (SYS_ppoll, NULL, 0, NULL, NULL);
++# else
+   for (;;);
++# endif
+ #endif
+ 
+   return 0;
+
+commit e701c7d761f6e5c48d8e9dd5da88cbe2e94943f4
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Apr 25 12:56:48 2024 +0200
+
+    i386: ulp update for SSE2 --disable-multi-arch configurations
+    
+    (cherry picked from commit 3a3a4497421422aa854c855cbe5110ca7d598ffc)
+
+diff --git a/sysdeps/i386/fpu/libm-test-ulps b/sysdeps/i386/fpu/libm-test-ulps
+index 84e6686eba..f2139fc172 100644
+--- a/sysdeps/i386/fpu/libm-test-ulps
++++ b/sysdeps/i386/fpu/libm-test-ulps
+@@ -1232,6 +1232,7 @@ ldouble: 6
+ 
+ Function: "hypot":
+ double: 1
++float: 1
+ float128: 1
+ ldouble: 1
+ 
+
+commit 2f8f157eb0cc7f1d8d9a3fcaa8c55bed53b092a8
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Tue Apr 23 13:59:50 2024 -0700
+
+    x86: Define MINIMUM_X86_ISA_LEVEL in config.h [BZ #31676]
+    
+    Define MINIMUM_X86_ISA_LEVEL at configure time to avoid
+    
+    /usr/bin/ld: …/build/elf/librtld.os: in function `init_cpu_features':
+    …/git/elf/../sysdeps/x86/cpu-features.c:1202: undefined reference to `_dl_runtime_resolve_fxsave'
+    /usr/bin/ld: …/build/elf/librtld.os: relocation R_X86_64_PC32 against undefined hidden symbol `_dl_runtime_resolve_fxsave' can not be used when making a shared object
+    /usr/bin/ld: final link failed: bad value
+    collect2: error: ld returned 1 exit status
+    
+    when glibc is built with -march=x86-64-v3 and configured with
+    --with-rtld-early-cflags=-march=x86-64, which is used to allow ld.so to
+    print an error message on unsupported CPUs:
+    
+    Fatal glibc error: CPU does not support x86-64-v3
+    
+    This fixes BZ #31676.
+    Reviewed-by: Sunil K Pandey <skpgkp2@gmail.com>
+    
+    (cherry picked from commit 46c999741340ea559784c20a45077955b50aca43)
+
+diff --git a/config.h.in b/config.h.in
+index 4d33c63a84..1e647de585 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -286,6 +286,9 @@
+ /* Define if x86 ISA level should be included in shared libraries.  */
+ #undef INCLUDE_X86_ISA_LEVEL
+ 
++/* The x86 ISA level.  1 for baseline.  Undefined on non-x86.  */
++#undef MINIMUM_X86_ISA_LEVEL
++
+ /* Define if -msahf is enabled by default on x86.  */
+ #undef HAVE_X86_LAHF_SAHF
+ 
+diff --git a/sysdeps/x86/configure b/sysdeps/x86/configure
+index 2a5421bb31..d28d9bcb29 100644
+--- a/sysdeps/x86/configure
++++ b/sysdeps/x86/configure
+@@ -151,6 +151,13 @@ printf "%s\n" "$libc_cv_have_x86_isa_level" >&6; }
+ else
+   libc_cv_have_x86_isa_level=baseline
+ fi
++if test $libc_cv_have_x86_isa_level = baseline; then
++  printf "%s\n" "#define MINIMUM_X86_ISA_LEVEL 1" >>confdefs.h
++
++else
++  printf "%s\n" "#define MINIMUM_X86_ISA_LEVEL $libc_cv_have_x86_isa_level" >>confdefs.h
++
++fi
+ config_vars="$config_vars
+ have-x86-isa-level = $libc_cv_have_x86_isa_level"
+ config_vars="$config_vars
+diff --git a/sysdeps/x86/configure.ac b/sysdeps/x86/configure.ac
+index 78ff7c8f41..5b0acd03d2 100644
+--- a/sysdeps/x86/configure.ac
++++ b/sysdeps/x86/configure.ac
+@@ -105,6 +105,11 @@ EOF
+ else
+   libc_cv_have_x86_isa_level=baseline
+ fi
++if test $libc_cv_have_x86_isa_level = baseline; then
++  AC_DEFINE_UNQUOTED(MINIMUM_X86_ISA_LEVEL, 1)
++else
++  AC_DEFINE_UNQUOTED(MINIMUM_X86_ISA_LEVEL, $libc_cv_have_x86_isa_level)
++fi
+ LIBC_CONFIG_VAR([have-x86-isa-level], [$libc_cv_have_x86_isa_level])
+ LIBC_CONFIG_VAR([x86-isa-level-3-or-above], [3 4])
+ LIBC_CONFIG_VAR([enable-x86-isa-level], [$libc_cv_include_x86_isa_level])
+diff --git a/sysdeps/x86/isa-level.h b/sysdeps/x86/isa-level.h
+index 11fe1ca90c..2c7f74212b 100644
+--- a/sysdeps/x86/isa-level.h
++++ b/sysdeps/x86/isa-level.h
+@@ -61,8 +61,10 @@
+ # define __X86_ISA_V4 0
+ #endif
+ 
+-#define MINIMUM_X86_ISA_LEVEL                                                 \
++#ifndef MINIMUM_X86_ISA_LEVEL
++# define MINIMUM_X86_ISA_LEVEL                                                 \
+   (__X86_ISA_V1 + __X86_ISA_V2 + __X86_ISA_V3 + __X86_ISA_V4)
++#endif
+ 
+ /* Depending on the minimum ISA level, a feature check result can be a
+    compile-time constant.. */
+
+commit 1263d583d2e28afb8be53f8d6922f0842036f35d
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Apr 25 15:00:45 2024 +0200
+
+    CVE-2024-33599: nscd: Stack-based buffer overflow in netgroup cache (bug 31677)
+    
+    Using alloca matches what other caches do.  The request length is
+    bounded by MAXKEYLEN.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 87801a8fd06db1d654eea3e4f7626ff476a9bdaa)
+
+diff --git a/nscd/netgroupcache.c b/nscd/netgroupcache.c
+index 0c6e46f15c..f227dc7fa2 100644
+--- a/nscd/netgroupcache.c
++++ b/nscd/netgroupcache.c
+@@ -502,12 +502,13 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+       = (struct indataset *) mempool_alloc (db,
+ 					    sizeof (*dataset) + req->key_len,
+ 					    1);
+-  struct indataset dataset_mem;
+   bool cacheable = true;
+   if (__glibc_unlikely (dataset == NULL))
+     {
+       cacheable = false;
+-      dataset = &dataset_mem;
++      /* The alloca is safe because nscd_run_worker verfies that
++	 key_len is not larger than MAXKEYLEN.  */
++      dataset = alloca (sizeof (*dataset) + req->key_len);
+     }
+ 
+   datahead_init_pos (&dataset->head, sizeof (*dataset) + req->key_len,
+
+commit 5a508e0b508c8ad53bd0d2fb48fd71b242626341
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Apr 25 15:01:07 2024 +0200
+
+    CVE-2024-33600: nscd: Do not send missing not-found response in addgetnetgrentX (bug 31678)
+    
+    If we failed to add a not-found response to the cache, the dataset
+    point can be null, resulting in a null pointer dereference.
+    
+    Reviewed-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    (cherry picked from commit 7835b00dbce53c3c87bbbb1754a95fb5e58187aa)
+
+diff --git a/nscd/netgroupcache.c b/nscd/netgroupcache.c
+index f227dc7fa2..c18fe111f3 100644
+--- a/nscd/netgroupcache.c
++++ b/nscd/netgroupcache.c
+@@ -147,7 +147,7 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+       /* No such service.  */
+       cacheable = do_notfound (db, fd, req, key, &dataset, &total, &timeout,
+ 			       &key_copy);
+-      goto writeout;
++      goto maybe_cache_add;
+     }
+ 
+   memset (&data, '\0', sizeof (data));
+@@ -348,7 +348,7 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+     {
+       cacheable = do_notfound (db, fd, req, key, &dataset, &total, &timeout,
+ 			       &key_copy);
+-      goto writeout;
++      goto maybe_cache_add;
+     }
+ 
+   total = buffilled;
+@@ -410,14 +410,12 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+   }
+ 
+   if (he == NULL && fd != -1)
+-    {
+-      /* We write the dataset before inserting it to the database
+-	 since while inserting this thread might block and so would
+-	 unnecessarily let the receiver wait.  */
+-    writeout:
++    /* We write the dataset before inserting it to the database since
++       while inserting this thread might block and so would
++       unnecessarily let the receiver wait.  */
+       writeall (fd, &dataset->resp, dataset->head.recsize);
+-    }
+ 
++ maybe_cache_add:
+   if (cacheable)
+     {
+       /* If necessary, we also propagate the data to disk.  */
+
+commit c99f886de54446cd4447db6b44be93dabbdc2f8b
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Apr 25 15:01:07 2024 +0200
+
+    CVE-2024-33600: nscd: Avoid null pointer crashes after notfound response (bug 31678)
+    
+    The addgetnetgrentX call in addinnetgrX may have failed to produce
+    a result, so the result variable in addinnetgrX can be NULL.
+    Use db->negtimeout as the fallback value if there is no result data;
+    the timeout is also overwritten below.
+    
+    Also avoid sending a second not-found response.  (The client
+    disconnects after receiving the first response, so the data stream did
+    not go out of sync even without this fix.)  It is still beneficial to
+    add the negative response to the mapping, so that the client can get
+    it from there in the future, instead of going through the socket.
+    
+    Reviewed-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    (cherry picked from commit b048a482f088e53144d26a61c390bed0210f49f2)
+
+diff --git a/nscd/netgroupcache.c b/nscd/netgroupcache.c
+index c18fe111f3..e22ffa5884 100644
+--- a/nscd/netgroupcache.c
++++ b/nscd/netgroupcache.c
+@@ -511,14 +511,15 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+ 
+   datahead_init_pos (&dataset->head, sizeof (*dataset) + req->key_len,
+ 		     sizeof (innetgroup_response_header),
+-		     he == NULL ? 0 : dh->nreloads + 1, result->head.ttl);
++		     he == NULL ? 0 : dh->nreloads + 1,
++		     result == NULL ? db->negtimeout : result->head.ttl);
+   /* Set the notfound status and timeout based on the result from
+      getnetgrent.  */
+-  dataset->head.notfound = result->head.notfound;
++  dataset->head.notfound = result == NULL || result->head.notfound;
+   dataset->head.timeout = timeout;
+ 
+   dataset->resp.version = NSCD_VERSION;
+-  dataset->resp.found = result->resp.found;
++  dataset->resp.found = result != NULL && result->resp.found;
+   /* Until we find a matching entry the result is 0.  */
+   dataset->resp.result = 0;
+ 
+@@ -566,7 +567,9 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+       goto out;
+     }
+ 
+-  if (he == NULL)
++  /* addgetnetgrentX may have already sent a notfound response.  Do
++     not send another one.  */
++  if (he == NULL && dataset->resp.found)
+     {
+       /* We write the dataset before inserting it to the database
+ 	 since while inserting this thread might block and so would
+
+commit a9a8d3eebb145779a18d90e3966009a1daa63cd8
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Apr 25 15:01:07 2024 +0200
+
+    CVE-2024-33601, CVE-2024-33602: nscd: netgroup: Use two buffers in addgetnetgrentX (bug 31680)
+    
+    This avoids potential memory corruption when the underlying NSS
+    callback function does not use the buffer space to store all strings
+    (e.g., for constant strings).
+    
+    Instead of custom buffer management, two scratch buffers are used.
+    This increases stack usage somewhat.
+    
+    Scratch buffer allocation failure is handled by return -1
+    (an invalid timeout value) instead of terminating the process.
+    This fixes bug 31679.
+    
+    Reviewed-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    (cherry picked from commit c04a21e050d64a1193a6daab872bca2528bda44b)
+
+diff --git a/nscd/netgroupcache.c b/nscd/netgroupcache.c
+index e22ffa5884..e8fe041846 100644
+--- a/nscd/netgroupcache.c
++++ b/nscd/netgroupcache.c
+@@ -23,6 +23,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <sys/mman.h>
++#include <scratch_buffer.h>
+ 
+ #include "../nss/netgroup.h"
+ #include "nscd.h"
+@@ -65,6 +66,16 @@ struct dataset
+   char strdata[0];
+ };
+ 
++/* Send a notfound response to FD.  Always returns -1 to indicate an
++   ephemeral error.  */
++static time_t
++send_notfound (int fd)
++{
++  if (fd != -1)
++    TEMP_FAILURE_RETRY (send (fd, &notfound, sizeof (notfound), MSG_NOSIGNAL));
++  return -1;
++}
++
+ /* Sends a notfound message and prepares a notfound dataset to write to the
+    cache.  Returns true if there was enough memory to allocate the dataset and
+    returns the dataset in DATASETP, total bytes to write in TOTALP and the
+@@ -83,8 +94,7 @@ do_notfound (struct database_dyn *db, int fd, request_header *req,
+   total = sizeof (notfound);
+   timeout = time (NULL) + db->negtimeout;
+ 
+-  if (fd != -1)
+-    TEMP_FAILURE_RETRY (send (fd, &notfound, total, MSG_NOSIGNAL));
++  send_notfound (fd);
+ 
+   dataset = mempool_alloc (db, sizeof (struct dataset) + req->key_len, 1);
+   /* If we cannot permanently store the result, so be it.  */
+@@ -109,11 +119,78 @@ do_notfound (struct database_dyn *db, int fd, request_header *req,
+   return cacheable;
+ }
+ 
++struct addgetnetgrentX_scratch
++{
++  /* This is the result that the caller should use.  It can be NULL,
++     point into buffer, or it can be in the cache.  */
++  struct dataset *dataset;
++
++  struct scratch_buffer buffer;
++
++  /* Used internally in addgetnetgrentX as a staging area.  */
++  struct scratch_buffer tmp;
++
++  /* Number of bytes in buffer that are actually used.  */
++  size_t buffer_used;
++};
++
++static void
++addgetnetgrentX_scratch_init (struct addgetnetgrentX_scratch *scratch)
++{
++  scratch->dataset = NULL;
++  scratch_buffer_init (&scratch->buffer);
++  scratch_buffer_init (&scratch->tmp);
++
++  /* Reserve space for the header.  */
++  scratch->buffer_used = sizeof (struct dataset);
++  static_assert (sizeof (struct dataset) < sizeof (scratch->tmp.__space),
++		 "initial buffer space");
++  memset (scratch->tmp.data, 0, sizeof (struct dataset));
++}
++
++static void
++addgetnetgrentX_scratch_free (struct addgetnetgrentX_scratch *scratch)
++{
++  scratch_buffer_free (&scratch->buffer);
++  scratch_buffer_free (&scratch->tmp);
++}
++
++/* Copy LENGTH bytes from S into SCRATCH.  Returns NULL if SCRATCH
++   could not be resized, otherwise a pointer to the copy.  */
++static char *
++addgetnetgrentX_append_n (struct addgetnetgrentX_scratch *scratch,
++			  const char *s, size_t length)
++{
++  while (true)
++    {
++      size_t remaining = scratch->buffer.length - scratch->buffer_used;
++      if (remaining >= length)
++	break;
++      if (!scratch_buffer_grow_preserve (&scratch->buffer))
++	return NULL;
++    }
++  char *copy = scratch->buffer.data + scratch->buffer_used;
++  memcpy (copy, s, length);
++  scratch->buffer_used += length;
++  return copy;
++}
++
++/* Copy S into SCRATCH, including its null terminator.  Returns false
++   if SCRATCH could not be resized.  */
++static bool
++addgetnetgrentX_append (struct addgetnetgrentX_scratch *scratch, const char *s)
++{
++  if (s == NULL)
++    s = "";
++  return addgetnetgrentX_append_n (scratch, s, strlen (s) + 1) != NULL;
++}
++
++/* Caller must initialize and free *SCRATCH.  If the return value is
++   negative, this function has sent a notfound response.  */
+ static time_t
+ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+ 		 const char *key, uid_t uid, struct hashentry *he,
+-		 struct datahead *dh, struct dataset **resultp,
+-		 void **tofreep)
++		 struct datahead *dh, struct addgetnetgrentX_scratch *scratch)
+ {
+   if (__glibc_unlikely (debug_level > 0))
+     {
+@@ -132,14 +209,10 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+ 
+   char *key_copy = NULL;
+   struct __netgrent data;
+-  size_t buflen = MAX (1024, sizeof (*dataset) + req->key_len);
+-  size_t buffilled = sizeof (*dataset);
+-  char *buffer = NULL;
+   size_t nentries = 0;
+   size_t group_len = strlen (key) + 1;
+   struct name_list *first_needed
+     = alloca (sizeof (struct name_list) + group_len);
+-  *tofreep = NULL;
+ 
+   if (netgroup_database == NULL
+       && !__nss_database_get (nss_database_netgroup, &netgroup_database))
+@@ -151,8 +224,6 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+     }
+ 
+   memset (&data, '\0', sizeof (data));
+-  buffer = xmalloc (buflen);
+-  *tofreep = buffer;
+   first_needed->next = first_needed;
+   memcpy (first_needed->name, key, group_len);
+   data.needed_groups = first_needed;
+@@ -195,8 +266,8 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+ 		while (1)
+ 		  {
+ 		    int e;
+-		    status = getfct.f (&data, buffer + buffilled,
+-				       buflen - buffilled - req->key_len, &e);
++		    status = getfct.f (&data, scratch->tmp.data,
++				       scratch->tmp.length, &e);
+ 		    if (status == NSS_STATUS_SUCCESS)
+ 		      {
+ 			if (data.type == triple_val)
+@@ -204,68 +275,10 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+ 			    const char *nhost = data.val.triple.host;
+ 			    const char *nuser = data.val.triple.user;
+ 			    const char *ndomain = data.val.triple.domain;
+-
+-			    size_t hostlen = strlen (nhost ?: "") + 1;
+-			    size_t userlen = strlen (nuser ?: "") + 1;
+-			    size_t domainlen = strlen (ndomain ?: "") + 1;
+-
+-			    if (nhost == NULL || nuser == NULL || ndomain == NULL
+-				|| nhost > nuser || nuser > ndomain)
+-			      {
+-				const char *last = nhost;
+-				if (last == NULL
+-				    || (nuser != NULL && nuser > last))
+-				  last = nuser;
+-				if (last == NULL
+-				    || (ndomain != NULL && ndomain > last))
+-				  last = ndomain;
+-
+-				size_t bufused
+-				  = (last == NULL
+-				     ? buffilled
+-				     : last + strlen (last) + 1 - buffer);
+-
+-				/* We have to make temporary copies.  */
+-				size_t needed = hostlen + userlen + domainlen;
+-
+-				if (buflen - req->key_len - bufused < needed)
+-				  {
+-				    buflen += MAX (buflen, 2 * needed);
+-				    /* Save offset in the old buffer.  We don't
+-				       bother with the NULL check here since
+-				       we'll do that later anyway.  */
+-				    size_t nhostdiff = nhost - buffer;
+-				    size_t nuserdiff = nuser - buffer;
+-				    size_t ndomaindiff = ndomain - buffer;
+-
+-				    char *newbuf = xrealloc (buffer, buflen);
+-				    /* Fix up the triplet pointers into the new
+-				       buffer.  */
+-				    nhost = (nhost ? newbuf + nhostdiff
+-					     : NULL);
+-				    nuser = (nuser ? newbuf + nuserdiff
+-					     : NULL);
+-				    ndomain = (ndomain ? newbuf + ndomaindiff
+-					       : NULL);
+-				    *tofreep = buffer = newbuf;
+-				  }
+-
+-				nhost = memcpy (buffer + bufused,
+-						nhost ?: "", hostlen);
+-				nuser = memcpy ((char *) nhost + hostlen,
+-						nuser ?: "", userlen);
+-				ndomain = memcpy ((char *) nuser + userlen,
+-						  ndomain ?: "", domainlen);
+-			      }
+-
+-			    char *wp = buffer + buffilled;
+-			    wp = memmove (wp, nhost ?: "", hostlen);
+-			    wp += hostlen;
+-			    wp = memmove (wp, nuser ?: "", userlen);
+-			    wp += userlen;
+-			    wp = memmove (wp, ndomain ?: "", domainlen);
+-			    wp += domainlen;
+-			    buffilled = wp - buffer;
++			    if (!(addgetnetgrentX_append (scratch, nhost)
++				  && addgetnetgrentX_append (scratch, nuser)
++				  && addgetnetgrentX_append (scratch, ndomain)))
++			      return send_notfound (fd);
+ 			    ++nentries;
+ 			  }
+ 			else
+@@ -317,8 +330,8 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+ 		      }
+ 		    else if (status == NSS_STATUS_TRYAGAIN && e == ERANGE)
+ 		      {
+-			buflen *= 2;
+-			*tofreep = buffer = xrealloc (buffer, buflen);
++			if (!scratch_buffer_grow (&scratch->tmp))
++			  return send_notfound (fd);
+ 		      }
+ 		    else if (status == NSS_STATUS_RETURN
+ 			     || status == NSS_STATUS_NOTFOUND
+@@ -351,10 +364,17 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+       goto maybe_cache_add;
+     }
+ 
+-  total = buffilled;
++  /* Capture the result size without the key appended.   */
++  total = scratch->buffer_used;
++
++  /* Make a copy of the key.  The scratch buffer must not move after
++     this point.  */
++  key_copy = addgetnetgrentX_append_n (scratch, key, req->key_len);
++  if (key_copy == NULL)
++    return send_notfound (fd);
+ 
+   /* Fill in the dataset.  */
+-  dataset = (struct dataset *) buffer;
++  dataset = scratch->buffer.data;
+   timeout = datahead_init_pos (&dataset->head, total + req->key_len,
+ 			       total - offsetof (struct dataset, resp),
+ 			       he == NULL ? 0 : dh->nreloads + 1,
+@@ -363,11 +383,7 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+   dataset->resp.version = NSCD_VERSION;
+   dataset->resp.found = 1;
+   dataset->resp.nresults = nentries;
+-  dataset->resp.result_len = buffilled - sizeof (*dataset);
+-
+-  assert (buflen - buffilled >= req->key_len);
+-  key_copy = memcpy (buffer + buffilled, key, req->key_len);
+-  buffilled += req->key_len;
++  dataset->resp.result_len = total - sizeof (*dataset);
+ 
+   /* Now we can determine whether on refill we have to create a new
+      record or not.  */
+@@ -398,7 +414,7 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+     if (__glibc_likely (newp != NULL))
+       {
+ 	/* Adjust pointer into the memory block.  */
+-	key_copy = (char *) newp + (key_copy - buffer);
++	key_copy = (char *) newp + (key_copy - (char *) dataset);
+ 
+ 	dataset = memcpy (newp, dataset, total + req->key_len);
+ 	cacheable = true;
+@@ -439,7 +455,7 @@ addgetnetgrentX (struct database_dyn *db, int fd, request_header *req,
+     }
+ 
+  out:
+-  *resultp = dataset;
++  scratch->dataset = dataset;
+ 
+   return timeout;
+ }
+@@ -460,6 +476,9 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+   if (user != NULL)
+     key = strchr (key, '\0') + 1;
+   const char *domain = *key++ ? key : NULL;
++  struct addgetnetgrentX_scratch scratch;
++
++  addgetnetgrentX_scratch_init (&scratch);
+ 
+   if (__glibc_unlikely (debug_level > 0))
+     {
+@@ -475,12 +494,8 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+ 							    group, group_len,
+ 							    db, uid);
+   time_t timeout;
+-  void *tofree;
+   if (result != NULL)
+-    {
+-      timeout = result->head.timeout;
+-      tofree = NULL;
+-    }
++    timeout = result->head.timeout;
+   else
+     {
+       request_header req_get =
+@@ -489,7 +504,10 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+ 	  .key_len = group_len
+ 	};
+       timeout = addgetnetgrentX (db, -1, &req_get, group, uid, NULL, NULL,
+-				 &result, &tofree);
++				 &scratch);
++      result = scratch.dataset;
++      if (timeout < 0)
++	goto out;
+     }
+ 
+   struct indataset
+@@ -603,7 +621,7 @@ addinnetgrX (struct database_dyn *db, int fd, request_header *req,
+     }
+ 
+  out:
+-  free (tofree);
++  addgetnetgrentX_scratch_free (&scratch);
+   return timeout;
+ }
+ 
+@@ -613,11 +631,12 @@ addgetnetgrentX_ignore (struct database_dyn *db, int fd, request_header *req,
+ 			const char *key, uid_t uid, struct hashentry *he,
+ 			struct datahead *dh)
+ {
+-  struct dataset *ignore;
+-  void *tofree;
+-  time_t timeout = addgetnetgrentX (db, fd, req, key, uid, he, dh,
+-				    &ignore, &tofree);
+-  free (tofree);
++  struct addgetnetgrentX_scratch scratch;
++  addgetnetgrentX_scratch_init (&scratch);
++  time_t timeout = addgetnetgrentX (db, fd, req, key, uid, he, dh, &scratch);
++  addgetnetgrentX_scratch_free (&scratch);
++  if (timeout < 0)
++    timeout = 0;
+   return timeout;
+ }
+ 
+@@ -661,5 +680,9 @@ readdinnetgr (struct database_dyn *db, struct hashentry *he,
+       .key_len = he->len
+     };
+ 
+-  return addinnetgrX (db, -1, &req, db->data + he->key, he->owner, he, dh);
++  int timeout = addinnetgrX (db, -1, &req, db->data + he->key, he->owner,
++			     he, dh);
++  if (timeout < 0)
++    timeout = 0;
++  return timeout;
+ }
+
+commit fd658f026f25cf59e8db243bc3b3e09cd5a20ba0
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Thu Apr 25 08:06:52 2024 -0700
+
+    elf: Also compile dl-misc.os with $(rtld-early-cflags)
+    
+    Also compile dl-misc.os with $(rtld-early-cflags) to avoid
+    
+    Program received signal SIGILL, Illegal instruction.
+    0x00007ffff7fd36ea in _dl_strtoul (nptr=nptr@entry=0x7fffffffe2c9 "2",
+        endptr=endptr@entry=0x7fffffffd728) at dl-misc.c:156
+    156       bool positive = true;
+    (gdb) bt
+     #0  0x00007ffff7fd36ea in _dl_strtoul (nptr=nptr@entry=0x7fffffffe2c9 "2",
+        endptr=endptr@entry=0x7fffffffd728) at dl-misc.c:156
+     #1  0x00007ffff7fdb1a9 in tunable_initialize (
+        cur=cur@entry=0x7ffff7ffbc00 <tunable_list+2176>,
+        strval=strval@entry=0x7fffffffe2c9 "2", len=len@entry=1)
+        at dl-tunables.c:131
+     #2  0x00007ffff7fdb3a2 in parse_tunables (valstring=<optimized out>)
+        at dl-tunables.c:258
+     #3  0x00007ffff7fdb5d9 in __GI___tunables_init (envp=0x7fffffffdd58)
+        at dl-tunables.c:288
+     #4  0x00007ffff7fe44c3 in _dl_sysdep_start (
+        start_argptr=start_argptr@entry=0x7fffffffdcb0,
+        dl_main=dl_main@entry=0x7ffff7fe5f80 <dl_main>)
+        at ../sysdeps/unix/sysv/linux/dl-sysdep.c:110
+     #5  0x00007ffff7fe5cae in _dl_start_final (arg=0x7fffffffdcb0) at rtld.c:494
+     #6  _dl_start (arg=0x7fffffffdcb0) at rtld.c:581
+     #7  0x00007ffff7fe4b38 in _start ()
+    (gdb)
+    
+    when setting GLIBC_TUNABLES in glibc compiled with APX.
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    
+    (cherry picked from commit 049b7684c912dd32b67b1b15b0f43bf07d5f512e)
+
+diff --git a/elf/Makefile b/elf/Makefile
+index 69aa423c4b..a50a988e73 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -170,6 +170,7 @@ CFLAGS-.op += $(call elide-stack-protector,.op,$(elide-routines.os))
+ CFLAGS-.os += $(call elide-stack-protector,.os,$(all-rtld-routines))
+ 
+ # Add the requested compiler flags to the early startup code.
++CFLAGS-dl-misc.os += $(rtld-early-cflags)
+ CFLAGS-dl-printf.os += $(rtld-early-cflags)
+ CFLAGS-dl-setup_hash.os += $(rtld-early-cflags)
+ CFLAGS-dl-sysdep.os += $(rtld-early-cflags)
+
+commit 9831f98c266a8d56d1bf729b709c08e40375540c
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Apr 19 14:38:17 2024 +0200
+
+    login: Check default sizes of structs utmp, utmpx, lastlog
+    
+    The default <utmp-size.h> is for ports with a 64-bit time_t.
+    Ports with a 32-bit time_t or with __WORDSIZE_TIME64_COMPAT32=1
+    need to override it.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 4d4da5aab936504b2d3eca3146e109630d9093c4)
+
+diff --git a/login/Makefile b/login/Makefile
+index 1e22008a61..b26ac42bfc 100644
+--- a/login/Makefile
++++ b/login/Makefile
+@@ -44,7 +44,7 @@ subdir-dirs = programs
+ vpath %.c programs
+ 
+ tests := tst-utmp tst-utmpx tst-grantpt tst-ptsname tst-getlogin tst-updwtmpx \
+-  tst-pututxline-lockfail tst-pututxline-cache
++  tst-pututxline-lockfail tst-pututxline-cache tst-utmp-size
+ 
+ # Empty compatibility library for old binaries.
+ extra-libs      := libutil
+diff --git a/login/tst-utmp-size.c b/login/tst-utmp-size.c
+new file mode 100644
+index 0000000000..1b7f7ff042
+--- /dev/null
++++ b/login/tst-utmp-size.c
+@@ -0,0 +1,33 @@
++/* Check expected sizes of struct utmp, struct utmpx, struct lastlog.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <utmp.h>
++#include <utmpx.h>
++#include <utmp-size.h>
++
++static int
++do_test (void)
++{
++  _Static_assert (sizeof (struct utmp) == UTMP_SIZE, "struct utmp size");
++  _Static_assert (sizeof (struct utmpx) == UTMP_SIZE, "struct utmpx size");
++  _Static_assert (sizeof (struct lastlog) == LASTLOG_SIZE,
++                  "struct lastlog size");
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/sysdeps/arc/utmp-size.h b/sysdeps/arc/utmp-size.h
+new file mode 100644
+index 0000000000..a247fcd3da
+--- /dev/null
++++ b/sysdeps/arc/utmp-size.h
+@@ -0,0 +1,3 @@
++/* arc has less padding than other architectures with 64-bit time_t.  */
++#define UTMP_SIZE 392
++#define LASTLOG_SIZE 296
+diff --git a/sysdeps/arm/utmp-size.h b/sysdeps/arm/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/arm/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/csky/utmp-size.h b/sysdeps/csky/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/csky/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/generic/utmp-size.h b/sysdeps/generic/utmp-size.h
+new file mode 100644
+index 0000000000..89dbe878b0
+--- /dev/null
++++ b/sysdeps/generic/utmp-size.h
+@@ -0,0 +1,23 @@
++/* Expected sizes of utmp-related structures stored in files.  64-bit version.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* Expected size, in bytes, of struct utmp and struct utmpx.  */
++#define UTMP_SIZE 400
++
++/* Expected size, in bytes, of struct lastlog.  */
++#define LASTLOG_SIZE 296
+diff --git a/sysdeps/hppa/utmp-size.h b/sysdeps/hppa/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/hppa/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/m68k/utmp-size.h b/sysdeps/m68k/utmp-size.h
+new file mode 100644
+index 0000000000..5946685819
+--- /dev/null
++++ b/sysdeps/m68k/utmp-size.h
+@@ -0,0 +1,3 @@
++/* m68k has 2-byte alignment.  */
++#define UTMP_SIZE 382
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/microblaze/utmp-size.h b/sysdeps/microblaze/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/microblaze/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/mips/utmp-size.h b/sysdeps/mips/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/mips/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/nios2/utmp-size.h b/sysdeps/nios2/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/nios2/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/or1k/utmp-size.h b/sysdeps/or1k/utmp-size.h
+new file mode 100644
+index 0000000000..6b3653aa4d
+--- /dev/null
++++ b/sysdeps/or1k/utmp-size.h
+@@ -0,0 +1,3 @@
++/* or1k has less padding than other architectures with 64-bit time_t.  */
++#define UTMP_SIZE 392
++#define LASTLOG_SIZE 296
+diff --git a/sysdeps/powerpc/utmp-size.h b/sysdeps/powerpc/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/powerpc/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/riscv/utmp-size.h b/sysdeps/riscv/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/riscv/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/sh/utmp-size.h b/sysdeps/sh/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/sh/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/sparc/utmp-size.h b/sysdeps/sparc/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/sparc/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+diff --git a/sysdeps/x86/utmp-size.h b/sysdeps/x86/utmp-size.h
+new file mode 100644
+index 0000000000..8f21ebe1b6
+--- /dev/null
++++ b/sysdeps/x86/utmp-size.h
+@@ -0,0 +1,2 @@
++#define UTMP_SIZE 384
++#define LASTLOG_SIZE 292
+
+commit 836d43b98973e0845b739ff5d3aad3af09dc7d0f
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Apr 19 14:38:17 2024 +0200
+
+    login: structs utmp, utmpx, lastlog _TIME_BITS independence (bug 30701)
+    
+    These structs describe file formats under /var/log, and should not
+    depend on the definition of _TIME_BITS.  This is achieved by
+    defining __WORDSIZE_TIME64_COMPAT32 to 1 on 32-bit ports that
+    support 32-bit time_t values (where __time_t is 32 bits).
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 9abdae94c7454c45e02e97e4ed1eb1b1915d13d8)
+
+diff --git a/bits/wordsize.h b/bits/wordsize.h
+index 14edae3a11..53013a9275 100644
+--- a/bits/wordsize.h
++++ b/bits/wordsize.h
+@@ -21,7 +21,9 @@
+ #define __WORDSIZE32_PTRDIFF_LONG
+ 
+ /* Set to 1 in order to force time types to be 32 bits instead of 64 bits in
+-   struct lastlog and struct utmp{,x} on 64-bit ports.  This may be done in
++   struct lastlog and struct utmp{,x}.  This may be done in
+    order to make 64-bit ports compatible with 32-bit ports.  Set to 0 for
+-   64-bit ports where the time types are 64-bits or for any 32-bit ports.  */
++   64-bit ports where the time types are 64-bits and new 32-bit ports
++   where time_t is 64 bits, and there is no companion architecture with
++   32-bit time_t.  */
+ #define __WORDSIZE_TIME64_COMPAT32
+diff --git a/login/Makefile b/login/Makefile
+index b26ac42bfc..f91190e3dc 100644
+--- a/login/Makefile
++++ b/login/Makefile
+@@ -44,7 +44,9 @@ subdir-dirs = programs
+ vpath %.c programs
+ 
+ tests := tst-utmp tst-utmpx tst-grantpt tst-ptsname tst-getlogin tst-updwtmpx \
+-  tst-pututxline-lockfail tst-pututxline-cache tst-utmp-size
++  tst-pututxline-lockfail tst-pututxline-cache tst-utmp-size tst-utmp-size-64
++
++CFLAGS-tst-utmp-size-64.c += -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64
+ 
+ # Empty compatibility library for old binaries.
+ extra-libs      := libutil
+diff --git a/login/tst-utmp-size-64.c b/login/tst-utmp-size-64.c
+new file mode 100644
+index 0000000000..7a581a4c12
+--- /dev/null
++++ b/login/tst-utmp-size-64.c
+@@ -0,0 +1,2 @@
++/* The on-disk layout must not change in time64 mode.  */
++#include "tst-utmp-size.c"
+diff --git a/sysdeps/arm/bits/wordsize.h b/sysdeps/arm/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/arm/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/csky/bits/wordsize.h b/sysdeps/csky/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/csky/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/m68k/bits/wordsize.h b/sysdeps/m68k/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/m68k/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/microblaze/bits/wordsize.h b/sysdeps/microblaze/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/microblaze/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/mips/bits/wordsize.h b/sysdeps/mips/bits/wordsize.h
+index 57f0f2a22f..30dd3fd85d 100644
+--- a/sysdeps/mips/bits/wordsize.h
++++ b/sysdeps/mips/bits/wordsize.h
+@@ -19,11 +19,7 @@
+ 
+ #define __WORDSIZE			_MIPS_SZPTR
+ 
+-#if _MIPS_SIM == _ABI64
+-# define __WORDSIZE_TIME64_COMPAT32	1
+-#else
+-# define __WORDSIZE_TIME64_COMPAT32	0
+-#endif
++#define __WORDSIZE_TIME64_COMPAT32	1
+ 
+ #if __WORDSIZE == 32
+ #define __WORDSIZE32_SIZE_ULONG		0
+diff --git a/sysdeps/nios2/bits/wordsize.h b/sysdeps/nios2/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/nios2/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/powerpc/powerpc32/bits/wordsize.h b/sysdeps/powerpc/powerpc32/bits/wordsize.h
+index 04ca9debf0..6993fb6b29 100644
+--- a/sysdeps/powerpc/powerpc32/bits/wordsize.h
++++ b/sysdeps/powerpc/powerpc32/bits/wordsize.h
+@@ -2,10 +2,9 @@
+ 
+ #if defined __powerpc64__
+ # define __WORDSIZE	64
+-# define __WORDSIZE_TIME64_COMPAT32	1
+ #else
+ # define __WORDSIZE	32
+-# define __WORDSIZE_TIME64_COMPAT32	0
+ # define __WORDSIZE32_SIZE_ULONG	0
+ # define __WORDSIZE32_PTRDIFF_LONG	0
+ #endif
++#define __WORDSIZE_TIME64_COMPAT32	1
+diff --git a/sysdeps/powerpc/powerpc64/bits/wordsize.h b/sysdeps/powerpc/powerpc64/bits/wordsize.h
+index 04ca9debf0..6993fb6b29 100644
+--- a/sysdeps/powerpc/powerpc64/bits/wordsize.h
++++ b/sysdeps/powerpc/powerpc64/bits/wordsize.h
+@@ -2,10 +2,9 @@
+ 
+ #if defined __powerpc64__
+ # define __WORDSIZE	64
+-# define __WORDSIZE_TIME64_COMPAT32	1
+ #else
+ # define __WORDSIZE	32
+-# define __WORDSIZE_TIME64_COMPAT32	0
+ # define __WORDSIZE32_SIZE_ULONG	0
+ # define __WORDSIZE32_PTRDIFF_LONG	0
+ #endif
++#define __WORDSIZE_TIME64_COMPAT32	1
+diff --git a/sysdeps/sh/bits/wordsize.h b/sysdeps/sh/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/sh/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/sparc/sparc32/bits/wordsize.h b/sysdeps/sparc/sparc32/bits/wordsize.h
+index 4bbd2e63b4..a2e79e0fa9 100644
+--- a/sysdeps/sparc/sparc32/bits/wordsize.h
++++ b/sysdeps/sparc/sparc32/bits/wordsize.h
+@@ -1,6 +1,6 @@
+ /* Determine the wordsize from the preprocessor defines.  */
+ 
+ #define __WORDSIZE	32
+-#define __WORDSIZE_TIME64_COMPAT32	0
++#define __WORDSIZE_TIME64_COMPAT32	1
+ #define __WORDSIZE32_SIZE_ULONG	0
+ #define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/sparc/sparc64/bits/wordsize.h b/sysdeps/sparc/sparc64/bits/wordsize.h
+index 2f66f10d72..ea103e5970 100644
+--- a/sysdeps/sparc/sparc64/bits/wordsize.h
++++ b/sysdeps/sparc/sparc64/bits/wordsize.h
+@@ -2,10 +2,9 @@
+ 
+ #if defined __arch64__ || defined __sparcv9
+ # define __WORDSIZE	64
+-# define __WORDSIZE_TIME64_COMPAT32	1
+ #else
+ # define __WORDSIZE	32
+-# define __WORDSIZE_TIME64_COMPAT32	0
+ # define __WORDSIZE32_SIZE_ULONG	0
+ # define __WORDSIZE32_PTRDIFF_LONG	0
+ #endif
++#define __WORDSIZE_TIME64_COMPAT32	1
+diff --git a/sysdeps/unix/sysv/linux/hppa/bits/wordsize.h b/sysdeps/unix/sysv/linux/hppa/bits/wordsize.h
+new file mode 100644
+index 0000000000..6ecbfe7c86
+--- /dev/null
++++ b/sysdeps/unix/sysv/linux/hppa/bits/wordsize.h
+@@ -0,0 +1,21 @@
++/* Copyright (C) 1999-2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#define __WORDSIZE			32
++#define __WORDSIZE_TIME64_COMPAT32	1
++#define __WORDSIZE32_SIZE_ULONG		0
++#define __WORDSIZE32_PTRDIFF_LONG	0
+diff --git a/sysdeps/unix/sysv/linux/powerpc/bits/wordsize.h b/sysdeps/unix/sysv/linux/powerpc/bits/wordsize.h
+index 04ca9debf0..6993fb6b29 100644
+--- a/sysdeps/unix/sysv/linux/powerpc/bits/wordsize.h
++++ b/sysdeps/unix/sysv/linux/powerpc/bits/wordsize.h
+@@ -2,10 +2,9 @@
+ 
+ #if defined __powerpc64__
+ # define __WORDSIZE	64
+-# define __WORDSIZE_TIME64_COMPAT32	1
+ #else
+ # define __WORDSIZE	32
+-# define __WORDSIZE_TIME64_COMPAT32	0
+ # define __WORDSIZE32_SIZE_ULONG	0
+ # define __WORDSIZE32_PTRDIFF_LONG	0
+ #endif
++#define __WORDSIZE_TIME64_COMPAT32	1
+diff --git a/sysdeps/unix/sysv/linux/sparc/bits/wordsize.h b/sysdeps/unix/sysv/linux/sparc/bits/wordsize.h
+index 7562875ee2..ea103e5970 100644
+--- a/sysdeps/unix/sysv/linux/sparc/bits/wordsize.h
++++ b/sysdeps/unix/sysv/linux/sparc/bits/wordsize.h
+@@ -2,10 +2,9 @@
+ 
+ #if defined __arch64__ || defined __sparcv9
+ # define __WORDSIZE	64
+-# define __WORDSIZE_TIME64_COMPAT32	1
+ #else
+ # define __WORDSIZE	32
+ # define __WORDSIZE32_SIZE_ULONG	0
+ # define __WORDSIZE32_PTRDIFF_LONG	0
+-# define __WORDSIZE_TIME64_COMPAT32	0
+ #endif
++#define __WORDSIZE_TIME64_COMPAT32	1
+diff --git a/sysdeps/x86/bits/wordsize.h b/sysdeps/x86/bits/wordsize.h
+index 70f652bca1..3f40aa76f9 100644
+--- a/sysdeps/x86/bits/wordsize.h
++++ b/sysdeps/x86/bits/wordsize.h
+@@ -8,10 +8,9 @@
+ #define __WORDSIZE32_PTRDIFF_LONG	0
+ #endif
+ 
++#define __WORDSIZE_TIME64_COMPAT32 1
++
+ #ifdef __x86_64__
+-# define __WORDSIZE_TIME64_COMPAT32	1
+ /* Both x86-64 and x32 use the 64-bit system call interface.  */
+ # define __SYSCALL_WORDSIZE		64
+-#else
+-# define __WORDSIZE_TIME64_COMPAT32	0
+ #endif
+
+commit acc56074b0a5127631a64640aef1b7c5c103ebd8
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu May 2 17:06:19 2024 +0200
+
+    nscd: Use time_t for return type of addgetnetgrentX
+    
+    Using int may give false results for future dates (timeouts after the
+    year 2028).
+    
+    Fixes commit 04a21e050d64a1193a6daab872bca2528bda44b ("CVE-2024-33601,
+    CVE-2024-33602: nscd: netgroup: Use two buffers in addgetnetgrentX
+    (bug 31680)").
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 4bbca1a44691a6e9adcee5c6798a707b626bc331)
+
+diff --git a/nscd/netgroupcache.c b/nscd/netgroupcache.c
+index e8fe041846..01d554af9c 100644
+--- a/nscd/netgroupcache.c
++++ b/nscd/netgroupcache.c
+@@ -680,8 +680,8 @@ readdinnetgr (struct database_dyn *db, struct hashentry *he,
+       .key_len = he->len
+     };
+ 
+-  int timeout = addinnetgrX (db, -1, &req, db->data + he->key, he->owner,
+-			     he, dh);
++  time_t timeout = addinnetgrX (db, -1, &req, db->data + he->key, he->owner,
++				he, dh);
+   if (timeout < 0)
+     timeout = 0;
+   return timeout;
+
+commit 273a835fe7c685cc54266bb8b502787bad5e9bae
+Author: Carlos O'Donell <carlos@redhat.com>
+Date:   Tue Apr 23 13:30:37 2024 -0400
+
+    time: Allow later version licensing.
+    
+    The FSF's Licensing and Compliance Lab noted a discrepancy in the
+    licensing of several files in the glibc package.
+    
+    When timespect_get.c was impelemented the license did not include
+    the standard ", or (at your option) any later version." text.
+    
+    Change the license in timespec_get.c and all copied files to match
+    the expected license.
+    
+    This change was previously approved in principle by the FSF in
+    RT ticket #1316403. And a similar instance was fixed in
+    commit 46703efa02f6ddebce5ee54c92f7c32598de0de6.
+    
+    (cherry picked from commit 91695ee4598b39d181ab8df579b888a8863c4cab)
+
+diff --git a/sysdeps/unix/sysv/linux/timespec_get.c b/sysdeps/unix/sysv/linux/timespec_get.c
+index c6e5e66289..778d1e3354 100644
+--- a/sysdeps/unix/sysv/linux/timespec_get.c
++++ b/sysdeps/unix/sysv/linux/timespec_get.c
+@@ -5,7 +5,7 @@
+    The GNU C Library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+-   version 2.1 of the License.
++   version 2.1 of the License, or (at your option) any later version.
+ 
+    The GNU C Library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+diff --git a/sysdeps/unix/sysv/linux/timespec_getres.c b/sysdeps/unix/sysv/linux/timespec_getres.c
+index 5acebe2a2c..2eef9e512c 100644
+--- a/sysdeps/unix/sysv/linux/timespec_getres.c
++++ b/sysdeps/unix/sysv/linux/timespec_getres.c
+@@ -5,7 +5,7 @@
+    The GNU C Library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+-   version 2.1 of the License.
++   version 2.1 of the License, or (at your option) any later version.
+ 
+    The GNU C Library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+diff --git a/time/timespec_get.c b/time/timespec_get.c
+index b031e42ca2..26a044bca6 100644
+--- a/time/timespec_get.c
++++ b/time/timespec_get.c
+@@ -4,7 +4,7 @@
+    The GNU C Library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+-   version 2.1 of the License.
++   version 2.1 of the License, or (at your option) any later version.
+ 
+    The GNU C Library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+diff --git a/time/timespec_getres.c b/time/timespec_getres.c
+index edb397507c..2e18b8bcac 100644
+--- a/time/timespec_getres.c
++++ b/time/timespec_getres.c
+@@ -5,7 +5,7 @@
+    The GNU C Library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+-   version 2.1 of the License.
++   version 2.1 of the License, or (at your option) any later version.
+ 
+    The GNU C Library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+
+commit 3148714ab61ad61281bae5a30f530d637034ac3b
+Author: Gabi Falk <gabifalk@gmx.com>
+Date:   Tue Apr 30 20:05:02 2024 +0000
+
+    i586: Fix multiple definitions of __memcpy_chk and __mempcpy_chk
+    
+    /home/bmg/install/compilers/x86_64-linux-gnu/lib/gcc/x86_64-glibc-linux-gnu/13.2.1/../../../../x86_64-glibc-linux-gnu/bin/ld: /home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(memcpy_chk.o): in function `__memcpy_chk':
+    /home/bmg/src/glibc/debug/../sysdeps/i386/memcpy_chk.S:29: multiple definition of `__memcpy_chk';/home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(memcpy.o):/home/bmg/src/glibc/string/../sysdeps/i386/i586/memcpy.S:31: first defined here /home/bmg/install/compilers/x86_64-linux-gnu/lib/gcc/x86_64-glibc-linux-gnu/13.2.1/../../../../x86_64-glibc-linux-gnu/bin/ld: /home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(mempcpy_chk.o): in function `__mempcpy_chk': /home/bmg/src/glibc/debug/../sysdeps/i386/mempcpy_chk.S:28: multiple definition of `__mempcpy_chk'; /home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(mempcpy.o):/home/bmg/src/glibc/string/../sysdeps/i386/i586/memcpy.S:31: first defined here
+    
+    After this change, the static library built for i586, regardless of PIC
+    options, contains implementations of these functions respectively from
+    sysdeps/i386/memcpy_chk.S and sysdeps/i386/mempcpy_chk.S.  This ensures
+    that memcpy and mempcpy won't pull in __chk_fail and the routines it
+    calls.
+    
+    Reported-by: Florian Weimer <fweimer@redhat.com>
+    Signed-off-by: Gabi Falk <gabifalk@gmx.com>
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+    (cherry picked from commit 789894a2f554d4503ecb2f13b2b4e93e43414f33)
+
+diff --git a/sysdeps/i386/i586/memcpy.S b/sysdeps/i386/i586/memcpy.S
+index 3e26f112d6..79856d498a 100644
+--- a/sysdeps/i386/i586/memcpy.S
++++ b/sysdeps/i386/i586/memcpy.S
+@@ -26,7 +26,7 @@
+ #define LEN	SRC+4
+ 
+         .text
+-#if defined PIC && IS_IN (libc)
++#if defined SHARED && IS_IN (libc)
+ ENTRY (__memcpy_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+
+commit ad92c483a4bd34db1cfb3eb625212ea64848244f
+Author: Gabi Falk <gabifalk@gmx.com>
+Date:   Tue Apr 30 20:05:03 2024 +0000
+
+    i686: Fix multiple definitions of __memmove_chk and __memset_chk
+    
+    Commit c73c96a4a1af1326df7f96eec58209e1e04066d8 updated memcpy.S and
+    mempcpy.S, but omitted memmove.S and memset.S.  As a result, the static
+    library built as PIC, whether with or without multiarch support,
+    contains two definitions for each of the __memmove_chk and __memset_chk
+    symbols.
+    
+    /usr/lib/gcc/i686-pc-linux-gnu/14/../../../../i686-pc-linux-gnu/bin/ld: /usr/lib/gcc/i686-pc-linux-gnu/14/../../../../lib/libc.a(memset-ia32.o): in function `__memset_chk':
+    /var/tmp/portage/sys-libs/glibc-2.39-r3/work/glibc-2.39/string/../sysdeps/i386/i686/memset.S:32: multiple definition of `__memset_chk'; /usr/lib/gcc/i686-pc-linux-gnu/14/../../../../lib/libc.a(memset_chk.o):/var/tmp/portage/sys-libs/glibc-2.39-r3/work/glibc-2.39/debug/../sysdeps/i386/i686/multiarch/memset_chk.c:24: first defined here
+    
+    After this change, regardless of PIC options, the static library, built
+    for i686 with multiarch contains implementations of these functions
+    respectively from debug/memmove_chk.c and debug/memset_chk.c, and
+    without multiarch contains implementations of these functions
+    respectively from sysdeps/i386/memmove_chk.S and
+    sysdeps/i386/memset_chk.S.  This ensures that memmove and memset won't
+    pull in __chk_fail and the routines it calls.
+    
+    Reported-by: Sam James <sam@gentoo.org>
+    Tested-by: Sam James <sam@gentoo.org>
+    Fixes: c73c96a4a1 ("i686: Fix build with --disable-multiarch")
+    Signed-off-by: Gabi Falk <gabifalk@gmx.com>
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+    (cherry picked from commit 5a2cf833f5772d6c37c7adac388dd9af9cc1c4b9)
+
+diff --git a/sysdeps/i386/i686/memmove.S b/sysdeps/i386/i686/memmove.S
+index f230359ad6..effd958120 100644
+--- a/sysdeps/i386/i686/memmove.S
++++ b/sysdeps/i386/i686/memmove.S
+@@ -29,7 +29,7 @@
+ #define SRC	DEST+4
+ #define LEN	SRC+4
+ 
+-#if defined PIC && IS_IN (libc)
++#if defined SHARED && IS_IN (libc)
+ ENTRY_CHK (__memmove_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+diff --git a/sysdeps/i386/i686/memset.S b/sysdeps/i386/i686/memset.S
+index f02f5a6df7..ab06771ea0 100644
+--- a/sysdeps/i386/i686/memset.S
++++ b/sysdeps/i386/i686/memset.S
+@@ -27,7 +27,7 @@
+ #define LEN	CHR+4
+ 
+         .text
+-#if defined PIC && IS_IN (libc)
++#if defined SHARED && IS_IN (libc)
+ ENTRY_CHK (__memset_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+
+commit ff110b2591f0bdeccd121c3726af19c62d6fb184
+Author: Gabi Falk <gabifalk@gmx.com>
+Date:   Tue Apr 30 20:05:04 2024 +0000
+
+    Add a test to check for duplicate definitions in the static library
+    
+    This change follows two previous fixes addressing multiple definitions
+    of __memcpy_chk and __mempcpy_chk functions on i586, and __memmove_chk
+    and __memset_chk functions on i686.  The test is intended to prevent
+    such issues from occurring in the future.
+    
+    Signed-off-by: Gabi Falk <gabifalk@gmx.com>
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+    (cherry picked from commit ded2e0753e9c46debeb2e0d26c5e560d2581d314)
+
+diff --git a/Makefile b/Makefile
+index 7052b46df8..2e351c0321 100644
+--- a/Makefile
++++ b/Makefile
+@@ -577,6 +577,13 @@ $(objpfx)lint-makefiles.out: scripts/lint-makefiles.sh
+ 	$(SHELL) $< "$(PYTHON)" `pwd` > $@ ; \
+ 	$(evaluate-test)
+ 
++# Link libc.a as a whole to verify that it does not contain multiple
++# definitions of any symbols.
++tests-special += $(objpfx)link-static-libc.out
++$(objpfx)link-static-libc.out:
++	$(LINK.o) $(whole-archive) -r $(objpfx)libc.a -o /dev/null > $@ 2>&1; \
++	$(evaluate-test)
++
+ # Print test summary for tests in $1 .sum file;
+ # $2 is optional test identifier.
+ # Fail if there are unexpected failures in the test results.
+
+commit fa616ea3730cb42046d19f28d611be0bc390af7c
+Author: Sam James <sam@gentoo.org>
+Date:   Sat May 4 13:28:13 2024 +0100
+
+    Revert "Add a test to check for duplicate definitions in the static library"
+    
+    This reverts commit ff110b2591f0bdeccd121c3726af19c62d6fb184.
+    
+    I had the wrong cherry-pick reference (the commit content is right; it's
+    just referring to a base that isn't upstream), but let's revert and reapply
+    for clarity.
+    
+    Signed-off-by: Sam James <sam@gentoo.org>
+
+diff --git a/Makefile b/Makefile
+index 2e351c0321..7052b46df8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -577,13 +577,6 @@ $(objpfx)lint-makefiles.out: scripts/lint-makefiles.sh
+ 	$(SHELL) $< "$(PYTHON)" `pwd` > $@ ; \
+ 	$(evaluate-test)
+ 
+-# Link libc.a as a whole to verify that it does not contain multiple
+-# definitions of any symbols.
+-tests-special += $(objpfx)link-static-libc.out
+-$(objpfx)link-static-libc.out:
+-	$(LINK.o) $(whole-archive) -r $(objpfx)libc.a -o /dev/null > $@ 2>&1; \
+-	$(evaluate-test)
+-
+ # Print test summary for tests in $1 .sum file;
+ # $2 is optional test identifier.
+ # Fail if there are unexpected failures in the test results.
+
+commit c16871e662cd0f3370173d916864b19e69f1bc9a
+Author: Sam James <sam@gentoo.org>
+Date:   Sat May 4 13:28:51 2024 +0100
+
+    Revert "i686: Fix multiple definitions of __memmove_chk and __memset_chk"
+    
+    This reverts commit ad92c483a4bd34db1cfb3eb625212ea64848244f.
+    
+    I had the wrong cherry-pick reference (the commit content is right; it's
+    just referring to a base that isn't upstream), but let's revert and reapply
+    for clarity.
+    
+    Signed-off-by: Sam James <sam@gentoo.org>
+
+diff --git a/sysdeps/i386/i686/memmove.S b/sysdeps/i386/i686/memmove.S
+index effd958120..f230359ad6 100644
+--- a/sysdeps/i386/i686/memmove.S
++++ b/sysdeps/i386/i686/memmove.S
+@@ -29,7 +29,7 @@
+ #define SRC	DEST+4
+ #define LEN	SRC+4
+ 
+-#if defined SHARED && IS_IN (libc)
++#if defined PIC && IS_IN (libc)
+ ENTRY_CHK (__memmove_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+diff --git a/sysdeps/i386/i686/memset.S b/sysdeps/i386/i686/memset.S
+index ab06771ea0..f02f5a6df7 100644
+--- a/sysdeps/i386/i686/memset.S
++++ b/sysdeps/i386/i686/memset.S
+@@ -27,7 +27,7 @@
+ #define LEN	CHR+4
+ 
+         .text
+-#if defined SHARED && IS_IN (libc)
++#if defined PIC && IS_IN (libc)
+ ENTRY_CHK (__memset_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+
+commit 5141d4d83c17406f0eaea3e345ef2b52e10f386e
+Author: Sam James <sam@gentoo.org>
+Date:   Sat May 4 13:28:54 2024 +0100
+
+    Revert "i586: Fix multiple definitions of __memcpy_chk and __mempcpy_chk"
+    
+    This reverts commit 3148714ab61ad61281bae5a30f530d637034ac3b.
+    
+    I had the wrong cherry-pick reference (the commit content is right; it's
+    just referring to a base that isn't upstream), but let's revert and reapply
+    for clarity.
+    
+    Signed-off-by: Sam James <sam@gentoo.org>
+
+diff --git a/sysdeps/i386/i586/memcpy.S b/sysdeps/i386/i586/memcpy.S
+index 79856d498a..3e26f112d6 100644
+--- a/sysdeps/i386/i586/memcpy.S
++++ b/sysdeps/i386/i586/memcpy.S
+@@ -26,7 +26,7 @@
+ #define LEN	SRC+4
+ 
+         .text
+-#if defined SHARED && IS_IN (libc)
++#if defined PIC && IS_IN (libc)
+ ENTRY (__memcpy_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+
+commit 8323a83abd73446dc434aceff66219712c09140b
+Author: Gabi Falk <gabifalk@gmx.com>
+Date:   Tue Apr 30 20:05:02 2024 +0000
+
+    i586: Fix multiple definitions of __memcpy_chk and __mempcpy_chk
+    
+    /home/bmg/install/compilers/x86_64-linux-gnu/lib/gcc/x86_64-glibc-linux-gnu/13.2.1/../../../../x86_64-glibc-linux-gnu/bin/ld: /home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(memcpy_chk.o): in function `__memcpy_chk':
+    /home/bmg/src/glibc/debug/../sysdeps/i386/memcpy_chk.S:29: multiple definition of `__memcpy_chk';/home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(memcpy.o):/home/bmg/src/glibc/string/../sysdeps/i386/i586/memcpy.S:31: first defined here /home/bmg/install/compilers/x86_64-linux-gnu/lib/gcc/x86_64-glibc-linux-gnu/13.2.1/../../../../x86_64-glibc-linux-gnu/bin/ld: /home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(mempcpy_chk.o): in function `__mempcpy_chk': /home/bmg/src/glibc/debug/../sysdeps/i386/mempcpy_chk.S:28: multiple definition of `__mempcpy_chk'; /home/bmg/build/glibcs/i586-linux-gnu/glibc/libc.a(mempcpy.o):/home/bmg/src/glibc/string/../sysdeps/i386/i586/memcpy.S:31: first defined here
+    
+    After this change, the static library built for i586, regardless of PIC
+    options, contains implementations of these functions respectively from
+    sysdeps/i386/memcpy_chk.S and sysdeps/i386/mempcpy_chk.S.  This ensures
+    that memcpy and mempcpy won't pull in __chk_fail and the routines it
+    calls.
+    
+    Reported-by: Florian Weimer <fweimer@redhat.com>
+    Signed-off-by: Gabi Falk <gabifalk@gmx.com>
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+    (cherry picked from commit 0fdf4ba48ccce5abf567340b0ab8fa8ed8a9bc6e)
+
+diff --git a/sysdeps/i386/i586/memcpy.S b/sysdeps/i386/i586/memcpy.S
+index 3e26f112d6..79856d498a 100644
+--- a/sysdeps/i386/i586/memcpy.S
++++ b/sysdeps/i386/i586/memcpy.S
+@@ -26,7 +26,7 @@
+ #define LEN	SRC+4
+ 
+         .text
+-#if defined PIC && IS_IN (libc)
++#if defined SHARED && IS_IN (libc)
+ ENTRY (__memcpy_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+
+commit 8b005d7869debac4d5cd67f65e49a0fad89da9ad
+Author: Gabi Falk <gabifalk@gmx.com>
+Date:   Tue Apr 30 20:05:03 2024 +0000
+
+    i686: Fix multiple definitions of __memmove_chk and __memset_chk
+    
+    Commit c73c96a4a1af1326df7f96eec58209e1e04066d8 updated memcpy.S and
+    mempcpy.S, but omitted memmove.S and memset.S.  As a result, the static
+    library built as PIC, whether with or without multiarch support,
+    contains two definitions for each of the __memmove_chk and __memset_chk
+    symbols.
+    
+    /usr/lib/gcc/i686-pc-linux-gnu/14/../../../../i686-pc-linux-gnu/bin/ld: /usr/lib/gcc/i686-pc-linux-gnu/14/../../../../lib/libc.a(memset-ia32.o): in function `__memset_chk':
+    /var/tmp/portage/sys-libs/glibc-2.39-r3/work/glibc-2.39/string/../sysdeps/i386/i686/memset.S:32: multiple definition of `__memset_chk'; /usr/lib/gcc/i686-pc-linux-gnu/14/../../../../lib/libc.a(memset_chk.o):/var/tmp/portage/sys-libs/glibc-2.39-r3/work/glibc-2.39/debug/../sysdeps/i386/i686/multiarch/memset_chk.c:24: first defined here
+    
+    After this change, regardless of PIC options, the static library, built
+    for i686 with multiarch contains implementations of these functions
+    respectively from debug/memmove_chk.c and debug/memset_chk.c, and
+    without multiarch contains implementations of these functions
+    respectively from sysdeps/i386/memmove_chk.S and
+    sysdeps/i386/memset_chk.S.  This ensures that memmove and memset won't
+    pull in __chk_fail and the routines it calls.
+    
+    Reported-by: Sam James <sam@gentoo.org>
+    Tested-by: Sam James <sam@gentoo.org>
+    Fixes: c73c96a4a1 ("i686: Fix build with --disable-multiarch")
+    Signed-off-by: Gabi Falk <gabifalk@gmx.com>
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+    (cherry picked from commit 5a2cf833f5772d6c37c7adac388dd9af9cc1c4b9)
+
+diff --git a/sysdeps/i386/i686/memmove.S b/sysdeps/i386/i686/memmove.S
+index f230359ad6..effd958120 100644
+--- a/sysdeps/i386/i686/memmove.S
++++ b/sysdeps/i386/i686/memmove.S
+@@ -29,7 +29,7 @@
+ #define SRC	DEST+4
+ #define LEN	SRC+4
+ 
+-#if defined PIC && IS_IN (libc)
++#if defined SHARED && IS_IN (libc)
+ ENTRY_CHK (__memmove_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+diff --git a/sysdeps/i386/i686/memset.S b/sysdeps/i386/i686/memset.S
+index f02f5a6df7..ab06771ea0 100644
+--- a/sysdeps/i386/i686/memset.S
++++ b/sysdeps/i386/i686/memset.S
+@@ -27,7 +27,7 @@
+ #define LEN	CHR+4
+ 
+         .text
+-#if defined PIC && IS_IN (libc)
++#if defined SHARED && IS_IN (libc)
+ ENTRY_CHK (__memset_chk)
+ 	movl	12(%esp), %eax
+ 	cmpl	%eax, 16(%esp)
+
+commit f8e462342189525e4605cf233b8f798d1c7f398d
+Author: Gabi Falk <gabifalk@gmx.com>
+Date:   Tue Apr 30 20:05:04 2024 +0000
+
+    Add a test to check for duplicate definitions in the static library
+    
+    This change follows two previous fixes addressing multiple definitions
+    of __memcpy_chk and __mempcpy_chk functions on i586, and __memmove_chk
+    and __memset_chk functions on i686.  The test is intended to prevent
+    such issues from occurring in the future.
+    
+    Signed-off-by: Gabi Falk <gabifalk@gmx.com>
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Dmitry V. Levin <ldv@altlinux.org>
+    (cherry picked from commit ded2e0753e9c46debeb2e0d26c5e560d2581d314)
+
+diff --git a/Makefile b/Makefile
+index 7052b46df8..2e351c0321 100644
+--- a/Makefile
++++ b/Makefile
+@@ -577,6 +577,13 @@ $(objpfx)lint-makefiles.out: scripts/lint-makefiles.sh
+ 	$(SHELL) $< "$(PYTHON)" `pwd` > $@ ; \
+ 	$(evaluate-test)
+ 
++# Link libc.a as a whole to verify that it does not contain multiple
++# definitions of any symbols.
++tests-special += $(objpfx)link-static-libc.out
++$(objpfx)link-static-libc.out:
++	$(LINK.o) $(whole-archive) -r $(objpfx)libc.a -o /dev/null > $@ 2>&1; \
++	$(evaluate-test)
++
+ # Print test summary for tests in $1 .sum file;
+ # $2 is optional test identifier.
+ # Fail if there are unexpected failures in the test results.

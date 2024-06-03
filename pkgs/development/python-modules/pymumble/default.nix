@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, opuslib
-, protobuf
-, pytestCheckHook
-, pycrypto
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  opuslib,
+  protobuf,
+  pytestCheckHook,
+  pycrypto,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

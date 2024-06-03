@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, rapidjson
-, pytestCheckHook
-, pytz
-, setuptools
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  rapidjson,
+  pytestCheckHook,
+  pytz,
+  setuptools,
+  substituteAll,
 }:
 
 let
@@ -27,7 +28,8 @@ let
       })
     ];
   });
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   version = "1.16";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.8";
@@ -48,18 +50,14 @@ in buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];
 
-  disabledTestPaths = [
-    "benchmarks"
-  ];
+  disabledTestPaths = [ "benchmarks" ];
 
   meta = with lib; {
     changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.rev}/CHANGES.rst";

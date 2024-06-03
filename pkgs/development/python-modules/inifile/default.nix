@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A small INI library for Python";
-    homepage    = "https://github.com/mitsuhiko/python-inifile";
-    license     = licenses.bsd0;
+    homepage = "https://github.com/mitsuhiko/python-inifile";
+    license = licenses.bsd0;
     maintainers = with maintainers; [ ];
   };
-
 }

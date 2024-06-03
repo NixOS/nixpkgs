@@ -1,4 +1,9 @@
-{ lib, mkDerivation, libc, headers }:
+{
+  lib,
+  mkDerivation,
+  libc,
+  headers,
+}:
 
 mkDerivation {
   path = "lib/librt";

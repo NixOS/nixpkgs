@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pygithub, python-gitlab }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygithub,
+  python-gitlab,
+}:
 
 buildPythonPackage rec {
   pname = "criticality_score";
@@ -9,7 +15,10 @@ buildPythonPackage rec {
     hash = "sha256-5XkVT0blnLG158a01jDfQl1Rx9U1LMsqaMjTdN7Q4QQ=";
   };
 
-  propagatedBuildInputs = [ pygithub python-gitlab ];
+  propagatedBuildInputs = [
+    pygithub
+    python-gitlab
+  ];
 
   doCheck = false;
 

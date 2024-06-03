@@ -1,10 +1,11 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitLab
-, isPy27
-, jinja2
-, pytest
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitLab,
+  isPy27,
+  jinja2,
+  pytest,
 }:
 
 buildPythonPackage rec {

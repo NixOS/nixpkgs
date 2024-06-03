@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, docutils
-, installShellFiles
-, poetry-core
-, google-api-python-client
-, simplejson
-, oauth2client
-, setuptools
-, pyxdg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pythonOlder,
+  docutils,
+  installShellFiles,
+  poetry-core,
+  google-api-python-client,
+  simplejson,
+  oauth2client,
+  setuptools,
+  pyxdg,
 }:
 
 buildPythonPackage rec {

@@ -406,8 +406,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.8.1";
-          sha256 = "0kqzry0cbvvy1pkbx5rhnk5ry7j91cbf11vz1s1jrqc7j0hq0yx8";
+          version = "1.14.1";
+          hash = "sha256-taO9jxNC4mvli08Gbl8oO70T+RkfZkztoVZYWeVY4Bs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -1030,6 +1030,21 @@ let
         };
       };
 
+      danielgavin.ols = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "DanielGavin";
+          name = "ols";
+          version = "0.1.28";
+          hash = "sha256-yVXltjvtLc+zqela/Jyg+g66PU61+YTMX1hWPW8fIkk=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for Odin language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=DanielGavin.ols";
+          homepage = "https://github.com/DanielGavin/ols";
+          license = lib.licenses.mit;
+        };
+      };
+
       daohong-emilio.yash = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "daohong-emilio";
@@ -1477,8 +1492,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.20.0";
-          hash = "sha256-p+YNBRzzA/EezBMxI5Rmdb8SdJgFV7QwuLVi1mcJV+E=";
+          version = "0.21.3";
+          hash = "sha256-C6QFlqMIcefQhzBuVd3CnQHHaDdM1de7j+a/06wZ9FQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -2205,8 +2220,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.18.2";
-          hash = "sha256-CEeTLiZktp5YzCRxDXa+s8W9N971iQla/FyCr8Co0SQ=";
+          version = "7.19.1";
+          hash = "sha256-QyGt3q00IEXw6YNvx7pFhLS1s44aeiB/U0m3Ow1UdlM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2231,6 +2246,27 @@ let
           homepage = "https://github.com/IronGeek/vscode-env.git";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      jackmacwindows.vscode-computercraft = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-computercraft";
+          publisher = "jackmacwindows";
+          version = "1.1.1";
+          hash = "sha256-ec1I3oQ06iMdSUcqf8yA3GjE7Aqa0PiLzRQLwFcL0KU=";
+        };
+        postInstall = ''
+          # Remove superflouous images to reduce closure size
+          rm $out/$installPrefix/images/*.gif
+        '';
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.vscode-computercraft/changelog";
+          description = "A Visual Studio Code extension for ComputerCraft and CC: Tweaked auto-completion";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.vscode-computercraft";
+          homepage = "https://github.com/MCJack123/vscode-computercraft";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ tomodachi94 ];
         };
       };
 
@@ -2857,8 +2893,8 @@ let
         mktplcRef = {
           name = "debugpy";
           publisher = "ms-python";
-          version = "2023.3.13121011";
-          hash = "sha256-owYUEyQl2FQytApfuI97N4y9p7/dL0lu6EBk/AzSMjw=";
+          version = "2024.6.0";
+          hash = "sha256-VlPe65ViBur5P6L7iRKdGnmbNlSCwYrdZAezStx8Bz8=";
         };
         meta = {
           description = "Python debugger (debugpy) extension for VS Code";
@@ -3073,7 +3109,7 @@ let
         };
         meta = {
           description = "Open any folder or repository inside a Docker container.";
-          downloadPage = "Use a container as your development environment";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers";
           homepage = "https://code.visualstudio.com/docs/devcontainers/containers";
           license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.anthonyroussel ];
@@ -3270,6 +3306,21 @@ let
           homepage = "https://github.com/oderwat/vscode-indent-rainbow";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.imgabe ];
+        };
+      };
+
+      phind.phind = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "phind";
+          publisher = "phind";
+          version = "0.22.2";
+          hash = "sha256-nN/7IVa4WaA5V39CHx0nrvWBmBNtISvAINTQzk02x1w=";
+        };
+        meta = {
+          description = "Using Phind AI service to provide answers based on the code context";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=phind.phind";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.onny ];
         };
       };
 
@@ -3679,8 +3730,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.12";
-          hash = "sha256-4Iq6idux029i7cBV3x79ZRAbSk3ymqx+Q2jv0zV9ZTI=";
+          version = "0.8.13";
+          hash = "sha256-DxM7oWAbIonsKTvJjxX4oTaBwvRcxNT2y10ljYAzVeI=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -3892,8 +3943,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "3.0.1";
-          hash = "sha256-KeYE6/yO2n3RHPjnJOnOyHsz4XW81y9AbkSC/I975kQ=";
+          version = "4.0.2";
+          hash = "sha256-k3FxRAtW9Fdhm7jD3ingFXONiBsOia1Whs7OPeDmlSw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -4268,8 +4319,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.42";
-          hash = "sha256-cgLWgMej1Nv8kNK2MfgO3Z/xJPXdcmYs8LXrFNfc3jQ=";
+          version = "0.0.44";
+          hash = "sha256-lumK7gcj/NIhiZKT6F++ZsTFKWw7ZVaKZgIsQvZAGs4=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -4712,6 +4763,23 @@ let
         };
       };
 
+      xdebug.php-debug = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "php-debug";
+          publisher = "xdebug";
+          version = "1.34.0";
+          hash = "sha256-WAcXWCMmvuw7nkfGcOgmK+s+Nw6XpvNR4POXD85E/So=";
+        };
+        meta = {
+          description = "PHP Debug Adapter";
+          license = lib.licenses.mit;
+          homepage = "https://github.com/xdebug/vscode-php-debug";
+          changelog = "https://github.com/xdebug/vscode-php-debug/blob/main/CHANGELOG.md";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=xdebug.php-debug";
+          maintainers = [ lib.maintainers.onny ];
+        };
+      };
+
       xyz.local-history = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "local-history";
@@ -4844,18 +4912,18 @@ let
     };
 
   aliases = super: {
-    _13xforever = super."13xforever";
-    _1Password = super."1Password";
-    _2gua = super."2gua";
-    _4ops = super."4ops";
-    Arjun.swagger-viewer = super.arjun.swagger-viewer;
-    jakebecker.elixir-ls = super.elixir-lsp.vscode-elixir-ls;
-    jpoissonnier.vscode-styled-components = super.styled-components.vscode-styled-components;
-    matklad.rust-analyzer = super.rust-lang.rust-analyzer; # Previous publisher
-    ms-vscode.go = super.golang.go;
-    ms-vscode.PowerShell = super.ms-vscode.powershell;
-    rioj7.commandOnAllFiles = super.rioj7.commandonallfiles;
-    WakaTime.vscode-wakatime = super.wakatime.vscode-wakatime;
+    _13xforever = throw "_13xforever is deprecated in favor of 13xforever"; # Added 2024-05-29
+    _1Password = throw "_1Password is deprecated in favor of 1Password"; # Added 2024-05-29
+    _2gua = throw "_2gua is deprecated in favor of 2gua"; # Added 2024-05-29
+    _4ops = throw "_4ops is deprecated in favor of 4ops"; # Added 2024-05-29
+    Arjun.swagger-viewer = throw "Arjun.swagger-viewer is deprecated in favor of arjun.swagger-viewer"; # Added 2024-05-29
+    jakebecker.elixir-ls = throw "jakebecker.elixir-ls is deprecated in favor of elixir-lsp.vscode-elixir-ls"; # Added 2024-05-29
+    jpoissonnier.vscode-styled-components = throw "jpoissonnier.vscode-styled-components is deprecated in favor of styled-components.vscode-styled-components"; # Added 2024-05-29
+    matklad.rust-analyzer = throw "matklad.rust-analyzer is deprecated in favor of rust-lang.rust-analyzer"; # Added 2024-05-29
+    ms-vscode.go = throw "ms-vscode.go is deprecated in favor of golang.go"; # Added 2024-05-29
+    ms-vscode.PowerShell = throw "ms-vscode.PowerShell is deprecated in favor of super.ms-vscode.powershell"; # Added 2024-05-29
+    rioj7.commandOnAllFiles = throw "rioj7.commandOnAllFiles is deprecated in favor of rioj7.commandonallfiles"; # Added 2024-05-29
+    WakaTime.vscode-wakatime = throw "WakaTime.vscode-wakatime is deprecated in favor of wakatime.vscode-wakatime"; # Added 2024-05-29
   };
 
   # TODO: add overrides overlay, so that we can have a generated.nix

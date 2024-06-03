@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, requests
-, paho-mqtt
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  requests,
+  paho-mqtt,
+  cryptography,
 }:
 let
   pname = "tuya-device-sharing-sdk";
@@ -23,9 +24,7 @@ buildPythonPackage {
     touch requirements.txt
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     requests

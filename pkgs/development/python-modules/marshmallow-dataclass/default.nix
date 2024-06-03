@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, marshmallow-enum
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, typeguard
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  typeguard,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "8.6.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
@@ -30,7 +30,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    marshmallow-enum
     pytestCheckHook
     typeguard
   ];
@@ -46,9 +45,7 @@ buildPythonPackage rec {
     "test_newtype"
   ];
 
-  pythonImportsCheck = [
-    "marshmallow_dataclass"
-  ];
+  pythonImportsCheck = [ "marshmallow_dataclass" ];
 
   meta = with lib; {
     description = "Automatic generation of marshmallow schemas from dataclasses";

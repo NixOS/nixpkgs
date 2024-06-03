@@ -21,8 +21,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2023.1.10091012";
-    hash = "sha256-JosFv6ngJmw1XRILwTZMVxlGIdWFLFQjj4olfnVwAIM=";
+    version = "2024.5.11021008";
+    hash = "sha256-UnI0leRKqCtFLBdGS/UvLuCcxQhibyY0ChmzQ9uytoY=";
   };
 
   buildInputs = [ icu ];
@@ -37,11 +37,11 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   postPatch =
     ''
       # remove bundled python deps and use libs from nixpkgs
-      rm -r pythonFiles/lib
-      mkdir -p pythonFiles/lib/python/
-      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy pythonFiles/lib/python/
+      rm -r python_files/lib
+      mkdir -p python_files/lib/python/
+      ln -s ${python3.pkgs.debugpy}/lib/*/site-packages/debugpy python_files/lib/python/
       buildPythonPath "$propagatedBuildInputs"
-      for i in pythonFiles/*.py; do
+      for i in python_files/*.py; do
         patchPythonScript "$i"
       done
     ''

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  pkg-config,
 }:
 
 python3.pkgs.buildPythonPackage {
@@ -19,7 +20,10 @@ python3.pkgs.buildPythonPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = with python3.pkgs; [ cffi secp256k1 ];
+  propagatedBuildInputs = with python3.pkgs; [
+    cffi
+    secp256k1
+  ];
 
   nativeCheckInputs = [ python3.pkgs.pytestCheckHook ];
 

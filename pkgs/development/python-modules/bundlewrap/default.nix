@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, cryptography
-, jinja2
-, mako
-, passlib
-, pytest
-, pyyaml
-, requests
-, rtoml
-, setuptools
-, tomlkit
-, librouteros
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  cryptography,
+  jinja2,
+  mako,
+  passlib,
+  pytest,
+  pyyaml,
+  requests,
+  rtoml,
+  setuptools,
+  tomlkit,
+  librouteros,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
   propagatedBuildInputs = [
-    setuptools cryptography jinja2 mako passlib pyyaml requests tomlkit librouteros
+    setuptools
+    cryptography
+    jinja2
+    mako
+    passlib
+    pyyaml
+    requests
+    tomlkit
+    librouteros
   ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
 
   pythonImportsCheck = [ "bundlewrap" ];
@@ -48,7 +57,7 @@ buildPythonPackage rec {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
     mainProgram = "bw";
-    license = [ licenses.gpl3 ] ;
+    license = [ licenses.gpl3 ];
     maintainers = with maintainers; [ wamserma ];
   };
 }

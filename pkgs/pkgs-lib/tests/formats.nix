@@ -425,4 +425,48 @@ in runBuildTests {
       \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
     '';
   };
+
+  phpAtoms = shouldPass rec {
+    format = formats.php { finalVariable = "config"; };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      str_special = "foo\ntesthello'''";
+      attrs.foo = null;
+      list = [ null null ];
+      mixed = format.lib.mkMixedArray [ 10 3.141 ] {
+        str = "foo";
+        attrs.foo = null;
+      };
+      raw = format.lib.mkRaw "random_function()";
+    };
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      $config = ['attrs' => ['foo' => null], 'false' => false, 'float' => 3.141000, 'int' => 10, 'list' => [null, null], 'mixed' => [10, 3.141000, 'attrs' => ['foo' => null], 'str' => 'foo'], 'null' => null, 'raw' => random_function(), 'str' => 'foo', 'str_special' => 'foo
+      testhello\'\'\'${"'"}, 'true' => true];
+    '';
+  };
+
+  phpReturn = shouldPass {
+    format = formats.php { };
+    input = {
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      str_special = "foo\ntesthello'''";
+      attrs.foo = null;
+    };
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      return ['attrs' => ['foo' => null], 'float' => 3.141000, 'int' => 10, 'str' => 'foo', 'str_special' => 'foo
+      testhello\'\'\'${"'"}];
+    '';
+  };
+
 }

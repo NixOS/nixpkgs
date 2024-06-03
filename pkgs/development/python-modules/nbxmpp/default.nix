@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, gobject-introspection
-, idna
-, libsoup_3
-, packaging
-, precis-i18n
-, pygobject3
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  gobject-introspection,
+  idna,
+  libsoup_3,
+  packaging,
+  precis-i18n,
+  pygobject3,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    precis-i18n
-  ];
+  buildInputs = [ precis-i18n ];
 
   propagatedBuildInputs = [
     gobject-introspection
@@ -47,13 +46,9 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "nbxmpp"
-  ];
+  pythonImportsCheck = [ "nbxmpp" ];
 
   meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";

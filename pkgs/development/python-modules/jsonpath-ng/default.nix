@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ply
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ply,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Exclude tests that require oslotest
     "tests/test_jsonpath_rw_ext.py"
   ];
 
-  pythonImportsCheck = [
-    "jsonpath_ng"
-  ];
+  pythonImportsCheck = [ "jsonpath_ng" ];
 
   meta = with lib; {
     description = "JSONPath implementation";

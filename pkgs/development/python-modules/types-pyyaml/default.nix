@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yaml-stubs"
-  ];
+  pythonImportsCheck = [ "yaml-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for PyYAML";

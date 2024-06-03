@@ -1,6 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi
-, jinja2
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  pyyaml,
 }:
 
 buildPythonPackage rec {

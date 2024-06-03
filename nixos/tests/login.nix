@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
 {
   name = "login";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes.machine =

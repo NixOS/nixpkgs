@@ -1,16 +1,18 @@
-{ lib, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, libngspice
-, numpy
-, ply
-, scipy
-, pyyaml
-, cffi
-, requests
-, matplotlib
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  libngspice,
+  numpy,
+  ply,
+  scipy,
+  pyyaml,
+  cffi,
+  requests,
+  matplotlib,
+  setuptools,
 }:
 
 buildPythonPackage rec {

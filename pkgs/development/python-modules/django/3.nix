@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, geos_3_9
-, gdal
-, asgiref
-, pytz
-, sqlparse
-, tzdata
-, pythonOlder
-, withGdal ? false
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  geos_3_9,
+  gdal,
+  asgiref,
+  pytz,
+  sqlparse,
+  tzdata,
+  pythonOlder,
+  withGdal ? false,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-fKOKeGVK7nI3hZTWPlFjbAS44oV09VBd/2MIlbVHJ3c=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./django_3_set_zoneinfo_dir.patch;
-      zoneinfo = tzdata + "/share/zoneinfo";
-    })
-  ] ++ lib.optional withGdal
-    (substituteAll {
+  patches =
+    [
+      (substituteAll {
+        src = ./django_3_set_zoneinfo_dir.patch;
+        zoneinfo = tzdata + "/share/zoneinfo";
+      })
+    ]
+    ++ lib.optional withGdal (substituteAll {
       src = ./django_3_set_geos_gdal_lib.patch;
       inherit geos_3_9;
       inherit gdal;
@@ -54,5 +56,8 @@ buildPythonPackage rec {
     homepage = "https://www.djangoproject.com/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ georgewhewell ];
+    knownVulnerabilities = [
+      "Support for Django 3.2 ended on 2024-04-01, see https://www.djangoproject.com/download/#supported-versions."
+    ];
   };
 }

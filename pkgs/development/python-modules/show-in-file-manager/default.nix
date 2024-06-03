@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, argparse-manpage
-, setuptools
-, packaging
-, pyxdg
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  argparse-manpage,
+  setuptools,
+  packaging,
+  pyxdg,
 }:
 
 buildPythonPackage rec {
@@ -23,10 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ]
-  ++ lib.optional (stdenv.isLinux) pyxdg;
+  propagatedBuildInputs = [ packaging ] ++ lib.optional (stdenv.isLinux) pyxdg;
 
   meta = with lib; {
     homepage = "https://github.com/damonlynch/showinfilemanager";

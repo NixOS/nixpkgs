@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "himitsu";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromSourcehut {
     name = pname + "-src";
     owner = "~sircmpwn";
     repo = pname;
     rev = version;
-    hash = "sha256-3x6Lc1rWBtYWVocBuMV5CtoZQjL0Ce+6J2xFjaYaeG4=";
+    hash = "sha256-jDxQajc8Kyfihm8q3wCpA+WsbAkQEZerLckLQXNhTa8=";
   };
 
   nativeBuildInputs = [

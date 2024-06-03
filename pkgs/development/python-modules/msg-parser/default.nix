@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# dependencies
-, olefile
-# test dependencies
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # dependencies
+  olefile,
+  # test dependencies
+  pytestCheckHook,
 }:
 let
   pname = "msg-parser";
@@ -24,13 +25,9 @@ buildPythonPackage {
     hash = "sha256-srDk6w8nzt0dyGCFQWfVCnKb4LawHoqoHX6d1l1dAmM=";
   };
 
-  propagatedBuildInputs = [
-    olefile
-  ];
+  propagatedBuildInputs = [ olefile ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python module to read, parse and converting Microsoft Outlook MSG E-Mail files.";

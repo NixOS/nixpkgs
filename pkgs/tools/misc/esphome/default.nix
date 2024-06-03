@@ -19,14 +19,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.4.2";
+  version = "2024.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-q4SVsfd5PJjeqt6UJJG6vuyxTA/bqDDl6e5dxhWIfYM=";
+    hash = "sha256-UxNMHRQLrViK9ssFc0vHA/zqNw5yH8E6n+OAnq6vJdQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -41,6 +41,12 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
+
+    # ensure component dependencies are available
+    cat requirements_optional.txt >> requirements.txt
+    # relax strict runtime version check
+    substituteInPlace esphome/components/font/__init__.py \
+      --replace-fail "10.2.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
@@ -55,6 +61,7 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    cairosvg
     click
     colorama
     cryptography

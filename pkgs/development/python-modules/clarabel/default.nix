@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, libiconv
-, numpy
-, scipy
-, nix-update-script
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  libiconv,
+  numpy,
+  scipy,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "clarabel";
-  version = "0.7.1";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-owqxNfR1xbx4Mp/X31dSkRVeYFW8rwISTrYQuK0XY5Y=";
+    hash = "sha256-03GEFzlvzLeedKVeDokdHGArwjunh3Zm8cJQL90mI+o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Tg9K66WIIAZyua8QlKrlUnpRJRmuxe7ihIr2Vqg79NQ=";
+    hash = "sha256-9zBr9SUd8jJDSqRX9Xs0mDV5gck/qfqJ3VfEAOz7EsA=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "clarabel"
-  ];
+  pythonImportsCheck = [ "clarabel" ];
 
   # no tests but run the same examples as .github/workflows/pypi.yaml
   checkPhase = ''

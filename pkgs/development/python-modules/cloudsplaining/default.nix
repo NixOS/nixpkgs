@@ -1,18 +1,19 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, cached-property
-, click
-, click-option-group
-, fetchFromGitHub
-, jinja2
-, markdown
-, policy-sentry
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, schema
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cached-property,
+  click,
+  click-option-group,
+  fetchFromGitHub,
+  jinja2,
+  markdown,
+  policy-sentry,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  schema,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     schema
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     # Ignore pinned versions
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     "test_statement_details_for_allow_not_action"
   ];
 
-  pythonImportsCheck = [
-    "cloudsplaining"
-  ];
+  pythonImportsCheck = [ "cloudsplaining" ];
 
   meta = with lib; {
     description = "Python module for AWS IAM security assessment";

@@ -1,10 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, twisted
-, qtpy
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  twisted,
+  qtpy,
+  pyqt5,
 }:
 
 buildPythonPackage rec {
@@ -18,19 +18,14 @@ buildPythonPackage rec {
     sha256 = "1nb5iwg0nfz86shw28a2kj5pyhd4jvvxhf73fhnfbl8scgnvjv9h";
   };
 
-  disabled = pythonOlder "3.0";
-
   propagatedBuildInputs = [
-    twisted qtpy
+    twisted
+    qtpy
   ];
 
-  nativeCheckInputs = [
-    pyqt5
-  ];
+  nativeCheckInputs = [ pyqt5 ];
 
-  pythonImportsCheck = [
-    "qreactor"
-  ];
+  pythonImportsCheck = [ "qreactor" ];
 
   meta = with lib; {
     homepage = "https://github.com/frmdstryr/qt-reactor";

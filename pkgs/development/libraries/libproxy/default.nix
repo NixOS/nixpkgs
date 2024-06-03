@@ -4,7 +4,6 @@
 , darwin
 , duktape
 , fetchFromGitHub
-, fetchpatch
 , gi-docgen
 , gitUpdater
 , glib
@@ -21,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.5.3";
+  version = "0.5.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -29,18 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libproxy";
     repo = "libproxy";
     rev = finalAttrs.version;
-    hash = "sha256-qdYB6HJkgboS8kkTvTqLy6Z3JYY5SOJsRl6nZM0iuvw=";
+    hash = "sha256-2uDlKjxzrKlyZKV0BSUDzmLSo2voJKDerbZZkamgNYk=";
   };
 
   patches = [
-    # Minor refactoring. Allows the following patches to apply without rebasing.
-    (fetchpatch {
-      url = "https://github.com/libproxy/libproxy/commit/397f4dc72607cc1bb3b584ffd3de49f8ba80491a.patch";
-      hash = "sha256-iUMBMpcVOLG+NxEj8Nd7JtKZFmoGXn0t6A2r2ayiteg=";
-      includes = [
-        "src/backend/plugins/config-gnome/config-gnome.c"
-      ];
-    })
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # Disable schema presence detection, it would fail because it cannot be autopatched,
@@ -87,7 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
   ]);
 
-  mesonFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  mesonFlags = [
+    # Prevent installing commit hook.
+    "-Drelease=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dconfig-gnome=false"
   ];
 

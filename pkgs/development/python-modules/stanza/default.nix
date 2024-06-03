@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, emoji
-, fetchFromGitHub
-, networkx
-, numpy
-, peft
-, protobuf
-, pythonOlder
-, requests
-, six
-, toml
-, torch
-, tqdm
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  emoji,
+  fetchFromGitHub,
+  networkx,
+  numpy,
+  peft,
+  protobuf,
+  pythonOlder,
+  requests,
+  six,
+  toml,
+  torch,
+  tqdm,
+  transformers,
 }:
 
 buildPythonPackage rec {
@@ -46,9 +47,7 @@ buildPythonPackage rec {
   # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stanza"
-  ];
+  pythonImportsCheck = [ "stanza" ];
 
   meta = with lib; {
     description = "Official Stanford NLP Python Library for Many Human Languages";

@@ -1,15 +1,16 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, gssapi
-, impacket
-, ldap3
-, lxml
-, pyasn1
-, pycryptodome
-, pythonOlder
-, setuptools
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gssapi,
+  impacket,
+  ldap3,
+  lxml,
+  pyasn1,
+  pycryptodome,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,14 +22,12 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "the-useless-one";
-    repo ="pywerview";
+    repo = "pywerview";
     rev = "refs/tags/v${version}";
     hash = "sha256-WZE6qWq9v4A78YELMEcbgyufBRrVFRTqlhGmknpKn1Y=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -43,9 +42,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pywerview"
-  ];
+  pythonImportsCheck = [ "pywerview" ];
 
   meta = with lib; {
     description = "Module for PowerSploit's PowerView support";

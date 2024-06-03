@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorlog
-, jinja2
-, lxml
-, pygments
-, pythonOlder
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  colorlog,
+  jinja2,
+  lxml,
+  pygments,
+  pythonOlder,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     jinja2
     lxml
     pygments
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There are no unit tests in the pypi tarball. Most of the unit tests on the
   # github repository currently only work with gcc5, so we just disable them.
@@ -46,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://www.gcovr.com/";
     changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ sigmanificient ];
   };
 }

@@ -4,32 +4,39 @@
 , pkg-config
 , makeWrapper
 , meson
+, cmake
 , ninja
 , binutils
 , cairo
+, epoll-shim
 , git
 , hyprcursor
 , hyprland-protocols
 , hyprlang
+, hyprwayland-scanner
 , jq
 , libGL
 , libdrm
 , libexecinfo
 , libinput
-, libxcb
+, libuuid
 , libxkbcommon
 , mesa
 , pango
 , pciutils
+, pkgconf
+, python3
 , systemd
 , tomlplusplus
-, udis86-hyprland
 , wayland
 , wayland-protocols
 , wayland-scanner
-, wlroots-hyprland
-, xcbutilwm
 , xwayland
+, hwdata
+, seatd
+, libdisplay-info
+, libliftoff
+, xorg
 , debug ? false
 , enableXWayland ? true
 , legacyRenderer ? false
@@ -44,38 +51,26 @@ assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been remov
 assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 
-let
-  wlr = wlroots-hyprland.override { inherit enableXWayland; };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.39.1";
+  version = "0.40.0-unstable-2024-05-05";
+
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Urb/njWiHYUudXpmK8EKl9Z58esTIG0PxXw5LuM2r5g=";
+    fetchSubmodules = true;
+    rev = "f15513309b24790099d42974274eb23f66f7c985";
+    hash = "sha256-zKOfgXPTlRqCR+EME4qjN9rgAnC3viI5KWx10dhKszw=";
   };
-
-  patches = [
-    # make meson use the provided dependencies instead of the git submodules
-    "${finalAttrs.src}/nix/patches/meson-build.patch"
-  ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
-
-    # Generate version.h
-    cp src/version.h.in src/version.h
-    substituteInPlace src/version.h \
-      --replace "@HASH@" '${finalAttrs.src.rev}' \
-      --replace "@BRANCH@" "" \
-      --replace "@MESSAGE@" "" \
-      --replace "@DATE@" "2024-04-16" \
-      --replace "@TAG@" "" \
-      --replace "@DIRTY@" ""
   '';
+
+  # used by version.sh
+  DATE = "2024-05-05";
+  HASH = finalAttrs.src.rev;
 
   depsBuildBuild = [
     # to find wayland-scanner when cross-compiling
@@ -83,12 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    hwdata
+    hyprwayland-scanner
     jq
     makeWrapper
-    meson
+    cmake
+    meson # for wlroots
     ninja
     pkg-config
     wayland-scanner
+    python3 # for udis86
   ];
 
   outputs = [
@@ -97,48 +96,57 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  buildInputs =
-    wlr.buildInputs ++ [
-      cairo
-      git
-      hyprcursor
-      hyprland-protocols
-      hyprlang
-      libGL
-      libdrm
-      libinput
-      libxkbcommon
-      mesa
-      udis86-hyprland
-      wayland
-      wayland-protocols
-      pango
-      pciutils
-      tomlplusplus
-      wlr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
-    ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]
-    ++ lib.optionals withSystemd [ systemd ];
+  buildInputs = [
+    cairo
+    git
+    hyprcursor
+    hyprland-protocols
+    hyprlang
+    libGL
+    libdrm
+    libinput
+    libuuid
+    libxkbcommon
+    mesa
+    wayland
+    wayland-protocols
+    pango
+    pciutils
+    tomlplusplus
+    # for subproject wlroots-hyprland
+    seatd
+    libliftoff
+    libdisplay-info
+    xorg.xcbutilerrors
+    xorg.xcbutilrenderutil
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isBSD [ epoll-shim ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
+  ++ lib.optionals enableXWayland [
+    xorg.libxcb
+    xorg.libXdmcp
+    xorg.xcbutil
+    xorg.xcbutilwm
+    xwayland
+  ]
+  ++ lib.optionals withSystemd [ systemd ];
 
-  mesonBuildType =
+  cmakeBuildType =
     if debug
-    then "debug"
-    else "release";
+    then "Debug"
+    else "RelWithDebInfo";
 
-  mesonAutoFeatures = "disabled";
 
-  mesonFlags = [
-    (lib.mesonEnable "xwayland" enableXWayland)
-    (lib.mesonEnable "legacy_renderer" legacyRenderer)
-    (lib.mesonEnable "systemd" withSystemd)
+  cmakeFlags = [
+    (lib.cmakeBool "NO_XWAYLAND" (!enableXWayland))
+    (lib.cmakeBool "LEGACY_RENDERER" legacyRenderer)
+    (lib.cmakeBool "NO_SYSTEMD" (!withSystemd))
   ];
 
   postInstall = ''
-    ln -s ${wlr}/include/wlr $dev/include/hyprland/wlroots
     ${lib.optionalString wrapRuntimeDeps ''
       wrapProgram $out/bin/Hyprland \
-        --suffix PATH : ${lib.makeBinPath [binutils pciutils stdenv.cc]}
+        --suffix PATH : ${lib.makeBinPath [binutils pciutils pkgconf]}
     ''}
   '';
 
@@ -150,6 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot fufexan ];
     mainProgram = "Hyprland";
-    platforms = wlr.meta.platforms;
+    platforms = lib.platforms.linux;
   };
 })

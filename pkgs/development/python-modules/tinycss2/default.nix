@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, webencodings
-, pytestCheckHook
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  webencodings,
+  pytestCheckHook,
+  flit-core,
 }:
 
 buildPythonPackage rec {

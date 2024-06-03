@@ -16,6 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xl9+k6xJp5/t1QPOYfnBLyYprhhrzjzByDKkT3dtVVQ=";
   };
 
+  cargoPatches = [ ./rustc-serialize-fix.patch ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -36,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ esau79p ];
     mainProgram = "aw-watcher-window-wayland";
+    platforms = platforms.linux;
   };
 }

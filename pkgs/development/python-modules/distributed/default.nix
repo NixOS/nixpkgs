@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, click
-, cloudpickle
-, dask
-, fetchFromGitHub
-, jinja2
-, locket
-, msgpack
-, packaging
-, psutil
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, setuptools
-, setuptools-scm
-, sortedcontainers
-, tblib
-, toolz
-, tornado
-, urllib3
-, versioneer
-, zict
+{
+  lib,
+  buildPythonPackage,
+  click,
+  cloudpickle,
+  dask,
+  fetchFromGitHub,
+  jinja2,
+  locket,
+  msgpack,
+  packaging,
+  psutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  sortedcontainers,
+  tblib,
+  toolz,
+  tornado,
+  urllib3,
+  versioneer,
+  zict,
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.4.2";
+  version = "2024.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-xoQ+b7qzstZl9gRNs4jssNOsGQHDdvTXU7pTjBSuyWs=";
+    hash = "sha256-9W5BpBQHw1ZXCOWiFPeIlMns/Yys1gtdwQ4Lhd7qjK8=";
   };
 
   postPatch = ''
@@ -43,18 +44,16 @@ buildPythonPackage rec {
       --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
 
-  pythonRelaxDeps = [
-    "dask"
-  ];
+  pythonRelaxDeps = [ "dask" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     cloudpickle
     dask
@@ -75,9 +74,7 @@ buildPythonPackage rec {
   # When tested random tests would fail and not repeatably
   doCheck = false;
 
-  pythonImportsCheck = [
-    "distributed"
-  ];
+  pythonImportsCheck = [ "distributed" ];
 
   meta = with lib; {
     description = "Distributed computation in Python";

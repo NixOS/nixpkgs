@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonImportsCheck = [
-    "lupa"
-  ];
+  pythonImportsCheck = [ "lupa" ];
 
   meta = with lib; {
     description = "Lua in Python";

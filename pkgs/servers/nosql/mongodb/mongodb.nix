@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , buildPackages
 , boost
 , gperftools
@@ -63,8 +63,10 @@ in stdenv.mkDerivation rec {
   inherit version;
   pname = "mongodb";
 
-  src = fetchurl {
-    url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "mongodb";
+    repo = "mongo";
+    rev = "r${version}";
     inherit sha256;
   };
 
@@ -127,6 +129,7 @@ in stdenv.mkDerivation rec {
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
     "--link-model=static"
+    "MONGO_VERSION=${version}"
   ]
   ++ map (lib: "--use-system-${lib}") system-libraries;
 

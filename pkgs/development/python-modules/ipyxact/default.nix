@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pyyaml
-, six
-, lxml
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pyyaml,
+  six,
+  lxml,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +13,10 @@ buildPythonPackage rec {
   format = "setuptools";
 
   propagatedBuildInputs = [ pyyaml ];
-  checkInputs = [ six lxml ];
+  checkInputs = [
+    six
+    lxml
+  ];
 
   src = fetchFromGitHub {
     owner = "olofk";

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pythonRelaxDepsHook
-, requests
-, pydantic
-, aiohttp
-, inflection
-, fluent-logger
-, toml
-, click
-, semver
-, tiktoken
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pythonRelaxDepsHook,
+  requests,
+  pydantic,
+  aiohttp,
+  inflection,
+  fluent-logger,
+  toml,
+  click,
+  semver,
+  tiktoken,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-U9SA2Dvepl9BjrvhH+8bVBNjby8IWu5UE+/oor7YWzI=";
   };
 
-  pythonRelaxDeps = [
-    "requests"
-  ];
+  pythonRelaxDeps = [ "requests" ];
 
   nativeBuildInputs = [
     setuptools-scm
@@ -48,9 +47,7 @@ buildPythonPackage rec {
   # almost all tests require "steamship api key"
   doCheck = false;
 
-  pythonImportsCheck = [
-    "steamship"
-  ];
+  pythonImportsCheck = [ "steamship" ];
 
   meta = with lib; {
     description = "The fastest way to add language AI to your product";

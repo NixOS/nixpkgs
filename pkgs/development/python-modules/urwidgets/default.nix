@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, urwid
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  urwid,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-ultlfNeCGFTqKaMeXu0+NihkN5/6NtMewk33YfIzhu8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    urwid
-  ];
+  propagatedBuildInputs = [ urwid ];
 
-  pythonImportsCheck = [
-    "urwidgets"
-  ];
+  pythonImportsCheck = [ "urwidgets" ];
 
   meta = with lib; {
     description = "A collection of widgets for urwid";

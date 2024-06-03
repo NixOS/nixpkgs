@@ -1,32 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, nix-update-script
-, hatch-vcs
-, hatchling
-, bdffont
-, brotli
-, fonttools
-, pypng
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  nix-update-script,
+  hatch-vcs,
+  hatchling,
+  bdffont,
+  brotli,
+  fonttools,
+  pypng,
+  pcffont,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.19";
+  version = "0.0.24";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pixel_font_builder";
     inherit version;
-    hash = "sha256-f38DyM5hojHfv8k/W6kcHxbOjz43hHW6i4Scm6NbHiQ=";
+    hash = "sha256-hBlTTIPx4TRgeXapVnSaKPUwseR3uYT0gcgKLGmmSZI=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [ "fonttools" ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  build-system = [
     hatch-vcs
     hatchling
   ];
@@ -36,10 +42,11 @@ buildPythonPackage rec {
     pypng
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bdffont
     brotli
     fonttools
+    pcffont
   ];
 
   passthru.updateScript = nix-update-script { };

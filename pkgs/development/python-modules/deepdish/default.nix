@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, scipy
-, tables
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  tables,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     tables
   ];
 
-  pythonImportsCheck = [
-    "deepdish"
-  ];
+  pythonImportsCheck = [ "deepdish" ];
 
   # nativeCheckInputs = [
   #   pandas

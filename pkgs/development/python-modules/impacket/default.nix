@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, charset-normalizer
-, dsinternals
-, fetchPypi
-, flask
-, ldap3
-, ldapdomaindump
-, pyasn1
-, pycryptodomex
-, pyopenssl
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  charset-normalizer,
+  dsinternals,
+  fetchPypi,
+  flask,
+  ldap3,
+  ldapdomaindump,
+  pyasn1,
+  pycryptodomex,
+  pyopenssl,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-7kA5tNKu3o9fZEeLxZ+qyGA2eWviTeqNwY8An7CQXko=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     charset-normalizer
@@ -44,13 +43,9 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "impacket"
-  ];
+  pythonImportsCheck = [ "impacket" ];
 
   disabledTestPaths = [
     # Skip all RPC related tests
@@ -61,7 +56,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Network protocols Constructors and Dissectors";
     homepage = "https://github.com/SecureAuthCorp/impacket";
-    changelog = "https://github.com/fortra/impacket/releases/tag/impacket_"
+    changelog =
+      "https://github.com/fortra/impacket/releases/tag/impacket_"
       + replaceStrings [ "." ] [ "_" ] version;
     # Modified Apache Software License, Version 1.1
     license = licenses.free;

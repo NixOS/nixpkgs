@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, gettext
-, libcomps
-, libdnf
-, python
-, rpm
-, sphinx
-, nix-update-script
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  fetchFromGitHub,
+  gettext,
+  libcomps,
+  libdnf,
+  python,
+  rpm,
+  sphinx,
+  nix-update-script,
 }:
 
 let
@@ -20,7 +21,11 @@ buildPythonPackage rec {
   version = "4.20.0";
   format = "other";
 
-  outputs = [ "out" "man" "py" ];
+  outputs = [
+    "out"
+    "man"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -29,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-0BwnUb0ZORjJmB70Jca/CnyysIOGB7azVzUUIGplmso=";
   };
 
-  patches = [
-    ./fix-python-install-dir.patch
-  ];
+  patches = [ ./fix-python-install-dir.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -59,9 +62,7 @@ buildPythonPackage rec {
     rpm
   ];
 
-  cmakeFlags = [
-    "-DPYTHON_DESIRED=${pyMajor}"
-  ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${pyMajor}" ];
 
   dontWrapPythonPrograms = true;
 

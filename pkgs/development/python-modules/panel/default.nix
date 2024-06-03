@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, bleach
-, bokeh
-, param
-, pyviz-comms
-, markdown
-, pyct
-, requests
-, setuptools
-, tqdm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  bleach,
+  bokeh,
+  param,
+  pyviz-comms,
+  markdown,
+  pyct,
+  requests,
+  setuptools,
+  tqdm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "1.4.1";
+  version = "1.4.3";
 
   format = "wheel";
 
@@ -25,18 +26,14 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-x7ywbO2uY1r06bDXV/+X/7cs9f6jFawyDHeo8pLWZVE=";
+    hash = "sha256-iIBQ9UEcmO6q3bS2faFK7tY4mPVaoIWS7bMzKLzkfWw=";
     dist = "py3";
     python = "py3";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "bokeh"
-  ];
+  pythonRelaxDeps = [ "bokeh" ];
 
   propagatedBuildInputs = [
     bleach
@@ -51,9 +48,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "panel"
-  ];
+  pythonImportsCheck = [ "panel" ];
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;

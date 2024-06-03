@@ -43,14 +43,14 @@ in rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ eelco ];
+        maintainers = with pkgs.lib.maintainers; [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
-        (onFullSupported "nixos.iso_plasma5")
+        (onFullSupported "nixos.iso_plasma6")
         (onFullSupported "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
         (onSystems ["x86_64-linux"] "nixos.ova")
@@ -112,7 +112,7 @@ in rec {
         (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
-        (onFullSupported "nixos.tests.misc")
+        (onFullSupported "nixos.tests.misc.default")
         (onFullSupported "nixos.tests.mutableUsers")
         (onFullSupported "nixos.tests.nat.firewall")
         (onFullSupported "nixos.tests.nat.standalone")

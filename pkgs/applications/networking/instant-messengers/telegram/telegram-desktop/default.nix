@@ -15,6 +15,7 @@
 , qtsvg
 , qtimageformats
 , gtk3
+, glib-networking
 , boost
 , fmt
 , libdbusmenu
@@ -63,14 +64,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "5.0.1";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-GKKlcNcFPXslyjE7u5t+VLOiEXY8RYjYvBNL+WjpeeY=";
+    hash = "sha256-n3WeyGQCw9fbA/1hZ85mqdm5xuBLjy9qHMcVRb4cmAg=";
   };
 
   patches = [
@@ -137,6 +138,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     qtwayland
     gtk3
+    glib-networking
     fmt
     libdbusmenu
     alsa-lib

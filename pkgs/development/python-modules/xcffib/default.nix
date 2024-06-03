@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, xorg
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  xorg,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     sed -e 's,ffi\.dlopen(,&"${xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
   '';
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     rm -r xcffib
   '';
 
-  pythonImportsCheck = [
-    "xcffib"
-  ];
+  pythonImportsCheck = [ "xcffib" ];
 
   # Tests use xvfb
   __darwinAllowLocalNetworking = true;

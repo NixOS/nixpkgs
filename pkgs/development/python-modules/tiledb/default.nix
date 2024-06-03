@@ -1,16 +1,17 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, pybind11
-, tiledb
-, numpy
-, wheel
-, isPy3k
-, setuptools-scm
-, psutil
-, pandas
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  pybind11,
+  tiledb,
+  numpy,
+  wheel,
+  isPy3k,
+  setuptools-scm,
+  psutil,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    tiledb
-  ];
+  buildInputs = [ tiledb ];
 
   propagatedBuildInputs = [
     numpy

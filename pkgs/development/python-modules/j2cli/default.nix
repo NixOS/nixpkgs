@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,11 @@ buildPythonPackage rec {
   };
 
   doCheck = false; # tests aren't installed thus aren't found, so skip
-  propagatedBuildInputs = [ jinja2 pyyaml setuptools ];
+  propagatedBuildInputs = [
+    jinja2
+    pyyaml
+    setuptools
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/kolypto/j2cli";
@@ -28,7 +33,9 @@ buildPythonPackage rec {
       J2Cli is a command-line tool for templating in shell-scripts,
       leveraging the Jinja2 library.
     '';
-    maintainers = with maintainers; [ rushmorem SuperSandro2000 ];
+    maintainers = with maintainers; [
+      rushmorem
+      SuperSandro2000
+    ];
   };
-
 }

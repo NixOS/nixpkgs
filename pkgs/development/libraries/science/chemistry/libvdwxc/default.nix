@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gfortran ];
 
-  propagatedBuildInputs = [ mpi fftwMpi ];
+  buildInputs = [ mpi fftwMpi ];
 
   preConfigure = ''
     mkdir build && cd build

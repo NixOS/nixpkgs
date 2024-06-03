@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "cano";
-  version = "0-unstable-2024-31-3";
+  version = "0.1.0-alpha";
 
   src = fetchFromGitHub {
     owner = "CobbCoding1";
     repo = "Cano";
-    rev = "6b3488545b4180f20a7fa892fb0ee719e9298ddc";
-    hash = "sha256-qFo0szZVGLUf7c7KdEIofcieWZqtM6kQE6D8afrZ+RU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BKbBDN7xZwlNzw7UFgX+PD9UXbr9FtELo+PlbfSHyRY=";
   };
 
   buildInputs = [ gnumake ncurses ];

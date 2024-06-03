@@ -229,6 +229,10 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
     wcwidth
     websocket-client
     xmltodict
+  ] ++ lib.optionals (!withImmutableConfig) [
+    # pip is required to install extensions locally, but it's not needed if
+    # we're using the default immutable configuration.
+    pip
   ];
 
   postInstall = ''

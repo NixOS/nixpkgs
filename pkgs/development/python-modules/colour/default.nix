@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     ./remove-unmaintained-d2to1.diff
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     "--doctest-glob=\"*.rst\""
     "--doctest-modules"
   ];
 
-  pythonImportsCheck = [
-    "colour"
-  ];
+  pythonImportsCheck = [ "colour" ];
 
   meta = with lib; {
     description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";

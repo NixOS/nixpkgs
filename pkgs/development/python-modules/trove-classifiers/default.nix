@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, calver
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  calver,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 let
@@ -32,9 +33,7 @@ let
 
     doCheck = false; # avoid infinite recursion with hatchling
 
-    nativeCheckInputs = [
-      pytestCheckHook
-    ];
+    nativeCheckInputs = [ pytestCheckHook ];
 
     pythonImportsCheck = [ "trove_classifiers" ];
 
@@ -49,4 +48,4 @@ let
     };
   };
 in
-  self
+self

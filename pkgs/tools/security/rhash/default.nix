@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , which
 , enableStatic ? stdenv.hostPlatform.isStatic
+, gettext
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
   };
 
+  patches = [ ./dont-fail-ln.patch ./do-link-so.patch ];
+
   nativeBuildInputs = [ which ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
 
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;

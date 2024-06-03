@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchFromGitHub
-, pytest-django
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchFromGitHub,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     pytest-django
   ];
 
-  pythonImportsCheck = [
-    "rest_registration"
-  ];
+  pythonImportsCheck = [ "rest_registration" ];
 
   disabledTests = [
     # This test fails on Python 3.10

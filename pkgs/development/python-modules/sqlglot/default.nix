@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, duckdb
-, fetchFromGitHub
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  duckdb,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     "tests/dataframe/integration"
   ];
 
-  pythonImportsCheck = [
-    "sqlglot"
-  ];
+  pythonImportsCheck = [ "sqlglot" ];
 
   meta = with lib; {
     description = "A no dependency Python SQL parser, transpiler, and optimizer";

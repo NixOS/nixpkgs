@@ -1,9 +1,20 @@
-{ lib, mkDerivation
-, include
-, bsdSetupHook, netbsdSetupHook
-, makeMinimal, install, tsort, lorder, statHook, rsync, uudecode, config, genassym
-, defaultMakeFlags
-, common
+{
+  lib,
+  mkDerivation,
+  include,
+  bsdSetupHook,
+  netbsdSetupHook,
+  makeMinimal,
+  install,
+  tsort,
+  lorder,
+  statHook,
+  rsync,
+  uudecode,
+  config,
+  genassym,
+  defaultMakeFlags,
+  common,
 }:
 {
   path = "sys";
@@ -29,23 +40,34 @@
     ''
       substituteInPlace sys/arch/i386/stand/efiboot/Makefile.efiboot \
         --replace "-nocombreloc" "-z nocombreloc"
-    '' +
-    # multiple header dirs, see above
-    include.postPatch;
+    ''
+    +
+      # multiple header dirs, see above
+      include.postPatch;
 
   CONFIG = "GENERIC";
 
   propagatedBuildInputs = [ include ];
   nativeBuildInputs = [
-    bsdSetupHook netbsdSetupHook
-    makeMinimal install tsort lorder statHook rsync uudecode config genassym
+    bsdSetupHook
+    netbsdSetupHook
+    makeMinimal
+    install
+    tsort
+    lorder
+    statHook
+    rsync
+    uudecode
+    config
+    genassym
   ];
 
-  postConfigure = ''
-    pushd arch/$MACHINE/conf
-    config $CONFIG
-    popd
-  ''
+  postConfigure =
+    ''
+      pushd arch/$MACHINE/conf
+      config $CONFIG
+      popd
+    ''
     # multiple header dirs, see above
     + include.postConfigure;
 
@@ -68,5 +90,4 @@
 
   meta.platforms = lib.platforms.netbsd;
   extraPaths = [ common ];
-
 }

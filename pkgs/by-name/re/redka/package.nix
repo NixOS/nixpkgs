@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "redka";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "nalgeon";
     repo = "redka";
     rev = "v${version}";
-    hash = "sha256-Dm+QMmCYoYJWv+Crot0bwcSPHuUYQzhRgTO65jRjLLE=";
+    hash = "sha256-PlEZMOrAPQh9RxJBw3zhaUoAH44lor7SFSpmODxUM4U=";
   };
 
   vendorHash = "sha256-aX0X6TWVEouo884LunCt+UzLyvDHgmvuxdV0wh0r7Ro=";

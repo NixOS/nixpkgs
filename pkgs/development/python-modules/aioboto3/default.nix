@@ -1,19 +1,20 @@
-{ lib
-, aiobotocore
-, aiofiles
-, buildPythonPackage
-, chalice
-, cryptography
-, dill
-, fetchFromGitHub
-, moto
-, poetry-core
-, poetry-dynamic-versioning
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
+{
+  lib,
+  aiobotocore,
+  aiofiles,
+  buildPythonPackage,
+  chalice,
+  cryptography,
+  dill,
+  fetchFromGitHub,
+  moto,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -36,21 +37,13 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "aiobotocore"
-  ];
+  pythonRelaxDeps = [ "aiobotocore" ];
 
-  propagatedBuildInputs = [
-    aiobotocore
-  ] ++ aiobotocore.optional-dependencies.boto3;
+  propagatedBuildInputs = [ aiobotocore ] ++ aiobotocore.optional-dependencies.boto3;
 
   passthru.optional-dependencies = {
-    chalice = [
-      chalice
-    ];
-    s3cse = [
-      cryptography
-    ];
+    chalice = [ chalice ];
+    s3cse = [ cryptography ];
   };
 
   nativeCheckInputs = [
@@ -62,9 +55,7 @@ buildPythonPackage rec {
     requests
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "aioboto3"
-  ];
+  pythonImportsCheck = [ "aioboto3" ];
 
   disabledTests = [
     # Our moto package is not ready to support more tests

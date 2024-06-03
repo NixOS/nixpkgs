@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Yelp/dumb-init";
     license = licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "dumb-init";
   };
 }

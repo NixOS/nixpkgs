@@ -30,9 +30,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

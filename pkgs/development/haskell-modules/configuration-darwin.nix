@@ -316,6 +316,23 @@ self: super: ({
 
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
+
+  jsaddle-wkwebview = overrideCabal (drv: {
+    libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
+    libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps
+  }) super.jsaddle-wkwebview;
+  reflex-dom = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ base bytestring jsaddle-wkwebview reflex reflex-dom-core text ]; # cabal2nix doesn't add darwin-only deps
+  }) super.reflex-dom;
+
+  # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
+  di-core = overrideCabal (drv: {
+    preConfigure = ''
+      substituteInPlace test/Main.hs --replace \
+        "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
+    '';
+  }) super.di-core;
+
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87

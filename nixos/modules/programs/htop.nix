@@ -1,29 +1,27 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.programs.htop;
 
   fmt = value:
-    if isList value then concatStringsSep " " (map fmt value) else
-    if isString value then value else
-    if isBool value then if value then "1" else "0" else
-    if isInt value then toString value else
-    throw "Unrecognized type ${typeOf value} in htop settings";
+    if builtins.isList value then builtins.concatStringsSep " " (builtins.map fmt value) else
+    if builtins.isString value then value else
+    if builtins.isBool value then if value then "1" else "0" else
+    if builtins.isInt value then builtins.toString value else
+    throw "Unrecognized type ${builtins.typeOf value} in htop settings";
 
 in
 
 {
 
   options.programs.htop = {
-    package = mkPackageOption pkgs "htop" { };
+    package = lib.mkPackageOption pkgs "htop" { };
 
-    enable = mkEnableOption "htop process monitor";
+    enable = lib.mkEnableOption "htop process monitor";
 
-    settings = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);
+    settings = lib.mkOption {
+      type = with lib.types; attrsOf (oneOf [ str int bool (listOf (oneOf [ str int bool ])) ]);
       default = {};
       example = {
         hide_kernel_threads = true;
@@ -38,7 +36,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.package
     ];
@@ -46,7 +44,7 @@ in
     environment.etc."htoprc".text = ''
       # Global htop configuration
       # To change set: programs.htop.settings.KEY = VALUE;
-    '' + concatStringsSep "\n" (mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings);
+    '' + builtins.concatStringsSep "\n" (lib.mapAttrsToList (key: value: "${key}=${fmt value}") cfg.settings);
   };
 
 }

@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
-, jupyter-packaging
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jupyter-packaging,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +22,7 @@ buildPythonPackage rec {
       --replace '"jupyterlab~=4.0"' ""
   '';
 
-  nativeBuildInputs = [
-    jupyter-packaging
-  ];
+  nativeBuildInputs = [ jupyter-packaging ];
 
   # has no tests
   doCheck = false;

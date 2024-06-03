@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, setuptools
+  setuptools,
 
-, gensim
-, numpy
-, requests
-, sentencepiece
-, tqdm
+  gensim,
+  numpy,
+  requests,
+  sentencepiece,
+  tqdm,
 }:
 
 buildPythonPackage {
@@ -23,9 +24,7 @@ buildPythonPackage {
     hash = "sha256-nVaMXb5TBhO/vWE8AYAA3P9dSPI8O+rmzFvbEj8VEkE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     gensim
@@ -38,9 +37,7 @@ buildPythonPackage {
   # need network connection for tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bpemb"
-  ];
+  pythonImportsCheck = [ "bpemb" ];
 
   meta = with lib; {
     description = "Byte-pair embeddings in 275 languages";

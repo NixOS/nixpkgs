@@ -1,15 +1,16 @@
-{ buildPythonPackage
-, embedding-reader
-, faiss
-, fetchFromGitHub
-, fire
-, fsspec
-, lib
-, numpy
-, pyarrow
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
+{
+  buildPythonPackage,
+  embedding-reader,
+  faiss,
+  fetchFromGitHub,
+  fire,
+  fsspec,
+  lib,
+  numpy,
+  pyarrow,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-pey3wrW7CDLMiPPKnmYrcSJqGuy6ecA2SE9m3Jtt6DU=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     # The `dataclasses` packages is a python2-only backport, unnecessary in
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     pyarrow
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Attempts to spin up a Spark cluster and talk to it which doesn't work in

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sphinx
-, sphinx-pytest
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  sphinx,
+  sphinx-pytest,
+  pytestCheckHook,
 }:
 let
   pname = "sphinx-sitemap";
@@ -21,13 +22,9 @@ buildPythonPackage {
     hash = "sha256-R8nAaEPd2vQs9Z0Fa5yvTP0KP3O+DnIJLPeISZ10Xtk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   nativeCheckInputs = [
     pytestCheckHook

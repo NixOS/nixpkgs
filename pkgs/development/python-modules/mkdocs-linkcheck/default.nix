@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonPackages
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonPackages,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "linkchecker-mkdocs";
-    rev = "a75d765b0ec564e5ed0218880ed0b5ab4b973917" ;
+    rev = "a75d765b0ec564e5ed0218880ed0b5ab4b973917";
     hash = "sha256-z59F7zUKZKIQSiTlE6wGbGDecPMeruNgltWUYfDf8jY=";
   };
 

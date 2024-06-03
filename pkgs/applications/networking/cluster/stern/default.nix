@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "stern";
-  version = "1.29.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
-    sha256 = "sha256-8Tvhul7GwVbRJqJenbYID8OY5zGzFhIormUwEtLE0Lw=";
+    sha256 = "sha256-sqRPX+NC58mQi0wvs3u3Lb81LBntaY1FzzlY1TIiz18=";
   };
 
   vendorHash = "sha256-RLcF7KfKtkwB+nWzaQb8Va9pau+TS2uE9AmJ0aFNsik=";
@@ -23,7 +23,7 @@ buildGoModule rec {
     stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
   in
     ''
-      for shell in bash zsh; do
+      for shell in bash zsh fish; do
         ${stern}/bin/stern --completion $shell > stern.$shell
         installShellCompletion stern.$shell
       done

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oath
-, pycryptodome
-, requests
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oath,
+  pycryptodome,
+  requests,
+  pytest,
 }:
 
 buildPythonPackage rec {

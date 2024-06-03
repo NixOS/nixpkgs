@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  matplotlib,
 }:
 
 buildPythonPackage rec {

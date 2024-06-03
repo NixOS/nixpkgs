@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, openpyxl
-, robotframework
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  openpyxl,
+  robotframework,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-ZzAwlYM8DgWD1hfWRnY8u2RnZc3V368kgigBApeDZYg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     openpyxl

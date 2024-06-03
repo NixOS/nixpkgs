@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, importlib-resources
-, setuptools
-, setuptools-scm
-, youseedee
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  importlib-resources,
+  setuptools,
+  setuptools-scm,
+  youseedee,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
 
   # Package has no unit tests.
   doCheck = false;
-  pythonImportsCheck = [
-    "gfsubsets"
-  ];
+  pythonImportsCheck = [ "gfsubsets" ];
 
   meta = with lib; {
     description = "Codepoint definitions for the Google Fonts subsetter";

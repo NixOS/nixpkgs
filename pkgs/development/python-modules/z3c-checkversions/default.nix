@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, zc-buildout
-, zope-testrunner
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  zc-buildout,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {

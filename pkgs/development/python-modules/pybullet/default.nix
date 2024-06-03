@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, libGLU, libGL
-, xorg
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  libGLU,
+  libGL,
+  xorg,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +19,15 @@ buildPythonPackage rec {
     hash = "sha256-2idSVDPIhpjcn9i8IPpK5NB3OLRlZjNlnr2CwtKITgg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   buildInputs = [
-    libGLU libGL
+    libGLU
+    libGL
     xorg.libX11
   ];
 
-  propagatedBuildInputs =  [ numpy ];
+  propagatedBuildInputs = [ numpy ];
 
   patches = [
     # make sure X11 and OpenGL can be found at runtime

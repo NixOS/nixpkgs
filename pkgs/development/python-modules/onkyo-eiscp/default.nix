@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, docopt, netifaces }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  docopt,
+  netifaces,
+}:
 
 buildPythonPackage rec {
   pname = "onkyo-eiscp";
@@ -11,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "761abb16c654a1136763b927d094174d41f282809e44ea32cd47e199dd79d9c9";
   };
 
-  propagatedBuildInputs = [ docopt netifaces ];
+  propagatedBuildInputs = [
+    docopt
+    netifaces
+  ];
 
   meta = with lib; {
     description = "Control Onkyo receivers over ethernet";

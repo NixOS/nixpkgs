@@ -29,6 +29,7 @@
 , nix-update-script
 # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
 , plugins ? null
+, withGtkPlugins ? true
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
 , hotdoc
@@ -114,7 +115,7 @@ let
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
-    ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
+    ] ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
       # these require gstreamer-gl
       "gtk4"
       "livesync"

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, aiohttp
-, incremental
+  # dependencies
+  aiohttp,
+  incremental,
 
-# tests
-, aioresponses
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-socket
-, pytestCheckHook
-, syrupy
+  # tests
+  aioresponses,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-socket,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {

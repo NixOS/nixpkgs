@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, python-dateutil, pytz }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pytz,
+}:
 
 buildPythonPackage rec {
   pname = "dateutils";

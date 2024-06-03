@@ -13,26 +13,25 @@
 , mesa
 , fontconfig
 , libglvnd
-, libclang
 , autoPatchelfHook
 , clang
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-YuYowUw5ecPa78bhT72zY2b99wn68mO3vVkop8hnb8M=";
+    hash = "sha256-MJh0CR2YHJE0GNnxaTcElNMuZUEI0pe9fvC0mfy4484=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-1ANERwRG7Uwe1gSm6zQnEMQlpRrGSFP8mp6JItzjz0k=";
+      "smithay-0.3.0" = "sha256-UzX5pws8yxJhXdKIDzu6uw+PlVLRS9U9ZAfQovKv0w0=";
     };
   };
 

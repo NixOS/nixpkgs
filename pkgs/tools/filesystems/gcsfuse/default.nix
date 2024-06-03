@@ -5,32 +5,30 @@
 
 buildGoModule rec {
   pname = "gcsfuse";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    hash = "sha256-brE6iwIMPRAQfERTOhVVne1Dy/ZdPUrA01G7Gj5k//Y=";
+    hash = "sha256-1SKTwHvSCkkYhPY2yVTIRVsddW/Gt8Vke6W+a4VO6fc=";
   };
 
-  vendorHash = "sha256-0I/PFMZXqE3EZv52CESsao4ygvYXIEgRE4EyV1CqM54=";
+  vendorHash = "sha256-7IEF11gqou3Dk+CdU1HKPV7MyksldMmciQ74I9MEtuo=";
 
   subPackages = [ "." "tools/mount_gcsfuse" ];
 
   ldflags = [ "-s" "-w" "-X main.gcsfuseVersion=${version}" ];
 
-  preCheck =
+  checkFlags =
     let
       skippedTests = [
+        # Disable flaky tests
         "Test_Main"
         "TestFlags"
       ];
     in
-    ''
-      # Disable flaky tests
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.gcsfuse

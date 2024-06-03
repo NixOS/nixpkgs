@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
 
   doCheck = false; # Circular dependency
 
-  pythonImportsCheck = [
-    "Cheetah"
-  ];
+  pythonImportsCheck = [ "Cheetah" ];
 
   meta = with lib; {
     description = "A template engine and code generation tool";

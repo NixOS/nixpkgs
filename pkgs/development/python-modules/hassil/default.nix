@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# propagates
-, pyyaml
-, unicode-rbnf
+  # propagates
+  pyyaml,
+  unicode-rbnf,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 let
@@ -31,12 +32,10 @@ buildPythonPackage {
     unicode-rbnf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    changelog  = "https://github.com/home-assistant/hassil/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant/hassil/blob/v${version}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";

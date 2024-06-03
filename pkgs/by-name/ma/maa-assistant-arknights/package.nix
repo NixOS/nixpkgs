@@ -29,27 +29,6 @@ stdenv.mkDerivation (finalAttr: {
     hash = if isBeta then sources.beta.hash else sources.stable.hash;
   };
 
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=maa-assistant-arknights
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'RUNTIME DESTINATION .' ' ' \
-      --replace-fail 'LIBRARY DESTINATION .' ' ' \
-      --replace-fail 'PUBLIC_HEADER DESTINATION .' ' '
-
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'find_package(asio ' '# find_package(asio ' \
-      --replace-fail 'asio::asio' ' '
-
-    shopt -s globstar nullglob
-
-    substituteInPlace src/MaaCore/**/{*.h,*.cpp,*.hpp,*.cc} \
-      --replace 'onnxruntime/core/session/' ""
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'ONNXRuntime' 'onnxruntime'
-
-    cp -v ${fastdeploy.cmake}/Findonnxruntime.cmake cmake/
-  '';
-
   nativeBuildInputs = [
     asio
     cmake
@@ -74,11 +53,12 @@ stdenv.mkDerivation (finalAttr: {
   ]);
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
-    (lib.cmakeBool "USE_MAADEPS" false)
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    (lib.cmakeBool "INSTALL_RESOURCE" true)
+    (lib.cmakeBool "INSTALL_FLATTEN" false)
     (lib.cmakeBool "INSTALL_PYTHON" true)
+    (lib.cmakeBool "INSTALL_RESOURCE" true)
+    (lib.cmakeBool "USE_MAADEPS" false)
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
     (lib.cmakeFeature "MAA_VERSION" "v${finalAttr.version}")
   ];
 

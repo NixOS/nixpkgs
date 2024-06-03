@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, hypothesis
-, packaging
-, parameterized
-, msgpack
-, pyserial
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
-, wrapt
-, uptime
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  hypothesis,
+  packaging,
+  parameterized,
+  msgpack,
+  pyserial,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  wrapt,
+  uptime,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     msgpack
@@ -48,15 +47,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    serial = [
-      pyserial
-    ];
-    seeedstudio = [
-      pyserial
-    ];
-    pcan = [
-      uptime
-    ];
+    serial = [ pyserial ];
+    seeedstudio = [ pyserial ];
+    pcan = [ uptime ];
   };
 
   nativeCheckInputs = [
@@ -72,18 +65,20 @@ buildPythonPackage rec {
     "test/test_interface_canalystii.py"
   ];
 
-  disabledTests = [
-    # Tests require access socket
-    "BasicTestUdpMulticastBusIPv4"
-    "BasicTestUdpMulticastBusIPv6"
-    # pytest.approx is not supported in a boolean context (since pytest7)
-    "test_pack_unpack"
-    "test_receive"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # timing sensitive
-    "test_general"
-    "test_gap"
-  ];
+  disabledTests =
+    [
+      # Tests require access socket
+      "BasicTestUdpMulticastBusIPv4"
+      "BasicTestUdpMulticastBusIPv6"
+      # pytest.approx is not supported in a boolean context (since pytest7)
+      "test_pack_unpack"
+      "test_receive"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # timing sensitive
+      "test_general"
+      "test_gap"
+    ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -91,15 +86,16 @@ buildPythonPackage rec {
     export CI=1
   '';
 
-  pythonImportsCheck = [
-    "can"
-  ];
+  pythonImportsCheck = [ "can" ];
 
   meta = with lib; {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
     changelog = "https://github.com/hardbyte/python-can/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab sorki ];
+    maintainers = with maintainers; [
+      fab
+      sorki
+    ];
   };
 }

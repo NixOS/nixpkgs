@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, hatchling
-, hatch-vcs
-, pytest
-, pytest-localserver
-, pytest-metadata
-, requests
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  hatchling,
+  hatch-vcs,
+  pytest,
+  pytest-localserver,
+  pytest-metadata,
+  requests,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,9 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -46,18 +43,14 @@ buildPythonPackage rec {
     pytest-metadata
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTests = [
     # should be xfail? or mocking doesn't work
     "test_url_fails"
   ];
 
-  pythonImportsCheck = [
-    "pytest_base_url"
-  ];
+  pythonImportsCheck = [ "pytest_base_url" ];
 
   meta = with lib; {
     description = "pytest plugin for URL based tests";

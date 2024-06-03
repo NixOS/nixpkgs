@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, psutil
-, pytestCheckHook
-, lsof
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  psutil,
+  pytestCheckHook,
+  lsof,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     "test_exec_worker"
   ];
 
-  pythonImportsCheck = [
-    "daemonocle"
-  ];
+  pythonImportsCheck = [ "daemonocle" ];
 
   meta = with lib; {
     description = "A Python library for creating super fancy Unix daemons";

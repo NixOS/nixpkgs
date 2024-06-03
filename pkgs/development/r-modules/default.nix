@@ -335,6 +335,7 @@ let
     Cardinal = [ pkgs.which ];
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = [ pkgs.pkg-config ];
+    interpolation = [ pkgs.pkg-config ];
     clarabel = [ pkgs.cargo ];
     curl = [ pkgs.curl.dev ];
     CytoML = [ pkgs.libxml2.dev ];
@@ -379,6 +380,7 @@ let
     LOMAR = [ pkgs.gmp.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
+    rsbml = [ pkgs.pkg-config ];
     rvg = [ pkgs.libpng.dev ];
     MAGEE = [ pkgs.zlib.dev pkgs.bzip2.dev ];
     magick = [ pkgs.imagemagick.dev ];
@@ -588,12 +590,14 @@ let
     gdtools = [ pkgs.pkg-config ];
     archive = [ pkgs.libarchive];
     gdalcubes = with pkgs; [ proj.dev gdal sqlite.dev netcdf ];
+    rsbml = [ pkgs.libsbml ];
     SuperGauss = [ pkgs.pkg-config pkgs.fftw.dev];
     specklestar = [ pkgs.fftw.dev ];
     cartogramR = [ pkgs.fftw.dev ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [ gmp libxml2.dev glpk ];
+    interpolation = [ pkgs.gmp ];
     image_textlinedetector = with pkgs; [ pkg-config opencv ];
     lwgeom = with pkgs; [ pkg-config proj.dev sqlite.dev ];
     magick = [ pkgs.pkg-config ];
@@ -1165,6 +1169,11 @@ let
       patchPhase = "patchShebangs configure";
     });
 
+    luajr = old.luajr.overrideAttrs (attrs: {
+      hardeningDisable = [ "format" ];
+      postPatch = "patchShebangs configure";
+    });
+
     RcppArmadillo = old.RcppArmadillo.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -1196,6 +1205,10 @@ let
 
    rsgeo = old.rsgeo.overrideAttrs (attrs: {
       nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      postPatch = "patchShebangs configure";
+    });
+
+   instantiate = old.instantiate.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
@@ -1483,6 +1496,43 @@ let
 
     geojsonio = old.geojsonio.overrideAttrs (attrs: {
       buildInputs = [ cacert ] ++ attrs.buildInputs;
+    });
+
+
+    immunotation = let
+      MHC41alleleList = fetchurl {
+        url = "https://services.healthtech.dtu.dk/services/NetMHCpan-4.1/allele.list";
+        hash = "sha256-CRZ+0uHzcq5zK5eONucAChXIXO8tnq5sSEAS80Z7jhg=";
+      };
+
+      MHCII40alleleList = fetchurl {
+        url = "https://services.healthtech.dtu.dk/services/NetMHCIIpan-4.0/alleles_name.list";
+        hash = "sha256-K4Ic2NUs3P4IkvOODwZ0c4Yh8caex5Ih0uO5jXRHp40=";
+      };
+
+      # List of valid countries, regions and ethnic groups
+      # The original page is changing a bit every day, but the relevant
+      # content does not. Use archive.org to get a stable snapshot.
+      # It can be updated from time to time, or when the package becomes
+      # deficient. This may be difficult to know.
+      # Update the snapshot date, and add id_ after it, as described here:
+      # https://web.archive.org/web/20130806040521/http://faq.web.archive.org/page-without-wayback-code/
+      validGeographics = fetchurl {
+        url = "https://web.archive.org/web/20240418194005id_/http://www.allelefrequencies.net/hla6006a.asp";
+        hash = "sha256-m7Wkmh/cPxeqn94LwoznIh+fcFXskmSGErUYj6kTqak=";
+      };
+    in old.immunotation.overrideAttrs (attrs: {
+      patches = [ ./patches/immunotation.patch ];
+      postPatch = ''
+        substituteInPlace "R/external_resources_input.R" --replace-fail \
+          "nix-NetMHCpan-4.1-allele-list" ${MHC41alleleList}
+
+        substituteInPlace "R/external_resources_input.R" --replace-fail \
+          "nix-NETMHCIIpan-4.0-alleles-name-list" ${MHCII40alleleList}
+
+        substituteInPlace "R/AFND_interface.R" --replace-fail \
+          "nix-valid-geographics" ${validGeographics}
+      '';
     });
 
     rstan = old.rstan.overrideAttrs (attrs: {

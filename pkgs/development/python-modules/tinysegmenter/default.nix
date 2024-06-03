@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, unittestCheckHook
+  unittestCheckHook,
 
-, setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,15 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-ZEWL26VLp0gsAseF+WDPPWz2FZSk2rPWTDJUOQlPwbc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   pythonImportsCheck = [ "tinysegmenter" ];
 

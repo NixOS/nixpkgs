@@ -19,8 +19,6 @@ python3Packages.buildPythonApplication rec {
     colorama imagesize lxml requests setuptools six
   ];
 
-  disabled = python3Packages.pythonOlder "3.3";
-
   meta = {
     description = "A comic strip downloader and archiver";
     mainProgram = "dosage";

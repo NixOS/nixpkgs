@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pillow
-, zbar
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pillow,
+  zbar,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,10 @@ buildPythonPackage rec {
 
   buildInputs = [ zbar ];
 
-  propagatedBuildInputs = [ pillow numpy ];
+  propagatedBuildInputs = [
+    pillow
+    numpy
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

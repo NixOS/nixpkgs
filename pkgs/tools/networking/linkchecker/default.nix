@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , python3
 , gettext
@@ -8,49 +7,48 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "linkchecker";
   version = "10.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "linkchecker";
+    repo = "linkchecker";
     rev = "refs/tags/v${version}";
     hash = "sha256-z7Qp74cai8GfsxB4n9dSCWQepp0/4PimFiRJQBaVSoo=";
   };
 
-  nativeBuildInputs = [
-    gettext
+  nativeBuildInputs = [ gettext ];
+
+  build-system = with python3.pkgs; [
+    hatchling
+    hatch-vcs
+    polib # translations
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     argcomplete
     beautifulsoup4
-    configargparse
     dnspython
-    hatch-vcs
-    hatchling
-    pyopenssl
     requests
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pyopenssl
     parameterized
     pytestCheckHook
   ];
 
   disabledTests = [
-    # test_timeit2 is flakey, and depends sleep being precise to the milisecond
     "TestLoginUrl"
-    "test_timeit2"
+    "test_timeit2" # flakey, and depends sleep being precise to the milisecond
+    "test_internet" # uses network, fails on Darwin (not sure why it doesn't fail on linux)
   ];
 
   disabledTestPaths = [
     "tests/checker/telnetserver.py"
     "tests/checker/test_telnet.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "tests/checker/test_content_allows_robots.py"
-    "tests/checker/test_http*.py"
-    "tests/test_network.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Check websites for broken links";

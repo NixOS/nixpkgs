@@ -1,5 +1,10 @@
-{ buildPythonPackage, fetchPypi
-, requests, six, python-dateutil }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  six,
+  python-dateutil,
+}:
 
 buildPythonPackage rec {
   pname = "hypchat";
@@ -11,5 +16,9 @@ buildPythonPackage rec {
     sha256 = "1sd8f3gihagaqd848dqy6xw457fa4f9bla1bfyni7fq3h76sjdzg";
   };
 
-  propagatedBuildInputs = [ requests six python-dateutil ];
+  propagatedBuildInputs = [
+    requests
+    six
+    python-dateutil
+  ];
 }

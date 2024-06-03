@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, snowflake-connector-python
-, sqlalchemy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  snowflake-connector-python,
+  sqlalchemy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Pypi does not include tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "snowflake.sqlalchemy"
-  ];
+  pythonImportsCheck = [ "snowflake.sqlalchemy" ];
 
   meta = with lib; {
     changelog = "https://github.com/snowflakedb/snowflake-sqlalchemy/blob/v${version}/DESCRIPTION.md";

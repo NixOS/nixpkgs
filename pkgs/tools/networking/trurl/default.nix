@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-r+z+7aE/frr1qWaBXyyO2L+aNa8CnhRqLg/jwwamIPg=";
+    hash = "sha256-TkYZk4SoGAc0dxtxil4FjEhA53M+/dRmhc2kJfxWze8=";
   };
 
   outputs = [ "out" "dev" "man" ];

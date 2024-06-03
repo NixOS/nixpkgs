@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, requests
-, lxml
-, pandas
-, pytestCheckHook
-, pytest-recording
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  requests,
+  lxml,
+  pandas,
+  pytestCheckHook,
+  pytest-recording,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [ requests lxml pandas ];
+  propagatedBuildInputs = [
+    requests
+    lxml
+    pandas
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -41,9 +46,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pytestFlagsArray = [
-    "--block-network"
-  ];
+  pytestFlagsArray = [ "--block-network" ];
 
   pythonImportsCheck = [ "pytrends" ];
 
@@ -53,5 +56,4 @@ buildPythonPackage rec {
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.mmahut ];
   };
-
 }

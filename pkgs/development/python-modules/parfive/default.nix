@@ -1,16 +1,17 @@
-{ lib
-, aiofiles
-, aioftp
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytest-localserver
-, pytest-socket
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, tqdm
+{
+  lib,
+  aiofiles,
+  aioftp,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytest-localserver,
+  pytest-socket,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-zWy0GSQhMHMM9B1M9vKE6/UPGnHObJUI4EZ+yY8X3I4=";
   };
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     aioftp
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     "test_ftp_http"
   ];
 
-  pythonImportsCheck = [
-    "parfive"
-  ];
+  pythonImportsCheck = [ "parfive" ];
 
   meta = with lib; {
     description = "A HTTP and FTP parallel file downloader";

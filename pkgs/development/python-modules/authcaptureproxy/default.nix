@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, aiohttp
-, beautifulsoup4
-, httpx
-, multidict
-, typer
-, yarl
+  # dependencies
+  aiohttp,
+  beautifulsoup4,
+  httpx,
+  multidict,
+  typer,
+  yarl,
 
-# tests
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-gdu0Ror/epu6huTEpBrqHD62O9uaL6273pKnpqPKskc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -54,9 +53,7 @@ buildPythonPackage rec {
     "test_return_timer_countdown_refresh_html"
   ];
 
-  pythonImportsCheck = [
-    "authcaptureproxy"
-  ];
+  pythonImportsCheck = [ "authcaptureproxy" ];
 
   meta = with lib; {
     changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
@@ -64,6 +61,9 @@ buildPythonPackage rec {
     mainProgram = "auth_capture_proxy";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ graham33 hexa ];
+    maintainers = with maintainers; [
+      graham33
+      hexa
+    ];
   };
 }

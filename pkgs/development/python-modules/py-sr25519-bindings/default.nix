@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, rustPlatform
-, stdenv
-, py-bip39-bindings
-, libiconv }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  rustPlatform,
+  stdenv,
+  py-bip39-bindings,
+  libiconv,
+}:
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
@@ -41,18 +42,17 @@ buildPythonPackage rec {
     py-bip39-bindings
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "sr25519"
-  ];
+  pythonImportsCheck = [ "sr25519" ];
 
   meta = with lib; {
     description = "Python bindings for sr25519 library";
     homepage = "https://github.com/polkascan/py-sr25519-bindings";
     license = licenses.asl20;
-    maintainers = with maintainers; [ onny stargate01 ];
+    maintainers = with maintainers; [
+      onny
+      stargate01
+    ];
   };
 }

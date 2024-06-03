@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jsonable
-, nose
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jsonable,
+  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

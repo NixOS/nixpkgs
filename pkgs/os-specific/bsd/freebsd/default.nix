@@ -5,7 +5,7 @@
   callPackage,
   crossLibcStdenv,
   attributePathToSplice ? [ "freebsd" ],
-  branch ? "release/13.1.0",
+  branch ? "release/14.0.0",
 }:
 
 let
@@ -52,7 +52,7 @@ let
             sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
             versionData = self.sourceData.version;
             buildFreebsd = otherSplices.selfBuildHost;
-            patchesRoot = ./patches/${self.versionData.revision};
+            patchesRoot = ./patches + "/${self.versionData.revision}";
           }
           // extraArgs
         ) self;

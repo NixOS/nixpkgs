@@ -67,6 +67,7 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     svglib
     yapsy
+    packaging
   ];
 
   preFixup = ''
