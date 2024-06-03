@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ obs-studio onnxruntime opencv qt6.qtbase curl ];
+  buildInputs = [ obs-studio onnxruntime (lib.getOutput "cxxdev" opencv) qt6.qtbase curl ];
 
   dontWrapQtApps = true;
 
