@@ -45,6 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://maven.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cko ];
+    maintainers = with maintainers; [ ];
   };
 })
