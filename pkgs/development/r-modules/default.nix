@@ -1090,6 +1090,7 @@ let
     "benchmarkfdrData2019"
     "bodymapRat"
     "clustifyrdatahub"
+    "CTexploreR"
     "depmap"
     "emtdata"
     "metaboliteIDmapping"
