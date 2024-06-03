@@ -48,11 +48,11 @@ in
 rec {
 
   /**
-    Returns true when the given argument is an option
+    Returns true when the given argument `a` is an option
 
     # Inputs
 
-    `value`
+    `a`
     : Any value to check whether it is an option
 
     # Examples
@@ -363,20 +363,35 @@ rec {
 
   /**
     A merge function that merges multiple definitions of an option into a single value
-    by checking that they are all equal.
-    Merge functions are typically used for constructing option types.
+
+    :::{.caution}
+    This function is used as the default merge operation in `lib.types.mkOptionType`. In most cases, explicit usage of this function is unnecessary.
+    :::
 
     # Inputs
 
     `loc`
     : location of the option in the configuration as a list of strings.
 
-      e.g. ["boot" "loader "grub" "enable"]
+      e.g. `["boot" "loader "grub" "enable"]`
 
     `defs`
     : list of definition values and locations.
 
-      e.g. [ { file = "/foo.nix"; value = 1; } { file = "/bar.nix"; value = 2 } ]
+      e.g. `[ { file = "/foo.nix"; value = 1; } { file = "/bar.nix"; value = 2 } ]`
+
+    # Example
+    :::{.example}
+    ## `lib.options.mergeDefaultOption` usage example
+
+    ```nix
+    myType = mkOptionType {
+      name = "myType";
+      merge = mergeDefaultOption; # <- This line is redundant. It is the default aready.
+    };
+    ```
+
+    :::
 
     # Merge behavior
 
@@ -834,6 +849,21 @@ rec {
     ```nix
     showOptionWithDefLocs { loc = ["x" "y" ]; files = [ "foo.nix" "bar.nix" ];  }
     "x.y, with values defined in:\n  - foo.nix\n  - bar.nix\n"
+    ```
+
+    ```nix
+    nix-repl> eval = lib.evalModules {
+        modules = [
+          {
+            options = {
+              foo = lib.mkEnableOption "foo";
+            };
+          }
+        ];
+      }
+
+    nix-repl> lib.options.showOptionWithDefLocs eval.options.foo
+    "foo, with values defined in:\n  - <unknown-file>\n"
     ```
 
     :::
