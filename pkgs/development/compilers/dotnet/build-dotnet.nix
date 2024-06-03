@@ -103,6 +103,7 @@ mkCommon type rec {
     mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
 
     ln -s $out/dotnet $out/bin/dotnet
+    wrapProgram "$out/bin/dotnet" --set AZURE_TELEMETRY_DISABLED 1
 
     runHook postInstall
   '';
