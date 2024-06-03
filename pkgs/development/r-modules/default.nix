@@ -386,6 +386,7 @@ let
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
+    heck = [ pkgs.cargo ];
     LOMAR = [ pkgs.gmp.dev ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
@@ -1186,6 +1187,10 @@ let
     });
 
    gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    heck = old.heck.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
 
