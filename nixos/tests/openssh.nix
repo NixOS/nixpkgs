@@ -113,20 +113,15 @@ in {
       {
         services.openssh = {
           enable = true;
+          # Rely on upstream's alg selection: it knows to not use OpenSSL algorithms
+          # when not linked with OpenSSL.
+          enableRecommendedAlgorithms = false;
           package = pkgs.opensshPackages.openssh.override {
             linkOpenssl = false;
           };
           hostKeys = [
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
           ];
-          settings = {
-            # Must not specify the OpenSSL provided algorithms.
-            Ciphers = [ "chacha20-poly1305@openssh.com" ];
-            KexAlgorithms = [
-              "curve25519-sha256"
-              "curve25519-sha256@libssh.org"
-            ];
-          };
         };
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilEd25519PublicKey

@@ -334,7 +334,15 @@ in
         '';
       };
 
-
+      enableRecommendedAlgorithms = mkEnableOption "recommended cryptographic algorithms" // {
+        default = true;
+        description = ''
+            Uses the lower bound recommended in both
+            <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
+            and
+            <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
+        '';
+      };
 
       settings = mkOption {
         description = "Configuration for `sshd_config(5)`.";
@@ -417,36 +425,22 @@ in
             };
             KexAlgorithms = mkOption {
               type = types.nullOr (types.listOf types.str);
-              default = [
+              default = if cfg.enableRecommendedAlgorithms then [
                 "sntrup761x25519-sha512@openssh.com"
                 "curve25519-sha256"
                 "curve25519-sha256@libssh.org"
                 "diffie-hellman-group-exchange-sha256"
-              ];
-              description = ''
-                Allowed key exchange algorithms
-
-                Uses the lower bound recommended in both
-                <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
-                and
-                <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
-              '';
+              ] else null;
+              description = "Allowed key exchange algorithms";
             };
             Macs = mkOption {
               type = types.nullOr (types.listOf types.str);
-              default = [
+              default = if cfg.enableRecommendedAlgorithms then [
                 "hmac-sha2-512-etm@openssh.com"
                 "hmac-sha2-256-etm@openssh.com"
                 "umac-128-etm@openssh.com"
-              ];
-              description = ''
-                Allowed MACs
-
-                Defaults to recommended settings from both
-                <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
-                and
-                <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
-              '';
+              ] else null;
+              description = "Allowed MACs";
             };
             StrictModes = mkOption {
               type = types.nullOr (types.bool);
@@ -457,22 +451,15 @@ in
             };
             Ciphers = mkOption {
               type = types.nullOr (types.listOf types.str);
-              default = [
+              default = if cfg.enableRecommendedAlgorithms then [
                 "chacha20-poly1305@openssh.com"
                 "aes256-gcm@openssh.com"
                 "aes128-gcm@openssh.com"
                 "aes256-ctr"
                 "aes192-ctr"
                 "aes128-ctr"
-              ];
-              description = ''
-                Allowed ciphers
-
-                Defaults to recommended settings from both
-                <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
-                and
-                <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
-              '';
+              ] else null;
+              description = "Allowed ciphers";
             };
             AllowUsers = mkOption {
               type = with types; nullOr (listOf str);
