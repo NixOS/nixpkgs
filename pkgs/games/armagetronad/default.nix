@@ -23,6 +23,7 @@
 , protobuf
 , xvfb-run
 , gnugrep
+, nixosTests
 , dedicatedServer ? false
 }:
 
@@ -191,6 +192,7 @@ let
           {
             # Allow both a "dedicated" passthru and a passthru for all the options other than the latest version, which this is.
             dedicated = mkArmagetron fn true;
+            tests.armagetronad = nixosTests.armagetronad;
           };
 
       meta = with lib; {
