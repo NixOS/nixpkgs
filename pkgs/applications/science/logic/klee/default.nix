@@ -11,6 +11,7 @@
 , sqlite
 , gtest
 , lit
+, nix-update-script
 
 # Build KLEE in debug mode. Defaults to false.
 , debug ? false
