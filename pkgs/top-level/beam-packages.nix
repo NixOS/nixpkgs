@@ -17,7 +17,7 @@ in
 {
   beamLib = callPackage ../development/beam-modules/lib.nix { };
 
-  latestVersion = "erlang_25";
+  latestVersion = "erlang_27";
 
   # Each
   interpreters = {
@@ -94,6 +94,7 @@ in
   packages = {
     erlang = self.packages.${self.latestVersion};
 
+    erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
     erlang_24 = self.packagesWith self.interpreters.erlang_24;
