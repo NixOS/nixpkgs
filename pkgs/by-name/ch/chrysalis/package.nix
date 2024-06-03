@@ -7,15 +7,14 @@
 let
   pname = "chrysalis";
   version = "0.13.3";
-  name = "${pname}-${version}-binary";
   src = fetchurl {
     url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}-x64.AppImage";
     hash = "sha512-F6Y87rgIclj1OA3gVX/gqqp9AvXKQlBXrbqk/26F1KHPF9NzHJgVmeszSo3Nhb6xg4CzWmzkqc8IW2H/Bg57kw==";
   };
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 rec {
-  inherit name pname src;
+  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.glib ];
 
@@ -51,5 +50,6 @@ appimageTools.wrapType2 rec {
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "chrysalis";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
