@@ -8,7 +8,7 @@ let
   configFormat = pkgs.formats.json { };
   configFile = configFormat.generate "config.json" cfg.config;
   inherit (lib)
-    mkEnableOption mdDoc mkPackageOption mkOption mkIf types getExe;
+    mkEnableOption mkPackageOption mkOption mkIf types getExe;
 in
 {
 
@@ -16,14 +16,14 @@ in
 
   options = {
     services.realm = {
-      enable = mkEnableOption (mdDoc "A simple, high performance relay server written in rust");
+      enable = mkEnableOption "A simple, high performance relay server written in rust";
       package = mkPackageOption pkgs "realm" { };
       config = mkOption {
         type = types.submodule {
           freeformType = configFormat.type;
         };
         default = { };
-        description = mdDoc ''
+        description = ''
           The realm configuration, see <https://github.com/zhboner/realm#overview> for documentation.
         '';
       };
