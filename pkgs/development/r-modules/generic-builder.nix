@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
-                lib.optionals requireX [util-linux xvfb-run] ++
+                lib.optionals (requireX && stdenv.isLinux) [util-linux xvfb-run] ++
                 lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran libiconv];
 
   env.NIX_CFLAGS_COMPILE =
