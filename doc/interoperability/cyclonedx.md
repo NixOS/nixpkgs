@@ -60,7 +60,7 @@ For example, the `fetchFromGitHub` is commonly used within Nixpkgs but should be
 | `nix:fod:url`    | URL to fetch |
 
 
-`nix:fod` properties may be extracted and evaluated to a derivation using code similar to the following:
+`nix:fod` properties may be extracted and evaluated to a derivation using code similar to the following, assuming a fictitious function `filterPropertiesToAttrs`:
 
 ```nix
 { pkgs, filterPropertiesToAttrs, properties }:
