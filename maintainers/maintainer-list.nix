@@ -7412,6 +7412,16 @@
       fingerprint = "386E D1BF 848A BB4A 6B4A  3C45 FC83 907C 125B C2BC";
     }];
   };
+  geoffreyfrogeye = {
+    name = "Geoffrey Frogeye";
+    email = "geoffrey@frogeye.fr";
+    matrix = "@geoffrey:frogeye.fr";
+    github = "GeoffreyFrogeye";
+    githubId = 1685403;
+    keys = [{
+      fingerprint = "4FBA 930D 314A 0321 5E2C  DB0A 8312 C8CA C1BA C289";
+    }];
+  };
   georgesalkhouri = {
     name = "Georges Alkhouri";
     email = "incense.stitch_0w@icloud.com";
