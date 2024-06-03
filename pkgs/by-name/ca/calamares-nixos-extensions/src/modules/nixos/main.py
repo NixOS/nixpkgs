@@ -609,29 +609,6 @@ def run():
         pattern = "@@{key}@@".format(key=key)
         cfg = cfg.replace(pattern, str(variables[key]))
 
-    # Mount swap partition
-    for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fs"] == "linuxswap":
-            status = _("Mounting swap")
-            libcalamares.job.setprogress(0.2)
-            if part["fsName"] == "luks" or part["fsName"] == "luks2":
-                try:
-                    libcalamares.utils.host_env_process_output(
-                        ["swapon", "/dev/mapper/" + part["luksMapperName"]], None)
-                except subprocess.CalledProcessError:
-                    libcalamares.utils.error(
-                        "Failed to activate swap: " + "/dev/mapper/" + part["luksMapperName"])
-                    return (_("swapon failed to activate swap"), _("failed while activating:" + "/dev/mapper/" + part["luksMapperName"]))
-            else:
-                try:
-                    libcalamares.utils.host_env_process_output(
-                        ["swapon", part["device"]], None)
-                except subprocess.CalledProcessError:
-                    libcalamares.utils.error(
-                        "Failed to activate swap: " + "/dev/mapper/" + part["device"])
-                    return (_("swapon failed to activate swap " + part["device"]), _("failed while activating:" + "/dev/mapper/" + part["device"]))
-            break
-
     status = _("Generating NixOS configuration")
     libcalamares.job.setprogress(0.25)
 
