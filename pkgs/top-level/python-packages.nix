@@ -15481,6 +15481,8 @@ self: super: with self; {
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
 
+  tree-sitter0_21 = callPackage ../development/python-modules/tree-sitter0_21 { };
+
   tree-sitter-html = callPackage ../development/python-modules/tree-sitter-html { };
 
   tree-sitter-python = callPackage ../development/python-modules/tree-sitter-python { };
