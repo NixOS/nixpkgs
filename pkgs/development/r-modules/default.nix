@@ -310,6 +310,10 @@ let
     rmsb = [ self.rstantools ];
     gastempt = [ self.rstantools ];
     interactiveDisplay = [ self.BiocManager ];
+    disbayes = [ self.rstantools ];
+    tipsae = [ self.rstantools ];
+    TriDimRegression = [ self.rstantools ];
+    bbmix = [ self.rstantools ];
   };
 
   packagesWithNativeBuildInputs = {
