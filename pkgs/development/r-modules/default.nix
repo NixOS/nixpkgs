@@ -572,6 +572,7 @@ let
     qspray = [ pkgs.pkg-config ];
     ratioOfQsprays = [ pkgs.pkg-config ];
     symbolicQspray = [ pkgs.pkg-config ];
+    sphereTessellation = [ pkgs.pkg-config ];
     vapour = [ pkgs.pkg-config ];
   };
 
@@ -770,6 +771,7 @@ let
     qspray = with pkgs; [ gmp.dev mpfr.dev ];
     ratioOfQsprays = with pkgs; [ gmp.dev mpfr.dev ];
     symbolicQspray = with pkgs; [ gmp.dev mpfr.dev ];
+    sphereTessellation = with pkgs; [ gmp.dev mpfr.dev ];
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
