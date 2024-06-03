@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitHub
 , fetchgit
 , fetchurl
 , libuuid
@@ -10,6 +11,16 @@
 , python3
 }:
 
+let
+  gnu-efi-src = fetchFromGitHub {
+    owner = "ncroxon";
+    repo = "gnu-efi";
+    # see 363d61c4f112b972649b19d67e96b9321f738f00 in syslinux
+    rev = "d34132e62f666904158c7ec2f1eef5a9d5281c36";
+    hash = "sha256-SYr8Lkp6qsNIGQ7I9JXI9HKsh1gcOJbwvOd1lMqLB1c=";
+  };
+in
+
 stdenv.mkDerivation {
   pname = "syslinux";
   version = "unstable-2019-02-07";
@@ -17,10 +28,10 @@ stdenv.mkDerivation {
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
   src = fetchgit {
-    url = "https://repo.or.cz/syslinux";
+    url = "https://repo.or.cz/syslinux.git";
     rev = "b40487005223a78c3bb4c300ef6c436b3f6ec1f7";
-    sha256 = "sha256-GqvRTr9mA2yRD0G0CF11x1X0jCgqV4Mh+tvE0/0yjqk=";
-    fetchSubmodules = true;
+    fetchSubmodules = false;
+    hash = "sha256-XNC+X7UYxdMQQAg4MLACQLxRNnI5/ZCOiCJrEkKgPeM=";
   };
 
   patches = let
@@ -74,6 +85,10 @@ stdenv.mkDerivation {
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
       --replace-fail /usr/include/ ""
+
+    # needs to be manually put in place because submodule hash contains an extra g in the beginning gd34132e
+    cp -r ${gnu-efi-src}/* ./gnu-efi
+    chmod -R +w ./gnu-efi
 
     # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
     mkdir gnu-efi/inc/ia32/gnu
