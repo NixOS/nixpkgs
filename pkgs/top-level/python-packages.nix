@@ -11174,6 +11174,12 @@ self: super: with self; {
 
   piexif = callPackage ../development/python-modules/piexif { };
 
+  pigpio = toPythonModule (
+    pkgs.pigpio.override {
+      inherit buildPythonPackage;
+    }
+  );
+
   pijuice = callPackage ../development/python-modules/pijuice { };
 
   pika = callPackage ../development/python-modules/pika { };
