@@ -7038,6 +7038,8 @@ self: super: with self; {
 
   lsprotocol = callPackage ../development/python-modules/lsprotocol { };
 
+  lsp-tree-sitter = callPackage ../development/python-modules/lsp-tree-sitter { };
+
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
   lttng = callPackage ../development/python-modules/lttng { };
