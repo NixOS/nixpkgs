@@ -22207,7 +22207,8 @@ with pkgs;
 
   liblc3 = callPackage ../development/libraries/liblc3 { };
 
-  libliftoff = callPackage ../development/libraries/libliftoff { };
+  inherit (callPackages ../development/libraries/libliftoff { }) libliftoff_0_4;
+  libliftoff = libliftoff_0_4;
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
