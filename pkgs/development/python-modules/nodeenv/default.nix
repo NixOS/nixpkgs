@@ -7,24 +7,28 @@
   python,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   which,
 }:
 
 buildPythonPackage rec {
   pname = "nodeenv";
   version = "1.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ekalinin";
-    repo = pname;
+    repo = "nodeenv";
     rev = "refs/tags/${version}";
     hash = "sha256-85Zr4RbmNeW3JAdtvDblWaPTivWWUJKh+mJbtsGJVO4=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
     mock
