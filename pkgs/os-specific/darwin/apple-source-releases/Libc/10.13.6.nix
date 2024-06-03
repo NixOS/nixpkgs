@@ -1,4 +1,4 @@
-{ appleDerivation', stdenvNoCC, ed, unifdef, fetchzip }:
+{ lib, appleDerivation', stdenvNoCC, ed, unifdef, fetchzip }:
 
 appleDerivation' stdenvNoCC {
   nativeBuildInputs = [ ed unifdef ];
@@ -24,4 +24,8 @@ appleDerivation' stdenvNoCC {
   '';
 
   appleHeaders = builtins.readFile ./headers-10.13.6.txt;
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
