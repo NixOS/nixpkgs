@@ -704,7 +704,7 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
-  probe-rs = callPackage ../development/tools/rust/probe-rs {
+  probe-rs-tools = callPackage ../by-name/pr/probe-rs-tools/package.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     inherit (darwin) DarwinTools;
   };
