@@ -38091,8 +38091,7 @@ with pkgs;
 
   lapack-ilp64 = lapack.override { isILP64 = true; };
 
-  lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
-  liblapack = lapack-reference;
+  lapack-reference = liblapack;
 
   libamplsolver = callPackage ../development/libraries/science/math/libamplsolver { };
 
