@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.8.6";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Jcy/nds/JuivRV8mRtq2FbBB2L/CGqmoHoG1wVCwHFU=";
+    hash = "sha256-7dcZbuz3yi0sND6AEqIwIo9byeZheOpIAhmBpOW5lhU=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -74,7 +74,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-xRUZnFekzWHPtlUbpt0JZmlNjdjS1bBZDz8MmH8DC2U=";
+    npmDepsHash = "sha256-gLEzifZK8Ok1SOo3YIIV5pTx4cbedQh025VqkodYrYQ=";
 
     nativeBuildInputs = [
       pkg-config
