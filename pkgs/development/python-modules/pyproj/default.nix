@@ -3,17 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  python,
-  proj,
+  pytestCheckHook,
   pythonOlder,
   substituteAll,
-  cython,
-  pytestCheckHook,
-  mock,
+
   certifi,
+  cython,
+  mock,
   numpy,
-  shapely,
   pandas,
+  proj,
+  shapely,
   xarray,
 }:
 
@@ -51,11 +51,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ certifi ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
     numpy
-    shapely
     pandas
+    pytestCheckHook
+    shapely
     xarray
   ];
 
