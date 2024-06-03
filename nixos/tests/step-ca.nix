@@ -101,10 +101,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
         caserver.wait_until_succeeds("journalctl -o cat -u step-ca.service | grep '${pkgs.step-ca.version}'")
 
         caclient.wait_for_unit("acme-finished-caclient.target")
-        catester.succeed("curl https://caclient/ | grep \"Welcome to nginx!\"")
+        catester.wait_until_succeeds("curl https://caclient/ | grep \"Welcome to nginx!\"")
 
         caclientcaddy.wait_for_unit("caddy.service")
-        catester.succeed("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
+        catester.wait_until_succeeds("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
 
         caclientcertbot.wait_until_succeeds("REQUESTS_CA_BUNDLE=${test-certificates}/root_ca.crt certbot certonly --agree-tos --email certbot@example.org -n --standalone -d caclientcertbot --server https://caserver:8443/acme/acme/directory")
         caclientcertbot.wait_for_file("/etc/letsencrypt/live/caclientcertbot/fullchain.pem")
