@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, cmake
-, rustPlatform
-, pkg-config
-, fetchFromGitHub
-, atk
-, gtk3
-, glib
-, openssl
-, Security
-, nix-update-script
+{
+  lib,
+  stdenv,
+  cmake,
+  rustPlatform,
+  pkg-config,
+  fetchFromGitHub,
+  atk,
+  gtk3,
+  glib,
+  openssl,
+  Security,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,12 +40,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     description = "An advanced geospatial data analysis platform";
-    license = licenses.mit;
-    maintainers = [ maintainers.mpickering ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mpickering ];
   };
 }
