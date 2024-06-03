@@ -23,7 +23,7 @@
 
   environment.systemPackages = with pkgs; [
     # Graphical text editor
-    kate
+    plasma5Packages.kate
   ];
 
   system.activationScripts.installerDesktop = let
