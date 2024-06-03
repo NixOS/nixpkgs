@@ -348,7 +348,26 @@ in
       description = ''
         Extra config options for systemd sleep state logic.
         See {manpage}`sleep.conf.d(5)` man page for available options.
+
+        **Note**: Please pass structured settings via {option}`sleep.settings`
+        instead, this option will get deprecated in the future.
       '';
+    };
+
+    sleep.settings = mkOption {
+      type = types.submodule {
+        freeformType = format.type;
+      };
+      default = {};
+      example = literalExpression ''
+        {
+          HibernateDelaySec = "1h";
+        }
+      '';
+      description = lib.mdDoc ''
+        Extra config options for systemd sleep state logic.
+        See {manpage}`sleep.conf.d(5)` man page for available options.
+      ''  ;
     };
 
     additionalUpstreamSystemUnits = mkOption {
