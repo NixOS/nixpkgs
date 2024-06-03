@@ -1,6 +1,7 @@
 { lib
 , clangStdenv
 , fetchFromGitLab
+, fetchpatch
 , cmake
 , pkg-config
 , spdlog
@@ -9,6 +10,7 @@
 , libbpf
 , elfutils
 , bpftools
+, pcre2
 , zlib
 }:
 
@@ -24,6 +26,15 @@ clangStdenv.mkDerivation rec {
     sha256 = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
 
+  patches = [
+    # FIXME: remove this when updating to next stable release
+    (fetchpatch {
+      name = "allow-regex-pattern-matching.patch";
+      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/6ea2dccceec39b6c4913f617dad81d859aa20f24.patch";
+      hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
+    })
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -33,6 +44,7 @@ clangStdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    pcre2
     spdlog
     nlohmann_json
     systemd
@@ -51,6 +63,7 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BPF_PROC_IMPL=ON"
     "-DBPF_BUILD_LIBBPF=OFF"
     "-DENABLE_SYSTEMD=ON"
+    "-DENABLE_REGEX_SUPPORT=ON"
     "-DVERSION=${version}"
   ];
 
