@@ -132,6 +132,7 @@ mapAliases ({
   boost174 = throw "boost174 has been deprecated in favor of the latest version"; # Added 2023-06-08
   boost17x = throw "boost17x has been deprecated in favor of the latest version"; # Added 2023-07-13
   boost18x = throw "boost18x has been deprecated in favor of the latest version"; # Added 2023-07-13
+  boost_process = throw "boost_process has been removed as it is included in regular boost"; # Added 2024-05-01
   bpb = throw "bpb has been removed as it is unmaintained and not compatible with recent Rust versions"; # Added 2024-04-30
   bpftool = bpftools; # Added 2021-05-03
   bpytop = throw "bpytop has been deprecated by btop"; # Added 2023-02-16
@@ -924,6 +925,7 @@ mapAliases ({
   noto-fonts-emoji = noto-fonts-color-emoji; # Added 2023-09-09
   noto-fonts-extra = noto-fonts; # Added 2023-04-08
   NSPlist = nsplist; # Added 2024-01-05
+  nushellFull = lib.warn "`nushellFull` has has been replaced by `nushell` as it's features no longer exist" nushell; # Added 2024-05-30
   nvidia-thrust = throw "nvidia-thrust has been removed because the project was deprecated; use cudaPackages.cuda_cccl";
   nvtop = lib.warn "nvtop has been renamed to nvtopPackages.full" nvtopPackages.full; # Added 2024-02-25
   nvtop-amd = lib.warn "nvtop-amd has been renamed to nvtopPackages.amd" nvtopPackages.amd; # Added 2024-02-25
@@ -1353,6 +1355,7 @@ mapAliases ({
   volatility = throw "'volatility' has been removed, as it was broken and unmaintained"; # Added 2023-12-10
 
   ### W ###
+  wakatime = wakatime-cli; # 2024-05-30
   waybar-hyprland = throw "waybar-hyprland has been removed: hyprland support is now built into waybar by default."; # Added 2023-08-21
   wayfireApplications-unwrapped = throw ''
     'wayfireApplications-unwrapped.wayfire' has been renamed to/replaced by 'wayfire'

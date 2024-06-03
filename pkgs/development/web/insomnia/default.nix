@@ -26,7 +26,7 @@ let
     changelog = "https://github.com/Kong/insomnia/releases/tag/core@${version}";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ markus1189 babariviere kashw2 DataHearth ];
+    maintainers = with maintainers; [ markus1189 kashw2 DataHearth ];
   };
 in
 if stdenv.isDarwin then stdenv.mkDerivation {

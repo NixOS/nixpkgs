@@ -140,7 +140,7 @@ in {
       {
         assertion = cfg.settings != null
           -> !(hasAttrByPath [ "bind_port" ] cfg.settings);
-        message = "AdGuard option `settings.bind_host' has been superseded by `services.adguardhome.port'";
+        message = "AdGuard option `settings.bind_port' has been superseded by `services.adguardhome.port'";
       }
       {
         assertion = settings != null -> cfg.mutableSettings

@@ -7,6 +7,7 @@
   gitUpdater,
   scdoc,
   tzdata,
+  mailcap,
   substituteAll,
   fetchpatch,
   callPackage,
@@ -116,6 +117,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.sr.ht/~sircmpwn/hare/commit/e35f2284774436f422e06f0e8d290b173ced1677.patch";
       hash = "sha256-A59bGO/9tOghV8/MomTxd8xRExkHVdoMom2d+HTfQGg=";
     })
+    # Use mailcap `/etc/mime.types` for Hare's mime module
+    (substituteAll {
+      src = ./003-use-mailcap-for-mimetypes.patch;
+      inherit mailcap;
+    })
   ];
 
   nativeBuildInputs = [
@@ -169,9 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
-    tests = lib.optionalAttrs enableCrossCompilation {
-      crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
-    };
+    tests =
+      lib.optionalAttrs enableCrossCompilation {
+        crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        mimeModule = callPackage ./mime-module-test.nix { hare = finalAttrs.finalPackage; };
+      };
   };
 
   meta = {

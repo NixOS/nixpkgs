@@ -12,12 +12,13 @@
   rich,
   scipy,
   setuptools,
+  threadpoolctl,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.15.0";
+  version = "5.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9AqnJOm0yQOOoksg1lpI4EcduU5xDjnIplOzVJIwQFo=";
+    hash = "sha256-wVz/sn9XbbYMAfClRBx6iK9+UKzy5e2oyH5ABGfNCIM=";
   };
 
   postPatch = ''
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     pytensor
     rich
     scipy
+    threadpoolctl
     typing-extensions
   ];
 
@@ -54,12 +56,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
     changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nidabdella
       ferrine
     ];

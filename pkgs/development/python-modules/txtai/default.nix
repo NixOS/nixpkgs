@@ -52,7 +52,7 @@
   unittestCheckHook,
 }:
 let
-  version = "7.1.0";
+  version = "7.2.0";
   api = [
     aiohttp
     fastapi
@@ -154,7 +154,7 @@ buildPythonPackage {
     owner = "neuml";
     repo = "txtai";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L+L2jRkCQKOgd1k3N4mft0Kt6kvCN81lgSQUjoon5rk=";
+    hash = "sha256-2d31wzUz0/FcrejDIog2EI4BXgjd7XXpN4tRXpLk5DI=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

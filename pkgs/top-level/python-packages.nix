@@ -4534,6 +4534,8 @@ self: super: with self; {
 
   frelatage = callPackage ../development/python-modules/frelatage { };
 
+  freud = callPackage ../development/python-modules/freud { };
+
   frida-python = callPackage ../development/python-modules/frida-python { };
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
@@ -6692,6 +6694,11 @@ self: super: with self; {
     inherit (pkgs) libsodium;
   };
 
+  libnbd = toPythonModule (pkgs.libnbd.override {
+    buildPythonBindings = true;
+    python3 = python;
+  });
+
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
@@ -8602,6 +8609,8 @@ self: super: with self; {
   nameparser = callPackage ../development/python-modules/nameparser { };
 
   names = callPackage ../development/python-modules/names { };
+
+  namex = callPackage ../development/python-modules/namex { };
 
   name-that-hash = callPackage ../development/python-modules/name-that-hash { };
 
@@ -13428,6 +13437,8 @@ self: super: with self; {
   routes = callPackage ../development/python-modules/routes { };
 
   rova = callPackage ../development/python-modules/rova { };
+
+  rowan = callPackage ../development/python-modules/rowan { };
 
   rpcq = callPackage ../development/python-modules/rpcq { };
 
