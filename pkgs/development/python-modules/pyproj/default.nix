@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   python,
   proj,
   pythonOlder,
@@ -35,6 +36,12 @@ buildPythonPackage rec {
       src = ./001.proj.patch;
       proj = proj;
       projdev = proj.dev;
+    })
+
+    # fix test failure caused by update of EPSG DB
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/3f7c7e5bcec33d9b2f37ceb03c484ea318dff3ce.patch";
+      hash = "sha256-0J8AlInuhFDAYIBJAJ00XbqIanJY/D8xPVwlOapmLDE=";
     })
   ];
 
