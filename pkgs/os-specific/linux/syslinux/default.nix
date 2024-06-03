@@ -1,11 +1,14 @@
 { lib
 , stdenv
-, fetchgit
+, fetchFromRepoOrCz
+, gnu-efi
 , fetchurl
+, fetchpatch
 , libuuid
 , makeWrapper
 , mtools
 , nasm
+, nixosTests
 , perl
 , python3
 }:
@@ -16,11 +19,10 @@ stdenv.mkDerivation {
 
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
-  src = fetchgit {
-    url = "https://repo.or.cz/syslinux";
+  src = fetchFromRepoOrCz {
+    repo = "syslinux";
     rev = "b40487005223a78c3bb4c300ef6c436b3f6ec1f7";
-    sha256 = "sha256-GqvRTr9mA2yRD0G0CF11x1X0jCgqV4Mh+tvE0/0yjqk=";
-    fetchSubmodules = true;
+    hash = "sha256-XNC+X7UYxdMQQAg4MLACQLxRNnI5/ZCOiCJrEkKgPeM=";
   };
 
   patches = let
@@ -65,6 +67,8 @@ stdenv.mkDerivation {
       "0018-prevent-pow-optimization.patch"
       "26f0e7b2"
       "sha256-dVzXBi/oSV9vYgU85mRFHBKuZdup+1x1BipJX74ED7E=")
+    # Fixes build with "modern" gnu-efi
+    ./import-efisetjmp.patch
   ];
 
   postPatch = ''
@@ -74,10 +78,6 @@ stdenv.mkDerivation {
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
       --replace-fail /usr/include/ ""
-
-    # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
-    mkdir gnu-efi/inc/ia32/gnu
-    touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
   nativeBuildInputs = [
@@ -89,6 +89,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libuuid
+    gnu-efi
   ];
 
   # Fails very rarely with 'No rule to make target: ...'
@@ -111,8 +112,22 @@ stdenv.mkDerivation {
     "MANDIR=$(out)/share/man"
     "PERL=perl"
     "HEXDATE=0x00000000"
+    # Works around confusing (unrelated) error messages when upx is not made available
+    "UPX=false"
+
+    # Configurations needed to make use of external gnu-efi
+    "LIBEFI=${gnu-efi}/lib/libefi.a"
+    "LIBDIR=${gnu-efi}/lib/"
+    "EFIINC=${gnu-efi}/include/efi"
+
+    # Legacy bios boot target is always built
+    "bios"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+  # Build "ia32" EFI for i686
+  ++ lib.optional stdenv.hostPlatform.isi686 "efi32"
+  # Build "x86_64" EFI for x86_64
+  ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64"
+  ;
 
   # Some tests require qemu, some others fail in a sandboxed environment
   doCheck = false;
@@ -124,6 +139,8 @@ stdenv.mkDerivation {
     # Delete com32 headers to save space, nobody seems to be using them
     rm -rf $out/share/syslinux/com32
   '';
+
+  passthru.tests.biosCdrom = nixosTests.boot.biosCdrom;
 
   meta = with lib; {
     homepage = "https://www.syslinux.org/";
