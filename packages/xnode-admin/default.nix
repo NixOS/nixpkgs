@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> { system = builtins.currentSystem; }
+{ pkgs
 , lib ? pkgs.lib
 , stdenv ? pkgs.stdenv
 , python3Packages ? pkgs.python3Packages
@@ -14,9 +14,8 @@ python3Packages.buildPythonPackage rec {
     owner = "Openmesh-Network";
     repo = pname;
     rev = "572ef943713fda0ef7a90f59b43980b7307f2b15";
-    sha256 = "18bhc64yyrcmbb6fblg1b6a6nmmy01hyalnphl01jawki83mrfbi";
+    sha256 = "u6zZKe+E9QgbcJfAJzrCakLsny8tb+b54mIpozRx0Vc=";
   };
-
   nativeBuildInputs = [
     pkgs.python311Packages.hatchling
   ];

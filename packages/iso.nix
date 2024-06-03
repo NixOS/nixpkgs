@@ -1,4 +1,4 @@
-{ inputs, sshPubKey ? "", ... }@flakeContext:
+{ inputs, ... }@flakeContext:
 let
   isoModule = { config, lib, pkgs, ... }: {
     config = {
@@ -13,11 +13,6 @@ let
       services = {
         getty = {
           greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
-        };
-        openssh = {
-          enable = true;
-          settings.PasswordAuthentication = false;
-          settings.KbdInteractiveAuthentication = false;
         };
       };
       boot = {
@@ -36,7 +31,10 @@ let
       };
       environment = {
         systemPackages = with pkgs; [
-          prometheus grafana 
+          prometheus
+          grafana
+#          (callPackage ./xnode-admin {})
+#          (callPackage ./openmesh-core {})
         ];
       };
       networking = {
@@ -47,7 +45,6 @@ let
           "xnode" = {
             isNormalUser = true;
             password = "xnode";
-            openssh.authorizedKeys.keys = [ sshPubKey ]; # Inject a key from environment or through --args
           };
         };
       };
