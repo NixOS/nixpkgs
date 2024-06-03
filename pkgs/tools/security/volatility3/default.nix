@@ -15,11 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-elTUAvSe91TqpsTXg08SPKaVr6iM7FKcBaVNunv+HfU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     capstone
     jsonschema
     pefile
