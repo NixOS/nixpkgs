@@ -2,6 +2,7 @@
 , openssl, nss, p11-kit
 , opensc, gnutls, expect
 , meson, ninja, pkg-config
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,10 @@ stdenv.mkDerivation rec {
   enableParallelInstalling = false;
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(\d\.\d)"];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/latchset/pkcs11-provider";
