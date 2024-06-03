@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
       on them, and libliftoff will pick planes for these layers if possible.
     '';
     inherit (finalAttrs.src.meta) homepage;
-    changelog = "https://github.com/emersion/libliftoff/releases/tag/v${finalAttrs.version}";
+    changelog   = "https://gitlab.freedesktop.org/emersion/libliftoff/-/tags/v${finalAttrs.version}";
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ primeos Scrumplex ];
