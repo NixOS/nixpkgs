@@ -30,7 +30,7 @@
 , octave
 , opencv
 , python3
-, openmp ? null
+, llvmPackages # for openmp
 }:
 
 let blas64_ = blas64; in
@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
+  buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) llvmPackages.openmp;
 
   depsBuildBuild = [
     buildPackages.gfortran
