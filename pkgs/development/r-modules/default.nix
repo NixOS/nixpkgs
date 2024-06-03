@@ -1411,6 +1411,10 @@ let
       ];
     });
 
+    covidsymptom = old.covidsymptom.overrideAttrs (attrs: {
+      preConfigure = "rm R/covidsymptomdata.R";
+    });
+
     cubature = old.cubature.overrideAttrs (attrs: {
       enableParallelBuilding = false;
     });
