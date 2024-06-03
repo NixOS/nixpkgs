@@ -38063,8 +38063,6 @@ with pkgs;
 
   blas-ilp64 = blas.override { isILP64 = true; };
 
-  blas-reference = callPackage ../development/libraries/science/math/blas { };
-
   bonmin = callPackage ../development/libraries/science/math/bonmin { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
