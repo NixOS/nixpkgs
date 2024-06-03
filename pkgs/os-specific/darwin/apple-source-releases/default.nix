@@ -341,6 +341,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                       { CommonCrypto = "CommonCrypto/10.13.6.nix";
                         Libc = "Libc/10.13.6.nix";
                         libdispatch = "libdispatch/10.13.6.nix";
+                        libplatform = "libplatform/10.13.6.nix";
                       }."${namePath}"
                       or namePath;
                  in import ./macos-10.13.6.nix
