@@ -5,6 +5,8 @@
 , protonvpn-nm-lib
 , pythondialog
 , dialog
+, wrapGAppsNoGuiHook
+, gobject-introspection
 }:
 
 buildPythonApplication rec {
@@ -20,6 +22,17 @@ buildPythonApplication rec {
     rev = "refs/tags/${version}";
     sha256 = "sha256-KhfogC23i7THe6YZJ6Sy1+q83vZupHsS69NurHCeo8I=";
   };
+
+  nativeBuildInputs = [
+    wrapGAppsNoGuiHook
+    gobject-introspection
+  ];
+
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   propagatedBuildInputs = [
     protonvpn-nm-lib
