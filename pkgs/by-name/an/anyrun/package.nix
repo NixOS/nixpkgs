@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "anyrun";
-  version = "0-unstable-2023-12-01";
+  version = "0-unstable-2024-04-16";
 
   src = fetchFromGitHub {
-    owner = "kirottu";
+    owner = "anyrun-org";
     repo = "anyrun";
-    rev = "e14da6c37337ffa3ee1bc66965d58ef64c1590e5";
-    hash = "sha256-hI9+KBShsSfvWX7bmRa/1VI20WGat3lDXmbceMZzMS4=";
+    rev = "f9d30e34fa4ccb2797c6becec37e8bcff6585d39";
+    hash = "sha256-WTO84hUL8IlNuHDK2yOCeJ38EewFzGt5E0kzBjNWxa8=";
   };
 
-  cargoHash = "sha256-apOQc9Z6YANoaeKcbNxBfAv7mmGFB+CagrYRPgC5wLY=";
+  cargoHash = "sha256-RSfAnM3Cq0RUhhzIb9KbebzKAcp/VTORVqctK7PW3XA=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "A wayland-native, highly customizable runner";
-    homepage = "https://github.com/kirottu/anyrun";
+    homepage = "https://github.com/anyrun-org/anyrun";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       eclairevoyant
