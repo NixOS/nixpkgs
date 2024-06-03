@@ -8387,6 +8387,12 @@
     githubId = 896431;
     name = "Chris Hodapp";
   };
+  hogcycle = {
+    email = "nate@gysli.ng";
+    github = "hogcycle";
+    githubId = 57007241;
+    name = "hogcycle";
+  };
   holgerpeters = {
     name = "Holger Peters";
     email = "holger.peters@posteo.de";
