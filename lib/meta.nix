@@ -134,12 +134,13 @@ rec {
   /**
     Set the nix-env priority of the package.
 
-
     # Inputs
 
     `priority`
-
     : 1\. Function argument
+
+    `drv`
+    : 2\. Function argument
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
