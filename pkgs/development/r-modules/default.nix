@@ -324,6 +324,7 @@ let
     BayesXsrc = with pkgs; [ readline.dev ncurses gsl ];
     bioacoustics = [ pkgs.fftw.dev pkgs.cmake ];
     bigGP = [ pkgs.mpi ];
+    bigrquerystorage = with pkgs; [ grpc protobuf which ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
