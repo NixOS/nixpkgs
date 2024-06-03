@@ -258,7 +258,9 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   # store.
   fixupPhase = attrs.fixupPhase or ''
     runHook preFixup
-    patchShebangs --update --host $out/${ruby.gemPath}/bin
+    if [[ -d $out/${ruby.gemPath}/bin ]]; then
+      patchShebangs --update --host $out/${ruby.gemPath}/bin
+    fi
     runHook postFixup
   '';
 
