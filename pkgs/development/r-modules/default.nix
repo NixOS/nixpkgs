@@ -559,6 +559,7 @@ let
     redux = [ pkgs.pkg-config ];
     rswipl = with pkgs; [ cmake pkg-config ];
     rrd = [ pkgs.pkg-config ];
+    surveyvoi = [ pkgs.pkg-config ];
     Rbwa = [ pkgs.zlib.dev ];
     trackViewer = [ pkgs.zlib.dev ];
     themetagenomics = [ pkgs.zlib.dev ];
@@ -759,6 +760,7 @@ let
     spaMM = [ pkgs.gsl ];
     shrinkTVP = [ pkgs.gsl ];
     sbrl = with pkgs; [ gsl gmp.dev ];
+    surveyvoi = with pkgs; [ gmp.dev mpfr.dev ];
     unigd = with pkgs; [ cairo.dev libpng.dev ];
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
