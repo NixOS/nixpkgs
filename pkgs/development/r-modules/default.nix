@@ -474,6 +474,8 @@ let
     tok = [ pkgs.cargo ];
     rshift = [ pkgs.cargo ];
     arcgisutils = with pkgs; [ cargo rustc ];
+    arcgisgeocode = with pkgs; [ cargo rustc ];
+    arcgisplaces = with pkgs; [ pkg-config openssl.dev cargo rustc ];
     apcf = with pkgs; [ geos ];
     SemiCompRisks = [ pkgs.gsl ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
