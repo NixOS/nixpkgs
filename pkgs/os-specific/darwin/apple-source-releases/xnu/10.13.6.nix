@@ -148,6 +148,10 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   '';
 
   appleHeaders = builtins.readFile ./headers-10.13.6.txt;
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 } // lib.optionalAttrs headersOnly {
   HOST_CODESIGN = "echo";
   HOST_CODESIGN_ALLOCATE = "echo";
