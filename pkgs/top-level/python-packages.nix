@@ -14544,6 +14544,8 @@ self: super: with self; {
 
   skodaconnect = callPackage ../development/python-modules/skodaconnect { };
 
+  skops = callPackage ../development/python-modules/skops { };
+
   skorch = callPackage ../development/python-modules/skorch { };
 
   skrl = callPackage ../development/python-modules/skrl { };
