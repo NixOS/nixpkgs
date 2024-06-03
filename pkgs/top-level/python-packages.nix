@@ -9757,6 +9757,10 @@ self: super: with self; {
 
   pypemicro = callPackage ../development/python-modules/pypemicro { };
 
+  pigpio = toPythonModule (pkgs.pigpio.override {
+    inherit buildPythonPackage;
+  });
+
   pymeshlab = toPythonModule (pkgs.libsForQt5.callPackage ../applications/graphics/pymeshlab { });
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
