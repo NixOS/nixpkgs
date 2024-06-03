@@ -28203,8 +28203,6 @@ with pkgs;
 
   ananicy = callPackage ../misc/ananicy { };
 
-  ananicy-cpp = callPackage ../misc/ananicy-cpp { };
-
   andagii = callPackage ../data/fonts/andagii { };
 
   andika = callPackage ../data/fonts/andika { };
