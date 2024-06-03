@@ -356,5 +356,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                         "hfs" "407.30.1" "macos-10.13.2"
                         "sha256-YDVwkFWARimNcYdNfDlnDD3QZphO0zvuHwr41dj7SNU="
                         {};
+                      launchd = applePackageMapping
+                        "launchd" "842.92.1" "macos-10.9.2"
+                        "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs="
+                        {};
                     };
 }
