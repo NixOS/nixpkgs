@@ -1,5 +1,4 @@
-{ config
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , cmake
@@ -21,8 +20,6 @@
 , sox
 , vid-stab
 , darwin
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
 , enableJackrack ? stdenv.isLinux
 , glib
 , ladspa-sdk
@@ -59,8 +56,6 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     makeWrapper
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
   ] ++ lib.optionals enablePython [
     python3
     swig
@@ -69,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (opencv4.override { inherit ffmpeg; })
+    (lib.getOutput "cxxdev" (opencv4.override { inherit ffmpeg; }))
     ffmpeg
     fftw
     frei0r
@@ -85,8 +80,6 @@ stdenv.mkDerivation rec {
     vid-stab
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Accelerate
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
   ] ++ lib.optionals enableJackrack [
     glib
     ladspa-sdk
