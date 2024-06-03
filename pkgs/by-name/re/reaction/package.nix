@@ -5,7 +5,7 @@
   fetchFromGitLab,
 }:
 let
-  version = "1.3.0";
+  version = "1.3.1";
 in buildGoModule {
   inherit version;
   pname = "reaction";
@@ -15,7 +15,7 @@ in buildGoModule {
     owner = "ppom";
     repo = "reaction";
     rev = "v${version}";
-    sha256 = "sha256-hlrso4dCGwn5/jOEPvjrK0RgctB4a70UhQkF+cv6NMc=";
+    sha256 = "sha256-hBEtXaTpubb5sKSrA8bhw3MW6YLszuESWrFZYf/+RvM=";
   };
 
   vendorHash = "sha256-THUIoWFzkqaTofwH4clBgsmtUlLS9WIB2xjqW7vkhpg=";
