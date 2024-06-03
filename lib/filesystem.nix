@@ -310,20 +310,20 @@ in
 
     Structured function argument
 
-    : callPackage
+    : Attribute set containing the following attributes.
+      Additional attributes are ignored.
+
+      `callPackage`
 
       : `pkgs.callPackage`
 
         Type: `Path -> AttrSet -> a`
 
-    : directory
+      `directory`
 
       : The directory to read package files from
 
         Type: `Path`
-
-    : `...`
-      : Additional attributes are ignored
 
 
     # Type
