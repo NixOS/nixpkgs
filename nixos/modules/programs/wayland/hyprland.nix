@@ -69,8 +69,8 @@ in
 
     (import ./wayland-session.nix {
       inherit lib pkgs;
-      xwayland = cfg.xwayland.enable;
-      wlr-portal = false; # Hyprland has its own portal, wlr is not needed
+      enableXWayland = cfg.xwayland.enable;
+      enableWlrPortal = false; # Hyprland has its own portal, wlr is not needed
     })
   ]);
 

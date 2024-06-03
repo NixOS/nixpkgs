@@ -1,8 +1,8 @@
 {
   lib,
   pkgs,
-  xwayland ? true,
-  wlr-portal ? true,
+  enableXWayland ? true,
+  enableWlrPortal ? true,
 }:
 
 {
@@ -16,10 +16,10 @@
 
   programs = {
     dconf.enable = lib.mkDefault true;
-    xwayland.enable = lib.mkDefault xwayland;
+    xwayland.enable = lib.mkDefault enableXWayland;
   };
 
-  xdg.portal.wlr.enable = wlr-portal;
+  xdg.portal.wlr.enable = enableWlrPortal;
 
   # Window manager only sessions (unlike DEs) don't handle XDG
   # autostart files, so force them to run the service
