@@ -350,5 +350,11 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                           Security = null;
                           xpc = null;
                         };
+                      # hfs is missing the headers we need from the version
+                      # corresponding to macOS 10.13.3 to 10.15.3.
+                      hfs = applePackageMapping
+                        "hfs" "407.30.1" "macos-10.13.2"
+                        "sha256-YDVwkFWARimNcYdNfDlnDD3QZphO0zvuHwr41dj7SNU="
+                        {};
                     };
 }
