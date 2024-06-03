@@ -30,6 +30,7 @@
 , "bower2nix"
 , "browserify"
 , "browser-sync"
+, "cbmp"
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clipboard-cli"
