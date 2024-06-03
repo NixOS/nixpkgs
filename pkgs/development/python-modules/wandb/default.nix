@@ -297,6 +297,13 @@ buildPythonPackage rec {
     [
       # Timing sensitive
       "test_login_timeout"
+
+      # Tensorflow 2.13 is too old for the current version of keras
+      # ModuleNotFoundError: No module named 'keras.api._v2'
+      "test_saved_model_keras"
+      "test_sklearn_saved_model"
+      "test_pytorch_saved_model"
+      "test_tensorflow_keras_saved_model"
     ]
     ++ lib.optionals stdenv.isDarwin [
       # Disable test that fails on darwin due to issue with python3Packages.psutil:
