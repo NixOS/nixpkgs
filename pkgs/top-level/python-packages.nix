@@ -7791,6 +7791,14 @@ self: super: with self; {
 
   lexilang = callPackage ../development/python-modules/lexilang { };
 
+  lgpio = toPythonModule (
+    pkgs.lgpio.override {
+      inherit buildPythonPackage;
+      pyProject = "PY_LGPIO";
+      lgpioWithoutPython = pkgs.lgpio;
+    }
+  );
+
   lhapdf = toPythonModule (pkgs.lhapdf.override { python3 = python; });
 
   lib4package = callPackage ../development/python-modules/lib4package { };
