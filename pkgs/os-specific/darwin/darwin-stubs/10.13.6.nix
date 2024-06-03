@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "darwin-stubs";
@@ -15,4 +15,8 @@ stdenvNoCC.mkDerivation rec {
     mkdir $out
     mv stubs/${version}/* $out
   '';
+
+  meta = {
+    maintainers = with lib.maintainers; [ toonn ];
+  };
 }
