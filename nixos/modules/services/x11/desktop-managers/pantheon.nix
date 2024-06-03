@@ -269,11 +269,6 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Use native GTK file chooser on Qt apps. This is because Qt does not know Pantheon.
-      # https://invent.kde.org/qt/qt/qtbase/-/blob/6.6/src/gui/platform/unix/qgenericunixthemes.cpp#L1312
-      # https://github.com/elementary/default-settings/blob/7.0.2/profile.d/qt-qpa-platformtheme.sh
-      environment.variables.QT_QPA_PLATFORMTHEME = mkDefault "gtk3";
-
       # Default Fonts
       fonts.packages = with pkgs; [
         inter
