@@ -87,6 +87,8 @@ in
         };
         description = "Set configuration for the network service (/etc/bluetooth/network.conf).";
       };
+
+      experimental = mkEnableOption "experimental D-Bus interface and kernel features";
     };
   };
 
@@ -116,7 +118,8 @@ in
           # if/when the bluez derivation is changed.
           args = [ "-f" "/etc/bluetooth/main.conf" ]
             ++ optional hasDisabledPlugins
-            "--noplugin=${concatStringsSep "," cfg.disabledPlugins}";
+            "--noplugin=${concatStringsSep "," cfg.disabledPlugins}"
+            ++ optionals cfg.experimental ["-E" "-K"];
         in
         {
           wantedBy = [ "bluetooth.target" ];
