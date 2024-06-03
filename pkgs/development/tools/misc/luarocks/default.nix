@@ -1,3 +1,12 @@
+/*
+This is a minimal/manual luarocks derivation used by `buildLuarocksPackage` to install lua packages.
+
+As a nix user, you should use the generated lua.pkgs.luarocks that contains a luarocks manifest
+which makes it recognizable to luarocks.
+Generating the manifest for luarocks_bootstrap seemed too hackish, which is why we end up
+with two "luarocks" derivations.
+
+*/
 { lib
 , stdenv
 , fetchFromGitHub
