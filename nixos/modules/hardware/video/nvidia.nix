@@ -285,7 +285,7 @@ in
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
           '';
           hardware.opengl = {
-            extraPackages = [ nvidia_x11.out nvidia_x11.settings.libXNVCtrl ];
+            extraPackages = [ nvidia_x11.out ] ++ (lib.optional (builtins.hasAttr "libXNVCtrl" nvidia_x11.settings) nvidia_x11.settings.libXNVCtrl);
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
