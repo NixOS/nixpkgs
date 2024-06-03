@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchFromGitHub, six, requests, infotagger, inputstreamhelper }:
+{ lib, buildKodiAddon, fetchFromGitHub, requests, inputstream-adaptive, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "youtube";
@@ -13,9 +13,8 @@ buildKodiAddon rec {
   };
 
   propagatedBuildInputs = [
-    six
     requests
-    infotagger
+    inputstream-adaptive
     inputstreamhelper
   ];
 
