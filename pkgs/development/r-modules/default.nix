@@ -1517,7 +1517,7 @@ let
     });
 
     rgoslin = old.rgoslin.overrideAttrs (attrs: {
-      patches = [ ./patches/rgoslin.patch ];
+      enableParallelBuilding = false;
     });
 
     rpanel = old.rpanel.overrideAttrs (attrs: {
