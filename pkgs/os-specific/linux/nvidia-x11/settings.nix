@@ -30,6 +30,14 @@ let
     inherit sha256;
   };
 
+  meta = with lib; {
+    homepage = "https://www.nvidia.com/object/unix.html";
+    license = licenses.unfreeRedistributable;
+    platforms = nvidia_x11.meta.platforms;
+    mainProgram = "nvidia-settings";
+    maintainers = with maintainers; [ abbradar aidalgol ];
+  };
+
   libXNVCtrl = stdenv.mkDerivation {
     pname = "libXNVCtrl";
     version = nvidia_x11.settingsVersion;
@@ -62,6 +70,10 @@ let
       cp NVCtrlLib.h  $out/include/NVCtrl
       cp -P libXNVCtrl.so* $out/lib
     '';
+
+    meta = meta // {
+      description = "NVIDIA NV-CONTROL X extension";
+    };
   };
 
 in
@@ -141,12 +153,7 @@ stdenv.mkDerivation {
     inherit libXNVCtrl;
   };
 
-  meta = with lib; {
-    homepage = "https://www.nvidia.com/object/unix.html";
+  meta = meta // {
     description = "Settings application for NVIDIA graphics cards";
-    license = licenses.unfreeRedistributable;
-    platforms = nvidia_x11.meta.platforms;
-    mainProgram = "nvidia-settings";
-    maintainers = with maintainers; [ abbradar aidalgol ];
   };
 }
