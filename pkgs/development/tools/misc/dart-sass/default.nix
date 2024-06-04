@@ -10,24 +10,24 @@
 }:
 
 let
-  embedded-protocol-version = "2.7.0";
+  embedded-protocol-version = "2.7.1";
 
   embedded-protocol = fetchFromGitHub {
     owner = "sass";
     repo = "sass";
     rev = "refs/tags/embedded-protocol-${embedded-protocol-version}";
-    hash = "sha256-BQCQ4GE85teRkCY2iuvqFT4vyf6RzZ1ztoRhBCAwA4w=";
+    hash = "sha256-6bGH/klCYxuq7CrOJVF8ySafhLJwet5ppBcpI8dzeCQ=";
   };
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.77.2";
+  version = "1.77.4";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    hash = "sha256-Spd21/IRNDtpgMecoO2ozKWEVSQneMGCOVCCePaFzus=";
+    hash = "sha256-xHOZDeK6xYnfrb6yih6jzRDZLRvyp0EeKZynEq3A4aI=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

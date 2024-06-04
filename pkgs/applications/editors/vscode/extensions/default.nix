@@ -3943,8 +3943,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.1";
-          hash = "sha256-Vxk+PpwwRV7dH8A9hI+DSzPMqH2l//VtrgUV+w8at4g=";
+          version = "4.0.2";
+          hash = "sha256-k3FxRAtW9Fdhm7jD3ingFXONiBsOia1Whs7OPeDmlSw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -4319,8 +4319,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.42";
-          hash = "sha256-cgLWgMej1Nv8kNK2MfgO3Z/xJPXdcmYs8LXrFNfc3jQ=";
+          version = "0.0.44";
+          hash = "sha256-lumK7gcj/NIhiZKT6F++ZsTFKWw7ZVaKZgIsQvZAGs4=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

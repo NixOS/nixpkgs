@@ -77,6 +77,7 @@ lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
+luarocks,,,,,,mrcjkb teto
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-treesitter-parser,,,,,,mrcjkb
 luasec,,,,,,flosse

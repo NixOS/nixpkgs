@@ -1913,6 +1913,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+luarocks = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
+buildLuarocksPackage {
+  pname = "luarocks";
+  version = "3.11.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luarocks-3.11.0-1.rockspec";
+    sha256 = "0pi55445dskpw6nhrq52589h4v39fsf23c0kp8d4zg2qaf6y2n38";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "luarocks";
+    repo = "luarocks";
+    rev = "v3.11.0";
+    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+  };
+
+
+  meta = {
+    homepage = "http://www.luarocks.org";
+    description = "A package manager for Lua modules.";
+    maintainers = with lib.maintainers; [ mrcjkb teto ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 luarocks-build-rust-mlua = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
 buildLuarocksPackage {
   pname = "luarocks-build-rust-mlua";

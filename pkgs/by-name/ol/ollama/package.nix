@@ -30,13 +30,13 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.39";
+  version = "0.1.41";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-OYWHpPvnIgdjDjpcV8BKnr5cq6eJzBsAOGZmaVBBalQ=";
+    hash = "sha256-rwJf/DbqTOD2TIS0YHK8CaIEC93CfeDg08qV9ydaNe4=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,7 @@ let
     (preparePatch "02-clip-log.diff" "sha256-rMWbl3QgrPlhisTeHwD7EnGRJyOhLB4UeS7rqa0tdXM=")
     (preparePatch "03-load_exception.diff" "sha256-0XfMtMyg17oihqSFDBakBtAF0JwhsR188D+cOodgvDk=")
     (preparePatch "04-metal.diff" "sha256-Ne8J9R8NndUosSK0qoMvFfKNwqV5xhhce1nSoYrZo7Y=")
-    (preparePatch "05-default-pretokenizer.diff" "sha256-8ffYnl9kMHEZ05e5CqryYJLdJ6/EEQJSlW6e/IgaU2Q=")
+    (preparePatch "05-default-pretokenizer.diff" "sha256-NrQ0Fv5DAZYtRM0NBEeM2JLVTLFmb4Fs9RhwXhdMCC4=")
   ];
 
   preparePatch = patch: hash: fetchpatch {

@@ -1,5 +1,6 @@
 { config
 , lib
+, linuxPackages
 , pkgs
 , generateSplicesForMkScope
 , makeScopeWithSplicing'
@@ -140,7 +141,9 @@ makeScopeWithSplicing' {
 
       xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
+      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
+        libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+      };
 
       xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 

@@ -9,7 +9,7 @@
 buildPythonApplication rec {
   pname = "bitwarden-menu";
   version = "0.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "bitwarden_menu";

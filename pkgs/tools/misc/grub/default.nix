@@ -1,5 +1,6 @@
 { lib, stdenv, runCommand, fetchFromSavannah, fetchpatch, flex, bison, python3, autoconf, automake, libtool, bash
-, rsync, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
+, fetchzip
 , buildPackages
 , nixosTests
 , fuse # only needed for grub-mount
@@ -53,22 +54,13 @@ let
     hash = "sha256-lathsBb2f7urh8R86ihpTdwo3h1hAHnRiHd5gCLVpBc=";
   };
 
-  # HACK: the translations are stored on a different server,
-  # not versioned and not included in the git repo, so fetch them
-  # and hope they don't change often
-  locales = runCommand "grub-locales" {
-    nativeBuildInputs = [rsync];
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-XzW2e7Xe7Pi297eV/fD2B/6uONEz9UjL2EHDCY0huTA=";
-  }
-  ''
-    mkdir -p po
-    ${src}/linguas.sh
-
-    mv po $out
-  '';
+  # The locales are fetched from translationproject.org at build time,
+  # but those translations are not versioned/stable. For that reason
+  # we take them from the nearest release tarball instead:
+  locales = fetchzip {
+    url = "https://ftp.gnu.org/gnu/grub/grub-2.12.tar.gz";
+    hash = "sha256-IoRiJHNQ58y0UhCAD0CrpFiI8Mz1upzAtyh5K4Njh/w=";
+  };
 in (
 
 assert efiSupport -> canEfi;
@@ -134,7 +126,7 @@ stdenv.mkDerivation rec {
         exit 1
       fi
 
-      cp -f --no-preserve=mode ${locales}/* po
+      cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
 
       ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 

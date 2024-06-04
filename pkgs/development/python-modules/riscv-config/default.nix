@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "riscv-config";
-  version = "3.18.2";
+  version = "3.18.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "riscv-software-src";
     repo = "riscv-config";
     rev = "refs/tags/${version}";
-    hash = "sha256-ADmf7EN3D+8isZRFx6WRMYq91YHunGavuwy3a3M3gCc=";
+    hash = "sha256-eaHi6ezgU8gQYH97gCS2TzEzIP3F4zfn7uiA/To2Gmc=";
   };
 
   pythonRelaxDeps = [ "pyyaml" ];

@@ -2,7 +2,7 @@
 { lib
 , lua
 , wrapLua
-, luarocks
+, luarocks_bootstrap
 , writeTextFile
 
 # Whether the derivation provides a lua module or not.
@@ -91,7 +91,7 @@ let
   nativeBuildInputs = [
     lua  # for lua.h
     wrapLua
-    luarocks
+    luarocks_bootstrap
   ];
 
   inherit doCheck extraConfig rockspecFilename knownRockspec externalDeps nativeCheckInputs;
@@ -99,7 +99,7 @@ let
   buildInputs = let
     # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
     externalDeps' = lib.filter (dep: !lib.isDerivation dep) self.externalDeps;
-    in [ lua.pkgs.luarocks ]
+    in [ luarocks_bootstrap ]
       ++ buildInputs
       ++ lib.optionals self.doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs)
       ++ (map (d: d.dep) externalDeps')

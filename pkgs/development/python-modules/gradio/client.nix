@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   pythonOlder,
   pythonRelaxDepsHook,
   # pyproject
@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "0.16.1";
+  version = "0.20.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
-    rev = "refs/tags/gradio_client@${version}";
+    rev = "refs/tags/@gradio/client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-SVUm9LrjYG0r3U1yOd3rctxVMYlnAOW+Opqy9c3osnw=";
+    hash = "sha256-55RxoZR/A6WCWGgYggdwjGornIxF8BcjJpWw3p6jrzU=";
   };
   prePatch = ''
     cd client/python
@@ -97,7 +97,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = gitUpdater { rev-prefix = "@gradio/client@"; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "@gradio/client@(.*)" ];
+  };
 
   meta = with lib; {
     homepage = "https://www.gradio.app/";

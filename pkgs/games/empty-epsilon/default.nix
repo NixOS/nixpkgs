@@ -2,10 +2,10 @@
 
 let
 
-  major = "2023";
-  minor = "06";
-  patch.seriousproton = "17";
-  patch.emptyepsilon = "17";
+  major = "2024";
+  minor = "05";
+  patch.seriousproton = "16";
+  patch.emptyepsilon = "16";
 
   version.seriousproton = "${major}.${minor}.${patch.seriousproton}";
   version.emptyepsilon = "${major}.${minor}.${patch.emptyepsilon}";
@@ -26,7 +26,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version.seriousproton}";
-      sha256 = "sha256-5ifYb5dX8ihQmJB1RHyzMsZJeXZ+m27JmA+W+XA/XwI=";
+      sha256 = "sha256-0gCwWvx7ceJG3VmVVufRkwreuHn41pl7jHsJXzNwqaE=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version.emptyepsilon}";
-    sha256 = "sha256-zuXbCBlv6URndbB0aA+3bli0cSeUBf3LT/7/jcPITnc=";
+    sha256 = "sha256-pLnyzahGEPb2cEwH89RE5Jq8UHIoDWXatmDWdeZ+rqo=";
   };
 
   nativeBuildInputs = [ cmake ];

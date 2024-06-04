@@ -54,6 +54,8 @@
 , vimPlugins
 , vimUtils
 , yajl
+, zip
+, unzip
 , zlib
 , zziplib
 }:
@@ -405,6 +407,34 @@ in
     externalDeps = [
       { name = "CRYPT"; dep = libxcrypt; }
     ];
+  });
+
+
+  # As a nix user, use this derivation instead of "luarocks_bootstrap"
+  luarocks = prev.luarocks.overrideAttrs (oa: {
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ installShellFiles lua unzip ];
+    # cmake is just to compile packages with "cmake" buildType, not luarocks itself
+    dontUseCmakeConfigure = true;
+
+    propagatedBuildInputs = [ zip unzip cmake ];
+
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd luarocks \
+        --bash <($out/bin/luarocks completion bash) \
+        --fish <($out/bin/luarocks completion fish) \
+        --zsh <($out/bin/luarocks completion zsh)
+
+      installShellCompletion --cmd luarocks-admin \
+        --bash <($out/bin/luarocks-admin completion bash) \
+        --fish <($out/bin/luarocks-admin completion fish) \
+        --zsh <($out/bin/luarocks-admin completion zsh)
+    '';
+
+    meta = oa.meta // {
+      mainProgram = "luarocks";
+    };
+
   });
 
   luasec = prev.luasec.overrideAttrs (oa: {
