@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://web.archive.org/web/20240521141411/https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz";
-    hash = "sha256-zr8ARr/QjPRdprwJSuR6o56/QVXl7eQTc7V5uPEHHnw=";
+    hash = "sha256-nLAz5JfLC/LQrXJDMiS4Rg99FwC6NdIrIRZcKpW+2fc=";
   };
 
   # The source tarball does not have a single top-level directory.
