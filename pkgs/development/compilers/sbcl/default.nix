@@ -7,7 +7,7 @@
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
 , coreCompression ? true
-, markRegionGC ? true
+, markRegionGC ? threadSupport
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
@@ -157,6 +157,7 @@ stdenv.mkDerivation (self: rec {
   '';
 
   enableFeatures = with lib;
+    assert assertMsg (markRegionGC -> threadSupport) "SBCL mark region GC requires thread support";
     optional threadSupport "sb-thread" ++
     optional linkableRuntime "sb-linkable-runtime" ++
     optional coreCompression "sb-core-compression" ++
