@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildGoModule
-, fetchurl
+, fetchFromGitHub
 , makeWrapper
 , git
 , bash
@@ -16,23 +16,47 @@
 , brotli
 , xorg
 , nixosTests
+, buildNpmPackage
 }:
 
-buildGoModule rec {
+let
+  frontend = buildNpmPackage {
+    pname = "gitea-frontend";
+    inherit (gitea) src version;
+
+    npmDepsHash = "sha256-gXBBiDIIS0aW6qK37HcF0AuJOliblinznRVXoo6DV1s=";
+
+    # use webpack directly instead of 'make frontend' as the packages are already installed
+    buildPhase = ''
+      BROWSERSLIST_IGNORE_OLD_DATA=true npx webpack
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -R public $out/
+    '';
+  };
+in buildGoModule rec {
   pname = "gitea";
   version = "1.22.0";
 
-  # not fetching directly from the git repo, because that lacks several vendor files for the web UI
-  src = fetchurl {
-    url = "https://dl.gitea.com/gitea/${version}/gitea-src-${version}.tar.gz";
-    hash = "sha256-bU4u/RsE12InXjJ2ZvIL31z9AzB7XULyV0+ytAYnyjg=";
+  src = fetchFromGitHub {
+    owner = "go-gitea";
+    repo = "gitea";
+    rev = "v${gitea.version}";
+    hash = "sha256-LdNEiPch2BZNYMOjE9yWsq78g6DolMjM5wUci3jXj30=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-8VoJR4p2WnhG6nTFMzBlcrd/B6UwaOU3Q/rnDx9MtWc=";
 
-  patches = [
-    ./static-root-path.patch
-  ];
+  outputs = [ "out" "data" ];
+
+  patches = [ ./static-root-path.patch ];
+
+  # go-modules derivation doesn't provide $data
+  # so we need to wait until it is built, and then
+  # at that time we can then apply the substituteInPlace
+  overrideModAttrs = _: { postPatch = null; };
 
   postPatch = ''
     substituteInPlace modules/setting/server.go --subst-var data
@@ -54,11 +78,10 @@ buildGoModule rec {
     "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
   ];
 
-  outputs = [ "out" "data" ];
-
   postInstall = ''
     mkdir $data
-    cp -R ./{public,templates,options} $data
+    ln -s ${frontend}/public $data/public
+    cp -R ./{templates,options} $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
 
@@ -84,7 +107,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Git with a cup of tea";
-    homepage = "https://gitea.io";
+    homepage = "https://about.gitea.com";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
     broken = stdenv.isDarwin;

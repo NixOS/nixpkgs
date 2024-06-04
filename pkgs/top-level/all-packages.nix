@@ -8329,8 +8329,6 @@ with pkgs;
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
-  gitea = callPackage ../applications/version-management/gitea { };
-
   gitea-actions-runner = callPackage ../development/tools/continuous-integration/gitea-actions-runner { };
 
   gokart = callPackage ../development/tools/gokart { };
@@ -23554,8 +23552,6 @@ with pkgs;
   oobicpl = callPackage ../development/libraries/science/biology/oobicpl { };
 
   ookla-speedtest = callPackage ../tools/networking/ookla-speedtest { };
-
-  open62541 = callPackage ../development/libraries/open62541 { };
 
   openalSoft = callPackage ../development/libraries/openal-soft {
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
