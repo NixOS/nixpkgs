@@ -121,14 +121,11 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  postInstall = ''
-    ${lib.optionalString (!withGtk2) ''
-      rm -f $out/lib/libnvidia-gtk2.so.*
-    ''}
-    ${lib.optionalString (!withGtk3) ''
-      rm -f $out/lib/libnvidia-gtk3.so.*
-    ''}
-
+  postInstall = lib.optionalString (!withGtk2) ''
+    rm -f $out/lib/libnvidia-gtk2.so.*
+  '' + lib.optionalString (!withGtk3) ''
+    rm -f $out/lib/libnvidia-gtk3.so.*
+  '' + ''
     # Install the desktop file and icon.
     # The template has substitution variables intended to be replaced resulting
     # in absolute paths. Because absolute paths break after the desktop file is
