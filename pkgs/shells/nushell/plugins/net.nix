@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    rev = "a84d72290f513397a359581b9447a4e638ce60c9";
-    hash = "sha256-uKLYTRR2tThSvwWbvEePOLZ9ehNPfCYruZxTKSIxpEA=";
+    rev = "60d315afb19c3c673409db796a4cc7a240058605";
+    hash = "sha256-izIxV2rFxZ1Om6NNaofNpc5prtN/lsw8dC4DyKEQ+v8=";
   };
 
-  cargoHash = "sha256-BsCOej31vfTf+Wca4+AjxkhXz6wpMRFJmGBsUqOj2U0=";
+  cargoHash = "sha256-nBxcxADyvPgGrfkW8eBq/wmB2Slq+YGJV2IlxuuCgCg=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
