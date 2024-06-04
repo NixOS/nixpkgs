@@ -102,6 +102,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.zfsroot")
         (onSystems ["x86_64-linux"] "nixos.tests.nixos-rebuild-specialisations")
+        (onFullSupported "nixos.tests.nix-misc.default")
         (onFullSupported "nixos.tests.ipv6")
         (onFullSupported "nixos.tests.keymap.azerty")
         (onFullSupported "nixos.tests.keymap.colemak")
