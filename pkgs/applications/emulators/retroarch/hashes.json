@@ -165,10 +165,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bsnes-libretro",
-            "rev": "37606e377ebae5d3175cd6267e4ddfa3f3c5091f",
-            "hash": "sha256-B1ragos8ZeCjg8Xlt6SC8V69iTZ6OXTpPptlWw4EMOU="
+            "rev": "44f6ce5dedb138ded8e59d71df18cae5b0655eba",
+            "hash": "sha256-7iB2VQ3f8YVOV3C+Rkviaj7USoZdO/riDnT9kCdzc8k="
         },
-        "version": "unstable-2024-05-17"
+        "version": "unstable-2024-05-31"
     },
     "bsnes-hd": {
         "fetcher": "fetchFromGitHub",
@@ -297,21 +297,21 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-fceumm",
-            "rev": "0dc5915f0ba10d4bb63b35fbfa57b81a3dd0955e",
-            "hash": "sha256-fLgJ3EWOaHMpBxPqhjcyYKuwVzIiAmKhk0KUmUswlmY="
+            "rev": "c970bcc2b527f2c9d072e3ad2a5e3b4143246e25",
+            "hash": "sha256-EOtUExsYIXyuX2bTzs9Ia0i9aIMdXVByhZ+S0bSPfJw="
         },
-        "version": "unstable-2024-05-27"
+        "version": "unstable-2024-05-29"
     },
     "flycast": {
         "fetcher": "fetchFromGitHub",
         "src": {
             "owner": "flyinghead",
             "repo": "flycast",
-            "rev": "90896368b80531e492fede0e17c54f7e6855a13b",
-            "hash": "sha256-7JhHpNYxC6oNyvLCMmBie0pkPgWJ9hxfeYRxmmgpBso=",
+            "rev": "021249c321826ecb6b0a0ed6e5d2af9044e973a3",
+            "hash": "sha256-/S/43/fKZrUjZTSq51NY3OU3oDpyoqNbHB2QGzqBOuk=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-05-27"
+        "version": "unstable-2024-06-02"
     },
     "fmsx": {
         "fetcher": "fetchFromGitHub",
