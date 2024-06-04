@@ -336,6 +336,8 @@ in {
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
+    deepin-anything-module = callPackage ../os-specific/linux/deepin-anything-module { };
+
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
