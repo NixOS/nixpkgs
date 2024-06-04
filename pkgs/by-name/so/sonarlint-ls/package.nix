@@ -40,7 +40,7 @@ mavenJdk17.buildMavenPackage rec {
 
   # disable node and npm module installation because the need network access
   # for the tests.
-  mvnDepsParameters = "-Dskip.installnodenpm=true -Dskip.npm -DskipTests package";
+  mvnDepsParameters = "-Dskip.installnodenpm=true -Dskip.npm package";
 
   # disable failing tests which either need network access or are flaky
   mvnParameters = lib.escapeShellArgs [
@@ -52,6 +52,8 @@ mavenJdk17.buildMavenPackage rec {
     !ConnectedModeMediumTests,
     !JavaMediumTests"
   ];
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
