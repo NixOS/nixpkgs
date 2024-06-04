@@ -2014,7 +2014,6 @@ broken-packages:
   - ghc-syb # failure in job https://hydra.nixos.org/build/233236783 at 2023-09-02
   - ghc-syb-utils # failure in job https://hydra.nixos.org/build/233229196 at 2023-09-02
   - ghc-symbol # failure in job https://hydra.nixos.org/build/252710738 at 2024-03-16
-  - ghc-tags # failure in job https://hydra.nixos.org/build/252730131 at 2024-03-16
   - ghc-tags-plugin # failure in job https://hydra.nixos.org/build/233229916 at 2023-09-02
   - ghc-time-alloc-prof # failure in job https://hydra.nixos.org/build/233242289 at 2023-09-02
   - ghc-usage # failure in job https://hydra.nixos.org/build/233199565 at 2023-09-02
