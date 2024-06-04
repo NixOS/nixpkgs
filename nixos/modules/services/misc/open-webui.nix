@@ -18,12 +18,14 @@ in
       stateDir = lib.mkOption {
         type = types.path;
         default = "/var/lib/open-webui";
+        example = "/home/foo";
         description = "State directory of Open-WebUI.";
       };
 
       host = lib.mkOption {
         type = types.str;
         default = "localhost";
+        example = "0.0.0.0";
         description = ''
           The host address which the Open-WebUI server HTTP interface listens to.
         '';
@@ -32,6 +34,7 @@ in
       port = lib.mkOption {
         type = types.port;
         default = 8080;
+        example = 11111;
         description = ''
           Which port the Open-WebUI server listens to.
         '';
@@ -42,7 +45,7 @@ in
         default = { };
         example = ''
           {
-            OLLAMA_API_BASE_URL = "http://localhost:11434";
+            OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
             # Disable authentication
             WEBUI_AUTH = "False";
           }
