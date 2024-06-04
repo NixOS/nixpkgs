@@ -459,7 +459,10 @@ Examples going from bad to best practices:
 
 ## Patches
 
-Patches available online should be retrieved using `fetchpatch`.
+Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
+When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
+
+Patches already merged upstream or published elsewhere should be retrieved using `fetchpatch`.
 
 ```nix
 {
@@ -473,7 +476,9 @@ Patches available online should be retrieved using `fetchpatch`.
 }
 ```
 
-Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
+Otherwise, you can add a `.patch` file to the `nixpkgs` repository.
+In the interest of keeping our maintenance burden and the size of nixpkgs to a minimum, only do this for patches that are unique to `nixpkgs` or that have been proposed upstream but are not merged yet, cannot be easily fetched or have a high chance to disappear in the future due to unstable or unreliable URLs.
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
