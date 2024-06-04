@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pkgs
 , stdenv
+, newScope
 }:
 
 let
@@ -47,7 +48,7 @@ let
       '';
     }));
 
-in rec {
+in lib.makeScope newScope (self: with self; {
   inherit mkTmuxPlugin;
 
   mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
@@ -718,9 +719,7 @@ in rec {
     };
   };
 
-  tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
-    inherit mkTmuxPlugin;
-  };
+  tmux-thumbs = self.callPackage ./tmux-thumbs { };
 
   t-smart-tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "t-smart-tmux-session-manager";
@@ -818,4 +817,4 @@ in rec {
       sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
     };
   };
-}
+})
