@@ -26896,8 +26896,6 @@ with pkgs;
 
   cockroachdb-bin = callPackage ../servers/sql/cockroachdb/cockroachdb-bin.nix { };
 
-  coconutbattery = callPackage ../os-specific/darwin/coconutbattery { };
-
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_4;
     inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
