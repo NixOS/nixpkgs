@@ -12,25 +12,29 @@ in
 {
   options = {
     services.open-webui = {
-      enable = lib.mkEnableOption "Enable open-webui, an interactive chat web app";
+      enable = lib.mkEnableOption "Open-WebUI server";
       package = lib.mkPackageOption pkgs "open-webui" { };
 
       stateDir = lib.mkOption {
         type = types.path;
         default = "/var/lib/open-webui";
-        description = "State directory of open-webui.";
+        description = "State directory of Open-WebUI.";
       };
 
       host = lib.mkOption {
         type = types.str;
         default = "localhost";
-        description = "Host of open-webui";
+        description = ''
+          The host address which the Open-WebUI server HTTP interface listens to.
+        '';
       };
 
       port = lib.mkOption {
         type = types.port;
         default = 8080;
-        description = "Port of open-webui";
+        description = ''
+          Which port the Open-WebUI server listens to.
+        '';
       };
 
       environment = lib.mkOption {
@@ -43,7 +47,7 @@ in
             WEBUI_AUTH = "False";
           }
         '';
-        description = "Extra environment variables for open-webui";
+        description = "Extra environment variables for Open-WebUI";
       };
 
       openFirewall = lib.mkOption {
@@ -59,7 +63,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.open-webui = {
-      description = "User-friendly WebUI for LLMs (Formerly Ollama WebUI)";
+      description = "User-friendly WebUI for LLMs";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
