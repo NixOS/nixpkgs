@@ -2,18 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm-config";
-  version = "0.1.0";
+  version = "a9f2f21ece3a01d6c36610295ae3163644d3f99e";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hWxyzgWWh6CBxpbbXfd888Q70cCZQ9FESDijOSXtdZA=";
+    sha256 = "sha256-wyb/26EyNyBJeTDUvnMxlMiQjaCGBES8t4VteNY1I/A=";
   };
 
-  cargoSha256 = "sha256-NfBteoknxveIGrpSuDe70LLnGvN3nb9gvbVbbwsYD4A=";
-
-  patches = [ ./0001-rm-unstable-is-some-with-feature.patch ];
+  cargoSha256 = "sha256-zHZk7Aa63nJhGI2vhDPwFnjNJ8oy7QJOeBCxV2n7uwg=";
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
@@ -21,6 +19,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm-config";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ yanganto ];
+    maintainers = with maintainers; [
+      denperidge
+    ];
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm-theme";
-  version = "unstable-2022-12-24";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = pname;
-    rev = "7f2292f91f31d14a30d49372198c0e7cbe183223";
-    sha256 = "sha256-tYT1eT7Rbs/6zZcl9eWsOA651dUGoXc7eRtVK8fn610=";
+    rev = "v" + version;
+    sha256 = "sha256-JCNpgdV4v0DzRmELAv+UwPAZ7O2V0KI4t8zirhhQshA";
   };
 
-  cargoSha256 = "sha256-3ZwVmyLvDq2z1FEqNuBlEgJLQ9KwcWj/jRlPNCNjCE4=";
+  cargoSha256 = "sha256-wit1rAOH9tIu8SpyXNk0GNuBo17liBw4e+JjPQj+uA4=";
 
   checkFlags = [
     # direct writing /tmp
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
+  OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
@@ -30,6 +31,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm-theme";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ yanganto ];
+    maintainers = with maintainers; [ 
+      denperidge
+    ];
   };
 }
