@@ -246,10 +246,10 @@
         "src": {
             "owner": "schellingb",
             "repo": "dosbox-pure",
-            "rev": "1c7ad4fafc5204e3aff83e2caa6020cb2fe43a2d",
-            "hash": "sha256-cOamfnwLilAz2I8CKA18JvauadbObuAq4JabNcdw7EQ="
+            "rev": "1e3cb35355769467ca7be192e740eb9728ecc88c",
+            "hash": "sha256-svVpHUOPPAFMypmeaHLCQfwTAVOZajTMKyeKvWLZlcc="
         },
-        "version": "unstable-2024-05-20"
+        "version": "unstable-2024-06-03"
     },
     "easyrpg": {
         "fetcher": "fetchFromGitHub",
@@ -348,10 +348,10 @@
         "src": {
             "owner": "libretro",
             "repo": "gambatte-libretro",
-            "rev": "238b195bca073bc1a2032c4e92c097d157e521f8",
-            "hash": "sha256-i9+a1kVlJ6EPaCOMkuIZgujNEg6MwPRM3mHnhconWHo="
+            "rev": "f0d83f0eff4ad91471f90acd098d078eea0a67b3",
+            "hash": "sha256-zcqFVPotOu5gDwzgWzn0lpzhcTwQUm81UpA5FtCrz1M="
         },
-        "version": "unstable-2024-05-17"
+        "version": "unstable-2024-06-02"
     },
     "genesis-plus-gx": {
         "fetcher": "fetchFromGitHub",
@@ -814,10 +814,10 @@
         "src": {
             "owner": "libretro",
             "repo": "swanstation",
-            "rev": "d5169ed204838b622551c82b3c20df376324870f",
-            "hash": "sha256-ixLd2xdy6r5irNEhBDbdMpvRR7clnHr1LrTywuqkr84="
+            "rev": "7a27436548128c00e70b08dde63c52118e2a6228",
+            "hash": "sha256-u7D044lKNAH4aAaY/Ol7BR3dNeusX4wirIMdUEGw2oM="
         },
-        "version": "unstable-2024-05-27"
+        "version": "unstable-2024-05-30"
     },
     "tgbdual": {
         "fetcher": "fetchFromGitHub",

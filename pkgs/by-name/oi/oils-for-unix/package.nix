@@ -51,9 +51,6 @@ stdenv.mkDerivation rec {
     "--readline=${readline-all}"
   ];
 
-  # Stripping breaks the bundles by removing the zip file from the end.
-  dontStrip = true;
-
   meta = {
     description = "A Unix shell with JSON-compatible structured data. It's our upgrade path from bash to a better language and runtime.";
     homepage = "https://www.oilshell.org/";
