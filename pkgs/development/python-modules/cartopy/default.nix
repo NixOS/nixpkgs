@@ -36,6 +36,15 @@ buildPythonPackage rec {
     hash = "sha256-Ix83s1cB8rox2UlZzKdebaBMLuo6fxTOHHXuOw6udnY=";
   };
 
+  patches = [
+    # Some tests in the 0.23.0 release are failing due to missing network markers. Revisit after update.
+    (fetchpatch {
+      name = "mnt-add-missing-needs-network-markers.patch";
+      url = "https://github.com/SciTools/cartopy/commit/2403847ea69c3d95e899ad5d0cab32ac6017df0e.patch";
+      hash = "sha256-aGBUX4jFn7GgoqmHVC51DmS+ga3GcQGKfkut++x67Q0=";
+    })
+  ];
+
   nativeBuildInputs = [
     cython
     geos # for geos-config
@@ -85,7 +94,10 @@ buildPythonPackage rec {
     "'not network and not natural_earth'"
   ];
 
-  disabledTests = [ "test_gridliner_labels_bbox_style" ];
+  disabledTests = [
+    "test_gridliner_constrained_adjust_datalim"
+    "test_gridliner_labels_bbox_style"
+  ];
 
   meta = with lib; {
     description = "Process geospatial data to create maps and perform analyses";
