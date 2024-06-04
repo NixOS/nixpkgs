@@ -65,7 +65,7 @@ final: prev: {
   fast-cli = prev.fast-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     prePatch = ''
-      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      export PUPPETEER_SKIP_DOWNLOAD=1
     '';
     postInstall = ''
       wrapProgram $out/bin/fast \
@@ -446,7 +446,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-linux-64/-/workerd-linux-64-${workerdVersion}.tgz";
-          sha512 = "G1BEzbw9TFIeMvc425F145IetC7fuH4KOkGhseLq9y/mt5PfDWkghwmXSK+q0BiMwm0XAobtzVlHcEr2u4WlRQ==";
+          sha512 = "sha512-E8mj+HPBryKwaJAiNsYzXtVjKCL0KvUBZbtxJxlWM4mLSQhT+uwGT3nydb/hFY59rZnQgZslw0oqEWht5TEYiQ==";
         };
       };
       linuxWorkerdArm = {
@@ -456,7 +456,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-linux-arm64/-/workerd-linux-arm64-${workerdVersion}.tgz";
-          sha512 = "LLk/d/y77TRu6QOG3CJUI2cD3Ff2lSg0ts6G83bsm9ZK+WKObWFFSPBy9l81m3EnlKFh7RZCzxN4J10kuDaO8w==";
+          sha512 = "sha512-/Fr1W671t2triNCDCBWdStxngnbUfZunZ/2e4kaMLzJDJLYDtYdmvOUCBDzUD4ssqmIMbn9RCQQ0U+CLEoqBqw==";
         };
       };
       darwinWorkerd = {
@@ -466,7 +466,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-64/-/workerd-darwin-64-${workerdVersion}.tgz";
-          sha512 = "rfHlvsWzkqEEQNvm14AOE/BYHYzB9wxQHCaZZEgwOuTl5KpDcs9La0N0LaDTR78ESumIWOcifVmko2VTrZb7TQ==";
+          sha512 = "sha512-ATaXjefbTsrv4mpn4Fdua114RRDXcX5Ky+Mv+f4JTUllgalmqC4CYMN4jxRz9IpJU/fNMN8IEfvUyuJBAcl9Iw==";
         };
       };
       darwinWorkerdArm = {
@@ -476,7 +476,7 @@ final: prev: {
         version = workerdVersion;
         src = fetchurl {
           url = "https://registry.npmjs.org/@cloudflare/workerd-darwin-arm64/-/workerd-darwin-arm64-${workerdVersion}.tgz";
-          sha512 = "IXGOxHsPdRYfAzcY6IroI1PDvx3hhXf18qFCloHp8Iw5bzLgq/PTjcp10Z/2xedZ2hVlfpHy1eEptsTmi9YeNw==";
+          sha512 = "sha512-wnbsZI4CS0QPCd+wnBHQ40C28A/2Qo4ESi1YhE2735G3UNcc876MWksZhsubd+XH0XPIra6eNFqyw6wRMpQOXA==";
         };
       };
 
