@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   fetchzip,
@@ -114,6 +115,8 @@ stdenv.mkDerivation rec {
   configureScript = "python ./configure";
 
   enableParallelBuilding = true;
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && !config.cudaSupport;
 
   # This is needed as the checks need to compile and link the test cases with
   # -lpetsc, which is not available in the checkPhase, which is executed before
