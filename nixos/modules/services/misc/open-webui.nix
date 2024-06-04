@@ -45,6 +45,15 @@ in
         '';
         description = "Extra environment variables for open-webui";
       };
+
+      openFirewall = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for Open-WebUI.
+          This adds `services.open-webui.port` to `networking.firewall.allowedTCPPorts`.
+        '';
+      };
     };
   };
 
@@ -88,6 +97,8 @@ in
         UMask = "0077";
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 
   meta.maintainers = with lib.maintainers; [ shivaraj-bh ];
