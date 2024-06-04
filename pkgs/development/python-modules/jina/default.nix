@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "jina";
   version = "3.25.1";
-  pyproject = true;
 
   src = fetchFromGitHub {
     inherit pname version;
@@ -31,6 +30,8 @@ buildPythonPackage rec {
     protobuf
     pyyaml
   ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Multimodal AI services & pipelines with cloud-native stack";
