@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "air";
@@ -13,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-dSu00NAq6hEOdJxXp+12UaUq32z53Wzla3/u+2nxqPw=";
 
-   ldflags = [ "-s" "-w" "-X=main.airVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.airVersion=${version}"
+  ];
 
   subPackages = [ "." ];
 
