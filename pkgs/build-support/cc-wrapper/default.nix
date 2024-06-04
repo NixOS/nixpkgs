@@ -67,6 +67,7 @@ let
     concatMapStrings
     concatStringsSep
     escapeShellArg
+    escapeShellArgs
     getBin
     getDev
     getLib
@@ -233,6 +234,32 @@ let
     in if isGccTuneSupported guess
        then guess
        else null;
+
+  thumb = if targetPlatform.gcc.thumb then "thumb" else "arm";
+  tune = if targetPlatform ? gcc.tune
+         then findBestTuneApproximation targetPlatform.gcc.tune
+         else null;
+
+  # Machine flags. These are necessary to support
+
+  # TODO: We should make a way to support miscellaneous machine
+  # flags and other gcc flags as well.
+
+  machineFlags =
+    # Always add -march based on cpu in triple. Sometimes there is a
+    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # that case.
+    optional (targetPlatform ? gcc.arch && !(targetPlatform.isDarwin && targetPlatform.isAarch64) && isGccArchSupported targetPlatform.gcc.arch) "-march=${targetPlatform.gcc.arch}" ++
+    # TODO: aarch64-darwin has mcpu incompatible with gcc
+    optional (targetPlatform ? gcc.cpu && !(targetPlatform.isDarwin && targetPlatform.isAarch64)) "-mcpu=${targetPlatform.gcc.cpu}" ++
+    # -mfloat-abi only matters on arm32 but we set it here
+    # unconditionally just in case. If the abi specifically sets hard
+    # vs. soft floats we use it here.
+    optional (targetPlatform ? gcc.float-abi) "-mfloat-abi=${targetPlatform.gcc.float-abi}" ++
+    optional (targetPlatform ? gcc.fpu) "-mfpu=${targetPlatform.gcc.fpu}" ++
+    optional (targetPlatform ? gcc.mode) "-mmode=${targetPlatform.gcc.mode}" ++
+    optional (targetPlatform ? gcc.thumb) "-m${thumb}" ++
+    optional (tune != null) "-mtune=${tune}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [];
 
@@ -610,52 +637,10 @@ stdenvNoCC.mkDerivation {
       export hardening_unsupported_flags="${concatStringsSep " " ccHardeningUnsupportedFlags}"
     ''
 
-    # Machine flags. These are necessary to support
-
-    # TODO: We should make a way to support miscellaneous machine
-    # flags and other gcc flags as well.
-
-    # Always add -march based on cpu in triple. Sometimes there is a
-    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
-    # that case.
-    #
     # For clang, this is handled in add-clang-cc-cflags-before.sh
-
-    # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.arch) && !isClang && !(targetPlatform.isDarwin && targetPlatform.isAarch64) &&
-                      isGccArchSupported targetPlatform.gcc.arch) ''
-      echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+    + lib.optionalString (!isClang && machineFlags != []) ''
+      printf "%s\n" ${lib.escapeShellArgs machineFlags} >> $out/nix-support/cc-cflags-before
     ''
-
-    # -mcpu is not very useful, except on PowerPC where it is used
-    # instead of march. On all other platforms you should use mtune
-    # and march instead.
-    # TODO: aarch64-darwin has mcpu incompatible with gcc
-    + optionalString ((targetPlatform ? gcc.cpu) && (isClang || !(targetPlatform.isDarwin && targetPlatform.isAarch64))) ''
-      echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
-    ''
-
-    # -mfloat-abi only matters on arm32 but we set it here
-    # unconditionally just in case. If the abi specifically sets hard
-    # vs. soft floats we use it here.
-    + optionalString (targetPlatform ? gcc.float-abi) ''
-      echo "-mfloat-abi=${targetPlatform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
-    ''
-    + optionalString (targetPlatform ? gcc.fpu) ''
-      echo "-mfpu=${targetPlatform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
-    ''
-    + optionalString (targetPlatform ? gcc.mode) ''
-      echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
-    ''
-    + optionalString (targetPlatform ? gcc.thumb) ''
-      echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
-    ''
-    + (let tune = if targetPlatform ? gcc.tune
-                  then findBestTuneApproximation targetPlatform.gcc.tune
-                  else null;
-      in optionalString (tune != null) ''
-      echo "-mtune=${tune}" >> $out/nix-support/cc-cflags-before
-    '')
 
     # TODO: categorize these and figure out a better place for them
     + optionalString targetPlatform.isWindows ''
@@ -718,9 +703,7 @@ stdenvNoCC.mkDerivation {
     ##
     + optionalString isClang ''
       # Escape twice: once for this script, once for the one it gets substituted into.
-      export march=${escapeShellArg
-        (optionalString (targetPlatform ? gcc.arch)
-          (escapeShellArg "-march=${targetPlatform.gcc.arch}"))}
+      export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
       export defaultTarget=${targetPlatform.config}
       substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
