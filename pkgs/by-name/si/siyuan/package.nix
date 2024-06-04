@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
@@ -8,22 +9,30 @@
   electron,
 }:
 
+let
+  platformId =
+    {
+      "x86_64-linux" = "linux";
+      "aarch64-linux" = "linux-arm64";
+    }
+    .${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+in
 buildNpmPackage rec {
   pname = "siyuan";
-  version = "3.0.11";
+  version = "3.0.17";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${version}";
-    hash = "sha256-s82g5os944us85V2TBnm+HNd37vVzNjaOJYrbBrgLSI=";
+    hash = "sha256-tTFoSftl8u9ZRBH+74yMsaTH0WMCqybIpnul0pb9F0E=";
   };
 
   kernel = buildGoModule {
     name = "${pname}-${version}-kernel";
     inherit src;
     sourceRoot = "${src.name}/kernel";
-    vendorHash = "sha256-onZBrw0fDsjqXgQF06C40ArxNmsbFDIwD57fJ0jB0ls=";
+    vendorHash = "sha256-jEy16IdgLPT+Om0rZkjpp1lwFKmVVjzlQ/3IOtPSjmA=";
 
     patches = [
       (substituteAll {
@@ -46,28 +55,27 @@ buildNpmPackage rec {
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
+
+    mkdir kernel-${platformId}
+    ln -s ${kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
+
     # for some reason the default page is broken, use the redirection link automatically
     substituteInPlace electron/main.js \
         --replace-fail ' "/stage/build/app/index.html?v=" + new Date().getTime()' '"/stage/build/desktop"'
   '';
 
-  npmDepsHash = "sha256-Yv/iOCyry3CNeKPxS206Y5y5mvzPU873PJdi0UQkVLs=";
+  npmDepsHash = "sha256-R09EcegN/4l9nblWgiGcwg/IeNZDeMtk0bSnw80QEiA=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   npmBuildScript = "build:desktop";
 
   postBuild = ''
-    substituteInPlace electron-builder-linux.yml \
-        --replace-fail '- target: "AppImage"' "" \
-        --replace-fail '- target: "tar.gz"' '- target: "dir"'
-
-    # add extra fields to resolve the electron provided by nixpkgs
-    sed -e 1i'electronDist: ${electron}/libexec/electron' \
-        -e 1i'electronVersion: ${electron.version}' \
-        -i electron-builder-linux.yml
-
-    npm run dist-linux
+    npm exec electron-builder -- \
+        --dir \
+        --config electron-builder-${platformId}.yml \
+        -c.electronDist=${electron}/libexec/electron \
+        -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
@@ -75,9 +83,6 @@ buildNpmPackage rec {
 
     mkdir -p $out/share/siyuan
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
-
-    mkdir $out/share/siyuan/resources/kernel
-    ln -s ${kernel}/bin/kernel $out/share/siyuan/resources/kernel/SiYuan-Kernel
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
         --chdir $out/share/siyuan/resources \
