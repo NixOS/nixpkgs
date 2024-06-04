@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, fetchpatch
 , fetchFromGitHub
 , pkgsBuildBuild
 , jq
