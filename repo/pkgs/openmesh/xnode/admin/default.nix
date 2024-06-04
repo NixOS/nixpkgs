@@ -1,26 +1,22 @@
-{ pkgs 
-, lib ? lib
-, stdenv ? stdenv
-, fetchFromGitHub ? fetchFromGitHub
-, python3Packages ? pkgs.python3Packages
-}:
+{ pkgs, lib, ... }:
 
-python3Packages.buildPythonPackage rec {
+pkgs.python3Packages.buildPythonPackage rec {
   pname = "xnode-admin";
   version = "0.0.0";
   format = "pyproject";
 
-  src = fetchFromGitHub {
+  src = pkgs.fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = pname;
     rev = "96ee992e5f2cc95672964d7f5a55168549e501d4";
     sha256 = "0p11b039vfn9696zrnl1hl6hrm60mpkhg76jrwk57rg29vy1lcfv";
   };
+
   nativeBuildInputs = [
-    python3Packages.hatchling
+    pkgs.python3Packages.hatchling
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with pkgs.python3Packages; [
     gitpython
     psutil
     requests

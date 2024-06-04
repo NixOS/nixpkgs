@@ -1,6 +1,6 @@
 { inputs, ... }@flakeContext:
 let
-  netboot = { config, lib, pkgs, ... }: {
+  isoModule = { config, lib, pkgs, ... }: {
     config = {
       documentation = {
         nixos = {
@@ -15,11 +15,26 @@ let
           greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
         };
       };
+      boot = {
+        loader = {
+          timeout = lib.mkForce 1;
+          grub = {
+            timeoutStyle = lib.mkForce "countdown";
+          };
+        };
+      };
+      isoImage = {
+        forceTextMode = true;
+        makeBiosBootable = true;
+        makeEfiBootable = true;
+        makeUsbBootable = true;
+      };
       environment = {
-        systemPackages = [
-          pkgs.nyancat
-          (pkgs.callPackage ./xnode-admin {})
-#          (pkgs.callPackage ./openmesh-core {})
+        systemPackages = with pkgs; [
+          prometheus
+          grafana
+#          (callPackage ./xnode-admin {})
+#          (callPackage ./openmesh-core {})
         ];
       };
       networking = {
@@ -27,7 +42,7 @@ let
       };
       users = {
         users = {
-          xnode = {
+          "xnode" = {
             isNormalUser = true;
             password = "xnode";
           };
@@ -38,9 +53,8 @@ let
 in
 inputs.nixos-generators.nixosGenerate {
   system = "x86_64-linux";
-  customFormats = { "netboot" = import ./image/format/netboot.nix; };
-  format = "netboot";
+  format = "iso";
   modules = [
-    netboot
+    isoModule
   ];
 }

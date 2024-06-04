@@ -3,14 +3,13 @@
 with lib;
 
 let
-  cfg = config.services.xnode-admin;
+  cfg = config.services.openmesh.xnode.admin;
   package = cfg.package;
-
 in 
 {
   meta.maintainers = with maintainers; [ harrys522 ];
 
-  options.services.xnode-admin = {
+  options.services.openmesh.xnode.admin = {
     enable = mkEnableOption "Management service for Xnode";
 
     localDir = mkOption {
@@ -21,7 +20,7 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.xnode.pkgs.xnode-admin;
+      default = (pkgs.callPackage ../../../../pkgs/openmesh/xnode/admin {});
       description = "Specify xnode-admin package to use";
     };
 
@@ -44,5 +43,14 @@ in
                   ${localDir} ${remoteDir} ${searchInterval}         
                   ";
     };
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
+#    systemd.services.openmesh-xnode-admin = {
+#      serviceConfig = cfg.serviceConfig
+#    }
+
   };
 }
