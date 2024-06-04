@@ -23,9 +23,6 @@ in
   interpreters = {
 
     erlang = self.interpreters.${self.latestVersion};
-    erlang_odbc = self.interpreters."${self.latestVersion}_odbc";
-    erlang_javac = self.interpreters."${self.latestVersion}_javac";
-    erlang_odbc_javac = self.interpreters."${self.latestVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
 
@@ -44,24 +41,12 @@ in
       autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
     };
-    erlang_26_odbc = self.interpreters.erlang_26.override { odbcSupport = true; };
-    erlang_26_javac = self.interpreters.erlang_26.override { javacSupport = true; };
-    erlang_26_odbc_javac = self.interpreters.erlang_26.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
 
     erlang_25 = self.beamLib.callErlang ../development/interpreters/erlang/25.nix {
       wxGTK = wxGTK32;
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
-    };
-    erlang_25_odbc = self.interpreters.erlang_25.override { odbcSupport = true; };
-    erlang_25_javac = self.interpreters.erlang_25.override { javacSupport = true; };
-    erlang_25_odbc_javac = self.interpreters.erlang_25.override {
-      javacSupport = true;
-      odbcSupport = true;
     };
 
     erlang_24 = self.beamLib.callErlang ../development/interpreters/erlang/24.nix {
@@ -70,12 +55,6 @@ in
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
-    };
-    erlang_24_odbc = self.interpreters.erlang_24.override { odbcSupport = true; };
-    erlang_24_javac = self.interpreters.erlang_24.override { javacSupport = true; };
-    erlang_24_odbc_javac = self.interpreters.erlang_24.override {
-      javacSupport = true;
-      odbcSupport = true;
     };
 
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
