@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm-theme";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ 
+    maintainers = with maintainers; [
       denperidge
     ];
   };
