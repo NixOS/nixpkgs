@@ -138,4 +138,47 @@ in
       quantenzitrone
     ];
   };
+
+  customGroup =
+    let
+      name = "customGroup";
+      nodeName = "${name}Node";
+      insideGroupUsername = "ydotool-user";
+      outsideGroupUsername = "other-user";
+      groupName = "custom-group";
+    in
+    makeTest {
+      inherit name;
+
+      nodes."${nodeName}" = {
+        programs.ydotool = {
+          enable = true;
+          group = groupName;
+        };
+
+        users.users = {
+          "${insideGroupUsername}" = {
+            isNormalUser = true;
+            extraGroups = [ groupName ];
+          };
+          "${outsideGroupUsername}".isNormalUser = true;
+        };
+      };
+
+      testScript = ''
+        start_all()
+
+        # Wait for service to start
+        ${nodeName}.wait_for_unit("multi-user.target")
+        ${nodeName}.wait_for_unit("ydotoold.service")
+
+        # Verify that user with the configured group can use the service
+        ${nodeName}.succeed("sudo --login --user=${insideGroupUsername} ydotool type 'Hello, World!'")
+
+        # Verify that user without the configured group can't use the service
+        ${nodeName}.fail("sudo --login --user=${outsideGroupUsername} ydotool type 'Hello, World!'")
+      '';
+
+      meta.maintainers = with lib.maintainers; [ l0b0 ];
+    };
 }
