@@ -224,7 +224,7 @@ let
   ] ++ optional (allPkgconfigDepends != [])
     "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
 
-  parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
+  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
   crossCabalFlagsString =
     lib.optionalString isCross (" " + lib.concatStringsSep " " crossCabalFlags);
@@ -245,8 +245,8 @@ let
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding "--ghc-options=${parallelBuildingFlags}")
-    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (optionalString enableParallelBuilding (makeGhcOptions [ "-j$NIX_BUILD_CORES" "+RTS" "-A64M" "-RTS" ]))
+    (optionalString useCpphs ("--with-cpphs=${cpphs}/bin/cpphs " + (makeGhcOptions [ "-cpp"  "-pgmP${cpphs}/bin/cpphs" "-optP--cpp" ])))
     (enableFeature enableLibraryProfiling "library-profiling")
     (optionalString (enableExecutableProfiling || enableLibraryProfiling) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling "profiling")
@@ -269,16 +269,14 @@ let
   ) ++ optionals enableSeparateBinOutput [
     "--bindir=${binDir}"
   ] ++ optionals (doHaddockInterfaces && isLibrary) [
-    "--ghc-options=-haddock"
+    "--ghc-option=-haddock"
   ];
 
   postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-package-db=$setupPackageConfDir")
-    (optionalString enableParallelBuilding parallelBuildingFlags)
     "-threaded"       # https://github.com/haskell/cabal/issues/2398
-    "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
   ];
 
   isHaskellPkg = x: x ? isHaskellLibrary;
