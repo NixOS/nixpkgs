@@ -23,6 +23,7 @@
 , nativeBuildInputs ? []
 , buildInputs ? []
 , extraConfigPaths ? []
+, passthru ? {}
 , ...
 }@args:
 
@@ -182,7 +183,7 @@ let
             exit 1
           '';
         };
-    });
+    } // passthru);
   };
 
   basicEnv =
