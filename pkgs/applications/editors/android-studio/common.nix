@@ -260,6 +260,7 @@ let
       unwrapped = androidStudio;
       full = withSdk androidenv.androidPkgs.androidsdk;
       inherit withSdk;
+      sdk = androidSdk;
     };
     meta = with lib; {
       description = "The Official IDE for Android (${channel} channel)";
