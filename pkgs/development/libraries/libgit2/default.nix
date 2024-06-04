@@ -20,7 +20,7 @@
 , krb5
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgit2";
   version = "1.8.1";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-J2rCxTecyLbbDdsyBWn9w7r3pbKRMkI9E7RvRgAqBdY=";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  passthru.tests = {
+  passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
     inherit libgit2-glib;
     inherit (python3Packages) pygit2;
     inherit gitstatus;
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
-}
+})
