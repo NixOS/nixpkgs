@@ -188,7 +188,6 @@ stdenv.mkDerivation rec {
                  -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
                  -ldftd4 -lmstore -lmulticharge -lmctc-lib \
                  ${lib.strings.optionalString (gpuBackend == "cuda") ''
-                   -L${cudaPackages.cuda_cudart}/lib/stubs/ \
                    -lcudart -lnvrtc -lcuda -lcublas
                    ''
                  } \
