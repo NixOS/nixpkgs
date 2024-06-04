@@ -7,6 +7,7 @@
 , gnupg
 , darwin, xcbuild
 , procps, icu
+, installShellFiles
 }:
 
 { enableNpm ? true, version, sha256, patches ? [] } @args:
@@ -69,7 +70,7 @@ let
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu bash ];
 
-    nativeBuildInputs = [ which pkg-config python ]
+    nativeBuildInputs = [ installShellFiles pkg-config python which ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
     outputs = [ "out" "libv8" ];
@@ -150,6 +151,11 @@ let
 
     postInstall = ''
       HOST_PATH=$out/bin patchShebangs --host $out
+
+      ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        $out/bin/${self.meta.mainProgram} --completion-bash > ${self.meta.mainProgram}.bash
+        installShellCompletion ${self.meta.mainProgram}.bash
+      ''}
 
       ${lib.optionalString (enableNpm) ''
         mkdir -p $out/share/bash-completion/completions
