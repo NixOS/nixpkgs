@@ -13,7 +13,7 @@ let
 
     { imports = [ ./common/user-account.nix ./common/x11.nix ];
       hardware.graphics.enable = true;
-      virtualisation.memorySize = 256;
+      virtualisation.memorySize = 384;
       environment = {
         systemPackages = [ pkgs.armagetronad ];
         variables.XAUTHORITY = "/home/${user}/.Xauthority";
