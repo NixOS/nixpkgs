@@ -62,6 +62,7 @@ in
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
+, nixosTests
 , openssl
 , perl
 , pkg-config
@@ -251,6 +252,9 @@ self = stdenv.mkDerivation {
 
     tests = {
       nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+      # Basic smoke test that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
     };
   };
 
