@@ -16,15 +16,15 @@
 , xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0-rc.9";
+  version = "1.0.0-rc.10";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-GFltwKc6madTJWPTeAeslmFffHtixR0Dxd+3hAnHvz0=";
+    hash = "sha256-bkP9/S9luT0tgESabt3KaaEUObx6SGxz87XLOIIrDNw=";
   };
-  cargoHash = "sha256-UM9eDWyeewWPq3+z0JWqdAsCxx6EqytuYMwLXDHOC64=";
+  cargoHash = "sha256-FDxXFhQmpWwkvAMawBTwuSXOz1UMqP83Csk9N0atlN8=";
 
   nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];
@@ -42,6 +42,8 @@
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
+    # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
+    "--skip=tests::e2e::test_connection_crossing"
   ];
 
   postInstall = ''
