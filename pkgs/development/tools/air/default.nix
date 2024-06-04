@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "1.52.1";
 
   src = fetchFromGitHub {
-    owner = "cosmtrek";
+    owner = "air-verse";
     repo = "air";
     rev = "v${version}";
     hash = "sha256-KTutLvcLH1dOsJFDaEU2c4wGbQyRE7qUHah4mEXCL08=";
@@ -20,7 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Live reload for Go apps";
     mainProgram = "air";
-    homepage = "https://github.com/cosmtrek/air";
+    homepage = "https://github.com/air-verse/air";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Gonzih ];
   };
