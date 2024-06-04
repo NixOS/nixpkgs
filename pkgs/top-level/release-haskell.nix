@@ -555,18 +555,12 @@ let
         compilerNames.ghc8107
       ];
       ghc-lib = lib.subtractLists [
-        compilerNames.ghc981
-        compilerNames.ghc982
         compilerNames.ghc9101
       ] released;
       ghc-lib-parser = lib.subtractLists [
-        compilerNames.ghc981
-        compilerNames.ghc982
         compilerNames.ghc9101
       ] released;
       ghc-lib-parser-ex = lib.subtractLists [
-        compilerNames.ghc981
-        compilerNames.ghc982
         compilerNames.ghc9101
       ] released;
       ghc-source-gen = [
