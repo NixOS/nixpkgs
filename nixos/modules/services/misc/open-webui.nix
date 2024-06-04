@@ -67,13 +67,9 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${cfg.stateDir}/static
-      '';
-
       environment = {
-        STATIC_DIR = "${cfg.stateDir}/static";
-        DATA_DIR = "${cfg.stateDir}";
+        STATIC_DIR = ".";
+        DATA_DIR = ".";
       } // cfg.environment;
 
       serviceConfig = {
