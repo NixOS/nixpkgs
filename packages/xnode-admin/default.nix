@@ -1,8 +1,8 @@
-{ pkgs
-, lib ? pkgs.lib
-, stdenv ? pkgs.stdenv
+{ pkgs 
+, lib ? lib
+, stdenv ? stdenv
+, fetchFromGitHub ? fetchFromGitHub
 , python3Packages ? pkgs.python3Packages
-, fetchFromGitHub ? pkgs.fetchFromGitHub
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -13,15 +13,17 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = pname;
-    rev = "572ef943713fda0ef7a90f59b43980b7307f2b15";
-    sha256 = "u6zZKe+E9QgbcJfAJzrCakLsny8tb+b54mIpozRx0Vc=";
+    rev = "96ee992e5f2cc95672964d7f5a55168549e501d4";
+    sha256 = "0p11b039vfn9696zrnl1hl6hrm60mpkhg76jrwk57rg29vy1lcfv";
   };
   nativeBuildInputs = [
-    pkgs.python311Packages.hatchling
+    python3Packages.hatchling
   ];
 
-  propagatedBuildInputs = [
-    pkgs.python311Packages.gitpython
+  propagatedBuildInputs = with python3Packages; [
+    gitpython
+    psutil
+    requests
   ];
 
   meta = with lib; {

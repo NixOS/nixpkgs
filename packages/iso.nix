@@ -33,7 +33,7 @@ let
         systemPackages = with pkgs; [
           prometheus
           grafana
-#          (callPackage ./xnode-admin {})
+          (callPackage ./xnode-admin {})
 #          (callPackage ./openmesh-core {})
         ];
       };
