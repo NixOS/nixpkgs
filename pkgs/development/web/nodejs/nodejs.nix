@@ -60,8 +60,6 @@ let
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
     };
 
-    CC_host = "cc";
-    CXX_host = "c++";
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
 
     # NB: technically, we do not need bash in build inputs since all scripts are
@@ -105,6 +103,11 @@ let
     configurePlatforms = [];
 
     dontDisableStatic = true;
+
+    configureScript = writeScript "nodejs-configure" ''
+      export CC_host="$CC_FOR_BUILD" CXX_host="$CXX_FOR_BUILD"
+      exec ${python.executable} configure.py "$@"
+    '';
 
     enableParallelBuilding = true;
 
