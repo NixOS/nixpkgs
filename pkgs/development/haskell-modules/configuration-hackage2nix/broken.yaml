@@ -764,7 +764,6 @@ broken-packages:
   - ChristmasTree # failure in job https://hydra.nixos.org/build/233259648 at 2023-09-02
   - chronograph # failure in job https://hydra.nixos.org/build/233232822 at 2023-09-02
   - chr-parse # failure in job https://hydra.nixos.org/build/233243933 at 2023-09-02
-  - chs-cabal # failure in job https://hydra.nixos.org/build/259964491 at 2024-05-19
   - chunky # failure in job https://hydra.nixos.org/build/233216440 at 2023-09-02
   - church # failure in job https://hydra.nixos.org/build/233223920 at 2023-09-02
   - church-maybe # failure in job https://hydra.nixos.org/build/233258572 at 2023-09-02

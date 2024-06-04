@@ -35,6 +35,7 @@ default-package-overrides:
   - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
   # 2024-05-10: need to match hlegder from stackage
   - hledger-ui < 1.33
+  - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
 
 
 extra-packages:
