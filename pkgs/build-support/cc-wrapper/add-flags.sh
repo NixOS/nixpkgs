@@ -27,8 +27,8 @@ for var in "${var_templates_bool[@]}"; do
     mangleVarBool "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
 done
 
-# `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
-NIX_CFLAGS_COMPILE_@suffixSalt@="-B@out@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
+# `-B@bintools@/bin' forces cc to use ld-wrapper.sh when calling ld.
+NIX_CFLAGS_COMPILE_@suffixSalt@="-B@bintools@/bin/ $NIX_CFLAGS_COMPILE_@suffixSalt@"
 
 # Export and assign separately in order that a failing $(..) will fail
 # the script.
