@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 , help2man
 , installShellFiles

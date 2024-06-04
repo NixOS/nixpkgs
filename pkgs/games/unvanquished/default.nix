@@ -2,7 +2,6 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
-, fetchpatch
 , SDL2
 , buildFHSEnv
 , cmake

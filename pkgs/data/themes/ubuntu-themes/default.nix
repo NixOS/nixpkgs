@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , gnome-icon-theme
 , gnome
 , gtk-engine-murrine

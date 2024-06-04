@@ -3,7 +3,6 @@
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , gn

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , desktop-file-utils
 , gettext
 , glibcLocales

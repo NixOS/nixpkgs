@@ -7,16 +7,15 @@
 
 buildPythonPackage rec {
   pname = "latex2pydata";
-  version = "0.2.0";
-
-  format = "pyproject";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lFYGBFox7fv/vlfqZN3xsh9UIRCQ+C5Cizq9j4RTcJ0=";
+    hash = "sha256-XMGmTK1H6f66pI/wDLA3+Pytl4A7spbMMpfa77xr2M4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
