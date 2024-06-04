@@ -6493,6 +6493,8 @@ self: super: with self; {
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+  langfuse = callPackage ../development/python-modules/langfuse { };
+
   langid = callPackage ../development/python-modules/langid { };
 
   langsmith = callPackage ../development/python-modules/langsmith { };
