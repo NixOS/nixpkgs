@@ -49,7 +49,9 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this. Note that unfuck and twbt are not required for 50.
-  latestVersion = "50.13";
+  latestVersion = if stdenv.isLinux then "50.13"
+                  else if stdenv.isDarwin then "0.47.05"
+                  else throw "Unsupported system";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${replaceStrings ["."] ["_"] version}";
@@ -62,7 +64,7 @@ let
         let
           isAtLeast50 = versionAtLeast dfVersion "50.0";
 
-          dwarf-fortress-unfuck = optionalAttrs (!isAtLeast50) (callPackage ./unfuck.nix { inherit dfVersion; });
+          dwarf-fortress-unfuck = optionalAttrs (!isAtLeast50 && stdenv.isLinux) (callPackage ./unfuck.nix { inherit dfVersion; });
 
           dwarf-fortress = callPackage ./game.nix {
             inherit dfVersion;

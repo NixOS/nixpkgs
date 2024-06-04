@@ -53,7 +53,7 @@ let
   patchVersion = elemAt dfVersionTuple (dfVersionBaseIndex + 1);
 
   isAtLeast50 = baseVersion >= 50;
-  enableUnfuck = !isAtLeast50 && dwarf-fortress-unfuck != null;
+  enableUnfuck = !isAtLeast50 && dwarf-fortress-unfuck != null && (dwarf-fortress-unfuck.dfVersion or null) == dfVersion;
 
   game =
     if hasAttr dfVersion df-hashes
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     fi
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = optional stdenv.isLinux autoPatchelfHook;
   buildInputs = optionals isAtLeast50 [ SDL2 SDL2_image SDL2_mixer ]
     ++ optional (!isAtLeast50) SDL
     ++ optional enableUnfuck dwarf-fortress-unfuck
