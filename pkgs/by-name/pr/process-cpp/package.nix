@@ -4,33 +4,42 @@
 , testers
 , unstableGitUpdater
 , cmake
+, coreutils
 , boost
+, gtest
+, lomiri
 , properties-cpp
 , pkg-config
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "process-cpp";
-  version = "unstable-2021-05-11";
+  version = "3.0.1-unstable-2024-03-14";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
-    rev = "ee6d99a3278343f5fdcec7ed3dad38763e257310";
-    hash = "sha256-jDYXKCzrg/ZGFC2xpyfkn/f7J3t0cdOwHK2mLlYWNN0=";
+    rev = "7b0a829abcbcdd25d949e5f9e2c26bb985a58b31";
+    hash = "sha256-Az+lSJ7uVR4pAWvOeah5vFtIPb12eKp0nAFF1qsHZXA=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   postPatch = ''
-    # Excludes tests from tainting nativeBuildInputs with their dependencies when not being run
-    # Tests fail upon verifying OOM score adjustment via /proc/<pid>/oom_score
-    # [ RUN      ] LinuxProcess.adjusting_proc_oom_score_adj_works
-    # /build/source/tests/linux_process_test.cpp:83: Failure
-    # Value of: is_approximately_equal(oom_score.value, core::posix::linux::proc::process::OomScoreAdj::max_value())
-    #   Actual: false (333 > 10)
-    # Expected: true
-    sed -i '/tests/d' CMakeLists.txt
+    substituteInPlace data/process-cpp.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+
+    substituteInPlace tests/posix_process_test.cpp \
+      --replace-fail '/usr/bin/sleep' '${lib.getExe' coreutils "sleep"}' \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -39,8 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    lomiri.cmake-extras
     properties-cpp
   ];
+
+  checkInputs = [
+    gtest
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
