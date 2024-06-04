@@ -1,6 +1,9 @@
 { inputs, ... }@flakeContext:
 let
   isoModule = { config, lib, pkgs, ... }: {
+    imports = [
+      ../repo/modules/services/openmesh/xnode/admin.nix
+    ];
     config = {
       documentation = {
         nixos = {
@@ -13,6 +16,9 @@ let
       services = {
         getty = {
           greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
+        };
+        openmesh.xnode.admin = {
+          enable = true;
         };
       };
       boot = {

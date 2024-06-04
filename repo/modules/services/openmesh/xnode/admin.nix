@@ -14,7 +14,7 @@ in
 
     localDir = mkOption {
       type = types.str;
-      default = "/xnode/config.nix";
+      default = "/var/lib/openmesh/config.nix";
       description = "Local repository for nix configurations, typically a cloned git repository.";
     };
 
@@ -26,31 +26,30 @@ in
 
     remoteDir = mkOption {
       type = types.str;
-      default = "openmesh.network/xnode/";
+      default = "openmesh.network/xnodes/functions";
       description = "The remote repository to pull down a configuration from.";
     };
 
     searchInterval = mkOption {
       type = types.int;
-      default = 120;
+      default = 0;
       description = "Number of seconds between fetching for changes to configuration.";
     };
-
-    serviceConfig = {
-      DynamicUser = true;
-      Restart = "always";
-      ExecStart = "${package}/src/nix_rebuilder.py \
-                  ${localDir} ${remoteDir} ${searchInterval}         
-                  ";
-    };
+    # Todo: UUID + PSK implementation
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    #environment.systemPackages = [ cfg.package ];
 
-#    systemd.services.openmesh-xnode-admin = {
-#      serviceConfig = cfg.serviceConfig
-#    }
+    systemd.services.openmesh-xnode-admin = {
+      serviceConfig = {
+        DynamicUser = true;
+        Restart = "always";
+        ExecStart = "${cfg.package}/src/nix_rebuilder.py \
+                    ${cfg.localDir} ${cfg.remoteDir} ${toString cfg.searchInterval}
+                    "; 
+      };
+    };
 
   };
 }
