@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "onevpl-intel-gpu";
+  pname = "vpl-gpu-rt";
   version = "24.2.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "oneapi-src";
-    repo = "oneVPL-intel-gpu";
+    owner = "intel";
+    repo = "vpl-gpu-rt";
     rev = "intel-onevpl-${version}";
     sha256 = "sha256-JtvRh4p4wPRnqFfE86tJW+yS9AKMoi3TPZO+LZ2Q7Mo=";
   };
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "oneAPI Video Processing Library Intel GPU implementation";
-    homepage = "https://github.com/oneapi-src/oneVPL-intel-gpu";
-    changelog = "https://github.com/oneapi-src/oneVPL-intel-gpu/releases/tag/${src.rev}";
+    homepage = "https://github.com/intel/vpl-gpu-rt";
+    changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${src.rev}";
     license = [ lib.licenses.mit ];
     platforms = lib.platforms.linux;
     # CMake adds x86 specific compiler flags in <source>/builder/FindGlobals.cmake
