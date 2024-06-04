@@ -77,14 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ATLauncher/ATLauncher/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "A simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
     downloadPage = "https://atlauncher.com/downloads";
     homepage = "https://atlauncher.com";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "atlauncher";
-    maintainers = [ maintainers.getpsyched ];
-    platforms = platforms.all;
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    maintainers = with lib.maintainers; [ getpsyched ];
+    platforms = lib.platforms.all;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
 })
