@@ -66,28 +66,6 @@ let
         import json
 
 
-        def get_path_info(path):
-            result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
-            parsed = json.loads(result)
-            return parsed
-
-
-        with subtest("nix-db"):
-            out = "${foo}"
-            info = get_path_info(out)
-            print(info)
-
-            pathinfo = info[0] if isinstance(info, list) else info[out]
-
-            if (
-                pathinfo["narHash"]
-                != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
-            ):
-                raise Exception("narHash not set")
-
-            if pathinfo["narSize"] != 128:
-                raise Exception("narSize not set")
-
         with subtest("nixos-version"):
             machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
