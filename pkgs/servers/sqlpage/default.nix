@@ -74,9 +74,9 @@ rustPlatform.buildRustPackage rec {
       --replace '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.popular.min.js */' \
       "$(cat ${tomselect})"
     '';
-  
+
   cargoHash = "sha256-uDeQ6/hKJFD747sUeQbpQIIzbpcvQfsTbbx68m1GAKY=";
-  
+
   nativeBuildInputs = [
     pkg-config
   ];
