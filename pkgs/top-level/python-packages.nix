@@ -4577,6 +4577,8 @@ self: super: with self; {
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
+  dxpy = callPackage ../development/python-modules/dxpy { };
+
   dyn = callPackage ../development/python-modules/dyn { };
 
   dynaconf = callPackage ../development/python-modules/dynaconf { };
