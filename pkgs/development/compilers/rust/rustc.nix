@@ -142,7 +142,12 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
-  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
+  ] ++ optionals (stdenv.targetPlatform.isLinux || stdenv.targetPlatform.isDarwin || stdenv.targetPlatform.isAndroid || stdenv.targetPlatform.isFreeBSD || (stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.isMinGW)) [
+    # Sources for the conditions
+    # https://github.com/rust-lang/rust/blob/master/src/ci/github-actions/jobs.yml
+    # https://github.com/search?q=repo%3Arust-lang%2Frust%20%2Fenable-profiler%2F&type=code
+    # MinGW excluded because there's an open pr to rust to remove it's
+    # `enable-profiler` in `jobs.yml` https://github.com/rust-lang/rust/pull/122613/files
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
     "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
