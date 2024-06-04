@@ -52,6 +52,7 @@ let
     dde-gsettings-schemas = callPackage ./core/dde-gsettings-schemas { };
     dde-widgets = callPackage ./core/dde-widgets { };
     dde-shell = callPackage ./core/dde-shell { };
+    dde-grand-search = callPackage ./core/dde-grand-search { };
 
     #### Dtk Application
     deepin-album = callPackage ./apps/deepin-album { };
