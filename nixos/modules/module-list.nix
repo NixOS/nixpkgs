@@ -773,6 +773,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/ollama.nix
   ./services/misc/ombi.nix
+  ./services/misc/open-webui.nix
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
   ./services/misc/packagekit.nix
